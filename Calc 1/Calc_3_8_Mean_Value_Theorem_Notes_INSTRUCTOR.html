@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mean Value Theorem &mdash; Notes</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75;font-size:15px}
+.container{max-width:900px;margin:0 auto;padding:2rem 1.5rem 4rem}
+
+/* ── Header ── */
+.page-title{font-size:28px;font-weight:700;margin-bottom:4px}
+.page-sub{font-family:sans-serif;font-size:13px;color:#666;margin-bottom:1.6rem}
+
+/* ── Opening question ── */
+.opening-q{background:#eef3f9;border-left:4px solid #185fa5;
+  border-radius:0 8px 8px 0;padding:1rem 1.2rem;font-size:15px;
+  margin-bottom:1.5rem;font-style:italic;line-height:1.75}
+
+/* ── Section heading ── */
+.section-head{font-family:sans-serif;font-size:11px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.08em;color:#185fa5;
+  margin-top:1.4rem;margin-bottom:.6rem;
+  border-bottom:1px solid #c8d8ec;padding-bottom:4px}
+
+/* ── Accent box ── */
+.accent-box{background:#d9e8f5;border-left:4px solid #185fa5;
+  border-radius:0 8px 8px 0;padding:.9rem 1.1rem;font-size:14px;
+  margin-bottom:.85rem;line-height:1.95}
+.accent-box ul{margin-left:1.3rem;margin-top:.3rem}
+.accent-box li{margin-bottom:.15rem}
+.accent-box p{margin-bottom:.4rem}
+
+/* ── Body text ── */
+.body-text{font-size:14px;line-height:1.75;margin-bottom:.85rem}
+
+/* ── Spacer ── */
+.spacer{height:1rem}
+
+/* ── Two-column layout ── */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:.5rem}
+.col{min-width:0}
+
+/* ── Worked examples 2-col grid ── */
+.examples-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem}
+.ex-block{border:1.5px solid #ddd;border-radius:9px;padding:1rem 1.1rem;background:#fff}
+.ex-label{font-family:sans-serif;font-size:11px;font-weight:700;color:#185fa5;
+  text-transform:uppercase;letter-spacing:.05em;margin-bottom:.45rem}
+.ex-body{font-size:14px;line-height:1.75;margin-bottom:.5rem}
+.ex-answer.instructor{background:#fef9e7;border-left:3px solid #c9860a;
+  border-radius:0 6px 6px 0;padding:.6rem .9rem;font-size:13.5px;
+  color:#5a3e00;line-height:1.85}
+.ex-answer.student{height:4.5rem;border-bottom:1.5px solid #bbb;margin-top:.4rem}
+
+/* ── Practice section ── */
+.practice{margin-bottom:1.5rem}
+.pr-row{display:grid;grid-template-columns:1.6rem 1fr 210px;gap:.75rem;
+  align-items:start;padding:.6rem 0;border-bottom:1px solid #ece8e0}
+.pr-num{font-family:sans-serif;font-weight:700;font-size:14px;color:#185fa5;padding-top:2px}
+.pr-prob{font-size:14px;line-height:1.75}
+.pr-ans.instructor{font-size:13px;color:#5a3e00;background:#fef9e7;
+  border-radius:5px;padding:4px 9px;line-height:1.75}
+.pr-ans.student{border-bottom:1.5px solid #bbb;min-height:2.2rem}
+
+/* ── KaTeX overflow ── */
+.katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}
+
+/* ── Print styles ── */
+@media print{
+  body{background:white;font-size:10pt;line-height:1.5}
+  .container{padding:0;max-width:none}
+  .page-sub{margin-bottom:.8rem}
+  .opening-q{padding:.5rem .8rem;margin-bottom:.8rem;font-size:10pt;line-height:1.5;break-inside:avoid}
+  .section-head{margin-top:.7rem;margin-bottom:.35rem}
+  .spacer{height:.3rem}
+  .accent-box{padding:.5rem .75rem;margin-bottom:.5rem;font-size:10pt;line-height:1.55;
+    background:#e8f0f8 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .accent-box p{margin-bottom:.2rem}
+  .body-text{font-size:10pt;line-height:1.5;margin-bottom:.5rem}
+  .two-col{gap:1rem;margin-bottom:.3rem;break-inside:avoid}
+  .examples-grid{gap:.6rem;margin-bottom:.8rem;break-inside:avoid}
+  .ex-block{padding:.55rem .75rem;border:1px solid #ccc;break-inside:avoid}
+  .ex-label{margin-bottom:.25rem}
+  .ex-body{font-size:10pt;line-height:1.5;margin-bottom:.3rem}
+  .ex-answer.instructor{padding:.35rem .7rem;font-size:9.5pt;line-height:1.55;
+    background:#fef9e7 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .ex-answer.student{height:2.8rem}
+  .practice{margin-bottom:.8rem}
+  .pr-row{padding:.3rem 0;break-inside:avoid}
+  .pr-prob{font-size:10pt;line-height:1.5}
+  .pr-ans.instructor{font-size:9.5pt;padding:2px 7px;line-height:1.55;
+    background:#fef9e7 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .pr-ans.student{min-height:1.6rem}
+  .opening-q{
+    background:#eef3f9 !important;
+    -webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+@page{margin:.55in .65in;size:letter}
+</style>
+</head>
+<body>
+<div class="container">
+<h1 class="page-title">Mean Value Theorem</h1>
+<p class="page-sub">Calculus I &nbsp;&middot;&nbsp; &sect;3.8 &nbsp;&middot;&nbsp; Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026 &nbsp;&middot;&nbsp; <strong>INSTRUCTOR</strong></p>
+<div class="opening-q">If you drive 120 miles in 2 hours, your average speed is 60 mph. The Mean Value Theorem says: at some moment, your speedometer <em>must</em> have read exactly 60 mph. Can we always find that exact moment?</div>
+<div class="two-col">
+<div class="col"><div class="section-head">Mean Value Theorem</div>
+<div class="accent-box"><p>If $f$ is <strong>continuous on $[a,b]$</strong> and <strong>differentiable on $(a,b)$</strong>, then</p><p>$$\exists\,c\in(a,b)\text{ such that }f'(c)=\frac{f(b)-f(a)}{b-a}$$</p><p>The instantaneous rate of change equals the average rate of change at some interior point.</p></div>
+<p class="body-text">Geometrically: there exists a point where the tangent line is parallel to the secant line through $(a,f(a))$ and $(b,f(b))$.</p>
+</div>
+<div class="col"><div class="section-head">Finding $c$ & Rolle's Theorem</div>
+<div class="accent-box"><p><strong>To find $c$:</strong></p><ol style='margin-left:1.2rem;margin-top:.3rem'>  <li>Compute the average rate: $m=\dfrac{f(b)-f(a)}{b-a}$</li>  <li>Solve $f'(x)=m$</li>  <li>Keep solutions in $(a,b)$</li></ol><p><strong>Rolle's Theorem</strong> (special case):<br>If $f(a)=f(b)$, then $m=0$, so $\exists\,c$ with $f'(c)=0$.</p></div>
+</div>
+</div>
+<div class="section-head">Worked Examples</div>
+<div class="examples-grid">
+<div class="ex-block">
+  <div class="ex-label">Example 1 &nbsp;&mdash;&nbsp; Average rate of change</div>
+  <div class="ex-body">Find the average rate of change of $f(x)=x^2$ on $[1,3]$.</div>
+  <div class="ex-answer instructor">$m=\dfrac{9-1}{3-1}=\dfrac{8}{2}=4$</div>
+</div>
+<div class="ex-block">
+  <div class="ex-label">Example 2 &nbsp;&mdash;&nbsp; Finding $c$</div>
+  <div class="ex-body">Find $c$ guaranteed by MVT for $f(x)=x^2$ on $[1,3]$.</div>
+  <div class="ex-answer instructor">$f'(x)=2x=4 \Rightarrow x=2$<br>$c=2 \in (1,3)$ ✓</div>
+</div>
+<div class="ex-block">
+  <div class="ex-label">Example 3 &nbsp;&mdash;&nbsp; Rolle's Theorem</div>
+  <div class="ex-body">Apply Rolle's Theorem to $f(x)=x^2-4x$ on $[0,4]$.</div>
+  <div class="ex-answer instructor">$f(0)=0=f(4)$; $f'(x)=2x-4=0 \Rightarrow x=2$<br>$c=2\in(0,4)$ ✓</div>
+</div>
+<div class="ex-block">
+  <div class="ex-label">Example 4 &nbsp;&mdash;&nbsp; MVT application</div>
+  <div class="ex-body">For $f(x)=x^3-x$ on $[0,2]$, find $c$ guaranteed by MVT.</div>
+  <div class="ex-answer instructor">$m=\dfrac{6-0}{2-0}=3$<br>$f'(x)=3x^2-1=3 \Rightarrow 3x^2=4 \Rightarrow x=\dfrac{2}{\sqrt{3}}\approx 1.15$<br>$c=\dfrac{2}{\sqrt{3}}\in(0,2)$ ✓</div>
+</div>
+</div>
+<div class="section-head">Practice Problems</div>
+<div class="practice">
+<div class="pr-row">
+  <div class="pr-num">1.</div>
+  <div class="pr-prob">Find the average rate of change of $f(x)=x^2+1$ on $[0,4]$.</div>
+  <div class="pr-ans instructor">$m=\dfrac{17-1}{4}=4$</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">2.</div>
+  <div class="pr-prob">Find $c$ guaranteed by MVT for $f(x)=x^2+1$ on $[0,4]$.</div>
+  <div class="pr-ans instructor">$f'(x)=2x=4 \Rightarrow x=2$; $c=2\in(0,4)$</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">3.</div>
+  <div class="pr-prob">Find $c$ for $f(x)=x^3$ on $[0,2]$.</div>
+  <div class="pr-ans instructor">$m=8/2=4$; $f'=3x^2=4 \Rightarrow x=2/\sqrt{3}\approx 1.15$</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">4.</div>
+  <div class="pr-prob">Does Rolle's Theorem apply to $f(x)=x^2-2x$ on $[0,2]$? Find $c$.</div>
+  <div class="pr-ans instructor">$f(0)=f(2)=0$; yes. $f'=2x-2=0 \Rightarrow x=1$</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">5.</div>
+  <div class="pr-prob">Find the average rate of change of $f(x)=\sin x$ on $[0,\pi]$.</div>
+  <div class="pr-ans instructor">$m=\dfrac{\sin\pi-\sin 0}{\pi-0}=\dfrac{0-0}{\pi}=0$</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">6.</div>
+  <div class="pr-prob">Interpret: A car travels 240 miles in 4 hours. What does the MVT guarantee?</div>
+  <div class="pr-ans instructor">At some moment the speedometer read exactly $240/4=60$ mph.</div>
+</div>
+</div>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script>
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left: '$$', right: '$$', display: true},
+      {left: '$',  right: '$',  display: false}
+    ],
+    throwOnError: false
+  });
+</script>
+</body>
+</html>

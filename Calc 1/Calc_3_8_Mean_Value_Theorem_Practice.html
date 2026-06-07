@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mean Value Theorem &mdash; Practice</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.7}
+  .container{max-width:820px;margin:0 auto;padding:2rem 1.5rem 4rem}
+  h1{font-size:26px;font-weight:700;margin-bottom:4px}
+  .subtitle{font-size:14px;color:#666;margin-bottom:2rem;font-family:sans-serif}
+  .section{margin-bottom:2.5rem}
+  .section-title{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;
+    color:#777;font-family:sans-serif;margin-bottom:1rem;border-bottom:1px solid #ddd;padding-bottom:6px}
+  .concept{background:#d9e8f5;border-left:4px solid #185fa5;border-radius:0 8px 8px 0;
+    padding:.85rem 1.1rem;font-size:15px;margin-bottom:1rem}
+  .concept-label{font-family:sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;
+    letter-spacing:.07em;color:#185fa5;display:block;margin-bottom:.35rem}
+  .score-bar{display:flex;align-items:center;gap:12px;margin-bottom:1.25rem;
+    font-family:sans-serif;font-size:14px;flex-wrap:wrap}
+  .score-display{font-weight:700;font-size:18px;min-width:60px}
+  .score-label{color:#777;font-size:13px}
+  .score-note{font-size:12px;color:#999;font-style:italic}
+  .progress{flex:1;min-width:80px;height:6px;background:#e5e1d8;border-radius:3px;overflow:hidden}
+  .progress-fill{height:100%;background:#185fa5;border-radius:3px;transition:width .4s}
+  .reset-btn{font-size:12px;background:none;border:1px solid #bbb;border-radius:5px;
+    padding:4px 10px;cursor:pointer;color:#666;font-family:sans-serif;white-space:nowrap}
+  .reset-btn:hover{background:#eee}
+  .problems{display:grid;grid-template-columns:repeat(auto-fill,minmax(370px,1fr));gap:14px}
+  .card{background:#fff;border:1.5px solid #ddd;border-radius:10px;overflow:hidden;transition:border-color .25s}
+  .card.correct{border-color:#3a7a3a}.card.wrong{border-color:#b03030}.card.peeked{border-color:#b8860b}
+  .card-body{padding:14px 16px}
+  .card-meta{font-family:sans-serif;font-size:12px;color:#888;margin-bottom:4px}
+  .card-expr{font-size:17px;margin-bottom:12px;line-height:2.2;overflow-x:auto}
+  .katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}
+  .input-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .ans-input{font-family:'Courier New',monospace;font-size:14px;border:1px solid #ccc;
+    border-radius:6px;padding:7px 10px;flex:1;min-width:120px;background:#fafaf8;
+    color:#1a1a1a;outline:none}
+  .ans-input:focus{border-color:#185fa5;background:#fff}
+  .ans-input.ok{border-color:#3a7a3a;background:#f0faf0}
+  .ans-input.bad{border-color:#b03030;background:#fdf0f0}
+  .check-btn{font-family:sans-serif;font-size:13px;background:#1a1a1a;color:#fff;
+    border:none;border-radius:6px;padding:7px 14px;cursor:pointer}
+  .check-btn:hover{background:#333}.check-btn:disabled{background:#aaa;cursor:default}
+  .hint{font-family:sans-serif;font-size:12px;color:#888;margin-top:7px}
+  .feedback{font-family:sans-serif;font-size:13px;margin-top:10px;padding:8px 12px;
+    border-radius:6px;display:none;line-height:1.5}
+  .feedback.correct{display:block;background:#eaf5ea;color:#1a5a1a}
+  .feedback.wrong{display:block;background:#faeaea;color:#7a1a1a}
+  .feedback.peeked{display:block;background:#fdf8e8;color:#7a5a00}
+  .reveal-link{font-family:sans-serif;font-size:12px;color:#999;cursor:pointer;
+    text-decoration:underline;margin-top:8px;display:inline-block}
+  .reveal-link:hover{color:#555}
+  .revealed-answer{display:none;margin-top:8px;font-family:sans-serif;font-size:13px;
+    color:#444;background:#f5f3ef;border-radius:6px;padding:8px 11px;line-height:1.8;overflow-x:auto}
+  code{font-family:'Courier New',monospace;background:#f0ede7;padding:1px 5px;border-radius:3px;font-size:12px}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Mean Value Theorem</h1>
+  <p class="subtitle">Calculus I &nbsp;&middot;&nbsp; &sect;3.8 &nbsp;&middot;&nbsp; Instructor: Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026</p>
+
+  <div class="section">
+    <div class="section-title">Core Ideas</div>
+
+    <div class="concept">
+      <span class="concept-label">Mean Value Theorem</span>
+      If $f$ is continuous on $[a,b]$ and differentiable on $(a,b)$, then
+      $\exists\; c\in(a,b)$ such that
+      $$f'(c)=\frac{f(b)-f(a)}{b-a}$$
+      Instantaneous rate of change $=$ average rate of change at some interior point.
+    </div>
+    <div class="concept">
+      <span class="concept-label">Finding c &nbsp;|&nbsp; Rolle's Theorem</span>
+      Compute $m=\dfrac{f(b)-f(a)}{b-a}$, then solve $f'(x)=m$ and keep solutions in $(a,b)$.
+      Rolle's Theorem: special case where $f(a)=f(b)$, so $m=0$ and $f'(c)=0$.
+    </div>
+
+  </div>
+
+  <div class="section">
+    <div class="section-title">Practice Problems</div>
+    <p style="font-family:sans-serif;font-size:13px;color:#666;margin-bottom:1rem;">
+      All answers are integers. Average rate of change and word problems: type the number. Finding c: type the x-value.
+      Press <strong>Check</strong> or hit Enter.
+    </p>
+    <div class="score-bar">
+      <span class="score-label">Score:</span>
+      <span class="score-display" id="score">0 / 8</span>
+      <span class="score-note">first attempt only</span>
+      <div class="progress"><div class="progress-fill" id="prog" style="width:0%"></div></div>
+      <button class="reset-btn" onclick="resetAll()">New set &nbsp;&#8635;</button>
+    </div>
+    <div class="problems" id="problems"></div>
+  </div>
+</div>
+
+<script>
+// ── Crypto-quality RNG ────────────────────────────────────────────────────────
+function _rf() {
+  const b = new Uint32Array(1);
+  crypto.getRandomValues(b);
+  return b[0] / 4294967296;
+}
+function rInt(n)   { return Math.floor(_rf() * n); }
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = rInt(i + 1);
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+// Pick one element at random from an array  e.g. choose([1,4,9])
+function choose(arr) { return arr[rInt(arr.length)]; }
+
+// ── Display helpers ───────────────────────────────────────────────────────────
+// Leading coefficient: 1→'', -1→'-', else the number as a string
+function fc(a) { if (a===1) return ''; if (a===-1) return '-'; return String(a); }
+// Subsequent term with sign: addT(-2,'x')→' - 2x', addT(3,'')→' + 3', addT(0,'x')→''
+function addT(n, v) {
+  if (n===0) return '';
+  const s = n>0?'+':'-', abs = Math.abs(n);
+  if (abs===1 && v) return ' ' + s + ' ' + v;
+  return ' ' + s + ' ' + abs + (v||'');
+}
+
+// ── Problem generators (section-specific, injected below) ─────────────────────
+
+// gen1: AROC of f(x)=x^2 on [a,b] → (b^2-a^2)/(b-a) = a+b  (always integer)
+function gen1() {
+  const a = rInt(4)+1, b = a + rInt(3)+2;   // b > a, gap 2-4
+  const ans = a + b;
+  return {
+    latex: `\\text{Find the average rate of change of }f(x)=x^2\\text{ on }[${a},${b}]`,
+    answer: [String(ans)],
+    hint: `Plug into \\frac{f(b)-f(a)}{b-a}. Notice how the numerator factors.`,
+    step: `\\frac{${b*b}-${a*a}}{${b}-${a}}=\\frac{${b*b-a*a}}{${b-a}}=${ans}`
+  };
+}
+
+// gen2: AROC of f(x)=x^2+cx on [0,b] → (b^2+cb)/b = b+c  (always integer)
+function gen2() {
+  const b = rInt(4)+2, c = rInt(4)+1;
+  const ans = b + c;
+  return {
+    latex: `\\text{Find the average rate of change of }f(x)=x^2+${c}x\\text{ on }[0,${b}]`,
+    answer: [String(ans)],
+    hint: `f(0)=0, so AROC simplifies to f(${b})/${b}. Compute f(${b}) first.`,
+    step: `\\frac{f(${b})-f(0)}{${b}-0}=\\frac{${b*b+c*b}}{${b}}=${ans}`
+  };
+}
+
+// gen3: Find c from MVT for f(x)=x^2 on [a,b] → c=(a+b)/2  (integer when a+b even)
+// Ensure a+b even by making both odd or both even.
+function gen3() {
+  const parity = rInt(2);                           // 0=both odd, 1=both even
+  const a = 2*rInt(3) + (parity===0?1:2);           // odd in {1,3,5} or even in {2,4,6}
+  const b = a + 2*(rInt(2)+1);                      // b = a+2 or a+4, same parity
+  const aroc = a + b;
+  const c    = (a + b) / 2;
+  return {
+    latex: `\\text{Find }c\\text{ guaranteed by MVT for }f(x)=x^2\\text{ on }[${a},${b}]`,
+    answer: [String(c)],
+    hint: `Compute the average rate of change first, then set f'(x) equal to it and solve.`,
+    step: `\\begin{aligned}m&=\\frac{${b*b}-${a*a}}{${b}-${a}}=${aroc}\\\\f'(x)&=2x=${aroc}\\\\c&=${c}\\end{aligned}`
+  };
+}
+
+// gen4: Find c from MVT for f(x)=x^2+2x on [0,b] → c=b/2  (integer when b even)
+function gen4() {
+  const b    = 2*(rInt(3)+1);    // b in {2,4,6}
+  const aroc = b + 2;            // (b^2+2b)/b = b+2
+  const c    = b / 2;
+  return {
+    latex: `\\text{Find }c\\text{ guaranteed by MVT for }f(x)=x^2+2x\\text{ on }[0,${b}]`,
+    answer: [String(c)],
+    hint: `f(0)=0 simplifies the AROC. Then set f'(x)=2x+2 equal to the average rate and solve.`,
+    step: `\\begin{aligned}m&=\\frac{${b*b+2*b}}{${b}}=${aroc}\\\\2x+2&=${aroc}\\\\c&=${c}\\end{aligned}`
+  };
+}
+
+// gen5: Rolle's — f(x)=x^2-2ax on [0,2a], f'(c)=0 → c=a  (integer)
+function gen5() {
+  const a = rInt(4)+1;
+  return {
+    latex: `\\text{Find }c\\text{ from Rolle's Theorem for }f(x)=x^2-${2*a}x\\text{ on }[0,${2*a}]`,
+    answer: [String(a)],
+    hint: `Verify f(0)=f(${2*a}) first. Then set f'(x)=0 and solve — that's your c.`,
+    step: `\\begin{aligned}f(0)&=0,\\;f(${2*a})=${4*a*a}-${4*a*a}=0\\;\\checkmark\\\\f'(x)&=2x-${2*a}=0\\\\c&=${a}\\end{aligned}`
+  };
+}
+
+// gen6: Rolle's — f(x)=(x-p)(x-q) on [p,q], c=(p+q)/2  (integer, q-p even)
+function gen6() {
+  const p  = rInt(4)+1;
+  const q  = p + 2*(rInt(2)+1);    // gap of 2 or 4, same parity → c integer
+  const c  = (p + q) / 2;
+  return {
+    latex: `\\text{Find }c\\text{ from Rolle's Theorem for }f(x)=(x-${p})(x-${q})\\text{ on }[${p},${q}]`,
+    answer: [String(c)],
+    hint: `f(${p})=f(${q})=0, so Rolle's applies. Expand or use the product rule to find f'(x), then set it to 0.`,
+    step: `\\begin{aligned}f(${p})&=f(${q})=0\\;\\checkmark\\\\f'(x)&=2x-${p+q}=0\\\\c&=${c}\\end{aligned}`
+  };
+}
+
+// gen7: Word problem — car travels d miles in t hours, find guaranteed speed (integer mph)
+function gen7() {
+  const spd  = (rInt(4)+1)*10;    // speed in {10,20,30,40} — will scale to realistic values
+  const hrs  = rInt(2)+2;         // time in {2,3}
+  const dist = spd * hrs;
+  return {
+    latex: `\\text{A car travels ${dist} miles in ${hrs} hours. The MVT guarantees it was going exactly how many mph at some moment?}`,
+    answer: [String(spd)],
+    hint: `The MVT guarantees the instantaneous speed equaled the average speed at some point. Compute total distance ÷ total time.`,
+    step: `\\text{Average speed}=\\frac{${dist}}{${hrs}}=${spd}\\text{ mph}`
+  };
+}
+
+// gen8: Temperature word problem — ΔT over Δt, find guaranteed rate (integer °F/hr)
+function gen8() {
+  const rate = rInt(4)+2;         // °F per hour: {2,3,4,5}
+  const hrs  = rInt(2)+2;         // hours: {2,3}
+  const t1   = 50 + 2*rInt(8);    // starting temp, even number in {50,...,64}
+  const t2   = t1 + rate*hrs;
+  return {
+    latex: `\\text{Temperature rose from ${t1}°F to ${t2}°F over ${hrs} hours. The MVT guarantees it changed at exactly how many °F/hr at some moment?}`,
+    answer: [String(rate)],
+    hint: `Compute the average rate of temperature change over the interval. The MVT guarantees this rate occurred instantaneously.`,
+    step: `\\frac{${t2}-${t1}}{${hrs}}=\\frac{${rate*hrs}}{${hrs}}=${rate}\\text{ °F/hr}`
+  };
+}
+
+const GENERATORS = [gen1, gen2, gen3, gen4, gen5, gen6, gen7, gen8];
+
+
+// ── State ─────────────────────────────────────────────────────────────────────
+let ACTIVE, correct, flags, attempted, peeked;
+
+function norm(s) {
+  return s.trim().toLowerCase().replace(/\s+/g, '').replace(/[−–]/g, '-');
+}
+function ok(user, acc) { return acc.some(a => norm(user) === norm(a)); }
+
+function init() {
+  ACTIVE    = shuffle(GENERATORS.map(gen => gen()));
+  correct   = 0;
+  flags     = Array(GENERATORS.length).fill(false);
+  attempted = Array(GENERATORS.length).fill(false);
+  peeked    = Array(GENERATORS.length).fill(false);
+}
+
+function buildCards() {
+  const wrap = document.getElementById('problems');
+  wrap.innerHTML = '';
+  ACTIVE.forEach((p, i) => {
+    const div = document.createElement('div');
+    div.className = 'card'; div.id = 'card-' + i;
+    div.innerHTML =
+      `<div class="card-body">
+        <div class="card-meta">Problem ${i + 1}</div>
+        <div class="card-expr" id="expr-${i}"></div>
+        <div class="input-row">
+          <input class="ans-input" id="ai-${i}" placeholder="answer" />
+          <button class="check-btn" id="chk-${i}" onclick="check(${i})">Check</button>
+        </div>
+        <div class="hint">${p.hint}</div>
+        <div class="feedback" id="fb-${i}"></div>
+        <span class="reveal-link" id="rl-${i}" onclick="reveal(${i})">Show solution</span>
+        <div class="revealed-answer" id="ra-${i}"></div>
+      </div>`;
+    wrap.appendChild(div);
+    document.getElementById('ai-' + i)
+      .addEventListener('keydown', e => { if (e.key === 'Enter') check(i); });
+    if (p.svg) {
+      document.getElementById('expr-' + i).innerHTML = p.svg;
+    } else {
+      katex.render(p.latex, document.getElementById('expr-' + i),
+        { throwOnError: false, displayMode: true });
+    }
+  });
+}
+
+function check(i) {
+  const p = ACTIVE[i], inp = document.getElementById('ai-'+i),
+        fb = document.getElementById('fb-'+i), card = document.getElementById('card-'+i),
+        good = ok(inp.value, p.answer);
+  inp.className = 'ans-input';
+  if (good) {
+    inp.className = 'ans-input ok'; fb.className = 'feedback correct';
+    fb.textContent = '✓ Correct!'; card.className = 'card correct';
+    if (!flags[i] && !attempted[i] && !peeked[i]) { flags[i]=true; correct++; updateScore(); }
+    attempted[i] = true;
+    document.getElementById('chk-'+i).disabled = true; inp.readOnly = true;
+  } else {
+    attempted[i] = true; inp.className = 'ans-input bad'; fb.className = 'feedback wrong';
+    fb.textContent = '✗ Not quite — try again or show the solution.';
+    card.className = peeked[i] ? 'card peeked' : 'card wrong';
+  }
+}
+
+function reveal(i) {
+  const p = ACTIVE[i], box = document.getElementById('ra-'+i),
+        lnk = document.getElementById('rl-'+i);
+  if (box.style.display === 'block') {
+    box.style.display = 'none'; lnk.textContent = 'Show solution';
+  } else {
+    if (!flags[i]) {
+      peeked[i] = true; document.getElementById('card-'+i).className = 'card peeked';
+      if (!attempted[i]) {
+        const fb = document.getElementById('fb-'+i);
+        fb.className = 'feedback peeked';
+        fb.textContent = '⚠ Solution revealed — no point awarded.';
+      }
+    }
+    box.innerHTML = '<strong>Solution:</strong><br>';
+    const span = document.createElement('span'); box.appendChild(span);
+    katex.render(p.step, span, { throwOnError: false, displayMode: true });
+    box.style.display = 'block'; lnk.textContent = 'Hide solution';
+  }
+}
+
+function updateScore() {
+  const n = ACTIVE.length;
+  document.getElementById('score').textContent = correct + ' / ' + n;
+  document.getElementById('prog').style.width = Math.round(correct / n * 100) + '%';
+}
+
+function resetAll() { init(); buildCards(); updateScore(); }
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script>
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left: '$$', right: '$$', display: true},
+      {left: '$',  right: '$',  display: false}
+    ]
+  });
+  init(); buildCards(); updateScore();
+</script>
+</body>
+</html>

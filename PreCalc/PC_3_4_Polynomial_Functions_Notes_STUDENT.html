@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Polynomial Functions &mdash; Notes</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75;font-size:15px}
+.container{max-width:900px;margin:0 auto;padding:2rem 1.5rem 4rem}
+.page-title{font-size:28px;font-weight:700;margin-bottom:4px}
+.page-sub{font-family:sans-serif;font-size:13px;color:#666;margin-bottom:1.6rem}
+.opening-q{background:#eef3f9;border-left:4px solid #185fa5;border-radius:0 8px 8px 0;padding:1rem 1.2rem;font-size:15px;margin-bottom:1.5rem;font-style:italic;line-height:1.75}
+.section-head{font-family:sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#185fa5;margin-top:1.4rem;margin-bottom:.6rem;border-bottom:1px solid #c8d8ec;padding-bottom:4px}
+.accent-box{background:#d9e8f5;border-left:4px solid #185fa5;border-radius:0 8px 8px 0;padding:.9rem 1.1rem;font-size:14px;margin-bottom:.85rem;line-height:1.95}
+.accent-box ul{margin-left:1.3rem;margin-top:.3rem}
+.accent-box li{margin-bottom:.15rem}
+.accent-box p{margin-bottom:.4rem}
+.body-text{font-size:14px;line-height:1.75;margin-bottom:.85rem}
+.spacer{height:1rem}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:.5rem}
+.col{min-width:0}
+.examples-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem}
+.ex-block{border:1.5px solid #ddd;border-radius:9px;padding:1rem 1.1rem;background:#fff}
+.ex-label{font-family:sans-serif;font-size:11px;font-weight:700;color:#185fa5;text-transform:uppercase;letter-spacing:.05em;margin-bottom:.45rem}
+.ex-body{font-size:14px;line-height:1.75;margin-bottom:.5rem}
+.ex-answer.instructor{background:#fef9e7;border-left:3px solid #c9860a;border-radius:0 6px 6px 0;padding:.6rem .9rem;font-size:13.5px;color:#5a3e00;line-height:1.85}
+.practice{margin-bottom:1.5rem}
+.pr-row{display:grid;grid-template-columns:1.6rem 1fr 210px;gap:.75rem;align-items:start;padding:.6rem 0;border-bottom:1px solid #ece8e0}
+.pr-num{font-family:sans-serif;font-weight:700;font-size:14px;color:#185fa5;padding-top:2px}
+.pr-prob{font-size:14px;line-height:1.75}
+.pr-ans.instructor{font-size:13px;color:#5a3e00;background:#fef9e7;border-radius:5px;padding:4px 9px;line-height:1.75}
+.pr-ans.student{border-bottom:1.5px solid #bbb;min-height:2.2rem}
+.st-work{width:100%;min-height:3rem;border:1px solid #ccc;border-radius:5px;padding:.35rem .5rem;font-family:Georgia,serif;font-size:13px;resize:vertical;background:#fafafa;display:block;margin-bottom:.3rem}
+.st-work-sm{width:100%;min-height:1.5rem;border:1px solid #ccc;border-radius:4px;padding:.2rem .4rem;font-family:Georgia,serif;font-size:12px;resize:vertical;background:#fafafa;display:block;margin-bottom:.2rem}
+.st-btn{font-family:sans-serif;font-size:10px;font-weight:700;color:#185fa5;background:none;border:1.5px solid #185fa5;border-radius:4px;padding:2px 9px;cursor:pointer;margin-bottom:.2rem;display:inline-block}
+.st-btn-sm{font-family:sans-serif;font-size:9px;font-weight:700;color:#185fa5;background:none;border:1px solid #185fa5;border-radius:3px;padding:1px 6px;cursor:pointer;margin-bottom:.15rem;display:inline-block}
+.st-btn:hover,.st-btn-sm:hover{background:#eef3f9}
+.st-ans-hidden{display:none;background:#fef9e7;border-left:3px solid #c9860a;border-radius:0 5px 5px 0;padding:.4rem .7rem;font-size:13px;color:#5a3e00;line-height:1.85}
+.st-ans-hidden.visible{display:block}
+.katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}
+@media print{
+  body{background:white;font-size:10pt;line-height:1.5}
+  .container{padding:0;max-width:none}
+  .opening-q{padding:.5rem .8rem;margin-bottom:.8rem;font-size:10pt;line-height:1.5;break-inside:avoid;background:#eef3f9 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .section-head{margin-top:.7rem;margin-bottom:.35rem}
+  .accent-box{padding:.5rem .75rem;margin-bottom:.5rem;font-size:10pt;line-height:1.55;background:#e8f0f8 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .two-col{gap:1rem;margin-bottom:.3rem;break-inside:avoid}
+  .examples-grid{gap:.6rem;margin-bottom:.8rem;break-inside:avoid}
+  .ex-block{padding:.55rem .75rem;border:1px solid #ccc;break-inside:avoid}
+  .ex-answer.instructor{padding:.35rem .7rem;font-size:9.5pt;line-height:1.55;background:#fef9e7 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .pr-row{padding:.3rem 0;break-inside:avoid}
+  .pr-ans.instructor{font-size:9.5pt;padding:2px 7px;line-height:1.55;background:#fef9e7 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .st-work,.st-work-sm{background:none;border:none;border-bottom:1.5px solid #bbb;border-radius:0;min-height:2.6rem;resize:none}
+  .st-btn,.st-btn-sm{display:none}
+  .st-ans-hidden{display:none !important}
+}
+@page{margin:.55in .65in;size:letter}
+</style>
+</head>
+<body>
+<div class="container">
+<h1 class="page-title">Polynomial Functions</h1>
+<p class="page-sub">Pre-Calculus &nbsp;&middot;&nbsp; §3.4 &nbsp;&middot;&nbsp; Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026 &nbsp;&middot;&nbsp; <strong>STUDENT</strong></p>
+<div class="opening-q">A linear function has one "bend" (none, actually) and a quadratic has one. How many times can a degree-$n$ polynomial bend, and how does the leading term control the ends of the graph?</div>
+<div class="two-col"><div class="col"><div class="section-head">Polynomials, Degree, and Zeros</div>
+<div class="accent-box"><p><strong>Polynomial:</strong> $f(x)=a_nx^n+\cdots+a_1x+a_0$, $a_n\neq0$.</p><p><strong>Degree:</strong> largest power $n$. <strong>Leading coefficient:</strong> $a_n$.</p><p><strong>Zeros:</strong> $x=r$ is a zero if $f(r)=0$, i.e. $(x-r)$ is a factor.</p><p><strong>Multiplicity:</strong> if $(x-r)^m$ is a factor, $r$ has multiplicity $m$.</p><ul><li>Odd multiplicity: graph <em>crosses</em> $x$-axis at $r$.</li><li>Even multiplicity: graph <em>touches</em> (bounces off) $x$-axis at $r$.</li></ul></div>
+</div><div class="col"><div class="section-head">End Behavior</div>
+<div class="accent-box"><p><strong>End Behavior Theorem:</strong> for large $|x|$, $f(x)\approx a_nx^n$.</p><table style='font-size:13px;border-collapse:collapse;width:100%'><tr><th style='text-align:left;padding:2px 6px'>$a_n>0$, even $n$</th><td style='padding:2px 6px'>$\uparrow\uparrow$ (both ends up)</td></tr><tr><th style='text-align:left;padding:2px 6px'>$a_n<0$, even $n$</th><td style='padding:2px 6px'>$\downarrow\downarrow$ (both ends down)</td></tr><tr><th style='text-align:left;padding:2px 6px'>$a_n>0$, odd $n$</th><td style='padding:2px 6px'>$\downarrow\uparrow$ (left down, right up)</td></tr><tr><th style='text-align:left;padding:2px 6px'>$a_n<0$, odd $n$</th><td style='padding:2px 6px'>$\uparrow\downarrow$ (left up, right down)</td></tr></table></div>
+<p class="body-text">A degree-$n$ poly has at most $n$ real zeros and at most $n-1$ turning points.</p>
+</div></div>
+<div class="section-head">Worked Examples</div>
+<div class="examples-grid">
+<div class="ex-block"><div class="ex-label">Example 1 &mdash; Identify polynomial and degree</div><div class="ex-body">Which are polynomials? (a) $3x^4-2x+5$ (b) $\sqrt{x}+1$ (c) $x^{-2}+1$ (d) $x^3+x^2-7$</div><div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">(a) Yes, degree 4. (b) No — $\sqrt{x}=x^{1/2}$, not integer exponent. (c) No — negative exponent. (d) Yes, degree 3.</div></div></div>
+<div class="ex-block"><div class="ex-label">Example 2 &mdash; Zeros and multiplicities</div><div class="ex-body">Find zeros and multiplicities of $f(x)=5(x-2)(x+3)^2(x-\tfrac{1}{2})^4$.</div><div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">Zero $x=2$ (mult 1, crosses); $x=-3$ (mult 2, bounces); $x=\tfrac{1}{2}$ (mult 4, bounces).</div></div></div>
+<div class="ex-block"><div class="ex-label">Example 3 &mdash; End behavior</div><div class="ex-body">Describe end behavior of $f(x)=-3x^5+7x^2-1$.</div><div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">$a_n=-3<0$, odd degree $5$: as $x\to-\infty$, $f\to+\infty$; as $x\to+\infty$, $f\to-\infty$.</div></div></div>
+<div class="ex-block"><div class="ex-label">Example 4 &mdash; Build a polynomial</div><div class="ex-body">Find a degree-3 polynomial with zeros $-3, 2, 5$ and leading coefficient $1$.</div><div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">$f(x)=(x+3)(x-2)(x-5)=x^3-4x^2-11x+30$.</div></div></div>
+</div>
+<div class="section-head">Practice Problems</div>
+<div class="practice">
+<div class="pr-row"><div class="pr-num">1.</div><div class="pr-prob">State degree and leading coefficient of $f(x)=-7x^6+3x^2-x$.</div><div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">Degree 6, leading coefficient $-7$.</div></div></div>
+<div class="pr-row"><div class="pr-num">2.</div><div class="pr-prob">Find zeros of $f(x)=(x+1)^2(x-3)$.</div><div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$x=-1$ (mult 2), $x=3$ (mult 1).</div></div></div>
+<div class="pr-row"><div class="pr-num">3.</div><div class="pr-prob">What is end behavior of $f(x)=4x^3-2x$?</div><div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$a_n=4>0$, odd degree: $\downarrow\uparrow$.</div></div></div>
+<div class="pr-row"><div class="pr-num">4.</div><div class="pr-prob">How many turning points can $f(x)=x^4-3x^2+1$ have?</div><div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">At most $4-1=3$.</div></div></div>
+<div class="pr-row"><div class="pr-num">5.</div><div class="pr-prob">Write a degree-2 poly with zeros $x=1$ and $x=-4$ and leading coefficient $3$.</div><div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$f(x)=3(x-1)(x+4)=3x^2+9x-12$.</div></div></div>
+<div class="pr-row"><div class="pr-num">6.</div><div class="pr-prob">At a zero of multiplicity 3, does the graph cross or bounce?</div><div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">Odd multiplicity — the graph crosses the $x$-axis.</div></div></div>
+</div>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script>
+function toggleAns(btn) {
+  if (!btn.dataset.orig) btn.dataset.orig = btn.textContent;
+  var ans = btn.nextElementSibling;
+  var showing = ans.classList.toggle('visible');
+  btn.textContent = showing ? 'Hide' : btn.dataset.orig;
+}
+renderMathInElement(document.body, {
+  delimiters: [
+    {left: '$$', right: '$$', display: true},
+    {left: '$',  right: '$',  display: false}
+  ],
+  throwOnError: false
+});
+</script>
+</body>
+</html>

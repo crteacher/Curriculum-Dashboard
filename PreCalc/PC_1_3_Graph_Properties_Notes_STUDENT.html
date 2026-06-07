@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Graph Properties &mdash; Notes</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75;font-size:15px}
+.container{max-width:900px;margin:0 auto;padding:2rem 1.5rem 4rem}
+.page-title{font-size:28px;font-weight:700;margin-bottom:4px}
+.page-sub{font-family:sans-serif;font-size:13px;color:#666;margin-bottom:1.6rem}
+.opening-q{background:#eef3f9;border-left:4px solid #185fa5;border-radius:0 8px 8px 0;padding:1rem 1.2rem;font-size:15px;margin-bottom:1.5rem;font-style:italic;line-height:1.75}
+.section-head{font-family:sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#185fa5;margin-top:1.4rem;margin-bottom:.6rem;border-bottom:1px solid #c8d8ec;padding-bottom:4px}
+.accent-box{background:#d9e8f5;border-left:4px solid #185fa5;border-radius:0 8px 8px 0;padding:.9rem 1.1rem;font-size:14px;margin-bottom:.85rem;line-height:1.95}
+.accent-box ul{margin-left:1.3rem;margin-top:.3rem}
+.accent-box li{margin-bottom:.15rem}
+.accent-box p{margin-bottom:.4rem}
+.body-text{font-size:14px;line-height:1.75;margin-bottom:.85rem}
+.spacer{height:1rem}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:.5rem}
+.col{min-width:0}
+.examples-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem}
+.ex-block{border:1.5px solid #ddd;border-radius:9px;padding:1rem 1.1rem;background:#fff}
+.ex-label{font-family:sans-serif;font-size:11px;font-weight:700;color:#185fa5;text-transform:uppercase;letter-spacing:.05em;margin-bottom:.45rem}
+.ex-body{font-size:14px;line-height:1.75;margin-bottom:.5rem}
+.ex-answer.instructor{background:#fef9e7;border-left:3px solid #c9860a;border-radius:0 6px 6px 0;padding:.6rem .9rem;font-size:13.5px;color:#5a3e00;line-height:1.85}
+.practice{margin-bottom:1.5rem}
+.pr-row{display:grid;grid-template-columns:1.6rem 1fr 210px;gap:.75rem;align-items:start;padding:.6rem 0;border-bottom:1px solid #ece8e0}
+.pr-num{font-family:sans-serif;font-weight:700;font-size:14px;color:#185fa5;padding-top:2px}
+.pr-prob{font-size:14px;line-height:1.75}
+.pr-ans.instructor{font-size:13px;color:#5a3e00;background:#fef9e7;border-radius:5px;padding:4px 9px;line-height:1.75}
+.pr-ans.student{border-bottom:1.5px solid #bbb;min-height:2.2rem}
+.st-work{width:100%;min-height:3rem;border:1px solid #ccc;border-radius:5px;padding:.35rem .5rem;font-family:Georgia,serif;font-size:13px;resize:vertical;background:#fafafa;display:block;margin-bottom:.3rem}
+.st-work-sm{width:100%;min-height:1.5rem;border:1px solid #ccc;border-radius:4px;padding:.2rem .4rem;font-family:Georgia,serif;font-size:12px;resize:vertical;background:#fafafa;display:block;margin-bottom:.2rem}
+.st-btn{font-family:sans-serif;font-size:10px;font-weight:700;color:#185fa5;background:none;border:1.5px solid #185fa5;border-radius:4px;padding:2px 9px;cursor:pointer;margin-bottom:.2rem;display:inline-block}
+.st-btn-sm{font-family:sans-serif;font-size:9px;font-weight:700;color:#185fa5;background:none;border:1px solid #185fa5;border-radius:3px;padding:1px 6px;cursor:pointer;margin-bottom:.15rem;display:inline-block}
+.st-btn:hover,.st-btn-sm:hover{background:#eef3f9}
+.st-ans-hidden{display:none;background:#fef9e7;border-left:3px solid #c9860a;border-radius:0 5px 5px 0;padding:.4rem .7rem;font-size:13px;color:#5a3e00;line-height:1.85}
+.st-ans-hidden.visible{display:block}
+.katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}
+@media print{
+  body{background:white;font-size:10pt;line-height:1.5}
+  .container{padding:0;max-width:none}
+  .opening-q{padding:.5rem .8rem;margin-bottom:.8rem;font-size:10pt;line-height:1.5;break-inside:avoid;background:#eef3f9 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .section-head{margin-top:.7rem;margin-bottom:.35rem}
+  .accent-box{padding:.5rem .75rem;margin-bottom:.5rem;font-size:10pt;line-height:1.55;background:#e8f0f8 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .two-col{gap:1rem;margin-bottom:.3rem;break-inside:avoid}
+  .examples-grid{gap:.6rem;margin-bottom:.8rem;break-inside:avoid}
+  .ex-block{padding:.55rem .75rem;border:1px solid #ccc;break-inside:avoid}
+  .ex-answer.instructor{padding:.35rem .7rem;font-size:9.5pt;line-height:1.55;background:#fef9e7 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .pr-row{padding:.3rem 0;break-inside:avoid}
+  .pr-ans.instructor{font-size:9.5pt;padding:2px 7px;line-height:1.55;background:#fef9e7 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .st-work,.st-work-sm{background:none;border:none;border-bottom:1.5px solid #bbb;border-radius:0;min-height:2.6rem;resize:none}
+  .st-btn,.st-btn-sm{display:none}
+  .st-ans-hidden{display:none !important}
+}
+@page{margin:.55in .65in;size:letter}
+</style>
+</head>
+<body>
+<div class="container">
+<h1 class="page-title">Graph Properties</h1>
+<p class="page-sub">Pre-Calculus &nbsp;&middot;&nbsp; §1.3 &nbsp;&middot;&nbsp; Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026 &nbsp;&middot;&nbsp; <strong>STUDENT</strong></p>
+<div class="opening-q">If you graph your distance from home over a day, what does it mean when the graph goes up? Down? Stays flat? How do the highest and lowest points relate to your travel?</div>
+<div class="two-col"><div class="col"><div class="section-head">Increasing, Decreasing, Constant</div>
+<div class="accent-box"><p>Reading graphs <em>left to right</em>:</p><ul><li><strong>Increasing</strong> on $(a,b)$: $a<x_1<x_2<b\Rightarrow f(x_1)<f(x_2)$</li><li><strong>Decreasing</strong> on $(a,b)$: $a<x_1<x_2<b\Rightarrow f(x_1)>f(x_2)$</li><li><strong>Constant</strong> on $(a,b)$: $f(x_1)=f(x_2)$ for all $x_1,x_2$</li></ul><p><em>Report intervals using $x$-values, using open intervals.</em></p></div>
+</div><div class="col"><div class="section-head">Maxima, Minima & Average Rate of Change</div>
+<div class="accent-box"><p><strong>Local max/min:</strong> highest/lowest in some open interval around the point.</p><p><strong>Absolute max/min:</strong> highest/lowest on the entire domain (may not exist).</p><p><strong>Average rate of change</strong> from $a$ to $b$:</p><p>$$\text{ARC}=\dfrac{f(b)-f(a)}{b-a}$$</p><p>This equals the slope of the <em>secant line</em> connecting $(a,f(a))$ and $(b,f(b))$.</p></div>
+</div></div>
+<div style="text-align:center;margin:1rem 0 0.5rem"><svg width="520" height="160" viewBox="0 0 520 160" xmlns="http://www.w3.org/2000/svg">
+<rect width="520" height="160" fill="#fafaf8" rx="6"/>
+<line x1="30" y1="101" x2="490" y2="101" stroke="#888" stroke-width="1.5" marker-end="url(#arr)"/>
+<line x1="107" y1="130" x2="107" y2="30" stroke="#888" stroke-width="1.5"/>
+<polyline points="30.0,52.9; 33.8,55.2; 37.7,57.4; 41.5,59.5; 45.3,61.4; 49.2,63.3; 53.0,65.1; 56.8,66.8; 60.7,68.4; 64.5,69.9; 68.3,71.4; 72.2,72.7; 76.0,73.9; 79.8,75.1; 83.7,76.2; 87.5,77.2; 91.3,78.1; 95.2,78.9; 99.0,79.7; 102.8,80.3; 106.7,81.0; 110.5,81.5; 114.3,82.0; 118.2,82.4; 122.0,82.7; 125.8,83.0; 129.7,83.2; 133.5,83.3; 137.3,83.4; 141.2,83.4; 145.0,83.4; 148.8,83.3; 152.7,83.2; 156.5,83.0; 160.3,82.8; 164.2,82.5; 168.0,82.2; 171.8,81.8; 175.7,81.4; 179.5,81.0; 183.3,80.5; 187.2,80.0; 191.0,79.4; 194.8,78.8; 198.7,78.2; 202.5,77.6; 206.3,76.9; 210.2,76.2; 214.0,75.5; 217.8,74.7; 221.7,74.0; 225.5,73.2; 229.3,72.4; 233.2,71.6; 237.0,70.8; 240.8,70.0; 244.7,69.1; 248.5,68.3; 252.3,67.4; 256.2,66.6; 260.0,65.7; 263.8,64.9; 267.7,64.0; 271.5,63.2; 275.3,62.3; 279.2,61.5; 283.0,60.6; 286.8,59.8; 290.7,59.0; 294.5,58.2; 298.3,57.4; 302.2,56.7; 306.0,55.9; 309.8,55.2; 313.7,54.5; 317.5,53.9; 321.3,53.2; 325.2,52.6; 329.0,52.0; 332.8,51.5; 336.7,51.0; 340.5,50.5; 344.3,50.0; 348.2,49.6; 352.0,49.3; 355.8,48.9; 359.7,48.7; 363.5,48.4; 367.3,48.2; 371.2,48.1; 375.0,48.0; 378.8,48.0; 382.7,48.0; 386.5,48.1; 390.3,48.3; 394.2,48.5; 398.0,48.7; 401.8,49.1; 405.7,49.5; 409.5,49.9; 413.3,50.5; 417.2,51.1; 421.0,51.8; 424.8,52.5; 428.7,53.4; 432.5,54.3; 436.3,55.3; 440.2,56.3; 444.0,57.5; 447.8,58.7; 451.7,60.1; 455.5,61.5; 459.3,63.0; 463.2,64.6; 467.0,66.3; 470.8,68.1; 474.7,70.0; 478.5,72.0; 482.3,74.1; 486.2,76.3" fill="none" stroke="#185fa5" stroke-width="2.2" stroke-linejoin="round"/>
+<circle cx="168.0" cy="82.2" r="4" fill="#c9860a"/>
+<text x="166" y="74" font-size="9.5" font-family="sans-serif" fill="#c9860a" font-weight="bold">local max</text>
+<circle cx="352.0" cy="49.3" r="4" fill="#c9860a"/>
+<text x="348" y="65" font-size="9.5" font-family="sans-serif" fill="#c9860a" font-weight="bold">local min</text>
+<text x="68" y="61" font-size="9" font-family="sans-serif" fill="#2a7a2a" font-style="italic">increasing ↗</text>
+<text x="237" y="83" font-size="9" font-family="sans-serif" fill="#b03030" font-style="italic">decreasing ↘</text>
+<text x="383" y="39" font-size="9" font-family="sans-serif" fill="#2a7a2a" font-style="italic">increasing ↗</text>
+</svg></div><div class="section-head">Worked Examples</div>
+<div class="examples-grid">
+<div class="ex-block"><div class="ex-label">Example 1 &mdash; Increasing/decreasing from graph</div><div class="ex-body">A function increases on $(-\infty,1)$, decreases on $(1,3)$, and increases again on $(3,\infty)$. Identify local max and min.</div><div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">Local max at $x=1$; local min at $x=3$.</div></div></div>
+<div class="ex-block"><div class="ex-label">Example 2 &mdash; Average rate of change</div><div class="ex-body">Find the ARC of $f(x)=3x^2$ from $x=1$ to $x=3$.</div><div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">$\dfrac{f(3)-f(1)}{3-1}=\dfrac{27-3}{2}=\dfrac{24}{2}=12$.</div></div></div>
+<div class="ex-block"><div class="ex-label">Example 3 &mdash; ARC from a table</div><div class="ex-body">Table: $x$: 0,2,4,6; $f(x)$: 1,5,3,7. Find the ARC from $x=2$ to $x=6$.</div><div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">$\dfrac{7-5}{6-2}=\dfrac{2}{4}=0.5$.</div></div></div>
+<div class="ex-block"><div class="ex-label">Example 4 &mdash; Identify properties from formula</div><div class="ex-body">For $f(x)=-x^2+4$, find any absolute max or min, and state where $f$ is increasing and decreasing.</div><div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">Vertex at $(0,4)$ — absolute max of 4. Increasing on $(-\infty,0)$, decreasing on $(0,\infty)$.</div></div></div>
+</div>
+<div class="section-head">Practice Problems</div>
+<div class="practice">
+<div class="pr-row"><div class="pr-num">1.</div><div class="pr-prob">A graph increases on $(-2,1)$, has a local max of 5 at $x=1$, then decreases. Describe the function's behavior.</div><div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">Increasing on $(-2,1)$, local max $=5$ at $x=1$, decreasing after.</div></div></div>
+<div class="pr-row"><div class="pr-num">2.</div><div class="pr-prob">Find the ARC of $f(x)=x^2+1$ from $x=0$ to $x=4$.</div><div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$\dfrac{17-1}{4}=4$.</div></div></div>
+<div class="pr-row"><div class="pr-num">3.</div><div class="pr-prob">Find the ARC of $f(x)=2x-3$ from $x=1$ to $x=5$.</div><div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$\dfrac{7-(-1)}{4}=2$ (equals slope of line).</div></div></div>
+<div class="pr-row"><div class="pr-num">4.</div><div class="pr-prob">A function has an absolute min of $-2$ but no absolute max. Sketch a possible graph.</div><div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">E.g. $y=x^2-2$, opening upward with vertex at minimum.</div></div></div>
+<div class="pr-row"><div class="pr-num">5.</div><div class="pr-prob">On what interval(s) is $f(x)=|x|$ decreasing?</div><div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">Decreasing on $(-\infty,0)$.</div></div></div>
+<div class="pr-row"><div class="pr-num">6.</div><div class="pr-prob">Find the ARC of $g(x)=x^3$ from $x=-1$ to $x=2$.</div><div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$\dfrac{8-(-1)}{3}=3$.</div></div></div>
+</div>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script>
+function toggleAns(btn) {
+  if (!btn.dataset.orig) btn.dataset.orig = btn.textContent;
+  var ans = btn.nextElementSibling;
+  var showing = ans.classList.toggle('visible');
+  btn.textContent = showing ? 'Hide' : btn.dataset.orig;
+}
+renderMathInElement(document.body, {
+  delimiters: [
+    {left: '$$', right: '$$', display: true},
+    {left: '$',  right: '$',  display: false}
+  ],
+  throwOnError: false
+});
+</script>
+</body>
+</html>

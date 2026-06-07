@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Graphing Linear Equations &mdash; Notes</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75;font-size:15px}
+.container{max-width:900px;margin:0 auto;padding:2rem 1.5rem 4rem}
+.page-title{font-size:28px;font-weight:700;margin-bottom:4px}
+.page-sub{font-family:sans-serif;font-size:13px;color:#666;margin-bottom:1.6rem}
+.opening-q{background:#eef3f9;border-left:4px solid #185fa5;border-radius:0 8px 8px 0;padding:1rem 1.2rem;font-size:15px;margin-bottom:1.5rem;font-style:italic;line-height:1.75}
+.section-head{font-family:sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#185fa5;margin-top:1.4rem;margin-bottom:.6rem;border-bottom:1px solid #c8d8ec;padding-bottom:4px}
+.accent-box{background:#d9e8f5;border-left:4px solid #185fa5;border-radius:0 8px 8px 0;padding:.9rem 1.1rem;font-size:14px;margin-bottom:.85rem;line-height:1.95}
+.accent-box ul{margin-left:1.3rem;margin-top:.3rem}
+.accent-box li{margin-bottom:.15rem}
+.accent-box p{margin-bottom:.4rem}
+.body-text{font-size:14px;line-height:1.75;margin-bottom:.85rem}
+.spacer{height:1rem}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:.5rem}
+.col{min-width:0}
+.examples-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem}
+.ex-block{border:1.5px solid #ddd;border-radius:9px;padding:1rem 1.1rem;background:#fff}
+.ex-label{font-family:sans-serif;font-size:11px;font-weight:700;color:#185fa5;text-transform:uppercase;letter-spacing:.05em;margin-bottom:.45rem}
+.ex-body{font-size:14px;line-height:1.75;margin-bottom:.5rem}
+.ex-answer.instructor{background:#fef9e7;border-left:3px solid #c9860a;border-radius:0 6px 6px 0;padding:.6rem .9rem;font-size:13.5px;color:#5a3e00;line-height:1.85}
+.practice{margin-bottom:1.5rem}
+.pr-row{display:grid;grid-template-columns:1.6rem 1fr 210px;gap:.75rem;align-items:start;padding:.6rem 0;border-bottom:1px solid #ece8e0}
+.pr-num{font-family:sans-serif;font-weight:700;font-size:14px;color:#185fa5;padding-top:2px}
+.pr-prob{font-size:14px;line-height:1.75}
+.pr-ans.instructor{font-size:13px;color:#5a3e00;background:#fef9e7;border-radius:5px;padding:4px 9px;line-height:1.75}
+.pr-ans.student{border-bottom:1.5px solid #bbb;min-height:2.2rem}
+.st-work{width:100%;min-height:3rem;border:1px solid #ccc;border-radius:5px;padding:.35rem .5rem;font-family:Georgia,serif;font-size:13px;resize:vertical;background:#fafafa;display:block;margin-bottom:.3rem}
+.st-work-sm{width:100%;min-height:1.5rem;border:1px solid #ccc;border-radius:4px;padding:.2rem .4rem;font-family:Georgia,serif;font-size:12px;resize:vertical;background:#fafafa;display:block;margin-bottom:.2rem}
+.st-btn{font-family:sans-serif;font-size:10px;font-weight:700;color:#185fa5;background:none;border:1.5px solid #185fa5;border-radius:4px;padding:2px 9px;cursor:pointer;margin-bottom:.2rem;display:inline-block}
+.st-btn-sm{font-family:sans-serif;font-size:9px;font-weight:700;color:#185fa5;background:none;border:1px solid #185fa5;border-radius:3px;padding:1px 6px;cursor:pointer;margin-bottom:.15rem;display:inline-block}
+.st-btn:hover,.st-btn-sm:hover{background:#eef3f9}
+.st-ans-hidden{display:none;background:#fef9e7;border-left:3px solid #c9860a;border-radius:0 5px 5px 0;padding:.4rem .7rem;font-size:13px;color:#5a3e00;line-height:1.85}
+.st-ans-hidden.visible{display:block}
+.katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}
+@media print{
+  body{background:white;font-size:10pt;line-height:1.5}
+  .container{padding:0;max-width:none}
+  .opening-q{padding:.5rem .8rem;margin-bottom:.8rem;font-size:10pt;line-height:1.5;break-inside:avoid;background:#eef3f9 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .section-head{margin-top:.7rem;margin-bottom:.35rem}
+  .accent-box{padding:.5rem .75rem;margin-bottom:.5rem;font-size:10pt;line-height:1.55;background:#e8f0f8 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .two-col{gap:1rem;margin-bottom:.3rem;break-inside:avoid}
+  .examples-grid{gap:.6rem;margin-bottom:.8rem;break-inside:avoid}
+  .ex-block{padding:.55rem .75rem;border:1px solid #ccc;break-inside:avoid}
+  .ex-answer.instructor{padding:.35rem .7rem;font-size:9.5pt;line-height:1.55;background:#fef9e7 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .pr-row{padding:.3rem 0;break-inside:avoid}
+  .pr-ans.instructor{font-size:9.5pt;padding:2px 7px;line-height:1.55;background:#fef9e7 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .st-work,.st-work-sm{background:none;border:none;border-bottom:1.5px solid #bbb;border-radius:0;min-height:2.6rem;resize:none}
+  .st-btn,.st-btn-sm{display:none}
+  .st-ans-hidden{display:none !important}
+}
+@page{margin:.55in .65in;size:letter}
+</style>
+</head>
+<body>
+<div class="container">
+<h1 class="page-title">Graphing Linear Equations</h1>
+<p class="page-sub">Pre-Calculus &nbsp;&middot;&nbsp; §2.2 &nbsp;&middot;&nbsp; Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026 &nbsp;&middot;&nbsp; <strong>INSTRUCTOR</strong></p>
+<div class="opening-q">A hot-air balloon starts 1 m off the ground and rises at 2 m/s. If you graph height vs. time, what does the $y$-intercept represent? What does the slope represent?</div>
+<div class="two-col"><div class="col"><div class="section-head">Graphing from Slope and Intercepts</div>
+<div class="accent-box"><p><strong>Using slope-intercept form $y=mx+b$:</strong><br>Plot the $y$-intercept $(0,b)$, then use rise/run to find a second point.</p><p><strong>Finding intercepts:</strong><br>$y$-intercept: set $x=0$, solve for $y$.<br>$x$-intercept: set $y=0$, solve for $x$.</p><p><strong>Special lines:</strong><br>$x=a$ — vertical; undefined slope.<br>$y=b$ — horizontal; slope $=0$.</p></div>
+</div><div class="col"><div class="section-head">Parallel and Perpendicular Lines</div>
+<div class="accent-box"><p><strong>Parallel:</strong> same slope, different intercept. Graphs never intersect.</p><p><strong>Perpendicular:</strong> slopes multiply to $-1$. Graphs cross at $90^\circ$.</p><p>To find a parallel/perpendicular line: identify the slope of the given line, then use point-slope form with the new point.</p></div>
+<p class="body-text">Always check your answer by verifying the new line passes through the required point.</p>
+</div></div>
+<div style="text-align:center;margin:1rem 0 0.5rem"><svg width="400" height="200" viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+<rect width="400" height="200" fill="#fafaf8" rx="6"/>
+<line x1="32.0" y1="32" x2="32.0" y2="168" stroke="#eee" stroke-width="0.8"/>
+<line x1="74.0" y1="32" x2="74.0" y2="168" stroke="#eee" stroke-width="0.8"/>
+<line x1="116.0" y1="32" x2="116.0" y2="168" stroke="#eee" stroke-width="0.8"/>
+<line x1="158.0" y1="32" x2="158.0" y2="168" stroke="#eee" stroke-width="0.8"/>
+<line x1="200.0" y1="32" x2="200.0" y2="168" stroke="#eee" stroke-width="0.8"/>
+<line x1="242.0" y1="32" x2="242.0" y2="168" stroke="#eee" stroke-width="0.8"/>
+<line x1="284.0" y1="32" x2="284.0" y2="168" stroke="#eee" stroke-width="0.8"/>
+<line x1="326.0" y1="32" x2="326.0" y2="168" stroke="#eee" stroke-width="0.8"/>
+<line x1="368.0" y1="32" x2="368.0" y2="168" stroke="#eee" stroke-width="0.8"/>
+<line x1="32" y1="168.0" x2="368" y2="168.0" stroke="#eee" stroke-width="0.8"/>
+<line x1="32" y1="152.9" x2="368" y2="152.9" stroke="#eee" stroke-width="0.8"/>
+<line x1="32" y1="137.8" x2="368" y2="137.8" stroke="#eee" stroke-width="0.8"/>
+<line x1="32" y1="122.7" x2="368" y2="122.7" stroke="#eee" stroke-width="0.8"/>
+<line x1="32" y1="107.6" x2="368" y2="107.6" stroke="#eee" stroke-width="0.8"/>
+<line x1="32" y1="92.4" x2="368" y2="92.4" stroke="#eee" stroke-width="0.8"/>
+<line x1="32" y1="77.3" x2="368" y2="77.3" stroke="#eee" stroke-width="0.8"/>
+<line x1="32" y1="62.2" x2="368" y2="62.2" stroke="#eee" stroke-width="0.8"/>
+<line x1="32" y1="47.1" x2="368" y2="47.1" stroke="#eee" stroke-width="0.8"/>
+<line x1="32" y1="32.0" x2="368" y2="32.0" stroke="#eee" stroke-width="0.8"/>
+<line x1="32" y1="107.6" x2="368" y2="107.6" stroke="#999" stroke-width="1.5"/>
+<line x1="200.0" y1="32" x2="200.0" y2="168" stroke="#999" stroke-width="1.5"/>
+<line x1="95.0" y1="179.3" x2="347.0" y2="43.3" stroke="#185fa5" stroke-width="2.2"/>
+<line x1="242.0" y1="122.7" x2="326.0" y2="122.7" stroke="#c9860a" stroke-width="1.8" stroke-dasharray="5,3"/>
+<line x1="326.0" y1="122.7" x2="326.0" y2="77.3" stroke="#c03030" stroke-width="1.8" stroke-dasharray="5,3"/>
+<text x="284" y="137" text-anchor="middle" font-size="10" font-family="sans-serif" fill="#c9860a">run = 2</text>
+<text x="344" y="100" text-anchor="start" font-size="10" font-family="sans-serif" fill="#c03030">rise = 3</text>
+<circle cx="200.0" cy="122.7" r="4" fill="#185fa5"/>
+<text x="208" y="123" font-size="9.5" font-family="sans-serif" fill="#185fa5">y-int (0,−1)</text>
+<text x="318" y="49" font-size="11" font-family="sans-serif" fill="#185fa5" font-style="italic">y = ³⁄₂x − 1</text>
+<text x="366" y="120" font-size="10" font-family="sans-serif" fill="#888" text-anchor="end">m = rise/run = 3/2</text>
+</svg></div><div class="section-head">Worked Examples</div>
+<div class="examples-grid">
+<div class="ex-block"><div class="ex-label">Example 1 &mdash; Graph using intercepts</div><div class="ex-body">Graph $2x+3y=12$ by finding $x$- and $y$-intercepts.</div><div class="ex-answer instructor">$x$-int: set $y=0\Rightarrow x=6$, point $(6,0)$. $y$-int: set $x=0\Rightarrow y=4$, point $(0,4)$. Draw the line.</div></div>
+<div class="ex-block"><div class="ex-label">Example 2 &mdash; Graph from slope and point</div><div class="ex-body">Graph the line through $(3,2)$ with slope $m=-\tfrac{4}{5}$.</div><div class="ex-answer instructor">Plot $(3,2)$. Go down 4, right 5 to get $(8,-2)$. Draw line through both points.</div></div>
+<div class="ex-block"><div class="ex-label">Example 3 &mdash; Parallel line</div><div class="ex-body">Find and sketch the line through $(1,-3)$ parallel to $2x+2y=6$.</div><div class="ex-answer instructor">Given slope: $-1$. Parallel: $y+3=-(x-1)\Rightarrow y=-x-2$.</div></div>
+<div class="ex-block"><div class="ex-label">Example 4 &mdash; Perpendicular line</div><div class="ex-body">Find the line through $(1,-2)$ perpendicular to $x+3y=6$.</div><div class="ex-answer instructor">Slope of given: $-\tfrac{1}{3}$. Perpendicular slope: $3$. Line: $y=3x-5$.</div></div>
+</div>
+<div class="section-head">Practice Problems</div>
+<div class="practice">
+<div class="pr-row"><div class="pr-num">1.</div><div class="pr-prob">Find the $x$- and $y$-intercepts of $3x-4y=12$.</div><div class="pr-ans instructor">$x$-int: $(4,0)$; $y$-int: $(0,-3)$.</div></div>
+<div class="pr-row"><div class="pr-num">2.</div><div class="pr-prob">Graph $y=-2x+5$. Label the intercepts.</div><div class="pr-ans instructor">$y$-int $(0,5)$, $x$-int $(2.5,0)$.</div></div>
+<div class="pr-row"><div class="pr-num">3.</div><div class="pr-prob">Write the equation of the vertical line through $(4,0)$.</div><div class="pr-ans instructor">$x=4$.</div></div>
+<div class="pr-row"><div class="pr-num">4.</div><div class="pr-prob">Find the line through $(0,3)$ parallel to $y=-x+7$.</div><div class="pr-ans instructor">$y=-x+3$.</div></div>
+<div class="pr-row"><div class="pr-num">5.</div><div class="pr-prob">Find the line through $(2,1)$ perpendicular to $y=\tfrac{1}{2}x+3$.</div><div class="pr-ans instructor">Slope $-2$: $y-1=-2(x-2)\Rightarrow y=-2x+5$.</div></div>
+<div class="pr-row"><div class="pr-num">6.</div><div class="pr-prob">A balloon rises from 1 m at 2 m/s. Write $h(t)$ and find $h(10)$.</div><div class="pr-ans instructor">$h(t)=2t+1$; $h(10)=21$ m.</div></div>
+</div>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script>
+function toggleAns(btn) {
+  if (!btn.dataset.orig) btn.dataset.orig = btn.textContent;
+  var ans = btn.nextElementSibling;
+  var showing = ans.classList.toggle('visible');
+  btn.textContent = showing ? 'Hide' : btn.dataset.orig;
+}
+renderMathInElement(document.body, {
+  delimiters: [
+    {left: '$$', right: '$$', display: true},
+    {left: '$',  right: '$',  display: false}
+  ],
+  throwOnError: false
+});
+</script>
+</body>
+</html>

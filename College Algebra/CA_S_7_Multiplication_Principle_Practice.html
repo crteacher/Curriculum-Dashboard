@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Multiplication Principle &mdash; Practice</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.7}
+  .container{max-width:820px;margin:0 auto;padding:2rem 1.5rem 4rem}
+  h1{font-size:26px;font-weight:700;margin-bottom:4px}
+  .subtitle{font-size:14px;color:#666;margin-bottom:2rem;font-family:sans-serif}
+  .section{margin-bottom:2.5rem}
+  .section-title{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;
+    color:#777;font-family:sans-serif;margin-bottom:1rem;border-bottom:1px solid #ddd;padding-bottom:6px}
+  .concept{background:#d9e8f5;border-left:4px solid #185fa5;border-radius:0 8px 8px 0;
+    padding:.85rem 1.1rem;font-size:15px;margin-bottom:1rem}
+  .concept-label{font-family:sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;
+    letter-spacing:.07em;color:#185fa5;display:block;margin-bottom:.35rem}
+  .score-bar{display:flex;align-items:center;gap:12px;margin-bottom:1.25rem;
+    font-family:sans-serif;font-size:14px;flex-wrap:wrap}
+  .score-display{font-weight:700;font-size:18px;min-width:60px}
+  .score-label{color:#777;font-size:13px}
+  .score-note{font-size:12px;color:#999;font-style:italic}
+  .progress{flex:1;min-width:80px;height:6px;background:#e5e1d8;border-radius:3px;overflow:hidden}
+  .progress-fill{height:100%;background:#185fa5;border-radius:3px;transition:width .4s}
+  .reset-btn{font-size:12px;background:none;border:1px solid #bbb;border-radius:5px;
+    padding:4px 10px;cursor:pointer;color:#666;font-family:sans-serif;white-space:nowrap}
+  .reset-btn:hover{background:#eee}
+  .problems{display:grid;grid-template-columns:repeat(auto-fill,minmax(370px,1fr));gap:14px}
+  .card{background:#fff;border:1.5px solid #ddd;border-radius:10px;overflow:hidden;transition:border-color .25s}
+  .card.correct{border-color:#3a7a3a}.card.wrong{border-color:#b03030}.card.peeked{border-color:#b8860b}
+  .card-body{padding:14px 16px}
+  .card-meta{font-family:sans-serif;font-size:12px;color:#888;margin-bottom:4px}
+  .card-expr{font-size:17px;margin-bottom:12px;line-height:2.2;overflow-x:auto}
+  .katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}
+  .input-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .ans-input{font-family:'Courier New',monospace;font-size:14px;border:1px solid #ccc;
+    border-radius:6px;padding:7px 10px;flex:1;min-width:120px;background:#fafaf8;
+    color:#1a1a1a;outline:none}
+  .ans-input:focus{border-color:#185fa5;background:#fff}
+  .ans-input.ok{border-color:#3a7a3a;background:#f0faf0}
+  .ans-input.bad{border-color:#b03030;background:#fdf0f0}
+  .check-btn{font-family:sans-serif;font-size:13px;background:#1a1a1a;color:#fff;
+    border:none;border-radius:6px;padding:7px 14px;cursor:pointer}
+  .check-btn:hover{background:#333}.check-btn:disabled{background:#aaa;cursor:default}
+  .hint{font-family:sans-serif;font-size:12px;color:#888;margin-top:7px}
+  .feedback{font-family:sans-serif;font-size:13px;margin-top:10px;padding:8px 12px;
+    border-radius:6px;display:none;line-height:1.5}
+  .feedback.correct{display:block;background:#eaf5ea;color:#1a5a1a}
+  .feedback.wrong{display:block;background:#faeaea;color:#7a1a1a}
+  .feedback.peeked{display:block;background:#fdf8e8;color:#7a5a00}
+  .reveal-link{font-family:sans-serif;font-size:12px;color:#999;cursor:pointer;
+    text-decoration:underline;margin-top:8px;display:inline-block}
+  .reveal-link:hover{color:#555}
+  .revealed-answer{display:none;margin-top:8px;font-family:sans-serif;font-size:13px;
+    color:#444;background:#f5f3ef;border-radius:6px;padding:8px 11px;line-height:1.8;overflow-x:auto}
+  code{font-family:'Courier New',monospace;background:#f0ede7;padding:1px 5px;border-radius:3px;font-size:12px}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Multiplication Principle</h1>
+  <p class="subtitle">College Algebra &nbsp;&middot;&nbsp; &sect;S.7 &nbsp;&middot;&nbsp; Instructor: Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026</p>
+
+  <div class="section">
+    <div class="section-title">Core Ideas</div>
+
+    <div class="concept">
+      <span class="concept-label">Multiplication Principle</span>
+      If task 1 has $n_1$ options and task 2 has $n_2$ options (independently),
+      the total number of outcomes is $n_1 \times n_2$.
+      Extends to any number of consecutive choices.
+    </div>
+    <div class="concept">
+      <span class="concept-label">Factorial</span>
+      $n! = n \times (n-1) \times \cdots \times 2 \times 1$. &nbsp;
+      $0! = 1$. &nbsp;
+      The number of ways to arrange $n$ distinct objects in a row is $n!$
+    </div>
+    <div class="concept">
+      <span class="concept-label">Ordered Selection (no repeats)</span>
+      Choosing $r$ positions from $n$ objects where order matters and repeats are not allowed:
+      $n \times (n-1) \times \cdots \times (n-r+1)$.
+    </div>
+
+  </div>
+
+  <div class="section">
+    <div class="section-title">Practice Problems</div>
+    <p style="font-family:sans-serif;font-size:13px;color:#666;margin-bottom:1rem;">
+      All answers are integers — multiply the number of options at each step.
+      Press <strong>Check</strong> or hit Enter.
+    </p>
+    <div class="score-bar">
+      <span class="score-label">Score:</span>
+      <span class="score-display" id="score">0 / 8</span>
+      <span class="score-note">first attempt only</span>
+      <div class="progress"><div class="progress-fill" id="prog" style="width:0%"></div></div>
+      <button class="reset-btn" onclick="resetAll()">New set &nbsp;&#8635;</button>
+    </div>
+    <div class="problems" id="problems"></div>
+  </div>
+</div>
+
+<script>
+// ── Crypto-quality RNG ────────────────────────────────────────────────────────
+function _rf() {
+  const b = new Uint32Array(1);
+  crypto.getRandomValues(b);
+  return b[0] / 4294967296;
+}
+function rInt(n)   { return Math.floor(_rf() * n); }
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = rInt(i + 1);
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+// Pick one element at random from an array  e.g. choose([1,4,9])
+function choose(arr) { return arr[rInt(arr.length)]; }
+
+// ── Display helpers ───────────────────────────────────────────────────────────
+// Leading coefficient: 1→'', -1→'-', else the number as a string
+function fc(a) { if (a===1) return ''; if (a===-1) return '-'; return String(a); }
+// Subsequent term with sign: addT(-2,'x')→' - 2x', addT(3,'')→' + 3', addT(0,'x')→''
+function addT(n, v) {
+  if (n===0) return '';
+  const s = n>0?'+':'-', abs = Math.abs(n);
+  if (abs===1 && v) return ' ' + s + ' ' + v;
+  return ' ' + s + ' ' + abs + (v||'');
+}
+
+// ── Problem generators (section-specific, injected below) ─────────────────────
+
+// gen1: two independent choices — n1 × n2
+function gen1() {
+  const n1 = rInt(6)+2, n2 = rInt(6)+2;
+  const items1 = choose(['shirt colors','sandwich types','paint shades','flavors','book genres']);
+  const items2 = choose(['pant styles','drink choices','frame styles','toppings','cover types']);
+  return {
+    latex:  `${n1}\\text{ ${items1}} \\times ${n2}\\text{ ${items2}}.\\quad\\text{How many combinations?}`,
+    answer: [String(n1*n2)],
+    hint:   'What does the multiplication principle say about consecutive independent choices?',
+    step:   `${n1}\\times${n2}=${n1*n2}`
+  };
+}
+
+// gen2: three independent choices — n1 × n2 × n3
+function gen2() {
+  const n1 = rInt(4)+2, n2 = rInt(4)+2, n3 = rInt(4)+2;
+  return {
+    latex:  `\\text{A task has three consecutive choices with }${n1},\\;${n2},\\text{ and }${n3}\\text{ options.}\\quad\\text{How many outcomes?}`,
+    answer: [String(n1*n2*n3)],
+    hint:   'How many total outcomes arise from three consecutive independent choices?',
+    step:   `${n1}\\times${n2}\\times${n3}=${n1*n2*n3}`
+  };
+}
+
+// gen3: coin flips — 2^n
+function gen3() {
+  const n = rInt(4)+2;   // n = 2..5
+  const val = Math.pow(2, n);
+  return {
+    latex:  `\\text{A fair coin is flipped }${n}\\text{ times.}\\quad\\text{How many different outcome sequences are possible?}`,
+    answer: [String(val)],
+    hint:   'How many outcomes does each coin flip contribute to the sequence?',
+    step:   `2^{${n}}=${val}`
+  };
+}
+
+// gen4: dice — 6^n
+function gen4() {
+  const n = rInt(2)+1;   // n = 1 or 2
+  const val = Math.pow(6, n);
+  const diceWord = n === 1 ? 'die is rolled' : 'dice are rolled';
+  return {
+    latex:  `\\text{A fair }${n===1?'':n+'\\text{-'}\\text{sided }${diceWord}.}\\quad\\text{How many outcomes are in the sample space?}`,
+    answer: [String(val)],
+    hint:   'How many outcomes does each die contribute to the sample space?',
+    step:   `6^{${n}}=${val}`
+  };
+}
+
+// gen5: binary switches — 2^n
+function gen5() {
+  const n = rInt(4)+2;   // n = 2..5
+  const val = Math.pow(2, n);
+  return {
+    latex:  `\\text{There are }${n}\\text{ on/off switches.}\\quad\\text{How many different on/off combinations exist?}`,
+    answer: [String(val)],
+    hint:   'How many states does each on/off switch contribute to the total count?',
+    step:   `2^{${n}}=${val}`
+  };
+}
+
+// gen6: ordered selection, no repeats — n×(n-1)×…×(n-r+1)
+function gen6() {
+  const n = rInt(5)+6;   // n = 6..10
+  const r = rInt(2)+2;   // r = 2 or 3
+  let val = 1;
+  for (let i = 0; i < r; i++) val *= (n - i);
+  const roleNames = r === 2 ? 'President and VP' : 'President, VP, and Treasurer';
+  return {
+    latex:  `\\text{From }${n}\\text{ people, choose a }${roleNames}\\text{ (order matters, no repeats).}\\quad\\text{How many ways?}`,
+    answer: [String(val)],
+    hint:   'When the same person cannot fill two roles, how does the number of choices change at each position?',
+    step:   Array.from({length:r},(_,i)=>n-i).join('\\times')+'='+val
+  };
+}
+
+// gen7: factorial value — n!
+function gen7() {
+  const n = rInt(4)+3;   // n = 3..6
+  let val = 1;
+  for (let i = 2; i <= n; i++) val *= i;
+  return {
+    latex:  `\\text{Evaluate }${n}!`,
+    answer: [String(val)],
+    hint:   'What does the factorial symbol mean in terms of a product of consecutive integers?',
+    step:   Array.from({length:n},(_,i)=>n-i).join('\\times')+'='+val
+  };
+}
+
+// gen8: lock / digit combinations — 10^r or variations
+function gen8() {
+  const dials = rInt(2)+2;   // 2 or 3 dials
+  const digits = rInt(5)+6;  // 6..10 options per dial
+  const val = Math.pow(digits, dials);
+  return {
+    latex:  `\\text{A combination lock has }${dials}\\text{ dials, each showing digits }0\\text{–}${digits-1}.\\quad\\text{How many combinations exist?}`,
+    answer: [String(val)],
+    hint:   'How does the multiplication principle apply when each dial has the same number of options?',
+    step:   `${digits}^{${dials}}=${val}`
+  };
+}
+
+const GENERATORS = [gen1, gen2, gen3, gen4, gen5, gen6, gen7, gen8];
+
+
+// ── State ─────────────────────────────────────────────────────────────────────
+let ACTIVE, correct, flags, attempted, peeked;
+
+function norm(s) {
+  return s.trim().toLowerCase().replace(/\s+/g, '').replace(/[−–]/g, '-');
+}
+function ok(user, acc) { return acc.some(a => norm(user) === norm(a)); }
+
+function init() {
+  ACTIVE    = shuffle(GENERATORS.map(gen => gen()));
+  correct   = 0;
+  flags     = Array(GENERATORS.length).fill(false);
+  attempted = Array(GENERATORS.length).fill(false);
+  peeked    = Array(GENERATORS.length).fill(false);
+}
+
+function buildCards() {
+  const wrap = document.getElementById('problems');
+  wrap.innerHTML = '';
+  ACTIVE.forEach((p, i) => {
+    const div = document.createElement('div');
+    div.className = 'card'; div.id = 'card-' + i;
+    div.innerHTML =
+      `<div class="card-body">
+        <div class="card-meta">Problem ${i + 1}</div>
+        <div class="card-expr" id="expr-${i}"></div>
+        <div class="input-row">
+          <input class="ans-input" id="ai-${i}" placeholder="answer" />
+          <button class="check-btn" id="chk-${i}" onclick="check(${i})">Check</button>
+        </div>
+        <div class="hint">${p.hint}</div>
+        <div class="feedback" id="fb-${i}"></div>
+        <span class="reveal-link" id="rl-${i}" onclick="reveal(${i})">Show solution</span>
+        <div class="revealed-answer" id="ra-${i}"></div>
+      </div>`;
+    wrap.appendChild(div);
+    document.getElementById('ai-' + i)
+      .addEventListener('keydown', e => { if (e.key === 'Enter') check(i); });
+    if (p.svg) {
+      document.getElementById('expr-' + i).innerHTML = p.svg;
+    } else {
+      katex.render(p.latex, document.getElementById('expr-' + i),
+        { throwOnError: false, displayMode: true });
+    }
+  });
+}
+
+function check(i) {
+  const p = ACTIVE[i], inp = document.getElementById('ai-'+i),
+        fb = document.getElementById('fb-'+i), card = document.getElementById('card-'+i),
+        good = ok(inp.value, p.answer);
+  inp.className = 'ans-input';
+  if (good) {
+    inp.className = 'ans-input ok'; fb.className = 'feedback correct';
+    fb.textContent = '✓ Correct!'; card.className = 'card correct';
+    if (!flags[i] && !attempted[i] && !peeked[i]) { flags[i]=true; correct++; updateScore(); }
+    attempted[i] = true;
+    document.getElementById('chk-'+i).disabled = true; inp.readOnly = true;
+  } else {
+    attempted[i] = true; inp.className = 'ans-input bad'; fb.className = 'feedback wrong';
+    fb.textContent = '✗ Not quite — try again or show the solution.';
+    card.className = peeked[i] ? 'card peeked' : 'card wrong';
+  }
+}
+
+function reveal(i) {
+  const p = ACTIVE[i], box = document.getElementById('ra-'+i),
+        lnk = document.getElementById('rl-'+i);
+  if (box.style.display === 'block') {
+    box.style.display = 'none'; lnk.textContent = 'Show solution';
+  } else {
+    if (!flags[i]) {
+      peeked[i] = true; document.getElementById('card-'+i).className = 'card peeked';
+      if (!attempted[i]) {
+        const fb = document.getElementById('fb-'+i);
+        fb.className = 'feedback peeked';
+        fb.textContent = '⚠ Solution revealed — no point awarded.';
+      }
+    }
+    box.innerHTML = '<strong>Solution:</strong><br>';
+    const span = document.createElement('span'); box.appendChild(span);
+    katex.render(p.step, span, { throwOnError: false, displayMode: true });
+    box.style.display = 'block'; lnk.textContent = 'Hide solution';
+  }
+}
+
+function updateScore() {
+  const n = ACTIVE.length;
+  document.getElementById('score').textContent = correct + ' / ' + n;
+  document.getElementById('prog').style.width = Math.round(correct / n * 100) + '%';
+}
+
+function resetAll() { init(); buildCards(); updateScore(); }
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script>
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left: '$$', right: '$$', display: true},
+      {left: '$',  right: '$',  display: false}
+    ]
+  });
+  init(); buildCards(); updateScore();
+</script>
+</body>
+</html>

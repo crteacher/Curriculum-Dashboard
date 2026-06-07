@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Partitions &mdash; Practice</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.7}
+  .container{max-width:820px;margin:0 auto;padding:2rem 1.5rem 4rem}
+  h1{font-size:26px;font-weight:700;margin-bottom:4px}
+  .subtitle{font-size:14px;color:#666;margin-bottom:2rem;font-family:sans-serif}
+  .section{margin-bottom:2.5rem}
+  .section-title{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;
+    color:#777;font-family:sans-serif;margin-bottom:1rem;border-bottom:1px solid #ddd;padding-bottom:6px}
+  .concept{background:#d9e8f5;border-left:4px solid #185fa5;border-radius:0 8px 8px 0;
+    padding:.85rem 1.1rem;font-size:15px;margin-bottom:1rem}
+  .concept-label{font-family:sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;
+    letter-spacing:.07em;color:#185fa5;display:block;margin-bottom:.35rem}
+  .score-bar{display:flex;align-items:center;gap:12px;margin-bottom:1.25rem;
+    font-family:sans-serif;font-size:14px;flex-wrap:wrap}
+  .score-display{font-weight:700;font-size:18px;min-width:60px}
+  .score-label{color:#777;font-size:13px}
+  .score-note{font-size:12px;color:#999;font-style:italic}
+  .progress{flex:1;min-width:80px;height:6px;background:#e5e1d8;border-radius:3px;overflow:hidden}
+  .progress-fill{height:100%;background:#185fa5;border-radius:3px;transition:width .4s}
+  .reset-btn{font-size:12px;background:none;border:1px solid #bbb;border-radius:5px;
+    padding:4px 10px;cursor:pointer;color:#666;font-family:sans-serif;white-space:nowrap}
+  .reset-btn:hover{background:#eee}
+  .problems{display:grid;grid-template-columns:repeat(auto-fill,minmax(370px,1fr));gap:14px}
+  .card{background:#fff;border:1.5px solid #ddd;border-radius:10px;overflow:hidden;transition:border-color .25s}
+  .card.correct{border-color:#3a7a3a}.card.wrong{border-color:#b03030}.card.peeked{border-color:#b8860b}
+  .card-body{padding:14px 16px}
+  .card-meta{font-family:sans-serif;font-size:12px;color:#888;margin-bottom:4px}
+  .card-expr{font-size:17px;margin-bottom:12px;line-height:2.2;overflow-x:auto}
+  .katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}
+  .input-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .ans-input{font-family:'Courier New',monospace;font-size:14px;border:1px solid #ccc;
+    border-radius:6px;padding:7px 10px;flex:1;min-width:120px;background:#fafaf8;
+    color:#1a1a1a;outline:none}
+  .ans-input:focus{border-color:#185fa5;background:#fff}
+  .ans-input.ok{border-color:#3a7a3a;background:#f0faf0}
+  .ans-input.bad{border-color:#b03030;background:#fdf0f0}
+  .check-btn{font-family:sans-serif;font-size:13px;background:#1a1a1a;color:#fff;
+    border:none;border-radius:6px;padding:7px 14px;cursor:pointer}
+  .check-btn:hover{background:#333}.check-btn:disabled{background:#aaa;cursor:default}
+  .hint{font-family:sans-serif;font-size:12px;color:#888;margin-top:7px}
+  .feedback{font-family:sans-serif;font-size:13px;margin-top:10px;padding:8px 12px;
+    border-radius:6px;display:none;line-height:1.5}
+  .feedback.correct{display:block;background:#eaf5ea;color:#1a5a1a}
+  .feedback.wrong{display:block;background:#faeaea;color:#7a1a1a}
+  .feedback.peeked{display:block;background:#fdf8e8;color:#7a5a00}
+  .reveal-link{font-family:sans-serif;font-size:12px;color:#999;cursor:pointer;
+    text-decoration:underline;margin-top:8px;display:inline-block}
+  .reveal-link:hover{color:#555}
+  .revealed-answer{display:none;margin-top:8px;font-family:sans-serif;font-size:13px;
+    color:#444;background:#f5f3ef;border-radius:6px;padding:8px 11px;line-height:1.8;overflow-x:auto}
+  code{font-family:'Courier New',monospace;background:#f0ede7;padding:1px 5px;border-radius:3px;font-size:12px}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Partitions</h1>
+  <p class="subtitle">College Algebra &nbsp;&middot;&nbsp; &sect;S.10 &nbsp;&middot;&nbsp; Instructor: Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026</p>
+
+  <div class="section">
+    <div class="section-title">Core Ideas</div>
+
+    <div class="concept">
+      <span class="concept-label">Ordered Partition (Labeled Groups)</span>
+      Split $n$ objects into labeled groups of sizes $n_1, n_2, \ldots$:
+      $\dfrac{n!}{n_1!\,n_2!\cdots} = C(n,n_1)\times C(n-n_1,n_2)\times\cdots$
+    </div>
+    <div class="concept">
+      <span class="concept-label">Unordered Partition (Identical Groups)</span>
+      Split $n$ objects into $m$ interchangeable groups of size $r$:
+      divide the ordered count by $m!$ to remove duplicate groupings.
+    </div>
+    <div class="concept">
+      <span class="concept-label">The Key Question</span>
+      Do the groups have distinct identities (labeled destinations, roles, colors)?
+      &rarr; Ordered. &nbsp;
+      Are the groups interchangeable?
+      &rarr; Unordered (divide by $m!$).
+    </div>
+
+  </div>
+
+  <div class="section">
+    <div class="section-title">Practice Problems</div>
+    <p style="font-family:sans-serif;font-size:13px;color:#666;margin-bottom:1rem;">
+      Most answers are integers. For the ordered/unordered question enter <code>ordered</code> or <code>unordered</code>.
+      Press <strong>Check</strong> or hit Enter.
+    </p>
+    <div class="score-bar">
+      <span class="score-label">Score:</span>
+      <span class="score-display" id="score">0 / 8</span>
+      <span class="score-note">first attempt only</span>
+      <div class="progress"><div class="progress-fill" id="prog" style="width:0%"></div></div>
+      <button class="reset-btn" onclick="resetAll()">New set &nbsp;&#8635;</button>
+    </div>
+    <div class="problems" id="problems"></div>
+  </div>
+</div>
+
+<script>
+// ── Crypto-quality RNG ────────────────────────────────────────────────────────
+function _rf() {
+  const b = new Uint32Array(1);
+  crypto.getRandomValues(b);
+  return b[0] / 4294967296;
+}
+function rInt(n)   { return Math.floor(_rf() * n); }
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = rInt(i + 1);
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+// Pick one element at random from an array  e.g. choose([1,4,9])
+function choose(arr) { return arr[rInt(arr.length)]; }
+
+// ── Display helpers ───────────────────────────────────────────────────────────
+// Leading coefficient: 1→'', -1→'-', else the number as a string
+function fc(a) { if (a===1) return ''; if (a===-1) return '-'; return String(a); }
+// Subsequent term with sign: addT(-2,'x')→' - 2x', addT(3,'')→' + 3', addT(0,'x')→''
+function addT(n, v) {
+  if (n===0) return '';
+  const s = n>0?'+':'-', abs = Math.abs(n);
+  if (abs===1 && v) return ' ' + s + ' ' + v;
+  return ' ' + s + ' ' + abs + (v||'');
+}
+
+// ── Problem generators (section-specific, injected below) ─────────────────────
+
+function fact(n) { let v=1; for(let i=2;i<=n;i++) v*=i; return v; }
+function C(n,r) {
+  if(r<0||r>n) return 0;
+  let v=1; for(let i=0;i<r;i++) v*=(n-i); return Math.round(v/fact(r));
+}
+
+// gen1: ordered partition into 2 labeled groups → C(n, k)
+function gen1() {
+  const k = rInt(3)+2;           // k = 2..4
+  const rest = rInt(3)+k+1;      // ensure rest > k
+  const n = k + rest;
+  const val = C(n, k);
+  const dest1 = choose(['Washington DC','Chicago','the museum','the lab','Team A']);
+  const dest2 = dest1 === 'Team A' ? 'Team B' : 'home';
+  return {
+    latex:  `${n}\\text{ people split into a group of }${k}\\text{ (${dest1}) and }${rest}\\text{ (${dest2}). How many ways?}`,
+    answer: [String(val)],
+    hint:   'When groups have distinct labels, which formula counts ways to assign people to one specific group?',
+    step:   `C(${n},${k})=${val}`
+  };
+}
+
+// gen2: ordered partition into 3 labeled groups → C(n,a)×C(n-a,b)
+function gen2() {
+  const a = rInt(2)+2, b = rInt(2)+2;   // a,b = 2..3
+  const c = rInt(2)+1;                   // c = 1..2
+  const n = a+b+c;
+  const val = C(n,a)*C(n-a,b);          // ×C(c,c)=1
+  return {
+    latex:  `${n}\\text{ people → Team A (}${a}\\text{), Team B (}${b}\\text{), Team C (}${c}\\text{). How many ways?}`,
+    answer: [String(val)],
+    hint:   'For labeled groups, how do you count the ways to fill each group in sequence?',
+    step:   `C(${n},${a})\\times C(${n-a},${b})=${C(n,a)}\\times${C(n-a,b)}=${val}`
+  };
+}
+
+// gen3: unordered partition into 2 equal groups → C(n, n/2) / 2
+function gen3() {
+  const r = rInt(3)+2;    // group size r = 2..4
+  const n = 2*r;
+  const val = C(n,r)/2;
+  return {
+    latex:  `${n}\\text{ people split into 2 unlabeled groups of }${r}. \\text{ How many ways?}`,
+    answer: [String(val)],
+    hint:   'When two groups are interchangeable, how does that change the count compared to labeled groups?',
+    step:   `C(${n},${r})\\div 2!=${C(n,r)}\\div 2=${val}`
+  };
+}
+
+// gen4: ordered vs unordered — text answer
+function gen4() {
+  const labeled = Math.random() < 0.5;
+  const scenario = labeled
+    ? choose(['splitting into a red team and a blue team',
+              'assigning people to Group A and Group B',
+              'splitting into a morning shift and an evening shift'])
+    : choose(['splitting into two equal teams for a game',
+              'dividing into two study groups with no labels',
+              'forming two anonymous committees']);
+  return {
+    latex:  `\\text{Is "${scenario}" an ordered or unordered partition?}`,
+    answer: [labeled ? 'ordered' : 'unordered'],
+    hint:   'Do the groups have distinct identities, or are they interchangeable?',
+    step:   labeled ? `\\text{Groups are labeled}\\Rightarrow\\text{ordered}`
+                    : `\\text{Groups are interchangeable}\\Rightarrow\\text{unordered}`
+  };
+}
+
+// gen5: C(n, k) — first factor in an ordered 2-group partition
+function gen5() {
+  const k = rInt(3)+2, rest = rInt(3)+k;
+  const n = k+rest;
+  const val = C(n,k);
+  return {
+    latex:  `\\text{${n} people split into labeled groups of ${k} and ${rest}. What is the number of ways?}`,
+    answer: [String(val)],
+    hint:   'For two labeled groups, how many ways can you choose who goes in the smaller group?',
+    step:   `C(${n},${k})=${val}`
+  };
+}
+
+// gen6: unordered — 3 equal groups of 2 → C(6,2)×C(4,2)/3!
+function gen6() {
+  const n = 6, r = 2, m = 3;
+  const ordered = C(6,2)*C(4,2)*C(2,2);
+  const val = ordered/fact(m);
+  return {
+    latex:  `6\\text{ people split into 3 unlabeled pairs. How many ways?}`,
+    answer: [String(val)],
+    hint:   'After counting ordered arrangements of equal groups, what do you divide by to remove duplicates?',
+    step:   `C(6,2)\\times C(4,2)\\times C(2,2)\\div 3!=${ordered}\\div 6=${val}`
+  };
+}
+
+// gen7: ordered — how many ways given C(n,k) directly
+function gen7() {
+  const k1 = rInt(2)+2, k2 = rInt(2)+2;
+  const n = k1+k2+rInt(2)+1;
+  const k3 = n-k1-k2;
+  const val = C(n,k1)*C(n-k1,k2);
+  return {
+    latex:  `C(${n},${k1})\\times C(${n-k1},${k2})\\times C(${k3},${k3}).\\quad\\text{Evaluate.}`,
+    answer: [String(val)],
+    hint:   'What does each factor in this product represent in a partition into labeled groups?',
+    step:   `${C(n,k1)}\\times${C(n-k1,k2)}\\times 1=${val}`
+  };
+}
+
+// gen8: unordered 2 groups, unequal sizes — just C(n,k)/2 for equal split variant
+function gen8() {
+  const r = rInt(2)+3;   // r = 3 or 4
+  const n = 2*r;
+  const ordered = C(n,r);
+  const val = ordered/2;
+  return {
+    latex:  `\\text{In how many ways can }${n}\\text{ students be split into 2 equal, unlabeled groups of }${r}?`,
+    answer: [String(val)],
+    hint:   'How many times does each unlabeled split appear in the labeled count?',
+    step:   `C(${n},${r})\\div 2=${ordered}\\div 2=${val}`
+  };
+}
+
+const GENERATORS = [gen1, gen2, gen3, gen4, gen5, gen6, gen7, gen8];
+
+
+// ── State ─────────────────────────────────────────────────────────────────────
+let ACTIVE, correct, flags, attempted, peeked;
+
+function norm(s) {
+  return s.trim().toLowerCase().replace(/\s+/g, '').replace(/[−–]/g, '-');
+}
+function ok(user, acc) { return acc.some(a => norm(user) === norm(a)); }
+
+function init() {
+  ACTIVE    = shuffle(GENERATORS.map(gen => gen()));
+  correct   = 0;
+  flags     = Array(GENERATORS.length).fill(false);
+  attempted = Array(GENERATORS.length).fill(false);
+  peeked    = Array(GENERATORS.length).fill(false);
+}
+
+function buildCards() {
+  const wrap = document.getElementById('problems');
+  wrap.innerHTML = '';
+  ACTIVE.forEach((p, i) => {
+    const div = document.createElement('div');
+    div.className = 'card'; div.id = 'card-' + i;
+    div.innerHTML =
+      `<div class="card-body">
+        <div class="card-meta">Problem ${i + 1}</div>
+        <div class="card-expr" id="expr-${i}"></div>
+        <div class="input-row">
+          <input class="ans-input" id="ai-${i}" placeholder="answer" />
+          <button class="check-btn" id="chk-${i}" onclick="check(${i})">Check</button>
+        </div>
+        <div class="hint">${p.hint}</div>
+        <div class="feedback" id="fb-${i}"></div>
+        <span class="reveal-link" id="rl-${i}" onclick="reveal(${i})">Show solution</span>
+        <div class="revealed-answer" id="ra-${i}"></div>
+      </div>`;
+    wrap.appendChild(div);
+    document.getElementById('ai-' + i)
+      .addEventListener('keydown', e => { if (e.key === 'Enter') check(i); });
+    if (p.svg) {
+      document.getElementById('expr-' + i).innerHTML = p.svg;
+    } else {
+      katex.render(p.latex, document.getElementById('expr-' + i),
+        { throwOnError: false, displayMode: true });
+    }
+  });
+}
+
+function check(i) {
+  const p = ACTIVE[i], inp = document.getElementById('ai-'+i),
+        fb = document.getElementById('fb-'+i), card = document.getElementById('card-'+i),
+        good = ok(inp.value, p.answer);
+  inp.className = 'ans-input';
+  if (good) {
+    inp.className = 'ans-input ok'; fb.className = 'feedback correct';
+    fb.textContent = '✓ Correct!'; card.className = 'card correct';
+    if (!flags[i] && !attempted[i] && !peeked[i]) { flags[i]=true; correct++; updateScore(); }
+    attempted[i] = true;
+    document.getElementById('chk-'+i).disabled = true; inp.readOnly = true;
+  } else {
+    attempted[i] = true; inp.className = 'ans-input bad'; fb.className = 'feedback wrong';
+    fb.textContent = '✗ Not quite — try again or show the solution.';
+    card.className = peeked[i] ? 'card peeked' : 'card wrong';
+  }
+}
+
+function reveal(i) {
+  const p = ACTIVE[i], box = document.getElementById('ra-'+i),
+        lnk = document.getElementById('rl-'+i);
+  if (box.style.display === 'block') {
+    box.style.display = 'none'; lnk.textContent = 'Show solution';
+  } else {
+    if (!flags[i]) {
+      peeked[i] = true; document.getElementById('card-'+i).className = 'card peeked';
+      if (!attempted[i]) {
+        const fb = document.getElementById('fb-'+i);
+        fb.className = 'feedback peeked';
+        fb.textContent = '⚠ Solution revealed — no point awarded.';
+      }
+    }
+    box.innerHTML = '<strong>Solution:</strong><br>';
+    const span = document.createElement('span'); box.appendChild(span);
+    katex.render(p.step, span, { throwOnError: false, displayMode: true });
+    box.style.display = 'block'; lnk.textContent = 'Hide solution';
+  }
+}
+
+function updateScore() {
+  const n = ACTIVE.length;
+  document.getElementById('score').textContent = correct + ' / ' + n;
+  document.getElementById('prog').style.width = Math.round(correct / n * 100) + '%';
+}
+
+function resetAll() { init(); buildCards(); updateScore(); }
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script>
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left: '$$', right: '$$', display: true},
+      {left: '$',  right: '$',  display: false}
+    ]
+  });
+  init(); buildCards(); updateScore();
+</script>
+</body>
+</html>

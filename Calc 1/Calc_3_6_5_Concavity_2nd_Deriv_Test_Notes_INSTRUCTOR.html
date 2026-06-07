@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Concavity &amp; 2nd Derivative Test &mdash; Notes</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75;font-size:15px}
+.container{max-width:900px;margin:0 auto;padding:2rem 1.5rem 4rem}
+
+/* ── Header ── */
+.page-title{font-size:28px;font-weight:700;margin-bottom:4px}
+.page-sub{font-family:sans-serif;font-size:13px;color:#666;margin-bottom:1.6rem}
+
+/* ── Opening question ── */
+.opening-q{background:#eef3f9;border-left:4px solid #185fa5;
+  border-radius:0 8px 8px 0;padding:1rem 1.2rem;font-size:15px;
+  margin-bottom:1.5rem;font-style:italic;line-height:1.75}
+
+/* ── Section heading ── */
+.section-head{font-family:sans-serif;font-size:11px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.08em;color:#185fa5;
+  margin-top:1.4rem;margin-bottom:.6rem;
+  border-bottom:1px solid #c8d8ec;padding-bottom:4px}
+
+/* ── Accent box ── */
+.accent-box{background:#d9e8f5;border-left:4px solid #185fa5;
+  border-radius:0 8px 8px 0;padding:.9rem 1.1rem;font-size:14px;
+  margin-bottom:.85rem;line-height:1.95}
+.accent-box ul{margin-left:1.3rem;margin-top:.3rem}
+.accent-box li{margin-bottom:.15rem}
+.accent-box p{margin-bottom:.4rem}
+
+/* ── Body text ── */
+.body-text{font-size:14px;line-height:1.75;margin-bottom:.85rem}
+
+/* ── Spacer ── */
+.spacer{height:1rem}
+
+/* ── Two-column layout ── */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:.5rem}
+.col{min-width:0}
+
+/* ── Worked examples 2-col grid ── */
+.examples-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem}
+.ex-block{border:1.5px solid #ddd;border-radius:9px;padding:1rem 1.1rem;background:#fff}
+.ex-label{font-family:sans-serif;font-size:11px;font-weight:700;color:#185fa5;
+  text-transform:uppercase;letter-spacing:.05em;margin-bottom:.45rem}
+.ex-body{font-size:14px;line-height:1.75;margin-bottom:.5rem}
+.ex-answer.instructor{background:#fef9e7;border-left:3px solid #c9860a;
+  border-radius:0 6px 6px 0;padding:.6rem .9rem;font-size:13.5px;
+  color:#5a3e00;line-height:1.85}
+.ex-answer.student{height:4.5rem;border-bottom:1.5px solid #bbb;margin-top:.4rem}
+
+/* ── Practice section ── */
+.practice{margin-bottom:1.5rem}
+.pr-row{display:grid;grid-template-columns:1.6rem 1fr 210px;gap:.75rem;
+  align-items:start;padding:.6rem 0;border-bottom:1px solid #ece8e0}
+.pr-num{font-family:sans-serif;font-weight:700;font-size:14px;color:#185fa5;padding-top:2px}
+.pr-prob{font-size:14px;line-height:1.75}
+.pr-ans.instructor{font-size:13px;color:#5a3e00;background:#fef9e7;
+  border-radius:5px;padding:4px 9px;line-height:1.75}
+.pr-ans.student{border-bottom:1.5px solid #bbb;min-height:2.2rem}
+
+/* ── SVG figures ── */
+.svg-figure{text-align:center;margin:.4rem 0 .6rem}
+.svg-figure svg{max-width:100%;height:auto}
+.svg-caption{font-family:sans-serif;font-size:11px;color:#555;
+  margin-top:.2rem;font-style:italic}
+
+/* ── KaTeX overflow ── */
+.katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}
+
+/* ── Print styles ── */
+@media print{
+  body{background:white;font-size:10pt;line-height:1.5}
+  .container{padding:0;max-width:none}
+  .page-sub{margin-bottom:.8rem}
+  .opening-q{padding:.5rem .8rem;margin-bottom:.8rem;font-size:10pt;line-height:1.5;break-inside:avoid}
+  .section-head{margin-top:.7rem;margin-bottom:.35rem}
+  .spacer{height:.3rem}
+  .accent-box{padding:.5rem .75rem;margin-bottom:.5rem;font-size:10pt;line-height:1.55;
+    background:#e8f0f8 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .accent-box p{margin-bottom:.2rem}
+  .body-text{font-size:10pt;line-height:1.5;margin-bottom:.5rem}
+  .two-col{gap:1rem;margin-bottom:.3rem;break-inside:avoid}
+  .examples-grid{gap:.6rem;margin-bottom:.8rem;break-inside:avoid}
+  .ex-block{padding:.55rem .75rem;border:1px solid #ccc;break-inside:avoid}
+  .ex-label{margin-bottom:.25rem}
+  .ex-body{font-size:10pt;line-height:1.5;margin-bottom:.3rem}
+  .ex-answer.instructor{padding:.35rem .7rem;font-size:9.5pt;line-height:1.55;
+    background:#fef9e7 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .ex-answer.student{height:2.8rem}
+  .practice{margin-bottom:.8rem}
+  .pr-row{padding:.3rem 0;break-inside:avoid}
+  .pr-prob{font-size:10pt;line-height:1.5}
+  .pr-ans.instructor{font-size:9.5pt;padding:2px 7px;line-height:1.55;
+    background:#fef9e7 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .pr-ans.student{min-height:1.6rem}
+  .opening-q{
+    background:#eef3f9 !important;
+    -webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .svg-figure{margin:.25rem 0 .4rem}
+  .svg-figure svg{max-width:100%;height:auto}
+  .svg-caption{font-size:9pt}
+}
+@page{margin:.55in .65in;size:letter}
+</style>
+</head>
+<body>
+<div class="container">
+<h1 class="page-title">Concavity &amp; 2nd Derivative Test</h1>
+<p class="page-sub">Calculus I &nbsp;&middot;&nbsp; &sect;3.6.5 &nbsp;&middot;&nbsp; Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026 &nbsp;&middot;&nbsp; <strong>INSTRUCTOR</strong></p>
+<div class="opening-q">The first derivative tells us where $f$ goes up or down. The second derivative tells us whether the graph curves up like a cup or down like a hill. Can we use $f''$ to classify critical numbers more quickly?</div>
+<div class="two-col">
+<div class="col"><div class="section-head">Concavity & Inflection Points</div>
+<div class="accent-box"><p>$f''(x)>0$ on interval &rarr; $f$ is <strong>concave up</strong> ∪<br>$f''(x)<0$ on interval &rarr; $f$ is <strong>concave down</strong> ∩</p><p>An <strong>inflection point</strong> is where $f''$ changes sign.<br>To find: set $f''(x)=0$, check that the sign actually changes.</p></div>
+<p class="body-text">Concave up means the tangent line lies <em>below</em> the curve. Concave down means it lies <em>above</em>. An inflection point is NOT just where $f''=0$ — the sign must change.</p>
+<div class="svg-figure"><svg viewBox="0 0 260 115" xmlns="http://www.w3.org/2000/svg" style="width:230px;height:auto"><line x1="130" y1="5" x2="130" y2="110" stroke="#ddd" stroke-width="1"/><text x="65" y="14" text-anchor="middle" font-size="10" fill="#185fa5" font-family="sans-serif" font-weight="bold">Concave Up &#x222A;</text><text x="65" y="26" text-anchor="middle" font-size="9.5" fill="#2a8c2a" font-family="sans-serif" font-style="italic">f''(x) &gt; 0</text><path d="M 15,50 Q 65,90 115,50" stroke="#185fa5" stroke-width="2.2" fill="none"/><line x1="42" y1="70" x2="88" y2="70" stroke="#888" stroke-width="1.2" stroke-dasharray="4,3"/><circle cx="65" cy="70" r="3" fill="#185fa5"/><text x="195" y="14" text-anchor="middle" font-size="10" fill="#185fa5" font-family="sans-serif" font-weight="bold">Concave Down &#x2229;</text><text x="195" y="26" text-anchor="middle" font-size="9.5" fill="#c0392b" font-family="sans-serif" font-style="italic">f''(x) &lt; 0</text><path d="M 145,65 Q 195,25 245,65" stroke="#185fa5" stroke-width="2.2" fill="none"/><line x1="172" y1="45" x2="218" y2="45" stroke="#888" stroke-width="1.2" stroke-dasharray="4,3"/><circle cx="195" cy="45" r="3" fill="#185fa5"/><text x="65" y="107" text-anchor="middle" font-size="9" fill="#555" font-family="sans-serif">tangent below curve</text><text x="195" y="107" text-anchor="middle" font-size="9" fill="#555" font-family="sans-serif">tangent above curve</text></svg><div class="svg-caption">Concave up (cup): tangent lies below; concave down (hill): tangent lies above</div></div>
+</div>
+<div class="col"><div class="section-head">Second Derivative Test</div>
+<div class="accent-box"><p>If $f'(c)=0$:</p><ul>  <li>$f''(c)>0$ &rarr; concave up at $c$ &rarr; <strong>local min</strong></li>  <li>$f''(c)<0$ &rarr; concave down at $c$ &rarr; <strong>local max</strong></li>  <li>$f''(c)=0$ &rarr; <strong>inconclusive</strong> (use FDT instead)</li></ul><p>Memory: concave up = cup shape = min at bottom.</p></div>
+<p class="body-text">The 2nd Derivative Test is often faster than FDT when $f''$ is easy to compute. But if $f''(c)=0$, you must fall back to the First Derivative Test.</p>
+</div>
+</div>
+<div class="section-head">Worked Examples</div>
+<div class="examples-grid">
+<div class="ex-block">
+  <div class="ex-label">Example 1 &nbsp;&mdash;&nbsp; Concavity intervals</div>
+  <div class="ex-body">Find where $f(x)=x^3-3x^2$ is concave up/down.</div>
+  <div class="ex-answer instructor">$f'(x)=3x^2-6x$, $f''(x)=6x-6$<br>$f''=0$ at $x=1$<br>$x<1$: $f''<0$ &rarr; concave down<br>$x>1$: $f''>0$ &rarr; concave up</div>
+</div>
+<div class="ex-block">
+  <div class="ex-label">Example 2 &nbsp;&mdash;&nbsp; Inflection point</div>
+  <div class="ex-body">Find the inflection point of $f(x)=x^3-3x^2$.</div>
+  <div class="ex-answer instructor">$f''$ changes sign at $x=1$: inflection point at $(1,f(1))=(1,-2)$</div>
+</div>
+<div class="ex-block">
+  <div class="ex-label">Example 3 &nbsp;&mdash;&nbsp; Second Derivative Test</div>
+  <div class="ex-body">Classify the critical numbers of $f(x)=x^3-3x^2$ using the 2nd Derivative Test.</div>
+  <div class="ex-answer instructor">Critical: $x=0$ and $x=2$<br>$f''(0)=-6<0$ &rarr; <strong>local max</strong><br>$f''(2)=6>0$ &rarr; <strong>local min</strong></div>
+</div>
+<div class="ex-block">
+  <div class="ex-label">Example 4 &nbsp;&mdash;&nbsp; Inconclusive case</div>
+  <div class="ex-body">Apply 2nd Derivative Test to $f(x)=x^4$ at $x=0$.</div>
+  <div class="ex-answer instructor">$f'(x)=4x^3=0$ at $x=0$<br>$f''(x)=12x^2$, $f''(0)=0$ &rarr; <strong>inconclusive</strong><br>FDT: $f'$ changes $-\to+$ &rarr; local min</div>
+</div>
+</div>
+<div class="section-head">Practice Problems</div>
+<div class="practice">
+<div class="pr-row">
+  <div class="pr-num">1.</div>
+  <div class="pr-prob">Find the concavity intervals for $f(x)=x^4-6x^2$.</div>
+  <div class="pr-ans instructor">$f''=12x^2-12=0$ at $x=\pm 1$. CU on $(-\infty,-1)$ and $(1,\infty)$; CD on $(-1,1)$</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">2.</div>
+  <div class="pr-prob">Find inflection points of $f(x)=x^4-6x^2$.</div>
+  <div class="pr-ans instructor">$x=\pm 1$; points $(\pm 1,-5)$</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">3.</div>
+  <div class="pr-prob">Classify $x=0$ for $f(x)=x^4-6x^2$ using SDT.</div>
+  <div class="pr-ans instructor">$f'(0)=0$, $f''(0)=-12<0$ &rarr; local max</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">4.</div>
+  <div class="pr-prob">Classify $x=\pm\sqrt{3}$ for $f(x)=x^4-6x^2$ using SDT.</div>
+  <div class="pr-ans instructor">$f''(\sqrt{3})=24>0$ &rarr; local min; same at $-\sqrt{3}$</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">5.</div>
+  <div class="pr-prob">Where is $f(x)=e^{-x^2}$ concave up?</div>
+  <div class="pr-ans instructor">$f''=e^{-x^2}(4x^2-2)>0$ when $|x|>1/\sqrt{2}$</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">6.</div>
+  <div class="pr-prob">Does $f(x)=x^3$ have an inflection point? Where?</div>
+  <div class="pr-ans instructor">$f''=6x=0$ at $x=0$; sign changes &rarr; inflection at $(0,0)$</div>
+</div>
+</div>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script>
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left: '$$', right: '$$', display: true},
+      {left: '$',  right: '$',  display: false}
+    ],
+    throwOnError: false
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Displacement, Velocity &amp; Acceleration &mdash; Notes</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75;font-size:15px}
+.container{max-width:900px;margin:0 auto;padding:2rem 1.5rem 4rem}
+
+/* ── Header ── */
+.page-title{font-size:28px;font-weight:700;margin-bottom:4px}
+.page-sub{font-family:sans-serif;font-size:13px;color:#666;margin-bottom:1.6rem}
+
+/* ── Opening question ── */
+.opening-q{background:#eef3f9;border-left:4px solid #185fa5;
+  border-radius:0 8px 8px 0;padding:1rem 1.2rem;font-size:15px;
+  margin-bottom:1.5rem;font-style:italic;line-height:1.75}
+
+/* ── Section heading ── */
+.section-head{font-family:sans-serif;font-size:11px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.08em;color:#185fa5;
+  margin-top:1.4rem;margin-bottom:.6rem;
+  border-bottom:1px solid #c8d8ec;padding-bottom:4px}
+
+/* ── Accent box ── */
+.accent-box{background:#d9e8f5;border-left:4px solid #185fa5;
+  border-radius:0 8px 8px 0;padding:.9rem 1.1rem;font-size:14px;
+  margin-bottom:.85rem;line-height:1.95}
+.accent-box ul{margin-left:1.3rem;margin-top:.3rem}
+.accent-box li{margin-bottom:.15rem}
+.accent-box p{margin-bottom:.4rem}
+
+/* ── Body text ── */
+.body-text{font-size:14px;line-height:1.75;margin-bottom:.85rem}
+
+/* ── Spacer ── */
+.spacer{height:1rem}
+
+/* ── Two-column layout ── */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:.5rem}
+.col{min-width:0}
+
+/* ── Worked examples 2-col grid ── */
+.examples-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem}
+.ex-block{border:1.5px solid #ddd;border-radius:9px;padding:1rem 1.1rem;background:#fff}
+.ex-label{font-family:sans-serif;font-size:11px;font-weight:700;color:#185fa5;
+  text-transform:uppercase;letter-spacing:.05em;margin-bottom:.45rem}
+.ex-body{font-size:14px;line-height:1.75;margin-bottom:.5rem}
+.ex-answer.instructor{background:#fef9e7;border-left:3px solid #c9860a;
+  border-radius:0 6px 6px 0;padding:.6rem .9rem;font-size:13.5px;
+  color:#5a3e00;line-height:1.85}
+.ex-answer.student{height:4.5rem;border-bottom:1.5px solid #bbb;margin-top:.4rem}
+
+/* ── Practice section ── */
+.practice{margin-bottom:1.5rem}
+.pr-row{display:grid;grid-template-columns:1.6rem 1fr 210px;gap:.75rem;
+  align-items:start;padding:.6rem 0;border-bottom:1px solid #ece8e0}
+.pr-num{font-family:sans-serif;font-weight:700;font-size:14px;color:#185fa5;padding-top:2px}
+.pr-prob{font-size:14px;line-height:1.75}
+.pr-ans.instructor{font-size:13px;color:#5a3e00;background:#fef9e7;
+  border-radius:5px;padding:4px 9px;line-height:1.75}
+.pr-ans.student{border-bottom:1.5px solid #bbb;min-height:2.2rem}
+
+/* ── Student interactive ── */
+.st-work{width:100%;min-height:3rem;border:1px solid #ccc;border-radius:5px;
+  padding:.35rem .5rem;font-family:Georgia,serif;font-size:13px;resize:vertical;
+  background:#fafafa;display:block;margin-bottom:.3rem}
+.st-work-sm{width:100%;min-height:1.5rem;border:1px solid #ccc;border-radius:4px;
+  padding:.2rem .4rem;font-family:Georgia,serif;font-size:12px;resize:vertical;
+  background:#fafafa;display:block;margin-bottom:.2rem}
+.st-btn{font-family:sans-serif;font-size:10px;font-weight:700;color:#185fa5;
+  background:none;border:1.5px solid #185fa5;border-radius:4px;
+  padding:2px 9px;cursor:pointer;margin-bottom:.2rem;display:inline-block}
+.st-btn-sm{font-family:sans-serif;font-size:9px;font-weight:700;color:#185fa5;
+  background:none;border:1px solid #185fa5;border-radius:3px;
+  padding:1px 6px;cursor:pointer;margin-bottom:.15rem;display:inline-block}
+.st-btn:hover,.st-btn-sm:hover{background:#eef3f9}
+.st-ans-hidden{display:none;background:#fef9e7;border-left:3px solid #c9860a;
+  border-radius:0 5px 5px 0;padding:.4rem .7rem;font-size:13px;
+  color:#5a3e00;line-height:1.85}
+.st-ans-hidden.visible{display:block}
+
+/* ── SVG figures ── */
+.svg-figure{text-align:center;margin:.4rem 0 .6rem}
+.svg-figure svg{max-width:100%;height:auto}
+.svg-caption{font-family:sans-serif;font-size:11px;color:#555;
+  margin-top:.2rem;font-style:italic}
+
+/* ── KaTeX overflow ── */
+.katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}
+
+/* ── Print styles ── */
+@media print{
+  body{background:white;font-size:10pt;line-height:1.5}
+  .container{padding:0;max-width:none}
+  .page-sub{margin-bottom:.8rem}
+  .opening-q{padding:.5rem .8rem;margin-bottom:.8rem;font-size:10pt;line-height:1.5;break-inside:avoid}
+  .section-head{margin-top:.7rem;margin-bottom:.35rem}
+  .spacer{height:.3rem}
+  .accent-box{padding:.5rem .75rem;margin-bottom:.5rem;font-size:10pt;line-height:1.55;
+    background:#e8f0f8 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .accent-box p{margin-bottom:.2rem}
+  .body-text{font-size:10pt;line-height:1.5;margin-bottom:.5rem}
+  .two-col{gap:1rem;margin-bottom:.3rem;break-inside:avoid}
+  .examples-grid{gap:.6rem;margin-bottom:.8rem;break-inside:avoid}
+  .ex-block{padding:.55rem .75rem;border:1px solid #ccc;break-inside:avoid}
+  .ex-label{margin-bottom:.25rem}
+  .ex-body{font-size:10pt;line-height:1.5;margin-bottom:.3rem}
+  .ex-answer.instructor{padding:.35rem .7rem;font-size:9.5pt;line-height:1.55;
+    background:#fef9e7 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .ex-answer.student{height:2.8rem}
+  .practice{margin-bottom:.8rem}
+  .pr-row{padding:.3rem 0;break-inside:avoid}
+  .pr-prob{font-size:10pt;line-height:1.5}
+  .pr-ans.instructor{font-size:9.5pt;padding:2px 7px;line-height:1.55;
+    background:#fef9e7 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .pr-ans.student{min-height:1.6rem}
+  .st-work{background:none;border:none;border-bottom:1.5px solid #bbb;
+    border-radius:0;min-height:2.6rem;resize:none}
+  .st-work-sm{background:none;border:none;border-bottom:1.5px solid #bbb;
+    border-radius:0;min-height:1.3rem;resize:none}
+  .st-btn,.st-btn-sm{display:none}
+  .st-ans-hidden{display:none !important}
+  .opening-q{
+    background:#eef3f9 !important;
+    -webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .svg-figure{margin:.25rem 0 .4rem}
+  .svg-figure svg{max-width:100%;height:auto}
+  .svg-caption{font-size:9pt}
+}
+@page{margin:.55in .65in;size:letter}
+</style>
+</head>
+<body>
+<div class="container">
+<h1 class="page-title">Displacement, Velocity &amp; Acceleration</h1>
+<p class="page-sub">Calculus I &nbsp;&middot;&nbsp; &sect;4.6 &nbsp;&middot;&nbsp; Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026 &nbsp;&middot;&nbsp; <strong>INSTRUCTOR</strong></p>
+<div class="opening-q">Derivatives connected position, velocity, and acceleration going downward. Antiderivatives let us go back up — from acceleration to velocity to position. And the definite integral of velocity gives displacement. But displacement and total distance are different — which is which?</div>
+<div class="two-col">
+<div class="col"><div class="section-head">The Position-Velocity-Acceleration Chain</div>
+<div class="accent-box"><p><strong>Differentiate downward:</strong><br>$s(t)\xrightarrow{\;d/dt\;}v(t)\xrightarrow{\;d/dt\;}a(t)$</p><p><strong>Integrate upward:</strong><br>$a(t)\xrightarrow{\;\int\;}v(t)+C_1\xrightarrow{\;\int\;}s(t)+C_2$</p><p>Use initial conditions $v(t_0)$ and $s(t_0)$ to find $C_1$ and $C_2$.</p></div>
+</div>
+<div class="col"><div class="section-head">Displacement vs Total Distance</div>
+<div class="accent-box"><p><strong>Displacement</strong> (signed):</p>$$\Delta s=\int_a^b v(t)\,dt=s(b)-s(a)$$<p>Can be negative if the object moves back.</p><p><strong>Total distance</strong> (always $\geq 0$):</p>$$\text{distance}=\int_a^b |v(t)|\,dt$$<p>Split the integral at zeros of $v$ and add absolute values.</p></div>
+<p class="body-text">Object is moving <strong>right/up</strong> when $v>0$; <strong>left/down</strong> when $v<0$; <strong>stopped</strong> when $v=0$.</p>
+</div>
+</div>
+<div class="svg-figure"><svg viewBox="0 0 280 135" xmlns="http://www.w3.org/2000/svg" style="width:268px;height:auto"><polygon points="20,120 51,117 83,108 114,93 145,73 145,73 20,73" fill="#fde8e8" stroke="none"/><polygon points="145,73 176,47 208,15 208,73 145,73" fill="#e8f5e8" stroke="none"/><line x1="18" y1="73" x2="270" y2="73" stroke="#888" stroke-width="1.2"/><polygon points="270,70 276,73 270,76" fill="#888"/><line x1="20" y1="128" x2="20" y2="8" stroke="#888" stroke-width="1.2"/><polygon points="17,8 20,2 23,8" fill="#888"/><text x="271" y="77" font-size="9" fill="#555" font-family="sans-serif">t</text><text x="23" y="9" font-size="9" fill="#555" font-family="sans-serif">v(t)</text><polyline points="20,120 51,117 83,108 114,93 145,73 176,47 208,15" stroke="#185fa5" stroke-width="2.2" fill="none" stroke-linejoin="round"/><line x1="145" y1="70" x2="145" y2="76" stroke="#888" stroke-width="1"/><text x="141" y="86" font-size="9" fill="#555" font-family="sans-serif">2</text><line x1="208" y1="70" x2="208" y2="76" stroke="#888" stroke-width="1"/><text x="204" y="86" font-size="9" fill="#555" font-family="sans-serif">3</text><text x="78" y="100" text-anchor="middle" font-size="9.5" fill="#c03030" font-family="sans-serif" font-weight="bold">v &lt; 0</text><text x="78" y="112" text-anchor="middle" font-size="8.5" fill="#c03030" font-family="sans-serif">(moving left)</text><text x="178" y="62" text-anchor="middle" font-size="9.5" fill="#2a8c2a" font-family="sans-serif" font-weight="bold">v &gt; 0</text><text x="178" y="74" text-anchor="middle" font-size="8.5" fill="#2a8c2a" font-family="sans-serif">(moving right)</text><text x="140" y="125" text-anchor="end" font-size="8.5" fill="#c03030" font-family="sans-serif" font-style="italic">net area &lt; 0</text><text x="145" y="125" text-anchor="start" font-size="8.5" fill="#2a8c2a" font-family="sans-serif" font-style="italic">net area &gt; 0</text></svg><div class="svg-caption">Displacement $= \int_a^b v(t)\,dt$ = net signed area (cancels). Total distance $= \int_a^b |v(t)|\,dt$ = sum of shaded areas.</div></div>
+<div class="section-head">Worked Examples</div>
+<div class="examples-grid">
+<div class="ex-block">
+  <div class="ex-label">Example 1 &nbsp;&mdash;&nbsp; Find velocity from acceleration</div>
+  <div class="ex-body">Acceleration $a(t)=6t$, $v(0)=2$. Find $v(t)$.</div>
+  <div class="ex-answer instructor">$v(t)=\int 6t\,dt=3t^2+C$<br>$v(0)=C=2 \Rightarrow v(t)=3t^2+2$</div>
+</div>
+<div class="ex-block">
+  <div class="ex-label">Example 2 &nbsp;&mdash;&nbsp; Find position from velocity</div>
+  <div class="ex-body">$v(t)=3t^2+2$, $s(0)=1$. Find $s(t)$.</div>
+  <div class="ex-answer instructor">$s(t)=\int(3t^2+2)\,dt=t^3+2t+C$<br>$s(0)=C=1 \Rightarrow s(t)=t^3+2t+1$</div>
+</div>
+<div class="ex-block">
+  <div class="ex-label">Example 3 &nbsp;&mdash;&nbsp; Displacement</div>
+  <div class="ex-body">$v(t)=t^2-4$ on $[0,3]$. Find displacement.</div>
+  <div class="ex-answer instructor">$\displaystyle\int_0^3(t^2-4)\,dt=\left[\dfrac{t^3}{3}-4t\right]_0^3=9-12=−3$ units</div>
+</div>
+<div class="ex-block">
+  <div class="ex-label">Example 4 &nbsp;&mdash;&nbsp; Total distance</div>
+  <div class="ex-body">$v(t)=t^2-4$ on $[0,3]$. Find total distance traveled.</div>
+  <div class="ex-answer instructor">$v=0$ at $t=2$<br>$\int_0^2(4-t^2)\,dt+\int_2^3(t^2-4)\,dt$<br>$=\left[4t-t^3/3\right]_0^2+\left[t^3/3-4t\right]_2^3$<br>$=\dfrac{16}{3}+\dfrac{7}{3}=\dfrac{23}{3}$ units</div>
+</div>
+</div>
+<div class="section-head">Practice Problems</div>
+<div class="practice">
+<div class="pr-row">
+  <div class="pr-num">1.</div>
+  <div class="pr-prob">$a(t)=4$, $v(0)=0$. Find $v(t)$.</div>
+  <div class="pr-ans instructor">$v(t)=4t$</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">2.</div>
+  <div class="pr-prob">$v(t)=4t$, $s(0)=3$. Find $s(t)$.</div>
+  <div class="pr-ans instructor">$s(t)=2t^2+3$</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">3.</div>
+  <div class="pr-prob">$v(t)=2t-6$ on $[0,4]$. Find displacement.</div>
+  <div class="pr-ans instructor">$\int_0^4(2t-6)\,dt=[t^2-6t]_0^4=16-24=-8$</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">4.</div>
+  <div class="pr-prob">$v(t)=2t-6$ on $[0,4]$. Is the object moving right or left at $t=2$?</div>
+  <div class="pr-ans instructor">$v(2)=4-6=-2<0$ &rarr; moving left</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">5.</div>
+  <div class="pr-prob">$s(t)=t^3-6t^2+9t$. When is the object stopped?</div>
+  <div class="pr-ans instructor">$v(t)=3t^2-12t+9=3(t-1)(t-3)=0$ at $t=1$ and $t=3$</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">6.</div>
+  <div class="pr-prob">$v(t)=3t^2-12$. Find displacement on $[0,2]$.</div>
+  <div class="pr-ans instructor">$\int_0^2(3t^2-12)\,dt=[t^3-12t]_0^2=8-24=-16$</div>
+</div>
+</div>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script>
+function toggleAns(btn) {
+  if (!btn.dataset.orig) btn.dataset.orig = btn.textContent;
+  var ans = btn.nextElementSibling;
+  var showing = ans.classList.toggle('visible');
+  btn.textContent = showing ? 'Hide' : btn.dataset.orig;
+}
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left: '$$', right: '$$', display: true},
+      {left: '$',  right: '$',  display: false}
+    ],
+    throwOnError: false
+  });
+</script>
+</body>
+</html>

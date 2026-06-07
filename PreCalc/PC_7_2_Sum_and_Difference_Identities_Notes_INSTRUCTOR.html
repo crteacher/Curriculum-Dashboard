@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sum and Difference Identities &mdash; Notes</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75;font-size:15px}
+.container{max-width:900px;margin:0 auto;padding:2rem 1.5rem 4rem}
+.page-title{font-size:28px;font-weight:700;margin-bottom:4px}
+.page-sub{font-family:sans-serif;font-size:13px;color:#666;margin-bottom:1.6rem}
+.opening-q{background:#eef3f9;border-left:4px solid #185fa5;border-radius:0 8px 8px 0;padding:1rem 1.2rem;font-size:15px;margin-bottom:1.5rem;font-style:italic;line-height:1.75}
+.section-head{font-family:sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#185fa5;margin-top:1.4rem;margin-bottom:.6rem;border-bottom:1px solid #c8d8ec;padding-bottom:4px}
+.accent-box{background:#d9e8f5;border-left:4px solid #185fa5;border-radius:0 8px 8px 0;padding:.9rem 1.1rem;font-size:14px;margin-bottom:.85rem;line-height:1.95}
+.accent-box ul{margin-left:1.3rem;margin-top:.3rem}
+.accent-box li{margin-bottom:.15rem}
+.accent-box p{margin-bottom:.4rem}
+.body-text{font-size:14px;line-height:1.75;margin-bottom:.85rem}
+.spacer{height:1rem}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:.5rem}
+.col{min-width:0}
+.examples-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem}
+.ex-block{border:1.5px solid #ddd;border-radius:9px;padding:1rem 1.1rem;background:#fff}
+.ex-label{font-family:sans-serif;font-size:11px;font-weight:700;color:#185fa5;text-transform:uppercase;letter-spacing:.05em;margin-bottom:.45rem}
+.ex-body{font-size:14px;line-height:1.75;margin-bottom:.5rem}
+.ex-answer.instructor{background:#fef9e7;border-left:3px solid #c9860a;border-radius:0 6px 6px 0;padding:.6rem .9rem;font-size:13.5px;color:#5a3e00;line-height:1.85}
+.practice{margin-bottom:1.5rem}
+.pr-row{display:grid;grid-template-columns:1.6rem 1fr 210px;gap:.75rem;align-items:start;padding:.6rem 0;border-bottom:1px solid #ece8e0}
+.pr-num{font-family:sans-serif;font-weight:700;font-size:14px;color:#185fa5;padding-top:2px}
+.pr-prob{font-size:14px;line-height:1.75}
+.pr-ans.instructor{font-size:13px;color:#5a3e00;background:#fef9e7;border-radius:5px;padding:4px 9px;line-height:1.75}
+.pr-ans.student{border-bottom:1.5px solid #bbb;min-height:2.2rem}
+.st-work{width:100%;min-height:3rem;border:1px solid #ccc;border-radius:5px;padding:.35rem .5rem;font-family:Georgia,serif;font-size:13px;resize:vertical;background:#fafafa;display:block;margin-bottom:.3rem}
+.st-work-sm{width:100%;min-height:1.5rem;border:1px solid #ccc;border-radius:4px;padding:.2rem .4rem;font-family:Georgia,serif;font-size:12px;resize:vertical;background:#fafafa;display:block;margin-bottom:.2rem}
+.st-btn{font-family:sans-serif;font-size:10px;font-weight:700;color:#185fa5;background:none;border:1.5px solid #185fa5;border-radius:4px;padding:2px 9px;cursor:pointer;margin-bottom:.2rem;display:inline-block}
+.st-btn-sm{font-family:sans-serif;font-size:9px;font-weight:700;color:#185fa5;background:none;border:1px solid #185fa5;border-radius:3px;padding:1px 6px;cursor:pointer;margin-bottom:.15rem;display:inline-block}
+.st-btn:hover,.st-btn-sm:hover{background:#eef3f9}
+.st-ans-hidden{display:none;background:#fef9e7;border-left:3px solid #c9860a;border-radius:0 5px 5px 0;padding:.4rem .7rem;font-size:13px;color:#5a3e00;line-height:1.85}
+.st-ans-hidden.visible{display:block}
+.katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}
+@media print{
+  body{background:white;font-size:10pt;line-height:1.5}
+  .container{padding:0;max-width:none}
+  .opening-q{padding:.5rem .8rem;margin-bottom:.8rem;font-size:10pt;line-height:1.5;break-inside:avoid;background:#eef3f9 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .section-head{margin-top:.7rem;margin-bottom:.35rem}
+  .accent-box{padding:.5rem .75rem;margin-bottom:.5rem;font-size:10pt;line-height:1.55;background:#e8f0f8 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .two-col{gap:1rem;margin-bottom:.3rem;break-inside:avoid}
+  .examples-grid{gap:.6rem;margin-bottom:.8rem;break-inside:avoid}
+  .ex-block{padding:.55rem .75rem;border:1px solid #ccc;break-inside:avoid}
+  .ex-answer.instructor{padding:.35rem .7rem;font-size:9.5pt;line-height:1.55;background:#fef9e7 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .pr-row{padding:.3rem 0;break-inside:avoid}
+  .pr-ans.instructor{font-size:9.5pt;padding:2px 7px;line-height:1.55;background:#fef9e7 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .st-work,.st-work-sm{background:none;border:none;border-bottom:1.5px solid #bbb;border-radius:0;min-height:2.6rem;resize:none}
+  .st-btn,.st-btn-sm{display:none}
+  .st-ans-hidden{display:none !important}
+}
+@page{margin:.55in .65in;size:letter}
+</style>
+</head>
+<body>
+<div class="container">
+<h1 class="page-title">Sum and Difference Identities</h1>
+<p class="page-sub">Pre-Calculus &nbsp;&middot;&nbsp; §7.2 &nbsp;&middot;&nbsp; Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026 &nbsp;&middot;&nbsp; <strong>INSTRUCTOR</strong></p>
+<div class="opening-q">Can you find $\cos75°$ exactly without a calculator? If $75°=45°+30°$, is $\cos75°=\cos45°+\cos30°$? (Spoiler: it's not — so what is the correct formula?)</div>
+<div class="two-col"><div class="col"><div class="section-head">Sum and Difference Formulas</div>
+<div class="accent-box"><p><strong>Sine:</strong><br>$\sin(A+B)=\sin A\cos B+\cos A\sin B$<br>$\sin(A-B)=\sin A\cos B-\cos A\sin B$</p><p><strong>Cosine:</strong><br>$\cos(A+B)=\cos A\cos B-\sin A\sin B$<br>$\cos(A-B)=\cos A\cos B+\sin A\sin B$</p><p><strong>Tangent:</strong><br>$\tan(A\pm B)=\dfrac{\tan A\pm\tan B}{1\mp\tan A\tan B}$</p></div>
+</div><div class="col"><div class="section-head">Applications</div>
+<div class="accent-box"><p><strong>Exact values:</strong> write angle as sum/difference of special angles ($30°,45°,60°,90°,\ldots$).</p><p><strong>Verify identities</strong> and <strong>simplify expressions</strong> using these formulas.</p><p>Note: $\cos$ eats negatives ($\cos(-x)=\cos x$). $\sin$ flips sign ($\sin(-x)=-\sin x$).</p></div>
+</div></div>
+<div class="section-head">Worked Examples</div>
+<div class="examples-grid">
+<div class="ex-block"><div class="ex-label">Example 1 &mdash; Exact value</div><div class="ex-body">Find $\cos75°$ exactly.</div><div class="ex-answer instructor">$\cos(45°+30°)=\cos45°\cos30°-\sin45°\sin30°=\dfrac{\sqrt2}{2}\cdot\dfrac{\sqrt3}{2}-\dfrac{\sqrt2}{2}\cdot\dfrac{1}{2}=\dfrac{\sqrt6-\sqrt2}{4}$.</div></div>
+<div class="ex-block"><div class="ex-label">Example 2 &mdash; Exact value — sine</div><div class="ex-body">Find $\sin15°$.</div><div class="ex-answer instructor">$\sin(45°-30°)=\sin45°\cos30°-\cos45°\sin30°=\dfrac{\sqrt6-\sqrt2}{4}$.</div></div>
+<div class="ex-block"><div class="ex-label">Example 3 &mdash; Verify</div><div class="ex-body">Verify $\cos(a-b)=\cos a\cos b+\sin a\sin b$ for $a=\pi/3$, $b=\pi/6$.</div><div class="ex-answer instructor">LHS: $\cos(\pi/6)=\sqrt3/2$. RHS: $\cos(\pi/3)\cos(\pi/6)+\sin(\pi/3)\sin(\pi/6)=(1/2)(\sqrt3/2)+(\sqrt3/2)(1/2)=\sqrt3/2$ ✓.</div></div>
+<div class="ex-block"><div class="ex-label">Example 4 &mdash; Simplify</div><div class="ex-body">Simplify $\cos(2x)\cos(x)+\sin(2x)\sin(x)$.</div><div class="ex-answer instructor">$\cos(2x-x)=\cos x$.</div></div>
+</div>
+<div class="section-head">Practice Problems</div>
+<div class="practice">
+<div class="pr-row"><div class="pr-num">1.</div><div class="pr-prob">Find $\sin75°$ exactly.</div><div class="pr-ans instructor">$\sin(45°+30°)=\dfrac{\sqrt6+\sqrt2}{4}$.</div></div>
+<div class="pr-row"><div class="pr-num">2.</div><div class="pr-prob">Find $\cos15°$ exactly.</div><div class="pr-ans instructor">$\cos(45°-30°)=\dfrac{\sqrt6+\sqrt2}{4}$.</div></div>
+<div class="pr-row"><div class="pr-num">3.</div><div class="pr-prob">Expand $\sin(x+\pi)$.</div><div class="pr-ans instructor">$\sin x\cos\pi+\cos x\sin\pi=-\sin x$.</div></div>
+<div class="pr-row"><div class="pr-num">4.</div><div class="pr-prob">Simplify $\sin(A+B)-\sin(A-B)$.</div><div class="pr-ans instructor">$2\cos A\sin B$.</div></div>
+<div class="pr-row"><div class="pr-num">5.</div><div class="pr-prob">Find $\tan75°$ exactly.</div><div class="pr-ans instructor">$\dfrac{\tan45°+\tan30°}{1-\tan45°\tan30°}=\dfrac{1+1/\sqrt3}{1-1/\sqrt3}=2+\sqrt3$.</div></div>
+<div class="pr-row"><div class="pr-num">6.</div><div class="pr-prob">If $\sin A=3/5$ ($A$ in QI) and $\cos B=5/13$ ($B$ in QI), find $\sin(A+B)$.</div><div class="pr-ans instructor">$\sin A\cos B+\cos A\sin B=(3/5)(5/13)+(4/5)(12/13)=63/65$.</div></div>
+</div>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script>
+function toggleAns(btn) {
+  if (!btn.dataset.orig) btn.dataset.orig = btn.textContent;
+  var ans = btn.nextElementSibling;
+  var showing = ans.classList.toggle('visible');
+  btn.textContent = showing ? 'Hide' : btn.dataset.orig;
+}
+renderMathInElement(document.body, {
+  delimiters: [
+    {left: '$$', right: '$$', display: true},
+    {left: '$',  right: '$',  display: false}
+  ],
+  throwOnError: false
+});
+</script>
+</body>
+</html>

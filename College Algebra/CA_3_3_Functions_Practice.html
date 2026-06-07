@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Functions &mdash; Practice</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.7}
+  .container{max-width:820px;margin:0 auto;padding:2rem 1.5rem 4rem}
+  h1{font-size:26px;font-weight:700;margin-bottom:4px}
+  .subtitle{font-size:14px;color:#666;margin-bottom:2rem;font-family:sans-serif}
+  .section{margin-bottom:2.5rem}
+  .section-title{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;
+    color:#777;font-family:sans-serif;margin-bottom:1rem;border-bottom:1px solid #ddd;padding-bottom:6px}
+  .concept{background:#d9e8f5;border-left:4px solid #185fa5;border-radius:0 8px 8px 0;
+    padding:.85rem 1.1rem;font-size:15px;margin-bottom:1rem}
+  .concept-label{font-family:sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;
+    letter-spacing:.07em;color:#185fa5;display:block;margin-bottom:.35rem}
+  .score-bar{display:flex;align-items:center;gap:12px;margin-bottom:1.25rem;
+    font-family:sans-serif;font-size:14px;flex-wrap:wrap}
+  .score-display{font-weight:700;font-size:18px;min-width:60px}
+  .score-label{color:#777;font-size:13px}
+  .score-note{font-size:12px;color:#999;font-style:italic}
+  .progress{flex:1;min-width:80px;height:6px;background:#e5e1d8;border-radius:3px;overflow:hidden}
+  .progress-fill{height:100%;background:#185fa5;border-radius:3px;transition:width .4s}
+  .reset-btn{font-size:12px;background:none;border:1px solid #bbb;border-radius:5px;
+    padding:4px 10px;cursor:pointer;color:#666;font-family:sans-serif;white-space:nowrap}
+  .reset-btn:hover{background:#eee}
+  .problems{display:grid;grid-template-columns:repeat(auto-fill,minmax(370px,1fr));gap:14px}
+  .card{background:#fff;border:1.5px solid #ddd;border-radius:10px;overflow:hidden;transition:border-color .25s}
+  .card.correct{border-color:#3a7a3a}.card.wrong{border-color:#b03030}.card.peeked{border-color:#b8860b}
+  .card-body{padding:14px 16px}
+  .card-meta{font-family:sans-serif;font-size:12px;color:#888;margin-bottom:4px}
+  .card-expr{font-size:17px;margin-bottom:12px;line-height:2.2;overflow-x:auto}
+  .katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}
+  .input-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .ans-input{font-family:'Courier New',monospace;font-size:14px;border:1px solid #ccc;
+    border-radius:6px;padding:7px 10px;flex:1;min-width:120px;background:#fafaf8;
+    color:#1a1a1a;outline:none}
+  .ans-input:focus{border-color:#185fa5;background:#fff}
+  .ans-input.ok{border-color:#3a7a3a;background:#f0faf0}
+  .ans-input.bad{border-color:#b03030;background:#fdf0f0}
+  .check-btn{font-family:sans-serif;font-size:13px;background:#1a1a1a;color:#fff;
+    border:none;border-radius:6px;padding:7px 14px;cursor:pointer}
+  .check-btn:hover{background:#333}.check-btn:disabled{background:#aaa;cursor:default}
+  .hint{font-family:sans-serif;font-size:12px;color:#888;margin-top:7px}
+  .feedback{font-family:sans-serif;font-size:13px;margin-top:10px;padding:8px 12px;
+    border-radius:6px;display:none;line-height:1.5}
+  .feedback.correct{display:block;background:#eaf5ea;color:#1a5a1a}
+  .feedback.wrong{display:block;background:#faeaea;color:#7a1a1a}
+  .feedback.peeked{display:block;background:#fdf8e8;color:#7a5a00}
+  .reveal-link{font-family:sans-serif;font-size:12px;color:#999;cursor:pointer;
+    text-decoration:underline;margin-top:8px;display:inline-block}
+  .reveal-link:hover{color:#555}
+  .revealed-answer{display:none;margin-top:8px;font-family:sans-serif;font-size:13px;
+    color:#444;background:#f5f3ef;border-radius:6px;padding:8px 11px;line-height:1.8;overflow-x:auto}
+  code{font-family:'Courier New',monospace;background:#f0ede7;padding:1px 5px;border-radius:3px;font-size:12px}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Functions</h1>
+  <p class="subtitle">College Algebra &nbsp;&middot;&nbsp; &sect;3.3 &nbsp;&middot;&nbsp; Instructor: Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026</p>
+
+  <div class="section">
+    <div class="section-title">Core Ideas</div>
+
+    <div class="concept">
+      <span class="concept-label">Function Rule</span>
+      Each input maps to <strong>exactly one</strong> output.
+      To test ordered pairs: no x-value can appear with two <em>different</em> y-values.
+    </div>
+    <div class="concept">
+      <span class="concept-label">Vertical Line Test</span>
+      A graph represents a function if and only if every vertical line
+      crosses it <strong>at most once</strong>.
+    </div>
+
+  </div>
+
+  <div class="section">
+    <div class="section-title">Practice Problems</div>
+    <p style="font-family:sans-serif;font-size:13px;color:#666;margin-bottom:1rem;">
+      For yes/no problems enter <code>yes</code> or <code>no</code>. For numeric answers enter the integer.
+      Press <strong>Check</strong> or hit Enter.
+    </p>
+    <div class="score-bar">
+      <span class="score-label">Score:</span>
+      <span class="score-display" id="score">0 / 8</span>
+      <span class="score-note">first attempt only</span>
+      <div class="progress"><div class="progress-fill" id="prog" style="width:0%"></div></div>
+      <button class="reset-btn" onclick="resetAll()">New set &nbsp;&#8635;</button>
+    </div>
+    <div class="problems" id="problems"></div>
+  </div>
+</div>
+
+<script>
+// ── Crypto-quality RNG ────────────────────────────────────────────────────────
+function _rf() {
+  const b = new Uint32Array(1);
+  crypto.getRandomValues(b);
+  return b[0] / 4294967296;
+}
+function rInt(n)   { return Math.floor(_rf() * n); }
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = rInt(i + 1);
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+// Pick one element at random from an array  e.g. choose([1,4,9])
+function choose(arr) { return arr[rInt(arr.length)]; }
+
+// ── Display helpers ───────────────────────────────────────────────────────────
+// Leading coefficient: 1→'', -1→'-', else the number as a string
+function fc(a) { if (a===1) return ''; if (a===-1) return '-'; return String(a); }
+// Subsequent term with sign: addT(-2,'x')→' - 2x', addT(3,'')→' + 3', addT(0,'x')→''
+function addT(n, v) {
+  if (n===0) return '';
+  const s = n>0?'+':'-', abs = Math.abs(n);
+  if (abs===1 && v) return ' ' + s + ' ' + v;
+  return ' ' + s + ' ' + abs + (v||'');
+}
+
+// ── Problem generators (section-specific, injected below) ─────────────────────
+
+// gen1–4: is this set of ordered pairs a function? (yes/no)
+// gen1: yes — all x distinct
+function gen1() {
+  const xs = [1,2,3,4], ys = xs.map(() => rInt(8)+1);
+  const pairs = xs.map((x,i) => `(${x},${ys[i]})`).join(',\\;');
+  return {
+    latex:  `\\text{Is this a function? }\\{${pairs}\\}`,
+    answer: ['yes'],
+    hint:   `Check whether any x-value appears more than once with a different y-value.`,
+    step:   `\\text{All x-values are distinct → each x has exactly one output → yes}`
+  };
+}
+
+// gen2: no — one x repeated with different y
+function gen2() {
+  const badX = rInt(4)+1;
+  const y1 = rInt(6)+1, y2 = y1 + rInt(4)+1;
+  const other1 = badX+1, other2 = badX+2;
+  const yo1 = rInt(6)+1, yo2 = rInt(6)+1;
+  const pairs = `(${badX},${y1}),\\;(${other1},${yo1}),\\;(${other2},${yo2}),\\;(${badX},${y2})`;
+  return {
+    latex:  `\\text{Is this a function? }\\{${pairs}\\}`,
+    answer: ['no'],
+    hint:   `Look for any x-value that appears more than once. Do the y-values match?`,
+    step:   `\\text{x}=${badX}\\text{ maps to both }${y1}\\text{ and }${y2}\\text{ → not a function → no}`
+  };
+}
+
+// gen3: yes — repeated y is fine (different x)
+function gen3() {
+  const sharedY = rInt(6)+3;
+  const pairs = `(1,${sharedY}),\\;(2,${sharedY+1}),\\;(3,${sharedY}),\\;(4,${sharedY+2})`;
+  return {
+    latex:  `\\text{Is this a function? }\\{${pairs}\\}`,
+    answer: ['yes'],
+    hint:   `The same y-value appearing for different x-values is allowed. What matters is the x-values.`,
+    step:   `\\text{All x-values are distinct — repeating a y is fine → yes}`
+  };
+}
+
+// gen4: no — same x, different y, hidden in a longer list
+function gen4() {
+  const badX = rInt(3)+2;
+  const y1 = rInt(5)+2, y2 = y1+rInt(3)+1;
+  const pairs = `(1,${rInt(5)+1}),\\;(${badX},${y1}),\\;(${badX+2},${rInt(5)+1}),\\;(${badX},${y2})`;
+  return {
+    latex:  `\\text{Is this a function? }\\{${pairs}\\}`,
+    answer: ['no'],
+    hint:   `Scan through all x-values. Does any x appear twice with a different y?`,
+    step:   `\\text{x}=${badX}\\text{ appears twice with different outputs → no}`
+  };
+}
+
+// gen5: evaluate from a table — find f(c)
+function gen5() {
+  const xs = [1,2,3,4,5];
+  const ys = xs.map(() => rInt(10)+2);
+  const c  = xs[rInt(5)];
+  const ans = ys[xs.indexOf(c)];
+  const tableRows = xs.map((x,i)=>`${x} \\to ${ys[i]}`).join(',\\quad');
+  return {
+    latex:  `\\text{Given the table }${tableRows}.\\quad\\text{Find }f(${c}).`,
+    answer: [String(ans)],
+    hint:   `Find x = ${c} in the table and read off the corresponding output.`,
+    step:   `f(${c})=${ans}`
+  };
+}
+
+// gen6: how many outputs does a function allow per input?
+function gen6() {
+  return {
+    latex:  `\\text{A function allows at most how many outputs per input?}`,
+    answer: ['1'],
+    hint:   `Recall the definition of a function — what is the key restriction?`,
+    step:   `\\text{Exactly one output per input — the answer is 1}`
+  };
+}
+
+// gen7: is y = ax + b a function? (always yes for non-vertical lines)
+function gen7() {
+  const a = rInt(4) + 1, b = rInt(4) + 1;
+  return {
+    latex:  `\\text{Is }y = ${a}x + ${b}\\text{ a function?}`,
+    answer: ['yes'],
+    hint:   `For any value of x, how many values does this equation give for y?`,
+    step:   `\\text{For every x there is exactly one y → yes}`
+  };
+}
+
+// gen8: is x = c a function? (always no — vertical line)
+function gen8() {
+  const c = rInt(6) + 1;
+  return {
+    latex:  `\\text{Is }x = ${c}\\text{ a function?}`,
+    answer: ['no'],
+    hint:   `What kind of line is x = ${c}? What does the vertical line test say about it?`,
+    step:   `x=${c}\\text{ is a vertical line — one input maps to infinitely many outputs → no}`
+  };
+}
+
+const GENERATORS = [gen1, gen2, gen3, gen4, gen5, gen6, gen7, gen8];
+
+
+// ── State ─────────────────────────────────────────────────────────────────────
+let ACTIVE, correct, flags, attempted, peeked;
+
+function norm(s) {
+  return s.trim().toLowerCase().replace(/\s+/g, '').replace(/[−–]/g, '-');
+}
+function ok(user, acc) { return acc.some(a => norm(user) === norm(a)); }
+
+function init() {
+  ACTIVE    = shuffle(GENERATORS.map(gen => gen()));
+  correct   = 0;
+  flags     = Array(GENERATORS.length).fill(false);
+  attempted = Array(GENERATORS.length).fill(false);
+  peeked    = Array(GENERATORS.length).fill(false);
+}
+
+function buildCards() {
+  const wrap = document.getElementById('problems');
+  wrap.innerHTML = '';
+  ACTIVE.forEach((p, i) => {
+    const div = document.createElement('div');
+    div.className = 'card'; div.id = 'card-' + i;
+    div.innerHTML =
+      `<div class="card-body">
+        <div class="card-meta">Problem ${i + 1}</div>
+        <div class="card-expr" id="expr-${i}"></div>
+        <div class="input-row">
+          <input class="ans-input" id="ai-${i}" placeholder="answer" />
+          <button class="check-btn" id="chk-${i}" onclick="check(${i})">Check</button>
+        </div>
+        <div class="hint">${p.hint}</div>
+        <div class="feedback" id="fb-${i}"></div>
+        <span class="reveal-link" id="rl-${i}" onclick="reveal(${i})">Show solution</span>
+        <div class="revealed-answer" id="ra-${i}"></div>
+      </div>`;
+    wrap.appendChild(div);
+    document.getElementById('ai-' + i)
+      .addEventListener('keydown', e => { if (e.key === 'Enter') check(i); });
+    if (p.svg) {
+      document.getElementById('expr-' + i).innerHTML = p.svg;
+    } else {
+      katex.render(p.latex, document.getElementById('expr-' + i),
+        { throwOnError: false, displayMode: true });
+    }
+  });
+}
+
+function check(i) {
+  const p = ACTIVE[i], inp = document.getElementById('ai-'+i),
+        fb = document.getElementById('fb-'+i), card = document.getElementById('card-'+i),
+        good = ok(inp.value, p.answer);
+  inp.className = 'ans-input';
+  if (good) {
+    inp.className = 'ans-input ok'; fb.className = 'feedback correct';
+    fb.textContent = '✓ Correct!'; card.className = 'card correct';
+    if (!flags[i] && !attempted[i] && !peeked[i]) { flags[i]=true; correct++; updateScore(); }
+    attempted[i] = true;
+    document.getElementById('chk-'+i).disabled = true; inp.readOnly = true;
+  } else {
+    attempted[i] = true; inp.className = 'ans-input bad'; fb.className = 'feedback wrong';
+    fb.textContent = '✗ Not quite — try again or show the solution.';
+    card.className = peeked[i] ? 'card peeked' : 'card wrong';
+  }
+}
+
+function reveal(i) {
+  const p = ACTIVE[i], box = document.getElementById('ra-'+i),
+        lnk = document.getElementById('rl-'+i);
+  if (box.style.display === 'block') {
+    box.style.display = 'none'; lnk.textContent = 'Show solution';
+  } else {
+    if (!flags[i]) {
+      peeked[i] = true; document.getElementById('card-'+i).className = 'card peeked';
+      if (!attempted[i]) {
+        const fb = document.getElementById('fb-'+i);
+        fb.className = 'feedback peeked';
+        fb.textContent = '⚠ Solution revealed — no point awarded.';
+      }
+    }
+    box.innerHTML = '<strong>Solution:</strong><br>';
+    const span = document.createElement('span'); box.appendChild(span);
+    katex.render(p.step, span, { throwOnError: false, displayMode: true });
+    box.style.display = 'block'; lnk.textContent = 'Hide solution';
+  }
+}
+
+function updateScore() {
+  const n = ACTIVE.length;
+  document.getElementById('score').textContent = correct + ' / ' + n;
+  document.getElementById('prog').style.width = Math.round(correct / n * 100) + '%';
+}
+
+function resetAll() { init(); buildCards(); updateScore(); }
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script>
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left: '$$', right: '$$', display: true},
+      {left: '$',  right: '$',  display: false}
+    ]
+  });
+  init(); buildCards(); updateScore();
+</script>
+</body>
+</html>

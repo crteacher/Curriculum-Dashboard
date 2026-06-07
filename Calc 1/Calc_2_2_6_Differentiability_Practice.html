@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Differentiability &mdash; Practice</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.7}
+  .container{max-width:820px;margin:0 auto;padding:2rem 1.5rem 4rem}
+  h1{font-size:26px;font-weight:700;margin-bottom:4px}
+  .subtitle{font-size:14px;color:#666;margin-bottom:2rem;font-family:sans-serif}
+  .section{margin-bottom:2.5rem}
+  .section-title{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;
+    color:#777;font-family:sans-serif;margin-bottom:1rem;border-bottom:1px solid #ddd;padding-bottom:6px}
+  .concept{background:#d9e8f5;border-left:4px solid #185fa5;border-radius:0 8px 8px 0;
+    padding:.85rem 1.1rem;font-size:15px;margin-bottom:1rem}
+  .concept-label{font-family:sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;
+    letter-spacing:.07em;color:#185fa5;display:block;margin-bottom:.35rem}
+  .score-bar{display:flex;align-items:center;gap:12px;margin-bottom:1.25rem;
+    font-family:sans-serif;font-size:14px;flex-wrap:wrap}
+  .score-display{font-weight:700;font-size:18px;min-width:60px}
+  .score-label{color:#777;font-size:13px}
+  .score-note{font-size:12px;color:#999;font-style:italic}
+  .progress{flex:1;min-width:80px;height:6px;background:#e5e1d8;border-radius:3px;overflow:hidden}
+  .progress-fill{height:100%;background:#185fa5;border-radius:3px;transition:width .4s}
+  .reset-btn{font-size:12px;background:none;border:1px solid #bbb;border-radius:5px;
+    padding:4px 10px;cursor:pointer;color:#666;font-family:sans-serif;white-space:nowrap}
+  .reset-btn:hover{background:#eee}
+  .problems{display:grid;grid-template-columns:repeat(auto-fill,minmax(370px,1fr));gap:14px}
+  .card{background:#fff;border:1.5px solid #ddd;border-radius:10px;overflow:hidden;transition:border-color .25s}
+  .card.correct{border-color:#3a7a3a}.card.wrong{border-color:#b03030}.card.peeked{border-color:#b8860b}
+  .card-body{padding:14px 16px}
+  .card-meta{font-family:sans-serif;font-size:12px;color:#888;margin-bottom:4px}
+  .card-expr{font-size:17px;margin-bottom:12px;line-height:2.2;overflow-x:auto}
+  .katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}
+  .input-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .ans-input{font-family:'Courier New',monospace;font-size:14px;border:1px solid #ccc;
+    border-radius:6px;padding:7px 10px;flex:1;min-width:120px;background:#fafaf8;
+    color:#1a1a1a;outline:none}
+  .ans-input:focus{border-color:#185fa5;background:#fff}
+  .ans-input.ok{border-color:#3a7a3a;background:#f0faf0}
+  .ans-input.bad{border-color:#b03030;background:#fdf0f0}
+  .check-btn{font-family:sans-serif;font-size:13px;background:#1a1a1a;color:#fff;
+    border:none;border-radius:6px;padding:7px 14px;cursor:pointer}
+  .check-btn:hover{background:#333}.check-btn:disabled{background:#aaa;cursor:default}
+  .hint{font-family:sans-serif;font-size:12px;color:#888;margin-top:7px}
+  .feedback{font-family:sans-serif;font-size:13px;margin-top:10px;padding:8px 12px;
+    border-radius:6px;display:none;line-height:1.5}
+  .feedback.correct{display:block;background:#eaf5ea;color:#1a5a1a}
+  .feedback.wrong{display:block;background:#faeaea;color:#7a1a1a}
+  .feedback.peeked{display:block;background:#fdf8e8;color:#7a5a00}
+  .reveal-link{font-family:sans-serif;font-size:12px;color:#999;cursor:pointer;
+    text-decoration:underline;margin-top:8px;display:inline-block}
+  .reveal-link:hover{color:#555}
+  .revealed-answer{display:none;margin-top:8px;font-family:sans-serif;font-size:13px;
+    color:#444;background:#f5f3ef;border-radius:6px;padding:8px 11px;line-height:1.8;overflow-x:auto}
+  code{font-family:'Courier New',monospace;background:#f0ede7;padding:1px 5px;border-radius:3px;font-size:12px}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Differentiability</h1>
+  <p class="subtitle">Calculus I &nbsp;&middot;&nbsp; &sect;2.2.6 &nbsp;&middot;&nbsp; Instructor: Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026</p>
+
+  <div class="section">
+    <div class="section-title">Core Ideas</div>
+
+    <div class="concept">
+      <span class="concept-label">Differentiability</span>
+      $f$ is differentiable at $c$ if $f'(c)$ exists.
+      Three failure modes: <strong>discontinuity</strong>, <strong>corner</strong> (left and right slopes differ),
+      <strong>vertical tangent</strong> (slope is infinite).
+      For piecewise functions: check both continuity AND equal slopes at the join point.
+    </div>
+    <div class="concept">
+      <span class="concept-label">Key Theorem</span>
+      Differentiable $\Rightarrow$ Continuous &nbsp;(always). &nbsp;
+      Continuous $\Rightarrow$ Differentiable &nbsp;(NOT always — $|x|$ at 0 is the classic counterexample).<br>
+      Proof: $\lim_{x\to c}[f(x)-f(c)] = \lim_{x\to c}\frac{f(x)-f(c)}{x-c}\cdot(x-c) = f'(c)\cdot 0 = 0$.
+    </div>
+
+  </div>
+
+  <div class="section">
+    <div class="section-title">Practice Problems</div>
+    <p style="font-family:sans-serif;font-size:13px;color:#666;margin-bottom:1rem;">
+      Type <code>yes</code> or <code>no</code> (or <code>y</code>/<code>n</code>), or an integer for parameter problems. Not case-sensitive.
+      Press <strong>Check</strong> or hit Enter.
+    </p>
+    <div class="score-bar">
+      <span class="score-label">Score:</span>
+      <span class="score-display" id="score">0 / 8</span>
+      <span class="score-note">first attempt only</span>
+      <div class="progress"><div class="progress-fill" id="prog" style="width:0%"></div></div>
+      <button class="reset-btn" onclick="resetAll()">New set &nbsp;&#8635;</button>
+    </div>
+    <div class="problems" id="problems"></div>
+  </div>
+</div>
+
+<script>
+// ── Crypto-quality RNG ────────────────────────────────────────────────────────
+function _rf() {
+  const b = new Uint32Array(1);
+  crypto.getRandomValues(b);
+  return b[0] / 4294967296;
+}
+function rInt(n)   { return Math.floor(_rf() * n); }
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = rInt(i + 1);
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+// Pick one element at random from an array  e.g. choose([1,4,9])
+function choose(arr) { return arr[rInt(arr.length)]; }
+
+// ── Display helpers ───────────────────────────────────────────────────────────
+// Leading coefficient: 1→'', -1→'-', else the number as a string
+function fc(a) { if (a===1) return ''; if (a===-1) return '-'; return String(a); }
+// Subsequent term with sign: addT(-2,'x')→' - 2x', addT(3,'')→' + 3', addT(0,'x')→''
+function addT(n, v) {
+  if (n===0) return '';
+  const s = n>0?'+':'-', abs = Math.abs(n);
+  if (abs===1 && v) return ' ' + s + ' ' + v;
+  return ' ' + s + ' ' + abs + (v||'');
+}
+
+// ── Problem generators (section-specific, injected below) ─────────────────────
+
+// Slot 1: Piecewise smoothly joined (quadratic meets its own tangent line) → "yes"
+function gen1() {
+  const c = rInt(3)+1;  // c in {1,2,3}
+  const slope = 2*c, intercept = -(c*c);
+  const intStr = intercept < 0 ? String(intercept) : '+' + intercept;
+  return {
+    latex: `\\text{Is } f(x)=\\begin{cases}x^2 & x\\le${c}\\\\${slope}x${intStr} & x>${c}\\end{cases} \\text{ differentiable at } x=${c}\\text{?}`,
+    answer: ['yes', 'y'],
+    hint: `Check: (1) are the values equal at x=${c}? (2) are the slopes equal at x=${c}?`,
+    step: `f(${c}^-)=${c}^2=${c*c};\\;f(${c}^+)=${slope}(${c})${intStr}=${c*c}\\;\\checkmark\\quad f'(${c}^-)=2(${c})=${slope};\\;f'(${c}^+)=${slope}\\;\\checkmark`
+  };
+}
+
+// Slot 2: Piecewise with slope mismatch → "no"
+function gen2() {
+  const a = rInt(3)+2, b = a + rInt(3)+1;  // b > a, so slopes differ
+  return {
+    latex: `\\text{Is } f(x)=\\begin{cases}${a}x & x\\le0\\\\${b}x & x>0\\end{cases} \\text{ differentiable at } x=0\\text{?}`,
+    answer: ['no', 'n'],
+    hint: `Check continuity first — do the two pieces agree at x=0? Then compare the slopes from each side.`,
+    step: `f'(0^-)=${a},\\;f'(0^+)=${b};\\quad ${a}\\ne${b}\\Rightarrow\\text{not differentiable (corner)}`
+  };
+}
+
+// Slot 3: Absolute value — always a corner → "no"
+function gen3() {
+  const a = rInt(4)+1;  // shift: |x - a|
+  return {
+    latex: `\\text{Is } f(x)=|x-${a}| \\text{ differentiable at } x=${a}\\text{?}`,
+    answer: ['no', 'n'],
+    hint: `Compute left and right derivatives at x=${a} using the limit definition.`,
+    step: `f'(${a}^-)=\\lim_{h\\to0^-}\\frac{|h|}{h}=-1;\\quad f'(${a}^+)=1;\\quad -1\\ne1`
+  };
+}
+
+// Slot 4: Smooth polynomial — always differentiable → "yes"
+function gen4() {
+  const a = rInt(3)+1, b = rInt(5)-2, c = rInt(5)-2;
+  const bStr = b===0?'':(b>0?` + ${b}`:` - ${Math.abs(b)}`);
+  const cStr = c===0?'':(c>0?` + ${c}`:` - ${Math.abs(c)}`);
+  const pt = rInt(5)-2;
+  return {
+    latex: `\\text{Is } f(x)=${fc(a)}x^2${bStr}x${cStr} \\text{ differentiable at } x=${pt}\\text{?}`,
+    answer: ['yes', 'y'],
+    hint: `Think about what the graph of this function looks like. What kinds of functions are differentiable everywhere?`,
+    step: `\\text{Polynomials are differentiable everywhere.}\\;f'(${pt})\\text{ exists.}`
+  };
+}
+
+// Slot 5 (GRAPH): Corner — two line segments with unequal slopes meeting at x=c → "no"
+function gen5() {
+  const c  = rInt(5) - 2;     // c in {-2,-1,0,1,2}
+  const mL = rInt(2) + 1;     // left slope: 1 or 2
+  const mR = -(rInt(2) + 1);  // right slope: -1 or -2
+  const W=280, H=160, cx=140, cy=80, dx=35;
+  const x0=cx-dx, y0=cy+mL*dx;   // left endpoint (below corner in SVG)
+  const x2=cx+dx, y2=cy-mR*dx;   // right endpoint (mR<0 so -mR>0, also below corner)
+  const svg = `<svg width="${W}" height="${H}" style="display:block;margin:4px auto;border:1px solid #e8e4dc;border-radius:6px;background:#fafaf8">
+  <line x1="15" y1="${cy}" x2="${W-15}" y2="${cy}" stroke="#ccc" stroke-width="1"/>
+  <line x1="${cx}" y1="5" x2="${cx}" y2="${H-22}" stroke="#bbb" stroke-width="1" stroke-dasharray="4,3"/>
+  <polyline points="${x0},${y0} ${cx},${cy} ${x2},${y2}" stroke="#185fa5" stroke-width="2.5" fill="none" stroke-linejoin="miter"/>
+  <circle cx="${cx}" cy="${cy}" r="4" fill="#185fa5"/>
+  <text x="${cx}" y="${H-6}" font-size="11" text-anchor="middle" font-family="sans-serif" fill="#555">x = ${c}</text>
+</svg>`;
+  return {
+    svg: `<div style="font-family:sans-serif;font-size:14px;margin-bottom:6px">Is <em>f</em> differentiable at <em>x</em> = ${c}?</div>${svg}`,
+    answer: ['no', 'n'],
+    hint: `Look at the slopes on each side of x = ${c}. Do the left and right sides match?`,
+    step: `\\text{No — corner at }x=${c}.\\text{ Left slope}=${mL},\\text{ right slope}=${mR}.`
+  };
+}
+
+// Slot 6 (GRAPH): Jump discontinuity — open/filled circles at x=c → "no"
+function gen6() {
+  const c    = rInt(5) - 2;       // c in {-2,-1,0,1,2}
+  const jsgn = rInt(2)*2 - 1;     // +1 or -1 (jump direction)
+  const jump = 32;                 // pixel height of jump
+  const W=280, H=130, cx=140, cy=65, dx=55;
+  const yL = cy;                   // left piece y (limit from left)
+  const yR = cy - jsgn*jump;      // right piece y (actual value)
+  const svg = `<svg width="${W}" height="${H}" style="display:block;margin:4px auto;border:1px solid #e8e4dc;border-radius:6px;background:#fafaf8">
+  <line x1="15" y1="${cy}" x2="${W-15}" y2="${cy}" stroke="#ccc" stroke-width="1"/>
+  <line x1="${cx}" y1="5" x2="${cx}" y2="${H-20}" stroke="#bbb" stroke-width="1" stroke-dasharray="4,3"/>
+  <line x1="${cx-dx}" y1="${yL}" x2="${cx-5}" y2="${yL}" stroke="#185fa5" stroke-width="2.5"/>
+  <circle cx="${cx}" cy="${yL}" r="4.5" fill="white" stroke="#185fa5" stroke-width="2.5"/>
+  <circle cx="${cx}" cy="${yR}" r="4.5" fill="#185fa5"/>
+  <line x1="${cx}" y1="${yR}" x2="${cx+dx}" y2="${yR}" stroke="#185fa5" stroke-width="2.5"/>
+  <text x="${cx}" y="${H-4}" font-size="11" text-anchor="middle" font-family="sans-serif" fill="#555">x = ${c}</text>
+</svg>`;
+  return {
+    svg: `<div style="font-family:sans-serif;font-size:14px;margin-bottom:6px">Is <em>f</em> differentiable at <em>x</em> = ${c}?</div>${svg}`,
+    answer: ['no', 'n'],
+    hint: `Is f even continuous at x = ${c}? Check whether the left and right limits agree.`,
+    step: `\\text{No — jump discontinuity at }x=${c}.\\text{ Not continuous, so not differentiable.}`
+  };
+}
+
+// Slot 7: Find parameter a so piecewise is differentiable at x=c
+// f(x) = {ax - c², x≤c ; x², x>c}  →  a = 2c (matches slope AND continuity)
+function gen7() {
+  const c = rInt(3)+1;
+  const a = 2*c, b = -(c*c);
+  const bStr = b < 0 ? String(b) : '+'+b;
+  return {
+    latex: `\\text{Find } a \\text{ so } f(x)=\\begin{cases}ax${bStr} & x\\le${c}\\\\x^2 & x>${c}\\end{cases} \\text{ is differentiable at } x=${c}`,
+    answer: [String(a)],
+    hint: `For differentiability, slopes from both sides must match. What is the slope of x² at x=${c}? What must the left side\\'s slope equal?`,
+    step: `f'(${c}^+)=2(${c})=${a};\\quad\\text{need left slope }a=${a}\\quad\\checkmark\\text{ (also continuous)}`
+  };
+}
+
+// Slot 8: Vertical tangent — sqrt at 0 → "no"
+function gen8() {
+  const a = rInt(3)+1;
+  return {
+    latex: `\\text{Is } f(x)=\\sqrt{x} \\text{ differentiable at } x=0\\text{?}`,
+    answer: ['no', 'n'],
+    hint: `Write out the limit definition of f\\'(0) using a one-sided limit. What does the expression simplify to, and what happens as h→0⁺?`,
+    step: `\\lim_{h\\to0^+}\\frac{\\sqrt{h}}{h}=\\lim_{h\\to0^+}\\frac{1}{\\sqrt{h}}=+\\infty\\Rightarrow\\text{vertical tangent, not differentiable}`
+  };
+}
+
+const GENERATORS = [gen1, gen2, gen3, gen4, gen5, gen6, gen7, gen8];
+
+
+// ── State ─────────────────────────────────────────────────────────────────────
+let ACTIVE, correct, flags, attempted, peeked;
+
+function norm(s) {
+  return s.trim().toLowerCase().replace(/\s+/g, '').replace(/[−–]/g, '-');
+}
+function ok(user, acc) { return acc.some(a => norm(user) === norm(a)); }
+
+function init() {
+  ACTIVE    = shuffle(GENERATORS.map(gen => gen()));
+  correct   = 0;
+  flags     = Array(GENERATORS.length).fill(false);
+  attempted = Array(GENERATORS.length).fill(false);
+  peeked    = Array(GENERATORS.length).fill(false);
+}
+
+function buildCards() {
+  const wrap = document.getElementById('problems');
+  wrap.innerHTML = '';
+  ACTIVE.forEach((p, i) => {
+    const div = document.createElement('div');
+    div.className = 'card'; div.id = 'card-' + i;
+    div.innerHTML =
+      `<div class="card-body">
+        <div class="card-meta">Problem ${i + 1}</div>
+        <div class="card-expr" id="expr-${i}"></div>
+        <div class="input-row">
+          <input class="ans-input" id="ai-${i}" placeholder="answer" />
+          <button class="check-btn" id="chk-${i}" onclick="check(${i})">Check</button>
+        </div>
+        <div class="hint">${p.hint}</div>
+        <div class="feedback" id="fb-${i}"></div>
+        <span class="reveal-link" id="rl-${i}" onclick="reveal(${i})">Show solution</span>
+        <div class="revealed-answer" id="ra-${i}"></div>
+      </div>`;
+    wrap.appendChild(div);
+    document.getElementById('ai-' + i)
+      .addEventListener('keydown', e => { if (e.key === 'Enter') check(i); });
+    if (p.svg) {
+      document.getElementById('expr-' + i).innerHTML = p.svg;
+    } else {
+      katex.render(p.latex, document.getElementById('expr-' + i),
+        { throwOnError: false, displayMode: true });
+    }
+  });
+}
+
+function check(i) {
+  const p = ACTIVE[i], inp = document.getElementById('ai-'+i),
+        fb = document.getElementById('fb-'+i), card = document.getElementById('card-'+i),
+        good = ok(inp.value, p.answer);
+  inp.className = 'ans-input';
+  if (good) {
+    inp.className = 'ans-input ok'; fb.className = 'feedback correct';
+    fb.textContent = '✓ Correct!'; card.className = 'card correct';
+    if (!flags[i] && !attempted[i] && !peeked[i]) { flags[i]=true; correct++; updateScore(); }
+    attempted[i] = true;
+    document.getElementById('chk-'+i).disabled = true; inp.readOnly = true;
+  } else {
+    attempted[i] = true; inp.className = 'ans-input bad'; fb.className = 'feedback wrong';
+    fb.textContent = '✗ Not quite — try again or show the solution.';
+    card.className = peeked[i] ? 'card peeked' : 'card wrong';
+  }
+}
+
+function reveal(i) {
+  const p = ACTIVE[i], box = document.getElementById('ra-'+i),
+        lnk = document.getElementById('rl-'+i);
+  if (box.style.display === 'block') {
+    box.style.display = 'none'; lnk.textContent = 'Show solution';
+  } else {
+    if (!flags[i]) {
+      peeked[i] = true; document.getElementById('card-'+i).className = 'card peeked';
+      if (!attempted[i]) {
+        const fb = document.getElementById('fb-'+i);
+        fb.className = 'feedback peeked';
+        fb.textContent = '⚠ Solution revealed — no point awarded.';
+      }
+    }
+    box.innerHTML = '<strong>Solution:</strong><br>';
+    const span = document.createElement('span'); box.appendChild(span);
+    katex.render(p.step, span, { throwOnError: false, displayMode: true });
+    box.style.display = 'block'; lnk.textContent = 'Hide solution';
+  }
+}
+
+function updateScore() {
+  const n = ACTIVE.length;
+  document.getElementById('score').textContent = correct + ' / ' + n;
+  document.getElementById('prog').style.width = Math.round(correct / n * 100) + '%';
+}
+
+function resetAll() { init(); buildCards(); updateScore(); }
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script>
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left: '$$', right: '$$', display: true},
+      {left: '$',  right: '$',  display: false}
+    ]
+  });
+  init(); buildCards(); updateScore();
+</script>
+</body>
+</html>

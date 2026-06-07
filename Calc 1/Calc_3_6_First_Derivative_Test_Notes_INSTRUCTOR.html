@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>First Derivative Test &mdash; Notes</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75;font-size:15px}
+.container{max-width:900px;margin:0 auto;padding:2rem 1.5rem 4rem}
+
+/* ── Header ── */
+.page-title{font-size:28px;font-weight:700;margin-bottom:4px}
+.page-sub{font-family:sans-serif;font-size:13px;color:#666;margin-bottom:1.6rem}
+
+/* ── Opening question ── */
+.opening-q{background:#eef3f9;border-left:4px solid #185fa5;
+  border-radius:0 8px 8px 0;padding:1rem 1.2rem;font-size:15px;
+  margin-bottom:1.5rem;font-style:italic;line-height:1.75}
+
+/* ── Section heading ── */
+.section-head{font-family:sans-serif;font-size:11px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.08em;color:#185fa5;
+  margin-top:1.4rem;margin-bottom:.6rem;
+  border-bottom:1px solid #c8d8ec;padding-bottom:4px}
+
+/* ── Accent box ── */
+.accent-box{background:#d9e8f5;border-left:4px solid #185fa5;
+  border-radius:0 8px 8px 0;padding:.9rem 1.1rem;font-size:14px;
+  margin-bottom:.85rem;line-height:1.95}
+.accent-box ul{margin-left:1.3rem;margin-top:.3rem}
+.accent-box li{margin-bottom:.15rem}
+.accent-box p{margin-bottom:.4rem}
+
+/* ── Body text ── */
+.body-text{font-size:14px;line-height:1.75;margin-bottom:.85rem}
+
+/* ── Spacer ── */
+.spacer{height:1rem}
+
+/* ── Two-column layout ── */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:.5rem}
+.col{min-width:0}
+
+/* ── Worked examples 2-col grid ── */
+.examples-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem}
+.ex-block{border:1.5px solid #ddd;border-radius:9px;padding:1rem 1.1rem;background:#fff}
+.ex-label{font-family:sans-serif;font-size:11px;font-weight:700;color:#185fa5;
+  text-transform:uppercase;letter-spacing:.05em;margin-bottom:.45rem}
+.ex-body{font-size:14px;line-height:1.75;margin-bottom:.5rem}
+.ex-answer.instructor{background:#fef9e7;border-left:3px solid #c9860a;
+  border-radius:0 6px 6px 0;padding:.6rem .9rem;font-size:13.5px;
+  color:#5a3e00;line-height:1.85}
+.ex-answer.student{height:4.5rem;border-bottom:1.5px solid #bbb;margin-top:.4rem}
+
+/* ── Practice section ── */
+.practice{margin-bottom:1.5rem}
+.pr-row{display:grid;grid-template-columns:1.6rem 1fr 210px;gap:.75rem;
+  align-items:start;padding:.6rem 0;border-bottom:1px solid #ece8e0}
+.pr-num{font-family:sans-serif;font-weight:700;font-size:14px;color:#185fa5;padding-top:2px}
+.pr-prob{font-size:14px;line-height:1.75}
+.pr-ans.instructor{font-size:13px;color:#5a3e00;background:#fef9e7;
+  border-radius:5px;padding:4px 9px;line-height:1.75}
+.pr-ans.student{border-bottom:1.5px solid #bbb;min-height:2.2rem}
+
+/* ── SVG figures ── */
+.svg-figure{text-align:center;margin:.4rem 0 .6rem}
+.svg-figure svg{max-width:100%;height:auto}
+.svg-caption{font-family:sans-serif;font-size:11px;color:#555;
+  margin-top:.2rem;font-style:italic}
+
+/* ── KaTeX overflow ── */
+.katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}
+
+/* ── Print styles ── */
+@media print{
+  body{background:white;font-size:10pt;line-height:1.5}
+  .container{padding:0;max-width:none}
+  .page-sub{margin-bottom:.8rem}
+  .opening-q{padding:.5rem .8rem;margin-bottom:.8rem;font-size:10pt;line-height:1.5;break-inside:avoid}
+  .section-head{margin-top:.7rem;margin-bottom:.35rem}
+  .spacer{height:.3rem}
+  .accent-box{padding:.5rem .75rem;margin-bottom:.5rem;font-size:10pt;line-height:1.55;
+    background:#e8f0f8 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .accent-box p{margin-bottom:.2rem}
+  .body-text{font-size:10pt;line-height:1.5;margin-bottom:.5rem}
+  .two-col{gap:1rem;margin-bottom:.3rem;break-inside:avoid}
+  .examples-grid{gap:.6rem;margin-bottom:.8rem;break-inside:avoid}
+  .ex-block{padding:.55rem .75rem;border:1px solid #ccc;break-inside:avoid}
+  .ex-label{margin-bottom:.25rem}
+  .ex-body{font-size:10pt;line-height:1.5;margin-bottom:.3rem}
+  .ex-answer.instructor{padding:.35rem .7rem;font-size:9.5pt;line-height:1.55;
+    background:#fef9e7 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .ex-answer.student{height:2.8rem}
+  .practice{margin-bottom:.8rem}
+  .pr-row{padding:.3rem 0;break-inside:avoid}
+  .pr-prob{font-size:10pt;line-height:1.5}
+  .pr-ans.instructor{font-size:9.5pt;padding:2px 7px;line-height:1.55;
+    background:#fef9e7 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .pr-ans.student{min-height:1.6rem}
+  .opening-q{
+    background:#eef3f9 !important;
+    -webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .svg-figure{margin:.25rem 0 .4rem}
+  .svg-figure svg{max-width:100%;height:auto}
+  .svg-caption{font-size:9pt}
+}
+@page{margin:.55in .65in;size:letter}
+</style>
+</head>
+<body>
+<div class="container">
+<h1 class="page-title">First Derivative Test</h1>
+<p class="page-sub">Calculus I &nbsp;&middot;&nbsp; &sect;3.6 &nbsp;&middot;&nbsp; Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026 &nbsp;&middot;&nbsp; <strong>INSTRUCTOR</strong></p>
+<div class="opening-q">We found critical numbers — places where local extrema can occur. But not every critical number gives a max or min. How do we classify them? And how do we determine where a function is increasing versus decreasing?</div>
+<div class="two-col">
+<div class="col"><div class="section-head">Increasing & Decreasing</div>
+<div class="accent-box"><p>$f'(x)>0$ on an interval &rarr; $f$ is <strong>increasing</strong> there<br>$f'(x)<0$ on an interval &rarr; $f$ is <strong>decreasing</strong> there</p><p><strong>Procedure:</strong></p><ol style='margin-left:1.2rem;margin-top:.3rem'>  <li>Find all critical numbers</li>  <li>Build a sign chart: test $f'$ in each interval between critical numbers</li>  <li>$+$ sign means increasing; $-$ sign means decreasing</li></ol></div>
+</div>
+<div class="col"><div class="section-head">First Derivative Test</div>
+<div class="accent-box"><p>At a critical number $x=c$:</p><ul>  <li>$f'$ changes $+\to-$ &rarr; <strong>local max</strong></li>  <li>$f'$ changes $-\to+$ &rarr; <strong>local min</strong></li>  <li>No sign change &rarr; <strong>neither</strong> (inflection)</li></ul><p><em>The sign of $f'$ determines the shape — up-then-down is a max, down-then-up is a min.</em></p></div>
+<p class="body-text">When testing the sign of $f'$ in an interval, pick any convenient test point inside it — you only need the <em>sign</em>, not the exact value.</p>
+</div>
+</div>
+<div class="svg-figure"><svg viewBox="0 0 300 85" xmlns="http://www.w3.org/2000/svg" style="width:280px;height:auto"><text x="8" y="47" font-size="10" fill="#555" font-family="sans-serif" font-style="italic">f'</text><line x1="25" y1="45" x2="278" y2="45" stroke="#333" stroke-width="1.5"/><polygon points="278,42 284,45 278,48" fill="#333"/><line x1="90" y1="39" x2="90" y2="51" stroke="#333" stroke-width="2"/><text x="87" y="62" font-size="10" fill="#333" font-family="sans-serif">0</text><line x1="210" y1="39" x2="210" y2="51" stroke="#333" stroke-width="2"/><text x="207" y="62" font-size="10" fill="#333" font-family="sans-serif">2</text><text x="53" y="22" text-anchor="middle" font-size="13" fill="#2a8c2a" font-family="sans-serif" font-weight="bold">+</text><text x="53" y="40" text-anchor="middle" font-size="14" fill="#2a8c2a" font-family="sans-serif">&#x2197;</text><text x="150" y="22" text-anchor="middle" font-size="13" fill="#c0392b" font-family="sans-serif" font-weight="bold">&#x2212;</text><text x="150" y="40" text-anchor="middle" font-size="14" fill="#c0392b" font-family="sans-serif">&#x2198;</text><text x="247" y="22" text-anchor="middle" font-size="13" fill="#2a8c2a" font-family="sans-serif" font-weight="bold">+</text><text x="247" y="40" text-anchor="middle" font-size="14" fill="#2a8c2a" font-family="sans-serif">&#x2197;</text><text x="90" y="77" text-anchor="middle" font-size="9" fill="#c9860a" font-family="sans-serif">local max</text><text x="210" y="77" text-anchor="middle" font-size="9" fill="#c9860a" font-family="sans-serif">local min</text></svg><div class="svg-caption">Sign chart for $f'(x)=3x(x-2)$: $+\to-$ at $x=0$ (max), $-\to+$ at $x=2$ (min)</div></div>
+<div class="section-head">Worked Examples</div>
+<div class="examples-grid">
+<div class="ex-block">
+  <div class="ex-label">Example 1 &nbsp;&mdash;&nbsp; Sign chart</div>
+  <div class="ex-body">Find intervals where $f(x)=x^3-3x^2$ is increasing or decreasing.</div>
+  <div class="ex-answer instructor">$f'(x)=3x^2-6x=3x(x-2)$<br>Critical: $x=0$, $x=2$<br>$(-\infty,0)$: $f'>0$ &rarr; increasing<br>$(0,2)$: $f'<0$ &rarr; decreasing<br>$(2,\infty)$: $f'>0$ &rarr; increasing</div>
+</div>
+<div class="ex-block">
+  <div class="ex-label">Example 2 &nbsp;&mdash;&nbsp; Classify critical numbers</div>
+  <div class="ex-body">Classify the critical numbers of $f(x)=x^3-3x^2$.</div>
+  <div class="ex-answer instructor">$x=0$: $f'$ changes $+\to-$ &rarr; <strong>local max</strong><br>$x=2$: $f'$ changes $-\to+$ &rarr; <strong>local min</strong></div>
+</div>
+<div class="ex-block">
+  <div class="ex-label">Example 3 &nbsp;&mdash;&nbsp; No sign change</div>
+  <div class="ex-body">Classify $x=0$ as a critical number of $f(x)=x^3$.</div>
+  <div class="ex-answer instructor">$f'(x)=3x^2 \geq 0$ everywhere<br>No sign change at $x=0$ &rarr; <strong>neither</strong> max nor min</div>
+</div>
+<div class="ex-block">
+  <div class="ex-label">Example 4 &nbsp;&mdash;&nbsp; Full analysis</div>
+  <div class="ex-body">Find local extrema of $f(x)=2x^3+3x^2-12x$.</div>
+  <div class="ex-answer instructor">$f'(x)=6x^2+6x-12=6(x+2)(x-1)=0$<br>Critical: $x=-2$, $x=1$<br>$x=-2$: $+\to-$ &rarr; local max $f(-2)=20$<br>$x=1$: $-\to+$ &rarr; local min $f(1)=-7$</div>
+</div>
+</div>
+<div class="section-head">Practice Problems</div>
+<div class="practice">
+<div class="pr-row">
+  <div class="pr-num">1.</div>
+  <div class="pr-prob">Find where $f(x)=x^2-4x$ is increasing and decreasing.</div>
+  <div class="pr-ans instructor">$f'=2x-4=0$ at $x=2$. Dec on $(-\infty,2)$; inc on $(2,\infty)$</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">2.</div>
+  <div class="pr-prob">Classify $x=2$ for $f(x)=x^2-4x$.</div>
+  <div class="pr-ans instructor">$f'$ changes $-\to+$ &rarr; local min</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">3.</div>
+  <div class="pr-prob">Find where $f(x)=x^3-12x+1$ is increasing.</div>
+  <div class="pr-ans instructor">$f'=3x^2-12=0$ at $x=\pm 2$. Inc on $(-\infty,-2)$ and $(2,\infty)$</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">4.</div>
+  <div class="pr-prob">Find the local max and min of $f(x)=x^3-12x+1$.</div>
+  <div class="pr-ans instructor">Local max at $x=-2$: $f(-2)=17$; local min at $x=2$: $f(2)=-15$</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">5.</div>
+  <div class="pr-prob">For $f(x)=x^4$, classify $x=0$.</div>
+  <div class="pr-ans instructor">$f'=4x^3$: no sign change at $x=0$ from the standard FDT — but wait, $4x^3$ changes $-\to+$, so it <em>is</em> a local min.</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">6.</div>
+  <div class="pr-prob">Where is $f(x)=\sin x$ increasing on $[0,2\pi]$?</div>
+  <div class="pr-ans instructor">$f'=\cos x>0$ on $(0,\pi/2)$ and $(3\pi/2,2\pi)$</div>
+</div>
+</div>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script>
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left: '$$', right: '$$', display: true},
+      {left: '$',  right: '$',  display: false}
+    ],
+    throwOnError: false
+  });
+</script>
+</body>
+</html>

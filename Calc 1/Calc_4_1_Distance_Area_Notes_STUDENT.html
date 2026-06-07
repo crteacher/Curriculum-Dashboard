@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Distance Traveled &amp; Area Under a Curve &mdash; Notes</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75;font-size:15px}
+.container{max-width:900px;margin:0 auto;padding:2rem 1.5rem 4rem}
+
+/* ── Header ── */
+.page-title{font-size:28px;font-weight:700;margin-bottom:4px}
+.page-sub{font-family:sans-serif;font-size:13px;color:#666;margin-bottom:1.6rem}
+
+/* ── Opening question ── */
+.opening-q{background:#eef3f9;border-left:4px solid #185fa5;
+  border-radius:0 8px 8px 0;padding:1rem 1.2rem;font-size:15px;
+  margin-bottom:1.5rem;font-style:italic;line-height:1.75}
+
+/* ── Section heading ── */
+.section-head{font-family:sans-serif;font-size:11px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.08em;color:#185fa5;
+  margin-top:1.4rem;margin-bottom:.6rem;
+  border-bottom:1px solid #c8d8ec;padding-bottom:4px}
+
+/* ── Accent box ── */
+.accent-box{background:#d9e8f5;border-left:4px solid #185fa5;
+  border-radius:0 8px 8px 0;padding:.9rem 1.1rem;font-size:14px;
+  margin-bottom:.85rem;line-height:1.95}
+.accent-box ul{margin-left:1.3rem;margin-top:.3rem}
+.accent-box li{margin-bottom:.15rem}
+.accent-box p{margin-bottom:.4rem}
+
+/* ── Body text ── */
+.body-text{font-size:14px;line-height:1.75;margin-bottom:.85rem}
+
+/* ── Spacer ── */
+.spacer{height:1rem}
+
+/* ── Two-column layout ── */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:.5rem}
+.col{min-width:0}
+
+/* ── Worked examples 2-col grid ── */
+.examples-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem}
+.ex-block{border:1.5px solid #ddd;border-radius:9px;padding:1rem 1.1rem;background:#fff}
+.ex-label{font-family:sans-serif;font-size:11px;font-weight:700;color:#185fa5;
+  text-transform:uppercase;letter-spacing:.05em;margin-bottom:.45rem}
+.ex-body{font-size:14px;line-height:1.75;margin-bottom:.5rem}
+.ex-answer.instructor{background:#fef9e7;border-left:3px solid #c9860a;
+  border-radius:0 6px 6px 0;padding:.6rem .9rem;font-size:13.5px;
+  color:#5a3e00;line-height:1.85}
+.ex-answer.student{height:4.5rem;border-bottom:1.5px solid #bbb;margin-top:.4rem}
+
+/* ── Practice section ── */
+.practice{margin-bottom:1.5rem}
+.pr-row{display:grid;grid-template-columns:1.6rem 1fr 210px;gap:.75rem;
+  align-items:start;padding:.6rem 0;border-bottom:1px solid #ece8e0}
+.pr-num{font-family:sans-serif;font-weight:700;font-size:14px;color:#185fa5;padding-top:2px}
+.pr-prob{font-size:14px;line-height:1.75}
+.pr-ans.instructor{font-size:13px;color:#5a3e00;background:#fef9e7;
+  border-radius:5px;padding:4px 9px;line-height:1.75}
+.pr-ans.student{border-bottom:1.5px solid #bbb;min-height:2.2rem}
+
+/* ── SVG figures ── */
+.svg-figure{text-align:center;margin:.4rem 0 .6rem}
+.svg-figure svg{max-width:100%;height:auto}
+.svg-caption{font-family:sans-serif;font-size:11px;color:#555;
+  margin-top:.2rem;font-style:italic}
+
+/* ── KaTeX overflow ── */
+.katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}
+
+/* ── Print styles ── */
+@media print{
+  body{background:white;font-size:10pt;line-height:1.5}
+  .container{padding:0;max-width:none}
+  .page-sub{margin-bottom:.8rem}
+  .opening-q{padding:.5rem .8rem;margin-bottom:.8rem;font-size:10pt;line-height:1.5;break-inside:avoid}
+  .section-head{margin-top:.7rem;margin-bottom:.35rem}
+  .spacer{height:.3rem}
+  .accent-box{padding:.5rem .75rem;margin-bottom:.5rem;font-size:10pt;line-height:1.55;
+    background:#e8f0f8 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .accent-box p{margin-bottom:.2rem}
+  .body-text{font-size:10pt;line-height:1.5;margin-bottom:.5rem}
+  .two-col{gap:1rem;margin-bottom:.3rem;break-inside:avoid}
+  .examples-grid{gap:.6rem;margin-bottom:.8rem;break-inside:avoid}
+  .ex-block{padding:.55rem .75rem;border:1px solid #ccc;break-inside:avoid}
+  .ex-label{margin-bottom:.25rem}
+  .ex-body{font-size:10pt;line-height:1.5;margin-bottom:.3rem}
+  .ex-answer.instructor{padding:.35rem .7rem;font-size:9.5pt;line-height:1.55;
+    background:#fef9e7 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .ex-answer.student{height:2.8rem}
+  .practice{margin-bottom:.8rem}
+  .pr-row{padding:.3rem 0;break-inside:avoid}
+  .pr-prob{font-size:10pt;line-height:1.5}
+  .pr-ans.instructor{font-size:9.5pt;padding:2px 7px;line-height:1.55;
+    background:#fef9e7 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .pr-ans.student{min-height:1.6rem}
+  .opening-q{
+    background:#eef3f9 !important;
+    -webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .svg-figure{margin:.25rem 0 .4rem}
+  .svg-figure svg{max-width:100%;height:auto}
+  .svg-caption{font-size:9pt}
+}
+@page{margin:.55in .65in;size:letter}
+</style>
+</head>
+<body>
+<div class="container">
+<h1 class="page-title">Distance Traveled &amp; Area Under a Curve</h1>
+<p class="page-sub">Calculus I &nbsp;&middot;&nbsp; &sect;4.1 &nbsp;&middot;&nbsp; Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026 &nbsp;&middot;&nbsp; <strong>STUDENT</strong></p>
+<div class="opening-q">If you know your speed at every moment, how do you find total distance traveled? And geometrically, what does $\displaystyle\int_a^b f(x)\,dx$ actually represent? We start with the big picture: area as accumulated change.</div>
+<div class="two-col">
+<div class="col"><div class="section-head">Area = Accumulated Change</div>
+<div class="accent-box"><p>$$\int_a^b f(x)\,dx = \text{area under } f \text{ from } a \text{ to } b$$</p><p>If $f(x)$ is a <em>rate of change</em> (e.g., speed), the integral gives total change (distance).</p><p>For simple shapes, use <strong>geometry</strong>:<br>rectangle: $\text{base}\times\text{height}$<br>triangle: $\frac{1}{2}\cdot\text{base}\times\text{height}$<br>semicircle: $\frac{1}{2}\pi r^2$</p></div>
+<div class="svg-figure"><svg viewBox="0 0 240 140" xmlns="http://www.w3.org/2000/svg" style="width:210px;height:auto"><rect x="20" y="98" width="60" height="30" fill="#d9e8f5" stroke="#185fa5" stroke-width="1.5"/><rect x="80" y="88" width="60" height="40" fill="#d9e8f5" stroke="#185fa5" stroke-width="1.5"/><rect x="140" y="58" width="60" height="70" fill="#d9e8f5" stroke="#185fa5" stroke-width="1.5"/><polyline points="20,98 50,96 80,88 110,76 140,58 170,36 200,8" stroke="#1a1a1a" stroke-width="2" fill="none"/><line x1="10" y1="128" x2="220" y2="128" stroke="#888" stroke-width="1.2"/><polygon points="220,125 226,128 220,131" fill="#888"/><line x1="20" y1="133" x2="20" y2="8" stroke="#888" stroke-width="1.2"/><polygon points="17,8 20,2 23,8" fill="#888"/><text x="223" y="132" font-size="10" fill="#555" font-family="sans-serif">x</text><text x="24" y="8" font-size="10" fill="#555" font-family="sans-serif">y</text><line x1="20" y1="125" x2="20" y2="131" stroke="#888" stroke-width="1"/><text x="17" y="139" font-size="9.5" fill="#555" font-family="sans-serif">0</text><line x1="80" y1="125" x2="80" y2="131" stroke="#888" stroke-width="1"/><text x="77" y="139" font-size="9.5" fill="#555" font-family="sans-serif">1</text><line x1="140" y1="125" x2="140" y2="131" stroke="#888" stroke-width="1"/><text x="137" y="139" font-size="9.5" fill="#555" font-family="sans-serif">2</text><line x1="200" y1="125" x2="200" y2="131" stroke="#888" stroke-width="1"/><text x="197" y="139" font-size="9.5" fill="#555" font-family="sans-serif">3</text><text x="165" y="22" font-size="9.5" fill="#555" font-family="sans-serif" font-style="italic">y = x&#178;/3+1</text></svg><div class="svg-caption">Left Riemann sum with 3 rectangles — underestimates area under an increasing curve</div></div>
+</div>
+<div class="col"><div class="section-head">Riemann Sums from a Table</div>
+<div class="accent-box"><p>Approximate $\displaystyle\int_a^b f(x)\,dx$ by rectangles:</p><p><strong>Left sum:</strong> use $f$ at the left endpoint of each subinterval<br><strong>Right sum:</strong> use $f$ at the right endpoint</p><p>$$\text{Total}\approx\sum f(x_i)\cdot\Delta x_i$$</p><p>The width $\Delta x_i$ is the gap between consecutive $x$-values (may vary if the table is unequal).</p></div>
+<p class="body-text">When the function is positive, both left and right sums give positive area. When the function dips below zero, rectangles contribute <em>negative</em> area.</p>
+</div>
+</div>
+<div class="section-head">Worked Examples</div>
+<div class="examples-grid">
+<div class="ex-block">
+  <div class="ex-label">Example 1 &nbsp;&mdash;&nbsp; Left sum from a table</div>
+  <div class="ex-body">Velocity data: $t=0,1,2,3$, $v=2,5,4,6$ mph. Estimate distance using a left Riemann sum.</div>
+  <div class="ex-answer student"></div>
+</div>
+<div class="ex-block">
+  <div class="ex-label">Example 2 &nbsp;&mdash;&nbsp; Right sum from a table</div>
+  <div class="ex-body">Same data. Estimate distance using a right Riemann sum.</div>
+  <div class="ex-answer student"></div>
+</div>
+<div class="ex-block">
+  <div class="ex-label">Example 3 &nbsp;&mdash;&nbsp; Geometric area</div>
+  <div class="ex-body">Find $\displaystyle\int_0^3 2\,dx$ using geometry.</div>
+  <div class="ex-answer student"></div>
+</div>
+<div class="ex-block">
+  <div class="ex-label">Example 4 &nbsp;&mdash;&nbsp; Triangle area</div>
+  <div class="ex-body">Find $\displaystyle\int_0^4 x\,dx$ using geometry.</div>
+  <div class="ex-answer student"></div>
+</div>
+</div>
+<div class="section-head">Practice Problems</div>
+<div class="practice">
+<div class="pr-row">
+  <div class="pr-num">1.</div>
+  <div class="pr-prob">Velocity $v$: $t=0,2,4,6$ gives $v=10,8,12,6$ mph. Left sum estimate for total distance.</div>
+  <div class="pr-ans student"></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">2.</div>
+  <div class="pr-prob">Same data. Right sum estimate.</div>
+  <div class="pr-ans student"></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">3.</div>
+  <div class="pr-prob">Find $\displaystyle\int_0^5 3\,dx$ using geometry.</div>
+  <div class="pr-ans student"></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">4.</div>
+  <div class="pr-prob">Find $\displaystyle\int_0^6 x\,dx$ using geometry.</div>
+  <div class="pr-ans student"></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">5.</div>
+  <div class="pr-prob">Find $\displaystyle\int_{-2}^{2} \sqrt{4-x^2}\,dx$ using geometry.</div>
+  <div class="pr-ans student"></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">6.</div>
+  <div class="pr-prob">Velocity $v$: $t=0,1,3,6$ gives $v=4,4,4,4$ mph (constant). Left sum for total distance.</div>
+  <div class="pr-ans student"></div>
+</div>
+</div>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script>
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left: '$$', right: '$$', display: true},
+      {left: '$',  right: '$',  display: false}
+    ],
+    throwOnError: false
+  });
+</script>
+</body>
+</html>

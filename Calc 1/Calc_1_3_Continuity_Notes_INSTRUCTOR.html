@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Continuity &mdash; Notes</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75;font-size:15px}
+.container{max-width:900px;margin:0 auto;padding:2rem 1.5rem 4rem}
+
+/* ── Header ── */
+.page-title{font-size:28px;font-weight:700;margin-bottom:4px}
+.page-sub{font-family:sans-serif;font-size:13px;color:#666;margin-bottom:1.6rem}
+
+/* ── Opening question ── */
+.opening-q{background:#eef3f9;border-left:4px solid #185fa5;
+  border-radius:0 8px 8px 0;padding:1rem 1.2rem;font-size:15px;
+  margin-bottom:1.5rem;font-style:italic;line-height:1.75}
+
+/* ── Section heading ── */
+.section-head{font-family:sans-serif;font-size:11px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.08em;color:#185fa5;
+  margin-top:1.4rem;margin-bottom:.6rem;
+  border-bottom:1px solid #c8d8ec;padding-bottom:4px}
+
+/* ── Accent box ── */
+.accent-box{background:#d9e8f5;border-left:4px solid #185fa5;
+  border-radius:0 8px 8px 0;padding:.9rem 1.1rem;font-size:14px;
+  margin-bottom:.85rem;line-height:1.95}
+.accent-box ul{margin-left:1.3rem;margin-top:.3rem}
+.accent-box li{margin-bottom:.15rem}
+.accent-box p{margin-bottom:.4rem}
+
+/* ── Body text ── */
+.body-text{font-size:14px;line-height:1.75;margin-bottom:.85rem}
+
+/* ── Spacer ── */
+.spacer{height:1rem}
+
+/* ── Two-column layout ── */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:.5rem}
+.col{min-width:0}
+
+/* ── Worked examples 2-col grid ── */
+.examples-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem}
+.ex-block{border:1.5px solid #ddd;border-radius:9px;padding:1rem 1.1rem;background:#fff}
+.ex-label{font-family:sans-serif;font-size:11px;font-weight:700;color:#185fa5;
+  text-transform:uppercase;letter-spacing:.05em;margin-bottom:.45rem}
+.ex-body{font-size:14px;line-height:1.75;margin-bottom:.5rem}
+.ex-answer.instructor{background:#fef9e7;border-left:3px solid #c9860a;
+  border-radius:0 6px 6px 0;padding:.6rem .9rem;font-size:13.5px;
+  color:#5a3e00;line-height:1.85}
+.ex-answer.student{height:4.5rem;border-bottom:1.5px solid #bbb;margin-top:.4rem}
+
+/* ── Practice section ── */
+.practice{margin-bottom:1.5rem}
+.pr-row{display:grid;grid-template-columns:1.6rem 1fr 210px;gap:.75rem;
+  align-items:start;padding:.6rem 0;border-bottom:1px solid #ece8e0}
+.pr-num{font-family:sans-serif;font-weight:700;font-size:14px;color:#185fa5;padding-top:2px}
+.pr-prob{font-size:14px;line-height:1.75}
+.pr-ans.instructor{font-size:13px;color:#5a3e00;background:#fef9e7;
+  border-radius:5px;padding:4px 9px;line-height:1.75}
+.pr-ans.student{border-bottom:1.5px solid #bbb;min-height:2.2rem}
+
+/* ── SVG figures ── */
+.svg-figure{text-align:center;margin:.4rem 0 .6rem}
+.svg-figure svg{max-width:100%;height:auto}
+.svg-caption{font-family:sans-serif;font-size:11px;color:#555;
+  margin-top:.2rem;font-style:italic}
+
+/* ── KaTeX overflow ── */
+.katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}
+
+/* ── Print styles ── */
+@media print{
+  body{background:white;font-size:10pt;line-height:1.5}
+  .container{padding:0;max-width:none}
+  .page-sub{margin-bottom:.8rem}
+  .opening-q{padding:.5rem .8rem;margin-bottom:.8rem;font-size:10pt;line-height:1.5;break-inside:avoid}
+  .section-head{margin-top:.7rem;margin-bottom:.35rem}
+  .spacer{height:.3rem}
+  .accent-box{padding:.5rem .75rem;margin-bottom:.5rem;font-size:10pt;line-height:1.55;
+    background:#e8f0f8 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .accent-box p{margin-bottom:.2rem}
+  .body-text{font-size:10pt;line-height:1.5;margin-bottom:.5rem}
+  .two-col{gap:1rem;margin-bottom:.3rem;break-inside:avoid}
+  .examples-grid{gap:.6rem;margin-bottom:.8rem;break-inside:avoid}
+  .ex-block{padding:.55rem .75rem;border:1px solid #ccc;break-inside:avoid}
+  .ex-label{margin-bottom:.25rem}
+  .ex-body{font-size:10pt;line-height:1.5;margin-bottom:.3rem}
+  .ex-answer.instructor{padding:.35rem .7rem;font-size:9.5pt;line-height:1.55;
+    background:#fef9e7 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .ex-answer.student{height:2.8rem}
+  .practice{margin-bottom:.8rem}
+  .pr-row{padding:.3rem 0;break-inside:avoid}
+  .pr-prob{font-size:10pt;line-height:1.5}
+  .pr-ans.instructor{font-size:9.5pt;padding:2px 7px;line-height:1.55;
+    background:#fef9e7 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .pr-ans.student{min-height:1.6rem}
+  .opening-q{
+    background:#eef3f9 !important;
+    -webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .svg-figure{margin:.25rem 0 .4rem}
+  .svg-figure svg{max-width:100%;height:auto}
+  .svg-caption{font-size:9pt}
+}
+@page{margin:.55in .65in;size:letter}
+</style>
+</head>
+<body>
+<div class="container">
+<h1 class="page-title">Continuity</h1>
+<p class="page-sub">Calculus I &nbsp;&middot;&nbsp; &sect;1.3 &nbsp;&middot;&nbsp; Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026 &nbsp;&middot;&nbsp; <strong>INSTRUCTOR</strong></p>
+<div class="opening-q">A function can have a limit at a point without actually equaling that value there. So what does it mean for a function to be <em>continuous</em>? And what does continuity guarantee about a function's behavior on an interval?</div>
+<div class="two-col">
+<div class="col"><div class="section-head">Continuity at a Point</div>
+<div class="accent-box"><p>$f$ is <strong>continuous at $c$</strong> if all three hold:</p><ol style='margin-left:1.2rem;margin-top:.3rem'>  <li>$f(c)$ is defined</li>  <li>$\displaystyle\lim_{x\to c}f(x)$ exists</li>  <li>$\displaystyle\lim_{x\to c}f(x) = f(c)$</li></ol><p style='margin-top:.5rem'><strong>Types of discontinuity:</strong></p><ul>  <li><em>Removable:</em> limit exists but $\neq f(c)$ (or $f(c)$ undefined)</li>  <li><em>Jump:</em> one-sided limits exist but differ</li>  <li><em>Infinite:</em> limit is $\pm\infty$ (vertical asymptote)</li></ul></div>
+<p class="body-text"><strong>Continuous everywhere:</strong> polynomials, $e^x$, $\sin x$, $\cos x$, and their combinations are continuous on all of $\mathbb{R}$. Rational functions are continuous wherever the denominator $\neq 0$.</p>
+</div>
+<div class="col"><div class="section-head">Intermediate Value Theorem</div>
+<div class="accent-box"><p>If $f$ is continuous on $[a,b]$ and $N$ is any value strictly between $f(a)$ and $f(b)$, then there exists at least one $c\in(a,b)$ with $f(c)=N$.</p><p><strong>IVT template</strong> (proving $g(x)=0$ has a root):</p><ol style='margin-left:1.2rem;margin-top:.3rem'>  <li>Confirm $g$ is continuous on $[a,b]$</li>  <li>Show $g(a)$ and $g(b)$ have <em>opposite signs</em></li>  <li>Conclude $\exists\,c\in(a,b)$ with $g(c)=0$</li></ol><p style='margin-top:.4rem'><em>IVT guarantees existence, not uniqueness.</em></p></div>
+</div>
+</div>
+<div class="svg-figure"><svg viewBox="0 0 300 110" xmlns="http://www.w3.org/2000/svg" style="width:280px;height:auto"><text x="50" y="13" text-anchor="middle" font-size="9.5" fill="#185fa5" font-family="sans-serif" font-weight="bold">Removable</text><text x="150" y="13" text-anchor="middle" font-size="9.5" fill="#185fa5" font-family="sans-serif" font-weight="bold">Jump</text><text x="250" y="13" text-anchor="middle" font-size="9.5" fill="#185fa5" font-family="sans-serif" font-weight="bold">Infinite</text><line x1="100" y1="0" x2="100" y2="110" stroke="#ddd" stroke-width="1"/><line x1="200" y1="0" x2="200" y2="110" stroke="#ddd" stroke-width="1"/><path d="M 10,75 Q 30,30 48,43" stroke="#185fa5" stroke-width="2" fill="none"/><path d="M 52,43 Q 70,55 90,25" stroke="#185fa5" stroke-width="2" fill="none"/><circle cx="50" cy="43" r="4" fill="white" stroke="#185fa5" stroke-width="1.8"/><circle cx="50" cy="65" r="4" fill="#185fa5" stroke="none"/><line x1="110" y1="72" x2="147" y2="40" stroke="#185fa5" stroke-width="2"/><line x1="153" y1="57" x2="190" y2="28" stroke="#185fa5" stroke-width="2"/><circle cx="147" cy="40" r="4" fill="white" stroke="#185fa5" stroke-width="1.8"/><circle cx="153" cy="57" r="4" fill="white" stroke="#185fa5" stroke-width="1.8"/><line x1="250" y1="15" x2="250" y2="97" stroke="#c0392b" stroke-width="1.5" stroke-dasharray="4,3"/><path d="M 210,42 Q 235,52 248,97" stroke="#185fa5" stroke-width="2" fill="none"/><path d="M 252,15 Q 265,52 290,57" stroke="#185fa5" stroke-width="2" fill="none"/></svg><div class="svg-caption">Three types of discontinuity: removable (hole), jump, infinite (vertical asymptote)</div></div>
+<div class="section-head">Worked Examples</div>
+<div class="examples-grid">
+<div class="ex-block">
+  <div class="ex-label">Example 1 &nbsp;&mdash;&nbsp; Checking continuity</div>
+  <div class="ex-body">Is $f(x)=\dfrac{x^2-1}{x-1}$ continuous at $x=1$?</div>
+  <div class="ex-answer instructor">$f(1)$ is undefined (division by zero).<br>Condition (1) fails &rarr; <strong>not continuous</strong> at $x=1$.<br><span style='font-size:12px;color:#888'>Removable discontinuity: $\lim_{x\to 1}f(x)=2$ exists.</span></div>
+</div>
+<div class="ex-block">
+  <div class="ex-label">Example 2 &nbsp;&mdash;&nbsp; Finding $k$ for continuity</div>
+  <div class="ex-body">Find $k$ so $f(x)=\begin{cases}kx+1 & x\leq 2\\ x^2 & x>2\end{cases}$ is continuous.</div>
+  <div class="ex-answer instructor">Set left $=$ right at $x=2$:<br>$k(2)+1=4 \Rightarrow 2k=3 \Rightarrow k=\dfrac{3}{2}$</div>
+</div>
+<div class="ex-block">
+  <div class="ex-label">Example 3 &nbsp;&mdash;&nbsp; IVT — proving a root exists</div>
+  <div class="ex-body">Does $x^3+x-1=0$ have a root on $(0,1)$?</div>
+  <div class="ex-answer instructor">Let $g(x)=x^3+x-1$ (continuous everywhere).<br>$g(0)=-1<0$, &ensp; $g(1)=1>0$<br>Sign change &rarr; <strong>yes</strong>, by IVT.</div>
+</div>
+<div class="ex-block">
+  <div class="ex-label">Example 4 &nbsp;&mdash;&nbsp; Classifying a discontinuity</div>
+  <div class="ex-body">Classify the discontinuity of $f(x)=\dfrac{x^2-4}{x-2}$ at $x=2$.</div>
+  <div class="ex-answer instructor">$f(2)$ undefined, but $\lim_{x\to 2}f(x)=4$ exists.<br>The hole can be filled with a single point &rarr; <strong>removable discontinuity</strong>.</div>
+</div>
+</div>
+<div class="section-head">Practice Problems</div>
+<div class="practice">
+<div class="pr-row">
+  <div class="pr-num">1.</div>
+  <div class="pr-prob">Is $f(x)=\dfrac{1}{x-1}$ continuous at $x=2$?</div>
+  <div class="pr-ans instructor">Yes — $f(2)=1$, limit $=1$, equal.</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">2.</div>
+  <div class="pr-prob">Is $f(x)=\dfrac{x^2-1}{x-1}$ continuous at $x=1$?</div>
+  <div class="pr-ans instructor">No — $f(1)$ undefined (removable discontinuity).</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">3.</div>
+  <div class="pr-prob">Find $k$ so $f(x)=\begin{cases}3x+k & x<1\\ x^2 & x\geq 1\end{cases}$ is continuous.</div>
+  <div class="pr-ans instructor">$3(1)+k=1 \Rightarrow k=-2$</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">4.</div>
+  <div class="pr-prob">Where is $f(x)=\dfrac{1}{x^2-4}$ discontinuous?</div>
+  <div class="pr-ans instructor">$x=\pm 2$ (infinite discontinuities)</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">5.</div>
+  <div class="pr-prob">Does IVT guarantee a root of $x^3-5x+1=0$ on $(0,1)$?</div>
+  <div class="pr-ans instructor">$g(0)=1>0$, $g(1)=-3<0$ &rarr; yes.</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">6.</div>
+  <div class="pr-prob">Does $\cos x = x$ have a solution on $(0,2)$?</div>
+  <div class="pr-ans instructor">Let $g=\cos x-x$: $g(0)=1>0$, $g(2)\approx -1.58<0$ &rarr; yes, IVT.</div>
+</div>
+</div>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script>
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left: '$$', right: '$$', display: true},
+      {left: '$',  right: '$',  display: false}
+    ],
+    throwOnError: false
+  });
+</script>
+</body>
+</html>

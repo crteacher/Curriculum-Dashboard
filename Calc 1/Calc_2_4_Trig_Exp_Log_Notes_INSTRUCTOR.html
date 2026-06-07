@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Derivatives of sin, cos, e&#x02E3;, ln(x) &mdash; Notes</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75;font-size:15px}
+.container{max-width:900px;margin:0 auto;padding:2rem 1.5rem 4rem}
+
+/* ── Header ── */
+.page-title{font-size:28px;font-weight:700;margin-bottom:4px}
+.page-sub{font-family:sans-serif;font-size:13px;color:#666;margin-bottom:1.6rem}
+
+/* ── Opening question ── */
+.opening-q{background:#eef3f9;border-left:4px solid #185fa5;
+  border-radius:0 8px 8px 0;padding:1rem 1.2rem;font-size:15px;
+  margin-bottom:1.5rem;font-style:italic;line-height:1.75}
+
+/* ── Section heading ── */
+.section-head{font-family:sans-serif;font-size:11px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.08em;color:#185fa5;
+  margin-top:1.4rem;margin-bottom:.6rem;
+  border-bottom:1px solid #c8d8ec;padding-bottom:4px}
+
+/* ── Accent box ── */
+.accent-box{background:#d9e8f5;border-left:4px solid #185fa5;
+  border-radius:0 8px 8px 0;padding:.9rem 1.1rem;font-size:14px;
+  margin-bottom:.85rem;line-height:1.95}
+.accent-box ul{margin-left:1.3rem;margin-top:.3rem}
+.accent-box li{margin-bottom:.15rem}
+.accent-box p{margin-bottom:.4rem}
+
+/* ── Body text ── */
+.body-text{font-size:14px;line-height:1.75;margin-bottom:.85rem}
+
+/* ── Spacer ── */
+.spacer{height:1rem}
+
+/* ── Two-column layout ── */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:.5rem}
+.col{min-width:0}
+
+/* ── Worked examples 2-col grid ── */
+.examples-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem}
+.ex-block{border:1.5px solid #ddd;border-radius:9px;padding:1rem 1.1rem;background:#fff}
+.ex-label{font-family:sans-serif;font-size:11px;font-weight:700;color:#185fa5;
+  text-transform:uppercase;letter-spacing:.05em;margin-bottom:.45rem}
+.ex-body{font-size:14px;line-height:1.75;margin-bottom:.5rem}
+.ex-answer.instructor{background:#fef9e7;border-left:3px solid #c9860a;
+  border-radius:0 6px 6px 0;padding:.6rem .9rem;font-size:13.5px;
+  color:#5a3e00;line-height:1.85}
+.ex-answer.student{height:4.5rem;border-bottom:1.5px solid #bbb;margin-top:.4rem}
+
+/* ── Practice section ── */
+.practice{margin-bottom:1.5rem}
+.pr-row{display:grid;grid-template-columns:1.6rem 1fr 210px;gap:.75rem;
+  align-items:start;padding:.6rem 0;border-bottom:1px solid #ece8e0}
+.pr-num{font-family:sans-serif;font-weight:700;font-size:14px;color:#185fa5;padding-top:2px}
+.pr-prob{font-size:14px;line-height:1.75}
+.pr-ans.instructor{font-size:13px;color:#5a3e00;background:#fef9e7;
+  border-radius:5px;padding:4px 9px;line-height:1.75}
+.pr-ans.student{border-bottom:1.5px solid #bbb;min-height:2.2rem}
+
+/* ── KaTeX overflow ── */
+.katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}
+
+/* ── Print styles ── */
+@media print{
+  body{background:white;font-size:10pt;line-height:1.5}
+  .container{padding:0;max-width:none}
+  .page-sub{margin-bottom:.8rem}
+  .opening-q{padding:.5rem .8rem;margin-bottom:.8rem;font-size:10pt;line-height:1.5;break-inside:avoid}
+  .section-head{margin-top:.7rem;margin-bottom:.35rem}
+  .spacer{height:.3rem}
+  .accent-box{padding:.5rem .75rem;margin-bottom:.5rem;font-size:10pt;line-height:1.55;
+    background:#e8f0f8 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .accent-box p{margin-bottom:.2rem}
+  .body-text{font-size:10pt;line-height:1.5;margin-bottom:.5rem}
+  .two-col{gap:1rem;margin-bottom:.3rem;break-inside:avoid}
+  .examples-grid{gap:.6rem;margin-bottom:.8rem;break-inside:avoid}
+  .ex-block{padding:.55rem .75rem;border:1px solid #ccc;break-inside:avoid}
+  .ex-label{margin-bottom:.25rem}
+  .ex-body{font-size:10pt;line-height:1.5;margin-bottom:.3rem}
+  .ex-answer.instructor{padding:.35rem .7rem;font-size:9.5pt;line-height:1.55;
+    background:#fef9e7 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .ex-answer.student{height:2.8rem}
+  .practice{margin-bottom:.8rem}
+  .pr-row{padding:.3rem 0;break-inside:avoid}
+  .pr-prob{font-size:10pt;line-height:1.5}
+  .pr-ans.instructor{font-size:9.5pt;padding:2px 7px;line-height:1.55;
+    background:#fef9e7 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .pr-ans.student{min-height:1.6rem}
+  .opening-q{
+    background:#eef3f9 !important;
+    -webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+@page{margin:.55in .65in;size:letter}
+</style>
+</head>
+<body>
+<div class="container">
+<h1 class="page-title">Derivatives of sin, cos, e&#x02E3;, ln(x)</h1>
+<p class="page-sub">Calculus I &nbsp;&middot;&nbsp; &sect;2.4 &nbsp;&middot;&nbsp; Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026 &nbsp;&middot;&nbsp; <strong>INSTRUCTOR</strong></p>
+<div class="opening-q">The Power Rule handles polynomial-type functions. But what about $\sin x$, $e^x$, and $\ln x$? These have their own derivative rules — and unlike the chain rule versions, these formulas apply only when the argument is plain $x$.</div>
+<div class="two-col">
+<div class="col"><div class="section-head">The Four Core Formulas</div>
+<div class="accent-box"><p>$$\frac{d}{dx}[\sin x]=\cos x \qquad \frac{d}{dx}[\cos x]=-\sin x$$</p><p>$$\frac{d}{dx}[e^x]=e^x \qquad \frac{d}{dx}[\ln x]=\frac{1}{x}$$</p><p>Combine with constant multiples and sums/differences just like the Power Rule.</p><p><strong>Important:</strong> these formulas apply only when the argument is plain $x$ (not $2x$, $x^2$, etc. — that needs the Chain Rule).</p></div>
+</div>
+<div class="col"><div class="section-head">Key Values to Know</div>
+<div class="accent-box"><p>$\sin(0)=0$ &ensp; $\cos(0)=1$ &ensp; $e^0=1$ &ensp; $\ln(1)=0$</p><p>$\sin\!\left(\dfrac{\pi}{2}\right)=1$ &ensp; $\cos\!\left(\dfrac{\pi}{2}\right)=0$</p><p>Use these to evaluate derivatives at $x=0$, $x=1$, $x=\pi/2$.</p></div>
+<p class="body-text"><strong>Memory trick for trig:</strong> derivative of sine is cosine (positive); derivative of cosine is negative sine. The negative sign moves from cosine to its derivative, not sine.</p>
+</div>
+</div>
+<div class="section-head">Worked Examples</div>
+<div class="examples-grid">
+<div class="ex-block">
+  <div class="ex-label">Example 1 &nbsp;&mdash;&nbsp; Mixed function</div>
+  <div class="ex-body">Differentiate $f(x)=3\sin x - 2e^x + 5x^2$.</div>
+  <div class="ex-answer instructor">$f'(x)=3\cos x - 2e^x + 10x$</div>
+</div>
+<div class="ex-block">
+  <div class="ex-label">Example 2 &nbsp;&mdash;&nbsp; Tangent line</div>
+  <div class="ex-body">Find the tangent line to $f(x)=e^x$ at $x=0$.</div>
+  <div class="ex-answer instructor">$f'(0)=e^0=1$, $f(0)=1$<br>$y=1(x-0)+1=x+1$</div>
+</div>
+<div class="ex-block">
+  <div class="ex-label">Example 3 &nbsp;&mdash;&nbsp; Trig tangent line</div>
+  <div class="ex-body">Find the tangent line to $f(x)=\sin x$ at $x=\pi/2$.</div>
+  <div class="ex-answer instructor">$f'(\pi/2)=\cos(\pi/2)=0$, $f(\pi/2)=1$<br>$y=0(x-\pi/2)+1=1$ &ensp; (horizontal tangent)</div>
+</div>
+<div class="ex-block">
+  <div class="ex-label">Example 4 &nbsp;&mdash;&nbsp; Natural log derivative</div>
+  <div class="ex-body">Differentiate $g(x)=4\ln x - x^3 + \cos x$.</div>
+  <div class="ex-answer instructor">$g'(x)=\dfrac{4}{x}-3x^2-\sin x$</div>
+</div>
+</div>
+<div class="section-head">Practice Problems</div>
+<div class="practice">
+<div class="pr-row">
+  <div class="pr-num">1.</div>
+  <div class="pr-prob">Differentiate $f(x)=5\cos x + 2x^3$.</div>
+  <div class="pr-ans instructor">$-5\sin x + 6x^2$</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">2.</div>
+  <div class="pr-prob">Differentiate $g(x)=e^x - \ln x + 7$.</div>
+  <div class="pr-ans instructor">$e^x - \dfrac{1}{x}$</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">3.</div>
+  <div class="pr-prob">Find $f'(0)$ for $f(x)=\sin x + e^x$.</div>
+  <div class="pr-ans instructor">$f'(x)=\cos x+e^x$; $f'(0)=1+1=2$</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">4.</div>
+  <div class="pr-prob">Find the tangent line to $f(x)=\ln x$ at $x=1$.</div>
+  <div class="pr-ans instructor">$f'(1)=1$, $f(1)=0$. Line: $y=x-1$</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">5.</div>
+  <div class="pr-prob">Find all $x\in[0,2\pi]$ where $f(x)=\sin x$ has horizontal tangents.</div>
+  <div class="pr-ans instructor">$\cos x=0 \Rightarrow x=\pi/2,\,3\pi/2$</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">6.</div>
+  <div class="pr-prob">Differentiate $h(x)=3\sin x - 4\cos x + e^x - 2\ln x$.</div>
+  <div class="pr-ans instructor">$3\cos x+4\sin x+e^x-\dfrac{2}{x}$</div>
+</div>
+</div>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script>
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left: '$$', right: '$$', display: true},
+      {left: '$',  right: '$',  display: false}
+    ],
+    throwOnError: false
+  });
+</script>
+</body>
+</html>

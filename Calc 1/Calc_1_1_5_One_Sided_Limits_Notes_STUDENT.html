@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>One-Sided Limits &mdash; Notes</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75;font-size:15px}
+.container{max-width:900px;margin:0 auto;padding:2rem 1.5rem 4rem}
+
+/* ── Header ── */
+.page-title{font-size:28px;font-weight:700;margin-bottom:4px}
+.page-sub{font-family:sans-serif;font-size:13px;color:#666;margin-bottom:1.6rem}
+
+/* ── Opening question ── */
+.opening-q{background:#eef3f9;border-left:4px solid #185fa5;
+  border-radius:0 8px 8px 0;padding:1rem 1.2rem;font-size:15px;
+  margin-bottom:1.5rem;font-style:italic;line-height:1.75}
+
+/* ── Section heading ── */
+.section-head{font-family:sans-serif;font-size:11px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.08em;color:#185fa5;
+  margin-top:1.4rem;margin-bottom:.6rem;
+  border-bottom:1px solid #c8d8ec;padding-bottom:4px}
+
+/* ── Accent box ── */
+.accent-box{background:#d9e8f5;border-left:4px solid #185fa5;
+  border-radius:0 8px 8px 0;padding:.9rem 1.1rem;font-size:14px;
+  margin-bottom:.85rem;line-height:1.95}
+.accent-box ul{margin-left:1.3rem;margin-top:.3rem}
+.accent-box li{margin-bottom:.15rem}
+.accent-box p{margin-bottom:.4rem}
+
+/* ── Body text ── */
+.body-text{font-size:14px;line-height:1.75;margin-bottom:.85rem}
+
+/* ── Spacer ── */
+.spacer{height:1rem}
+
+/* ── Two-column layout ── */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:.5rem}
+.col{min-width:0}
+
+/* ── Worked examples 2-col grid ── */
+.examples-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem}
+.ex-block{border:1.5px solid #ddd;border-radius:9px;padding:1rem 1.1rem;background:#fff}
+.ex-label{font-family:sans-serif;font-size:11px;font-weight:700;color:#185fa5;
+  text-transform:uppercase;letter-spacing:.05em;margin-bottom:.45rem}
+.ex-body{font-size:14px;line-height:1.75;margin-bottom:.5rem}
+.ex-answer.instructor{background:#fef9e7;border-left:3px solid #c9860a;
+  border-radius:0 6px 6px 0;padding:.6rem .9rem;font-size:13.5px;
+  color:#5a3e00;line-height:1.85}
+.ex-answer.student{height:4.5rem;border-bottom:1.5px solid #bbb;margin-top:.4rem}
+
+/* ── Practice section ── */
+.practice{margin-bottom:1.5rem}
+.pr-row{display:grid;grid-template-columns:1.6rem 1fr 210px;gap:.75rem;
+  align-items:start;padding:.6rem 0;border-bottom:1px solid #ece8e0}
+.pr-num{font-family:sans-serif;font-weight:700;font-size:14px;color:#185fa5;padding-top:2px}
+.pr-prob{font-size:14px;line-height:1.75}
+.pr-ans.instructor{font-size:13px;color:#5a3e00;background:#fef9e7;
+  border-radius:5px;padding:4px 9px;line-height:1.75}
+.pr-ans.student{border-bottom:1.5px solid #bbb;min-height:2.2rem}
+
+/* ── SVG figures ── */
+.svg-figure{text-align:center;margin:.4rem 0 .6rem}
+.svg-figure svg{max-width:100%;height:auto}
+.svg-caption{font-family:sans-serif;font-size:11px;color:#555;
+  margin-top:.2rem;font-style:italic}
+
+/* ── KaTeX overflow ── */
+.katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}
+
+/* ── Print styles ── */
+@media print{
+  body{background:white;font-size:10pt;line-height:1.5}
+  .container{padding:0;max-width:none}
+  .page-sub{margin-bottom:.8rem}
+  .opening-q{padding:.5rem .8rem;margin-bottom:.8rem;font-size:10pt;line-height:1.5;break-inside:avoid}
+  .section-head{margin-top:.7rem;margin-bottom:.35rem}
+  .spacer{height:.3rem}
+  .accent-box{padding:.5rem .75rem;margin-bottom:.5rem;font-size:10pt;line-height:1.55;
+    background:#e8f0f8 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .accent-box p{margin-bottom:.2rem}
+  .body-text{font-size:10pt;line-height:1.5;margin-bottom:.5rem}
+  .two-col{gap:1rem;margin-bottom:.3rem;break-inside:avoid}
+  .examples-grid{gap:.6rem;margin-bottom:.8rem;break-inside:avoid}
+  .ex-block{padding:.55rem .75rem;border:1px solid #ccc;break-inside:avoid}
+  .ex-label{margin-bottom:.25rem}
+  .ex-body{font-size:10pt;line-height:1.5;margin-bottom:.3rem}
+  .ex-answer.instructor{padding:.35rem .7rem;font-size:9.5pt;line-height:1.55;
+    background:#fef9e7 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .ex-answer.student{height:2.8rem}
+  .practice{margin-bottom:.8rem}
+  .pr-row{padding:.3rem 0;break-inside:avoid}
+  .pr-prob{font-size:10pt;line-height:1.5}
+  .pr-ans.instructor{font-size:9.5pt;padding:2px 7px;line-height:1.55;
+    background:#fef9e7 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .pr-ans.student{min-height:1.6rem}
+  .opening-q{
+    background:#eef3f9 !important;
+    -webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .svg-figure{margin:.25rem 0 .4rem}
+  .svg-figure svg{max-width:100%;height:auto}
+  .svg-caption{font-size:9pt}
+}
+@page{margin:.55in .65in;size:letter}
+.proof-panel{margin:.4rem 0 1.1rem;border-left:3px solid #7a9a6a;border-radius:0 6px 6px 0;background:#f5f7f3}
+.proof-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#5a7a4a;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.proof-toggle::-webkit-details-marker{display:none}
+details[open]>.proof-toggle{color:#185fa5}
+.proof-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #c8d8b8}
+.proof-body p{margin-bottom:.45rem}
+.proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
+@media print{.proof-panel{display:none}}
+</style>
+</head>
+<body>
+<div class="container">
+<h1 class="page-title">One-Sided Limits</h1>
+<p class="page-sub">Calculus I &nbsp;&middot;&nbsp; &sect;1.1.5 &nbsp;&middot;&nbsp; Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026 &nbsp;&middot;&nbsp; <strong>STUDENT</strong></p>
+<div class="opening-q">The two-sided limit $\lim_{x\to a}f(x)$ asks what value $f$ approaches from <em>both</em> directions at once. But what if the function behaves differently from the left and the right? Can we still say something useful about the limit?</div>
+<div class="two-col">
+<div class="col"><div class="section-head">One-Sided Limits</div>
+<div class="accent-box"><p><strong>Left-hand limit:</strong> &ensp;$\displaystyle\lim_{x\to a^-}f(x)=L$<br>considers only $x < a$ approaching $a$.</p><p><strong>Right-hand limit:</strong> &ensp;$\displaystyle\lim_{x\to a^+}f(x)=L$<br>considers only $x > a$ approaching $a$.</p><p><strong>Key theorem:</strong><br>$\displaystyle\lim_{x\to a}f(x)$ exists &nbsp;$\iff$&nbsp; $\displaystyle\lim_{x\to a^-}f(x) = \lim_{x\to a^+}f(x)$</p><p>If the one-sided limits exist but are unequal &rarr; <strong>DNE</strong>.</p></div>
+<details class="proof-panel">
+<summary class="proof-toggle">▸ Geometric Argument</summary>
+<div class="proof-body">
+  <p>Why should the two-sided limit exist exactly when the left- and right-hand limits agree? Think of approaching $x=a$ as two separate walks toward the same milepost &mdash; one starting from the left side of the road, one from the right.</p>
+  <p><strong>If the two walks end at the same height $L$:</strong> no matter which direction you walk in from, $f(x)$ keeps getting closer to $L$. Since "approaching from either side" is exactly what the two-sided limit measures, $\displaystyle\lim_{x\to a}f(x)=L$.</p>
+  <p><strong>If the two walks end at different heights:</strong> say the left walk approaches $3$ and the right walk approaches $5$. Then there is no single number that $f(x)$ is closing in on as $x\to a$ &mdash; values near $a$ are piling up near two different heights depending on which side you're on. A limit is supposed to be <em>one</em> target value, so no such value exists, and the limit is DNE.</p>
+  <p>That's the whole theorem in one picture: the two-sided limit is just "the one-sided limits, when they happen to agree."</p>
+  <p class="proof-qed">∎</p>
+</div>
+</details>
+
+<p class="body-text"><strong>On graphs:</strong> trace the curve from the left — where does it head as it approaches $x=a$? That's the left-hand limit. Repeat from the right. An open circle shows the curve's approach; a filled dot shows the function value.</p>
+</div>
+<div class="col"><div class="section-head">Key Example: $|x|/x$</div>
+<div class="accent-box"><p>Let $f(x) = \dfrac{|x|}{x}$. Find one-sided limits at $x=0$.</p><p>For $x < 0$: $|x| = -x$, so $\dfrac{|x|}{x} = \dfrac{-x}{x} = -1$<br>$\Rightarrow \displaystyle\lim_{x\to 0^-}f(x) = -1$</p><p>For $x > 0$: $|x| = x$, so $\dfrac{|x|}{x} = \dfrac{x}{x} = 1$<br>$\Rightarrow \displaystyle\lim_{x\to 0^+}f(x) = 1$</p><p>$-1 \neq 1 \Rightarrow \displaystyle\lim_{x\to 0}f(x) = $ <strong>DNE</strong></p></div>
+<p class="body-text"><strong>Floor function $\lfloor x \rfloor$:</strong> at any integer $n$, the floor jumps — $\lim_{x\to n^-}\lfloor x\rfloor = n-1$ but $\lim_{x\to n^+}\lfloor x\rfloor = n$, so the two-sided limit is DNE.</p>
+<div class="svg-figure"><svg viewBox="0 0 240 125" xmlns="http://www.w3.org/2000/svg" style="width:200px;height:auto"><line x1="10" y1="62" x2="228" y2="62" stroke="#888" stroke-width="1.2"/><polygon points="228,59 234,62 228,65" fill="#888"/><line x1="120" y1="118" x2="120" y2="10" stroke="#888" stroke-width="1.2"/><polygon points="117,10 120,4 123,10" fill="#888"/><text x="232" y="66" font-size="10" fill="#555" font-family="sans-serif">x</text><text x="124" y="10" font-size="10" fill="#555" font-family="sans-serif">y</text><line x1="117" y1="27" x2="123" y2="27" stroke="#888" stroke-width="1"/><text x="126" y="31" font-size="9.5" fill="#555" font-family="sans-serif">1</text><line x1="117" y1="97" x2="123" y2="97" stroke="#888" stroke-width="1"/><text x="126" y="101" font-size="9.5" fill="#555" font-family="sans-serif">-1</text><line x1="10" y1="97" x2="115" y2="97" stroke="#185fa5" stroke-width="2.2"/><line x1="125" y1="27" x2="228" y2="27" stroke="#185fa5" stroke-width="2.2"/><line x1="120" y1="32" x2="120" y2="92" stroke="#c0392b" stroke-width="1.5" stroke-dasharray="4,3"/><circle cx="120" cy="97" r="4.5" fill="white" stroke="#185fa5" stroke-width="2"/><circle cx="120" cy="27" r="4.5" fill="white" stroke="#185fa5" stroke-width="2"/><text x="128" y="62" font-size="9.5" fill="#c0392b" font-family="sans-serif" font-weight="bold">DNE</text></svg><div class="svg-caption">Left limit $= -1$, right limit $= 1$ &mdash; two-sided limit DNE</div></div>
+</div>
+</div>
+<div class="section-head">Worked Examples</div>
+<div class="examples-grid">
+<div class="ex-block">
+  <div class="ex-label">Example 1 &nbsp;&mdash;&nbsp; Left-hand limit of $|x|/x$</div>
+  <div class="ex-body">Find $\displaystyle\lim_{x\to 0^-}\dfrac{|x|}{x}$.</div>
+  <div class="ex-answer student"></div>
+</div>
+<div class="ex-block">
+  <div class="ex-label">Example 2 &nbsp;&mdash;&nbsp; Two-sided limit — DNE</div>
+  <div class="ex-body">Find $\displaystyle\lim_{x\to 0}\dfrac{|x|}{x}$.</div>
+  <div class="ex-answer student"></div>
+</div>
+<div class="ex-block">
+  <div class="ex-label">Example 3 &nbsp;&mdash;&nbsp; Piecewise — one-sided limits agree</div>
+  <div class="ex-body">$f(x)=\begin{cases}x^2-1 & x<1 \\ 2x-2 & x\geq 1\end{cases}$ &ensp; Find $\lim_{x\to 1}f(x)$.</div>
+  <div class="ex-answer student"></div>
+</div>
+<div class="ex-block">
+  <div class="ex-label">Example 4 &nbsp;&mdash;&nbsp; Floor function</div>
+  <div class="ex-body">Find $\displaystyle\lim_{x\to 3^-}\lfloor x\rfloor$ and $\displaystyle\lim_{x\to 3^+}\lfloor x\rfloor$.</div>
+  <div class="ex-answer student"></div>
+</div>
+</div>
+<div class="section-head">Practice Problems</div>
+<div class="practice">
+<div class="pr-row">
+  <div class="pr-num">1.</div>
+  <div class="pr-prob">Find $\displaystyle\lim_{x\to 0^-}\dfrac{|x|}{x}$.</div>
+  <div class="pr-ans student"></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">2.</div>
+  <div class="pr-prob">Find $\displaystyle\lim_{x\to 1^-}\dfrac{x^2-1}{|x-1|}$.</div>
+  <div class="pr-ans student"></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">3.</div>
+  <div class="pr-prob">Find $\displaystyle\lim_{x\to 1^+}\dfrac{x^2-1}{|x-1|}$.</div>
+  <div class="pr-ans student"></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">4.</div>
+  <div class="pr-prob">Does $\displaystyle\lim_{x\to 1}\dfrac{x^2-1}{|x-1|}$ exist?</div>
+  <div class="pr-ans student"></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">5.</div>
+  <div class="pr-prob">Find $\displaystyle\lim_{x\to 3^-}\lfloor x\rfloor$.</div>
+  <div class="pr-ans student"></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">6.</div>
+  <div class="pr-prob">Find $\displaystyle\lim_{x\to 3}\lfloor x\rfloor$.</div>
+  <div class="pr-ans student"></div>
+</div>
+</div>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script>
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left: '$$', right: '$$', display: true},
+      {left: '$',  right: '$',  display: false}
+    ],
+    throwOnError: false
+  });
+</script>
+<!-- proof-layer:done -->
+</body>
+</html>

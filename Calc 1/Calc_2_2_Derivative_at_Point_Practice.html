@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Derivative at a Point &mdash; Practice</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.7}
+  .container{max-width:820px;margin:0 auto;padding:2rem 1.5rem 4rem}
+  h1{font-size:26px;font-weight:700;margin-bottom:4px}
+  .subtitle{font-size:14px;color:#666;margin-bottom:2rem;font-family:sans-serif}
+  .section{margin-bottom:2.5rem}
+  .section-title{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;
+    color:#777;font-family:sans-serif;margin-bottom:1rem;border-bottom:1px solid #ddd;padding-bottom:6px}
+  .concept{background:#d9e8f5;border-left:4px solid #185fa5;border-radius:0 8px 8px 0;
+    padding:.85rem 1.1rem;font-size:15px;margin-bottom:1rem}
+  .concept-label{font-family:sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;
+    letter-spacing:.07em;color:#185fa5;display:block;margin-bottom:.35rem}
+  .score-bar{display:flex;align-items:center;gap:12px;margin-bottom:1.25rem;
+    font-family:sans-serif;font-size:14px;flex-wrap:wrap}
+  .score-display{font-weight:700;font-size:18px;min-width:60px}
+  .score-label{color:#777;font-size:13px}
+  .score-note{font-size:12px;color:#999;font-style:italic}
+  .progress{flex:1;min-width:80px;height:6px;background:#e5e1d8;border-radius:3px;overflow:hidden}
+  .progress-fill{height:100%;background:#185fa5;border-radius:3px;transition:width .4s}
+  .reset-btn{font-size:12px;background:none;border:1px solid #bbb;border-radius:5px;
+    padding:4px 10px;cursor:pointer;color:#666;font-family:sans-serif;white-space:nowrap}
+  .reset-btn:hover{background:#eee}
+  .problems{display:grid;grid-template-columns:repeat(auto-fill,minmax(370px,1fr));gap:14px}
+  .card{background:#fff;border:1.5px solid #ddd;border-radius:10px;overflow:hidden;transition:border-color .25s}
+  .card.correct{border-color:#3a7a3a}.card.wrong{border-color:#b03030}.card.peeked{border-color:#b8860b}
+  .card-body{padding:14px 16px}
+  .card-meta{font-family:sans-serif;font-size:12px;color:#888;margin-bottom:4px}
+  .card-expr{font-size:17px;margin-bottom:12px;line-height:2.2;overflow-x:auto}
+  .katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}
+  .input-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .ans-input{font-family:'Courier New',monospace;font-size:14px;border:1px solid #ccc;
+    border-radius:6px;padding:7px 10px;flex:1;min-width:120px;background:#fafaf8;
+    color:#1a1a1a;outline:none}
+  .ans-input:focus{border-color:#185fa5;background:#fff}
+  .ans-input.ok{border-color:#3a7a3a;background:#f0faf0}
+  .ans-input.bad{border-color:#b03030;background:#fdf0f0}
+  .check-btn{font-family:sans-serif;font-size:13px;background:#1a1a1a;color:#fff;
+    border:none;border-radius:6px;padding:7px 14px;cursor:pointer}
+  .check-btn:hover{background:#333}.check-btn:disabled{background:#aaa;cursor:default}
+  .hint{font-family:sans-serif;font-size:12px;color:#888;margin-top:7px}
+  .feedback{font-family:sans-serif;font-size:13px;margin-top:10px;padding:8px 12px;
+    border-radius:6px;display:none;line-height:1.5}
+  .feedback.correct{display:block;background:#eaf5ea;color:#1a5a1a}
+  .feedback.wrong{display:block;background:#faeaea;color:#7a1a1a}
+  .feedback.peeked{display:block;background:#fdf8e8;color:#7a5a00}
+  .reveal-link{font-family:sans-serif;font-size:12px;color:#999;cursor:pointer;
+    text-decoration:underline;margin-top:8px;display:inline-block}
+  .reveal-link:hover{color:#555}
+  .revealed-answer{display:none;margin-top:8px;font-family:sans-serif;font-size:13px;
+    color:#444;background:#f5f3ef;border-radius:6px;padding:8px 11px;line-height:1.8;overflow-x:auto}
+  code{font-family:'Courier New',monospace;background:#f0ede7;padding:1px 5px;border-radius:3px;font-size:12px}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>The Derivative at a Point</h1>
+  <p class="subtitle">Calculus I &nbsp;&middot;&nbsp; &sect;2.2 &nbsp;&middot;&nbsp; Instructor: Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026</p>
+
+  <div class="section">
+    <div class="section-title">Core Ideas</div>
+
+    <div class="concept">
+      <span class="concept-label">Definition (h-form — use this for calculations)</span>
+      $$f'(c) = \lim_{h \to 0} \frac{f(c+h) - f(c)}{h}$$
+      Expand $f(c+h)$, subtract $f(c)$, cancel the $h$ in the denominator, then evaluate.
+    </div>
+    <div class="concept">
+      <span class="concept-label">Tangent Line at x = c</span>
+      $$y = f'(c)(x - c) + f(c)$$
+      Slope equals $f'(c)$, passing through $(c,\, f(c))$.
+      If $f'(c) > 0$: increasing. &nbsp; If $f'(c) < 0$: decreasing.
+    </div>
+
+  </div>
+
+  <div class="section">
+    <div class="section-title">Practice Problems</div>
+    <p style="font-family:sans-serif;font-size:13px;color:#666;margin-bottom:1rem;">
+      Eight problems generated fresh each session with random coefficients. Enter your answer as an integer (e.g. <code>4</code>, <code>-9</code>).
+      Press <strong>Check</strong> or hit Enter.
+    </p>
+    <div class="score-bar">
+      <span class="score-label">Score:</span>
+      <span class="score-display" id="score">0 / 8</span>
+      <span class="score-note">first attempt only</span>
+      <div class="progress"><div class="progress-fill" id="prog" style="width:0%"></div></div>
+      <button class="reset-btn" onclick="resetAll()">New set &nbsp;&#8635;</button>
+    </div>
+    <div class="problems" id="problems"></div>
+  </div>
+</div>
+
+<script>
+// ── Crypto-quality RNG ────────────────────────────────────────────────────────
+function _rf() {
+  const b = new Uint32Array(1);
+  crypto.getRandomValues(b);
+  return b[0] / 4294967296;
+}
+function rInt(n)   { return Math.floor(_rf() * n); }
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = rInt(i + 1);
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+// ── Display helpers ───────────────────────────────────────────────────────────
+// Leading coefficient: 1→'', -1→'-', else the number as a string
+function fc(a) { if (a===1) return ''; if (a===-1) return '-'; return String(a); }
+// Subsequent term with sign: addT(-2,'x')→' - 2x', addT(3,'')→' + 3', addT(0,'x')→''
+function addT(n, v) {
+  if (n===0) return '';
+  const s = n>0?'+':'-', abs = Math.abs(n);
+  if (abs===1 && v) return ' ' + s + ' ' + v;
+  return ' ' + s + ' ' + abs + (v||'');
+}
+
+// ── Problem generators (section-specific, injected below) ─────────────────────
+
+// Slot 1: Linear  f(x) = ax + b,  f'(c) = a
+function gen1() {
+  const a = rInt(4)+2, b = rInt(7)-3, c = rInt(4)+1;
+  const bStr = b===0?'':(b>0?` + ${b}`:` - ${Math.abs(b)}`);
+  const fcv = a*c+b, ans = a;
+  return {
+    latex: `f'(${c}) \\text{ for } f(x) = ${a}x${bStr}`,
+    answer: [String(ans)],
+    hint: `Linear function: slope is constant. What is the coefficient of x?`,
+    step: `\\lim_{h\\to0}\\frac{${a}(${c}+h)${bStr}-(${fcv})}{h}=\\lim_{h\\to0}\\frac{${a}h}{h}=${ans}`
+  };
+}
+
+// Slot 2: Pure quadratic c > 0,  f(x) = ax²,  f'(c) = 2ac
+function gen2() {
+  const a = rInt(3)+1, c = rInt(4)+1;
+  const fcv = a*c*c, ans = 2*a*c;
+  return {
+    latex: `f'(${c}) \\text{ for } f(x) = ${fc(a)}x^2`,
+    answer: [String(ans)],
+    hint: `Expand ${a===1?'':a}(${c}+h)², subtract f(${c}) = ${fcv}, divide by h.`,
+    step: `\\lim_{h\\to0}\\frac{${a}(${c}+h)^2-${fcv}}{h}=\\lim_{h\\to0}(${ans}+${a}h)=${ans}`
+  };
+}
+
+// Slot 3: Full quadratic  f(x) = ax² + bx,  f'(c) = 2ac + b
+function gen3() {
+  const a = rInt(2)+1, b = rInt(4)+1, c = rInt(3)+1;
+  const fcv = a*c*c+b*c, ans = 2*a*c+b;
+  return {
+    latex: `f'(${c}) \\text{ for } f(x) = ${fc(a)}x^2 + ${b}x`,
+    answer: [String(ans)],
+    hint: `Expand ${a===1?'':a}(${c}+h)² + ${b}(${c}+h), subtract f(${c}) = ${fcv}, factor out h.`,
+    step: `\\lim_{h\\to0}\\frac{${ans}h+${a}h^2}{h}=\\lim_{h\\to0}(${ans}+${a}h)=${ans}`
+  };
+}
+
+// Slot 4: Quadratic with constant  f(x) = ax² + bx + d,  f'(c) = 2ac + b  (d vanishes)
+function gen4() {
+  const a = rInt(2)+1, b = rInt(4)+1, d = rInt(5)+1, c = rInt(3)+1;
+  const fcv = a*c*c+b*c+d, ans = 2*a*c+b;
+  return {
+    latex: `f'(${c}) \\text{ for } f(x) = ${fc(a)}x^2 + ${b}x + ${d}`,
+    answer: [String(ans)],
+    hint: `The constant ${d} cancels when you compute f(${c}+h) - f(${c}). Factor out h.`,
+    step: `\\lim_{h\\to0}\\frac{${ans}h+${a}h^2}{h}=\\lim_{h\\to0}(${ans}+${a}h)=${ans}`
+  };
+}
+
+// Slot 5: Pure quadratic c < 0 → negative answer,  f(x) = ax²,  f'(c) = 2ac
+function gen5() {
+  const a = rInt(3)+1, c = -(rInt(3)+1);
+  const fcv = a*c*c, ans = 2*a*c;
+  return {
+    latex: `f'(${c}) \\text{ for } f(x) = ${fc(a)}x^2`,
+    answer: [String(ans)],
+    hint: `c is negative. Expand ${a===1?'':a}(${c}+h)², subtract f(${c}) = ${fcv}. Watch the sign.`,
+    step: `\\lim_{h\\to0}\\frac{${a}(${c}+h)^2-${fcv}}{h}=\\lim_{h\\to0}(${ans}+${a}h)=${ans}`
+  };
+}
+
+// Slot 6: Pure cubic  f(x) = ax³,  f'(c) = 3ac²
+function gen6() {
+  const a = rInt(2)+1, c = rInt(2)+1;
+  const fcv = a*c*c*c, ans = 3*a*c*c;
+  return {
+    latex: `f'(${c}) \\text{ for } f(x) = ${fc(a)}x^3`,
+    answer: [String(ans)],
+    hint: `Expand ${a===1?'':a}(${c}+h)³. The leading h term is ${ans}h; higher powers vanish.`,
+    step: `\\lim_{h\\to0}\\frac{${ans}h+${3*a*c}h^2+${a}h^3}{h}=\\lim_{h\\to0}(${ans}+\\cdots)=${ans}`
+  };
+}
+
+// Slot 7: Slope of tangent to  f(x) = ax² + bx  at x = c  (same algebra as slot 3, new framing)
+function gen7() {
+  const a = rInt(2)+1, b = rInt(4)+1, c = rInt(3)+1;
+  const ans = 2*a*c+b;
+  return {
+    latex: `\\text{Slope of tangent to } f(x)=${fc(a)}x^2+${b}x \\text{ at } x=${c}`,
+    answer: [String(ans)],
+    hint: `Slope of tangent = f'(${c}). Apply the limit definition.`,
+    step: `f'(${c})=\\lim_{h\\to0}\\frac{${ans}h+${a}h^2}{h}=${ans}`
+  };
+}
+
+// Slot 8: y-intercept of tangent to  f(x) = ax²  at x = c
+// Tangent: y = 2ac(x - c) + ac²  =  2ac·x − ac²,  so y-int = −ac²
+function gen8() {
+  const a = rInt(2)+1, c = rInt(3)+1;
+  const fcv = a*c*c, slope = 2*a*c, yint = -(a*c*c);
+  const yintStr = yint < 0 ? String(yint) : '+'+yint;
+  return {
+    latex: `\\text{y-intercept of tangent to } f(x)=${fc(a)}x^2 \\text{ at } x=${c}`,
+    answer: [String(yint)],
+    hint: `Find f'(${c}) = ${slope} and f(${c}) = ${fcv}. Tangent: y = ${slope}(x - ${c}) + ${fcv}. Set x = 0.`,
+    step: `f'(${c})=${slope},\\;f(${c})=${fcv};\\quad y=${slope}x${yintStr};\\quad b=${yint}`
+  };
+}
+
+const GENERATORS = [gen1, gen2, gen3, gen4, gen5, gen6, gen7, gen8];
+
+
+// ── State ─────────────────────────────────────────────────────────────────────
+let ACTIVE, correct, flags, attempted, peeked;
+
+function norm(s) {
+  return s.trim().toLowerCase().replace(/\s+/g, '').replace(/[−–]/g, '-');
+}
+function ok(user, acc) { return acc.some(a => norm(user) === norm(a)); }
+
+function init() {
+  ACTIVE    = shuffle(GENERATORS.map(gen => gen()));
+  correct   = 0;
+  flags     = Array(8).fill(false);
+  attempted = Array(8).fill(false);
+  peeked    = Array(8).fill(false);
+}
+
+function buildCards() {
+  const wrap = document.getElementById('problems');
+  wrap.innerHTML = '';
+  ACTIVE.forEach((p, i) => {
+    const div = document.createElement('div');
+    div.className = 'card'; div.id = 'card-' + i;
+    div.innerHTML =
+      `<div class="card-body">
+        <div class="card-meta">Problem ${i + 1}</div>
+        <div class="card-expr" id="expr-${i}"></div>
+        <div class="input-row">
+          <input class="ans-input" id="ai-${i}" placeholder="answer" />
+          <button class="check-btn" id="chk-${i}" onclick="check(${i})">Check</button>
+        </div>
+        <div class="hint">${p.hint}</div>
+        <div class="feedback" id="fb-${i}"></div>
+        <span class="reveal-link" id="rl-${i}" onclick="reveal(${i})">Show solution</span>
+        <div class="revealed-answer" id="ra-${i}"></div>
+      </div>`;
+    wrap.appendChild(div);
+    document.getElementById('ai-' + i)
+      .addEventListener('keydown', e => { if (e.key === 'Enter') check(i); });
+    katex.render(p.latex, document.getElementById('expr-' + i),
+      { throwOnError: false, displayMode: true });
+  });
+}
+
+function check(i) {
+  const p = ACTIVE[i], inp = document.getElementById('ai-'+i),
+        fb = document.getElementById('fb-'+i), card = document.getElementById('card-'+i),
+        good = ok(inp.value, p.answer);
+  inp.className = 'ans-input';
+  if (good) {
+    inp.className = 'ans-input ok'; fb.className = 'feedback correct';
+    fb.textContent = '✓ Correct!'; card.className = 'card correct';
+    if (!flags[i] && !attempted[i] && !peeked[i]) { flags[i]=true; correct++; updateScore(); }
+    attempted[i] = true;
+    document.getElementById('chk-'+i).disabled = true; inp.readOnly = true;
+  } else {
+    attempted[i] = true; inp.className = 'ans-input bad'; fb.className = 'feedback wrong';
+    fb.textContent = '✗ Not quite — try again or show the solution.';
+    card.className = peeked[i] ? 'card peeked' : 'card wrong';
+  }
+}
+
+function reveal(i) {
+  const p = ACTIVE[i], box = document.getElementById('ra-'+i),
+        lnk = document.getElementById('rl-'+i);
+  if (box.style.display === 'block') {
+    box.style.display = 'none'; lnk.textContent = 'Show solution';
+  } else {
+    if (!flags[i]) {
+      peeked[i] = true; document.getElementById('card-'+i).className = 'card peeked';
+      if (!attempted[i]) {
+        const fb = document.getElementById('fb-'+i);
+        fb.className = 'feedback peeked';
+        fb.textContent = '⚠ Solution revealed — no point awarded.';
+      }
+    }
+    box.innerHTML = '<strong>Solution:</strong><br>';
+    const span = document.createElement('span'); box.appendChild(span);
+    katex.render(p.step, span, { throwOnError: false, displayMode: true });
+    box.style.display = 'block'; lnk.textContent = 'Hide solution';
+  }
+}
+
+function updateScore() {
+  document.getElementById('score').textContent = correct + ' / 8';
+  document.getElementById('prog').style.width = Math.round(correct / 8 * 100) + '%';
+}
+
+function resetAll() { init(); buildCards(); updateScore(); }
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script>
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left: '$$', right: '$$', display: true},
+      {left: '$',  right: '$',  display: false}
+    ]
+  });
+  init(); buildCards(); updateScore();
+</script>
+</body>
+</html>

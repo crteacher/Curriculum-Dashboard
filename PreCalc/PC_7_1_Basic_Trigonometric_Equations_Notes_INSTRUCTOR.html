@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Basic Trigonometric Equations &mdash; Notes</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75;font-size:15px}
+.container{max-width:900px;margin:0 auto;padding:2rem 1.5rem 4rem}
+.page-title{font-size:28px;font-weight:700;margin-bottom:4px}
+.page-sub{font-family:sans-serif;font-size:13px;color:#666;margin-bottom:1.6rem}
+.opening-q{background:#eef3f9;border-left:4px solid #185fa5;border-radius:0 8px 8px 0;padding:1rem 1.2rem;font-size:15px;margin-bottom:1.5rem;font-style:italic;line-height:1.75}
+.section-head{font-family:sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#185fa5;margin-top:1.4rem;margin-bottom:.6rem;border-bottom:1px solid #c8d8ec;padding-bottom:4px}
+.accent-box{background:#d9e8f5;border-left:4px solid #185fa5;border-radius:0 8px 8px 0;padding:.9rem 1.1rem;font-size:14px;margin-bottom:.85rem;line-height:1.95}
+.accent-box ul{margin-left:1.3rem;margin-top:.3rem}
+.accent-box li{margin-bottom:.15rem}
+.accent-box p{margin-bottom:.4rem}
+.body-text{font-size:14px;line-height:1.75;margin-bottom:.85rem}
+.spacer{height:1rem}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:.5rem}
+.col{min-width:0}
+.examples-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem}
+.ex-block{border:1.5px solid #ddd;border-radius:9px;padding:1rem 1.1rem;background:#fff}
+.ex-label{font-family:sans-serif;font-size:11px;font-weight:700;color:#185fa5;text-transform:uppercase;letter-spacing:.05em;margin-bottom:.45rem}
+.ex-body{font-size:14px;line-height:1.75;margin-bottom:.5rem}
+.ex-answer.instructor{background:#fef9e7;border-left:3px solid #c9860a;border-radius:0 6px 6px 0;padding:.6rem .9rem;font-size:13.5px;color:#5a3e00;line-height:1.85}
+.practice{margin-bottom:1.5rem}
+.pr-row{display:grid;grid-template-columns:1.6rem 1fr 210px;gap:.75rem;align-items:start;padding:.6rem 0;border-bottom:1px solid #ece8e0}
+.pr-num{font-family:sans-serif;font-weight:700;font-size:14px;color:#185fa5;padding-top:2px}
+.pr-prob{font-size:14px;line-height:1.75}
+.pr-ans.instructor{font-size:13px;color:#5a3e00;background:#fef9e7;border-radius:5px;padding:4px 9px;line-height:1.75}
+.pr-ans.student{border-bottom:1.5px solid #bbb;min-height:2.2rem}
+.st-work{width:100%;min-height:3rem;border:1px solid #ccc;border-radius:5px;padding:.35rem .5rem;font-family:Georgia,serif;font-size:13px;resize:vertical;background:#fafafa;display:block;margin-bottom:.3rem}
+.st-work-sm{width:100%;min-height:1.5rem;border:1px solid #ccc;border-radius:4px;padding:.2rem .4rem;font-family:Georgia,serif;font-size:12px;resize:vertical;background:#fafafa;display:block;margin-bottom:.2rem}
+.st-btn{font-family:sans-serif;font-size:10px;font-weight:700;color:#185fa5;background:none;border:1.5px solid #185fa5;border-radius:4px;padding:2px 9px;cursor:pointer;margin-bottom:.2rem;display:inline-block}
+.st-btn-sm{font-family:sans-serif;font-size:9px;font-weight:700;color:#185fa5;background:none;border:1px solid #185fa5;border-radius:3px;padding:1px 6px;cursor:pointer;margin-bottom:.15rem;display:inline-block}
+.st-btn:hover,.st-btn-sm:hover{background:#eef3f9}
+.st-ans-hidden{display:none;background:#fef9e7;border-left:3px solid #c9860a;border-radius:0 5px 5px 0;padding:.4rem .7rem;font-size:13px;color:#5a3e00;line-height:1.85}
+.st-ans-hidden.visible{display:block}
+.katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}
+@media print{
+  body{background:white;font-size:10pt;line-height:1.5}
+  .container{padding:0;max-width:none}
+  .opening-q{padding:.5rem .8rem;margin-bottom:.8rem;font-size:10pt;line-height:1.5;break-inside:avoid;background:#eef3f9 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .section-head{margin-top:.7rem;margin-bottom:.35rem}
+  .accent-box{padding:.5rem .75rem;margin-bottom:.5rem;font-size:10pt;line-height:1.55;background:#e8f0f8 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .two-col{gap:1rem;margin-bottom:.3rem;break-inside:avoid}
+  .examples-grid{gap:.6rem;margin-bottom:.8rem;break-inside:avoid}
+  .ex-block{padding:.55rem .75rem;border:1px solid #ccc;break-inside:avoid}
+  .ex-answer.instructor{padding:.35rem .7rem;font-size:9.5pt;line-height:1.55;background:#fef9e7 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .pr-row{padding:.3rem 0;break-inside:avoid}
+  .pr-ans.instructor{font-size:9.5pt;padding:2px 7px;line-height:1.55;background:#fef9e7 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .st-work,.st-work-sm{background:none;border:none;border-bottom:1.5px solid #bbb;border-radius:0;min-height:2.6rem;resize:none}
+  .st-btn,.st-btn-sm{display:none}
+  .st-ans-hidden{display:none !important}
+}
+@page{margin:.55in .65in;size:letter}
+</style>
+</head>
+<body>
+<div class="container">
+<h1 class="page-title">Basic Trigonometric Equations</h1>
+<p class="page-sub">Pre-Calculus &nbsp;&middot;&nbsp; §7.1 &nbsp;&middot;&nbsp; Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026 &nbsp;&middot;&nbsp; <strong>INSTRUCTOR</strong></p>
+<div class="opening-q">$\sin\theta=0.5$ has infinitely many solutions — $\theta=30°, 150°, 390°, \ldots$ How do we find them all, and how do we restrict to just one period $[0,2\pi)$?</div>
+<div class="two-col"><div class="col"><div class="section-head">Solving Basic Trig Equations</div>
+<div class="accent-box"><p><strong>Steps:</strong></p><ol style='margin-left:1.1rem'><li>Isolate the trig function.</li><li>Find the reference angle using inverse trig.</li><li>Use ASTC to find all solutions in $[0,2\pi)$.</li><li>Add $2\pi k$ for all solutions (if asked).</li></ol><p>For $\tan$: add $\pi k$ (period is $\pi$).</p></div>
+</div><div class="col"><div class="section-head">Solutions in $[0,2\pi)$ by Function</div>
+<div class="accent-box"><p>$\sin\theta=c$: solutions in QI and QII if $c>0$; QIII and QIV if $c<0$.</p><p>$\cos\theta=c$: solutions in QI and QIV if $c>0$; QII and QIII if $c<0$.</p><p>$\tan\theta=c$: solutions in QI and QIII if $c>0$; QII and QIV if $c<0$.</p><p>Special values to memorize: $\sin,\cos\in\{0,\pm\tfrac{1}{2},\pm\tfrac{\sqrt2}{2},\pm\tfrac{\sqrt3}{2},\pm1\}$.</p></div>
+</div></div>
+<div class="section-head">Worked Examples</div>
+<div class="examples-grid">
+<div class="ex-block"><div class="ex-label">Example 1 &mdash; Basic sine equation</div><div class="ex-body">Solve $\sin\theta=\dfrac{\sqrt3}{2}$ on $[0,2\pi)$.</div><div class="ex-answer instructor">Reference angle $\pi/3$. QI: $\theta=\pi/3$; QII: $\theta=\pi-\pi/3=2\pi/3$.</div></div>
+<div class="ex-block"><div class="ex-label">Example 2 &mdash; Negative cosine</div><div class="ex-body">Solve $\cos\theta=-\dfrac{\sqrt2}{2}$ on $[0,2\pi)$.</div><div class="ex-answer instructor">Reference $\pi/4$. Cos negative in QII, QIII: $\theta=3\pi/4,5\pi/4$.</div></div>
+<div class="ex-block"><div class="ex-label">Example 3 &mdash; Tangent equation</div><div class="ex-body">Solve $\tan\theta=1$ on $[0,2\pi)$.</div><div class="ex-answer instructor">Reference $\pi/4$. Tan positive in QI, QIII: $\theta=\pi/4,5\pi/4$.</div></div>
+<div class="ex-block"><div class="ex-label">Example 4 &mdash; Equation requiring algebra</div><div class="ex-body">Solve $2\sin\theta+\sqrt3=0$ on $[0,2\pi)$.</div><div class="ex-answer instructor">$\sin\theta=-\dfrac{\sqrt3}{2}$. Reference $\pi/3$. Sin negative in QIII, QIV: $\theta=\pi+\pi/3=4\pi/3$ and $\theta=2\pi-\pi/3=5\pi/3$.</div></div>
+</div>
+<div class="section-head">Practice Problems</div>
+<div class="practice">
+<div class="pr-row"><div class="pr-num">1.</div><div class="pr-prob">Solve $\sin\theta=1$ on $[0,2\pi)$.</div><div class="pr-ans instructor">$\theta=\pi/2$.</div></div>
+<div class="pr-row"><div class="pr-num">2.</div><div class="pr-prob">Solve $\cos\theta=0$ on $[0,2\pi)$.</div><div class="pr-ans instructor">$\theta=\pi/2,3\pi/2$.</div></div>
+<div class="pr-row"><div class="pr-num">3.</div><div class="pr-prob">Solve $\tan\theta=-\sqrt3$ on $[0,2\pi)$.</div><div class="pr-ans instructor">Reference $\pi/3$; QII, QIV: $\theta=2\pi/3,5\pi/3$.</div></div>
+<div class="pr-row"><div class="pr-num">4.</div><div class="pr-prob">Solve $2\cos\theta=1$ on $[0,2\pi)$.</div><div class="pr-ans instructor">$\cos\theta=1/2$; $\theta=\pi/3,5\pi/3$.</div></div>
+<div class="pr-row"><div class="pr-num">5.</div><div class="pr-prob">Solve $\sin\theta=-1/2$ on $[0,2\pi)$.</div><div class="pr-ans instructor">$\theta=7\pi/6,11\pi/6$.</div></div>
+<div class="pr-row"><div class="pr-num">6.</div><div class="pr-prob">Write general solution of $\cos\theta=0$.</div><div class="pr-ans instructor">$\theta=\pi/2+n\pi$, $n$ integer.</div></div>
+</div>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script>
+function toggleAns(btn) {
+  if (!btn.dataset.orig) btn.dataset.orig = btn.textContent;
+  var ans = btn.nextElementSibling;
+  var showing = ans.classList.toggle('visible');
+  btn.textContent = showing ? 'Hide' : btn.dataset.orig;
+}
+renderMathInElement(document.body, {
+  delimiters: [
+    {left: '$$', right: '$$', display: true},
+    {left: '$',  right: '$',  display: false}
+  ],
+  throwOnError: false
+});
+</script>
+</body>
+</html>

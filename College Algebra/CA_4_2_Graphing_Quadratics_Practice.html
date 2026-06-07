@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Graphing Quadratics &mdash; Practice</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.7}
+  .container{max-width:820px;margin:0 auto;padding:2rem 1.5rem 4rem}
+  h1{font-size:26px;font-weight:700;margin-bottom:4px}
+  .subtitle{font-size:14px;color:#666;margin-bottom:2rem;font-family:sans-serif}
+  .section{margin-bottom:2.5rem}
+  .section-title{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;
+    color:#777;font-family:sans-serif;margin-bottom:1rem;border-bottom:1px solid #ddd;padding-bottom:6px}
+  .concept{background:#d9e8f5;border-left:4px solid #185fa5;border-radius:0 8px 8px 0;
+    padding:.85rem 1.1rem;font-size:15px;margin-bottom:1rem}
+  .concept-label{font-family:sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;
+    letter-spacing:.07em;color:#185fa5;display:block;margin-bottom:.35rem}
+  .score-bar{display:flex;align-items:center;gap:12px;margin-bottom:1.25rem;
+    font-family:sans-serif;font-size:14px;flex-wrap:wrap}
+  .score-display{font-weight:700;font-size:18px;min-width:60px}
+  .score-label{color:#777;font-size:13px}
+  .score-note{font-size:12px;color:#999;font-style:italic}
+  .progress{flex:1;min-width:80px;height:6px;background:#e5e1d8;border-radius:3px;overflow:hidden}
+  .progress-fill{height:100%;background:#185fa5;border-radius:3px;transition:width .4s}
+  .reset-btn{font-size:12px;background:none;border:1px solid #bbb;border-radius:5px;
+    padding:4px 10px;cursor:pointer;color:#666;font-family:sans-serif;white-space:nowrap}
+  .reset-btn:hover{background:#eee}
+  .problems{display:grid;grid-template-columns:repeat(auto-fill,minmax(370px,1fr));gap:14px}
+  .card{background:#fff;border:1.5px solid #ddd;border-radius:10px;overflow:hidden;transition:border-color .25s}
+  .card.correct{border-color:#3a7a3a}.card.wrong{border-color:#b03030}.card.peeked{border-color:#b8860b}
+  .card-body{padding:14px 16px}
+  .card-meta{font-family:sans-serif;font-size:12px;color:#888;margin-bottom:4px}
+  .card-expr{font-size:17px;margin-bottom:12px;line-height:2.2;overflow-x:auto}
+  .katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}
+  .input-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .ans-input{font-family:'Courier New',monospace;font-size:14px;border:1px solid #ccc;
+    border-radius:6px;padding:7px 10px;flex:1;min-width:120px;background:#fafaf8;
+    color:#1a1a1a;outline:none}
+  .ans-input:focus{border-color:#185fa5;background:#fff}
+  .ans-input.ok{border-color:#3a7a3a;background:#f0faf0}
+  .ans-input.bad{border-color:#b03030;background:#fdf0f0}
+  .check-btn{font-family:sans-serif;font-size:13px;background:#1a1a1a;color:#fff;
+    border:none;border-radius:6px;padding:7px 14px;cursor:pointer}
+  .check-btn:hover{background:#333}.check-btn:disabled{background:#aaa;cursor:default}
+  .hint{font-family:sans-serif;font-size:12px;color:#888;margin-top:7px}
+  .feedback{font-family:sans-serif;font-size:13px;margin-top:10px;padding:8px 12px;
+    border-radius:6px;display:none;line-height:1.5}
+  .feedback.correct{display:block;background:#eaf5ea;color:#1a5a1a}
+  .feedback.wrong{display:block;background:#faeaea;color:#7a1a1a}
+  .feedback.peeked{display:block;background:#fdf8e8;color:#7a5a00}
+  .reveal-link{font-family:sans-serif;font-size:12px;color:#999;cursor:pointer;
+    text-decoration:underline;margin-top:8px;display:inline-block}
+  .reveal-link:hover{color:#555}
+  .revealed-answer{display:none;margin-top:8px;font-family:sans-serif;font-size:13px;
+    color:#444;background:#f5f3ef;border-radius:6px;padding:8px 11px;line-height:1.8;overflow-x:auto}
+  code{font-family:'Courier New',monospace;background:#f0ede7;padding:1px 5px;border-radius:3px;font-size:12px}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Graphing Quadratics</h1>
+  <p class="subtitle">College Algebra &nbsp;&middot;&nbsp; &sect;4.2 &nbsp;&middot;&nbsp; Instructor: Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026</p>
+
+  <div class="section">
+    <div class="section-title">Core Ideas</div>
+
+    <div class="concept">
+      <span class="concept-label">Standard Form  f(x) = ax² + bx + c</span>
+      Vertex x-coordinate: $h = -b\,/\,(2a)$, then $k = f(h)$.
+      Opens <strong>up</strong> if $a&gt;0$ (minimum), <strong>down</strong> if $a&lt;0$ (maximum).
+      y-intercept is always $(0, c)$.
+    </div>
+    <div class="concept">
+      <span class="concept-label">Vertex Form  f(x) = a(x − h)² + k</span>
+      Vertex $(h, k)$ read directly. Watch the sign: $x+2 = x-(-2)$, so $h=-2$.
+      y-intercept: substitute $x=0$ to get $ah^2+k$.
+    </div>
+
+  </div>
+
+  <div class="section">
+    <div class="section-title">Practice Problems</div>
+    <p style="font-family:sans-serif;font-size:13px;color:#666;margin-bottom:1rem;">
+      Graph problems: read directly from the grid or enter <code>up</code>/<code>down</code>. Text problems: integers for coordinates; <code>max</code> or <code>min</code> where asked.
+      Press <strong>Check</strong> or hit Enter.
+    </p>
+    <div class="score-bar">
+      <span class="score-label">Score:</span>
+      <span class="score-display" id="score">0 / 8</span>
+      <span class="score-note">first attempt only</span>
+      <div class="progress"><div class="progress-fill" id="prog" style="width:0%"></div></div>
+      <button class="reset-btn" onclick="resetAll()">New set &nbsp;&#8635;</button>
+    </div>
+    <div class="problems" id="problems"></div>
+  </div>
+</div>
+
+<script>
+// ── Crypto-quality RNG ────────────────────────────────────────────────────────
+function _rf() {
+  const b = new Uint32Array(1);
+  crypto.getRandomValues(b);
+  return b[0] / 4294967296;
+}
+function rInt(n)   { return Math.floor(_rf() * n); }
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = rInt(i + 1);
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+// Pick one element at random from an array  e.g. choose([1,4,9])
+function choose(arr) { return arr[rInt(arr.length)]; }
+
+// ── Display helpers ───────────────────────────────────────────────────────────
+// Leading coefficient: 1→'', -1→'-', else the number as a string
+function fc(a) { if (a===1) return ''; if (a===-1) return '-'; return String(a); }
+// Subsequent term with sign: addT(-2,'x')→' - 2x', addT(3,'')→' + 3', addT(0,'x')→''
+function addT(n, v) {
+  if (n===0) return '';
+  const s = n>0?'+':'-', abs = Math.abs(n);
+  if (abs===1 && v) return ' ' + s + ' ' + v;
+  return ' ' + s + ' ' + abs + (v||'');
+}
+
+// ── Problem generators (section-specific, injected below) ─────────────────────
+
+// ── SVG parabola helper ───────────────────────────────────────────────────────
+function makeParabola(a, h, k, question) {
+  const W = 220, H = 220, cx = 110, cy = 110, sc = 20;
+  let g = '';
+  // grid lines
+  for (let i = -5; i <= 5; i++) {
+    const px = cx + i*sc, py = cy - i*sc;
+    g += `<line x1="${px}" y1="5" x2="${px}" y2="${H-5}" stroke="#e0ddd8" stroke-width="1"/>`;
+    g += `<line x1="5" y1="${py}" x2="${W-5}" y2="${py}" stroke="#e0ddd8" stroke-width="1"/>`;
+  }
+  // axes
+  g += `<line x1="5" y1="${cy}" x2="${W-10}" y2="${cy}" stroke="#555" stroke-width="1.5"/>`;
+  g += `<line x1="${cx}" y1="10" x2="${cx}" y2="${H-5}" stroke="#555" stroke-width="1.5"/>`;
+  g += `<polygon points="${W-5},${cy} ${W-12},${cy-4} ${W-12},${cy+4}" fill="#555"/>`;
+  g += `<polygon points="${cx},5 ${cx-4},12 ${cx+4},12" fill="#555"/>`;
+  // tick marks and labels
+  for (let i = -4; i <= 4; i++) {
+    if (i === 0) continue;
+    const px = cx + i*sc, py = cy - i*sc;
+    g += `<line x1="${px}" y1="${cy-4}" x2="${px}" y2="${cy+4}" stroke="#555" stroke-width="1"/>`;
+    g += `<text x="${px}" y="${cy+16}" text-anchor="middle" font-size="10" fill="#777" font-family="sans-serif">${i}</text>`;
+    g += `<line x1="${cx-4}" y1="${py}" x2="${cx+4}" y2="${py}" stroke="#555" stroke-width="1"/>`;
+    g += `<text x="${cx-8}" y="${py+4}" text-anchor="end" font-size="10" fill="#777" font-family="sans-serif">${i}</text>`;
+  }
+  g += `<text x="${cx-7}" y="${cy+15}" text-anchor="end" font-size="10" fill="#777" font-family="sans-serif">0</text>`;
+  // parabola as polyline
+  let pts = [];
+  for (let xi = -5.5; xi <= 5.51; xi += 0.1) {
+    const yi = a*(xi-h)*(xi-h) + k;
+    pts.push(`${(cx+xi*sc).toFixed(1)},${(cy-yi*sc).toFixed(1)}`);
+  }
+  g += `<polyline points="${pts.join(' ')}" fill="none" stroke="#185fa5" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>`;
+  // vertex dot
+  const vx = cx + h*sc, vy = cy - k*sc;
+  g += `<circle cx="${vx}" cy="${vy}" r="4" fill="#c0392b" stroke="#fff" stroke-width="1.5"/>`;
+  const qHtml = `<p style="font-family:sans-serif;font-size:13px;text-align:center;margin-top:6px;color:#1a1a1a">${question}</p>`;
+  return `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" style="display:block;margin:0 auto;background:#fafaf8;border-radius:4px">${g}</svg>${qHtml}`;
+}
+
+// gen1: graph → find vertex x-coordinate (red dot)
+function gen1() {
+  const h = rInt(7) - 3;
+  const k = rInt(5) - 2;
+  return {
+    svg:    makeParabola(1, h, k, 'What is the x-coordinate of the vertex? (red dot)'),
+    answer: [String(h)],
+    hint:   'The red dot marks the vertex. Read the x-value on the grid directly below or above it.',
+    step:   `\\text{vertex x} = ${h}`
+  };
+}
+
+// gen2: graph → find vertex y-coordinate (red dot)
+function gen2() {
+  const h = rInt(5) - 2;
+  const k = rInt(7) - 3;
+  return {
+    svg:    makeParabola(1, h, k, 'What is the y-coordinate of the vertex? (red dot)'),
+    answer: [String(k)],
+    hint:   'The red dot marks the vertex. Read the y-value on the grid directly left or right of it.',
+    step:   `\\text{vertex y} = ${k}`
+  };
+}
+
+// gen3: graph → opening direction
+function gen3() {
+  const a = choose([1, -1]);
+  const h = rInt(5) - 2;
+  const k = rInt(5) - 2;
+  const ans = a > 0 ? 'up' : 'down';
+  return {
+    svg:    makeParabola(a, h, k, 'Does this parabola open up or down?'),
+    answer: [ans],
+    hint:   'Look at the arms of the parabola from the vertex. Do they go upward or downward?',
+    step:   `a=${a}\\;${a>0?'>':'<'}\\;0\\quad\\Rightarrow\\quad\\text{opens ${ans}}`
+  };
+}
+
+// gen4: standard form → axis of symmetry (b always even for integer answer)
+function gen4() {
+  const bHalf = rInt(4) + 1;
+  const b     = choose([-1, 1]) * 2 * bHalf;
+  const c     = rInt(5) + 1;
+  const axis  = -b / 2;
+  const bStr  = b < 0 ? `- ${Math.abs(b)}` : `+ ${b}`;
+  return {
+    latex:  `f(x)=x^2${bStr}x+${c}.\\quad\\text{Find the axis of symmetry.}`,
+    answer: [String(axis)],
+    hint:   'What is the relationship between the axis of symmetry and the vertex?',
+    step:   `x=-\\frac{${b}}{2(1)}=${axis}`
+  };
+}
+
+// gen5: vertex form → y-intercept
+function gen5() {
+  const h   = choose([-3, -2, -1, 1, 2, 3]);
+  const k   = rInt(7) - 3;
+  const yInt = h*h + k;
+  const inner = h > 0 ? `(x-${h})` : `(x+${Math.abs(h)})`;
+  const kStr  = k >= 0 ? `+${k}` : `${k}`;
+  const inner0 = h > 0 ? `(0-${h})` : `(0+${Math.abs(h)})`;
+  return {
+    latex:  `f(x)=${inner}^2${kStr}.\\quad\\text{Find the y-intercept.}`,
+    answer: [String(yInt)],
+    hint:   'What is true about the x-value at every y-intercept?',
+    step:   `f(0)=${inner0}^2${kStr}=${h*h}${kStr}=${yInt}`
+  };
+}
+
+// gen6: standard form → vertex x-coordinate (b even)
+function gen6() {
+  const bHalf = rInt(4) + 1;
+  const b     = choose([-1, 1]) * 2 * bHalf;
+  const c     = rInt(5) + 1;
+  const vx    = -b / 2;
+  const bStr  = b < 0 ? `- ${Math.abs(b)}` : `+ ${b}`;
+  return {
+    latex:  `f(x)=x^2${bStr}x+${c}.\\quad\\text{Find the x-coordinate of the vertex.}`,
+    answer: [String(vx)],
+    hint:   'What formula gives the x-coordinate of the vertex of a parabola?',
+    step:   `h=-\\frac{${b}}{2}=${vx}`
+  };
+}
+
+// gen7: standard form → vertex y-coordinate (b even, c chosen so answer is clean)
+function gen7() {
+  const bHalf = rInt(3) + 1;
+  const b     = choose([-1, 1]) * 2 * bHalf;
+  const vx    = -b / 2;
+  const vy    = rInt(5) - 2;
+  const c     = vy + bHalf * bHalf;   // vy = c − bHalf² → c = vy + bHalf²
+  const bStr  = b < 0 ? `- ${Math.abs(b)}` : `+ ${b}`;
+  const cStr  = c < 0 ? `- ${Math.abs(c)}` : `+ ${c}`;
+  return {
+    latex:  `f(x)=x^2${bStr}x${cStr}.\\quad\\text{Find the y-coordinate of the vertex.}`,
+    answer: [String(vy)],
+    hint:   'What two coordinates define the vertex?',
+    step:   `h=${vx},\\quad k=f(${vx})=${vy}`
+  };
+}
+
+// gen8: max or min?
+function gen8() {
+  const a    = choose([-3, -2, -1, 1, 2, 3]);
+  const b    = choose([-4, -3, -2, -1, 1, 2, 3, 4]);
+  const c    = choose([-3, -2, -1, 1, 2, 3]);
+  const ans  = a > 0 ? 'min' : 'max';
+  const bStr = b < 0 ? `- ${Math.abs(b)}x` : `+ ${b}x`;
+  const cStr = c < 0 ? `- ${Math.abs(c)}` : `+ ${c}`;
+  return {
+    latex:  `f(x)=${a}x^2${bStr}${cStr}.\\quad\\text{Does the vertex give a max or min?}`,
+    answer: [ans],
+    hint:   'What does the sign of the leading coefficient tell you about which way the parabola opens?',
+    step:   `a=${a}\\;${a>0?'>':'<'}\\;0\\quad\\Rightarrow\\quad\\text{opens ${a>0?'up':'down'} → ${ans}}`
+  };
+}
+
+const GENERATORS = [gen1, gen2, gen3, gen4, gen5, gen6, gen7, gen8];
+
+
+// ── State ─────────────────────────────────────────────────────────────────────
+let ACTIVE, correct, flags, attempted, peeked;
+
+function norm(s) {
+  return s.trim().toLowerCase().replace(/\s+/g, '').replace(/[−–]/g, '-');
+}
+function ok(user, acc) { return acc.some(a => norm(user) === norm(a)); }
+
+function init() {
+  ACTIVE    = shuffle(GENERATORS.map(gen => gen()));
+  correct   = 0;
+  flags     = Array(GENERATORS.length).fill(false);
+  attempted = Array(GENERATORS.length).fill(false);
+  peeked    = Array(GENERATORS.length).fill(false);
+}
+
+function buildCards() {
+  const wrap = document.getElementById('problems');
+  wrap.innerHTML = '';
+  ACTIVE.forEach((p, i) => {
+    const div = document.createElement('div');
+    div.className = 'card'; div.id = 'card-' + i;
+    div.innerHTML =
+      `<div class="card-body">
+        <div class="card-meta">Problem ${i + 1}</div>
+        <div class="card-expr" id="expr-${i}"></div>
+        <div class="input-row">
+          <input class="ans-input" id="ai-${i}" placeholder="answer" />
+          <button class="check-btn" id="chk-${i}" onclick="check(${i})">Check</button>
+        </div>
+        <div class="hint">${p.hint}</div>
+        <div class="feedback" id="fb-${i}"></div>
+        <span class="reveal-link" id="rl-${i}" onclick="reveal(${i})">Show solution</span>
+        <div class="revealed-answer" id="ra-${i}"></div>
+      </div>`;
+    wrap.appendChild(div);
+    document.getElementById('ai-' + i)
+      .addEventListener('keydown', e => { if (e.key === 'Enter') check(i); });
+    if (p.svg) {
+      document.getElementById('expr-' + i).innerHTML = p.svg;
+    } else {
+      katex.render(p.latex, document.getElementById('expr-' + i),
+        { throwOnError: false, displayMode: true });
+    }
+  });
+}
+
+function check(i) {
+  const p = ACTIVE[i], inp = document.getElementById('ai-'+i),
+        fb = document.getElementById('fb-'+i), card = document.getElementById('card-'+i),
+        good = ok(inp.value, p.answer);
+  inp.className = 'ans-input';
+  if (good) {
+    inp.className = 'ans-input ok'; fb.className = 'feedback correct';
+    fb.textContent = '✓ Correct!'; card.className = 'card correct';
+    if (!flags[i] && !attempted[i] && !peeked[i]) { flags[i]=true; correct++; updateScore(); }
+    attempted[i] = true;
+    document.getElementById('chk-'+i).disabled = true; inp.readOnly = true;
+  } else {
+    attempted[i] = true; inp.className = 'ans-input bad'; fb.className = 'feedback wrong';
+    fb.textContent = '✗ Not quite — try again or show the solution.';
+    card.className = peeked[i] ? 'card peeked' : 'card wrong';
+  }
+}
+
+function reveal(i) {
+  const p = ACTIVE[i], box = document.getElementById('ra-'+i),
+        lnk = document.getElementById('rl-'+i);
+  if (box.style.display === 'block') {
+    box.style.display = 'none'; lnk.textContent = 'Show solution';
+  } else {
+    if (!flags[i]) {
+      peeked[i] = true; document.getElementById('card-'+i).className = 'card peeked';
+      if (!attempted[i]) {
+        const fb = document.getElementById('fb-'+i);
+        fb.className = 'feedback peeked';
+        fb.textContent = '⚠ Solution revealed — no point awarded.';
+      }
+    }
+    box.innerHTML = '<strong>Solution:</strong><br>';
+    const span = document.createElement('span'); box.appendChild(span);
+    katex.render(p.step, span, { throwOnError: false, displayMode: true });
+    box.style.display = 'block'; lnk.textContent = 'Hide solution';
+  }
+}
+
+function updateScore() {
+  const n = ACTIVE.length;
+  document.getElementById('score').textContent = correct + ' / ' + n;
+  document.getElementById('prog').style.width = Math.round(correct / n * 100) + '%';
+}
+
+function resetAll() { init(); buildCards(); updateScore(); }
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script>
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left: '$$', right: '$$', display: true},
+      {left: '$',  right: '$',  display: false}
+    ]
+  });
+  init(); buildCards(); updateScore();
+</script>
+</body>
+</html>

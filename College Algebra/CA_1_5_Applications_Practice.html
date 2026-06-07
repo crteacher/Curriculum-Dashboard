@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Applications of Linear Equations &amp; Inequalities &mdash; Practice</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.7}
+  .container{max-width:820px;margin:0 auto;padding:2rem 1.5rem 4rem}
+  h1{font-size:26px;font-weight:700;margin-bottom:4px}
+  .subtitle{font-size:14px;color:#666;margin-bottom:2rem;font-family:sans-serif}
+  .section{margin-bottom:2.5rem}
+  .section-title{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;
+    color:#777;font-family:sans-serif;margin-bottom:1rem;border-bottom:1px solid #ddd;padding-bottom:6px}
+  .concept{background:#d9e8f5;border-left:4px solid #185fa5;border-radius:0 8px 8px 0;
+    padding:.85rem 1.1rem;font-size:15px;margin-bottom:1rem}
+  .concept-label{font-family:sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;
+    letter-spacing:.07em;color:#185fa5;display:block;margin-bottom:.35rem}
+  .score-bar{display:flex;align-items:center;gap:12px;margin-bottom:1.25rem;
+    font-family:sans-serif;font-size:14px;flex-wrap:wrap}
+  .score-display{font-weight:700;font-size:18px;min-width:60px}
+  .score-label{color:#777;font-size:13px}
+  .score-note{font-size:12px;color:#999;font-style:italic}
+  .progress{flex:1;min-width:80px;height:6px;background:#e5e1d8;border-radius:3px;overflow:hidden}
+  .progress-fill{height:100%;background:#185fa5;border-radius:3px;transition:width .4s}
+  .reset-btn{font-size:12px;background:none;border:1px solid #bbb;border-radius:5px;
+    padding:4px 10px;cursor:pointer;color:#666;font-family:sans-serif;white-space:nowrap}
+  .reset-btn:hover{background:#eee}
+  .problems{display:grid;grid-template-columns:repeat(auto-fill,minmax(370px,1fr));gap:14px}
+  .card{background:#fff;border:1.5px solid #ddd;border-radius:10px;overflow:hidden;transition:border-color .25s}
+  .card.correct{border-color:#3a7a3a}.card.wrong{border-color:#b03030}.card.peeked{border-color:#b8860b}
+  .card-body{padding:14px 16px}
+  .card-meta{font-family:sans-serif;font-size:12px;color:#888;margin-bottom:4px}
+  .card-expr{font-size:17px;margin-bottom:12px;line-height:2.2;overflow-x:auto}
+  .katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}
+  .input-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .ans-input{font-family:'Courier New',monospace;font-size:14px;border:1px solid #ccc;
+    border-radius:6px;padding:7px 10px;flex:1;min-width:120px;background:#fafaf8;
+    color:#1a1a1a;outline:none}
+  .ans-input:focus{border-color:#185fa5;background:#fff}
+  .ans-input.ok{border-color:#3a7a3a;background:#f0faf0}
+  .ans-input.bad{border-color:#b03030;background:#fdf0f0}
+  .check-btn{font-family:sans-serif;font-size:13px;background:#1a1a1a;color:#fff;
+    border:none;border-radius:6px;padding:7px 14px;cursor:pointer}
+  .check-btn:hover{background:#333}.check-btn:disabled{background:#aaa;cursor:default}
+  .hint{font-family:sans-serif;font-size:12px;color:#888;margin-top:7px}
+  .feedback{font-family:sans-serif;font-size:13px;margin-top:10px;padding:8px 12px;
+    border-radius:6px;display:none;line-height:1.5}
+  .feedback.correct{display:block;background:#eaf5ea;color:#1a5a1a}
+  .feedback.wrong{display:block;background:#faeaea;color:#7a1a1a}
+  .feedback.peeked{display:block;background:#fdf8e8;color:#7a5a00}
+  .reveal-link{font-family:sans-serif;font-size:12px;color:#999;cursor:pointer;
+    text-decoration:underline;margin-top:8px;display:inline-block}
+  .reveal-link:hover{color:#555}
+  .revealed-answer{display:none;margin-top:8px;font-family:sans-serif;font-size:13px;
+    color:#444;background:#f5f3ef;border-radius:6px;padding:8px 11px;line-height:1.8;overflow-x:auto}
+  code{font-family:'Courier New',monospace;background:#f0ede7;padding:1px 5px;border-radius:3px;font-size:12px}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Applications of Linear Equations &amp; Inequalities</h1>
+  <p class="subtitle">College Algebra &nbsp;&middot;&nbsp; &sect;1.5 &nbsp;&middot;&nbsp; Instructor: Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026</p>
+
+  <div class="section">
+    <div class="section-title">Core Ideas</div>
+
+    <div class="concept">
+      <span class="concept-label">Translation Guide</span>
+      <em>is / equals</em> &rarr; $=$&nbsp;&nbsp;
+      <em>more than</em> &rarr; $+$&nbsp;&nbsp;
+      <em>times / of</em> &rarr; $\times$&nbsp;&nbsp;
+      <em>at least</em> &rarr; $\geq$&nbsp;&nbsp;
+      <em>at most</em> &rarr; $\leq$&nbsp;&nbsp;
+      <em>exceeds</em> &rarr; $>$
+    </div>
+    <div class="concept">
+      <span class="concept-label">Common Setups</span>
+      Flat fee + rate: &nbsp;$\text{total} = ax + b$&nbsp;&nbsp;|&nbsp;&nbsp;
+      Break-even: &nbsp;$ax + b = cx$&nbsp;&nbsp;|&nbsp;&nbsp;
+      Budget: &nbsp;$ax \leq \text{budget}$&nbsp;&nbsp;|&nbsp;&nbsp;
+      Savings goal: &nbsp;$b + ax \geq \text{target}$
+    </div>
+
+  </div>
+
+  <div class="section">
+    <div class="section-title">Practice Problems</div>
+    <p style="font-family:sans-serif;font-size:13px;color:#666;margin-bottom:1rem;">
+      All answers are positive integers — enter the number with no units (e.g. <code>4</code> for "4 tickets" or "4 months").
+      Press <strong>Check</strong> or hit Enter.
+    </p>
+    <div class="score-bar">
+      <span class="score-label">Score:</span>
+      <span class="score-display" id="score">0 / 8</span>
+      <span class="score-note">first attempt only</span>
+      <div class="progress"><div class="progress-fill" id="prog" style="width:0%"></div></div>
+      <button class="reset-btn" onclick="resetAll()">New set &nbsp;&#8635;</button>
+    </div>
+    <div class="problems" id="problems"></div>
+  </div>
+</div>
+
+<script>
+// ── Crypto-quality RNG ────────────────────────────────────────────────────────
+function _rf() {
+  const b = new Uint32Array(1);
+  crypto.getRandomValues(b);
+  return b[0] / 4294967296;
+}
+function rInt(n)   { return Math.floor(_rf() * n); }
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = rInt(i + 1);
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+// Pick one element at random from an array  e.g. choose([1,4,9])
+function choose(arr) { return arr[rInt(arr.length)]; }
+
+// ── Display helpers ───────────────────────────────────────────────────────────
+// Leading coefficient: 1→'', -1→'-', else the number as a string
+function fc(a) { if (a===1) return ''; if (a===-1) return '-'; return String(a); }
+// Subsequent term with sign: addT(-2,'x')→' - 2x', addT(3,'')→' + 3', addT(0,'x')→''
+function addT(n, v) {
+  if (n===0) return '';
+  const s = n>0?'+':'-', abs = Math.abs(n);
+  if (abs===1 && v) return ' ' + s + ' ' + v;
+  return ' ' + s + ' ' + abs + (v||'');
+}
+
+// ── Problem generators (section-specific, injected below) ─────────────────────
+
+// ── Context pools ────────────────────────────────────────────────────────────
+const TICKET_EVENTS  = ['concert','escape room','comedy show','laser tag session','pottery class'];
+const TICKET_ITEMS   = ['ticket','ticket','pass','ticket','session'];
+const SNACK_ITEMS    = ['boba tea','breakfast burrito','smoothie','slice of pizza','pretzel'];
+const SAVINGS_GOALS  = [
+  {item:'a new gaming console', price:200},
+  {item:'a concert ticket',     price:120},
+  {item:'new shoes',            price:150},
+  {item:'a road trip fund',     price:250},
+  {item:'a new textbook',       price:100},
+];
+const CLOTHING       = ['hoodie','graphic tee','cap','jacket','pair of socks'];
+const PLAN_A_NAMES   = ['Gym A','Plan A','Service A','Streaming A','App A'];
+const MONTHS         = ['months','months','months','months'];
+
+// gen1: Flat fee + per-unit → ax + b = c
+function gen1() {
+  const event  = choose(TICKET_EVENTS);
+  const item   = TICKET_ITEMS[TICKET_EVENTS.indexOf(event)];
+  const a      = rInt(5) + 6;     // price per ticket {6..10}
+  const b      = rInt(4) + 3;     // service fee {3..6}
+  const k      = rInt(4) + 2;     // answer: # tickets {2..5}
+  const c      = a * k + b;
+  return {
+    latex:  `\\text{${event.charAt(0).toUpperCase()+event.slice(1)} ${item}s cost }\\$${a}\\text{ each plus a }\\$${b}\\text{ order fee. You paid }\\$${c}\\text{. How many ${item}s?}`,
+    answer: [String(k)],
+    hint:   `What is the per-${item} cost, and what is the fixed fee? Which of those involves x?`,
+    step:   `${a}x+${b}=${c}\\Rightarrow ${a}x=${c-b}\\Rightarrow x=${k}\\text{ ${item}s}`
+  };
+}
+
+// gen2: Snack + flat fee → ax + b = c  (different context from gen1)
+function gen2() {
+  const snack  = choose(SNACK_ITEMS);
+  const a      = rInt(4) + 4;     // price per item {4..7}
+  const b      = rInt(3) + 2;     // app/delivery fee {2..4}
+  const k      = rInt(4) + 2;     // answer {2..5}
+  const c      = a * k + b;
+  return {
+    latex:  `\\text{Each ${snack} costs }\\$${a}\\text{. There's a }\\$${b}\\text{ delivery fee. You spent }\\$${c}\\text{. How many ${snack}s?}`,
+    answer: [String(k)],
+    hint:   `Identify the per-item cost and the flat fee. Which one multiplies by the number of ${snack}s?`,
+    step:   `${a}x+${b}=${c}\\Rightarrow x=${k}\\text{ ${snack}s}`
+  };
+}
+
+// gen3: Consecutive integers → x + (x+1) = c  →  x = (c-1)/2
+function gen3() {
+  const k  = rInt(8) + 5;        // smaller integer {5..12}
+  const c  = 2 * k + 1;
+  return {
+    latex:  `\\text{The sum of two consecutive integers is }${c}\\text{. Find the smaller one.}`,
+    answer: [String(k)],
+    hint:   `If the smaller integer is x, how do you write the next consecutive integer in terms of x?`,
+    step:   `x+(x+1)=${c}\\Rightarrow 2x=${c-1}\\Rightarrow x=${k}`
+  };
+}
+
+// gen4: Perimeter — length = width + d  →  w = (P - 2d)/4
+function gen4() {
+  const d  = rInt(4) + 2;        // length exceeds width by {2..5}
+  const w  = rInt(5) + 3;        // width {3..7}
+  const P  = 4 * w + 2 * d;
+  const places = ['dog park','garden bed','basketball court','community pool deck','school hallway'];
+  const place  = choose(places);
+  return {
+    latex:  `\\text{A rectangular ${place} has a length }${d}\\text{ ft more than its width. The perimeter is }${P}\\text{ ft. Find the width.}`,
+    answer: [String(w)],
+    hint:   `If the width is w, how do you express the length? Which perimeter formula applies?`,
+    step:   `2(w+${d})+2w=${P}\\Rightarrow 4w+${2*d}=${P}\\Rightarrow w=${w}\\text{ ft}`
+  };
+}
+
+// gen5: Break-even — ax + b = cx  →  x = b/(c-a) months
+function gen5() {
+  const diff = rInt(3) + 2;      // monthly difference {2..4}
+  const aRate = rInt(4) + 8;     // cheaper monthly rate {8..11}
+  const cRate = aRate + diff;    // pricier but no signup
+  const k    = rInt(5) + 4;      // break-even months {4..8}
+  const b    = diff * k;         // signup fee
+  const pairs = [
+    ['Gym A','Gym B'],['Plan A','Plan B'],['Service A','Service B'],
+    ['App A','App B'],['Club A','Club B']
+  ];
+  const [nameA, nameB] = choose(pairs);
+  return {
+    latex:  `\\text{${nameA}: }\\$${aRate}\\text{/mo + }\\$${b}\\text{ signup. ${nameB}: }\\$${cRate}\\text{/mo, no signup. After how many months is the total cost equal?}`,
+    answer: [String(k)],
+    hint:   `Write a total-cost expression for each plan in terms of months. What equation does "equal total" give you?`,
+    step:   `${aRate}x+${b}=${cRate}x\\Rightarrow ${b}=${diff}x\\Rightarrow x=${k}\\text{ months}`
+  };
+}
+
+// gen6: Budget inequality → ax ≤ budget, answer = floor
+function gen6() {
+  const clothing = choose(CLOTHING);
+  const a   = rInt(6) + 8;       // cost per item {8..13}
+  const k   = rInt(5) + 3;       // max items {3..7}
+  const rem = rInt(a - 1) + 1;   // leftover {1..a-1}
+  const budget = a * k + rem;
+  return {
+    latex:  `\\text{You have }\\$${budget}\\text{. Each ${clothing} costs }\\$${a}\\text{. How many can you buy?}`,
+    answer: [String(k)],
+    hint:   `Write an inequality: cost per item times quantity ≤ budget. Can x be a fraction here?`,
+    step:   `${a}x\\leq${budget}\\Rightarrow x\\leq${(budget/a).toFixed(2)}\\Rightarrow\\text{at most }${k}\\text{ ${clothing}s}`
+  };
+}
+
+// gen7: Savings goal → b + ax ≥ target
+function gen7() {
+  const goal    = choose(SAVINGS_GOALS);
+  const weekly  = (rInt(4) + 3) * 5;   // save {15,20,25,30,35} per week
+  const k       = rInt(5) + 3;          // weeks needed {3..7}
+  const saved   = rInt(weekly - 1) + 1; // already saved (less than one week's worth so answer is exactly k)
+  const target  = saved + weekly * k;
+  return {
+    latex:  `\\text{You have }\\$${saved}\\text{ saved and put away }\\$${weekly}\\text{ per week. How many weeks until you can afford ${goal.item} (}\\$${target}\\text{)?}`,
+    answer: [String(k)],
+    hint:   `Which quantity is fixed at the start, and which grows each week? What inequality means "enough to afford it"?`,
+    step:   `${saved}+${weekly}x\\geq${target}\\Rightarrow ${weekly}x\\geq${target-saved}\\Rightarrow x\\geq${k}\\text{ weeks}`
+  };
+}
+
+// gen8: Score needed — current + x ≥ target (inequality, fun context)
+function gen8() {
+  const perAssign = (rInt(3) + 2) * 10;  // each assignment worth {20,30,40,50}
+  const k         = rInt(4) + 1;           // need this many more points {1..4} × perAssign...
+  // actually: you've done n assignments, need total points T, what's min on next one?
+  const n         = rInt(3) + 2;           // assignments done {2..4}
+  const avgPts    = (rInt(3) + 6) * 10;   // average so far {60,70,80,90}
+  const current   = n * avgPts;
+  const targetAvg = avgPts + (rInt(2) + 1) * 10;  // target average 10 or 20 points higher
+  const target    = (n + 1) * targetAvg;
+  const minScore  = target - current;
+  // keep minScore reasonable (≤ 100)
+  if (minScore > 100 || minScore < 10) {
+    // fallback to a simpler version
+    const curr2   = 240;
+    const tgt2    = 300;
+    const min2    = 60;
+    return {
+      latex:  `\\text{You have }${curr2}\\text{ total points across 3 assignments. You need at least }${tgt2}\\text{ points total after 4 assignments. What is the minimum score on the next one?}`,
+      answer: [String(min2)],
+      hint:   `Your current total plus the new score must reach the target. What inequality expresses that?`,
+      step:   `240+x\\geq300\\Rightarrow x\\geq60\\text{ points}`
+    };
+  }
+  return {
+    latex:  `\\text{You have }${current}\\text{ total points across }${n}\\text{ assignments. You need at least }${target}\\text{ points total after }${n+1}\\text{ assignments. What is the minimum score on the next one?}`,
+    answer: [String(minScore)],
+    hint:   `Your current total plus the new score must reach the target. What inequality expresses that?`,
+    step:   `${current}+x\\geq${target}\\Rightarrow x\\geq${minScore}\\text{ points}`
+  };
+}
+
+const GENERATORS = [gen1, gen2, gen3, gen4, gen5, gen6, gen7, gen8];
+
+
+// ── State ─────────────────────────────────────────────────────────────────────
+let ACTIVE, correct, flags, attempted, peeked;
+
+function norm(s) {
+  return s.trim().toLowerCase().replace(/\s+/g, '').replace(/[−–]/g, '-');
+}
+function ok(user, acc) { return acc.some(a => norm(user) === norm(a)); }
+
+function init() {
+  ACTIVE    = shuffle(GENERATORS.map(gen => gen()));
+  correct   = 0;
+  flags     = Array(GENERATORS.length).fill(false);
+  attempted = Array(GENERATORS.length).fill(false);
+  peeked    = Array(GENERATORS.length).fill(false);
+}
+
+function buildCards() {
+  const wrap = document.getElementById('problems');
+  wrap.innerHTML = '';
+  ACTIVE.forEach((p, i) => {
+    const div = document.createElement('div');
+    div.className = 'card'; div.id = 'card-' + i;
+    div.innerHTML =
+      `<div class="card-body">
+        <div class="card-meta">Problem ${i + 1}</div>
+        <div class="card-expr" id="expr-${i}"></div>
+        <div class="input-row">
+          <input class="ans-input" id="ai-${i}" placeholder="answer" />
+          <button class="check-btn" id="chk-${i}" onclick="check(${i})">Check</button>
+        </div>
+        <div class="hint">${p.hint}</div>
+        <div class="feedback" id="fb-${i}"></div>
+        <span class="reveal-link" id="rl-${i}" onclick="reveal(${i})">Show solution</span>
+        <div class="revealed-answer" id="ra-${i}"></div>
+      </div>`;
+    wrap.appendChild(div);
+    document.getElementById('ai-' + i)
+      .addEventListener('keydown', e => { if (e.key === 'Enter') check(i); });
+    if (p.svg) {
+      document.getElementById('expr-' + i).innerHTML = p.svg;
+    } else {
+      katex.render(p.latex, document.getElementById('expr-' + i),
+        { throwOnError: false, displayMode: true });
+    }
+  });
+}
+
+function check(i) {
+  const p = ACTIVE[i], inp = document.getElementById('ai-'+i),
+        fb = document.getElementById('fb-'+i), card = document.getElementById('card-'+i),
+        good = ok(inp.value, p.answer);
+  inp.className = 'ans-input';
+  if (good) {
+    inp.className = 'ans-input ok'; fb.className = 'feedback correct';
+    fb.textContent = '✓ Correct!'; card.className = 'card correct';
+    if (!flags[i] && !attempted[i] && !peeked[i]) { flags[i]=true; correct++; updateScore(); }
+    attempted[i] = true;
+    document.getElementById('chk-'+i).disabled = true; inp.readOnly = true;
+  } else {
+    attempted[i] = true; inp.className = 'ans-input bad'; fb.className = 'feedback wrong';
+    fb.textContent = '✗ Not quite — try again or show the solution.';
+    card.className = peeked[i] ? 'card peeked' : 'card wrong';
+  }
+}
+
+function reveal(i) {
+  const p = ACTIVE[i], box = document.getElementById('ra-'+i),
+        lnk = document.getElementById('rl-'+i);
+  if (box.style.display === 'block') {
+    box.style.display = 'none'; lnk.textContent = 'Show solution';
+  } else {
+    if (!flags[i]) {
+      peeked[i] = true; document.getElementById('card-'+i).className = 'card peeked';
+      if (!attempted[i]) {
+        const fb = document.getElementById('fb-'+i);
+        fb.className = 'feedback peeked';
+        fb.textContent = '⚠ Solution revealed — no point awarded.';
+      }
+    }
+    box.innerHTML = '<strong>Solution:</strong><br>';
+    const span = document.createElement('span'); box.appendChild(span);
+    katex.render(p.step, span, { throwOnError: false, displayMode: true });
+    box.style.display = 'block'; lnk.textContent = 'Hide solution';
+  }
+}
+
+function updateScore() {
+  const n = ACTIVE.length;
+  document.getElementById('score').textContent = correct + ' / ' + n;
+  document.getElementById('prog').style.width = Math.round(correct / n * 100) + '%';
+}
+
+function resetAll() { init(); buildCards(); updateScore(); }
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script>
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left: '$$', right: '$$', display: true},
+      {left: '$',  right: '$',  display: false}
+    ]
+  });
+  init(); buildCards(); updateScore();
+</script>
+</body>
+</html>

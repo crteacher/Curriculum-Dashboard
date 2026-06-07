@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alternating Series &mdash; Practice</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.7}
+  .container{max-width:820px;margin:0 auto;padding:2rem 1.5rem 4rem}
+  h1{font-size:26px;font-weight:700;margin-bottom:4px}
+  .subtitle{font-size:14px;color:#666;margin-bottom:2rem;font-family:sans-serif}
+  .section{margin-bottom:2.5rem}
+  .section-title{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#777;font-family:sans-serif;margin-bottom:1rem;border-bottom:1px solid #ddd;padding-bottom:6px}
+  .concept{background:#d9e8f5;border-left:4px solid #185fa5;border-radius:0 8px 8px 0;padding:.85rem 1.1rem;font-size:15px;margin-bottom:1rem}
+  .concept-label{font-family:sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#185fa5;display:block;margin-bottom:.35rem}
+  .score-bar{display:flex;align-items:center;gap:12px;margin-bottom:1.25rem;font-family:sans-serif;font-size:14px;flex-wrap:wrap}
+  .score-display{font-weight:700;font-size:18px;min-width:60px}
+  .score-label{color:#777;font-size:13px}
+  .score-note{font-size:12px;color:#999;font-style:italic}
+  .progress{flex:1;min-width:80px;height:6px;background:#e5e1d8;border-radius:3px;overflow:hidden}
+  .progress-fill{height:100%;background:#185fa5;border-radius:3px;transition:width .4s}
+  .reset-btn{font-size:12px;background:none;border:1px solid #bbb;border-radius:5px;padding:4px 10px;cursor:pointer;color:#666;font-family:sans-serif;white-space:nowrap}
+  .reset-btn:hover{background:#eee}
+  .problems{display:grid;grid-template-columns:repeat(auto-fill,minmax(370px,1fr));gap:14px}
+  .card{background:#fff;border:1.5px solid #ddd;border-radius:10px;overflow:hidden;transition:border-color .25s}
+  .card.correct{border-color:#3a7a3a}.card.wrong{border-color:#b03030}.card.peeked{border-color:#b8860b}
+  .card-body{padding:14px 16px}
+  .card-meta{font-family:sans-serif;font-size:12px;color:#888;margin-bottom:4px}
+  .card-expr{font-size:17px;margin-bottom:12px;line-height:2.2;overflow-x:auto}
+  .katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}
+  .input-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .ans-input{font-family:'Courier New',monospace;font-size:14px;border:1px solid #ccc;border-radius:6px;padding:7px 10px;flex:1;min-width:120px;background:#fafaf8;color:#1a1a1a;outline:none}
+  .ans-input:focus{border-color:#185fa5;background:#fff}
+  .ans-input.ok{border-color:#3a7a3a;background:#f0faf0}
+  .ans-input.bad{border-color:#b03030;background:#fdf0f0}
+  .check-btn{font-family:sans-serif;font-size:13px;background:#1a1a1a;color:#fff;border:none;border-radius:6px;padding:7px 14px;cursor:pointer}
+  .check-btn:hover{background:#333}.check-btn:disabled{background:#aaa;cursor:default}
+  .hint{font-family:sans-serif;font-size:12px;color:#888;margin-top:7px}
+  .feedback{font-family:sans-serif;font-size:13px;margin-top:10px;padding:8px 12px;border-radius:6px;display:none;line-height:1.5}
+  .feedback.correct{display:block;background:#eaf5ea;color:#1a5a1a}
+  .feedback.wrong{display:block;background:#faeaea;color:#7a1a1a}
+  .feedback.peeked{display:block;background:#fdf8e8;color:#7a5a00}
+  .reveal-link{font-family:sans-serif;font-size:12px;color:#999;cursor:pointer;text-decoration:underline;margin-top:8px;display:inline-block}
+  .reveal-link:hover{color:#555}
+  .revealed-answer{display:none;margin-top:8px;font-family:sans-serif;font-size:13px;color:#444;background:#f5f3ef;border-radius:6px;padding:8px 11px;line-height:1.8;overflow-x:auto}
+  code{font-family:'Courier New',monospace;background:#f0ede7;padding:1px 5px;border-radius:3px;font-size:12px}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Alternating Series</h1>
+  <p class="subtitle">Calculus 2 &nbsp;&middot;&nbsp; &sect;26 &nbsp;&middot;&nbsp; Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026</p>
+  <div class="section">
+    <div class="section-title">Core Ideas</div>
+    <div class="concept">
+      <span class="concept-label">Alternating Series Test (AST)</span>
+      $\displaystyle\sum_{n=1}^{\infty}(-1)^{n-1}b_n$ converges if (1) $b_n &gt; 0$, (2) $b_{n+1} \leq b_n$ (decreasing), and (3) $\displaystyle\lim_{n\to\infty}b_n = 0$.
+    </div>
+    <div class="concept">
+      <span class="concept-label">Alternating Series Estimation</span>
+      If the AST conditions hold, the error in the $N$th partial sum satisfies $|S - S_N| \leq b_{N+1}$. The error is bounded by the first omitted term.
+    </div>
+    <div class="concept">
+      <span class="concept-label">Absolute vs. Conditional Convergence</span>
+      A series is <em>absolutely convergent</em> if $\sum|a_n|$ converges; <em>conditionally convergent</em> if $\sum a_n$ converges but $\sum|a_n|$ diverges. The alternating harmonic series is a classic conditional example.
+    </div>
+  </div>
+  <div class="section">
+    <div class="section-title">Practice Problems</div>
+    <p style="font-family:sans-serif;font-size:13px;color:#666;margin-bottom:1rem;">Type <code>convergent</code> or <code>divergent</code> for convergence questions. For fractions use <code>p/q</code>.</p>
+    <div class="score-bar">
+      <span class="score-label">Score:</span>
+      <span class="score-display" id="score">0 / 8</span>
+      <span class="score-note">first attempt only</span>
+      <div class="progress"><div class="progress-fill" id="prog" style="width:0%"></div></div>
+      <button class="reset-btn" onclick="resetAll()">New set &#8635;</button>
+    </div>
+    <div class="problems" id="problems"></div>
+  </div>
+</div>
+<script>
+function _rf(){const b=new Uint32Array(1);crypto.getRandomValues(b);return b[0]/4294967296;}
+function rInt(n){return Math.floor(_rf()*n);}
+function shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=rInt(i+1);[a[i],a[j]]=[a[j],a[i]];}return a;}
+function choose(arr){return arr[rInt(arr.length)];}
+function norm(s){return s.trim().toLowerCase().replace(/\s+/g,'').replace(/[‐‑‒–—]/g,'-').replace(/∞/g,'inf').replace(/∪/g,'u');}
+function ok(user,acc){return acc.some(a=>norm(user)===norm(a));}
+function gen1(){return{latex:`\\text{Does }\\displaystyle\\sum_{n=1}^{\\infty}\\frac{(-1)^{n-1}}{n}\\text{ converge or diverge?}`,answer:['convergent','converges'],hint:'Does this alternating series satisfy all three conditions of the Alternating Series Test?',step:`b_n=1/n:\\;b_n>0,\\;b_{n+1}<b_n,\\;\\lim_{n\\to\\infty}1/n=0\\Rightarrow\\text{convergent by AST.}`};}
+function gen2(){const p=choose([2,3,4]);return{latex:`\\text{Does }\\displaystyle\\sum_{n=1}^{\\infty}\\frac{(-1)^{n}}{n^{${p}}}\\text{ converge or diverge?}`,answer:['convergent','converges'],hint:'Does bn = 1/n^p satisfy the three conditions of the Alternating Series Test?',step:`b_n=1/n^{${p}}:\\;\\text{positive, decreasing, }\\to0\\Rightarrow\\text{convergent by AST.}`};}
+function gen3(){const a=choose([2,3,4]),b=choose([1,2,3]);return{latex:`\\text{Does }\\displaystyle\\sum_{n=1}^{\\infty}(-1)^n\\frac{${a}n}{${b}n+1}\\text{ converge or diverge?}`,answer:['divergent','diverges'],hint:'Before checking the AST, what must be true of the terms for any series to have a chance at converging?',step:`\\lim_{n\\to\\infty}\\frac{${a}n}{${b}n+1}=\\frac{${a}}{${b}}\\neq0\\Rightarrow\\text{diverges by Divergence Test.}`};}
+function gen4(){const N=choose([3,4,5]);return{latex:`\\text{For }\\displaystyle S=\\sum_{n=1}^{\\infty}\\frac{(-1)^{n-1}}{n},\\text{ the error }|S-S_{${N}}|\\leq`,answer:[`1/${N+1}`],hint:'How does the Alternating Series Estimation Theorem bound the error of the Nth partial sum?',step:`|S-S_{${N}}|\\leq b_{${N+1}}=\\frac{1}{${N+1}}`};}
+function gen5(){const thresh=choose([1/10,1/100,1/50]);const threshStr=thresh===1/10?'0.1':(thresh===1/100?'0.01':'0.02');const threshTex=thresh===1/10?'\\tfrac{1}{10}':(thresh===1/100?'\\tfrac{1}{100}':'\\tfrac{1}{50}');const N=thresh===1/10?9:(thresh===1/100?99:49);return{latex:`\\text{How many terms of }\\displaystyle\\sum_{n=1}^{\\infty}\\frac{(-1)^{n-1}}{n}\\text{ give error }<${threshStr}\\text{?}`,answer:[String(N)],hint:'How does the Alternating Series Estimation bound relate to the smallest adequate partial sum?',step:`b_{N+1}=\\frac{1}{N+1}<${threshTex}\\Rightarrow N+1>${thresh===1/10?10:(thresh===1/100?100:50)}\\Rightarrow N=${N}`};}
+function gen6(){return{latex:`\\text{Is }\\displaystyle\\sum_{n=1}^{\\infty}\\frac{(-1)^{n-1}}{n}\\text{ absolutely or conditionally convergent?}`,answer:['conditionally convergent','conditional','conditionally'],hint:'What is the convergence status of the series formed by taking absolute values of all terms?',step:`\\sum|a_n|=\\sum\\frac{1}{n}\\text{ diverges (harmonic)},\\text{ but }\\sum a_n\\text{ converges by AST}\\Rightarrow\\text{conditionally convergent.}`};}
+function gen7(){const p=choose([2,3,4]);return{latex:`\\text{Is }\\displaystyle\\sum_{n=1}^{\\infty}\\frac{(-1)^{n-1}}{n^{${p}}}\\text{ absolutely or conditionally convergent?}`,answer:['absolutely convergent','absolute','absolutely'],hint:'Check whether the series with absolute values also converges — what type of series is it?',step:`\\sum|a_n|=\\sum\\frac{1}{n^{${p}}}\\text{ converges }(p=${p}>1)\\Rightarrow\\text{absolutely convergent.}`};}
+function gen8(){const c=choose([1,2,3,4]);return{latex:`\\text{Does }\\displaystyle\\sum_{n=1}^{\\infty}\\frac{(-1)^{n+1}}{n+${c}}\\text{ converge or diverge?}`,answer:['convergent','converges'],hint:'Does bn = 1/(n+c) satisfy the conditions needed for the Alternating Series Test to apply?',step:`b_n=\\frac{1}{n+${c}}:\\;\\text{positive, decreasing, }\\to0\\Rightarrow\\text{convergent by AST.}`};}
+const GENERATORS=[gen1,gen2,gen3,gen4,gen5,gen6,gen7,gen8];
+let ACTIVE,correct,flags,attempted,peeked;
+function init(){ACTIVE=shuffle(GENERATORS.map(g=>g()));correct=0;flags=Array(8).fill(false);attempted=Array(8).fill(false);peeked=Array(8).fill(false);}
+function buildCards(){const wrap=document.getElementById('problems');wrap.innerHTML='';ACTIVE.forEach((p,i)=>{const div=document.createElement('div');div.className='card';div.id='card-'+i;div.innerHTML=`<div class="card-body"><div class="card-meta">Problem ${i+1}</div><div class="card-expr" id="expr-${i}"></div><div class="input-row"><input class="ans-input" id="ai-${i}" placeholder="answer"/><button class="check-btn" id="chk-${i}" onclick="check(${i})">Check</button></div><div class="hint">${p.hint}</div><div class="feedback" id="fb-${i}"></div><span class="reveal-link" id="rl-${i}" onclick="reveal(${i})">Show solution</span><div class="revealed-answer" id="ra-${i}"></div></div>`;wrap.appendChild(div);document.getElementById('ai-'+i).addEventListener('keydown',e=>{if(e.key==='Enter')check(i);});katex.render(p.latex,document.getElementById('expr-'+i),{throwOnError:false,displayMode:true});});}
+function check(i){const p=ACTIVE[i],inp=document.getElementById('ai-'+i),fb=document.getElementById('fb-'+i),card=document.getElementById('card-'+i),good=ok(inp.value,p.answer);inp.className='ans-input';if(good){inp.className='ans-input ok';fb.className='feedback correct';fb.textContent='✓ Correct!';card.className='card correct';if(!flags[i]&&!attempted[i]&&!peeked[i]){flags[i]=true;correct++;updateScore();}attempted[i]=true;document.getElementById('chk-'+i).disabled=true;inp.readOnly=true;}else{attempted[i]=true;inp.className='ans-input bad';fb.className='feedback wrong';fb.textContent='✗ Not quite — try again or show the solution.';card.className=peeked[i]?'card peeked':'card wrong';}}
+function reveal(i){const p=ACTIVE[i],box=document.getElementById('ra-'+i),lnk=document.getElementById('rl-'+i);if(box.style.display==='block'){box.style.display='none';lnk.textContent='Show solution';}else{if(!flags[i]){peeked[i]=true;document.getElementById('card-'+i).className='card peeked';if(!attempted[i]){const fb=document.getElementById('fb-'+i);fb.className='feedback peeked';fb.textContent='☆ Solution revealed — no point awarded.';}}box.innerHTML='<strong>Solution:</strong><br>';const span=document.createElement('span');box.appendChild(span);katex.render(p.step,span,{throwOnError:false,displayMode:true});box.style.display='block';lnk.textContent='Hide solution';}}
+function updateScore(){const n=ACTIVE.length;document.getElementById('score').textContent=correct+' / '+n;document.getElementById('prog').style.width=Math.round(correct/n*100)+'%';}
+function resetAll(){init();buildCards();updateScore();}
+</script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script>renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});init();buildCards();updateScore();</script>
+</body>
+</html>
