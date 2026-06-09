@@ -1,0 +1,471 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mathmap — The logical structure of your curriculum</title>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #0f0f1a; color: #e0e0f0; font-family: 'Segoe UI', system-ui, sans-serif; overflow: hidden; height: 100vh; display: flex; flex-direction: column; }
+
+#header { display: flex; align-items: center; gap: 16px; padding: 10px 18px; background: #13131f; border-bottom: 1px solid #2a2a3e; flex-shrink: 0; z-index: 10; }
+#header h1 { font-size: 20px; font-weight: 300; letter-spacing: 3px; color: #c0c8ff; }
+#header h1 span { font-weight: 700; color: #8899ff; }
+#subtitle { font-size: 11px; color: #556; margin-top: 2px; letter-spacing: 1px; }
+
+#toolbar { display: flex; align-items: center; gap: 10px; flex: 1; }
+#search { background: #1e1e30; border: 1px solid #334; color: #ccd; padding: 5px 12px; border-radius: 20px; font-size: 12px; width: 200px; outline: none; }
+#search:focus { border-color: #8899ff; }
+#search::placeholder { color: #445; }
+
+.filter-btn { padding: 4px 12px; border-radius: 12px; border: 1.5px solid; font-size: 11px; font-weight: 600; cursor: pointer; transition: all .15s; background: transparent; letter-spacing: .5px; }
+.filter-btn.active { color: #0f0f1a !important; }
+.filter-btn[data-course="calc1"]  { border-color: #4a9edd; color: #4a9edd; }
+.filter-btn[data-course="calc1"].active  { background: #4a9edd; }
+.filter-btn[data-course="calc2"]  { border-color: #e06060; color: #e06060; }
+.filter-btn[data-course="calc2"].active  { background: #e06060; }
+.filter-btn[data-course="ca"]     { border-color: #5cb85c; color: #5cb85c; }
+.filter-btn[data-course="ca"].active     { background: #5cb85c; }
+.filter-btn[data-course="pc"]     { border-color: #e8a838; color: #e8a838; }
+.filter-btn[data-course="pc"].active     { background: #e8a838; }
+.filter-btn[data-course="all"]    { border-color: #667; color: #aab; }
+.filter-btn[data-course="all"].active    { background: #445; color: #ccd; }
+
+#btn-reset { background: #1e1e30; border: 1px solid #334; color: #889; padding: 4px 10px; border-radius: 8px; font-size: 11px; cursor: pointer; }
+#btn-reset:hover { border-color: #8899ff; color: #aab; }
+
+#main { display: flex; flex: 1; overflow: hidden; }
+#graph-area { flex: 1; position: relative; }
+svg { width: 100%; height: 100%; }
+
+#sidebar { width: 280px; background: #13131f; border-left: 1px solid #2a2a3e; display: flex; flex-direction: column; overflow: hidden; transition: width .2s; }
+#sidebar.empty #sidebar-content { display: none; }
+#sidebar.empty #sidebar-hint { display: flex; }
+#sidebar-hint { align-items: center; justify-content: center; flex: 1; color: #334; font-size: 12px; text-align: center; padding: 20px; display: none; }
+#sidebar-content { flex: 1; overflow-y: auto; padding: 16px; }
+#sidebar-content::-webkit-scrollbar { width: 4px; }
+#sidebar-content::-webkit-scrollbar-thumb { background: #2a2a3e; border-radius: 2px; }
+
+.sb-badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 700; margin-bottom: 8px; color: #0f0f1a; }
+.sb-title { font-size: 16px; font-weight: 600; color: #dde; margin-bottom: 4px; line-height: 1.3; }
+.sb-section { font-size: 11px; color: #556; margin-bottom: 14px; letter-spacing: .5px; }
+.sb-section-header { font-size: 10px; font-weight: 700; letter-spacing: 1px; color: #445; text-transform: uppercase; margin: 12px 0 6px; }
+.sb-node-link { display: block; padding: 5px 8px; margin: 2px 0; border-radius: 6px; font-size: 12px; color: #99aacc; cursor: pointer; border: 1px solid transparent; }
+.sb-node-link:hover { background: #1e1e30; border-color: #334; color: #ccddff; }
+.sb-notes-link { display: block; margin-top: 14px; padding: 7px 12px; background: #1a1a2e; border: 1px solid #334; border-radius: 8px; font-size: 12px; color: #8899ff; text-decoration: none; text-align: center; }
+.sb-notes-link:hover { background: #20203a; border-color: #8899ff; }
+.sb-empty { color: #445; font-size: 11px; font-style: italic; }
+
+#footer { display: flex; align-items: center; justify-content: space-between; padding: 5px 14px; background: #13131f; border-top: 1px solid #2a2a3e; font-size: 10px; color: #445; flex-shrink: 0; }
+#node-count { }
+.legend { display: flex; gap: 12px; }
+.legend-item { display: flex; align-items: center; gap: 5px; }
+.legend-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+.node circle { cursor: pointer; stroke-width: 1.5px; }
+.node text { pointer-events: none; font-size: 10px; fill: #dde; font-family: inherit; display: none; }
+.node.hovered text, .node.selected text { display: block; }
+.labels-visible .node text { display: block; }
+.link { stroke: #2a2a3e; stroke-opacity: 0.7; }
+
+/* tooltip */
+#tooltip { position: absolute; background: #1e1e30; border: 1px solid #334; border-radius: 8px; padding: 8px 12px; font-size: 12px; pointer-events: none; opacity: 0; transition: opacity .1s; max-width: 200px; z-index: 100; }
+#tooltip .tt-title { font-weight: 600; color: #dde; margin-bottom: 2px; }
+#tooltip .tt-course { font-size: 10px; color: #667; }
+#tooltip .tt-section { font-size: 10px; color: #778; }
+</style>
+</head>
+<body>
+
+<div id="header">
+  <div>
+    <h1><span>Math</span>map</h1>
+    <div id="subtitle">The logical structure of your curriculum</div>
+  </div>
+  <div id="toolbar">
+    <input id="search" type="text" placeholder="Search concepts…" autocomplete="off">
+    <button class="filter-btn active" data-course="all">ALL</button>
+    <button class="filter-btn active" data-course="ca">CA</button>
+    <button class="filter-btn active" data-course="pc">PC</button>
+    <button class="filter-btn active" data-course="calc1">C1</button>
+    <button class="filter-btn active" data-course="calc2">C2</button>
+    <button id="btn-reset">↺ Reset</button>
+  </div>
+</div>
+
+<div id="main">
+  <div id="graph-area">
+    <svg id="svg"></svg>
+    <div id="tooltip"><div class="tt-title"></div><div class="tt-course"></div><div class="tt-section"></div></div>
+  </div>
+  <div id="sidebar empty" id="sidebar">
+    <div id="sidebar-hint">Click any node to explore its connections</div>
+    <div id="sidebar-content"></div>
+  </div>
+</div>
+
+<div id="footer">
+  <div id="node-count"></div>
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#5cb85c"></div>College Algebra</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#e8a838"></div>PreCalc</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#4a9edd"></div>Calc 1</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#e06060"></div>Calc 2</div>
+  </div>
+</div>
+
+<script>
+const GRAPH_DATA = {"nodes":[{"id":"calc_1_1_5_one_sided_limits","label":"One-Sided Limits","course":"calc1","section":"1.1.5","color":"#4a9edd","file":"Calc 1/Calc_1_1_5_One_Sided_Limits_Notes_STUDENT.html","px":150.0,"py":-179.8},{"id":"calc_1_1_limits","label":"Limits","course":"calc1","section":"1.1","color":"#4a9edd","file":"Calc 1/Calc_1_1_Limits_Notes_STUDENT.html","px":170,"py":-218.0},{"id":"calc_1_2_limit_rules","label":"Limit Rules & Algebraic Techniques","course":"calc1","section":"1.2","color":"#4a9edd","file":"Calc 1/Calc_1_2_Limit_Rules_Notes_STUDENT.html","px":170.0,"py":-171.8},{"id":"calc_1_3_continuity","label":"Continuity","course":"calc1","section":"1.3","color":"#4a9edd","file":"Calc 1/Calc_1_3_Continuity_Notes_STUDENT.html","px":150.0,"py":-141.6},{"id":"calc_1_4_limits_infinity","label":"Limits at Infinity & Unbounded Limits","course":"calc1","section":"1.4","color":"#4a9edd","file":"Calc 1/Calc_1_4_Limits_Infinity_Notes_STUDENT.html","px":170.0,"py":-133.6},{"id":"calc_1_5_squeeze_ivt","label":"Squeeze Theorem & Intermediate Value Theorem","course":"calc1","section":"1.5","color":"#4a9edd","file":"Calc 1/Calc_1_5_Squeeze_IVT_Notes_STUDENT.html","px":150.0,"py":-103.5},{"id":"calc_2_1_derivative_preliminaries","label":"Derivative Preliminaries","course":"calc1","section":"2.1","color":"#4a9edd","file":"Calc 1/Calc_2_1_Derivative_Preliminaries_Notes_STUDENT.html","px":170.0,"py":-95.5},{"id":"calc_2_2_5_derivative_as_function","label":"The Derivative as a Function","course":"calc1","section":"2.2.5","color":"#4a9edd","file":"Calc 1/Calc_2_2_5_Derivative_as_Function_Notes_STUDENT.html","px":170,"py":-27.1},{"id":"calc_2_2_6_differentiability","label":"Differentiability","course":"calc1","section":"2.2.6","color":"#4a9edd","file":"Calc 1/Calc_2_2_6_Differentiability_Notes_STUDENT.html","px":140.0,"py":11.1},{"id":"calc_2_2_derivative_at_point","label":"The Derivative at a Point","course":"calc1","section":"2.2","color":"#4a9edd","file":"Calc 1/Calc_2_2_Derivative_at_Point_Notes_STUDENT.html","px":170,"py":-65.3},{"id":"calc_2_3_power_rule","label":"The Power Rule","course":"calc1","section":"2.3","color":"#4a9edd","file":"Calc 1/Calc_2_3_Power_Rule_Notes_STUDENT.html","px":160.0,"py":19.1},{"id":"calc_2_4_5_rates_of_change","label":"Rates of Change","course":"calc1","section":"2.4.5","color":"#4a9edd","file":"Calc 1/Calc_2_4_5_Rates_of_Change_Notes_STUDENT.html","px":150.0,"py":49.3},{"id":"calc_2_4_trig_exp_log","label":"Derivatives of sin, cos, e&#x02E3;, ln(x)","course":"calc1","section":"2.4","color":"#4a9edd","file":"Calc 1/Calc_2_4_Trig_Exp_Log_Notes_STUDENT.html","px":140.0,"py":125.6},{"id":"calc_2_5_product_quotient","label":"Product & Quotient Rule","course":"calc1","section":"2.5","color":"#4a9edd","file":"Calc 1/Calc_2_5_Product_Quotient_Notes_STUDENT.html","px":170.0,"py":57.3},{"id":"calc_2_7_chain_rule","label":"The Chain Rule","course":"calc1","section":"2.7","color":"#4a9edd","file":"Calc 1/Calc_2_7_Chain_Rule_Notes_STUDENT.html","px":160.0,"py":87.5},{"id":"calc_2_8_general_derivatives","label":"General Derivatives","course":"calc1","section":"2.8","color":"#4a9edd","file":"Calc 1/Calc_2_8_General_Derivatives_Notes_STUDENT.html","px":160.0,"py":133.6},{"id":"calc_3_1_implicit_differentiation","label":"Implicit Differentiation","course":"calc1","section":"3.1","color":"#4a9edd","file":"Calc 1/Calc_3_1_Implicit_Differentiation_Notes_STUDENT.html","px":180.0,"py":141.6},{"id":"calc_3_4_linear_approximations","label":"Linear Approximations","course":"calc1","section":"3.4","color":"#4a9edd","file":"Calc 1/Calc_3_4_Linear_Approximations_Notes_STUDENT.html","px":150.0,"py":163.8},{"id":"calc_3_5_critical_points_evt","label":"Critical Points & EVT","course":"calc1","section":"3.5","color":"#4a9edd","file":"Calc 1/Calc_3_5_Critical_Points_EVT_Notes_STUDENT.html","px":180.0,"py":27.1},{"id":"calc_3_6_5_concavity_2nd_deriv_test","label":"Concavity & 2nd Derivative Test","course":"calc1","section":"3.6.5","color":"#4a9edd","file":"Calc 1/Calc_3_6_5_Concavity_2nd_Deriv_Test_Notes_STUDENT.html","px":180.0,"py":95.5},{"id":"calc_3_6_first_derivative_test","label":"First Derivative Test","course":"calc1","section":"3.6","color":"#4a9edd","file":"Calc 1/Calc_3_6_First_Derivative_Test_Notes_STUDENT.html","px":190.0,"py":65.3},{"id":"calc_3_8_mean_value_theorem","label":"Mean Value Theorem","course":"calc1","section":"3.8","color":"#4a9edd","file":"Calc 1/Calc_3_8_Mean_Value_Theorem_Notes_STUDENT.html","px":200.0,"py":11.1},{"id":"calc_4_1_distance_area","label":"Distance Traveled & Area Under a Curve","course":"calc1","section":"4.1","color":"#4a9edd","file":"Calc 1/Calc_4_1_Distance_Area_Notes_STUDENT.html","px":190.0,"py":-163.8},{"id":"calc_4_2_riemann_sums","label":"Riemann Sums","course":"calc1","section":"4.2","color":"#4a9edd","file":"Calc 1/Calc_4_2_Riemann_Sums_Notes_STUDENT.html","px":190.0,"py":-125.6},{"id":"calc_4_3_basic_integral_rules","label":"Basic Integration Rules","course":"calc1","section":"4.3","color":"#4a9edd","file":"Calc 1/Calc_4_3_Basic_Integral_Rules_Notes_STUDENT.html","px":190.0,"py":-87.5},{"id":"calc_4_4_ftc","label":"Fundamental Theorem of Calculus","course":"calc1","section":"4.4","color":"#4a9edd","file":"Calc 1/Calc_4_4_FTC_Notes_STUDENT.html","px":200.0,"py":125.6},{"id":"calc_4_5_antiderivatives","label":"Antiderivatives & Initial Value Problems","course":"calc1","section":"4.5","color":"#4a9edd","file":"Calc 1/Calc_4_5_Antiderivatives_Notes_STUDENT.html","px":170.0,"py":171.8},{"id":"calc_4_6_displacement_velocity_acceleration","label":"Displacement, Velocity & Acceleration","course":"calc1","section":"4.6","color":"#4a9edd","file":"Calc 1/Calc_4_6_Displacement_Velocity_Acceleration_Notes_STUDENT.html","px":190.0,"py":179.8},{"id":"calc_4_7_1_ftc_part1","label":"FTC Part 1 \u2014 The Accumulation Function","course":"calc1","section":"4.7.1","color":"#4a9edd","file":"Calc 1/Calc_4_7_1_FTC_Part1_Notes_STUDENT.html","px":170,"py":202.0},{"id":"c2_01_u_substitution","label":"U-Substitution","course":"calc2","section":"1","color":"#e06060","file":"Calc 2/C2_01_U_Substitution_Notes_STUDENT.html","px":480.0,"py":-218.0},{"id":"c2_02_u_sub_advanced","label":"U-Substitution \u2014 Continued","course":"calc2","section":"2","color":"#e06060","file":"Calc 2/C2_02_U_Sub_Advanced_Notes_STUDENT.html","px":480.0,"py":-78.0},{"id":"c2_03_trig_power_reduction","label":"U-Sub with Trig & Power Reduction","course":"calc2","section":"3","color":"#e06060","file":"Calc 2/C2_03_Trig_Power_Reduction_Notes_STUDENT.html","px":480.0,"py":62.0},{"id":"c2_04_inverse_trig_integrals","label":"Inverse Trig Integrals","course":"calc2","section":"4","color":"#e06060","file":"Calc 2/C2_04_Inverse_Trig_Integrals_Notes_STUDENT.html","px":486.7,"py":-210.0},{"id":"c2_05_area_between_curves","label":"Area Between Curves","course":"calc2","section":"5","color":"#e06060","file":"Calc 2/C2_05_Area_Between_Curves_Notes_STUDENT.html","px":493.3,"py":-202.0},{"id":"c2_06_volumes_of_solids","label":"Volumes of Solids","course":"calc2","section":"6","color":"#e06060","file":"Calc 2/C2_06_Volumes_of_Solids_Notes_STUDENT.html","px":500.0,"py":-218.0},{"id":"c2_07_rotational_solids_slicing","label":"Rotational Solids \u2014 Slicing Method","course":"calc2","section":"7","color":"#e06060","file":"Calc 2/C2_07_Rotational_Solids_Slicing_Notes_STUDENT.html","px":496.0,"py":-70.0},{"id":"c2_08_cylindrical_shells","label":"Rotational Solids \u2014 Cylindrical Shells","course":"calc2","section":"8","color":"#e06060","file":"Calc 2/C2_08_Cylindrical_Shells_Notes_STUDENT.html","px":512.0,"py":-62.0},{"id":"c2_09_arc_length","label":"Arc Length","course":"calc2","section":"9","color":"#e06060","file":"Calc 2/C2_09_Arc_Length_Notes_STUDENT.html","px":506.7,"py":-210.0},{"id":"c2_10_surface_area","label":"Surface Area of Revolution","course":"calc2","section":"10","color":"#e06060","file":"Calc 2/C2_10_Surface_Area_Notes_STUDENT.html","px":513.3,"py":-202.0},{"id":"c2_11_physical_applications","label":"Physical Applications of Integration","course":"calc2","section":"11","color":"#e06060","file":"Calc 2/C2_11_Physical_Applications_Notes_STUDENT.html","px":520.0,"py":-218.0},{"id":"c2_13_hyperbolic_functions","label":"Hyperbolic Functions","course":"calc2","section":"13","color":"#e06060","file":"Calc 2/C2_13_Hyperbolic_Functions_Notes_STUDENT.html","px":526.7,"py":-210.0},{"id":"c2_14_integration_by_parts","label":"Integration by Parts","course":"calc2","section":"14","color":"#e06060","file":"Calc 2/C2_14_Integration_By_Parts_Notes_STUDENT.html","px":533.3,"py":-202.0},{"id":"c2_16_partial_fraction_decomposition","label":"Partial Fraction Decomposition","course":"calc2","section":"16","color":"#e06060","file":"Calc 2/C2_16_Partial_Fraction_Decomposition_Notes_STUDENT.html","px":528.0,"py":-78.0},{"id":"c2_17_numerical_methods","label":"Numerical Integration Methods","course":"calc2","section":"17","color":"#e06060","file":"Calc 2/C2_17_Numerical_Methods_Notes_STUDENT.html","px":540.0,"py":-218.0},{"id":"c2_18_improper_integrals","label":"Improper Integrals","course":"calc2","section":"18","color":"#e06060","file":"Calc 2/C2_18_Improper_Integrals_Notes_STUDENT.html","px":546.7,"py":-210.0},{"id":"c2_19_differential_equations_intro","label":"Introduction to Differential Equations","course":"calc2","section":"19","color":"#e06060","file":"Calc 2/C2_19_Differential_Equations_Intro_Notes_STUDENT.html","px":553.3,"py":-202.0},{"id":"c2_21_separable_equations","label":"Separable Differential Equations","course":"calc2","section":"21","color":"#e06060","file":"Calc 2/C2_21_Separable_Equations_Notes_STUDENT.html","px":544.0,"py":-70.0},{"id":"c2_22_sequences","label":"Sequences","course":"calc2","section":"22","color":"#e06060","file":"Calc 2/C2_22_Sequences_Notes_STUDENT.html","px":560.0,"py":-218.0},{"id":"c2_23_series","label":"Infinite Series","course":"calc2","section":"23","color":"#e06060","file":"Calc 2/C2_23_Series_Notes_STUDENT.html","px":560.0,"py":-62.0},{"id":"c2_24_divergence_and_integral_tests","label":"Divergence & Integral Tests","course":"calc2","section":"24","color":"#e06060","file":"Calc 2/C2_24_Divergence_and_Integral_Tests_Notes_STUDENT.html","px":500.0,"py":70.0},{"id":"c2_25_comparison_test","label":"Comparison Tests","course":"calc2","section":"25","color":"#e06060","file":"Calc 2/C2_25_Comparison_Test_Notes_STUDENT.html","px":520.0,"py":78.0},{"id":"c2_26_alternating_series","label":"Alternating Series","course":"calc2","section":"26","color":"#e06060","file":"Calc 2/C2_26_Alternating_Series_Notes_STUDENT.html","px":540.0,"py":62.0},{"id":"c2_27_ratio_and_root_tests","label":"Ratio and Root Tests","course":"calc2","section":"27","color":"#e06060","file":"Calc 2/C2_27_Ratio_and_Root_Tests_Notes_STUDENT.html","px":560.0,"py":70.0},{"id":"c2_28_power_series","label":"Power Series","course":"calc2","section":"28","color":"#e06060","file":"Calc 2/C2_28_Power_Series_Notes_STUDENT.html","px":520,"py":202.0},{"id":"ca_1_1_solving_equations","label":"Solving Equations with One Unknown","course":"ca","section":"1.1","color":"#5cb85c","file":"College Algebra/CA_1_1_Solving_Equations_Notes_STUDENT.html","px":-560.0,"py":-218.0},{"id":"ca_1_2_solutions_linear_equations","label":"Solutions to Linear Equations","course":"ca","section":"1.2","color":"#5cb85c","file":"College Algebra/CA_1_2_Solutions_Linear_Equations_Notes_STUDENT.html","px":-560.0,"py":-165.5},{"id":"ca_1_3_interval_notation_inequalities","label":"Interval Notation and Inequalities","course":"ca","section":"1.3","color":"#5cb85c","file":"College Algebra/CA_1_3_Interval_Notation_Inequalities_Notes_STUDENT.html","px":-546.7,"py":-157.5},{"id":"ca_1_4_compound_inequalities","label":"Compound Inequalities","course":"ca","section":"1.4","color":"#5cb85c","file":"College Algebra/CA_1_4_Compound_Inequalities_Notes_STUDENT.html","px":-560.0,"py":-113.0},{"id":"ca_1_5_applications","label":"Applications","course":"ca","section":"1.5","color":"#5cb85c","file":"College Algebra/CA_1_5_Applications_Notes_STUDENT.html","px":-550.0,"py":-105.0},{"id":"ca_1_6_absolute_values","label":"Absolute Values","course":"ca","section":"1.6","color":"#5cb85c","file":"College Algebra/CA_1_6_Absolute_Values_Notes_STUDENT.html","px":-560.0,"py":-60.5},{"id":"ca_2_1_slope_intercepts","label":"Slope and Intercepts","course":"ca","section":"2.1","color":"#5cb85c","file":"College Algebra/CA_2_1_Slope_Intercepts_Notes_STUDENT.html","px":-533.3,"py":-149.5},{"id":"ca_2_2_slope_intercept_point_slope","label":"Slope-Intercept and Point-Slope Forms","course":"ca","section":"2.2","color":"#5cb85c","file":"College Algebra/CA_2_2_Slope_Intercept_Point_Slope_Notes_STUDENT.html","px":-540.0,"py":-97.0},{"id":"ca_2_3_equations_from_graphs","label":"Equations from Graphs","course":"ca","section":"2.3","color":"#5cb85c","file":"College Algebra/CA_2_3_Equations_from_Graphs_Notes_STUDENT.html","px":-550.0,"py":-52.5},{"id":"ca_2_4_parallel_perpendicular","label":"Parallel and Perpendicular Lines","course":"ca","section":"2.4","color":"#5cb85c","file":"College Algebra/CA_2_4_Parallel_Perpendicular_Notes_STUDENT.html","px":-540.0,"py":-44.5},{"id":"ca_3_1_inputs_outputs","label":"Inputs and Outputs","course":"ca","section":"3.1","color":"#5cb85c","file":"College Algebra/CA_3_1_Inputs_Outputs_Notes_STUDENT.html","px":-544.0,"py":-210.0},{"id":"ca_3_2_domain_range","label":"Domain and Range","course":"ca","section":"3.2","color":"#5cb85c","file":"College Algebra/CA_3_2_Domain_Range_Notes_STUDENT.html","px":-520.0,"py":-165.5},{"id":"ca_3_3_functions","label":"Functions","course":"ca","section":"3.3","color":"#5cb85c","file":"College Algebra/CA_3_3_Functions_Notes_STUDENT.html","px":-530.0,"py":-113.0},{"id":"ca_3_4_inc_dec_pos_neg","label":"Increasing, Decreasing, Positive, Negative","course":"ca","section":"3.4","color":"#5cb85c","file":"College Algebra/CA_3_4_Inc_Dec_Pos_Neg_Notes_STUDENT.html","px":-530.0,"py":-60.5},{"id":"ca_3_5_inverse_functions","label":"Inverse Functions","course":"ca","section":"3.5","color":"#5cb85c","file":"College Algebra/CA_3_5_Inverse_Functions_Notes_STUDENT.html","px":-520.0,"py":-52.5},{"id":"ca_4_0_binomials","label":"Binomials & Polynomial Multiplication","course":"ca","section":"4.0","color":"#5cb85c","file":"College Algebra/CA_4_0_Binomials_Notes_STUDENT.html","px":-528.0,"py":-202.0},{"id":"ca_4_1_solving_by_factoring","label":"Solving by Factoring","course":"ca","section":"4.1","color":"#5cb85c","file":"College Algebra/CA_4_1_Solving_by_Factoring_Notes_STUDENT.html","px":-506.7,"py":-157.5},{"id":"ca_4_2_graphing_quadratics","label":"Graphing Quadratics","course":"ca","section":"4.2","color":"#5cb85c","file":"College Algebra/CA_4_2_Graphing_Quadratics_Notes_STUDENT.html","px":-520.0,"py":-105.0},{"id":"ca_4_3_completing_square","label":"Completing the Square","course":"ca","section":"4.3","color":"#5cb85c","file":"College Algebra/CA_4_3_Completing_Square_Notes_STUDENT.html","px":-512.0,"py":-218.0},{"id":"ca_4_4_quadratic_formula","label":"Quadratic Formula & Discriminant","course":"ca","section":"4.4","color":"#5cb85c","file":"College Algebra/CA_4_4_Quadratic_Formula_Notes_STUDENT.html","px":-510.0,"py":-97.0},{"id":"ca_4_5_quadratic_inequalities","label":"Quadratic Inequalities","course":"ca","section":"4.5","color":"#5cb85c","file":"College Algebra/CA_4_5_Quadratic_Inequalities_Notes_STUDENT.html","px":-510.0,"py":-44.5},{"id":"ca_5_1_complex_numbers","label":"Complex Numbers","course":"ca","section":"5.1","color":"#5cb85c","file":"College Algebra/CA_5_1_Complex_Numbers_Notes_STUDENT.html","px":-500.0,"py":-60.5},{"id":"ca_5_2_multiply_divide_complex","label":"Multiply & Divide Complex Numbers","course":"ca","section":"5.2","color":"#5cb85c","file":"College Algebra/CA_5_2_Multiply_Divide_Complex_Notes_STUDENT.html","px":-530.0,"py":-8.0},{"id":"ca_6_1_exponent_rules","label":"Exponent Rules","course":"ca","section":"6.1","color":"#5cb85c","file":"College Algebra/CA_6_1_Exponent_Rules_Notes_STUDENT.html","px":-496.0,"py":-210.0},{"id":"ca_6_2_simplifying_roots","label":"Simplifying Roots","course":"ca","section":"6.2","color":"#5cb85c","file":"College Algebra/CA_6_2_Simplifying_Roots_Notes_STUDENT.html","px":-493.3,"py":-149.5},{"id":"ca_6_3_exponential_functions","label":"Exponential Functions","course":"ca","section":"6.3","color":"#5cb85c","file":"College Algebra/CA_6_3_Exponential_Functions_Notes_STUDENT.html","px":-500.0,"py":-113.0},{"id":"ca_6_4_graphing_exponential_functions","label":"Graphing Exponential Functions","course":"ca","section":"6.4","color":"#5cb85c","file":"College Algebra/CA_6_4_Graphing_Exponential_Functions_Notes_STUDENT.html","px":-490.0,"py":-52.5},{"id":"ca_s_10_partitions","label":"Partitions","course":"ca","section":"S.10","color":"#5cb85c","file":"College Algebra/CA_S_10_Partitions_Notes_STUDENT.html","px":-530.0,"py":202.0},{"id":"ca_s_11_probability_permutations_combinations","label":"Probability with Permutations & Combinations","course":"ca","section":"S.11","color":"#5cb85c","file":"College Algebra/CA_S_11_Probability_Permutations_Combinations_Notes_STUDENT.html","px":-510.0,"py":210.0},{"id":"ca_s_1_sets_and_notation","label":"Sets and Notation","course":"ca","section":"S.1","color":"#5cb85c","file":"College Algebra/CA_S_1_Sets_and_Notation_Notes_STUDENT.html","px":-480.0,"py":-202.0},{"id":"ca_s_2_set_operations","label":"Set Operations","course":"ca","section":"S.2","color":"#5cb85c","file":"College Algebra/CA_S_2_Set_Operations_Notes_STUDENT.html","px":-480.0,"py":-165.5},{"id":"ca_s_3_subsets_and_supersets","label":"Subsets and Supersets","course":"ca","section":"S.3","color":"#5cb85c","file":"College Algebra/CA_S_3_Subsets_and_Supersets_Notes_STUDENT.html","px":-490.0,"py":-105.0},{"id":"ca_s_4_venn_diagrams","label":"Venn Diagrams","course":"ca","section":"S.4","color":"#5cb85c","file":"College Algebra/CA_S_4_Venn_Diagrams_Notes_STUDENT.html","px":-480.0,"py":-97.0},{"id":"ca_s_5_inclusion_exclusion","label":"Inclusion-Exclusion","course":"ca","section":"S.5","color":"#5cb85c","file":"College Algebra/CA_S_5_Inclusion_Exclusion_Notes_STUDENT.html","px":-480.0,"py":-44.5},{"id":"ca_s_6_basic_probability","label":"Basic Probability","course":"ca","section":"S.6","color":"#5cb85c","file":"College Algebra/CA_S_6_Basic_Probability_Notes_STUDENT.html","px":-510.0,"py":0.0},{"id":"ca_s_7_multiplication_principle","label":"Multiplication Principle","course":"ca","section":"S.7","color":"#5cb85c","file":"College Algebra/CA_S_7_Multiplication_Principle_Notes_STUDENT.html","px":-520,"py":44.5},{"id":"ca_s_8_permutations_and_combinations","label":"Permutations and Combinations","course":"ca","section":"S.8","color":"#5cb85c","file":"College Algebra/CA_S_8_Permutations_and_Combinations_Notes_STUDENT.html","px":-520,"py":97.0},{"id":"ca_s_9_further_counting_techniques","label":"Further Counting Techniques","course":"ca","section":"S.9","color":"#5cb85c","file":"College Algebra/CA_S_9_Further_Counting_Techniques_Notes_STUDENT.html","px":-520,"py":149.5},{"id":"pc_1_1_functions","label":"Functions","course":"pc","section":"1.1","color":"#e8a838","file":"PreCalc/PC_1_1_Functions_Notes_STUDENT.html","px":-210.0,"py":-218.0},{"id":"pc_1_1b_library_of_functions_and_one_to_one","label":"Library of Functions & One-to-One","course":"pc","section":"1.1b","color":"#e8a838","file":"PreCalc/PC_1_1b_Library_of_Functions_and_One-to-One_Notes_STUDENT.html","px":-210.0,"py":-134.0},{"id":"pc_1_2a_domain_and_interval_notation","label":"Domain and Interval Notation","course":"pc","section":"1.2a","color":"#e8a838","file":"PreCalc/PC_1_2a_Domain_and_Interval_Notation_Notes_STUDENT.html","px":-203.8,"py":-126.0},{"id":"pc_1_2b_piecewise_functions","label":"Piecewise Functions","course":"pc","section":"1.2b","color":"#e8a838","file":"PreCalc/PC_1_2b_Piecewise_Functions_Notes_STUDENT.html","px":-197.7,"py":-118.0},{"id":"pc_1_3_graph_properties","label":"Graph Properties","course":"pc","section":"1.3","color":"#e8a838","file":"PreCalc/PC_1_3_Graph_Properties_Notes_STUDENT.html","px":-191.5,"py":-134.0},{"id":"pc_1_4_function_combinations_and_composition","label":"Function Combinations and Composition","course":"pc","section":"1.4","color":"#e8a838","file":"PreCalc/PC_1_4_Function_Combinations_and_Composition_Notes_STUDENT.html","px":-185.4,"py":-126.0},{"id":"pc_1_5_transformations_of_functions","label":"Transformations of Functions","course":"pc","section":"1.5","color":"#e8a838","file":"PreCalc/PC_1_5_Transformations_of_Functions_Notes_STUDENT.html","px":-210.0,"py":-50.0},{"id":"pc_1_7_inverse_functions","label":"Inverse Functions","course":"pc","section":"1.7","color":"#e8a838","file":"PreCalc/PC_1_7_Inverse_Functions_Notes_STUDENT.html","px":-179.2,"py":-118.0},{"id":"pc_2_1_lines","label":"Lines","course":"pc","section":"2.1","color":"#e8a838","file":"PreCalc/PC_2_1_Lines_Notes_STUDENT.html","px":-196.7,"py":-210.0},{"id":"pc_2_2_graphing_linear_equations","label":"Graphing Linear Equations","course":"pc","section":"2.2","color":"#e8a838","file":"PreCalc/PC_2_2_Graphing_Linear_Equations_Notes_STUDENT.html","px":-173.1,"py":-134.0},{"id":"pc_2_3_modeling_with_linear_functions","label":"Modeling with Linear Functions","course":"pc","section":"2.3","color":"#e8a838","file":"PreCalc/PC_2_3_Modeling_with_Linear_Functions_Notes_STUDENT.html","px":-198.6,"py":-42.0},{"id":"pc_2_4_linear_models_from_data","label":"Linear Models from Data","course":"pc","section":"2.4","color":"#e8a838","file":"PreCalc/PC_2_4_Linear_Models_from_Data_Notes_STUDENT.html","px":-210.0,"py":34.0},{"id":"pc_3_1_complex_numbers","label":"Complex Numbers","course":"pc","section":"3.1","color":"#e8a838","file":"PreCalc/PC_3_1_Complex_Numbers_Notes_STUDENT.html","px":-183.3,"py":-202.0},{"id":"pc_3_2a_quadratic_functions_vertex_and_factored_forms","label":"Quadratic Functions \u2014 Vertex & Factored Forms","course":"pc","section":"3.2a","color":"#e8a838","file":"PreCalc/PC_3_2a_Quadratic_Functions_-_Vertex_and_Factored_Forms_Notes_STUDENT.html","px":-166.9,"py":-126.0},{"id":"pc_3_2b_quadratic_functions_completing_the_square","label":"Quadratic Functions \u2014 Completing the Square","course":"pc","section":"3.2b","color":"#e8a838","file":"PreCalc/PC_3_2b_Quadratic_Functions_-_Completing_the_Square_Notes_STUDENT.html","px":-187.1,"py":-34.0},{"id":"pc_3_3_quadratics_and_parametric_equations","label":"Quadratics and Parametric Equations","course":"pc","section":"3.3","color":"#e8a838","file":"PreCalc/PC_3_3_Quadratics_and_Parametric_Equations_Notes_STUDENT.html","px":-201.1,"py":42.0},{"id":"pc_3_4_polynomial_functions","label":"Polynomial Functions","course":"pc","section":"3.4","color":"#e8a838","file":"PreCalc/PC_3_4_Polynomial_Functions_Notes_STUDENT.html","px":-170.0,"py":-218.0},{"id":"pc_3_5_graphing_polynomial_functions","label":"Graphing Polynomial Functions","course":"pc","section":"3.5","color":"#e8a838","file":"PreCalc/PC_3_5_Graphing_Polynomial_Functions_Notes_STUDENT.html","px":-175.7,"py":-50.0},{"id":"pc_3_6_rational_functions","label":"Rational Functions","course":"pc","section":"3.6","color":"#e8a838","file":"PreCalc/PC_3_6_Rational_Functions_Notes_STUDENT.html","px":-160.8,"py":-118.0},{"id":"pc_4_1_exponential_functions","label":"Exponential Functions","course":"pc","section":"4.1","color":"#e8a838","file":"PreCalc/PC_4_1_Exponential_Functions_Notes_STUDENT.html","px":-156.7,"py":-210.0},{"id":"pc_4_2_graphing_exponential_functions","label":"Graphing Exponential Functions","course":"pc","section":"4.2","color":"#e8a838","file":"PreCalc/PC_4_2_Graphing_Exponential_Functions_Notes_STUDENT.html","px":-154.6,"py":-134.0},{"id":"pc_4_3_logarithmic_functions","label":"Logarithmic Functions","course":"pc","section":"4.3","color":"#e8a838","file":"PreCalc/PC_4_3_Logarithmic_Functions_Notes_STUDENT.html","px":-164.3,"py":-42.0},{"id":"pc_4_5_exponential_and_logarithmic_equations","label":"Exponential and Logarithmic Equations","course":"pc","section":"4.5","color":"#e8a838","file":"PreCalc/PC_4_5_Exponential_and_Logarithmic_Equations_Notes_STUDENT.html","px":-192.2,"py":50.0},{"id":"pc_5_1_angles_and_their_measure","label":"Angles and Their Measure","course":"pc","section":"5.1","color":"#e8a838","file":"PreCalc/PC_5_1_Angles_and_Their_Measure_Notes_STUDENT.html","px":-143.3,"py":-202.0},{"id":"pc_5_2_unit_circle_sine_and_cosine","label":"Unit Circle: Sine and Cosine","course":"pc","section":"5.2","color":"#e8a838","file":"PreCalc/PC_5_2_Unit_Circle\uf03a_Sine_and_Cosine_Notes_STUDENT.html","px":-148.5,"py":-126.0},{"id":"pc_5_3_unit_circle_other_trig_functions","label":"Unit Circle: Other Trig Functions","course":"pc","section":"5.3","color":"#e8a838","file":"PreCalc/PC_5_3_Unit_Circle\uf03a_Other_Trig_Functions_Notes_STUDENT.html","px":-152.9,"py":-34.0},{"id":"pc_5_3b_triangle_definition_of_trig_functions","label":"Triangle Definition of Trig Functions","course":"pc","section":"5.3b","color":"#e8a838","file":"PreCalc/PC_5_3b_Triangle_Definition_of_Trig_Functions_Notes_STUDENT.html","px":-141.4,"py":-50.0},{"id":"pc_5_4_right_triangle_applications","label":"Right Triangle Applications","course":"pc","section":"5.4","color":"#e8a838","file":"PreCalc/PC_5_4_Right_Triangle_Applications_Notes_STUDENT.html","px":-183.3,"py":34.0},{"id":"pc_6_0_graphing_trigonometric_functions","label":"Graphing Trigonometric Functions","course":"pc","section":"6.0","color":"#e8a838","file":"PreCalc/PC_6_0_Graphing_Trigonometric_Functions_Notes_STUDENT.html","px":-174.4,"py":42.0},{"id":"pc_6_1_graphing_sine_and_cosine_extended","label":"Graphing Sine and Cosine \u2014 Extended","course":"pc","section":"6.1","color":"#e8a838","file":"PreCalc/PC_6_1_Graphing_Sine_and_Cosine_-_Extended_Notes_STUDENT.html","px":-190.0,"py":118.0},{"id":"pc_6_2_graphing_other_trig_functions","label":"Graphing Other Trig Functions","course":"pc","section":"6.2","color":"#e8a838","file":"PreCalc/PC_6_2_Graphing_Other_Trig_Functions_Notes_STUDENT.html","px":-170,"py":202.0},{"id":"pc_6_4_inverse_trigonometric_functions","label":"Inverse Trigonometric Functions","course":"pc","section":"6.4","color":"#e8a838","file":"PreCalc/PC_6_4_Inverse_Trigonometric_Functions_Notes_STUDENT.html","px":-165.6,"py":50.0},{"id":"pc_6_5_triangles_with_inverse_trig","label":"Triangles with Inverse Trig","course":"pc","section":"6.5","color":"#e8a838","file":"PreCalc/PC_6_5_Triangles_with_Inverse_Trig_Notes_STUDENT.html","px":-170.0,"py":126.0},{"id":"pc_7_1_basic_trigonometric_equations","label":"Basic Trigonometric Equations","course":"pc","section":"7.1","color":"#e8a838","file":"PreCalc/PC_7_1_Basic_Trigonometric_Equations_Notes_STUDENT.html","px":-156.7,"py":34.0},{"id":"pc_7_2_sum_and_difference_identities","label":"Sum and Difference Identities","course":"pc","section":"7.2","color":"#e8a838","file":"PreCalc/PC_7_2_Sum_and_Difference_Identities_Notes_STUDENT.html","px":-130.0,"py":-218.0},{"id":"pc_7_3_double_and_half_angle_identities","label":"Double and Half Angle Identities","course":"pc","section":"7.3","color":"#e8a838","file":"PreCalc/PC_7_3_Double_and_Half_Angle_Identities_Notes_STUDENT.html","px":-142.3,"py":-118.0},{"id":"pc_7_5_solving_trig_equations","label":"Solving Trig Equations","course":"pc","section":"7.5","color":"#e8a838","file":"PreCalc/PC_7_5_Solving_Trig_Equations_Notes_STUDENT.html","px":-150.0,"py":134.0},{"id":"pc_8_1_law_of_sines","label":"Law of Sines","course":"pc","section":"8.1","color":"#e8a838","file":"PreCalc/PC_8_1_Law_of_Sines_Notes_STUDENT.html","px":-147.8,"py":42.0},{"id":"pc_8_2_law_of_cosines","label":"Law of Cosines","course":"pc","section":"8.2","color":"#e8a838","file":"PreCalc/PC_8_2_Law_of_Cosines_Notes_STUDENT.html","px":-138.9,"py":50.0},{"id":"pc_8_3_polar_coordinates","label":"Polar Coordinates","course":"pc","section":"8.3","color":"#e8a838","file":"PreCalc/PC_8_3_Polar_Coordinates_Notes_STUDENT.html","px":-136.2,"py":-134.0},{"id":"pc_8_4_polar_coordinate_graphs","label":"Polar Coordinate Graphs","course":"pc","section":"8.4","color":"#e8a838","file":"PreCalc/PC_8_4_Polar_Coordinate_Graphs_Notes_STUDENT.html","px":-130.0,"py":-42.0},{"id":"pc_8_5_conic_sections","label":"Conic Sections","course":"pc","section":"8.5","color":"#e8a838","file":"PreCalc/PC_8_5_Conic_Sections_Notes_STUDENT.html","px":-130.0,"py":34.0},{"id":"pc_8_6_parametric_equations","label":"Parametric Equations","course":"pc","section":"8.6","color":"#e8a838","file":"PreCalc/PC_8_6_Parametric_Equations_Notes_STUDENT.html","px":-130.0,"py":-126.0}],"edges":[{"source":"ca_1_1_solving_equations","target":"ca_1_2_solutions_linear_equations"},{"source":"ca_1_1_solving_equations","target":"ca_1_3_interval_notation_inequalities"},{"source":"ca_1_1_solving_equations","target":"ca_1_5_applications"},{"source":"ca_1_3_interval_notation_inequalities","target":"ca_1_4_compound_inequalities"},{"source":"ca_1_4_compound_inequalities","target":"ca_1_6_absolute_values"},{"source":"ca_1_2_solutions_linear_equations","target":"ca_1_5_applications"},{"source":"ca_1_1_solving_equations","target":"ca_2_1_slope_intercepts"},{"source":"ca_2_1_slope_intercepts","target":"ca_2_2_slope_intercept_point_slope"},{"source":"ca_2_2_slope_intercept_point_slope","target":"ca_2_3_equations_from_graphs"},{"source":"ca_2_1_slope_intercepts","target":"ca_2_4_parallel_perpendicular"},{"source":"ca_2_2_slope_intercept_point_slope","target":"ca_2_4_parallel_perpendicular"},{"source":"ca_3_1_inputs_outputs","target":"ca_3_2_domain_range"},{"source":"ca_3_1_inputs_outputs","target":"ca_3_3_functions"},{"source":"ca_3_3_functions","target":"ca_3_4_inc_dec_pos_neg"},{"source":"ca_3_2_domain_range","target":"ca_3_3_functions"},{"source":"ca_3_3_functions","target":"ca_3_5_inverse_functions"},{"source":"ca_4_0_binomials","target":"ca_4_1_solving_by_factoring"},{"source":"ca_1_1_solving_equations","target":"ca_4_1_solving_by_factoring"},{"source":"ca_4_1_solving_by_factoring","target":"ca_4_2_graphing_quadratics"},{"source":"ca_4_1_solving_by_factoring","target":"ca_4_4_quadratic_formula"},{"source":"ca_4_3_completing_square","target":"ca_4_2_graphing_quadratics"},{"source":"ca_4_3_completing_square","target":"ca_4_4_quadratic_formula"},{"source":"ca_4_2_graphing_quadratics","target":"ca_4_5_quadratic_inequalities"},{"source":"ca_4_4_quadratic_formula","target":"ca_4_5_quadratic_inequalities"},{"source":"ca_4_1_solving_by_factoring","target":"ca_4_5_quadratic_inequalities"},{"source":"ca_4_4_quadratic_formula","target":"ca_5_1_complex_numbers"},{"source":"ca_5_1_complex_numbers","target":"ca_5_2_multiply_divide_complex"},{"source":"ca_6_1_exponent_rules","target":"ca_6_2_simplifying_roots"},{"source":"ca_6_1_exponent_rules","target":"ca_6_3_exponential_functions"},{"source":"ca_6_2_simplifying_roots","target":"ca_6_3_exponential_functions"},{"source":"ca_6_3_exponential_functions","target":"ca_6_4_graphing_exponential_functions"},{"source":"ca_s_1_sets_and_notation","target":"ca_s_2_set_operations"},{"source":"ca_s_2_set_operations","target":"ca_s_3_subsets_and_supersets"},{"source":"ca_s_2_set_operations","target":"ca_s_4_venn_diagrams"},{"source":"ca_s_4_venn_diagrams","target":"ca_s_5_inclusion_exclusion"},{"source":"ca_s_5_inclusion_exclusion","target":"ca_s_6_basic_probability"},{"source":"ca_s_6_basic_probability","target":"ca_s_7_multiplication_principle"},{"source":"ca_s_7_multiplication_principle","target":"ca_s_8_permutations_and_combinations"},{"source":"ca_s_8_permutations_and_combinations","target":"ca_s_9_further_counting_techniques"},{"source":"ca_s_9_further_counting_techniques","target":"ca_s_10_partitions"},{"source":"ca_s_8_permutations_and_combinations","target":"ca_s_11_probability_permutations_combinations"},{"source":"ca_s_9_further_counting_techniques","target":"ca_s_11_probability_permutations_combinations"},{"source":"ca_3_3_functions","target":"pc_1_1_functions"},{"source":"ca_3_2_domain_range","target":"pc_1_2a_domain_and_interval_notation"},{"source":"ca_3_3_functions","target":"pc_1_4_function_combinations_and_composition"},{"source":"ca_3_5_inverse_functions","target":"pc_1_7_inverse_functions"},{"source":"ca_4_2_graphing_quadratics","target":"pc_3_2a_quadratic_functions_vertex_and_factored_forms"},{"source":"ca_4_3_completing_square","target":"pc_3_2b_quadratic_functions_completing_the_square"},{"source":"ca_4_0_binomials","target":"pc_3_4_polynomial_functions"},{"source":"ca_6_3_exponential_functions","target":"pc_4_1_exponential_functions"},{"source":"ca_6_3_exponential_functions","target":"pc_4_3_logarithmic_functions"},{"source":"ca_5_1_complex_numbers","target":"pc_3_1_complex_numbers"},{"source":"ca_2_1_slope_intercepts","target":"pc_2_1_lines"},{"source":"ca_2_2_slope_intercept_point_slope","target":"pc_2_1_lines"},{"source":"ca_3_4_inc_dec_pos_neg","target":"pc_1_3_graph_properties"},{"source":"ca_6_1_exponent_rules","target":"pc_4_1_exponential_functions"},{"source":"pc_1_1_functions","target":"pc_1_1b_library_of_functions_and_one_to_one"},{"source":"pc_1_1_functions","target":"pc_1_2a_domain_and_interval_notation"},{"source":"pc_1_1_functions","target":"pc_1_2b_piecewise_functions"},{"source":"pc_1_1_functions","target":"pc_1_3_graph_properties"},{"source":"pc_1_1_functions","target":"pc_1_4_function_combinations_and_composition"},{"source":"pc_1_1_functions","target":"pc_1_5_transformations_of_functions"},{"source":"pc_1_1_functions","target":"pc_1_7_inverse_functions"},{"source":"pc_1_3_graph_properties","target":"pc_1_5_transformations_of_functions"},{"source":"pc_2_1_lines","target":"pc_2_2_graphing_linear_equations"},{"source":"pc_2_2_graphing_linear_equations","target":"pc_2_3_modeling_with_linear_functions"},{"source":"pc_2_3_modeling_with_linear_functions","target":"pc_2_4_linear_models_from_data"},{"source":"pc_3_1_complex_numbers","target":"pc_3_2a_quadratic_functions_vertex_and_factored_forms"},{"source":"pc_3_2a_quadratic_functions_vertex_and_factored_forms","target":"pc_3_2b_quadratic_functions_completing_the_square"},{"source":"pc_3_2b_quadratic_functions_completing_the_square","target":"pc_3_3_quadratics_and_parametric_equations"},{"source":"pc_3_4_polynomial_functions","target":"pc_3_5_graphing_polynomial_functions"},{"source":"pc_3_2a_quadratic_functions_vertex_and_factored_forms","target":"pc_3_5_graphing_polynomial_functions"},{"source":"pc_3_4_polynomial_functions","target":"pc_3_6_rational_functions"},{"source":"pc_4_1_exponential_functions","target":"pc_4_2_graphing_exponential_functions"},{"source":"pc_4_2_graphing_exponential_functions","target":"pc_4_3_logarithmic_functions"},{"source":"pc_4_1_exponential_functions","target":"pc_4_5_exponential_and_logarithmic_equations"},{"source":"pc_4_3_logarithmic_functions","target":"pc_4_5_exponential_and_logarithmic_equations"},{"source":"pc_5_1_angles_and_their_measure","target":"pc_5_2_unit_circle_sine_and_cosine"},{"source":"pc_5_2_unit_circle_sine_and_cosine","target":"pc_5_3_unit_circle_other_trig_functions"},{"source":"pc_5_2_unit_circle_sine_and_cosine","target":"pc_5_3b_triangle_definition_of_trig_functions"},{"source":"pc_5_3b_triangle_definition_of_trig_functions","target":"pc_5_4_right_triangle_applications"},{"source":"pc_5_2_unit_circle_sine_and_cosine","target":"pc_5_4_right_triangle_applications"},{"source":"pc_5_3_unit_circle_other_trig_functions","target":"pc_6_0_graphing_trigonometric_functions"},{"source":"pc_6_0_graphing_trigonometric_functions","target":"pc_6_1_graphing_sine_and_cosine_extended"},{"source":"pc_6_1_graphing_sine_and_cosine_extended","target":"pc_6_2_graphing_other_trig_functions"},{"source":"pc_5_3_unit_circle_other_trig_functions","target":"pc_6_4_inverse_trigonometric_functions"},{"source":"pc_6_4_inverse_trigonometric_functions","target":"pc_6_5_triangles_with_inverse_trig"},{"source":"pc_5_4_right_triangle_applications","target":"pc_6_5_triangles_with_inverse_trig"},{"source":"pc_5_3_unit_circle_other_trig_functions","target":"pc_7_1_basic_trigonometric_equations"},{"source":"pc_7_1_basic_trigonometric_equations","target":"pc_7_5_solving_trig_equations"},{"source":"pc_7_2_sum_and_difference_identities","target":"pc_7_3_double_and_half_angle_identities"},{"source":"pc_7_2_sum_and_difference_identities","target":"pc_7_5_solving_trig_equations"},{"source":"pc_7_3_double_and_half_angle_identities","target":"pc_7_5_solving_trig_equations"},{"source":"pc_5_3b_triangle_definition_of_trig_functions","target":"pc_8_1_law_of_sines"},{"source":"pc_5_3b_triangle_definition_of_trig_functions","target":"pc_8_2_law_of_cosines"},{"source":"pc_5_1_angles_and_their_measure","target":"pc_8_3_polar_coordinates"},{"source":"pc_8_3_polar_coordinates","target":"pc_8_4_polar_coordinate_graphs"},{"source":"pc_3_2a_quadratic_functions_vertex_and_factored_forms","target":"pc_8_5_conic_sections"},{"source":"pc_1_1_functions","target":"pc_8_6_parametric_equations"},{"source":"pc_3_2b_quadratic_functions_completing_the_square","target":"pc_8_5_conic_sections"},{"source":"pc_1_1_functions","target":"calc_1_1_limits"},{"source":"pc_1_3_graph_properties","target":"calc_1_1_limits"},{"source":"pc_5_3_unit_circle_other_trig_functions","target":"calc_2_4_trig_exp_log"},{"source":"pc_4_1_exponential_functions","target":"calc_2_4_trig_exp_log"},{"source":"pc_4_3_logarithmic_functions","target":"calc_2_4_trig_exp_log"},{"source":"pc_1_4_function_combinations_and_composition","target":"calc_2_7_chain_rule"},{"source":"pc_1_7_inverse_functions","target":"calc_3_1_implicit_differentiation"},{"source":"calc_1_1_limits","target":"calc_1_1_5_one_sided_limits"},{"source":"calc_1_1_limits","target":"calc_1_2_limit_rules"},{"source":"calc_1_2_limit_rules","target":"calc_1_3_continuity"},{"source":"calc_1_2_limit_rules","target":"calc_1_4_limits_infinity"},{"source":"calc_1_3_continuity","target":"calc_1_5_squeeze_ivt"},{"source":"calc_1_1_limits","target":"calc_1_5_squeeze_ivt"},{"source":"calc_1_3_continuity","target":"calc_2_1_derivative_preliminaries"},{"source":"calc_1_1_limits","target":"calc_2_1_derivative_preliminaries"},{"source":"calc_2_1_derivative_preliminaries","target":"calc_2_2_derivative_at_point"},{"source":"calc_2_2_derivative_at_point","target":"calc_2_2_5_derivative_as_function"},{"source":"calc_2_2_5_derivative_as_function","target":"calc_2_2_6_differentiability"},{"source":"calc_2_2_5_derivative_as_function","target":"calc_2_3_power_rule"},{"source":"calc_2_3_power_rule","target":"calc_2_4_trig_exp_log"},{"source":"calc_2_3_power_rule","target":"calc_2_4_5_rates_of_change"},{"source":"calc_2_3_power_rule","target":"calc_2_5_product_quotient"},{"source":"calc_2_5_product_quotient","target":"calc_2_7_chain_rule"},{"source":"calc_2_7_chain_rule","target":"calc_2_4_trig_exp_log"},{"source":"calc_2_7_chain_rule","target":"calc_2_8_general_derivatives"},{"source":"calc_2_7_chain_rule","target":"calc_3_1_implicit_differentiation"},{"source":"calc_3_1_implicit_differentiation","target":"calc_3_4_linear_approximations"},{"source":"calc_2_2_5_derivative_as_function","target":"calc_3_5_critical_points_evt"},{"source":"calc_3_5_critical_points_evt","target":"calc_3_6_first_derivative_test"},{"source":"calc_3_6_first_derivative_test","target":"calc_3_6_5_concavity_2nd_deriv_test"},{"source":"calc_2_2_5_derivative_as_function","target":"calc_3_8_mean_value_theorem"},{"source":"calc_3_8_mean_value_theorem","target":"calc_3_6_5_concavity_2nd_deriv_test"},{"source":"calc_1_1_limits","target":"calc_4_1_distance_area"},{"source":"calc_4_1_distance_area","target":"calc_4_2_riemann_sums"},{"source":"calc_4_2_riemann_sums","target":"calc_4_3_basic_integral_rules"},{"source":"calc_4_3_basic_integral_rules","target":"calc_4_4_ftc"},{"source":"calc_4_4_ftc","target":"calc_4_5_antiderivatives"},{"source":"calc_4_5_antiderivatives","target":"calc_4_7_1_ftc_part1"},{"source":"calc_4_4_ftc","target":"calc_4_6_displacement_velocity_acceleration"},{"source":"calc_2_7_chain_rule","target":"calc_4_4_ftc"},{"source":"calc_4_5_antiderivatives","target":"c2_01_u_substitution"},{"source":"calc_2_7_chain_rule","target":"c2_01_u_substitution"},{"source":"c2_01_u_substitution","target":"c2_02_u_sub_advanced"},{"source":"c2_02_u_sub_advanced","target":"c2_03_trig_power_reduction"},{"source":"calc_2_4_trig_exp_log","target":"c2_03_trig_power_reduction"},{"source":"calc_2_4_trig_exp_log","target":"c2_04_inverse_trig_integrals"},{"source":"calc_4_4_ftc","target":"c2_05_area_between_curves"},{"source":"calc_4_4_ftc","target":"c2_06_volumes_of_solids"},{"source":"c2_06_volumes_of_solids","target":"c2_07_rotational_solids_slicing"},{"source":"c2_06_volumes_of_solids","target":"c2_08_cylindrical_shells"},{"source":"calc_4_4_ftc","target":"c2_09_arc_length"},{"source":"calc_4_4_ftc","target":"c2_10_surface_area"},{"source":"calc_4_4_ftc","target":"c2_11_physical_applications"},{"source":"calc_2_4_trig_exp_log","target":"c2_13_hyperbolic_functions"},{"source":"calc_4_4_ftc","target":"c2_14_integration_by_parts"},{"source":"calc_2_5_product_quotient","target":"c2_14_integration_by_parts"},{"source":"c2_14_integration_by_parts","target":"c2_16_partial_fraction_decomposition"},{"source":"c2_01_u_substitution","target":"c2_16_partial_fraction_decomposition"},{"source":"calc_4_4_ftc","target":"c2_17_numerical_methods"},{"source":"calc_1_1_limits","target":"c2_18_improper_integrals"},{"source":"calc_4_4_ftc","target":"c2_18_improper_integrals"},{"source":"calc_2_1_derivative_preliminaries","target":"c2_19_differential_equations_intro"},{"source":"c2_19_differential_equations_intro","target":"c2_21_separable_equations"},{"source":"c2_01_u_substitution","target":"c2_21_separable_equations"},{"source":"calc_1_1_limits","target":"c2_22_sequences"},{"source":"c2_22_sequences","target":"c2_23_series"},{"source":"c2_23_series","target":"c2_24_divergence_and_integral_tests"},{"source":"c2_23_series","target":"c2_25_comparison_test"},{"source":"c2_23_series","target":"c2_26_alternating_series"},{"source":"c2_23_series","target":"c2_27_ratio_and_root_tests"},{"source":"c2_24_divergence_and_integral_tests","target":"c2_28_power_series"},{"source":"c2_27_ratio_and_root_tests","target":"c2_28_power_series"}]};
+
+const COURSE_LABELS = { ca: "College Algebra", pc: "PreCalc", calc1: "Calculus I", calc2: "Calculus II" };
+const NOTES_BASE = "";
+
+let activeCourses = new Set(["ca","pc","calc1","calc2"]);
+let selectedNode = null;
+let pathStart = null;
+
+// ── Build graph ──────────────────────────────────────────────────────────────
+const svg = d3.select("#svg");
+const width  = () => document.getElementById("graph-area").clientWidth;
+const height = () => document.getElementById("graph-area").clientHeight;
+
+const g = svg.append("g");
+
+// Zoom
+const zoom = d3.zoom().scaleExtent([0.1, 4])
+  .on("zoom", e => {
+  g.attr("transform", e.transform);
+  // Show all labels when zoomed in past 1.1×
+  document.getElementById("graph-area").classList.toggle("labels-visible", e.transform.k > 1.1);
+});
+svg.call(zoom).on("dblclick.zoom", null);
+
+// Arrowhead marker
+svg.append("defs").append("marker")
+  .attr("id","arrow").attr("viewBox","0 -4 8 8")
+  .attr("refX",14).attr("refY",0)
+  .attr("markerWidth",5).attr("markerHeight",5)
+  .attr("orient","auto")
+  .append("path").attr("d","M0,-4L8,0L0,4").attr("fill","#3a3a5e");
+
+// Compute in-degree for node sizing
+const inDegree = {};
+GRAPH_DATA.nodes.forEach(n => inDegree[n.id] = 0);
+GRAPH_DATA.edges.forEach(e => { if (inDegree[e.target] !== undefined) inDegree[e.target]++; });
+
+function nodeRadius(d) { return 5 + (inDegree[d.id] || 0) * 2.2; }
+
+// Build adjacency
+const adjOut = {}, adjIn = {};
+GRAPH_DATA.nodes.forEach(n => { adjOut[n.id] = []; adjIn[n.id] = []; });
+GRAPH_DATA.edges.forEach(e => {
+  if (adjOut[e.source]) adjOut[e.source].push(e.target);
+  if (adjIn[e.target])  adjIn[e.target].push(e.source);
+});
+
+function ancestors(id) {
+  const visited = new Set(); const queue = [id];
+  while (queue.length) { const n = queue.shift(); (adjIn[n]||[]).forEach(p => { if (!visited.has(p)) { visited.add(p); queue.push(p); } }); }
+  return visited;
+}
+function descendants(id) {
+  const visited = new Set(); const queue = [id];
+  while (queue.length) { const n = queue.shift(); (adjOut[n]||[]).forEach(c => { if (!visited.has(c)) { visited.add(c); queue.push(c); } }); }
+  return visited;
+}
+function bfsPath(srcId, tgtId) {
+  const prev = {}; const queue = [srcId]; const visited = new Set([srcId]);
+  while (queue.length) {
+    const n = queue.shift();
+    if (n === tgtId) { const path = []; let cur = tgtId; while (cur !== undefined) { path.unshift(cur); cur = prev[cur]; } return path; }
+    (adjOut[n]||[]).forEach(nb => { if (!visited.has(nb)) { visited.add(nb); prev[nb] = n; queue.push(nb); } });
+  }
+  return null;
+}
+
+// Simulation
+// Use pre-computed positions from layout_mathmap.py (px/py fields).
+// This means instant layout with no simulation needed on load.
+let nodes = GRAPH_DATA.nodes.map(d => ({...d, x: d.px||0, y: d.py||0, vx:0, vy:0}));
+let edges = GRAPH_DATA.edges.map(d => ({...d}));
+
+// Minimal simulation — alpha starts at 0 so it doesn't animate.
+// Only becomes active during drag (alphaTarget set by drag handlers).
+const sim = d3.forceSimulation(nodes)
+  .alpha(0).alphaTarget(0)
+  .force("link",      d3.forceLink(edges).id(d=>d.id).distance(70).strength(0.3))
+  .force("charge",    d3.forceManyBody().strength(-180))
+  .force("collision", d3.forceCollide().radius(d => nodeRadius(d)+4));
+sim.stop();
+
+const linkSel = g.append("g").selectAll("line").data(edges).join("line")
+  .attr("class","link").attr("marker-end","url(#arrow)");
+
+const nodeSel = g.append("g").selectAll("g.node").data(nodes).join("g")
+  .attr("class","node")
+  .call(d3.drag()
+    .on("start", (e,d) => { if (!e.active) sim.alphaTarget(.2).restart(); d.fx=d.x; d.fy=d.y; })
+    .on("drag",  (e,d) => { d.fx=e.x; d.fy=e.y; })
+    .on("end",   (e,d) => { if (!e.active) sim.alphaTarget(0); d.fx=null; d.fy=null; }));
+
+nodeSel.append("circle")
+  .attr("r", nodeRadius)
+  .attr("fill", d => d.color)
+  .attr("stroke","#0f0f1a");
+
+nodeSel.append("text")
+  .attr("dy","2.2em").attr("text-anchor","middle")
+  .text(d => d.label.length > 24 ? d.label.slice(0,22)+"…" : d.label);
+
+// Static render — called once on load and on each drag tick.
+function renderPositions() {
+  linkSel.attr("x1",d=>d.source.x).attr("y1",d=>d.source.y)
+         .attr("x2",d=>d.target.x).attr("y2",d=>d.target.y);
+  nodeSel.attr("transform",d=>`translate(${d.x},${d.y})`);
+}
+sim.on("tick", renderPositions);
+
+function fitAll(durationMs) {
+  const pad = 40;
+  const b = g.node().getBBox();
+  if (!b.width || !b.height) return;
+  const w = width(), h = height();
+  const scale = Math.min((w - pad*2) / b.width, (h - pad*2) / b.height, 1.2);
+  const tx = w/2 - scale * (b.x + b.width/2);
+  const ty = h/2 - scale * (b.y + b.height/2);
+  const t = d3.zoomIdentity.translate(tx, ty).scale(scale);
+  if (durationMs) svg.transition().duration(durationMs).call(zoom.transform, t);
+  else svg.call(zoom.transform, t);
+}
+
+// Render positions immediately from pre-computed px/py, then fit to viewport.
+renderPositions();
+// Apply fit using getBoundingClientRect (available before clientWidth/Height settle).
+(function applyFit() {
+  const r = document.getElementById('graph-area').getBoundingClientRect();
+  if (r.width < 100 || r.height < 100) { setTimeout(applyFit, 50); return; }
+  const pad = 40, b = g.node().getBBox();
+  if (!b.width || !b.height) { setTimeout(applyFit, 50); return; }
+  const scale = Math.min((r.width - pad*2) / b.width, (r.height - pad*2) / b.height, 1.2);
+  const tx = r.width/2  - scale * (b.x + b.width/2);
+  const ty = r.height/2 - scale * (b.y + b.height/2);
+  svg.call(zoom.transform, d3.zoomIdentity.translate(tx, ty).scale(scale));
+})();
+
+// ── Interactions ─────────────────────────────────────────────────────────────
+const tooltip = document.getElementById("tooltip");
+
+nodeSel.on("mouseover", (e,d) => {
+  d3.select(e.currentTarget).classed("hovered", true);
+  tooltip.querySelector(".tt-title").textContent = d.label;
+  tooltip.querySelector(".tt-course").textContent = COURSE_LABELS[d.course];
+  tooltip.querySelector(".tt-section").textContent = "§" + d.section;
+  tooltip.style.opacity = 1;
+}).on("mousemove", e => {
+  const r = document.getElementById("graph-area").getBoundingClientRect();
+  tooltip.style.left = (e.clientX - r.left + 14) + "px";
+  tooltip.style.top  = (e.clientY - r.top  - 10) + "px";
+}).on("mouseout", () => { tooltip.style.opacity = 0;
+  d3.select(e.currentTarget).classed("hovered", false);
+});
+
+nodeSel.on("click", (e, d) => {
+  e.stopPropagation();
+  if (pathStart && pathStart !== d.id) {
+    const path = bfsPath(pathStart, d.id);
+    highlightPath(path);
+    pathStart = null;
+    return;
+  }
+  selectNode(d);
+});
+
+nodeSel.on("dblclick", (e, d) => {
+  e.stopPropagation();
+  pathStart = d.id;
+  nodeSel.selectAll("circle")
+    .attr("stroke", n => n.id === d.id ? "#ffd700" : "#0f0f1a")
+    .attr("stroke-width", n => n.id === d.id ? 3 : 1.5);
+  showSidebar(`<div class="sb-section-header">Path Mode</div>
+    <div style="font-size:12px;color:#aab;">Starting from: <strong>${d.label}</strong><br><br>Now click any other node to find the shortest dependency path.</div>`);
+});
+
+svg.on("click", () => {
+  clearSelection();
+  pathStart = null;
+});
+
+function selectNode(d) {
+  selectedNode = d.id;
+  nodeSel.classed("selected", n => n.id === d.id);
+  const anc = ancestors(d.id);
+  const desc = descendants(d.id);
+  const all = new Set([...anc, ...desc, d.id]);
+
+  nodeSel.selectAll("circle")
+    .attr("opacity", n => all.has(n.id) ? 1 : 0.08)
+    .attr("stroke",  n => n.id === d.id ? "#ffd700" : "#0f0f1a")
+    .attr("stroke-width", n => n.id === d.id ? 3 : 1.5);
+  nodeSel.selectAll("text").attr("opacity", n => all.has(n.id) ? 1 : 0.05);
+  linkSel
+    .attr("stroke",  l => {
+      const s = l.source.id, t = l.target.id;
+      if (t === d.id || anc.has(t) && anc.has(s)) return l.source.color;
+      if (s === d.id || desc.has(s) && desc.has(t)) return l.target.color;
+      return "#1a1a2e";
+    })
+    .attr("stroke-opacity", l => {
+      const s = l.source.id, t = l.target.id;
+      return (all.has(s) && all.has(t)) ? 0.9 : 0.03;
+    })
+    .attr("stroke-width", l => {
+      const s = l.source.id, t = l.target.id;
+      return (l.source.id === d.id || l.target.id === d.id) ? 2.5 : 1;
+    });
+
+  // Sidebar
+  const directPre  = (adjIn[d.id]||[]).map(id=>nodes.find(n=>n.id===id)).filter(Boolean);
+  const directPost = (adjOut[d.id]||[]).map(id=>nodes.find(n=>n.id===id)).filter(Boolean);
+  const notesPath  = d.file ? `../Formatted Lecture Notes/${d.file}` : null;
+
+  let html = `
+    <div class="sb-badge" style="background:${d.color}">${COURSE_LABELS[d.course]}</div>
+    <div class="sb-title">${d.label}</div>
+    <div class="sb-section">§${d.section} &nbsp;·&nbsp; ${anc.size} prerequisite${anc.size!==1?'s':''} &nbsp;·&nbsp; ${desc.size} dependent${desc.size!==1?'s':''}</div>`;
+
+  if (directPre.length) {
+    html += `<div class="sb-section-header">Depends on (${directPre.length})</div>`;
+    directPre.forEach(n => { html += `<div class="sb-node-link" onclick="selectNodeById('${n.id}')" style="border-left:2px solid ${n.color}; padding-left:8px">${n.label} <span style="color:#445;font-size:10px">§${n.section}</span></div>`; });
+  } else {
+    html += `<div class="sb-section-header">Dependencies</div><div class="sb-empty">No prerequisites — this is a root concept.</div>`;
+  }
+
+  if (directPost.length) {
+    html += `<div class="sb-section-header">Required by (${directPost.length})</div>`;
+    directPost.forEach(n => { html += `<div class="sb-node-link" onclick="selectNodeById('${n.id}')" style="border-left:2px solid ${n.color}; padding-left:8px">${n.label} <span style="color:#445;font-size:10px">§${n.section}</span></div>`; });
+  }
+
+  if (notesPath) html += `<a class="sb-notes-link" href="${notesPath}" target="_blank">Open notes →</a>`;
+  html += `<div style="margin-top:16px;font-size:10px;color:#334">Double-click to set as path start</div>`;
+
+  showSidebar(html);
+}
+
+function highlightPath(path) {
+  if (!path) { showSidebar('<div style="color:#e06060;font-size:12px;padding:8px">No dependency path found between these concepts.</div>'); clearHighlight(); return; }
+  const pathSet = new Set(path);
+  const edgeSet = new Set();
+  for (let i=0;i<path.length-1;i++) edgeSet.add(path[i]+"→"+path[i+1]);
+
+  nodeSel.selectAll("circle")
+    .attr("opacity", n => pathSet.has(n.id) ? 1 : 0.06)
+    .attr("stroke", n => pathSet.has(n.id) ? "#ffd700" : "#0f0f1a")
+    .attr("stroke-width", n => pathSet.has(n.id) ? 3 : 1.5);
+  nodeSel.selectAll("text").attr("opacity", n => pathSet.has(n.id) ? 1 : 0.04);
+  linkSel
+    .attr("stroke", l => edgeSet.has(l.source.id+"→"+l.target.id) ? "#ffd700" : "#1a1a2e")
+    .attr("stroke-opacity", l => edgeSet.has(l.source.id+"→"+l.target.id) ? 1 : 0.03)
+    .attr("stroke-width", l => edgeSet.has(l.source.id+"→"+l.target.id) ? 3 : 1);
+
+  const pathNodes = path.map(id=>nodes.find(n=>n.id===id));
+  let html = `<div class="sb-section-header">Shortest path (${path.length} steps)</div>`;
+  pathNodes.forEach((n,i) => {
+    if (!n) return;
+    html += `<div style="display:flex;align-items:center;gap:6px;margin:4px 0">
+      <span style="color:#ffd700;font-size:10px;width:16px;text-align:right">${i+1}</span>
+      <div class="sb-node-link" style="flex:1;border-left:2px solid ${n.color};padding-left:8px;margin:0" onclick="selectNodeById('${n.id}')">${n.label} <span style="color:#445;font-size:10px">§${n.section}</span></div>
+    </div>`;
+    if (i<path.length-1) html += `<div style="margin-left:22px;color:#334;font-size:14px">↓</div>`;
+  });
+  showSidebar(html);
+}
+
+function clearHighlight() {
+  nodeSel.selectAll("circle").attr("opacity",1).attr("stroke","#0f0f1a").attr("stroke-width",1.5);
+  nodeSel.selectAll("text").attr("opacity",1);
+  linkSel.attr("stroke","#2a2a3e").attr("stroke-opacity",0.7).attr("stroke-width",1);
+}
+function clearSelection() {
+  selectedNode = null;
+  nodeSel.classed("selected", false);
+  clearHighlight();
+  document.getElementById("sidebar-content").innerHTML = "";
+  document.getElementById("sidebar").classList.add("empty");
+}
+function showSidebar(html) {
+  document.getElementById("sidebar").classList.remove("empty");
+  document.getElementById("sidebar-content").innerHTML = html;
+}
+window.selectNodeById = id => {
+  const d = nodes.find(n=>n.id===id);
+  if (d) selectNode(d);
+};
+
+// ── Search ────────────────────────────────────────────────────────────────────
+document.getElementById("search").addEventListener("input", function() {
+  const q = this.value.toLowerCase().trim();
+  if (!q) { clearHighlight(); return; }
+  nodeSel.selectAll("circle").attr("opacity", n => (n.label.toLowerCase().includes(q) || n.id.includes(q)) ? 1 : 0.06);
+  nodeSel.selectAll("text").attr("opacity", n => (n.label.toLowerCase().includes(q) || n.id.includes(q)) ? 1 : 0.05);
+  linkSel.attr("stroke-opacity", 0.05);
+});
+
+// ── Course filters ────────────────────────────────────────────────────────────
+document.querySelectorAll(".filter-btn").forEach(btn => {
+  btn.addEventListener("click", function() {
+    const c = this.dataset.course;
+    if (c === "all") {
+      const allOn = activeCourses.size === 4;
+      if (allOn) activeCourses.clear();
+      else activeCourses = new Set(["ca","pc","calc1","calc2"]);
+    } else {
+      if (activeCourses.has(c)) activeCourses.delete(c);
+      else activeCourses.add(c);
+    }
+    applyFilters();
+    updateFilterBtns();
+  });
+});
+
+function applyFilters() {
+  nodeSel.style("display", d => activeCourses.has(d.course) ? null : "none");
+  linkSel.style("display", l => (activeCourses.has(l.source.course) && activeCourses.has(l.target.course)) ? null : "none");
+  const visible = nodes.filter(n=>activeCourses.has(n.course)).length;
+  document.getElementById("node-count").textContent = `${visible} concepts · ${GRAPH_DATA.edges.length} dependencies`;
+}
+function updateFilterBtns() {
+  document.querySelectorAll(".filter-btn").forEach(btn => {
+    const c = btn.dataset.course;
+    if (c === "all") btn.classList.toggle("active", activeCourses.size===4);
+    else btn.classList.toggle("active", activeCourses.has(c));
+  });
+}
+
+document.getElementById("btn-reset").addEventListener("click", () => {
+  sim.alpha(0.5).restart();
+  svg.call(zoom.transform, d3.zoomIdentity);
+  clearSelection();
+});
+
+// URL hash navigation
+function checkHash() {
+  const id = location.hash.slice(1);
+  if (id) {
+    const d = nodes.find(n=>n.id===id);
+    if (d) { setTimeout(()=>selectNode(d), 800); }
+  }
+}
+
+// Initial state
+document.getElementById("node-count").textContent = `${nodes.length} concepts · ${GRAPH_DATA.edges.length} dependencies`;
+document.getElementById("sidebar").classList.add("empty");
+checkHash();
+
+// Resize
+window.addEventListener("resize", () => {
+  sim.force("center", d3.forceCenter(0,0));
+});
+</script>
+</body>
+</html>
