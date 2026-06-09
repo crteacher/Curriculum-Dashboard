@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Taylor Series &mdash; Notes</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75;font-size:15px}
+.container{max-width:900px;margin:0 auto;padding:2rem 1.5rem 4rem}
+.page-title{font-size:28px;font-weight:700;margin-bottom:4px}
+.page-sub{font-family:sans-serif;font-size:13px;color:#666;margin-bottom:1.6rem}
+.opening-q{background:#eef3f9;border-left:4px solid #185fa5;border-radius:0 8px 8px 0;
+  padding:1rem 1.2rem;font-size:15px;margin-bottom:1.5rem;font-style:italic;line-height:1.75}
+.section-head{font-family:sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;
+  letter-spacing:.08em;color:#185fa5;margin-top:1.4rem;margin-bottom:.6rem;
+  border-bottom:1px solid #c8d8ec;padding-bottom:4px}
+.accent-box{background:#d9e8f5;border-left:4px solid #185fa5;border-radius:0 8px 8px 0;
+  padding:.9rem 1.1rem;font-size:14px;margin-bottom:.85rem;line-height:1.95}
+.accent-box ul{margin-left:1.3rem;margin-top:.3rem}
+.accent-box li{margin-bottom:.15rem}
+.accent-box p{margin-bottom:.4rem}
+.body-text{font-size:14px;line-height:1.75;margin-bottom:.85rem}
+.spacer{height:1rem}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:.5rem}
+.col{min-width:0}
+.examples-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem}
+.ex-block{border:1.5px solid #ddd;border-radius:9px;padding:1rem 1.1rem;background:#fff}
+.ex-label{font-family:sans-serif;font-size:11px;font-weight:700;color:#185fa5;
+  text-transform:uppercase;letter-spacing:.05em;margin-bottom:.45rem}
+.ex-body{font-size:14px;line-height:1.75;margin-bottom:.5rem}
+.ex-answer.instructor{background:#fef9e7;border-left:3px solid #c9860a;border-radius:0 6px 6px 0;
+  padding:.6rem .9rem;font-size:13.5px;color:#5a3e00;line-height:1.85}
+.ex-answer.student{height:4.5rem;border-bottom:1.5px solid #bbb;margin-top:.4rem}
+.practice{margin-bottom:1.5rem}
+.pr-row{display:grid;grid-template-columns:1.6rem 1fr 210px;gap:.75rem;
+  align-items:start;padding:.6rem 0;border-bottom:1px solid #ece8e0}
+.pr-num{font-family:sans-serif;font-weight:700;font-size:14px;color:#185fa5;padding-top:2px}
+.pr-prob{font-size:14px;line-height:1.75}
+.pr-ans.instructor{font-size:13px;color:#5a3e00;background:#fef9e7;border-radius:5px;
+  padding:4px 9px;line-height:1.75}
+.katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}
+@media print{
+  body{background:white;font-size:10pt;line-height:1.5}
+  .container{padding:0;max-width:none}
+  .page-sub{margin-bottom:.8rem}
+  .opening-q{padding:.5rem .8rem;margin-bottom:.8rem;font-size:10pt;line-height:1.5;break-inside:avoid;
+    background:#eef3f9 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .section-head{margin-top:.7rem;margin-bottom:.35rem}
+  .spacer{height:.3rem}
+  .accent-box{padding:.5rem .75rem;margin-bottom:.5rem;font-size:10pt;line-height:1.55;
+    background:#e8f0f8 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .accent-box p{margin-bottom:.2rem}
+  .body-text{font-size:10pt;line-height:1.5;margin-bottom:.5rem}
+  .two-col{gap:1rem;margin-bottom:.3rem;break-inside:avoid}
+  .examples-grid{gap:.6rem;margin-bottom:.8rem;break-inside:avoid}
+  .ex-block{padding:.55rem .75rem;border:1px solid #ccc;break-inside:avoid}
+  .ex-label{margin-bottom:.25rem}
+  .ex-body{font-size:10pt;line-height:1.5;margin-bottom:.3rem}
+  .ex-answer.instructor{padding:.35rem .7rem;font-size:9.5pt;line-height:1.55;
+    background:#fef9e7 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .practice{margin-bottom:.8rem}
+  .pr-row{padding:.3rem 0;break-inside:avoid}
+  .pr-prob{font-size:10pt;line-height:1.5}
+  .pr-ans.instructor{font-size:9.5pt;padding:2px 7px;line-height:1.55;
+    background:#fef9e7 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+@page{margin:.55in .65in;size:letter}
+</style>
+</head>
+<body>
+<div class="container">
+<h1 class="page-title">Taylor Series</h1>
+<p class="page-sub">Calc 2 &nbsp;&middot;&nbsp; &sect;29 &nbsp;&middot;&nbsp; Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026 &nbsp;&middot;&nbsp; <strong>INSTRUCTOR</strong></p>
+<div class="opening-q">Power series let us represent $\frac{1}{1-x}$ as an infinite polynomial. Can we do the same for $\sin x$, $e^x$, or any differentiable function — and if so, how do we find the coefficients?</div>
+
+<div class="two-col">
+<div class="col">
+<div class="section-head">Taylor &amp; Maclaurin Series</div>
+<div class="accent-box">
+<p>If $f$ has derivatives of all orders at $x=a$, its <strong>Taylor series centered at $a$</strong> is:</p>
+<p>$$\sum_{n=0}^{\infty}\frac{f^{(n)}(a)}{n!}(x-a)^n = f(a)+f'(a)(x-a)+\frac{f''(a)}{2!}(x-a)^2+\cdots$$</p>
+<p>When $a=0$ this is called a <strong>Maclaurin series</strong>.</p>
+<p>The $n$th partial sum $T_n(x)$ is the <strong>degree-$n$ Taylor polynomial</strong>.</p>
+</div>
+</div>
+<div class="col">
+<div class="section-head">Key Maclaurin Series</div>
+<div class="accent-box">
+<ul>
+<li>$e^x = \displaystyle\sum_{n=0}^{\infty}\dfrac{x^n}{n!}$ &nbsp; ($R=\infty$)</li>
+<li>$\sin x = \displaystyle\sum_{n=0}^{\infty}\dfrac{(-1)^n x^{2n+1}}{(2n+1)!}$ &nbsp; ($R=\infty$)</li>
+<li>$\cos x = \displaystyle\sum_{n=0}^{\infty}\dfrac{(-1)^n x^{2n}}{(2n)!}$ &nbsp; ($R=\infty$)</li>
+<li>$\dfrac{1}{1-x} = \displaystyle\sum_{n=0}^{\infty}x^n$ &nbsp; ($R=1$)</li>
+<li>$\ln(1+x) = \displaystyle\sum_{n=1}^{\infty}\dfrac{(-1)^{n-1}x^n}{n}$ &nbsp; ($R=1$)</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div class="section-head">Worked Examples</div>
+<div class="examples-grid">
+<div class="ex-block">
+  <div class="ex-label">Example 1 &mdash; Deriving $e^x$</div>
+  <div class="ex-body">Find the Maclaurin series for $f(x)=e^x$ by computing derivatives.</div>
+  <div class="ex-answer instructor">$f^{(n)}(x)=e^x$, so $f^{(n)}(0)=1$ for all $n$. Thus $e^x=\displaystyle\sum_{n=0}^{\infty}\dfrac{x^n}{n!}$. Ratio test gives $R=\infty$.</div>
+</div>
+<div class="ex-block">
+  <div class="ex-label">Example 2 &mdash; Deriving $\sin x$</div>
+  <div class="ex-body">Find the Maclaurin series for $\sin x$.</div>
+  <div class="ex-answer instructor">Derivatives cycle: $\sin,\cos,-\sin,-\cos,\ldots$ Values at $0$: $0,1,0,-1,\ldots$ Only odd terms survive: $\sin x=\displaystyle\sum_{n=0}^{\infty}\dfrac{(-1)^n x^{2n+1}}{(2n+1)!}$.</div>
+</div>
+<div class="ex-block">
+  <div class="ex-label">Example 3 &mdash; Taylor Polynomial</div>
+  <div class="ex-body">Write the degree-4 Taylor polynomial $T_4(x)$ for $e^x$ centered at $a=0$.</div>
+  <div class="ex-answer instructor">$T_4(x)=1+x+\dfrac{x^2}{2}+\dfrac{x^3}{6}+\dfrac{x^4}{24}$. Use it to approximate $e^{0.5}\approx T_4(0.5)\approx 1.6484$.</div>
+</div>
+<div class="ex-block">
+  <div class="ex-label">Example 4 &mdash; Substitution</div>
+  <div class="ex-body">Use a known series to write the Maclaurin series for $\cos(x^2)$.</div>
+  <div class="ex-answer instructor">Replace $x$ with $x^2$ in the $\cos$ series: $\cos(x^2)=\displaystyle\sum_{n=0}^{\infty}\dfrac{(-1)^n x^{4n}}{(2n)!}=1-\dfrac{x^4}{2}+\dfrac{x^8}{24}-\cdots$</div>
+</div>
+</div>
+
+<div class="section-head">Practice Problems</div>
+<div class="practice">
+<div class="pr-row">
+  <div class="pr-num">1.</div>
+  <div class="pr-prob">Write the first four nonzero terms of the Maclaurin series for $\cos x$ from the definition.</div>
+  <div class="pr-ans instructor">$1-\dfrac{x^2}{2!}+\dfrac{x^4}{4!}-\dfrac{x^6}{6!}$</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">2.</div>
+  <div class="pr-prob">Find $T_3(x)$ for $f(x)=\ln(1+x)$ centered at $a=0$.</div>
+  <div class="pr-ans instructor">$x-\dfrac{x^2}{2}+\dfrac{x^3}{3}$</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">3.</div>
+  <div class="pr-prob">Find the Maclaurin series for $e^{-x}$.</div>
+  <div class="pr-ans instructor">$\displaystyle\sum_{n=0}^{\infty}\dfrac{(-1)^n x^n}{n!}$</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">4.</div>
+  <div class="pr-prob">Use the $e^x$ series to estimate $e^{0.1}$ — keep terms through $x^3$. Round to 4 decimal places.</div>
+  <div class="pr-ans instructor">$1+0.1+\frac{0.01}{2}+\frac{0.001}{6}\approx 1.1052$</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">5.</div>
+  <div class="pr-prob">Use a known series to write the first three nonzero terms of the Maclaurin series for $\sin(3x)$.</div>
+  <div class="pr-ans instructor">$3x-\dfrac{27x^3}{6}+\dfrac{243x^5}{120}=3x-\dfrac{9x^3}{2}+\dfrac{81x^5}{40}$</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">6.</div>
+  <div class="pr-prob">Find the Maclaurin series for $\dfrac{1}{1+x^2}$ using the geometric series formula.</div>
+  <div class="pr-ans instructor">Replace $x$ with $-x^2$: $\displaystyle\sum_{n=0}^{\infty}(-1)^n x^{2n}$, $R=1$</div>
+</div>
+</div>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script>
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left: '$$', right: '$$', display: true},
+      {left: '$',  right: '$',  display: false}
+    ],
+    throwOnError: false
+  });
+</script>
+</body>
+</html>
