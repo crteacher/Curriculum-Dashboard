@@ -13,8 +13,8 @@
       --text: #e8eaf0;
       --muted: #7a7f96;
       --border: #2a2d3d;
-      --green: #4caf81;
-      --red: #e06c75;
+      --ca-color: #2a7a4a;
+      --calc-color: #185fa5;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -39,11 +39,7 @@
       text-transform: uppercase;
       margin-bottom: .4rem;
     }
-    .header h1 {
-      font-size: 2.2rem;
-      font-weight: 700;
-      letter-spacing: -.02em;
-    }
+    .header h1 { font-size: 2.2rem; font-weight: 700; letter-spacing: -.02em; }
     .header h1 span { color: var(--accent); }
 
     .card {
@@ -55,20 +51,43 @@
       width: 100%;
       box-shadow: 0 8px 40px rgba(0,0,0,.4);
     }
-    .pill {
-      display: inline-block;
-      font-size: .72rem;
-      font-weight: 600;
-      letter-spacing: .1em;
-      text-transform: uppercase;
-      padding: .3rem .8rem;
-      border-radius: 999px;
-      margin-bottom: 1.2rem;
-    }
-    .pill.a-day { background: #1e3a5f; color: #6ab3f5; }
-    .pill.b-day { background: #2d1e4f; color: #b08cf5; }
-    .pill.special { background: #2a2d1e; color: #c5b96a; }
 
+    /* Course picker */
+    .picker-prompt {
+      text-align: center;
+      font-size: 1.1rem;
+      color: var(--muted);
+      margin-bottom: 1.8rem;
+    }
+    .course-btns {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .course-btn {
+      flex: 1;
+      min-width: 180px;
+      padding: 1.4rem 1rem;
+      border-radius: 12px;
+      border: 2px solid var(--border);
+      background: transparent;
+      color: var(--text);
+      font-size: 1.05rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: border-color .2s, background .2s, transform .1s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: .5rem;
+    }
+    .course-btn .course-icon { font-size: 1.8rem; }
+    .course-btn.ca:hover  { border-color: var(--ca-color);   background: rgba(42,122,74,.12); }
+    .course-btn.calc:hover { border-color: var(--calc-color); background: rgba(24,95,165,.12); }
+    .course-btn:active { transform: scale(.97); }
+
+    /* Warm-up content */
     .do-now-label {
       font-size: .8rem;
       font-weight: 700;
@@ -77,23 +96,11 @@
       color: var(--muted);
       margin-bottom: .5rem;
     }
-    .section-title {
-      font-size: 1.7rem;
-      font-weight: 700;
-      line-height: 1.25;
-      margin-bottom: .4rem;
-    }
-    .section-num {
-      font-size: 1rem;
-      color: var(--muted);
-      margin-bottom: 1.4rem;
-    }
+    .section-title { font-size: 1.7rem; font-weight: 700; line-height: 1.25; margin-bottom: .4rem; }
+    .section-num   { font-size: 1rem; color: var(--muted); margin-bottom: 1.4rem; }
     .swbat {
-      font-size: .95rem;
-      color: var(--muted);
-      line-height: 1.55;
-      margin-bottom: 1.6rem;
-      padding: .9rem 1.1rem;
+      font-size: .95rem; color: var(--muted); line-height: 1.55;
+      margin-bottom: 1.6rem; padding: .9rem 1.1rem;
       background: rgba(255,255,255,.04);
       border-left: 3px solid var(--accent);
       border-radius: 0 8px 8px 0;
@@ -101,87 +108,55 @@
     .swbat strong { color: var(--text); font-weight: 600; }
 
     .practice-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: .5rem;
-      background: var(--accent);
-      color: #fff;
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 1rem;
-      padding: .75rem 1.5rem;
-      border-radius: 8px;
+      display: inline-flex; align-items: center; gap: .5rem;
+      background: var(--accent); color: #fff; text-decoration: none;
+      font-weight: 600; font-size: 1rem;
+      padding: .75rem 1.5rem; border-radius: 8px;
       transition: background .2s, transform .1s;
     }
     .practice-btn:hover { background: #3a7ae0; transform: translateY(-1px); }
-    .practice-btn svg { flex-shrink: 0; }
 
-    .no-class-card {
-      text-align: center;
-      padding: 3rem 2rem;
+    .course-tag {
+      display: inline-block;
+      font-size: .72rem; font-weight: 700;
+      letter-spacing: .1em; text-transform: uppercase;
+      padding: .3rem .8rem; border-radius: 999px;
+      margin-bottom: 1.2rem;
     }
-    .no-class-card .icon { font-size: 3rem; margin-bottom: 1rem; }
-    .no-class-card h2 { font-size: 1.5rem; margin-bottom: .5rem; }
-    .no-class-card p { color: var(--muted); }
-
-    .multi-courses {
-      display: flex;
-      flex-direction: column;
-      gap: 1.5rem;
-    }
-    .course-block {
-      border-top: 1px solid var(--border);
-      padding-top: 1.5rem;
-    }
-    .course-block:first-child { border-top: none; padding-top: 0; }
-    .course-label {
-      font-size: .78rem;
-      font-weight: 700;
-      letter-spacing: .12em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: .8rem;
-    }
+    .tag-ca   { background: rgba(42,122,74,.25);  color: #5ccb87; }
+    .tag-calc { background: rgba(24,95,165,.25);  color: #6ab3f5; }
+    .tag-review { background: rgba(124,92,191,.2); color: #b08cf5; }
 
     .shuffle-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: .4rem;
-      background: transparent;
-      border: 1px solid var(--border);
-      color: var(--muted);
-      font-size: .82rem;
-      padding: .4rem .85rem;
-      border-radius: 6px;
-      cursor: pointer;
+      display: inline-flex; align-items: center; gap: .4rem;
+      background: transparent; border: 1px solid var(--border);
+      color: var(--muted); font-size: .82rem;
+      padding: .4rem .85rem; border-radius: 6px; cursor: pointer;
       margin-top: 1rem;
       transition: border-color .2s, color .2s;
     }
     .shuffle-btn:hover { border-color: var(--accent); color: var(--accent); }
 
-    .footer {
-      margin-top: 2rem;
-      color: var(--muted);
-      font-size: .78rem;
-      text-align: center;
+    .back-btn {
+      display: inline-flex; align-items: center; gap: .3rem;
+      background: transparent; border: none;
+      color: var(--muted); font-size: .82rem;
+      padding: 0; cursor: pointer; margin-top: 1.2rem;
+      transition: color .2s;
     }
+    .back-btn:hover { color: var(--text); }
+
+    .empty-state { text-align: center; padding: 1rem 0; }
+    .empty-state .icon { font-size: 2.5rem; margin-bottom: .8rem; }
+    .empty-state h2 { font-size: 1.3rem; margin-bottom: .5rem; }
+    .empty-state p { color: var(--muted); font-size: .95rem; }
+
+    .footer { margin-top: 2rem; color: var(--muted); font-size: .78rem; text-align: center; }
     .footer a { color: var(--muted); text-decoration: underline; }
 
-    .loading {
-      text-align: center;
-      color: var(--muted);
-      font-size: 1.1rem;
-    }
-    .dot-spin::after {
-      content: '';
-      animation: dots 1.2s steps(4, end) infinite;
-    }
-    @keyframes dots {
-      0%   { content: '.'; }
-      25%  { content: '..'; }
-      50%  { content: '...'; }
-      75%  { content: '....'; }
-    }
+    .loading { text-align: center; color: var(--muted); font-size: 1.1rem; }
+    .dot-spin::after { content: '.'; animation: dots 1.2s steps(4, end) infinite; }
+    @keyframes dots { 0%{content:'.'}25%{content:'..'}50%{content:'...'}75%{content:'....'}  }
   </style>
 </head>
 <body>
@@ -201,93 +176,90 @@
 
 <script>
 const BASE = 'https://crteacher.github.io/Curriculum-Dashboard/';
+const S1_START = '2025-08-20', S1_END = '2025-12-15';
+const S2_START = '2026-01-06', S2_END = '2026-05-22';
 
-// Semester boundaries
-const S1_START = '2025-08-20';
-const S1_END   = '2025-12-15';
-const S2_START = '2026-01-06';
-const S2_END   = '2026-05-22';
-
-function todayStr() {
-  const d = new Date();
-  return d.toISOString().slice(0,10);
-}
-
+function todayStr() { return new Date().toISOString().slice(0,10); }
 function formatDateDisplay(str) {
-  const d = new Date(str + 'T12:00:00');
-  return d.toLocaleDateString('en-US', { weekday:'long', month:'long', day:'numeric', year:'numeric' });
+  return new Date(str+'T12:00:00').toLocaleDateString('en-US',
+    {weekday:'long',month:'long',day:'numeric',year:'numeric'});
+}
+function inSemester(d,s,e){ return d>=s && d<=e; }
+
+function weightedPick(arr) {
+  if (!arr.length) return null;
+  const w = arr.map((_,i) => Math.pow(1.04,i));
+  const t = w.reduce((a,b)=>a+b,0);
+  let r = Math.random()*t;
+  for(let i=0;i<arr.length;i++){ r-=w[i]; if(r<=0) return arr[i]; }
+  return arr[arr.length-1];
 }
 
-function inSemester(dateStr, start, end) {
-  return dateStr >= start && dateStr <= end;
+// Globals
+let _calendar, _state, _sections, _today;
+let _allDone = {}; // courseKey -> doneSections array
+let _picked  = {}; // courseKey -> currently shown section
+
+function getCourseKey(courseChoice, today) {
+  // courseChoice: 'ca' or 'calc'
+  if (courseChoice === 'ca') return 'collegeAlgebra';
+  // For calc: pick calc1 (S1) or calc2 (S2) based on date
+  if (inSemester(today, S1_START, S1_END)) return 'calc1';
+  if (inSemester(today, S2_START, S2_END)) return 'calc2';
+  // Off-season: pick whichever has completed sections
+  const c1done = (_state.courses.calc1?.completedSections||[]).length;
+  const c2done = (_state.courses.calc2?.completedSections||[]).length;
+  return c2done >= c1done ? 'calc2' : 'calc1';
 }
 
-// Weighted random: pick mostly from recent sections for spiral review
-// but with a small tail toward older ones
-function weightedPick(sections) {
-  if (!sections.length) return null;
-  // weight: newest = highest chance, oldest = 1/10th chance
-  const n = sections.length;
-  const weights = sections.map((_, i) => Math.pow(1.04, i)); // slight exponential toward end
-  const total = weights.reduce((a, b) => a + b, 0);
-  let r = Math.random() * total;
-  for (let i = 0; i < n; i++) {
-    r -= weights[i];
-    if (r <= 0) return sections[i];
+function isSchoolDay(today) {
+  return _calendar.aDays.includes(today) || _calendar.bDays.includes(today);
+}
+
+function renderWarmup(courseChoice) {
+  const card = document.getElementById('mainCard');
+  const today = _today;
+  const courseKey = getCourseKey(courseChoice, today);
+  const courseState = _state.courses[courseKey];
+  const courseName = courseKey === 'collegeAlgebra' ? 'College Algebra' :
+                     courseKey === 'calc1' ? 'Calculus 1' : 'Calculus 2';
+  const tagClass = courseChoice === 'ca' ? 'tag-ca' : 'tag-calc';
+
+  const completed = courseState?.completedSections || [];
+  const allSections = _sections[courseKey === 'collegeAlgebra' ? 'collegeAlgebra' :
+                                courseKey === 'calc1' ? 'calc1' : 'calc2'] || [];
+  const doneSections = allSections.filter(s => completed.includes(s.id));
+
+  if (!doneSections.length) {
+    card.innerHTML = `
+      <span class="course-tag ${tagClass}">${courseName}</span>
+      <div class="empty-state">
+        <div class="icon">📚</div>
+        <h2>Nothing yet!</h2>
+        <p>Warm-ups appear here after your first completed section.<br>Check back soon.</p>
+      </div>
+      <button class="back-btn" onclick="showPicker()">← Choose a different class</button>`;
+    return;
   }
-  return sections[n - 1];
-}
 
-function buildCourseBlock(courseKey, state, sections, calendar, today) {
-  const courseState = state.courses[courseKey];
-  if (!courseState) return null;
+  _allDone[courseKey] = doneSections;
+  if (!_picked[courseKey]) _picked[courseKey] = weightedPick(doneSections);
+  const s = _picked[courseKey];
 
-  const period = courseState.period;
-  if (!period) return null;
+  const schoolDay = isSchoolDay(today);
+  const label = schoolDay ? 'Do Now' : 'Review';
+  const reviewNote = schoolDay ? '' :
+    `<p style="color:var(--muted);font-size:.82rem;margin-bottom:1rem">No class today — here's a review problem.</p>`;
 
-  // Is this course in season?
-  const isCA = courseKey === 'collegeAlgebra';
-  const isC1 = courseKey === 'calc1';
-  const isC2 = courseKey === 'calc2';
-  if (isC1 && !inSemester(today, S1_START, S1_END)) return null;
-  if (isC2 && !inSemester(today, S2_START, S2_END)) return null;
-
-  // Is this course's day type today?
-  const isADay = calendar.aDays.includes(today);
-  const isBDay = calendar.bDays.includes(today);
-  if (period === 'A' && !isADay) return null;
-  if (period === 'B' && !isBDay) return null;
-  if (period === 'AB' && !isADay && !isBDay) return null;
-
-  const completed = courseState.completedSections || [];
-  if (!completed.length) {
-    return { courseKey, noCompleted: true };
-  }
-
-  // Filter sections for this course
-  const coursePrefix = isCA ? 'CA_' : isC1 ? 'Calc_1_' : 'Calc_2_';
-  const courseSections = (sections[isCA ? 'collegeAlgebra' : isC1 ? 'calc1' : 'calc2'] || []);
-
-  // Only completed sections
-  const doneSections = courseSections.filter(s => completed.includes(s.id));
-  if (!doneSections.length) return { courseKey, noCompleted: true };
-
-  const picked = weightedPick(doneSections);
-  const courseName = isCA ? 'College Algebra' : isC1 ? 'Calculus 1' : 'Calculus 2';
-
-  return { courseKey, courseName, section: picked, allDone: doneSections };
-}
-
-function renderSection(block, container) {
-  const s = block.section;
-  const folder = block.courseKey === 'collegeAlgebra' ? 'College Algebra' :
-                 block.courseKey === 'calc1' ? 'Calc 1' : 'Calc 2';
-  // Strip any existing extension from practiceFile before adding .html
+  const folder = courseKey === 'collegeAlgebra' ? 'College Algebra' :
+                 courseKey === 'calc1' ? 'Calc 1' : 'Calc 2';
   const baseName = s.practiceFile.replace(/\.(html|docx|pdf)$/i, '');
   const practiceUrl = BASE + encodeURIComponent(folder) + '/' + encodeURIComponent(baseName) + '.html';
 
-  container.innerHTML = `
-    <div class="do-now-label">Do Now</div>
+  card.innerHTML = `
+    <span class="course-tag ${schoolDay ? tagClass : 'tag-review'}">${courseName}${schoolDay ? '' : ' · Review'}</span>
+    ${reviewNote}
+    <div class="do-now-label">${label}</div>
     <div class="section-title">${s.title}</div>
     <div class="section-num">Section ${s.section}</div>
     <div class="swbat"><strong>Today you'll review:</strong> ${s.swbat}.</div>
@@ -297,138 +269,69 @@ function renderSection(block, container) {
           <path d="M9 18l6-6-6-6"/>
         </svg>
         Open Practice Problems
-      </a>
-    ` : `<p style="color:var(--muted);font-size:.9rem">Practice problems coming soon.</p>`}
+      </a>` : `<p style="color:var(--muted);font-size:.9rem">Practice problems coming soon.</p>`}
     <br>
-    <button class="shuffle-btn" onclick="shuffleSection(this, '${block.courseKey}')">
-      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-        <polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/>
-        <polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/>
-      </svg>
-      Different section
-    </button>
-  `;
+    <div style="display:flex;gap:.7rem;flex-wrap:wrap;margin-top:.2rem">
+      <button class="shuffle-btn" onclick="shuffle('${courseKey}')">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/>
+          <polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/>
+        </svg>
+        Different section
+      </button>
+      <button class="back-btn" onclick="showPicker()">← Different class</button>
+    </div>`;
 }
 
-// Store blocks globally for shuffle
-let _allBlocks = {};
-let _sections = {};
-let _state = {};
+function shuffle(courseKey) {
+  const pool = (_allDone[courseKey] || []).filter(s => s.id !== _picked[courseKey]?.id);
+  if (!pool.length) return;
+  _picked[courseKey] = weightedPick(pool);
+  const choice = courseKey === 'collegeAlgebra' ? 'ca' : 'calc';
+  renderWarmup(choice);
+}
 
-function shuffleSection(btn, courseKey) {
-  const block = _allBlocks[courseKey];
-  if (!block || !block.allDone || block.allDone.length < 2) return;
-  const current = block.section.id;
-  const pool = block.allDone.filter(s => s.id !== current);
-  block.section = weightedPick(pool);
-  _allBlocks[courseKey] = block;
-  const container = btn.closest('.course-block') || btn.closest('.card');
-  renderSection(block, container);
+function showPicker() {
+  const card = document.getElementById('mainCard');
+  const today = _today;
+  const schoolDay = isSchoolDay(today);
+  const subtitle = schoolDay ? "Which class are you in?" : "Pick a class for review practice:";
+
+  card.innerHTML = `
+    <p class="picker-prompt">${subtitle}</p>
+    <div class="course-btns">
+      <button class="course-btn ca" onclick="renderWarmup('ca')">
+        <span class="course-icon">📐</span>
+        College Algebra
+      </button>
+      <button class="course-btn calc" onclick="renderWarmup('calc')">
+        <span class="course-icon">∫</span>
+        Calculus
+      </button>
+    </div>`;
 }
 
 async function init() {
-  const today = todayStr();
-  document.getElementById('dateDisplay').textContent = formatDateDisplay(today);
+  _today = todayStr();
+  document.getElementById('dateDisplay').textContent = formatDateDisplay(_today);
 
-  let calendar, state, sections;
   try {
-    [calendar, state, sections] = await Promise.all([
+    [_calendar, _state, _sections] = await Promise.all([
       fetch(BASE + 'calendar.json').then(r => r.json()),
       fetch(BASE + 'state.json').then(r => r.json()),
       fetch(BASE + 'sections.json').then(r => r.json()),
     ]);
   } catch(e) {
     document.getElementById('mainCard').innerHTML = `
-      <div class="no-class-card">
+      <div class="empty-state">
         <div class="icon">⚠️</div>
         <h2>Couldn't load data</h2>
-        <p>Check your internet connection or try refreshing.</p>
+        <p>Check your connection and try refreshing.</p>
       </div>`;
     return;
   }
 
-  // Determine day type
-  const isADay = calendar.aDays.includes(today);
-  const isBDay = calendar.bDays.includes(today);
-  const isCanceled = (calendar.canceledDays || []).includes(today);
-
-  // Weekend check
-  const dow = new Date(today + 'T12:00:00').getDay();
-  const isWeekend = (dow === 0 || dow === 6);
-
-  const card = document.getElementById('mainCard');
-
-  if (isWeekend || isCanceled || (!isADay && !isBDay)) {
-    const msg = isCanceled ? 'School was canceled today.' :
-                isWeekend ? 'No school on weekends.' :
-                'No regular A/B class today.';
-    card.innerHTML = `
-      <div class="no-class-card">
-        <div class="icon">📅</div>
-        <h2>No Class Today</h2>
-        <p>${msg}</p>
-      </div>`;
-    return;
-  }
-
-  // Add day pill
-  const dayType = isADay ? 'A' : 'B';
-  const pillClass = isADay ? 'a-day' : 'b-day';
-  const pillHTML = `<div class="pill ${pillClass}">${dayType}-Day</div>`;
-
-  // Build blocks for each course
-  const courseKeys = ['collegeAlgebra', 'calc1', 'calc2'];
-  const blocks = courseKeys
-    .map(k => buildCourseBlock(k, state, sections, calendar, today))
-    .filter(Boolean);
-
-  if (!blocks.length) {
-    card.innerHTML = pillHTML + `
-      <div class="no-class-card" style="padding:1.5rem 0 0">
-        <div class="icon">🚀</div>
-        <h2>Getting Started</h2>
-        <p>No sections marked complete yet. Check back after your first check-in!</p>
-      </div>`;
-    return;
-  }
-
-  // Store for shuffle
-  blocks.forEach(b => { if (b.section) _allBlocks[b.courseKey] = b; });
-
-  if (blocks.length === 1) {
-    const b = blocks[0];
-    card.innerHTML = pillHTML;
-    if (b.noCompleted) {
-      card.innerHTML += `
-        <div class="no-class-card" style="padding:1.5rem 0 0">
-          <div class="icon">📚</div>
-          <h2>${b.courseKey === 'collegeAlgebra' ? 'College Algebra' : b.courseKey === 'calc1' ? 'Calculus 1' : 'Calculus 2'}</h2>
-          <p>No completed sections yet — warm-ups will appear after your first check-in!</p>
-        </div>`;
-    } else {
-      const innerDiv = document.createElement('div');
-      card.appendChild(innerDiv);
-      renderSection(b, innerDiv);
-    }
-  } else {
-    // Multiple active courses
-    let html = pillHTML + '<div class="multi-courses">';
-    blocks.forEach(b => {
-      html += `<div class="course-block" id="block-${b.courseKey}">
-        <div class="course-label">${b.courseName || b.courseKey}</div>
-        ${b.noCompleted ? '<p style="color:var(--muted);font-size:.9rem">No completed sections yet.</p>' : '<div class="course-inner"></div>'}
-      </div>`;
-    });
-    html += '</div>';
-    card.innerHTML = html;
-
-    blocks.forEach(b => {
-      if (!b.noCompleted && b.section) {
-        const inner = card.querySelector(`#block-${b.courseKey} .course-inner`);
-        if (inner) renderSection(b, inner);
-      }
-    });
-  }
+  showPicker();
 }
 
 init();
