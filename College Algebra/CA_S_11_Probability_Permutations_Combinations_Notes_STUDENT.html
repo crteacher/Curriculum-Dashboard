@@ -141,33 +141,54 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 <div class="opening-q">You flip a coin 10 times. What is the probability of getting exactly 4 heads? You know the total number of outcomes is $2^{10} = 1024$. You just need the favorable outcomes &mdash; and those are exactly the sequences with 4 heads out of 10 flips. Which counting tool gives that number?</div>
 <div class="two-col">
 <div class="col"><div class="section-head">The Framework</div>
-<div class="accent-box"><p>$$P(\text{event}) = \frac{\text{favorable outcomes}}{\text{total outcomes}}$$</p><p><strong>Total outcomes:</strong> multiplication principle, $n!$, or $2^n$ for coin flips</p><p><strong>Favorable outcomes:</strong> $C(n,r)$ or $P(n,r)$ depending on whether order matters</p><p><strong>Coin flip probabilities:</strong><br>$P(\text{exactly } k \text{ heads in } n \text{ flips}) = \dfrac{C(n,k)}{2^n}$<br>e.g. $P(\text{exactly 4 heads in 10 flips}) = \dfrac{210}{1024} = \dfrac{105}{512}$</p><p><strong>At least 1 head:</strong><br>$1 - P(0 \text{ heads}) = 1 - \dfrac{1}{2^n}$</p></div>
+<div class="accent-box">
+  <div style="text-align:center;margin:.3rem 0 .5rem">$$P(\text{event}) = \frac{\text{favorable outcomes}}{\text{total outcomes}}$$</div>
+  <p><strong>Total outcomes:</strong> multiplication principle, $n!$, or $2^n$ for coin flips</p>
+  <p><strong>Favorable outcomes:</strong> $C(n,r)$ or $P(n,r)$ — whether order matters</p>
+  <p><strong>Coin flip probabilities:</strong></p>
+  <div style="text-align:center;margin:-.15rem 0 .35rem">$$P(\text{exactly }k\text{ heads in }n\text{ flips}) = \frac{C(n,k)}{2^n}$$</div>
+  <div style="text-align:center;margin:-.2rem 0 .3rem">$$\text{e.g. } P(\text{exactly 4 heads in 10 flips}) = \frac{210}{1024} = \frac{105}{512}$$</div>
+  <p><strong>At least 1 head:</strong></p>
+  <div style="text-align:center;margin:-.15rem 0 .2rem">$$1 - P(\text{0 heads}) = 1 - \frac{1}{2^n}$$</div>
+</div>
 </div>
 <div class="col"><div class="section-head">Committee and Selection Problems</div>
-<div class="accent-box"><p><strong>Committee of $r$ from $n$:</strong><br>$P(\text{specific person included}) = \dfrac{r}{n}$<br>e.g. 3-person committee from 10: $P = \dfrac{3}{10}$</p><p><strong>Both of two specific people included:</strong><br>$P = \dfrac{C(n-2,r-2)}{C(n,r)} = \dfrac{r(r-1)}{n(n-1)}$<br>e.g. $P = \dfrac{C(8,1)}{C(10,3)} = \dfrac{8}{120} = \dfrac{1}{15}$</p><p><strong>PIN with no repeated digits:</strong><br>2-digit: $\dfrac{10 \times 9}{100} = \dfrac{9}{10}$<br>3-digit: $\dfrac{10 \times 9 \times 8}{1000} = \dfrac{18}{25}$</p></div>
+<div class="accent-box">
+  <p><strong>One specific person included:</strong></p>
+  <div style="text-align:center;margin:-.15rem 0 .35rem">$$P = \frac{C(n-1,\,r-1)}{C(n,r)} = \frac{r}{n} \qquad \text{e.g., 3-from-10: } P = \frac{3}{10}$$</div>
+  <p><strong>Two specific people both included:</strong></p>
+  <div style="text-align:center;margin:-.15rem 0 .2rem">$$P = \frac{C(n-2,\,r-2)}{C(n,r)} = \frac{r(r-1)}{n(n-1)} \qquad \text{e.g., } \frac{C(8,1)}{C(10,3)} = \frac{8}{120} = \frac{1}{15}$$</div>
 </div>
+</div>
+</div>
+
+<div class="section-head">Ordered Selection (PIN / Password)</div>
+<div class="accent-box">
+<p>Use $P(n,r)$ (permutations) for favorable outcomes when order matters and repetition is not allowed.</p>
+<div style="text-align:center;margin:.1rem 0 .2rem">$$\text{2-digit PIN, no repeats: } P = \frac{P(10,2)}{10^2} = \frac{90}{100} = \frac{9}{10}$$</div>
+<div style="text-align:center;margin:.1rem 0 .25rem">$$\text{3-digit PIN, no repeats: } P = \frac{P(10,3)}{10^3} = \frac{720}{1000} = \frac{9}{10}\cdot\frac{8}{10} = \frac{18}{25}$$</div>
 </div>
 <div class="section-head">Worked Examples</div>
 <div class="examples-grid">
 <div class="ex-block">
   <div class="ex-label">Example 1 &nbsp;&mdash;&nbsp; Exact heads probability</div>
   <div class="ex-body">Flip a coin 5 times. Find $P(\text{exactly 2 heads})$.</div>
-  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">Favorable: $C(5,2) = 10$; Total: $2^5 = 32$<br>$P = \dfrac{10}{32} = \dfrac{5}{16}$</div></div>
+  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">Favorable: $C(5,2) = 10$; Total: $2^5 = 32$<br>$P = \frac{10}{32} = \frac{5}{16}$</div></div>
 </div>
 <div class="ex-block">
   <div class="ex-label">Example 2 &nbsp;&mdash;&nbsp; Committee membership</div>
   <div class="ex-body">A 3-person committee is chosen from 12 people. What is the probability you are on the committee?</div>
-  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">$P = \dfrac{r}{n} = \dfrac{3}{12} = \dfrac{1}{4}$</div></div>
+  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">$P = \frac{r}{n} = \frac{3}{12} = \frac{1}{4}$</div></div>
 </div>
 <div class="ex-block">
   <div class="ex-label">Example 3 &nbsp;&mdash;&nbsp; At least one head &mdash; complement</div>
   <div class="ex-body">Flip a coin 4 times. Find $P(\text{at least 1 head})$.</div>
-  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">$P(\text{all tails}) = \dfrac{1}{16}$<br>$P(\text{at least 1 head}) = 1 - \dfrac{1}{16} = \dfrac{15}{16}$</div></div>
+  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">$P(\text{all tails}) = \frac{1}{16}$<br>$P(\text{at least 1 head}) = 1 - \frac{1}{16} = \frac{15}{16}$</div></div>
 </div>
 <div class="ex-block">
   <div class="ex-label">Example 4 &nbsp;&mdash;&nbsp; No repeated digits</div>
   <div class="ex-body">A 2-digit PIN is chosen at random (digits 0&ndash;9, repetition allowed). What is the probability no digit is repeated?</div>
-  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">Favorable: $10 \times 9 = 90$; Total: $10^2 = 100$<br>$P = \dfrac{90}{100} = \dfrac{9}{10}$</div></div>
+  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">Favorable: $10 \times 9 = 90$; Total: $10^2 = 100$<br>$P = \frac{90}{100} = \frac{9}{10}$</div></div>
 </div>
 </div>
 <div class="section-head">Practice Problems</div>

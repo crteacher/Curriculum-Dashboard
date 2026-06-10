@@ -222,7 +222,7 @@ function gen7() {
     latex:  `\\text{A quantity starts at }${a}\\text{ and halves each step. Find the value after }${x}\\text{ step(s).}`,
     answer: [String(val)],
     hint:   'What fraction represents halving as an exponential base?',
-    step:   `${a}\\cdot\\left(\\tfrac{1}{2}\\right)^{${x}}=${a}\\div${Math.pow(2,x)}=${val}`
+    step:   `${a}\\cdot\\left(\\tfrac{1}{2}\\right)^{${x}}=\\dfrac{${a}}{${Math.pow(2,x)}}=${val}`
   };
 }
 

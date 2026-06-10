@@ -181,7 +181,7 @@ function gen3() {
     latex:  `${n}\\text{ people split into 2 unlabeled groups of }${r}. \\text{ How many ways?}`,
     answer: [String(val)],
     hint:   'When two groups are interchangeable, how does that change the count compared to labeled groups?',
-    step:   `C(${n},${r})\\div 2!=${C(n,r)}\\div 2=${val}`
+    step:   `\\dfrac{C(${n},${r})}{2!}=\\dfrac{${C(n,r)}}{2}=${val}`
   };
 }
 
@@ -226,7 +226,7 @@ function gen6() {
     latex:  `6\\text{ people split into 3 unlabeled pairs. How many ways?}`,
     answer: [String(val)],
     hint:   'After counting ordered arrangements of equal groups, what do you divide by to remove duplicates?',
-    step:   `C(6,2)\\times C(4,2)\\times C(2,2)\\div 3!=${ordered}\\div 6=${val}`
+    step:   `\\dfrac{C(6,2)\\times C(4,2)\\times C(2,2)}{3!}=\\dfrac{${ordered}}{6}=${val}`
   };
 }
 
@@ -254,7 +254,7 @@ function gen8() {
     latex:  `\\text{In how many ways can }${n}\\text{ students be split into 2 equal, unlabeled groups of }${r}?`,
     answer: [String(val)],
     hint:   'How many times does each unlabeled split appear in the labeled count?',
-    step:   `C(${n},${r})\\div 2=${ordered}\\div 2=${val}`
+    step:   `\\dfrac{C(${n},${r})}{2}=\\dfrac{${ordered}}{2}=${val}`
   };
 }
 

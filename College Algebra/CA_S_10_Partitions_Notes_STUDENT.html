@@ -144,7 +144,7 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 <div class="accent-box"><p>Splitting $n$ objects into <strong>labeled</strong> groups of sizes $n_1, n_2, \ldots$:</p><p>$$\frac{n!}{n_1! \cdot n_2! \cdots} = C(n,n_1) \times C(n-n_1, n_2) \times \cdots$$</p><p>e.g. 10 people &rarr; DC (5) and Chicago (5):<br>$C(10,5) = 252$</p><p>e.g. 9 people &rarr; Team A (2), Team B (3), Team C (4):<br>$C(9,2) \times C(7,3) \times C(4,4) = 36 \times 35 \times 1 = 1260$</p><p>&ldquo;Labeled&rdquo; means swapping groups creates a new outcome.</p></div>
 </div>
 <div class="col"><div class="section-head">Unordered Partitions &mdash; Groups Are Identical</div>
-<div class="accent-box"><p>Splitting $n$ objects into $m$ <strong>interchangeable</strong> groups of size $r$:</p><p>Divide the ordered count by $m!$</p><p>e.g. 6 friends into 2 unlabeled groups of 3:<br>$C(6,3) \div 2! = 20 \div 2 = 10$</p><p>e.g. 10 people into 2 unlabeled groups of 5:<br>$C(10,5) \div 2! = 252 \div 2 = 126$</p><p>&ldquo;Unlabeled&rdquo; means swapping both groups gives the same split.</p></div>
+<div class="accent-box"><p>Splitting $n$ objects into $m$ <strong>interchangeable</strong> groups of size $r$:</p><p>Divide the ordered count by $m!$</p><p>e.g. 6 friends into 2 unlabeled groups of 3:<br>$\frac{C(6,3)}{2!} = \frac{20}{2} = 10$</p><p>e.g. 10 people into 2 unlabeled groups of 5:<br>$\frac{C(10,5)}{2!} = \frac{252}{2} = 126$</p><p>&ldquo;Unlabeled&rdquo; means swapping both groups gives the same split.</p></div>
 <p class="body-text">Key question: Do the groups have distinct identities? &rarr; Ordered. Are they interchangeable? &rarr; Unordered (divide by $m!$).</p>
 </div>
 </div>
@@ -163,12 +163,12 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 <div class="ex-block">
   <div class="ex-label">Example 3 &nbsp;&mdash;&nbsp; Unordered &mdash; 2 equal groups</div>
   <div class="ex-body">6 friends split into 2 unlabeled groups of 3. How many ways?</div>
-  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">$C(6,3) \div 2! = 20 \div 2 = 10$</div></div>
+  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">$\frac{C(6,3)}{2!} = \frac{20}{2} = 10$</div></div>
 </div>
 <div class="ex-block">
   <div class="ex-label">Example 4 &nbsp;&mdash;&nbsp; Ordered vs. unordered</div>
   <div class="ex-body">10 students split into 2 groups of 5. (a) Groups labeled. (b) Groups unlabeled.</div>
-  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">(a) $C(10,5) = 252$<br>(b) $C(10,5) \div 2! = 252 \div 2 = 126$</div></div>
+  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">(a) $C(10,5) = 252$<br>(b) $\frac{C(10,5)}{2!} = \frac{252}{2} = 126$</div></div>
 </div>
 </div>
 <div class="section-head">Practice Problems</div>
@@ -181,7 +181,7 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 <div class="pr-row">
   <div class="pr-num">2.</div>
   <div class="pr-prob">8 people split into 2 unlabeled groups of 4. How many ways?</div>
-  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$C(8,4) \div 2 = 70 \div 2 = 35$</div></div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$\frac{C(8,4)}{2} = \frac{70}{2} = 35$</div></div>
 </div>
 <div class="pr-row">
   <div class="pr-num">3.</div>
@@ -191,7 +191,7 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 <div class="pr-row">
   <div class="pr-num">4.</div>
   <div class="pr-prob">6 people split into 3 unlabeled pairs. How many ways?</div>
-  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$C(6,2) \times C(4,2) \times C(2,2) \div 3! = 15 \times 6 \times 1 \div 6 = 15$</div></div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$\frac{C(6,2) \times C(4,2) \times C(2,2)}{3!} = \frac{15 \times 6 \times 1}{6} = 15$</div></div>
 </div>
 <div class="pr-row">
   <div class="pr-num">5.</div>

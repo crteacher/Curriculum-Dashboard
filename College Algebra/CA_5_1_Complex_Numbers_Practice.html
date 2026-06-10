@@ -225,7 +225,7 @@ function gen8() {
     latex:  `i^{${n}} = \\,?\\quad\\text{Enter the integer coefficient (the number in front of }i\\text{).}`,
     answer: ['-1'],
     hint:   'At what period do the powers of i repeat?',
-    step:   `${n}\\div 4\\text{ remainder }3\\Rightarrow i^{${n}}=i^3=-i;\\quad\\text{coefficient: }-1`
+    step:   `${n}\\bmod 4=3\\Rightarrow i^{${n}}=i^3=-i;\\quad\\text{coefficient: }-1`
   };
 }
 
