@@ -83,9 +83,15 @@
       gap: .5rem;
     }
     .course-btn .course-icon { font-size: 1.8rem; }
-    .course-btn.ca:hover  { border-color: var(--ca-color);   background: rgba(42,122,74,.12); }
-    .course-btn.calc:hover { border-color: var(--calc-color); background: rgba(24,95,165,.12); }
+    .course-btn.ca:hover    { border-color: var(--ca-color);   background: rgba(42,122,74,.12); }
+    .course-btn.calc:hover  { border-color: var(--calc-color); background: rgba(24,95,165,.12); }
+    .course-btn.donow:hover { border-color: var(--accent);     background: rgba(79,142,247,.12); }
     .course-btn:active { transform: scale(.97); }
+    .donow-badge {
+      font-size: .62rem; font-weight: 700; letter-spacing: .1em;
+      text-transform: uppercase; background: var(--accent);
+      color: #fff; padding: .15rem .5rem; border-radius: 999px;
+    }
 
     /* Warm-up content */
     .do-now-label {
@@ -305,10 +311,16 @@ function showPicker() {
       <button class="course-btn ca" onclick="renderWarmup('ca')">
         <span class="course-icon">📐</span>
         College Algebra
+        <span style="font-size:.75rem;color:var(--muted);font-weight:400">review (ungraded)</span>
       </button>
       <button class="course-btn calc" onclick="renderWarmup('calc')">
         <span class="course-icon">∫</span>
         Calculus
+      </button>
+      <button class="course-btn donow" onclick="location.href='donow-ca.html'">
+        <span class="course-icon">✏️</span>
+        CA Do Now
+        <span class="donow-badge">graded</span>
       </button>
     </div>`;
 }
