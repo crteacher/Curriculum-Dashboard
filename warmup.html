@@ -280,10 +280,11 @@ function buildCourseBlock(courseKey, state, sections, calendar, today) {
 
 function renderSection(block, container) {
   const s = block.section;
-  const practiceUrl = BASE + encodeURIComponent(
-    (block.courseKey === 'collegeAlgebra' ? 'College Algebra' :
-     block.courseKey === 'calc1' ? 'Calc 1' : 'Calc 2') + '/' + s.practiceFile + '.html'
-  );
+  const folder = block.courseKey === 'collegeAlgebra' ? 'College Algebra' :
+                 block.courseKey === 'calc1' ? 'Calc 1' : 'Calc 2';
+  // Strip any existing extension from practiceFile before adding .html
+  const baseName = s.practiceFile.replace(/\.(html|docx|pdf)$/i, '');
+  const practiceUrl = BASE + encodeURIComponent(folder) + '/' + encodeURIComponent(baseName) + '.html';
 
   container.innerHTML = `
     <div class="do-now-label">Do Now</div>

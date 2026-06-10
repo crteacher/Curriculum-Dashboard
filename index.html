@@ -51,6 +51,7 @@ header p{font-family:sans-serif;font-size:12px;color:#aaa}
   <p>Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026 &nbsp;&middot;&nbsp;
      139 sections &nbsp;&middot;&nbsp; 366 HTML files</p>
   <a class="map-link" href="./mathmap.html">Math Map ↗</a>
+  <a class="map-link" href="./warmup.html">Daily Warm-Up ↗</a>
 </header>
 <div class="tab-bar"><button class="tab-btn active" onclick="showTab('calc1')" id="btn-calc1" style="--c:#185fa5;--l:#eef3f9">Calculus I <span class="cnt">(29)</span></button><button class="tab-btn " onclick="showTab('calc2')" id="btn-calc2" style="--c:#7a1a1a;--l:#f9eeed">Calculus II <span class="cnt">(29)</span></button><button class="tab-btn " onclick="showTab('ca')" id="btn-ca" style="--c:#1a7a3a;--l:#edf7f0">College Algebra <span class="cnt">(38)</span></button><button class="tab-btn " onclick="showTab('precalc')" id="btn-precalc" style="--c:#8b3a8b;--l:#f5edf5">PreCalculus <span class="cnt">(43)</span></button></div>
 <div class="tab-pane active" id="pane-calc1"><div class="pane-header" style="border-color:#185fa5;color:#185fa5">Calculus I &mdash; 29 sections</div><div class="row">  <span class="dot" style="background:#185fa5"></span>  <span class="label">Limits</span>  <span class="pills"><a class="pill" href="./Calc 1/Calc_1_1_Limits_Notes_INSTRUCTOR.html" style="background:#185fa5;color:#fff" title="./Calc 1/Calc_1_1_Limits_Notes_INSTRUCTOR.html">Notes&nbsp;I</a><a class="pill" href="./Calc 1/Calc_1_1_Limits_Notes_STUDENT.html" style="background:#185fa5;color:#fff" title="./Calc 1/Calc_1_1_Limits_Notes_STUDENT.html">Notes&nbsp;S</a><a class="pill" href="./Calc 1/Calc_1_1_Limits_Practice.html" style="background:#c9860a;color:#fff" title="./Calc 1/Calc_1_1_Limits_Practice.html">Practice</a></span></div>
@@ -194,8 +195,4 @@ function showTab(id) {
   document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('pane-' + id).classList.add('active');
-  document.getElementById('btn-' + id).classList.add('active');
-}
-</script>
-</body>
-</html>
+  document.getElementById(
