@@ -808,4 +808,26 @@ async function init() {
 
   let html = '<div class="problems-grid">';
   secs.forEach((sec, idx) => {
-    const gen
+    const gen = GEN[sec.id];
+    if (gen) {
+      const prob = gen();
+      _solutions[idx] = prob.solutionHtml;
+      if (prob.type === 'numeric')  html += buildNumericCard(idx + 1, sec, prob, idx);
+      else if (prob.type === 'numeric2') html += buildNumeric2Card(idx + 1, sec, prob, idx);
+      else if (prob.type === 'mcq')      html += buildMCQCard(idx + 1, sec, prob, idx);
+      else html += buildFallbackCard(idx + 1, sec, idx);
+    } else {
+      html += buildFallbackCard(idx + 1, sec, idx);
+    }
+  });
+  html += '</div>';
+  html += `<p style="text-align:center;color:var(--muted);font-size:.78rem;margin-top:1.2rem">
+    Refresh for new numbers (same topics today). Answers lock after first submission.
+  </p>`;
+  document.getElementById('mainArea').innerHTML = html;
+}
+
+init();
+</script>
+</body>
+</html>

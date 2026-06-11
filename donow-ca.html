@@ -1360,4 +1360,13 @@ async function init() {
     }
   });
   html += '</div>';
-  html += `<p style="text-align:center
+  html += `<p style="text-align:center;color:var(--muted);font-size:.78rem;margin-top:1.2rem">
+    Refresh the page for new numbers (same topics). Answers lock after first submission.
+  </p>`;
+  document.getElementById('mainArea').innerHTML = html;
+}
+
+init();
+</script>
+</body>
+</html>

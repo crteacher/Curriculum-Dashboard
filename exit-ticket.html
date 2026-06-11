@@ -131,7 +131,7 @@ Promise.all([
   fetch('./sections.json').then(r=>r.json())
 ]).then(([state, sections]) => {
   const secMap = {};
-  for (const arr of Object.values(sections)) for (const s of arr) secMap[s.id]=s;
+  for (const arr of Object.values(sections)) { if (!Array.isArray(arr)) continue; for (const s of arr) secMap[s.id]=s; }
 
   function fill(secId, prefix, showAnswerNow) {
     const secEl  = document.getElementById(prefix+'Section');
