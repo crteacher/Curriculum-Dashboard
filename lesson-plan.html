@@ -148,7 +148,7 @@ function buildReviewCard(course,dayNum,unit,secMap){
 }
 
 function buildExamCard(course,dayNum){
-  const body=grm('Structure','<span style="color:#8b949e;font-size:.83rem">Silent individual assessment. Full period. Students may use their notes (check policy). Collect before bell.</span>');
+  const body=grm('Structure','<span style="color:#8b949e;font-size:.83rem">Silent individual assessment. Full period. Equation cards and calculators only — no notes. Collect before bell.</span>');
   return`<details class="lesson-card ${course} exam-day"><summary class="lesson-summary"><span class="day-badge exam">Day ${dayNum}</span><span class="lesson-title">✏️ Exam Day</span><span class="lesson-date">Fall 2026</span><span class="chevron">›</span></summary><div class="lesson-body">${body}</div></details>`;
 }
 
