@@ -15,183 +15,193 @@ header h1{font-size:1.15rem;font-weight:700;flex:1}
 .hbadge{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:.25rem .65rem;border-radius:10px}
 .hbadge.ca{background:#5bc8d41a;color:#5bc8d4;border:1px solid #5bc8d433}
 .hbadge.c2{background:#a78bfa1a;color:#a78bfa;border:1px solid #a78bfa33}
-
-/* Exit ticket tile */
 .et-tile{display:grid;grid-template-columns:1fr 1fr;gap:1rem;max-width:1100px;margin:1.25rem auto 0;padding:0 1.25rem}
 @media(max-width:700px){.et-tile{grid-template-columns:1fr}}
 .et-card{background:#161b22;border:1px solid #30363d;border-radius:10px;padding:1rem 1.2rem}
-.et-card.ca{border-color:#5bc8d433}
-.et-card.c2{border-color:#a78bfa33}
+.et-card.ca{border-color:#5bc8d433}.et-card.c2{border-color:#a78bfa33}
 .et-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;margin-bottom:.4rem}
-.et-card.ca .et-label{color:#5bc8d4}
-.et-card.c2 .et-label{color:#a78bfa}
+.et-card.ca .et-label{color:#5bc8d4}.et-card.c2 .et-label{color:#a78bfa}
 .et-day{font-size:.75rem;color:#8b949e;margin-bottom:.35rem}
 .et-q{font-size:.92rem;line-height:1.7}
 .et-none{color:#8b949e;font-style:italic;font-size:.85rem}
-
-/* Main grid */
 .main-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;max-width:1100px;margin:1.25rem auto 0;padding:0 1.25rem 3rem}
 @media(max-width:800px){.main-grid{grid-template-columns:1fr}}
 .col-header{font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.75rem}
-.col-header.ca{color:#5bc8d4}
-.col-header.c2{color:#a78bfa}
-
-/* Lesson cards */
+.col-header.ca{color:#5bc8d4}.col-header.c2{color:#a78bfa}
 .lesson-card{background:#161b22;border:1px solid #30363d;border-radius:10px;margin-bottom:.7rem;overflow:hidden}
-.lesson-card.ca{border-color:#5bc8d422}
-.lesson-card.c2{border-color:#a78bfa22}
-.lesson-card.review-day{border-style:dashed}
-.lesson-card.exam-day{border-style:dashed;opacity:.85}
+.lesson-card.ca{border-color:#5bc8d422}.lesson-card.c2{border-color:#a78bfa22}
+.lesson-card.review-day{border-style:dashed}.lesson-card.exam-day{border-style:dashed;opacity:.85}
 .lesson-summary{display:flex;align-items:center;gap:.7rem;padding:.85rem 1rem;cursor:pointer;list-style:none;flex-wrap:wrap}
 .lesson-summary::-webkit-details-marker{display:none}
 .lesson-summary:hover{background:#ffffff05}
 .day-badge{font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;padding:.22rem .6rem;border-radius:8px;white-space:nowrap}
-.day-badge.ca{background:#5bc8d41a;color:#5bc8d4}
-.day-badge.c2{background:#a78bfa1a;color:#a78bfa}
-.day-badge.review{background:#facc151a;color:#facc15}
-.day-badge.exam{background:#f871711a;color:#f87171}
+.day-badge.ca{background:#5bc8d41a;color:#5bc8d4}.day-badge.c2{background:#a78bfa1a;color:#a78bfa}
+.day-badge.review{background:#facc151a;color:#facc15}.day-badge.exam{background:#f871711a;color:#f87171}
 .lesson-title{font-size:.88rem;font-weight:600;flex:1}
 .lesson-date{font-size:.72rem;color:#8b949e;white-space:nowrap}
 .chevron{color:#8b949e;font-size:1rem;transition:transform .2s;margin-left:auto}
 details[open] .chevron{transform:rotate(90deg)}
-
-/* GRM body */
 .lesson-body{border-top:1px solid #30363d;padding:.85rem 1rem}
 .grm-row{display:grid;grid-template-columns:9rem 1fr;gap:.5rem 1rem;padding:.5rem 0;border-bottom:1px solid #ffffff08}
 .grm-row:last-child{border-bottom:none}
 .grm-label{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#8b949e;padding-top:.15rem;white-space:nowrap}
 .grm-value{font-size:.875rem;line-height:1.7}
 .grm-value .katex-display{margin:.35rem 0}
-
-/* Examples */
 .ex-block{margin:.2rem 0 .45rem;padding:.4rem .65rem;background:#0d1117;border-radius:6px;border:1px solid #30363d}
 .ex-prob{display:block;font-size:.87rem}
 .ex-ans{display:block;font-size:.8rem;color:#8b949e;margin-top:.2rem}
-em.muted,.muted-text{color:#8b949e;font-size:.83rem}
-
-/* Do Now link */
 .do-now-link{display:inline-block;padding:.3rem .85rem;border-radius:16px;font-size:.78rem;font-weight:600;text-decoration:none;border:1px solid;transition:all .15s}
 .do-now-link.ca{color:#5bc8d4;border-color:#5bc8d4}.do-now-link.ca:hover{background:#5bc8d41a}
 .do-now-link.c2{color:#a78bfa;border-color:#a78bfa}.do-now-link.c2:hover{background:#a78bfa1a}
-
-/* Practice link */
 .prac-link{color:#8b949e;font-size:.8rem;text-decoration:none;border-bottom:1px solid #8b949e44}
 .prac-link:hover{color:#e6edf3}
-
-/* Review chips */
-.chips-wrap{display:flex;flex-wrap:wrap;gap:.45rem;margin-top:.1rem}
-.chip{padding:.3rem .8rem;border-radius:14px;font-size:.78rem;font-weight:600;text-decoration:none;border:1px solid;transition:all .15s}
-.chip.ca{color:#5bc8d4;border-color:#5bc8d455}.chip.ca:hover{background:#5bc8d41a}
-.chip.c2{color:#a78bfa;border-color:#a78bfa55}.chip.c2:hover{background:#a78bfa1a}
-.review-intro{font-size:.82rem;color:#8b949e;margin-bottom:.5rem;padding-bottom:.5rem;border-bottom:1px solid #ffffff08}
-
-/* Footer */
-.footer{max-width:1100px;margin:0 auto;padding:0 1.25rem 2rem;font-size:.72rem;color:#8b949e}
+.review-intro{font-size:.82rem;color:#8b949e;margin-bottom:.75rem;line-height:1.5}
+.chips-wrap{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.25rem}
+.chip{display:inline-block;padding:.3rem .75rem;border-radius:14px;font-size:.75rem;font-weight:600;text-decoration:none;border:1px solid;transition:all .15s}
+.chip.ca{color:#5bc8d4;border-color:#5bc8d433;background:#5bc8d40d}.chip.ca:hover{background:#5bc8d41a}
+.chip.c2{color:#a78bfa;border-color:#a78bfa33;background:#a78bfa0d}.chip.c2:hover{background:#a78bfa1a}
+.state-msg{text-align:center;padding:3rem 1rem;color:#8b949e;font-size:.9rem;font-style:italic}
+.footer{text-align:center;font-size:.72rem;color:#8b949e44;padding:1rem;font-family:monospace}
 </style>
 </head>
 <body>
 <header>
   <a href="./index.html" class="back">← Portal</a>
-  <h1>📋 Weekly Lesson Plan</h1>
-  <span class="hbadge ca">College Algebra</span>
-  <span class="hbadge c2">Calculus 2</span>
+  <h1>📋 Lesson Plan</h1>
+  <span class="hbadge ca" id="hbCA">CA</span>
+  <span class="hbadge c2" id="hbC2">C2</span>
 </header>
 
-<!-- EXIT TICKET TILE -->
-<div class="et-tile" id="etTile">
+<div class="et-tile">
   <div class="et-card ca">
-    <div class="et-label">📝 Today's Exit Ticket — College Algebra</div>
-    <div class="et-day" id="etCaDay"></div>
+    <div class="et-label">Today's Exit Ticket — College Algebra</div>
+    <div class="et-day" id="etCaDay">&nbsp;</div>
     <div class="et-q" id="etCaQ"><span class="et-none">Loading…</span></div>
   </div>
   <div class="et-card c2">
-    <div class="et-label">📝 Today's Exit Ticket — Calculus 2</div>
-    <div class="et-day" id="etC2Day"></div>
+    <div class="et-label">Today's Exit Ticket — Calculus 2</div>
+    <div class="et-day" id="etC2Day">&nbsp;</div>
     <div class="et-q" id="etC2Q"><span class="et-none">Loading…</span></div>
   </div>
 </div>
 
-<!-- MAIN GRID -->
 <div class="main-grid">
-  <!-- CA Column -->
-  <div class="ca-col">
-    <div class="col-header ca">College Algebra &middot; 3 lessons + Review + Exam</div>
-<details class="lesson-card ca" open data-section-id="CA_6_2" data-day="1" data-title="Simplifying Radicals" data-exit="Simplify $\sqrt{45x^5}$."><summary class="lesson-summary"><span class="day-badge ca">Day 1</span><span class="lesson-title">§6.2 Simplifying Radicals</span><span class="lesson-date">Fall 2026</span><span class="chevron">›</span></summary><div class="lesson-body"><div class="grm-row"><div class="grm-label">SWBAT</div><div class="grm-value math-text">Students will be able to simplify radical expressions and convert between radical and rational exponent form.</div></div><div class="grm-row"><div class="grm-label">DO NOW</div><div class="grm-value math-text"><a href="./donow-ca.html" class="do-now-link ca" target="_blank">Open Do Now →</a></div></div><div class="grm-row"><div class="grm-label">I Do</div><div class="grm-value math-text"><div class="ex-block"><span class="ex-prob">Simplify $\sqrt{25x^2}$.</span><span class="ex-ans">→ $\sqrt{25} \cdot \sqrt{x^2} = 5x$</span></div><div class="ex-block"><span class="ex-prob">Simplify $\sqrt{12x^2}$.</span><span class="ex-ans">→ $\sqrt{4 \cdot 3 \cdot x^2} = 2x\sqrt{3}$</span></div></div></div><div class="grm-row"><div class="grm-label">We Do</div><div class="grm-value math-text"><div class="ex-block"><span class="ex-prob">Simplify $\sqrt{8x^3}$.</span><span class="ex-ans">→ $\sqrt{4x^2 \cdot 2x} = 2x\sqrt{2x}$</span></div><div class="ex-block"><span class="ex-prob">Simplify $\sqrt[3]{27x^6}$.</span><span class="ex-ans">→ $\sqrt[3]{27} \cdot \sqrt[3]{x^6} = 3x^2$</span></div></div></div><div class="grm-row"><div class="grm-label">You Do (Together)</div><div class="grm-value math-text"><div class="ex-block"><span class="ex-prob">Simplify $\sqrt{36}$.</span><span class="ex-ans">→ $6$</span></div><div class="ex-block"><span class="ex-prob">Simplify $\sqrt{50}$.</span><span class="ex-ans">→ $\sqrt{25 \cdot 2} = 5\sqrt{2}$</span></div></div></div><div class="grm-row"><div class="grm-label">You Do (Alone)</div><div class="grm-value math-text"><div class="ex-block"><span class="ex-prob">Simplify $\sqrt{x^4}$.</span><span class="ex-ans">→ $x^2$</span></div><div class="ex-block"><span class="ex-prob">Simplify $\sqrt{18x^2}$.</span><span class="ex-ans">→ $3x\sqrt{2}$</span></div><br><a href="./practice/ca-6-2.html" class="prac-link">📄 Practice Worksheet</a></div></div><div class="grm-row"><div class="grm-label">Technology</div><div class="grm-value math-text">Desmos graphing activity — students explore the concept visually.</div></div><div class="grm-row"><div class="grm-label">Exit Ticket</div><div class="grm-value math-text">Simplify $\sqrt{45x^5}$.</div></div></div></details>
-<details class="lesson-card ca" data-section-id="CA_6_3" data-day="2" data-title="Exponential Functions" data-exit="Is $y = 6 \cdot (0.8)^x$ growth or decay?"><summary class="lesson-summary"><span class="day-badge ca">Day 2</span><span class="lesson-title">§6.3 Exponential Functions</span><span class="lesson-date">Fall 2026</span><span class="chevron">›</span></summary><div class="lesson-body"><div class="grm-row"><div class="grm-label">SWBAT</div><div class="grm-value math-text">Students will be able to evaluate and interpret exponential growth and decay functions.</div></div><div class="grm-row"><div class="grm-label">DO NOW</div><div class="grm-value math-text"><a href="./donow-ca.html" class="do-now-link ca" target="_blank">Open Do Now →</a></div></div><div class="grm-row"><div class="grm-label">I Do</div><div class="grm-value math-text"><div class="ex-block"><span class="ex-prob">For $y = 7 \cdot 3^x$, identify $a$ and $b$ and describe the behavior.</span><span class="ex-ans">→ $a = 7$ (initial value), $b = 3$ (multiplied by 3 each step); growth</span></div><div class="ex-block"><span class="ex-prob">A quantity starts at 4 and triples each step. What is the value after 3 steps?</span><span class="ex-ans">→ $y = 4 \cdot 3^3 = 4 \cdot 27 = 108$</span></div></div></div><div class="grm-row"><div class="grm-label">We Do</div><div class="grm-value math-text"><div class="ex-block"><span class="ex-prob">A population starts at 5 and doubles each year. What is it after 10 years?</span><span class="ex-ans">→ $y = 5 \cdot 2^{10} = 5 \cdot 1024 = 5120$</span></div><div class="ex-block"><span class="ex-prob">A substance starts at 64 g and loses half its mass each day. How much remains after 4 days?</span><span class="ex-ans">→ $y = 64 \cdot \left(\frac{1}{2}\right)^4 = 64 \cdot \frac{1}{16} = 4$ g</span></div></div></div><div class="grm-row"><div class="grm-label">You Do (Together)</div><div class="grm-value math-text"><div class="ex-block"><span class="ex-prob">For $y = 3 \cdot 2^x$, what is $a$ and $b$?</span><span class="ex-ans">→ $a=3$, $b=2$</span></div><div class="ex-block"><span class="ex-prob">A value starts at 10 and doubles each year. What is it after 3 years?</span><span class="ex-ans">→ $10 \cdot 2^3 = 80$</span></div></div></div><div class="grm-row"><div class="grm-label">You Do (Alone)</div><div class="grm-value math-text"><div class="ex-block"><span class="ex-prob">A value starts at 100 and is multiplied by $\frac{1}{2}$ each step. What is it after 2 steps?</span><span class="ex-ans">→ $100 \cdot \left(\frac{1}{2}\right)^2 = 25$</span></div><div class="ex-block"><span class="ex-prob">For $y = 2 \cdot 5^x$, what is the value when $x = 0$?</span><span class="ex-ans">→ $y = 2 \cdot 1 = 2$</span></div><br><a href="./practice/ca-6-3.html" class="prac-link">📄 Practice Worksheet</a></div></div><div class="grm-row"><div class="grm-label">Technology</div><div class="grm-value math-text">Desmos graphing activity — students explore the concept visually.</div></div><div class="grm-row"><div class="grm-label">Exit Ticket</div><div class="grm-value math-text">Is $y = 6 \cdot (0.8)^x$ growth or decay?</div></div></div></details>
-<details class="lesson-card ca" data-section-id="CA_6_4" data-day="3" data-title="Graphing Exponential Functions" data-exit="State the domain and range of $y = 3 \cdot 7^x$."><summary class="lesson-summary"><span class="day-badge ca">Day 3</span><span class="lesson-title">§6.4 Graphing Exponential Functions</span><span class="lesson-date">Fall 2026</span><span class="chevron">›</span></summary><div class="lesson-body"><div class="grm-row"><div class="grm-label">SWBAT</div><div class="grm-value math-text">Students will be able to graph exponential functions and identify transformations, asymptotes, and intercepts.</div></div><div class="grm-row"><div class="grm-label">DO NOW</div><div class="grm-value math-text"><a href="./donow-ca.html" class="do-now-link ca" target="_blank">Open Do Now →</a></div></div><div class="grm-row"><div class="grm-label">I Do</div><div class="grm-value math-text"><div class="ex-block"><span class="ex-prob">State the y-intercept of $y = 5 \cdot 3^x$.</span><span class="ex-ans">→ $(0, 5)$</span></div><div class="ex-block"><span class="ex-prob">$y = 4 \cdot 2^x$ passes through $(3, 32)$. What is $y$ when $x = 4$?</span><span class="ex-ans">→ Multiply by $2$: $y = 32 \cdot 2 = 64$</span></div></div></div><div class="grm-row"><div class="grm-label">We Do</div><div class="grm-value math-text"><div class="ex-block"><span class="ex-prob">A curve falls toward $y = 0$ as $x$ increases. What does that tell you about $b$?</span><span class="ex-ans">→ $b &lt; 1$ &amp;mdash; the function is exponential decay</span></div><div class="ex-block"><span class="ex-prob">Build a table of values for $y = 3 \cdot 2^x$ at $x = 0, 1, 2, 3$.</span><span class="ex-ans">→ $x=0: 3$ &amp;nbsp;&amp;nbsp; $x=1: 6$ &amp;nbsp;&amp;nbsp; $x=2: 12$ &amp;nbsp;&amp;nbsp; $x=3: 24$</span></div></div></div><div class="grm-row"><div class="grm-label">You Do (Together)</div><div class="grm-value math-text"><div class="ex-block"><span class="ex-prob">State the y-intercept of $y = 4 \cdot 5^x$.</span><span class="ex-ans">→ $(0, 4)$</span></div><div class="ex-block"><span class="ex-prob">For $y = 2 \cdot 3^x$, what is $y$ when $x = 3$?</span><span class="ex-ans">→ $2 \cdot 27 = 54$</span></div></div></div><div class="grm-row"><div class="grm-label">You Do (Alone)</div><div class="grm-value math-text"><div class="ex-block"><span class="ex-prob">For $y = 10 \cdot (0.5)^x$, is this growth or decay?</span><span class="ex-ans">→ Decay ($b=0.5&lt;1$)</span></div><div class="ex-block"><span class="ex-prob">What is the horizontal asymptote of $y = 6 \cdot 4^x$?</span><span class="ex-ans">→ $y = 0$</span></div><br><a href="./practice/ca-6-4.html" class="prac-link">📄 Practice Worksheet</a></div></div><div class="grm-row"><div class="grm-label">Technology</div><div class="grm-value math-text">Desmos graphing activity — students explore the concept visually.</div></div><div class="grm-row"><div class="grm-label">Exit Ticket</div><div class="grm-value math-text">State the domain and range of $y = 3 \cdot 7^x$.</div></div></div></details>
-<details class="lesson-card ca review-day"><summary class="lesson-summary"><span class="day-badge ca review">Day 4</span><span class="lesson-title">📚 Review Day — Unit 6</span><span class="lesson-date">Fall 2026</span><span class="chevron">›</span></summary><div class="lesson-body"><div class="review-intro">Students review exam-style problems by section. Click a chip to open that section's review set.</div><div class="grm-row"><div class="grm-label">DO NOW</div><div class="grm-value"><a href="./donow-ca.html" class="do-now-link ca" target="_blank">Open Do Now →</a></div></div><div class="grm-row"><div class="grm-label">Sections</div><div class="grm-value chips-wrap"><a href="./review.html?section=CA_6_1" class="chip ca" target="_blank">§6.1 Exponent Rules</a><a href="./review.html?section=CA_6_2" class="chip ca" target="_blank">§6.2 Simplifying Radicals</a><a href="./review.html?section=CA_6_3" class="chip ca" target="_blank">§6.3 Exponential Functions</a><a href="./review.html?section=CA_6_4" class="chip ca" target="_blank">§6.4 Graphing Exponential Functions</a></div></div><div class="grm-row"><div class="grm-label">Structure</div><div class="grm-value muted-text">Students work through 5-problem sets from each section. Shuffle for a new set. Whole-class debrief on common errors.</div></div></div></details>
-<details class="lesson-card ca exam-day"><summary class="lesson-summary"><span class="day-badge ca exam">Day 5</span><span class="lesson-title">✏️ Exam Day — Unit 6</span><span class="lesson-date">Fall 2026</span><span class="chevron">›</span></summary><div class="lesson-body"><div class="grm-row"><div class="grm-label">Structure</div><div class="grm-value muted-text">Silent individual assessment. Full period. Students may use their notes (check policy). Collect before bell.</div></div></div></details>
-  </div>
-  <!-- C2 Column -->
-  <div class="c2-col">
-    <div class="col-header c2">Calculus 2 &middot; 5 lessons</div>
-<details class="lesson-card c2" open data-section-id="C2_01" data-day="1" data-title="U-Substitution" data-exit="$\int \frac{\ln x}{x}\,dx$"><summary class="lesson-summary"><span class="day-badge c2">Day 1</span><span class="lesson-title">§1 U-Substitution</span><span class="lesson-date">Fall 2026</span><span class="chevron">›</span></summary><div class="lesson-body"><div class="grm-row"><div class="grm-label">SWBAT</div><div class="grm-value math-text">Students will be able to evaluate integrals using u-substitution, both indefinite and definite.</div></div><div class="grm-row"><div class="grm-label">DO NOW</div><div class="grm-value math-text"><a href="./warmup.html" class="do-now-link c2" target="_blank">Open Do Now →</a></div></div><div class="grm-row"><div class="grm-label">I Do</div><div class="grm-value math-text"><div class="ex-block"><span class="ex-prob">Evaluate $\int 2x(x^2+1)^4\,dx$</span><span class="ex-ans">→ Let $u=x^2+1$, $du=2x\,dx$.$=\int u^4\,du=\dfrac{u^5}{5}+C=\dfrac{(x^2+1)^5}{5}+C$</span></div><div class="ex-block"><span class="ex-prob">Evaluate $\int \cos(3x)\,dx$</span><span class="ex-ans">→ Let $u=3x$, $du=3\,dx$, so $dx=\frac{du}{3}$.$=\frac{1}{3}\int\cos u\,du=\frac{\sin(3x)}{3}+C$</span></div></div></div><div class="grm-row"><div class="grm-label">We Do</div><div class="grm-value math-text"><div class="ex-block"><span class="ex-prob">Evaluate $\int x\,e^{x^2}\,dx$</span><span class="ex-ans">→ Let $u=x^2$, $du=2x\,dx$.$=\frac{1}{2}\int e^u\,du=\frac{e^{x^2}}{2}+C$</span></div><div class="ex-block"><span class="ex-prob">Evaluate $\int_0^1 2x\sqrt{x^2+1}\,dx$</span><span class="ex-ans">→ Let $u=x^2+1$; when $x=0$, $u=1$; when $x=1$, $u=2$.$=\int_1^2 \sqrt{u}\,du=\left[\frac{2}{3}u^{3/2}\right]_1^2=\frac{2}{3}(2\sqrt{2}-1)$</span></div></div></div><div class="grm-row"><div class="grm-label">You Do (Together)</div><div class="grm-value math-text"><div class="ex-block"><span class="ex-prob">$\int 3x^2(x^3-5)^6\,dx$</span><span class="ex-ans">→ $\dfrac{(x^3-5)^7}{7}+C$</span></div><div class="ex-block"><span class="ex-prob">$\int \sin(4x)\,dx$</span><span class="ex-ans">→ $-\dfrac{\cos(4x)}{4}+C$</span></div></div></div><div class="grm-row"><div class="grm-label">You Do (Alone)</div><div class="grm-value math-text"><div class="ex-block"><span class="ex-prob">$\int \frac{x}{x^2+9}\,dx$</span><span class="ex-ans">→ $\dfrac{1}{2}\ln|x^2+9|+C$</span></div><div class="ex-block"><span class="ex-prob">$\int e^{5x}\,dx$</span><span class="ex-ans">→ $\dfrac{e^{5x}}{5}+C$</span></div><br><a href="./practice/c2-01.html" class="prac-link">📄 Practice Worksheet</a></div></div><div class="grm-row"><div class="grm-label">Technology</div><div class="grm-value math-text">Desmos or GeoGebra activity — students visualize the integral or area.</div></div><div class="grm-row"><div class="grm-label">Exit Ticket</div><div class="grm-value math-text">$\int \frac{\ln x}{x}\,dx$</div></div></div></details>
-<details class="lesson-card c2" data-section-id="C2_02" data-day="2" data-title="Advanced U-Substitution" data-exit="$\int \dfrac{\cos x}{\sin^2 x}\,dx$"><summary class="lesson-summary"><span class="day-badge c2">Day 2</span><span class="lesson-title">§2 Advanced U-Substitution</span><span class="lesson-date">Fall 2026</span><span class="chevron">›</span></summary><div class="lesson-body"><div class="grm-row"><div class="grm-label">SWBAT</div><div class="grm-value math-text">Students will be able to apply u-substitution to complex integrands including trig and exponential forms.</div></div><div class="grm-row"><div class="grm-label">DO NOW</div><div class="grm-value math-text"><a href="./warmup.html" class="do-now-link c2" target="_blank">Open Do Now →</a></div></div><div class="grm-row"><div class="grm-label">I Do</div><div class="grm-value math-text"><div class="ex-block"><span class="ex-prob">$\int x\sqrt{x+1}\,dx$</span><span class="ex-ans">→ Let $u=x+1$, $x=u-1$, $dx=du$.$=\int(u-1)u^{1/2}\,du=\int(u^{3/2}-u^{1/2})\,du$$=\dfrac{2u^{5/2}}{5}-\dfrac{2u^{3/2}}{3}+C=\dfrac{2(x+1)^{5/2}}{5}-\dfrac{2(x+1)^{3/2}}{3}+C$</span></div><div class="ex-block"><span class="ex-prob">$\int \dfrac{x}{\sqrt{x-3}}\,dx$</span><span class="ex-ans">→ Let $u=x-3$, $x=u+3$.$=\int\dfrac{u+3}{\sqrt{u}}\,du=\int(u^{1/2}+3u^{-1/2})\,du$$=\dfrac{2u^{3/2}}{3}+6u^{1/2}+C$, back-sub $u=x-3$.</span></div></div></div><div class="grm-row"><div class="grm-label">We Do</div><div class="grm-value math-text"><div class="ex-block"><span class="ex-prob">$\int\dfrac{e^x}{1+e^{2x}}\,dx$</span><span class="ex-ans">→ Let $u=e^x$, $du=e^x\,dx$.$=\int\dfrac{du}{1+u^2}=\arctan(e^x)+C$</span></div><div class="ex-block"><span class="ex-prob">$\int_0^3 x\sqrt{9-x^2}\,dx$</span><span class="ex-ans">→ Let $u=9-x^2$, $du=-2x\,dx$; limits: $u(0)=9$, $u(3)=0$.$=-\frac{1}{2}\int_9^0\sqrt{u}\,du=\frac{1}{2}\int_0^9 u^{1/2}\,du=\left[\frac{u^{3/2}}{3}\right]_0^9=9$</span></div></div></div><div class="grm-row"><div class="grm-label">You Do (Together)</div><div class="grm-value math-text"><div class="ex-block"><span class="ex-prob">$\int x(x^2+4)^3\,dx$</span><span class="ex-ans">→ $\dfrac{(x^2+4)^4}{8}+C$</span></div><div class="ex-block"><span class="ex-prob">$\int x\sqrt{2x+1}\,dx$</span><span class="ex-ans">→ $\dfrac{(2x+1)^{5/2}}{10}-\dfrac{(2x+1)^{3/2}}{6}+C$</span></div></div></div><div class="grm-row"><div class="grm-label">You Do (Alone)</div><div class="grm-value math-text"><div class="ex-block"><span class="ex-prob">$\int \dfrac{x^2}{x^3+1}\,dx$</span><span class="ex-ans">→ $\dfrac{\ln|x^3+1|}{3}+C$</span></div><div class="ex-block"><span class="ex-prob">$\int x\,e^{-x^2}\,dx$</span><span class="ex-ans">→ $-\dfrac{e^{-x^2}}{2}+C$</span></div><br><a href="./practice/c2-02.html" class="prac-link">📄 Practice Worksheet</a></div></div><div class="grm-row"><div class="grm-label">Technology</div><div class="grm-value math-text">Desmos or GeoGebra activity — students visualize the integral or area.</div></div><div class="grm-row"><div class="grm-label">Exit Ticket</div><div class="grm-value math-text">$\int \dfrac{\cos x}{\sin^2 x}\,dx$</div></div></div></details>
-<details class="lesson-card c2" data-section-id="C2_03" data-day="3" data-title="Trig Power Reduction" data-exit="$\int \tan x\,dx$"><summary class="lesson-summary"><span class="day-badge c2">Day 3</span><span class="lesson-title">§3 Trig Power Reduction</span><span class="lesson-date">Fall 2026</span><span class="chevron">›</span></summary><div class="lesson-body"><div class="grm-row"><div class="grm-label">SWBAT</div><div class="grm-value math-text">Students will be able to integrate powers of sine and cosine using power-reducing identities.</div></div><div class="grm-row"><div class="grm-label">DO NOW</div><div class="grm-value math-text"><a href="./warmup.html" class="do-now-link c2" target="_blank">Open Do Now →</a></div></div><div class="grm-row"><div class="grm-label">I Do</div><div class="grm-value math-text"><div class="ex-block"><span class="ex-prob">$\int \sin^2 x\,dx$</span><span class="ex-ans">→ $=\int\dfrac{1-\cos 2x}{2}\,dx=\dfrac{x}{2}-\dfrac{\sin 2x}{4}+C$</span></div><div class="ex-block"><span class="ex-prob">$\int \sin^3 x\,dx$</span><span class="ex-ans">→ $=\int \sin^2 x\cdot\sin x\,dx=\int(1-\cos^2 x)\sin x\,dx$Let $u=\cos x$: $=-\int(1-u^2)\,du=-u+\dfrac{u^3}{3}+C=-\cos x+\dfrac{\cos^3 x}{3}+C$</span></div></div></div><div class="grm-row"><div class="grm-label">We Do</div><div class="grm-value math-text"><div class="ex-block"><span class="ex-prob">$\int \sin^2 x\cos^3 x\,dx$</span><span class="ex-ans">→ Odd power of $\cos$: $u=\sin x$, $du=\cos x\,dx$.$=\int u^2(1-u^2)\,du=\dfrac{u^3}{3}-\dfrac{u^5}{5}+C=\dfrac{\sin^3 x}{3}-\dfrac{\sin^5 x}{5}+C$</span></div><div class="ex-block"><span class="ex-prob">$\int \sin^2 x\cos^2 x\,dx$</span><span class="ex-ans">→ Use $\sin x\cos x=\frac{\sin 2x}{2}$:$=\int\dfrac{\sin^2 2x}{4}\,dx=\int\dfrac{1-\cos 4x}{8}\,dx=\dfrac{x}{8}-\dfrac{\sin 4x}{32}+C$</span></div></div></div><div class="grm-row"><div class="grm-label">You Do (Together)</div><div class="grm-value math-text"><div class="ex-block"><span class="ex-prob">$\int \cos^2 x\,dx$</span><span class="ex-ans">→ $\dfrac{x}{2}+\dfrac{\sin 2x}{4}+C$</span></div><div class="ex-block"><span class="ex-prob">$\int \cos^3 x\,dx$</span><span class="ex-ans">→ $\sin x - \dfrac{\sin^3 x}{3}+C$</span></div></div></div><div class="grm-row"><div class="grm-label">You Do (Alone)</div><div class="grm-value math-text"><div class="ex-block"><span class="ex-prob">$\int \sin^4 x\,dx$</span><span class="ex-ans">→ $\dfrac{3x}{8}-\dfrac{\sin 2x}{4}+\dfrac{\sin 4x}{32}+C$</span></div><div class="ex-block"><span class="ex-prob">$\int \sin^3 x\cos^2 x\,dx$</span><span class="ex-ans">→ $-\dfrac{\cos^3 x}{3}+\dfrac{\cos^5 x}{5}+C$</span></div><br><a href="./practice/c2-03.html" class="prac-link">📄 Practice Worksheet</a></div></div><div class="grm-row"><div class="grm-label">Technology</div><div class="grm-value math-text">Desmos or GeoGebra activity — students visualize the integral or area.</div></div><div class="grm-row"><div class="grm-label">Exit Ticket</div><div class="grm-value math-text">$\int \tan x\,dx$</div></div></div></details>
-<details class="lesson-card c2" data-section-id="C2_04" data-day="4" data-title="Inverse Trig Integrals" data-exit="$\int\dfrac{dx}{x^2-4x+8}$"><summary class="lesson-summary"><span class="day-badge c2">Day 4</span><span class="lesson-title">§4 Inverse Trig Integrals</span><span class="lesson-date">Fall 2026</span><span class="chevron">›</span></summary><div class="lesson-body"><div class="grm-row"><div class="grm-label">SWBAT</div><div class="grm-value math-text">Students will be able to evaluate integrals resulting in inverse trigonometric functions.</div></div><div class="grm-row"><div class="grm-label">DO NOW</div><div class="grm-value math-text"><a href="./warmup.html" class="do-now-link c2" target="_blank">Open Do Now →</a></div></div><div class="grm-row"><div class="grm-label">I Do</div><div class="grm-value math-text"><div class="ex-block"><span class="ex-prob">$\int\dfrac{dx}{4+x^2}$</span><span class="ex-ans">→ $a=2$: $\dfrac{1}{2}\arctan\dfrac{x}{2}+C$</span></div><div class="ex-block"><span class="ex-prob">$\int\dfrac{dx}{9+4x^2}$</span><span class="ex-ans">→ Let $u=2x$, $du=2\,dx$: $=\dfrac{1}{2}\int\dfrac{du}{9+u^2}=\dfrac{1}{6}\arctan\dfrac{2x}{3}+C$</span></div></div></div><div class="grm-row"><div class="grm-label">We Do</div><div class="grm-value math-text"><div class="ex-block"><span class="ex-prob">$\int\dfrac{dx}{\sqrt{16-x^2}}$</span><span class="ex-ans">→ $a=4$: $\arcsin\dfrac{x}{4}+C$</span></div><div class="ex-block"><span class="ex-prob">$\int\dfrac{dx}{x^2+6x+13}$</span><span class="ex-ans">→ $(x+3)^2+4$: let $u=x+3$, $a=2$.$=\dfrac{1}{2}\arctan\dfrac{x+3}{2}+C$</span></div></div></div><div class="grm-row"><div class="grm-label">You Do (Together)</div><div class="grm-value math-text"><div class="ex-block"><span class="ex-prob">$\int\dfrac{dx}{1+9x^2}$</span><span class="ex-ans">→ $\dfrac{1}{3}\arctan(3x)+C$</span></div><div class="ex-block"><span class="ex-prob">$\int\dfrac{dx}{\sqrt{25-x^2}}$</span><span class="ex-ans">→ $\arcsin\dfrac{x}{5}+C$</span></div></div></div><div class="grm-row"><div class="grm-label">You Do (Alone)</div><div class="grm-value math-text"><div class="ex-block"><span class="ex-prob">$\int_0^1\dfrac{dx}{1+x^2}$</span><span class="ex-ans">→ $\dfrac{\pi}{4}$</span></div><div class="ex-block"><span class="ex-prob">$\int\dfrac{2x\,dx}{x^2+1}$</span><span class="ex-ans">→ $\ln(x^2+1)+C$</span></div><br><a href="./practice/c2-04.html" class="prac-link">📄 Practice Worksheet</a></div></div><div class="grm-row"><div class="grm-label">Technology</div><div class="grm-value math-text">Desmos or GeoGebra activity — students visualize the integral or area.</div></div><div class="grm-row"><div class="grm-label">Exit Ticket</div><div class="grm-value math-text">$\int\dfrac{dx}{x^2-4x+8}$</div></div></div></details>
-<details class="lesson-card c2" data-section-id="C2_05" data-day="5" data-title="Area Between Curves" data-exit="Area: $x=y^2-1$ and $x=1-y^2$"><summary class="lesson-summary"><span class="day-badge c2">Day 5</span><span class="lesson-title">§5 Area Between Curves</span><span class="lesson-date">Fall 2026</span><span class="chevron">›</span></summary><div class="lesson-body"><div class="grm-row"><div class="grm-label">SWBAT</div><div class="grm-value math-text">Students will be able to compute the area between two curves by integrating the difference of functions.</div></div><div class="grm-row"><div class="grm-label">DO NOW</div><div class="grm-value math-text"><a href="./warmup.html" class="do-now-link c2" target="_blank">Open Do Now →</a></div></div><div class="grm-row"><div class="grm-label">I Do</div><div class="grm-value math-text"><div class="ex-block"><span class="ex-prob">Find the area between $y=x^2$ and $y=x+2$.</span><span class="ex-ans">→ Intersections: $x^2=x+2\Rightarrow x=-1,2$.$A=\int_{-1}^2[(x+2)-x^2]\,dx=\left[\dfrac{x^2}{2}+2x-\dfrac{x^3}{3}\right]_{-1}^2=\dfrac{9}{2}$</span></div><div class="ex-block"><span class="ex-prob">Area between $y=4-x^2$ and $y=0$.</span><span class="ex-ans">→ $A=\int_{-2}^2(4-x^2)\,dx=\left[4x-\dfrac{x^3}{3}\right]_{-2}^2=\dfrac{32}{3}$</span></div></div></div><div class="grm-row"><div class="grm-label">We Do</div><div class="grm-value math-text"><div class="ex-block"><span class="ex-prob">Area between $y=\sin x$ and $y=\cos x$ on $[0,\pi/2]$.</span><span class="ex-ans">→ They cross at $x=\pi/4$.$A=\int_0^{\pi/4}(\cos x-\sin x)\,dx+\int_{\pi/4}^{\pi/2}(\sin x-\cos x)\,dx=2(\sqrt{2}-1)$</span></div><div class="ex-block"><span class="ex-prob">Find the area between $x=y^2$ and $x=2-y$.</span><span class="ex-ans">→ Intersections: $y^2=2-y\Rightarrow y=-2,1$.$A=\int_{-2}^1[(2-y)-y^2]\,dy=\dfrac{9}{2}$</span></div></div></div><div class="grm-row"><div class="grm-label">You Do (Together)</div><div class="grm-value math-text"><div class="ex-block"><span class="ex-prob">Area between $y=x$ and $y=x^2$</span><span class="ex-ans">→ $\dfrac{1}{6}$</span></div><div class="ex-block"><span class="ex-prob">Area between $y=\sqrt{x}$ and $y=x^2$ on $[0,1]$</span><span class="ex-ans">→ $\dfrac{1}{3}$</span></div></div></div><div class="grm-row"><div class="grm-label">You Do (Alone)</div><div class="grm-value math-text"><div class="ex-block"><span class="ex-prob">Area between $y=x^2-4$ and $y=4-x^2$</span><span class="ex-ans">→ $\dfrac{64}{3}$</span></div><div class="ex-block"><span class="ex-prob">Area between $y=e^x$, $y=x$, $x=0$, $x=1$</span><span class="ex-ans">→ $e-\dfrac{3}{2}$</span></div><br><a href="./practice/c2-05.html" class="prac-link">📄 Practice Worksheet</a></div></div><div class="grm-row"><div class="grm-label">Technology</div><div class="grm-value math-text">Desmos or GeoGebra activity — students visualize the integral or area.</div></div><div class="grm-row"><div class="grm-label">Exit Ticket</div><div class="grm-value math-text">Area: $x=y^2-1$ and $x=1-y^2$</div></div></div></details>
-  </div>
+  <div id="caCol"><div class="state-msg">Loading…</div></div>
+  <div id="c2Col"><div class="state-msg">Loading…</div></div>
 </div>
 
-<div class="footer">Generated June 2026 &middot; Upcoming — next school year (Fall 2026) &middot; Nightly sync deploys updates</div>
+<div class="footer" id="footer">Loading…</div>
 
 <script>
-const CA_MAP = {"CA_6_2": {"section": "6.2", "title": "Simplifying Radicals", "exit": "Simplify $\\sqrt{45x^5}$."}, "CA_6_3": {"section": "6.3", "title": "Exponential Functions", "exit": "Is $y = 6 \\cdot (0.8)^x$ growth or decay?"}, "CA_6_4": {"section": "6.4", "title": "Graphing Exponential Functions", "exit": "State the domain and range of $y = 3 \\cdot 7^x$."}};
-const C2_MAP = {"C2_01": {"section": "1", "title": "U-Substitution", "exit": "$\\int \\frac{\\ln x}{x}\\,dx$"}, "C2_02": {"section": "2", "title": "Advanced U-Substitution", "exit": "$\\int \\dfrac{\\cos x}{\\sin^2 x}\\,dx$"}, "C2_03": {"section": "3", "title": "Trig Power Reduction", "exit": "$\\int \\tan x\\,dx$"}, "C2_04": {"section": "4", "title": "Inverse Trig Integrals", "exit": "$\\int\\dfrac{dx}{x^2-4x+8}$"}, "C2_05": {"section": "5", "title": "Area Between Curves", "exit": "Area: $x=y^2-1$ and $x=1-y^2$"}};
-
-function renderMath(text) {
-  if (!text) return '';
-  text = text.replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>')
-             .replace(/&ldquo;/g,'"').replace(/&rdquo;/g,'"').replace(/&mdash;/g,'—');
-  const parts = text.split(/(\$\$[\s\S]*?\$\$|\$[^$\n]*?\$|\\\[[\s\S]*?\\\]|\\\([\s\S]*?\\\))/g);
-  return parts.map(p => {
-    let display=false, tex=null;
-    if(p.startsWith('$$')&&p.endsWith('$$'))       {display=true; tex=p.slice(2,-2);}
-    else if(p.startsWith('$')&&p.endsWith('$'))    {display=false;tex=p.slice(1,-1);}
-    else if(p.startsWith('\\[')&&p.endsWith('\\]')){display=true; tex=p.slice(2,-2);}
+function renderMath(text){
+  if(!text)return'';
+  text=text.replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>')
+           .replace(/&ldquo;/g,'"').replace(/&rdquo;/g,'"').replace(/&mdash;/g,'—')
+           .replace(/&nbsp;/g,' ').replace(/&rarr;/g,'→').replace(/&middot;/g,'·');
+  const parts=text.split(/(\$\$[\s\S]*?\$\$|\$[^$\n]*?\$|\\\[[\s\S]*?\\\]|\\\([\s\S]*?\\\))/g);
+  return parts.map(p=>{
+    let display=false,tex=null;
+    if(p.startsWith('$$')&&p.endsWith('$$')){display=true;tex=p.slice(2,-2);}
+    else if(p.startsWith('$')&&p.endsWith('$')){display=false;tex=p.slice(1,-1);}
+    else if(p.startsWith('\\[')&&p.endsWith('\\]')){display=true;tex=p.slice(2,-2);}
     else if(p.startsWith('\\(')&&p.endsWith('\\)')){display=false;tex=p.slice(2,-2);}
-    if(tex!==null){
-      tex=tex.replace(/\\displaystyle\b/g,'').trim();
-      try{return katex.renderToString(tex,{displayMode:display,throwOnError:false});}
-      catch(e){return p;}
-    }
+    if(tex!==null){tex=tex.replace(/\\displaystyle\b/g,'').trim();
+      try{return katex.renderToString(tex,{displayMode:display,throwOnError:false});}catch(e){return p;}}
     return p;
   }).join('');
 }
+function mEl(t){const s=document.createElement('span');s.innerHTML=renderMath(t||'—');return s.outerHTML;}
+function grm(label,val){return`<div class="grm-row"><div class="grm-label">${label}</div><div class="grm-value">${val}</div></div>`;}
+function exBlock(p,a){return`<div class="ex-block"><span class="ex-prob">${mEl(p)}</span><span class="ex-ans">→ ${mEl(a)}</span></div>`;}
+function exBlocks(arr){return(arr||[]).map(e=>exBlock(e.problem,e.answer)).join('');}
+function pracLink(course,sec){
+  if(!sec.hasPractice||!sec.practiceFile)return'';
+  const folder=course==='ca'?'./PreCalc':'./C2';
+  return`<br><a href="${folder}/${sec.practiceFile}.html" class="prac-link" target="_blank">📄 Practice Worksheet</a>`;
+}
 
-// Render all .math-text elements
-document.querySelectorAll('.math-text').forEach(el => {
-  el.innerHTML = renderMath(el.innerHTML);
-});
+function buildLessonCard(course,sec,dayNum,isOpen){
+  const doNow=course==='ca'?'./donow-ca.html':'./warmup.html';
+  const we=sec.workedExamples||[],pp=sec.practiceProblems||[];
+  let body='';
+  body+=grm('SWBAT',mEl(sec.swbat||'—'));
+  body+=grm('DO NOW',`<a href="${doNow}" class="do-now-link ${course}" target="_blank">Open Do Now →</a>`);
+  const iDo=we.slice(0,2); if(iDo.length)body+=grm('I Do',exBlocks(iDo));
+  const weDo=we.slice(2,4); if(weDo.length)body+=grm('We Do',exBlocks(weDo));
+  const ydt=pp.slice(0,2); if(ydt.length)body+=grm('You Do (Together)',exBlocks(ydt));
+  const yda=pp.slice(2,4),pl=pracLink(course,sec);
+  if(yda.length||pl)body+=grm('You Do (Alone)',exBlocks(yda)+pl);
+  if(sec.exitTicket)body+=grm('Exit Ticket',mEl(sec.exitTicket));
+  return`<details class="lesson-card ${course}"${isOpen?' open':''}><summary class="lesson-summary"><span class="day-badge ${course}">Day ${dayNum}</span><span class="lesson-title">§${sec.section} ${sec.title}</span><span class="lesson-date">Fall 2026</span><span class="chevron">›</span></summary><div class="lesson-body">${body}</div></details>`;
+}
 
-// Exit ticket tile
-fetch('./state.json').then(r=>r.json()).then(state => {
-  const caId = state.courses?.collegeAlgebra?.currentSection;
-  const c2Id = state.courses?.calc2?.currentSection;
+function buildReviewCard(course,dayNum,unit,secMap){
+  const doNow=course==='ca'?'./donow-ca.html':'./warmup.html';
+  const chips=unit.sections.map(id=>{const s=secMap[id];if(!s||!s.reviewProblems?.length)return'';
+    return`<a href="./review.html?section=${id}" class="chip ${course}" target="_blank">§${s.section} ${s.title}</a>`;}).filter(Boolean).join('');
+  let body='<div class="review-intro">Students review exam-style problems by section. Click a chip to open that section\'s review set.</div>';
+  body+=grm('DO NOW',`<a href="${doNow}" class="do-now-link ${course}" target="_blank">Open Do Now →</a>`);
+  if(chips)body+=grm('Sections',`<div class="chips-wrap">${chips}</div>`);
+  body+=grm('Structure','<span style="color:#8b949e;font-size:.83rem">Students work through 5-problem sets from each section. Shuffle for a new set. Whole-class debrief on common errors.</span>');
+  const unitShort=unit.name.replace(/^Unit \S+ — /,'');
+  return`<details class="lesson-card ${course} review-day"><summary class="lesson-summary"><span class="day-badge review">Day ${dayNum}</span><span class="lesson-title">📚 Review Day — ${unitShort}</span><span class="lesson-date">Fall 2026</span><span class="chevron">›</span></summary><div class="lesson-body">${body}</div></details>`;
+}
 
-  function fillTile(secId, map, dayEl, qEl) {
-    let entry = map[secId];
-    if (!entry) {
-      // fallback: pick random entry with an exit ticket
-      const entries = Object.entries(map).filter(([,v]) => v.exit);
-      if (entries.length) {
-        const [rid, rentry] = entries[Math.floor(Math.random()*entries.length)];
-        entry = rentry; secId = rid;
-      }
-    }
-    if (entry) {
-      dayEl.textContent = '\u00a7' + entry.section + ' \u2014 ' + entry.title;
-      qEl.innerHTML = entry.exit ? renderMath(entry.exit) : '<span class="et-none">No exit ticket.</span>';
-    } else {
-      qEl.innerHTML = '<span class="et-none">No section data.</span>';
-    }
+function buildExamCard(course,dayNum){
+  const body=grm('Structure','<span style="color:#8b949e;font-size:.83rem">Silent individual assessment. Full period. Students may use their notes (check policy). Collect before bell.</span>');
+  return`<details class="lesson-card ${course} exam-day"><summary class="lesson-summary"><span class="day-badge exam">Day ${dayNum}</span><span class="lesson-title">✏️ Exam Day</span><span class="lesson-date">Fall 2026</span><span class="chevron">›</span></summary><div class="lesson-body">${body}</div></details>`;
+}
+
+function renderColumn(colEl,course,currentId,unit,secMap){
+  if(!unit){colEl.innerHTML='<div class="state-msg">No active unit found.</div>';return;}
+  const label=course==='ca'?'College Algebra':'Calculus 2';
+  const n=unit.sections.length;
+  const extra=unit.hasExam?' + Review + Exam':' + Review';
+  let html=`<div class="col-header ${course}">${label} &middot; ${n} lesson${n!==1?'s':''}${extra}</div>`;
+  unit.sections.forEach((id,idx)=>{
+    const sec=secMap[id]; if(!sec)return;
+    html+=buildLessonCard(course,sec,idx+1,id===currentId);
+  });
+  html+=buildReviewCard(course,n+1,unit,secMap);
+  if(unit.hasExam)html+=buildExamCard(course,n+2);
+  colEl.innerHTML=html;
+}
+
+function renderExitTile(caId,caMap,c2Id,c2Map){
+  function fill(secId,secMap,dayId,qId){
+    const sec=secMap[secId],dayEl=document.getElementById(dayId),qEl=document.getElementById(qId);
+    if(sec&&sec.exitTicket){if(dayEl)dayEl.textContent='§'+sec.section+' — '+sec.title;if(qEl)qEl.innerHTML=renderMath(sec.exitTicket);}
+    else if(qEl)qEl.innerHTML='<span class="et-none">No exit ticket for current section.</span>';
   }
+  fill(caId,caMap,'etCaDay','etCaQ');
+  fill(c2Id,c2Map,'etC2Day','etC2Q');
+}
 
-  fillTile(caId, CA_MAP, document.getElementById('etCaDay'), document.getElementById('etCaQ'));
-  fillTile(c2Id, C2_MAP, document.getElementById('etC2Day'), document.getElementById('etC2Q'));
-}).catch(()=>{
-  document.getElementById('etCaQ').innerHTML='<span class="et-none">Could not load.</span>';
-  document.getElementById('etC2Q').innerHTML='<span class="et-none">Could not load.</span>';
+Promise.all([
+  fetch('./state.json').then(r=>r.json()),
+  fetch('./sections.json').then(r=>r.json())
+]).then(([state,sections])=>{
+  const caId=state?.courses?.collegeAlgebra?.currentSection;
+  const c2Id=state?.courses?.calc2?.currentSection;
+  const caMap={},c2Map={};
+  (sections.collegeAlgebra||[]).forEach(s=>caMap[s.id]=s);
+  (sections.calc2||[]).forEach(s=>c2Map[s.id]=s);
+  const caUnits=sections.units?.collegeAlgebra||[];
+  const c2Units=sections.units?.calc2||[];
+  const caUnit=caUnits.find(u=>u.sections.includes(caId))||caUnits[caUnits.length-1]||null;
+  const c2Unit=c2Units.find(u=>u.sections.includes(c2Id))||c2Units[c2Units.length-1]||null;
+  renderExitTile(caId,caMap,c2Id,c2Map);
+  renderColumn(document.getElementById('caCol'),'ca',caId,caUnit,caMap);
+  renderColumn(document.getElementById('c2Col'),'c2',c2Id,c2Unit,c2Map);
+  const hbCA=document.getElementById('hbCA'),hbC2=document.getElementById('hbC2');
+  if(caUnit&&hbCA)hbCA.title=caUnit.name;
+  if(c2Unit&&hbC2)hbC2.title=c2Unit.name;
+  document.getElementById('footer').textContent=
+    'Data-driven from sections.json · '+[caUnit?.name,c2Unit?.name].filter(Boolean).join(' · ')+' · Fall 2026';
+}).catch(err=>{
+  document.getElementById('caCol').innerHTML='<div class="state-msg">Could not load data.</div>';
+  document.getElementById('c2Col').innerHTML='<div class="state-msg">Could not load data.</div>';
+  console.error(err);
 });
 </script>
 </body>
