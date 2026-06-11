@@ -812,6 +812,270 @@ GEN['CA_S_8'] = function() {
   }
 };
 
+// --- 1.4  Compound Inequalities  a < bx + c < d ---
+GEN['CA_1_4'] = function() {
+  const b = ri(2, 5);
+  const c = ri(-6, 6);
+  // Pick nice integer answers: x1 < x2
+  const x1 = ri(-5, 3);
+  const x2 = ri(x1 + 1, x1 + 6);
+  // b*x1 + c < b*x + c < b*x2 + c
+  const lo = b * x1 + c;
+  const hi = b * x2 + c;
+  const sym = pick(['<', '\\le']);
+  return {
+    html: `Solve the compound inequality: ${kD(`${lo} ${sym} ${b}x + ${c} ${sym} ${hi}`)} Enter the lower and upper bounds of ${kI('x')}:`,
+    type: 'numeric2',
+    answers: [x1, x2],
+    labels: ['lower bound', 'upper bound'],
+    solutionHtml:
+      kD(`${lo} - ${c} ${sym} ${b}x ${sym} ${hi} - ${c}`) +
+      kD(`${lo - c} ${sym} ${b}x ${sym} ${hi - c}`) +
+      kD(`${fracTex(lo - c, b)} ${sym} x ${sym} ${fracTex(hi - c, b)}`)
+  };
+};
+
+// --- 2.4  Parallel and Perpendicular Lines ---
+GEN['CA_2_4'] = function() {
+  const rise = ri(-5, 5) || 1;
+  const run = ri(1, 5) * (Math.random() < .5 ? 1 : -1);
+  const [mN, mD] = reduceFrac(rise, run);
+  const slopeVal = mN / mD;
+  const slopeTex = mD === 1 ? `${mN}` : fracTex(mN, mD);
+  const usePerp = Math.random() < .5;
+  if (usePerp) {
+    // Perpendicular slope = -mD/mN
+    const [pN, pD] = reduceFrac(-mD, mN);
+    return {
+      html: `A line has slope ${kI(slopeTex)}. What is the slope of a line <strong>perpendicular</strong> to it?
+             <span class="ans-hint">Enter as a fraction or integer.</span>`,
+      type: 'numeric',
+      answer: pN / pD,
+      solutionHtml: kD(`m_{\\perp} = -\\frac{1}{m} = -\\frac{${mD}}{${mN}} = ${fracTex(pN, pD)}`)
+    };
+  } else {
+    return {
+      html: `A line has slope ${kI(slopeTex)}. What is the slope of a line <strong>parallel</strong> to it?
+             <span class="ans-hint">Enter as a fraction or integer.</span>`,
+      type: 'numeric',
+      answer: slopeVal,
+      solutionHtml: `Parallel lines have equal slopes: ${kI(`m_{\\parallel} = ${slopeTex}`)}`
+    };
+  }
+};
+
+// --- 4.0  Binomials & Factoring Review: expand (x+a)(x+b) ---
+GEN['CA_4_0'] = function() {
+  const r1 = ri(-7, 7);
+  let r2 = ri(-7, 7);
+  if (r2 === r1) r2 = r1 + pick([-2, -1, 1, 2]);
+  const b = r1 + r2, c = r1 * r2;
+  const type = pick(['expand', 'factor']);
+  if (type === 'expand') {
+    const a1 = r1 >= 0 ? `+ ${r1}` : `- ${Math.abs(r1)}`;
+    const a2 = r2 >= 0 ? `+ ${r2}` : `- ${Math.abs(r2)}`;
+    return {
+      html: `Expand: ${kD(`(x ${a1})(x ${a2})`)} Your answer is ${kI(`x^2 + bx + c`)}. Enter ${kI('b')} and ${kI('c')}:`,
+      type: 'numeric2',
+      answers: [b, c],
+      labels: ['b', 'c'],
+      solutionHtml: kD(`(x ${a1})(x ${a2}) = x^2 + (${r1}+${r2})x + (${r1})(${r2}) = ${quadTex(1, b, c)}`)
+    };
+  } else {
+    return {
+      html: `Factor: ${kD(quadTex(1, b, c) + ' = (x + p)(x + q)')} Enter ${kI('p')} and ${kI('q')}:`,
+      type: 'numeric2',
+      answers: [Math.min(r1, r2), Math.max(r1, r2)],
+      labels: ['smaller value', 'larger value'],
+      solutionHtml: kD(`${quadTex(1, b, c)} = (x ${r1 >= 0 ? '+ ' + r1 : '- ' + Math.abs(r1)})(x ${r2 >= 0 ? '+ ' + r2 : '- ' + Math.abs(r2)})`)
+    };
+  }
+};
+
+// --- 4.2  Graphing Quadratics: find vertex from standard form ---
+GEN['CA_4_2'] = function() {
+  const a = pick([-3, -2, -1, 1, 2, 3]);
+  const h = ri(-5, 5);
+  const k = ri(-8, 8);
+  const bCoeff = -2 * a * h;
+  const cCoeff = a * h * h + k;
+  return {
+    html: `Find the vertex of the parabola: ${kD(quadTex(a, bCoeff, cCoeff))} Enter the vertex ${kI('(h, k)')}:`,
+    type: 'numeric2',
+    answers: [h, k],
+    labels: ['h  (x-coordinate)', 'k  (y-coordinate)'],
+    solutionHtml:
+      kD(`h = -\\frac{b}{2a} = -\\frac{${bCoeff}}{2(${a})} = -\\frac{${bCoeff}}{${2*a}} = ${h}`) +
+      kD(`k = f(${h}) = ${a}(${h})^2 + ${bCoeff}(${h}) + ${cCoeff} = ${k}`)
+  };
+};
+
+// --- 4.5  Quadratic Inequalities: find boundary values ---
+GEN['CA_4_5'] = function() {
+  const r1 = ri(-6, 6);
+  let r2 = ri(-6, 6);
+  if (r2 === r1) r2 = r1 + pick([-2, -1, 1, 2]);
+  const [lo, hi] = [Math.min(r1, r2), Math.max(r1, r2)];
+  const b = -(r1 + r2), c = r1 * r2;
+  const sym = pick(['<', '>', '\\le', '\\ge']);
+  return {
+    html: `Solve: ${kD(quadTex(1, b, c) + ` ${sym} 0`)} Enter the two boundary values (the roots):`,
+    type: 'numeric2',
+    answers: [lo, hi],
+    labels: ['smaller root', 'larger root'],
+    solutionHtml:
+      kD(`${quadTex(1, b, c)} = (x ${-r1 > 0 ? '+ ' + (-r1) : '- ' + Math.abs(r1)})(x ${-r2 > 0 ? '+ ' + (-r2) : '- ' + Math.abs(r2)}) = 0`) +
+      `Roots: ${kI(`x = ${lo}`)} and ${kI(`x = ${hi}`)}`
+  };
+};
+
+// --- 6.2  Simplifying Radicals ---
+GEN['CA_6_2'] = function() {
+  // √(a²·b) = a√b where b is square-free
+  const a = ri(2, 7);
+  const squareFrees = [2, 3, 5, 6, 7, 10, 11, 13];
+  const b = pick(squareFrees);
+  const radicand = a * a * b;
+  const type = pick(['simplify', 'coefficient']);
+  if (type === 'simplify') {
+    return {
+      html: `Simplify: ${kD(`\\sqrt{${radicand}}`)} Your answer is ${kI(`a\\sqrt{b}`)}. Enter the coefficient ${kI('a')}:`,
+      type: 'numeric',
+      answer: a,
+      solutionHtml: kD(`\\sqrt{${radicand}} = \\sqrt{${a*a} \\cdot ${b}} = ${a}\\sqrt{${b}}`)
+    };
+  } else {
+    return {
+      html: `Simplify: ${kD(`\\sqrt{${radicand}}`)} Enter the entire result as ${kI(`a\\sqrt{b}`)} — what is ${kI('b')} (the value under the radical after simplifying)?`,
+      type: 'numeric',
+      answer: b,
+      solutionHtml: kD(`\\sqrt{${radicand}} = \\sqrt{${a*a} \\cdot ${b}} = ${a}\\sqrt{${b}}`)
+    };
+  }
+};
+
+// --- S.2  Set Operations ---
+GEN['CA_S_2'] = function() {
+  const aSize = ri(5, 15);
+  const bSize = ri(5, 15);
+  const inter = ri(1, Math.min(aSize, bSize) - 1);
+  const union = aSize + bSize - inter;
+  const type = ri(0, 2);
+  if (type === 0) {
+    return {
+      html: `Sets A and B have ${kI(`|A| = ${aSize}`)}, ${kI(`|B| = ${bSize}`)}, and ${kI(`|A \\cap B| = ${inter}`)}. Find ${kI(`|A \\cup B|`)}:`,
+      type: 'numeric', answer: union,
+      solutionHtml: kD(`|A \\cup B| = |A| + |B| - |A \\cap B| = ${aSize} + ${bSize} - ${inter} = ${union}`)
+    };
+  } else if (type === 1) {
+    return {
+      html: `Sets A and B have ${kI(`|A| = ${aSize}`)}, ${kI(`|B| = ${bSize}`)}, and ${kI(`|A \\cup B| = ${union}`)}. Find ${kI(`|A \\cap B|`)}:`,
+      type: 'numeric', answer: inter,
+      solutionHtml: kD(`|A \\cap B| = |A| + |B| - |A \\cup B| = ${aSize} + ${bSize} - ${union} = ${inter}`)
+    };
+  } else {
+    const onlyA = aSize - inter;
+    return {
+      html: `In a Venn diagram, ${kI(inter)} elements are in both A and B, and ${kI(onlyA)} are in A only. How many total elements are in A?`,
+      type: 'numeric', answer: aSize,
+      solutionHtml: kD(`|A| = \\text{only A} + |A \\cap B| = ${onlyA} + ${inter} = ${aSize}`)
+    };
+  }
+};
+
+// --- S.3  Subsets: count subsets of a set ---
+GEN['CA_S_3'] = function() {
+  const n = ri(2, 6);
+  const ans = Math.pow(2, n);
+  const type = pick(['total', 'proper']);
+  if (type === 'total') {
+    return {
+      html: `A set has ${n} elements. How many subsets does it have (including the empty set and itself)?`,
+      type: 'numeric', answer: ans,
+      solutionHtml: kD(`2^n = 2^{${n}} = ${ans}`)
+    };
+  } else {
+    return {
+      html: `A set has ${n} elements. How many <strong>proper</strong> subsets does it have (excluding the set itself)?`,
+      type: 'numeric', answer: ans - 1,
+      solutionHtml: kD(`2^n - 1 = 2^{${n}} - 1 = ${ans - 1}`)
+    };
+  }
+};
+
+// --- S.4  Venn Diagrams: fill in the missing value ---
+GEN['CA_S_4'] = function() {
+  const onlyA = ri(3, 12);
+  const onlyB = ri(3, 12);
+  const both  = ri(2, 8);
+  const neither = ri(0, 5);
+  const total = onlyA + onlyB + both + neither;
+  const type = ri(0, 2);
+  if (type === 0) {
+    return {
+      html: `A Venn diagram shows: only A = ${onlyA}, only B = ${onlyB}, both A and B = ${both}, neither = ${neither}. How many total elements are there?`,
+      type: 'numeric', answer: total,
+      solutionHtml: kD(`${onlyA} + ${onlyB} + ${both} + ${neither} = ${total}`)
+    };
+  } else if (type === 1) {
+    return {
+      html: `Total elements = ${total}, only A = ${onlyA}, only B = ${onlyB}, neither = ${neither}. How many are in <strong>both</strong> A and B?`,
+      type: 'numeric', answer: both,
+      solutionHtml: kD(`\\text{both} = ${total} - ${onlyA} - ${onlyB} - ${neither} = ${both}`)
+    };
+  } else {
+    return {
+      html: `Total = ${total}, only B = ${onlyB}, both = ${both}, neither = ${neither}. How many are in A only?`,
+      type: 'numeric', answer: onlyA,
+      solutionHtml: kD(`\\text{only A} = ${total} - ${onlyB} - ${both} - ${neither} = ${onlyA}`)
+    };
+  }
+};
+
+// --- S.9  Counting with Repetition / Further Counting ---
+GEN['CA_S_9'] = function() {
+  const type = pick(['repetition', 'restriction']);
+  if (type === 'repetition') {
+    const n = ri(4, 8);
+    const r = ri(2, 3);
+    function fact(x) { let f = 1; for (let i = 2; i <= x; i++) f *= i; return f; }
+    function C(nn, rr) { return fact(nn) / (fact(rr) * fact(nn - rr)); }
+    const ans = C(n + r - 1, r);
+    return {
+      html: `How many ways can you choose ${r} items from ${n} types if <strong>repetition is allowed</strong> and order does not matter?`,
+      type: 'numeric', answer: ans,
+      solutionHtml: kD(`C(n + r - 1,\\, r) = C(${n + r - 1},\\, ${r}) = \\frac{${n + r - 1}!}{${r}! \\cdot ${n - 1}!} = ${ans}`)
+    };
+  } else {
+    // Arrange n items, k are identical
+    const n = ri(4, 7);
+    const k = ri(2, Math.min(3, n - 1));
+    function fact(x) { let f = 1; for (let i = 2; i <= x; i++) f *= i; return f; }
+    const ans = fact(n) / fact(k);
+    return {
+      html: `How many distinct arrangements of ${n} items are there if ${k} of them are identical?`,
+      type: 'numeric', answer: ans,
+      solutionHtml: kD(`\\frac{${n}!}{${k}!} = \\frac{${fact(n)}}{${fact(k)}} = ${ans}`)
+    };
+  }
+};
+
+// --- S.10  Partitions (multinomial arrangements) ---
+GEN['CA_S_10'] = function() {
+  function fact(x) { let f = 1; for (let i = 2; i <= x; i++) f *= i; return f; }
+  const k1 = ri(2, 4);
+  const k2 = ri(2, 4);
+  const k3 = ri(1, 3);
+  const n = k1 + k2 + k3;
+  const ans = fact(n) / (fact(k1) * fact(k2) * fact(k3));
+  const items = ['red', 'blue', 'green'];
+  return {
+    html: `How many distinct arrangements of ${n} objects are there if ${k1} are ${items[0]}, ${k2} are ${items[1]}, and ${k3} are ${items[2]}?`,
+    type: 'numeric', answer: ans,
+    solutionHtml: kD(`\\frac{${n}!}{${k1}! \\cdot ${k2}! \\cdot ${k3}!} = \\frac{${fact(n)}}{${fact(k1)} \\cdot ${fact(k2)} \\cdot ${fact(k3)}} = ${ans}`)
+  };
+};
+
 // --- S.11  Probability with Permutations & Combinations ---
 GEN['CA_S_11'] = function() {
   const n = ri(6, 10);
@@ -1035,7 +1299,8 @@ async function init() {
   const caState = state.courses?.collegeAlgebra;
   const allSections = sections.collegeAlgebra || [];
   const completed = caState?.completedSections || [];
-  const doneSections = allSections.filter(s => completed.includes(s.id));
+  // Only pick sections that have a generator (skip fallback-only sections)
+  const doneSections = allSections.filter(s => completed.includes(s.id) && GEN[s.id]);
 
   if (doneSections.length === 0) {
     document.getElementById('mainArea').innerHTML = `
@@ -1047,10 +1312,22 @@ async function init() {
     return;
   }
 
-  // Pick 2 sections deterministically using date seed
+  // Pick 2 sections — date-seeded, recency-biased (recent sections ~3x more likely)
+  function seededWeightedPick(pool, dateStr, salt) {
+    const weights = pool.map((_, i) => Math.pow(1.06, i)); // exponential: later = more recent = higher weight
+    const total = weights.reduce((a, b) => a + b, 0);
+    const h = hashStr(dateStr + salt);
+    let target = (h / 0xffffffff) * total;
+    for (let i = 0; i < pool.length; i++) {
+      target -= weights[i];
+      if (target <= 0) return i;
+    }
+    return pool.length - 1;
+  }
+
   const n = doneSections.length;
-  let i1 = hashStr(today + 'A') % n;
-  let i2 = hashStr(today + 'B') % n;
+  let i1 = seededWeightedPick(doneSections, today, 'prob1');
+  let i2 = seededWeightedPick(doneSections, today, 'prob2');
   if (n > 1 && i2 === i1) i2 = (i1 + 1) % n;
 
   const secs = n === 1 ? [doneSections[0], doneSections[0]] : [doneSections[i1], doneSections[i2]];
