@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Weekly Lesson Plan — Cardinal Ritter Prep Math</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --border: #30363d;
+    --text: #e6edf3;
+    --muted: #8b949e;
+    --ca: #5bc8d4;
+    --c2: #a78bfa;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; min-height: 100vh; }
+
+  header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 1.25rem 1.5rem; display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+  .back-link { color: var(--muted); text-decoration: none; font-size: .85rem; }
+  .back-link:hover { color: var(--text); }
+  header h1 { font-size: 1.25rem; font-weight: 700; flex: 1; }
+  .course-badges { display: flex; gap: .5rem; }
+  .badge { padding: .25rem .75rem; border-radius: 99px; font-size: .78rem; font-weight: 600; border: 1px solid; }
+  .badge-ca { color: var(--ca); border-color: var(--ca); background: #5bc8d41a; }
+  .badge-c2 { color: var(--c2); border-color: var(--c2); background: #a78bfa1a; }
+  .gen-note { font-size: .75rem; color: var(--muted); margin-left: auto; }
+
+  .plan-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; max-width: 1400px; margin: 1.5rem auto; padding: 0 1.5rem 3rem; }
+  @media(max-width: 900px) { .plan-grid { grid-template-columns: 1fr; } }
+
+  .course-col h2 { font-size: 1rem; font-weight: 600; margin-bottom: 1rem; padding-bottom: .5rem; border-bottom: 2px solid; display: flex; align-items: center; gap: .5rem; }
+  .course-col.ca h2 { color: var(--ca); border-color: var(--ca); }
+  .course-col.c2 h2 { color: var(--c2); border-color: var(--c2); }
+
+  .lesson-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; margin-bottom: .75rem; overflow: hidden; }
+  .card-header { display: flex; align-items: center; gap: .75rem; padding: .9rem 1rem; cursor: pointer; user-select: none; flex-wrap: wrap; }
+  .card-header:hover { background: #ffffff08; }
+  .day-badge { font-size: .72rem; font-weight: 700; padding: .2rem .6rem; border-radius: 99px; border: 1px solid; white-space: nowrap; }
+  .card-title { flex: 1; display: flex; gap: .5rem; align-items: baseline; flex-wrap: wrap; }
+  .section-num { font-weight: 700; font-size: .85rem; color: var(--muted); }
+  .section-name { font-weight: 600; font-size: .95rem; }
+  .card-date { font-size: .78rem; color: var(--muted); margin-left: auto; }
+  .chevron { color: var(--muted); font-size: .75rem; transition: transform .2s; }
+  .lesson-card.open .chevron { transform: rotate(180deg); }
+
+  .card-body { display: none; border-top: 1px solid var(--border); padding: .75rem 1rem; }
+  .lesson-card.open .card-body { display: block; }
+
+  .grm-row { display: grid; grid-template-columns: 140px 1fr; gap: .5rem; padding: .45rem 0; border-bottom: 1px solid #ffffff08; font-size: .875rem; }
+  .grm-row:last-child { border-bottom: none; }
+  .grm-label { color: var(--muted); font-size: .78rem; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; padding-top: .1rem; }
+  .swbat-row .grm-val { font-style: italic; }
+  .plink { color: var(--ca); font-size: .8rem; text-decoration: none; }
+  .plink:hover { text-decoration: underline; }
+  .course-col.c2 .plink { color: var(--c2); }
+
+  @media(max-width: 500px) { .grm-row { grid-template-columns: 1fr; gap: .15rem; } .grm-label { font-size: .7rem; } }
+</style>
+</head>
+<body>
+<header>
+  <a href="./index.html" class="back-link">← Portal</a>
+  <h1>📋 Weekly Lesson Plan</h1>
+  <div class="course-badges">
+    <span class="badge badge-ca">College Algebra</span>
+    <span class="badge badge-c2">Calc 2</span>
+  </div>
+  <span class="gen-note">Upcoming sections — Fall 2026</span>
+</header>
+
+<div class="plan-grid">
+  <div class="course-col ca">
+    <h2>📘 College Algebra <span style="font-weight:400;font-size:.85rem;color:var(--muted)">· A-Days</span></h2>
+    
+    <div class="lesson-card">
+      <div class="card-header" onclick="this.parentElement.classList.toggle('open')">
+        <div class="day-badge" style="background:#5bc8d422;border-color:#5bc8d444;color:#5bc8d4">CA Day 1</div>
+        <div class="card-title">
+          <span class="section-num">§6.2</span>
+          <span class="section-name">Simplifying Radicals</span>
+        </div>
+        <div class="card-date">Fall 2026</div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <div class="grm-row swbat-row">
+          <span class="grm-label">SWBAT</span>
+          <span class="grm-val">Students will be able to simplify radical expressions and convert between radical and rational exponent form.</span>
+        </div>
+        <div class="grm-row">
+          <span class="grm-label">DO NOW</span>
+          <span class="grm-val">Review: Evaluate 4² and (−3)³. Recall the rule for x^(1/2). <a href="./warmup.html" class="plink" target="_blank">↗ Warm-Up</a></span>
+        </div>
+        <div class="grm-row">
+          <span class="grm-label">I Do</span>
+          <span class="grm-val">Model simplifying radical expressions by factoring out perfect squares: √72 → 6√2. Demonstrate converting between radical and rational exponent form: x^(3/2) = x√x.</span>
+        </div>
+        <div class="grm-row">
+          <span class="grm-label">We Do</span>
+          <span class="grm-val">Class works through 4 mixed radical expressions on the board, discussing factor trees and when to stop simplifying.</span>
+        </div>
+        <div class="grm-row">
+          <span class="grm-label">You Do (Together)</span>
+          <span class="grm-val">Partners simplify a set of 6 radical expressions, then compare answers and resolve any differences.</span>
+        </div>
+        <div class="grm-row">
+          <span class="grm-label">You Do (Alone)</span>
+          <span class="grm-val">Practice: CA §6.2 worksheet. <a href="./CollegeAlgebra/CA_6_2_Simplifying_Roots_Practice.html" class="plink" target="_blank">↗ Practice</a></span>
+        </div>
+        <div class="grm-row">
+          <span class="grm-label">Technology</span>
+          <span class="grm-val">Desmos: enter radical and rational exponent form side-by-side to verify they are equivalent.</span>
+        </div>
+        <div class="grm-row">
+          <span class="grm-label">Assessment</span>
+          <span class="grm-val">Exit ticket: Simplify √108. Write x^(2/3) in radical form.</span>
+        </div>
+      </div>
+    </div>
+    <div class="lesson-card">
+      <div class="card-header" onclick="this.parentElement.classList.toggle('open')">
+        <div class="day-badge" style="background:#5bc8d422;border-color:#5bc8d444;color:#5bc8d4">CA Day 2</div>
+        <div class="card-title">
+          <span class="section-num">§6.3</span>
+          <span class="section-name">Exponential Functions</span>
+        </div>
+        <div class="card-date">Fall 2026</div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <div class="grm-row swbat-row">
+          <span class="grm-label">SWBAT</span>
+          <span class="grm-val">Students will be able to evaluate and interpret exponential growth and decay functions.</span>
+        </div>
+        <div class="grm-row">
+          <span class="grm-label">DO NOW</span>
+          <span class="grm-val">Evaluate: 2⁰, 2⁻¹, 2⁻², 2³. What pattern do you notice? <a href="./warmup.html" class="plink" target="_blank">↗ Warm-Up</a></span>
+        </div>
+        <div class="grm-row">
+          <span class="grm-label">I Do</span>
+          <span class="grm-val">Introduce the exponential function f(x) = bˣ for b > 0, b ≠ 1. Evaluate growth (b > 1) vs. decay (0 < b < 1) examples. Contrast with power functions.</span>
+        </div>
+        <div class="grm-row">
+          <span class="grm-label">We Do</span>
+          <span class="grm-val">Complete an input-output table for f(x) = 2ˣ and g(x) = (1/2)ˣ together, then sketch both graphs.</span>
+        </div>
+        <div class="grm-row">
+          <span class="grm-label">You Do (Together)</span>
+          <span class="grm-val">Partners classify a list of 8 functions as exponential growth, decay, or neither — justify each classification.</span>
+        </div>
+        <div class="grm-row">
+          <span class="grm-label">You Do (Alone)</span>
+          <span class="grm-val">Practice: CA §6.3 worksheet. <a href="./CollegeAlgebra/CA_6_3_Exponential_Functions_Practice.html" class="plink" target="_blank">↗ Practice</a></span>
+        </div>
+        <div class="grm-row">
+          <span class="grm-label">Technology</span>
+          <span class="grm-val">Desmos: graph y = aˣ and slide a to see how the base changes the curve.</span>
+        </div>
+        <div class="grm-row">
+          <span class="grm-label">Assessment</span>
+          <span class="grm-val">Exit ticket: Does f(x) = 3ˣ show growth or decay? What is f(−2)?</span>
+        </div>
+      </div>
+    </div>
+    <div class="lesson-card">
+      <div class="card-header" onclick="this.parentElement.classList.toggle('open')">
+        <div class="day-badge" style="background:#5bc8d422;border-color:#5bc8d444;color:#5bc8d4">CA Day 3</div>
+        <div class="card-title">
+          <span class="section-num">§6.4</span>
+          <span class="section-name">Graphing Exponential Functions</span>
+        </div>
+        <div class="card-date">Fall 2026</div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <div class="grm-row swbat-row">
+          <span class="grm-label">SWBAT</span>
+          <span class="grm-val">Students will be able to graph exponential functions and identify transformations, asymptotes, and intercepts.</span>
+        </div>
+        <div class="grm-row">
+          <span class="grm-label">DO NOW</span>
+          <span class="grm-val">Describe transformations: how does y = 2ˣ − 3 differ from y = 2ˣ? <a href="./warmup.html" class="plink" target="_blank">↗ Warm-Up</a></span>
+        </div>
+        <div class="grm-row">
+          <span class="grm-label">I Do</span>
+          <span class="grm-val">Graph exponential functions with transformations: shifts, reflections, and vertical stretches. Identify the horizontal asymptote and y-intercept for each.</span>
+        </div>
+        <div class="grm-row">
+          <span class="grm-label">We Do</span>
+          <span class="grm-val">Match 4 exponential graphs to their equations as a class, discussing asymptote and intercept clues.</span>
+        </div>
+        <div class="grm-row">
+          <span class="grm-label">You Do (Together)</span>
+          <span class="grm-val">Partners sketch two transformed exponential functions from equations and identify key features.</span>
+        </div>
+        <div class="grm-row">
+          <span class="grm-label">You Do (Alone)</span>
+          <span class="grm-val">Practice: CA §6.4 worksheet. <a href="./CollegeAlgebra/CA_6_4_Graphing_Exponential_Functions_Practice.html" class="plink" target="_blank">↗ Practice</a></span>
+        </div>
+        <div class="grm-row">
+          <span class="grm-label">Technology</span>
+          <span class="grm-val">Desmos: explore how h, k, and a affect y = a·bˣ⁻ʰ + k using sliders.</span>
+        </div>
+        <div class="grm-row">
+          <span class="grm-label">Assessment</span>
+          <span class="grm-val">Exit ticket: Identify the asymptote and y-intercept of f(x) = 2ˣ⁺¹ − 4.</span>
+        </div>
+      </div>
+    </div>
+    <div class="lesson-card">
+      <div class="card-header" onclick="this.parentElement.classList.toggle('open')">
+        <div class="day-badge" style="background:#5bc8d422;border-color:#5bc8d444;color:#5bc8d4">CA Day 4</div>
+        <div class="card-title">
+          <span class="section-num">§S.1</span>
+          <span class="section-name">Sets and Notation</span>
+        </div>
+        <div class="card-date">Fall 2026</div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <div class="grm-row swbat-row">
+          <span class="grm-label">SWBAT</span>
+          <span class="grm-val">Students will be able to represent sets using roster and set-builder notation.</span>
+        </div>
+        <div class="grm-row">
+          <span class="grm-label">DO NOW</span>
+          <span class="grm-val">How would you describe the set of all students in this class? What makes someone a "member"? <a href="./warmup.html" class="plink" target="_blank">↗ Warm-Up</a></span>
+        </div>
+        <div class="grm-row">
+          <span class="grm-label">I Do</span>
+          <span class="grm-val">Introduce set notation: roster form {1, 2, 3}, set-builder notation, and interval notation. Define element, subset, empty set, and universal set.</span>
+        </div>
+        <div class="grm-row">
+          <span class="grm-label">We Do</span>
+          <span class="grm-val">Whole-class activity: write the set of even numbers between 1 and 10 in three different notations.</span>
+        </div>
+        <div class="grm-row">
+          <span class="grm-label">You Do (Together)</span>
+          <span class="grm-val">Partners convert 5 sets between roster form and set-builder notation.</span>
+        </div>
+        <div class="grm-row">
+          <span class="grm-label">You Do (Alone)</span>
+          <span class="grm-val">Practice: CA Sets and Notation worksheet. <a href="./CollegeAlgebra/CA_S_10_Partitions_Practice.html" class="plink" target="_blank">↗ Practice</a></span>
+        </div>
+        <div class="grm-row">
+          <span class="grm-label">Technology</span>
+          <span class="grm-val">None required — notation focus.</span>
+        </div>
+        <div class="grm-row">
+          <span class="grm-label">Assessment</span>
+          <span class="grm-val">Exit ticket: Write {x | x is an integer, 2 < x ≤ 6} in roster form and interval notation.</span>
+        </div>
+      </div>
+    </div>
+    <div class="lesson-card">
+      <div class="card-header" onclick="this.parentElement.classList.toggle('open')">
+        <div class="day-badge" style="background:#5bc8d422;border-color:#5bc8d444;color:#5bc8d4">CA Day 5</div>
+        <div class="card-title">
+          <span class="section-num">§S.2</span>
+          <span class="section-name">Set Operations</span>
+        </div>
+        <div class="card-date">Fall 2026</div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <div class="grm-row swbat-row">
+          <span class="grm-label">SWBAT</span>
+          <span class="grm-val">Students will be able to perform union, intersection, and complement operations on sets.</span>
+        </div>
+        <div class="grm-row">
+          <span class="grm-label">DO NOW</span>
+          <span class="grm-val">If A = {1,2,3} and B = {2,3,4}, which elements do they share? <a href="./warmup.html" class="plink" target="_blank">↗ Warm-Up</a></span>
+        </div>
+        <div class="grm-row">
+          <span class="grm-label">I Do</span>
+          <span class="grm-val">Define and demonstrate: union (A ∪ B), intersection (A ∩ B), and complement (Aᶜ). Use Venn diagrams to visualize each operation.</span>
+        </div>
+        <div class="grm-row">
+          <span class="grm-label">We Do</span>
+          <span class="grm-val">Draw a Venn diagram together for two sets of students (athletes vs. honor roll) and label each region.</span>
+        </div>
+        <div class="grm-row">
+          <span class="grm-label">You Do (Together)</span>
+          <span class="grm-val">Partners solve 6 set operation problems using Venn diagrams, showing all work.</span>
+        </div>
+        <div class="grm-row">
+          <span class="grm-label">You Do (Alone)</span>
+          <span class="grm-val">Practice: CA Set Operations worksheet. <a href="./CollegeAlgebra/CA_S_2_Set_Operations_Practice.html" class="plink" target="_blank">↗ Practice</a></span>
+        </div>
+        <div class="grm-row">
+          <span class="grm-label">Technology</span>
+          <span class="grm-val">Draw.io or paper Venn diagrams.</span>
+        </div>
+        <div class="grm-row">
+          <span class="grm-label">Assessment</span>
+          <span class="grm-val">Exit ticket: Given A = {1,2,3,4} and B = {3,4,5,6}, find A ∪ B and A ∩ B.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="course-col c2">
+    <h2>📙 Calculus 2 <span style="font-weight:400;font-size:.85rem;color:var(--muted)">· Every Day</span></h2>
+    
+    <div class="lesson-card">
+      <div class="card-header" onclick="this.parentElement.classList.toggle('open')">
+        <div class="day-badge" style="background:#a78bfa22;border-color:#a78bfa44;color:#a78bfa">C2 Day 1</div>
+        <div class="card-title">
+          <span class="section-num">§1</span>
+          <span class="section-name">U-Substitution</span>
+        </div>
+        <div class="card-date">Fall 2026</div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <div class="grm-row swbat-row">
+          <span class="grm-label">SWBAT</span>
+          <span class="grm-val">Students will be able to evaluate integrals using u-substitution, both indefinite and definite.</span>
+        </div>
+        <div class="grm-row">
+          <span class="grm-label">DO NOW</span>
+          <span class="grm-val">Differentiate: f(x) = (3x² + 1)⁵. What chain rule step did you use? <a href="./warmup.html" class="plink" target="_blank">↗ Warm-Up</a></span>
+        </div>
+        <div class="grm-row">
+          <span class="grm-label">I Do</span>
+          <span class="grm-val">Introduce u-substitution as the "reverse chain rule." Walk through ∫2x(x²+1)³ dx step-by-step: choose u, find du, substitute, integrate, back-substitute.</span>
+        </div>
+        <div class="grm-row">
+          <span class="grm-label">We Do</span>
+          <span class="grm-val">Class evaluates ∫cos(x)·sin³(x) dx together, voting on u-choice before computing.</span>
+        </div>
+        <div class="grm-row">
+          <span class="grm-label">You Do (Together)</span>
+          <span class="grm-val">Partners evaluate 4 indefinite integrals using u-sub, then verify by differentiating the result.</span>
+        </div>
+        <div class="grm-row">
+          <span class="grm-label">You Do (Alone)</span>
+          <span class="grm-val">Practice: C2 §1 worksheet. <a href="./Calc2/C2_01_U_Substitution_Practice.html" class="plink" target="_blank">↗ Practice</a></span>
+        </div>
+        <div class="grm-row">
+          <span class="grm-label">Technology</span>
+          <span class="grm-val">Desmos: check antiderivatives by graphing the derivative of your answer against the original integrand.</span>
+        </div>
+        <div class="grm-row">
+          <span class="grm-label">Assessment</span>
+          <span class="grm-val">Exit ticket: Evaluate ∫(2x+1)⁴ dx using u-substitution.</span>
+        </div>
+      </div>
+    </div>
+    <div class="lesson-card">
+      <div class="card-header" onclick="this.parentElement.classList.toggle('open')">
+        <div class="day-badge" style="background:#a78bfa22;border-color:#a78bfa44;color:#a78bfa">C2 Day 2</div>
+        <div class="card-title">
+          <span class="section-num">§2</span>
+          <span class="section-name">Advanced U-Substitution</span>
+        </div>
+        <div class="card-date">Fall 2026</div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <div class="grm-row swbat-row">
+          <span class="grm-label">SWBAT</span>
+          <span class="grm-val">Students will be able to apply u-substitution to complex integrands including trig and exponential forms.</span>
+        </div>
+        <div class="grm-row">
+          <span class="grm-label">DO NOW</span>
+          <span class="grm-val">Evaluate ∫eˣ dx and ∫sin(x) dx. Recall the derivatives of eˣ and sin(x). <a href="./warmup.html" class="plink" target="_blank">↗ Warm-Up</a></span>
+        </div>
+        <div class="grm-row">
+          <span class="grm-label">I Do</span>
+          <span class="grm-val">Extend u-substitution to trig and exponential integrands: ∫e^(3x) dx, ∫tan(x) dx. Emphasize recognizing the "inside function" pattern.</span>
+        </div>
+        <div class="grm-row">
+          <span class="grm-label">We Do</span>
+          <span class="grm-val">Class evaluates ∫sin²(x)cos(x) dx — identify u, confirm du is present, compute.</span>
+        </div>
+        <div class="grm-row">
+          <span class="grm-label">You Do (Together)</span>
+          <span class="grm-val">Partners work through 4 complex u-sub integrals, checking for proper back-substitution.</span>
+        </div>
+        <div class="grm-row">
+          <span class="grm-label">You Do (Alone)</span>
+          <span class="grm-val">Practice: C2 §2 worksheet. <a href="./Calc2/C2_02_U_Sub_Advanced_Practice.html" class="plink" target="_blank">↗ Practice</a></span>
+        </div>
+        <div class="grm-row">
+          <span class="grm-label">Technology</span>
+          <span class="grm-val">Wolfram Alpha: compare step-by-step solutions to your own work.</span>
+        </div>
+        <div class="grm-row">
+          <span class="grm-label">Assessment</span>
+          <span class="grm-val">Exit ticket: Evaluate ∫xe^(x²) dx.</span>
+        </div>
+      </div>
+    </div>
+    <div class="lesson-card">
+      <div class="card-header" onclick="this.parentElement.classList.toggle('open')">
+        <div class="day-badge" style="background:#a78bfa22;border-color:#a78bfa44;color:#a78bfa">C2 Day 3</div>
+        <div class="card-title">
+          <span class="section-num">§3</span>
+          <span class="section-name">Trig Power Reduction</span>
+        </div>
+        <div class="card-date">Fall 2026</div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <div class="grm-row swbat-row">
+          <span class="grm-label">SWBAT</span>
+          <span class="grm-val">Students will be able to integrate powers of sine and cosine using power-reducing identities.</span>
+        </div>
+        <div class="grm-row">
+          <span class="grm-label">DO NOW</span>
+          <span class="grm-val">Recall: cos²x + sin²x = 1. Solve for sin²x and cos²x separately. <a href="./warmup.html" class="plink" target="_blank">↗ Warm-Up</a></span>
+        </div>
+        <div class="grm-row">
+          <span class="grm-label">I Do</span>
+          <span class="grm-val">Derive power-reducing identities: sin²x = (1−cos2x)/2, cos²x = (1+cos2x)/2. Apply to evaluate ∫sin²x dx and ∫cos⁴x dx.</span>
+        </div>
+        <div class="grm-row">
+          <span class="grm-label">We Do</span>
+          <span class="grm-val">Class works ∫sin²x·cos²x dx together using both identities sequentially.</span>
+        </div>
+        <div class="grm-row">
+          <span class="grm-label">You Do (Together)</span>
+          <span class="grm-val">Partners evaluate ∫sin³x dx and ∫cos⁵x dx using a split-one-factor strategy.</span>
+        </div>
+        <div class="grm-row">
+          <span class="grm-label">You Do (Alone)</span>
+          <span class="grm-val">Practice: C2 §3 worksheet. <a href="./Calc2/C2_03_Trig_Power_Reduction_Practice.html" class="plink" target="_blank">↗ Practice</a></span>
+        </div>
+        <div class="grm-row">
+          <span class="grm-label">Technology</span>
+          <span class="grm-val">Desmos: plot sin²x and (1−cos2x)/2 on the same graph to confirm the identity.</span>
+        </div>
+        <div class="grm-row">
+          <span class="grm-label">Assessment</span>
+          <span class="grm-val">Exit ticket: Set up (but do not evaluate) ∫sin⁴x dx using power reduction.</span>
+        </div>
+      </div>
+    </div>
+    <div class="lesson-card">
+      <div class="card-header" onclick="this.parentElement.classList.toggle('open')">
+        <div class="day-badge" style="background:#a78bfa22;border-color:#a78bfa44;color:#a78bfa">C2 Day 4</div>
+        <div class="card-title">
+          <span class="section-num">§4</span>
+          <span class="section-name">Inverse Trig Integrals</span>
+        </div>
+        <div class="card-date">Fall 2026</div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <div class="grm-row swbat-row">
+          <span class="grm-label">SWBAT</span>
+          <span class="grm-val">Students will be able to evaluate integrals resulting in inverse trigonometric functions.</span>
+        </div>
+        <div class="grm-row">
+          <span class="grm-label">DO NOW</span>
+          <span class="grm-val">Differentiate: arctan(x). What pattern do you notice with 1/(1+x²)? <a href="./warmup.html" class="plink" target="_blank">↗ Warm-Up</a></span>
+        </div>
+        <div class="grm-row">
+          <span class="grm-label">I Do</span>
+          <span class="grm-val">Develop the three inverse trig integral forms: ∫du/√(a²−u²), ∫du/(a²+u²), ∫du/(u√(u²−a²)). Work examples matching to each form.</span>
+        </div>
+        <div class="grm-row">
+          <span class="grm-label">We Do</span>
+          <span class="grm-val">Class categorizes 4 integrals by which inverse trig form applies before evaluating the first one together.</span>
+        </div>
+        <div class="grm-row">
+          <span class="grm-label">You Do (Together)</span>
+          <span class="grm-val">Partners evaluate ∫dx/(4+x²) and ∫dx/√(9−x²), labeling a and u clearly.</span>
+        </div>
+        <div class="grm-row">
+          <span class="grm-label">You Do (Alone)</span>
+          <span class="grm-val">Practice: C2 §4 worksheet. <a href="./Calc2/C2_04_Inverse_Trig_Integrals_Practice.html" class="plink" target="_blank">↗ Practice</a></span>
+        </div>
+        <div class="grm-row">
+          <span class="grm-label">Technology</span>
+          <span class="grm-val">Desmos: graph the antiderivative and check with the derivative.</span>
+        </div>
+        <div class="grm-row">
+          <span class="grm-label">Assessment</span>
+          <span class="grm-val">Exit ticket: Identify the form and evaluate ∫dx/(1+9x²).</span>
+        </div>
+      </div>
+    </div>
+    <div class="lesson-card">
+      <div class="card-header" onclick="this.parentElement.classList.toggle('open')">
+        <div class="day-badge" style="background:#a78bfa22;border-color:#a78bfa44;color:#a78bfa">C2 Day 5</div>
+        <div class="card-title">
+          <span class="section-num">§5</span>
+          <span class="section-name">Area Between Curves</span>
+        </div>
+        <div class="card-date">Fall 2026</div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <div class="grm-row swbat-row">
+          <span class="grm-label">SWBAT</span>
+          <span class="grm-val">Students will be able to compute the area between two curves by integrating the difference of functions.</span>
+        </div>
+        <div class="grm-row">
+          <span class="grm-label">DO NOW</span>
+          <span class="grm-val">Sketch y = x² and y = x on the same axes. Which is on top from x=0 to x=1? <a href="./warmup.html" class="plink" target="_blank">↗ Warm-Up</a></span>
+        </div>
+        <div class="grm-row">
+          <span class="grm-label">I Do</span>
+          <span class="grm-val">Develop the area-between-curves formula: A = ∫[a,b] (f(x)−g(x)) dx. Work through finding intersection points, identifying top/bottom function, and computing.</span>
+        </div>
+        <div class="grm-row">
+          <span class="grm-label">We Do</span>
+          <span class="grm-val">Class sets up and evaluates the area between y = x+2 and y = x² together, narrating each step.</span>
+        </div>
+        <div class="grm-row">
+          <span class="grm-label">You Do (Together)</span>
+          <span class="grm-val">Partners find the area enclosed by y = 4−x² and y = x+2, finding intersections first.</span>
+        </div>
+        <div class="grm-row">
+          <span class="grm-label">You Do (Alone)</span>
+          <span class="grm-val">Practice: C2 §5 worksheet. <a href="./Calc2/C2_05_Area_Between_Curves_Practice.html" class="plink" target="_blank">↗ Practice</a></span>
+        </div>
+        <div class="grm-row">
+          <span class="grm-label">Technology</span>
+          <span class="grm-val">Desmos: shade the region between two curves and estimate area visually before computing.</span>
+        </div>
+        <div class="grm-row">
+          <span class="grm-label">Assessment</span>
+          <span class="grm-val">Exit ticket: Set up (but do not evaluate) the integral for the area between y = x² and y = 2x.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Cards open on click (handled inline via classList.toggle)
+// Open first card of each column by default
+document.querySelectorAll('.course-col').forEach(col => {
+  const first = col.querySelector('.lesson-card');
+  if (first) first.classList.add('open');
+});
+</script>
+</body>
+</html>
