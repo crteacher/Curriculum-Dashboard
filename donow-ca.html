@@ -7,15 +7,15 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
   <style>
-    :root {
-      --bg: #0f1117;
-      --card: #1a1d27;
-      --accent: #4f8ef7;
-      --accent-green: #34c77b;
-      --accent-red: #f74f4f;
-      --text: #e8eaf0;
-      --muted: #7a7f96;
-      --border: #2a2d3d;
+        :root {
+      --bg: #f9f7f3;
+      --card: #ffffff;
+      --accent: #1a5c2e;
+      --accent-green: #1a5c2e;
+      --accent-red: #b91c1c;
+      --text: #1a1614;
+      --muted: #7a7570;
+      --border: #e4e0d8;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -77,8 +77,8 @@
       font-weight: 700;
       letter-spacing: .08em;
       text-transform: uppercase;
-      background: rgba(42,122,74,.2);
-      color: #5ccb87;
+      background: #e8f5ed;
+      color: #1a5c2e;
       padding: .22rem .65rem;
       border-radius: 999px;
     }
@@ -94,7 +94,7 @@
     .input-label { font-size: .82rem; color: var(--muted); white-space: nowrap; }
     .ans-input {
       flex: 1;
-      background: rgba(255,255,255,.06);
+      background:#f0ece6;
       border: 1px solid var(--border);
       border-radius: 7px;
       color: var(--text);
@@ -110,7 +110,7 @@
     /* MCQ */
     .mcq-opts { display: flex; flex-direction: column; gap: .45rem; }
     .mcq-btn {
-      background: rgba(255,255,255,.04);
+      background:#f0ece6;
       border: 1px solid var(--border);
       border-radius: 8px;
       color: var(--text);
@@ -213,11 +213,16 @@
       color: var(--muted);
       margin-top: .15rem;
     }
-  </style>
+  
+    .site-nav{background:#6b1a26;padding:.65rem 1.5rem;}
+    .site-nav a{color:rgba(255,255,255,.9);text-decoration:none;font-size:.85rem;font-family:Georgia,serif;}
+    .site-nav a:hover{color:#fff;}
+</style>
 </head>
 <body>
 
-<div class="page-header">
+<nav class="site-nav"><a href="./index.html">← Portal</a></nav>
+  <div class="page-header">
   <div class="date-label" id="dateLabel"></div>
   <h1>College Algebra <span id="doNowLabel">Do Now</span></h1>
   <div class="subtitle" id="subtitle">Two problems — same topic for everyone, your own numbers.</div>
@@ -1355,13 +1360,4 @@ async function init() {
     }
   });
   html += '</div>';
-  html += `<p style="text-align:center;color:var(--muted);font-size:.78rem;margin-top:1.2rem">
-    Refresh the page for new numbers (same topics). Answers lock after first submission.
-  </p>`;
-  document.getElementById('mainArea').innerHTML = html;
-}
-
-init();
-</script>
-</body>
-</html>
+  html += `<p style="text-align:center

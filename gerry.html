@@ -5,17 +5,23 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Gerrymandering — Mr. Halverson</title>
 <style>
-:root{
-  --bg:#0d0c0c;--card:#181414;--border:#2a2020;
-  --accent:#e87878;--accent2:#c05050;
-  --text:#ede0e0;--muted:#7a6868;--sub:#9a8585;
-  --gold:#f0c060;--blue:#7ab0e0;
-}
+    :root {
+      --bg: #f9f7f3;
+      --card: #ffffff;
+      --border: #e4e0d8;
+      --accent: #6b1a26;
+      --accent2: #8b2533;
+      --text: #1a1614;
+      --muted: #7a7570;
+      --sub: #5a5550;
+      --gold: #8b6914;
+      --blue: #185fa5;
+    }
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);
   min-height:100vh;line-height:1.6}
 
-.site-header{background:#0a0808;border-bottom:1px solid var(--border);
+.site-header{background:#6b1a26;border-bottom:1px solid rgba(255,255,255,.15);
   padding:.9rem 2rem;display:flex;align-items:center;gap:1rem}
 .site-header a{font-size:.78rem;color:var(--muted);text-decoration:none;
   border:1px solid var(--border);border-radius:20px;padding:.25rem .75rem;
@@ -41,15 +47,15 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .sec-header{width:100%;background:none;border:none;padding:1.1rem 1.4rem;
   display:flex;align-items:center;gap:.9rem;cursor:pointer;text-align:left;
   transition:background .15s}
-.sec-header:hover{background:rgba(255,255,255,.03)}
+.sec-header:hover{background:rgba(0,0,0,.025)}
 .sec-num{font-size:.68rem;font-weight:800;letter-spacing:.1em;color:var(--muted);
   text-transform:uppercase;min-width:1.8rem}
 .sec-title{font-size:1rem;font-weight:700;color:var(--text);flex:1}
 .sec-tag{font-size:.6rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;
   padding:.18rem .55rem;border-radius:999px;white-space:nowrap}
 .tag-gold{background:rgba(240,192,96,.15);color:var(--gold)}
-.tag-red{background:rgba(232,120,120,.12);color:var(--accent)}
-.tag-blue{background:rgba(122,176,224,.12);color:var(--blue)}
+.tag-red{background:rgba(107,26,38,.07);color:#6b1a26}
+.tag-blue{background:#e8f0fa;color:#185fa5}
 .sec-chevron{font-size:.7rem;color:var(--muted);transition:transform .22s;margin-left:.5rem}
 .section-item.open .sec-chevron{transform:rotate(180deg)}
 .sec-body{display:none;padding:0 1.4rem 1.4rem;border-top:1px solid var(--border)}
@@ -57,7 +63,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 
 .concept{font-size:.93rem;color:var(--sub);margin-top:1rem;line-height:1.65}
 .concept strong{color:var(--text)}
-.vocab{margin:1.1rem 0;padding:.85rem 1rem;background:rgba(255,255,255,.03);
+.vocab{margin:1.1rem 0;padding:.85rem 1rem;background:rgba(0,0,0,.025);
   border-radius:8px;font-size:.84rem}
 .vocab dt{font-weight:700;color:var(--accent);display:inline}
 .vocab dd{display:inline;color:var(--sub);margin:0 0 .4rem 0}
@@ -69,7 +75,7 @@ dl div{margin-bottom:.35rem}
 .result{margin-top:.9rem;padding:.75rem 1rem;background:rgba(232,120,120,.08);
   border-radius:8px;font-size:.88rem;color:var(--sub)}
 .result strong{color:var(--accent)}
-.think{margin-top:.9rem;padding:.75rem 1rem;background:rgba(255,255,255,.03);
+.think{margin-top:.9rem;padding:.75rem 1rem;background:rgba(0,0,0,.025);
   border-radius:8px;font-size:.83rem;color:var(--muted);font-style:italic;
   border-left:2px solid var(--border)}
 .think strong{color:var(--sub);font-style:normal}
@@ -125,7 +131,7 @@ footer a{color:var(--muted);text-decoration:underline}
 .g-cell .d-tag{position:absolute;bottom:3px;right:5px;
   font-size:.58rem;font-weight:900;letter-spacing:.04em}
 .dist-results{font-size:.87rem;color:var(--sub);line-height:1.9;
-  padding:.85rem 1.1rem;background:rgba(255,255,255,.03);border-radius:8px;min-height:60px}
+  padding:.85rem 1.1rem;background:rgba(0,0,0,.025);border-radius:8px;min-height:60px}
 .d-win-a{font-weight:700;color:#7ab0e0}
 .d-win-b{font-weight:700;color:var(--accent)}
 .d-tie{font-weight:700;color:var(--gold)}
@@ -140,6 +146,10 @@ footer a{color:var(--muted);text-decoration:underline}
 .ans-reveal{margin-top:.85rem;padding:.9rem 1.1rem;background:rgba(232,120,120,.07);
   border-radius:8px;font-size:.87rem;color:var(--sub);line-height:1.75}
 .ans-reveal strong{color:var(--text)}
+
+    .site-header a{color:rgba(255,255,255,.85) !important;border-color:rgba(255,255,255,.3) !important;}
+    .site-header a:hover{color:#fff !important;border-color:#fff !important;}
+    .site-header span{color:rgba(255,255,255,.65) !important;}
 </style>
 </head>
 <body>

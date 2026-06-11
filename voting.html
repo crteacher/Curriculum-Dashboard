@@ -5,18 +5,23 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Voting Theory — Mr. Halverson</title>
 <style>
-:root{
-  --bg:#0c0f14;--card:#141820;--border:#1e2530;
-  --accent:#5bc8d4;--accent2:#3aa8b4;
-  --text:#dde4ec;--muted:#6a7a8e;--sub:#8a9ab0;
-  --gold:#f0c060;
-}
+    :root {
+      --bg: #f9f7f3;
+      --card: #ffffff;
+      --border: #e4e0d8;
+      --accent: #6b1a26;
+      --accent2: #8b2533;
+      --text: #1a1614;
+      --muted: #7a7570;
+      --sub: #5a5550;
+      --gold: #8b6914;
+    }
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);
   min-height:100vh;line-height:1.6}
 
 /* ── Header ──────────────────────────────── */
-.site-header{background:#0a0c10;border-bottom:1px solid var(--border);
+.site-header{background:#6b1a26;border-bottom:1px solid rgba(255,255,255,.15);
   padding:.9rem 2rem;display:flex;align-items:center;gap:1rem}
 .site-header a{font-size:.78rem;color:var(--muted);text-decoration:none;
   border:1px solid var(--border);border-radius:20px;padding:.25rem .75rem;
@@ -45,14 +50,14 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .sec-header{width:100%;background:none;border:none;padding:1.1rem 1.4rem;
   display:flex;align-items:center;gap:.9rem;cursor:pointer;text-align:left;
   transition:background .15s}
-.sec-header:hover{background:rgba(255,255,255,.03)}
+.sec-header:hover{background:rgba(0,0,0,.025)}
 .sec-num{font-size:.68rem;font-weight:800;letter-spacing:.1em;color:var(--muted);
   text-transform:uppercase;min-width:1.8rem}
 .sec-title{font-size:1rem;font-weight:700;color:var(--text);flex:1}
 .sec-tag{font-size:.6rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;
   padding:.18rem .55rem;border-radius:999px;white-space:nowrap}
 .tag-gold{background:rgba(240,192,96,.15);color:var(--gold)}
-.tag-teal{background:rgba(91,200,212,.12);color:var(--accent)}
+.tag-teal{background:rgba(107,26,38,.07);color:#6b1a26}
 .sec-chevron{font-size:.7rem;color:var(--muted);transition:transform .22s;margin-left:.5rem}
 .section-item.open .sec-chevron{transform:rotate(180deg)}
 .sec-body{display:none;padding:0 1.4rem 1.4rem;border-top:1px solid var(--border)}
@@ -61,7 +66,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 /* ── Body content ─────────────────────────── */
 .concept{font-size:.93rem;color:var(--sub);margin-top:1rem;line-height:1.65}
 .concept strong{color:var(--text)}
-.vocab{margin:1.1rem 0;padding:.85rem 1rem;background:rgba(255,255,255,.03);
+.vocab{margin:1.1rem 0;padding:.85rem 1rem;background:rgba(0,0,0,.025);
   border-radius:8px;font-size:.84rem}
 .vocab dt{font-weight:700;color:var(--accent);display:inline}
 .vocab dd{display:inline;color:var(--sub);margin:0 0 .4rem 0}
@@ -80,7 +85,7 @@ dl div{margin-bottom:.35rem}
 .result{margin-top:.9rem;padding:.75rem 1rem;background:rgba(91,200,212,.08);
   border-radius:8px;font-size:.88rem;color:var(--sub)}
 .result strong{color:var(--accent)}
-.think{margin-top:.9rem;padding:.75rem 1rem;background:rgba(255,255,255,.03);
+.think{margin-top:.9rem;padding:.75rem 1rem;background:rgba(0,0,0,.025);
   border-radius:8px;font-size:.83rem;color:var(--muted);font-style:italic;
   border-left:2px solid var(--border)}
 .think strong{color:var(--sub);font-style:normal}
@@ -90,7 +95,7 @@ dl div{margin-bottom:.35rem}
 .arrow-box strong{color:var(--gold)}
 
 /* ── STL section ──────────────────────────── */
-.stl-box{margin-top:1rem;padding:1rem 1.2rem;background:rgba(255,255,255,.03);
+.stl-box{margin-top:1rem;padding:1rem 1.2rem;background:rgba(0,0,0,.025);
   border-radius:8px;font-size:.88rem;color:var(--sub);line-height:1.6}
 .stl-box strong{color:var(--text)}
 
@@ -113,6 +118,10 @@ footer a{color:var(--muted);text-decoration:underline}
 .win{color:var(--accent);font-weight:700}
 .violation{color:#f07070;font-weight:700}
 .ok{color:#70c070;font-weight:700}
+
+    .site-header a{color:rgba(255,255,255,.85) !important;border-color:rgba(255,255,255,.3) !important;}
+    .site-header a:hover{color:#fff !important;border-color:#fff !important;}
+    .site-header span{color:rgba(255,255,255,.65) !important;}
 </style>
 </head>
 <body>
@@ -520,24 +529,3 @@ footer a{color:var(--muted);text-decoration:underline}
   </div>
 
 </div><!-- /practice sections -->
-
-<footer>
-  <a href="./index.html">← Back to Home</a>
-  &nbsp;·&nbsp;
-  <a href="./gerry.html">Gerrymandering →</a>
-</footer>
-
-<script>
-function toggle(id) {
-  document.getElementById(id).classList.toggle('open');
-}
-function showAns(id) {
-  const el = document.getElementById(id);
-  const btn = el.previousElementSibling;
-  const visible = el.style.display !== 'none';
-  el.style.display = visible ? 'none' : 'block';
-  btn.textContent = visible ? 'Show Answer ▾' : 'Hide Answer ▴';
-}
-</script>
-</body>
-</html>
