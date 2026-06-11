@@ -56,6 +56,7 @@ details[open] .chevron{transform:rotate(90deg)}
 .grm-value{font-size:.875rem;line-height:1.7}
 .grm-value .katex-display{margin:.35rem 0}
 .ex-block{margin:.2rem 0 .45rem;padding:.4rem .65rem;background:#f5f3ef;border-radius:6px;border:1px solid #e4e0d8}
+.ex-technique{display:block;font-size:.72rem;font-weight:600;color:#8b6914;letter-spacing:.04em;text-transform:uppercase;margin-bottom:.18rem;opacity:.85}
 .ex-prob{display:block;font-size:.87rem}
 .ex-ans{display:block;font-size:.8rem;color:#7a7570;margin-top:.2rem}
 .do-now-link{display:inline-block;padding:.3rem .85rem;border-radius:16px;font-size:.78rem;font-weight:600;text-decoration:none;border:1px solid;transition:all .15s}
@@ -120,11 +121,14 @@ function renderMath(text){
 }
 function mEl(t){const s=document.createElement('span');s.innerHTML=renderMath(t||'—');return s.outerHTML;}
 function grm(label,val){return`<div class="grm-row"><div class="grm-label">${label}</div><div class="grm-value">${val}</div></div>`;}
-function exBlock(p,a){return`<div class="ex-block"><span class="ex-prob">${mEl(p)}</span><span class="ex-ans">→ ${mEl(a)}</span></div>`;}
-function exBlocks(arr){return(arr||[]).map(e=>exBlock(e.problem,e.answer)).join('');}
+function exBlock(p,a,tech){
+  const techHtml=tech?`<span class="ex-technique">⚑ ${tech}</span>`:'';
+  return`<div class="ex-block">${techHtml}<span class="ex-prob">${mEl(p)}</span><span class="ex-ans">→ ${mEl(a)}</span></div>`;
+}
+function exBlocks(arr){return(arr||[]).map(e=>exBlock(e.problem,e.answer,e.technique)).join('');}
 function pracLink(course,sec){
   if(!sec.hasPractice||!sec.practiceFile)return'';
-  const folder=course==='ca'?'./PreCalc':'./C2';
+  const folder=course==='ca'?'./College%20Algebra':'./Calc%202';
   return`<br><a href="${folder}/${sec.practiceFile}.html" class="prac-link" target="_blank">📄 Practice Worksheet</a>`;
 }
 
@@ -134,11 +138,18 @@ function buildLessonCard(course,sec,dayNum,isOpen){
   let body='';
   body+=grm('SWBAT',mEl(sec.swbat||'—'));
   body+=grm('DO NOW',`<a href="${doNow}" class="do-now-link ${course}" target="_blank">Open Do Now →</a>`);
+  // I Do: first 2 worked examples — teacher-led lecture demos
   const iDo=we.slice(0,2); if(iDo.length)body+=grm('I Do',exBlocks(iDo));
+  // We Do: next 2 worked examples — further into notes, guided together
   const weDo=we.slice(2,4); if(weDo.length)body+=grm('We Do',exBlocks(weDo));
-  const ydt=pp.slice(0,2); if(ydt.length)body+=grm('You Do (Together)',exBlocks(ydt));
-  const yda=pp.slice(2,4),pl=pracLink(course,sec);
-  if(yda.length||pl)body+=grm('You Do (Alone)',exBlocks(yda)+pl);
+  // You Do (Together): open the practice set for this section
+  const practiceSetLink=sec.reviewProblems?.length
+    ?`<a href="./review.html?section=${sec.id}" class="do-now-link ${course}" target="_blank">Open Practice Set →</a> `
+    :'';
+  body+=grm('You Do (Together)',practiceSetLink||'<span style="color:#7a7570;font-size:.83rem">No review set yet for this section.</span>');
+  // You Do (Alone): homework — practice worksheet if available
+  const pl=pracLink(course,sec);
+  body+=grm('You Do (Alone)',`<span style="color:#7a7570;font-size:.83rem">Assigned homework — MyOpenMath.</span>${pl?'<br>'+pl:''}`);
   if(sec.exitTicket)body+=grm('Exit Ticket',mEl(sec.exitTicket));
   return`<details class="lesson-card ${course}"${isOpen?' open':''}><summary class="lesson-summary"><span class="day-badge ${course}">Day ${dayNum}</span><span class="lesson-title">§${sec.section} ${sec.title}</span><span class="lesson-date">Fall 2026</span><span class="chevron">›</span></summary><div class="lesson-body">${body}</div></details>`;
 }

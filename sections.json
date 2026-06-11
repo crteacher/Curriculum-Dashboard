@@ -13,19 +13,23 @@
       "workedExamples": [
         {
           "problem": "Solve: $0.5(x+3)=7$",
-          "answer": "$x+3=14 \\Rightarrow x=11$"
+          "answer": "$x+3=14 \\Rightarrow x=11$",
+          "technique": "Clear decimals — multiply both sides by 2 first"
         },
         {
           "problem": "Solve: $3x+4=2x-4$",
-          "answer": "$x+4=-4 \\Rightarrow x=-8$"
+          "answer": "$x+4=-4 \\Rightarrow x=-8$",
+          "technique": "Collect x-terms on one side, constants on the other"
         },
         {
           "problem": "Solve: $2(x+5)-x=13$",
-          "answer": "$2x+10-x=13 \\Rightarrow x+10=13 \\Rightarrow x=3$"
+          "answer": "$2x+10-x=13 \\Rightarrow x+10=13 \\Rightarrow x=3$",
+          "technique": "Distribute first, then combine like terms"
         },
         {
           "problem": "Solve: $5x-7=5x+2$",
-          "answer": "$-7=2$ &mdash; FALSE &rarr; No solution"
+          "answer": "$-7=2$ &mdash; FALSE &rarr; No solution",
+          "technique": "Variables cancel on both sides → check for contradiction"
         }
       ],
       "practiceProblems": [
@@ -77,19 +81,23 @@
       "workedExamples": [
         {
           "problem": "Let $f(x) = 3x + 5$. Find $f(4)$.",
-          "answer": "$f(4) = 3(4) + 5 = 17$"
+          "answer": "$f(4) = 3(4) + 5 = 17$",
+          "technique": "Direct substitution — evaluate the function at a specific input"
         },
         {
           "problem": "Is $(3, 8)$ a solution to $y = 2x + 2$?",
-          "answer": "$2(3) + 2 = 8$ &#x2713; &mdash; Yes"
+          "answer": "$2(3) + 2 = 8$ &#x2713; &mdash; Yes",
+          "technique": "Plug in both coordinates, verify both sides equal"
         },
         {
           "problem": "Complete the ordered pair $(4, \\text{__})$ for $y = 3x - 1$.",
-          "answer": "$y = 3(4) - 1 = 11 \\Rightarrow (4, 11)$"
+          "answer": "$y = 3(4) - 1 = 11 \\Rightarrow (4, 11)$",
+          "technique": "Substitute the known coordinate, solve for the unknown"
         },
         {
           "problem": "Find x where $f(x) = 3x + 1$ and $g(x) = x + 7$ intersect.",
-          "answer": "$3x + 1 = x + 7 \\Rightarrow 2x = 6 \\Rightarrow x = 3$"
+          "answer": "$3x + 1 = x + 7 \\Rightarrow 2x = 6 \\Rightarrow x = 3$",
+          "technique": "Set functions equal to each other — intersection = shared solution"
         }
       ],
       "practiceProblems": [
@@ -141,19 +149,23 @@
       "workedExamples": [
         {
           "problem": "Solve $3x + 2 < 14$ and write in interval notation.",
-          "answer": "$3x < 12 \\Rightarrow x < 4 \\Rightarrow (-\\infty, 4)$"
+          "answer": "$3x < 12 \\Rightarrow x < 4 \\Rightarrow (-\\infty, 4)$",
+          "technique": "Solve like an equation, then write the solution in interval notation"
         },
         {
           "problem": "Solve $-2x + 5 > 1$ and write in interval notation.",
-          "answer": "$-2x > -4 \\Rightarrow x < 2$ (flip!) $\\Rightarrow (-\\infty, 2)$"
+          "answer": "$-2x > -4 \\Rightarrow x < 2$ (flip!) $\\Rightarrow (-\\infty, 2)$",
+          "technique": "Dividing or multiplying by a negative — flip the inequality sign"
         },
         {
           "problem": "Solve $4x + 1 \\geq 2x + 7$ and write in interval notation.",
-          "answer": "$2x \\geq 6 \\Rightarrow x \\geq 3 \\Rightarrow [3, \\infty)$"
+          "answer": "$2x \\geq 6 \\Rightarrow x \\geq 3 \\Rightarrow [3, \\infty)$",
+          "technique": "Same steps as solving equations until the variable is isolated"
         },
         {
           "problem": "Solve $1 < 2x - 3 < 9$ and write in interval notation.",
-          "answer": "$4 < 2x < 12 \\Rightarrow 2 < x < 6 \\Rightarrow (2, 6)$"
+          "answer": "$4 < 2x < 12 \\Rightarrow 2 < x < 6 \\Rightarrow (2, 6)$",
+          "technique": "Compound inequality: apply each operation to all three parts simultaneously"
         }
       ],
       "practiceProblems": [
@@ -3288,19 +3300,23 @@
       "workedExamples": [
         {
           "problem": "Evaluate $\\int 2x(x^2+1)^4\\,dx$",
-          "answer": "Let $u=x^2+1$, $du=2x\\,dx$.$=\\int u^4\\,du=\\dfrac{u^5}{5}+C=\\dfrac{(x^2+1)^5}{5}+C$"
+          "answer": "Let $u=x^2+1$, $du=2x\\,dx$.$=\\int u^4\\,du=\\dfrac{u^5}{5}+C=\\dfrac{(x^2+1)^5}{5}+C$",
+          "technique": "Spot the inner function — set u = inner, compute du"
         },
         {
           "problem": "Evaluate $\\int \\cos(3x)\\,dx$",
-          "answer": "Let $u=3x$, $du=3\\,dx$, so $dx=\\frac{du}{3}$.$=\\frac{1}{3}\\int\\cos u\\,du=\\frac{\\sin(3x)}{3}+C$"
+          "answer": "Let $u=3x$, $du=3\\,dx$, so $dx=\\frac{du}{3}$.$=\\frac{1}{3}\\int\\cos u\\,du=\\frac{\\sin(3x)}{3}+C$",
+          "technique": "u = argument of trig; factor out the constant to match du"
         },
         {
           "problem": "Evaluate $\\int x\\,e^{x^2}\\,dx$",
-          "answer": "Let $u=x^2$, $du=2x\\,dx$.$=\\frac{1}{2}\\int e^u\\,du=\\frac{e^{x^2}}{2}+C$"
+          "answer": "Let $u=x^2$, $du=2x\\,dx$.$=\\frac{1}{2}\\int e^u\\,du=\\frac{e^{x^2}}{2}+C$",
+          "technique": "x·dx hints at u = x² (since du = 2x dx)"
         },
         {
           "problem": "Evaluate $\\int_0^1 2x\\sqrt{x^2+1}\\,dx$",
-          "answer": "Let $u=x^2+1$; when $x=0$, $u=1$; when $x=1$, $u=2$.$=\\int_1^2 \\sqrt{u}\\,du=\\left[\\frac{2}{3}u^{3/2}\\right]_1^2=\\frac{2}{3}(2\\sqrt{2}-1)$"
+          "answer": "Let $u=x^2+1$; when $x=0$, $u=1$; when $x=1$, $u=2$.$=\\int_1^2 \\sqrt{u}\\,du=\\left[\\frac{2}{3}u^{3/2}\\right]_1^2=\\frac{2}{3}(2\\sqrt{2}-1)$",
+          "technique": "Definite integral: convert limits to u-values, avoid back-substituting"
         }
       ],
       "practiceProblems": [
@@ -3354,19 +3370,23 @@
       "workedExamples": [
         {
           "problem": "$\\int x\\sqrt{x+1}\\,dx$",
-          "answer": "Let $u=x+1$, $x=u-1$, $dx=du$.$=\\int(u-1)u^{1/2}\\,du=\\int(u^{3/2}-u^{1/2})\\,du$$=\\dfrac{2u^{5/2}}{5}-\\dfrac{2u^{3/2}}{3}+C=\\dfrac{2(x+1)^{5/2}}{5}-\\dfrac{2(x+1)^{3/2}}{3}+C$"
+          "answer": "Let $u=x+1$, $x=u-1$, $dx=du$.$=\\int(u-1)u^{1/2}\\,du=\\int(u^{3/2}-u^{1/2})\\,du$$=\\dfrac{2u^{5/2}}{5}-\\dfrac{2u^{3/2}}{3}+C=\\dfrac{2(x+1)^{5/2}}{5}-\\dfrac{2(x+1)^{3/2}}{3}+C$",
+          "technique": "u = linear expression inside root; express leftover x in terms of u"
         },
         {
           "problem": "$\\int \\dfrac{x}{\\sqrt{x-3}}\\,dx$",
-          "answer": "Let $u=x-3$, $x=u+3$.$=\\int\\dfrac{u+3}{\\sqrt{u}}\\,du=\\int(u^{1/2}+3u^{-1/2})\\,du$$=\\dfrac{2u^{3/2}}{3}+6u^{1/2}+C$, back-sub $u=x-3$."
+          "answer": "Let $u=x-3$, $x=u+3$.$=\\int\\dfrac{u+3}{\\sqrt{u}}\\,du=\\int(u^{1/2}+3u^{-1/2})\\,du$$=\\dfrac{2u^{3/2}}{3}+6u^{1/2}+C$, back-sub $u=x-3$.",
+          "technique": "u = denominator expression; rewrite x = u + constant in numerator"
         },
         {
           "problem": "$\\int\\dfrac{e^x}{1+e^{2x}}\\,dx$",
-          "answer": "Let $u=e^x$, $du=e^x\\,dx$.$=\\int\\dfrac{du}{1+u^2}=\\arctan(e^x)+C$"
+          "answer": "Let $u=e^x$, $du=e^x\\,dx$.$=\\int\\dfrac{du}{1+u^2}=\\arctan(e^x)+C$",
+          "technique": "After substitution, recognize the standard arctan integral form"
         },
         {
           "problem": "$\\int_0^3 x\\sqrt{9-x^2}\\,dx$",
-          "answer": "Let $u=9-x^2$, $du=-2x\\,dx$; limits: $u(0)=9$, $u(3)=0$.$=-\\frac{1}{2}\\int_9^0\\sqrt{u}\\,du=\\frac{1}{2}\\int_0^9 u^{1/2}\\,du=\\left[\\frac{u^{3/2}}{3}\\right]_0^9=9$"
+          "answer": "Let $u=9-x^2$, $du=-2x\\,dx$; limits: $u(0)=9$, $u(3)=0$.$=-\\frac{1}{2}\\int_9^0\\sqrt{u}\\,du=\\frac{1}{2}\\int_0^9 u^{1/2}\\,du=\\left[\\frac{u^{3/2}}{3}\\right]_0^9=9$",
+          "technique": "Change limits when substituting — no need to back-substitute"
         }
       ],
       "practiceProblems": [
@@ -3430,19 +3450,23 @@
       "workedExamples": [
         {
           "problem": "$\\int \\sin^2 x\\,dx$",
-          "answer": "$=\\int\\dfrac{1-\\cos 2x}{2}\\,dx=\\dfrac{x}{2}-\\dfrac{\\sin 2x}{4}+C$"
+          "answer": "$=\\int\\dfrac{1-\\cos 2x}{2}\\,dx=\\dfrac{x}{2}-\\dfrac{\\sin 2x}{4}+C$",
+          "technique": "Even power of sin → use the half-angle identity sin²x = (1−cos 2x)/2"
         },
         {
           "problem": "$\\int \\sin^3 x\\,dx$",
-          "answer": "$=\\int \\sin^2 x\\cdot\\sin x\\,dx=\\int(1-\\cos^2 x)\\sin x\\,dx$Let $u=\\cos x$: $=-\\int(1-u^2)\\,du=-u+\\dfrac{u^3}{3}+C=-\\cos x+\\dfrac{\\cos^3 x}{3}+C$"
+          "answer": "$=\\int \\sin^2 x\\cdot\\sin x\\,dx=\\int(1-\\cos^2 x)\\sin x\\,dx$Let $u=\\cos x$: $=-\\int(1-u^2)\\,du=-u+\\dfrac{u^3}{3}+C=-\\cos x+\\dfrac{\\cos^3 x}{3}+C$",
+          "technique": "Odd power → peel one sin factor, apply sin²x = 1−cos²x, then u = cos x"
         },
         {
           "problem": "$\\int \\sin^2 x\\cos^3 x\\,dx$",
-          "answer": "Odd power of $\\cos$: $u=\\sin x$, $du=\\cos x\\,dx$.$=\\int u^2(1-u^2)\\,du=\\dfrac{u^3}{3}-\\dfrac{u^5}{5}+C=\\dfrac{\\sin^3 x}{3}-\\dfrac{\\sin^5 x}{5}+C$"
+          "answer": "Odd power of $\\cos$: $u=\\sin x$, $du=\\cos x\\,dx$.$=\\int u^2(1-u^2)\\,du=\\dfrac{u^3}{3}-\\dfrac{u^5}{5}+C=\\dfrac{\\sin^3 x}{3}-\\dfrac{\\sin^5 x}{5}+C$",
+          "technique": "Mixed powers with odd cos → u = sin x; peel one cos for du"
         },
         {
           "problem": "$\\int \\sin^2 x\\cos^2 x\\,dx$",
-          "answer": "Use $\\sin x\\cos x=\\frac{\\sin 2x}{2}$:$=\\int\\dfrac{\\sin^2 2x}{4}\\,dx=\\int\\dfrac{1-\\cos 4x}{8}\\,dx=\\dfrac{x}{8}-\\dfrac{\\sin 4x}{32}+C$"
+          "answer": "Use $\\sin x\\cos x=\\frac{\\sin 2x}{2}$:$=\\int\\dfrac{\\sin^2 2x}{4}\\,dx=\\int\\dfrac{1-\\cos 4x}{8}\\,dx=\\dfrac{x}{8}-\\dfrac{\\sin 4x}{32}+C$",
+          "technique": "Both even → convert both using half-angle, use double-angle product identity"
         }
       ],
       "practiceProblems": [
@@ -3497,19 +3521,23 @@
       "workedExamples": [
         {
           "problem": "$\\int\\dfrac{dx}{4+x^2}$",
-          "answer": "$a=2$: $\\dfrac{1}{2}\\arctan\\dfrac{x}{2}+C$"
+          "answer": "$a=2$: $\\dfrac{1}{2}\\arctan\\dfrac{x}{2}+C$",
+          "technique": "Match 1/(a²+x²) → arctan form; identify a directly"
         },
         {
           "problem": "$\\int\\dfrac{dx}{9+4x^2}$",
-          "answer": "Let $u=2x$, $du=2\\,dx$: $=\\dfrac{1}{2}\\int\\dfrac{du}{9+u^2}=\\dfrac{1}{6}\\arctan\\dfrac{2x}{3}+C$"
+          "answer": "Let $u=2x$, $du=2\\,dx$: $=\\dfrac{1}{2}\\int\\dfrac{du}{9+u^2}=\\dfrac{1}{6}\\arctan\\dfrac{2x}{3}+C$",
+          "technique": "Coefficient on x² — factor out or substitute u = kx to normalize"
         },
         {
           "problem": "$\\int\\dfrac{dx}{\\sqrt{16-x^2}}$",
-          "answer": "$a=4$: $\\arcsin\\dfrac{x}{4}+C$"
+          "answer": "$a=4$: $\\arcsin\\dfrac{x}{4}+C$",
+          "technique": "Match 1/√(a²−x²) → arcsin form; identify a directly"
         },
         {
           "problem": "$\\int\\dfrac{dx}{x^2+6x+13}$",
-          "answer": "$(x+3)^2+4$: let $u=x+3$, $a=2$.$=\\dfrac{1}{2}\\arctan\\dfrac{x+3}{2}+C$"
+          "answer": "$(x+3)^2+4$: let $u=x+3$, $a=2$.$=\\dfrac{1}{2}\\arctan\\dfrac{x+3}{2}+C$",
+          "technique": "Complete the square in denominator/radicand to expose standard form"
         }
       ],
       "practiceProblems": [
@@ -3564,19 +3592,23 @@
       "workedExamples": [
         {
           "problem": "Find the area between $y=x^2$ and $y=x+2$.",
-          "answer": "Intersections: $x^2=x+2\\Rightarrow x=-1,2$.$A=\\int_{-1}^2[(x+2)-x^2]\\,dx=\\left[\\dfrac{x^2}{2}+2x-\\dfrac{x^3}{3}\\right]_{-1}^2=\\dfrac{9}{2}$"
+          "answer": "Intersections: $x^2=x+2\\Rightarrow x=-1,2$.$A=\\int_{-1}^2[(x+2)-x^2]\\,dx=\\left[\\dfrac{x^2}{2}+2x-\\dfrac{x^3}{3}\\right]_{-1}^2=\\dfrac{9}{2}$",
+          "technique": "Find intersections first; integrate (top − bottom) between them"
         },
         {
           "problem": "Area between $y=4-x^2$ and $y=0$.",
-          "answer": "$A=\\int_{-2}^2(4-x^2)\\,dx=\\left[4x-\\dfrac{x^3}{3}\\right]_{-2}^2=\\dfrac{32}{3}$"
+          "answer": "$A=\\int_{-2}^2(4-x^2)\\,dx=\\left[4x-\\dfrac{x^3}{3}\\right]_{-2}^2=\\dfrac{32}{3}$",
+          "technique": "One boundary is x-axis — area is just ∫f(x) dx over the interval"
         },
         {
           "problem": "Area between $y=\\sin x$ and $y=\\cos x$ on $[0,\\pi/2]$.",
-          "answer": "They cross at $x=\\pi/4$.$A=\\int_0^{\\pi/4}(\\cos x-\\sin x)\\,dx+\\int_{\\pi/4}^{\\pi/2}(\\sin x-\\cos x)\\,dx=2(\\sqrt{2}-1)$"
+          "answer": "They cross at $x=\\pi/4$.$A=\\int_0^{\\pi/4}(\\cos x-\\sin x)\\,dx+\\int_{\\pi/4}^{\\pi/2}(\\sin x-\\cos x)\\,dx=2(\\sqrt{2}-1)$",
+          "technique": "Curves cross: find the crossing point, split integral, add absolute values"
         },
         {
           "problem": "Find the area between $x=y^2$ and $x=2-y$.",
-          "answer": "Intersections: $y^2=2-y\\Rightarrow y=-2,1$.$A=\\int_{-2}^1[(2-y)-y^2]\\,dy=\\dfrac{9}{2}$"
+          "answer": "Intersections: $y^2=2-y\\Rightarrow y=-2,1$.$A=\\int_{-2}^1[(2-y)-y^2]\\,dy=\\dfrac{9}{2}$",
+          "technique": "Sideways region: integrate with respect to y using x = (right) − (left)"
         }
       ],
       "practiceProblems": [
@@ -3628,19 +3660,23 @@
       "workedExamples": [
         {
           "problem": "Rotate $y=\\sqrt{x}$ on $[0,4]$ about the $x$-axis.",
-          "answer": "$V=\\pi\\int_0^4 x\\,dx=\\pi\\left[\\dfrac{x^2}{2}\\right]_0^4=8\\pi$"
+          "answer": "$V=\\pi\\int_0^4 x\\,dx=\\pi\\left[\\dfrac{x^2}{2}\\right]_0^4=8\\pi$",
+          "technique": "Disk method: V = π∫[f(x)]² dx — one solid boundary only"
         },
         {
           "problem": "Rotate the region between $y=x$ and $y=x^2$ about the $x$-axis.",
-          "answer": "$V=\\pi\\int_0^1(x^2-x^4)\\,dx=\\pi\\left[\\dfrac{x^3}{3}-\\dfrac{x^5}{5}\\right]_0^1=\\dfrac{2\\pi}{15}$"
+          "answer": "$V=\\pi\\int_0^1(x^2-x^4)\\,dx=\\pi\\left[\\dfrac{x^3}{3}-\\dfrac{x^5}{5}\\right]_0^1=\\dfrac{2\\pi}{15}$",
+          "technique": "Washer: V = π∫(R² − r²) dx — R outer radius, r inner radius"
         },
         {
           "problem": "Rotate $y=x^2$ on $[0,2]$ about the $y$-axis.",
-          "answer": "Express as $x=\\sqrt{y}$, $y\\in[0,4]$.$V=\\pi\\int_0^4 y\\,dy=8\\pi$"
+          "answer": "Express as $x=\\sqrt{y}$, $y\\in[0,4]$.$V=\\pi\\int_0^4 y\\,dy=8\\pi$",
+          "technique": "Rotation about y-axis: rewrite function as x = g(y), integrate w.r.t. y"
         },
         {
           "problem": "Base is region between $y=1-x^2$ and $x$-axis; cross sections perpendicular to $x$-axis are squares.",
-          "answer": "$s=(1-x^2)$; $V=\\int_{-1}^1(1-x^2)^2\\,dx=\\dfrac{16}{15}$"
+          "answer": "$s=(1-x^2)$; $V=\\int_{-1}^1(1-x^2)^2\\,dx=\\dfrac{16}{15}$",
+          "technique": "Cross-section method: express cross-sectional area A(x), then V = ∫A(x) dx"
         }
       ],
       "practiceProblems": [
@@ -3692,19 +3728,23 @@
       "workedExamples": [
         {
           "problem": "Rotate $y=x^2$ and $y=1$ about $y=1$ on the region they enclose.",
-          "answer": "$R=1-x^2$, $r=0$; intersections at $x=\\pm1$.$V=\\pi\\int_{-1}^1(1-x^2)^2\\,dx=\\dfrac{16\\pi}{15}$"
+          "answer": "$R=1-x^2$, $r=0$; intersections at $x=\\pm1$.$V=\\pi\\int_{-1}^1(1-x^2)^2\\,dx=\\dfrac{16\\pi}{15}$",
+          "technique": "Axis is a line (not coordinate axis) — measure R and r as distances from that line"
         },
         {
           "problem": "Rotate $y=\\sqrt{x}$ on $[0,4]$ about $y=-1$.",
-          "answer": "$R=\\sqrt{x}+1$; $V=\\pi\\int_0^4(\\sqrt{x}+1)^2\\,dx=\\pi\\int_0^4(x+2\\sqrt{x}+1)\\,dx=\\dfrac{136\\pi}{3}$"
+          "answer": "$R=\\sqrt{x}+1$; $V=\\pi\\int_0^4(\\sqrt{x}+1)^2\\,dx=\\pi\\int_0^4(x+2\\sqrt{x}+1)\\,dx=\\dfrac{136\\pi}{3}$",
+          "technique": "Axis below x-axis: each radius = f(x) − (axis value) to get a positive length"
         },
         {
           "problem": "Rotate $y=x^2$ and $y=x$ about $x=3$.",
-          "answer": "Integrate w.r.t. $y$; $R=3-y$, $r=3-\\sqrt{y}$.$V=\\pi\\int_0^1[(3-y)^2-(3-\\sqrt{y})^2]\\,dy=\\dfrac{\\pi}{2}$"
+          "answer": "Integrate w.r.t. $y$; $R=3-y$, $r=3-\\sqrt{y}$.$V=\\pi\\int_0^1[(3-y)^2-(3-\\sqrt{y})^2]\\,dy=\\dfrac{\\pi}{2}$",
+          "technique": "Vertical axis: integrate w.r.t. y; radius = |axis x − curve x|"
         },
         {
           "problem": "Rotate region between $y=x$ and $y=x^2$ about $y=2$.",
-          "answer": "$R=2-x^2$, $r=2-x$; $[0,1]$.$V=\\pi\\int_0^1[(2-x^2)^2-(2-x)^2]\\,dx=\\dfrac{\\pi}{2}$"
+          "answer": "$R=2-x^2$, $r=2-x$; $[0,1]$.$V=\\pi\\int_0^1[(2-x^2)^2-(2-x)^2]\\,dx=\\dfrac{\\pi}{2}$",
+          "technique": "Identify which function is farther from the axis — that's the outer radius R"
         }
       ],
       "practiceProblems": [
@@ -3756,19 +3796,23 @@
       "workedExamples": [
         {
           "problem": "Rotate $y=x^2$ on $[0,2]$ about the $y$-axis.",
-          "answer": "$V=2\\pi\\int_0^2 x\\cdot x^2\\,dx=2\\pi\\int_0^2 x^3\\,dx=2\\pi\\cdot 4=8\\pi$"
+          "answer": "$V=2\\pi\\int_0^2 x\\cdot x^2\\,dx=2\\pi\\int_0^2 x^3\\,dx=2\\pi\\cdot 4=8\\pi$",
+          "technique": "Shell: V = 2π∫ x·f(x) dx — shell radius is x, height is f(x)"
         },
         {
           "problem": "Rotate $y=\\sqrt{x}$ on $[0,1]$ about $y$-axis.",
-          "answer": "$V=2\\pi\\int_0^1 x\\sqrt{x}\\,dx=2\\pi\\int_0^1 x^{3/2}\\,dx=2\\pi\\cdot\\dfrac{2}{5}=\\dfrac{4\\pi}{5}$"
+          "answer": "$V=2\\pi\\int_0^1 x\\sqrt{x}\\,dx=2\\pi\\int_0^1 x^{3/2}\\,dx=2\\pi\\cdot\\dfrac{2}{5}=\\dfrac{4\\pi}{5}$",
+          "technique": "Shell about y-axis from x-integration is often simpler than rewriting as x = g(y)"
         },
         {
           "problem": "Rotate $y=x(2-x)$ about $x=3$ on $[0,2]$.",
-          "answer": "$V=2\\pi\\int_0^2(3-x)\\cdot x(2-x)\\,dx=2\\pi\\int_0^2(6x-5x^2+x^3)\\,dx=\\dfrac{8\\pi}{3}$"
+          "answer": "$V=2\\pi\\int_0^2(3-x)\\cdot x(2-x)\\,dx=2\\pi\\int_0^2(6x-5x^2+x^3)\\,dx=\\dfrac{8\\pi}{3}$",
+          "technique": "Shifted axis x = a: shell radius becomes (a − x); adjust sign so radius stays positive"
         },
         {
           "problem": "Rotate region between $y=x$ and $y=x^2$ about $y$-axis.",
-          "answer": "$V=2\\pi\\int_0^1 x(x-x^2)\\,dx=2\\pi\\int_0^1(x^2-x^3)\\,dx=\\dfrac{\\pi}{6}$"
+          "answer": "$V=2\\pi\\int_0^1 x(x-x^2)\\,dx=2\\pi\\int_0^1(x^2-x^3)\\,dx=\\dfrac{\\pi}{6}$",
+          "technique": "Shell between curves: shell height = f(x) − g(x), radius still = x (or shift)"
         }
       ],
       "practiceProblems": [
