@@ -169,12 +169,12 @@ Promise.all([
     }
   }
 
-  const caCompleted = state.collegeAlgebra?.completedSections || [];
-  const c2Completed = state.calc2?.completedSections || [];
+  const caCompleted = state.courses?.collegeAlgebra?.completedSections || [];
+  const c2Completed = state.courses?.calc2?.completedSections || [];
 
   // Today = currentSection
-  fill(state.collegeAlgebra?.currentSection, 'caToday', false);
-  fill(state.calc2?.currentSection,          'c2Today', false);
+  fill(state.courses?.collegeAlgebra?.currentSection, 'caToday', false);
+  fill(state.courses?.calc2?.currentSection,          'c2Today', false);
 
   // Last class = last in completedSections
   fill(caCompleted[caCompleted.length-1], 'caLast', true);
