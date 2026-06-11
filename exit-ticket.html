@@ -41,23 +41,21 @@ header h1{font-size:1.2rem;font-weight:700;flex:1}
 <body>
 <header>
   <a href="./index.html" class="back">← Portal</a>
-  <h1>📝 Exit Ticket</h1>
+  <h1>↩ Last Class Exit Ticket</h1>
   <span class="date-badge" id="dateBadge"></span>
 </header>
 <div class="grid">
   <div class="card ca" id="caCard">
-    <div class="card-label">College Algebra</div>
+    <div class="card-label">College Algebra — Last Class</div>
     <div class="section-info loading" id="caSection">Loading…</div>
     <div class="question-box" id="caQ"><span class="loading">Loading…</span></div>
-    <button class="reveal-btn" id="caReveal" onclick="reveal('ca')" style="display:none">Show Answer</button>
-    <div class="answer-box" id="caAns"></div>
+    <div class="answer-box visible" id="caAns"></div>
   </div>
   <div class="card c2" id="c2Card">
-    <div class="card-label">Calculus 2</div>
+    <div class="card-label">Calculus 2 — Last Class</div>
     <div class="section-info loading" id="c2Section">Loading…</div>
     <div class="question-box" id="c2Q"><span class="loading">Loading…</span></div>
-    <button class="reveal-btn" id="c2Reveal" onclick="reveal('c2')" style="display:none">Show Answer</button>
-    <div class="answer-box" id="c2Ans"></div>
+    <div class="answer-box visible" id="c2Ans"></div>
   </div>
 </div>
 
@@ -82,15 +80,6 @@ function renderMath(text) {
     }
     return p;
   }).join('');
-}
-
-function reveal(course) {
-  const btn = document.getElementById(course + 'Reveal');
-  const box = document.getElementById(course + 'Ans');
-  box.classList.add('visible');
-  btn.textContent = 'Answer shown';
-  btn.classList.add('shown');
-  btn.disabled = true;
 }
 
 // ── Date display ───────────────────────────────────────────────────────────
@@ -132,19 +121,18 @@ Promise.all([
 
     if (sec.exitTicket) {
       qEl.innerHTML = renderMath(sec.exitTicket);
-      revBtn.style.display = 'inline-block';
-      if (sec.exitTicketAnswer) {
-        ansEl.innerHTML = '<div class="answer-label">Answer</div>' + renderMath(sec.exitTicketAnswer);
-      } else {
-        ansEl.innerHTML = '<div class="answer-label">Answer</div><span class="none-msg">No answer key available.</span>';
-      }
+      ansEl.innerHTML = '<div class="answer-label">Answer</div>' +
+        (sec.exitTicketAnswer ? renderMath(sec.exitTicketAnswer) : '<span class="none-msg">No answer key available.</span>');
     } else {
-      qEl.innerHTML = '<span class="none-msg">No exit ticket for this section yet.</span>';
+      qEl.innerHTML = '<span class="none-msg">No exit ticket recorded for this section.</span>';
     }
   }
 
-  fillCard('collegeAlgebra', 'ca', state.courses?.collegeAlgebra?.currentSection);
-  fillCard('calc2', 'c2', state.courses?.calc2?.currentSection);
+  // Show the LAST completed section (i.e. what students did previous class)
+  const caCompleted = state.courses?.collegeAlgebra?.completedSections || [];
+  const c2Completed = state.courses?.calc2?.completedSections || [];
+  fillCard('collegeAlgebra', 'ca', caCompleted[caCompleted.length - 1]);
+  fillCard('calc2', 'c2', c2Completed[c2Completed.length - 1]);
 
 }).catch(err => {
   console.error(err);
