@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Voting Theory — Mr. Halverson</title>
+<style>
+:root{
+  --bg:#0c0f14;--card:#141820;--border:#1e2530;
+  --accent:#5bc8d4;--accent2:#3aa8b4;
+  --text:#dde4ec;--muted:#6a7a8e;--sub:#8a9ab0;
+  --gold:#f0c060;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);
+  min-height:100vh;line-height:1.6}
+
+/* ── Header ──────────────────────────────── */
+.site-header{background:#0a0c10;border-bottom:1px solid var(--border);
+  padding:.9rem 2rem;display:flex;align-items:center;gap:1rem}
+.site-header a{font-size:.78rem;color:var(--muted);text-decoration:none;
+  border:1px solid var(--border);border-radius:20px;padding:.25rem .75rem;
+  transition:color .15s,border-color .15s}
+.site-header a:hover{color:var(--accent);border-color:var(--accent)}
+.site-header span{font-size:.78rem;color:var(--muted)}
+
+/* ── Hero ─────────────────────────────────── */
+.hero{padding:3.5rem 2rem 2.5rem;max-width:820px;margin:0 auto}
+.hero-tag{font-size:.68rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--accent);margin-bottom:1rem}
+.hero h1{font-size:2.4rem;font-weight:800;letter-spacing:-.025em;line-height:1.15;
+  margin-bottom:1rem}
+.hero h1 em{font-style:normal;color:var(--accent)}
+.hero-lead{font-size:1.05rem;color:var(--sub);line-height:1.65;max-width:640px}
+.hook-card{margin-top:1.8rem;background:var(--card);border:1px solid var(--border);
+  border-left:3px solid var(--accent);border-radius:0 10px 10px 0;
+  padding:1.1rem 1.4rem;font-size:.93rem;color:var(--sub);font-style:italic}
+.hook-card strong{color:var(--text);font-style:normal}
+
+/* ── Sections ─────────────────────────────── */
+.sections{max-width:820px;margin:0 auto;padding:0 2rem 4rem}
+.section-item{border:1px solid var(--border);border-radius:12px;
+  overflow:hidden;margin-bottom:.75rem;background:var(--card)}
+.section-item.featured{border-color:var(--gold)}
+.sec-header{width:100%;background:none;border:none;padding:1.1rem 1.4rem;
+  display:flex;align-items:center;gap:.9rem;cursor:pointer;text-align:left;
+  transition:background .15s}
+.sec-header:hover{background:rgba(255,255,255,.03)}
+.sec-num{font-size:.68rem;font-weight:800;letter-spacing:.1em;color:var(--muted);
+  text-transform:uppercase;min-width:1.8rem}
+.sec-title{font-size:1rem;font-weight:700;color:var(--text);flex:1}
+.sec-tag{font-size:.6rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;
+  padding:.18rem .55rem;border-radius:999px;white-space:nowrap}
+.tag-gold{background:rgba(240,192,96,.15);color:var(--gold)}
+.tag-teal{background:rgba(91,200,212,.12);color:var(--accent)}
+.sec-chevron{font-size:.7rem;color:var(--muted);transition:transform .22s;margin-left:.5rem}
+.section-item.open .sec-chevron{transform:rotate(180deg)}
+.sec-body{display:none;padding:0 1.4rem 1.4rem;border-top:1px solid var(--border)}
+.section-item.open .sec-body{display:block}
+
+/* ── Body content ─────────────────────────── */
+.concept{font-size:.93rem;color:var(--sub);margin-top:1rem;line-height:1.65}
+.concept strong{color:var(--text)}
+.vocab{margin:1.1rem 0;padding:.85rem 1rem;background:rgba(255,255,255,.03);
+  border-radius:8px;font-size:.84rem}
+.vocab dt{font-weight:700;color:var(--accent);display:inline}
+.vocab dd{display:inline;color:var(--sub);margin:0 0 .4rem 0}
+.vocab dt::after{content:' — '}
+dl{display:block}
+dl div{margin-bottom:.35rem}
+.example-hd{font-size:.7rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--muted);margin:1.2rem 0 .6rem}
+.pref-table{border-collapse:collapse;font-size:.84rem;width:auto;margin-bottom:1rem}
+.pref-table th{background:rgba(91,200,212,.12);color:var(--accent);
+  padding:.35rem .9rem;font-weight:700;text-align:center;
+  border:1px solid var(--border)}
+.pref-table td{padding:.3rem .9rem;border:1px solid var(--border);
+  text-align:center;color:var(--text)}
+.pref-table tr:hover td{background:rgba(255,255,255,.025)}
+.result{margin-top:.9rem;padding:.75rem 1rem;background:rgba(91,200,212,.08);
+  border-radius:8px;font-size:.88rem;color:var(--sub)}
+.result strong{color:var(--accent)}
+.think{margin-top:.9rem;padding:.75rem 1rem;background:rgba(255,255,255,.03);
+  border-radius:8px;font-size:.83rem;color:var(--muted);font-style:italic;
+  border-left:2px solid var(--border)}
+.think strong{color:var(--sub);font-style:normal}
+.arrow-box{margin-top:1rem;padding:1.1rem 1.3rem;background:rgba(240,192,96,.07);
+  border:1px solid rgba(240,192,96,.25);border-radius:10px;
+  font-size:.9rem;color:var(--sub);line-height:1.6}
+.arrow-box strong{color:var(--gold)}
+
+/* ── STL section ──────────────────────────── */
+.stl-box{margin-top:1rem;padding:1rem 1.2rem;background:rgba(255,255,255,.03);
+  border-radius:8px;font-size:.88rem;color:var(--sub);line-height:1.6}
+.stl-box strong{color:var(--text)}
+
+/* ── Footer ───────────────────────────────── */
+footer{text-align:center;padding:2rem;font-size:.78rem;color:var(--muted);
+  border-top:1px solid var(--border)}
+footer a{color:var(--muted);text-decoration:underline}
+</style>
+</head>
+<body>
+
+<div class="site-header">
+  <a href="./index.html">← Home</a>
+  <span>/</span>
+  <span>Voting Theory</span>
+</div>
+
+<div class="hero">
+  <div class="hero-tag">Mathematics of Democracy</div>
+  <h1>What Makes an Election <em>Fair</em>?</h1>
+  <p class="hero-lead">Every voting method has a flaw. That's not an opinion — it's a theorem. Mathematicians have spent centuries trying to design a perfect election system, and in 1951, Kenneth Arrow proved it cannot exist.</p>
+  <div class="hook-card">
+    <strong>Burlington, Vermont, 2009.</strong> The city used Instant Runoff Voting — a system specifically designed to elect the candidate most voters preferred. In the mayoral race, the candidate who would have beaten every other candidate in a head-to-head matchup came in third. The system failed the very test it was built to pass. The city repealed it the following year.
+  </div>
+</div>
+
+<div class="sections">
+
+  <!-- 1. Preference Ballots -->
+  <div class="section-item" id="s1">
+    <button class="sec-header" onclick="toggle('s1')">
+      <span class="sec-num">01</span>
+      <span class="sec-title">Preference Ballots &amp; Schedules</span>
+      <span class="sec-tag tag-teal">Foundation</span>
+      <span class="sec-chevron">▼</span>
+    </button>
+    <div class="sec-body">
+      <div class="concept">
+        Most elections ask you to pick one candidate. A <strong>preference ballot</strong> asks you to rank all the candidates in order. This gives us much more information — not just who you want, but the full picture of your preferences.
+        <br><br>
+        A <strong>preference schedule</strong> tallies these ballots by grouping identical rankings together. It's the starting point for every method in this unit.
+      </div>
+      <div class="vocab">
+        <dl>
+          <div><dt>Preference ballot</dt><dd>A ballot where voters rank all candidates from most to least preferred.</dd></div>
+          <div><dt>Preference schedule</dt><dd>A table summarizing how many voters chose each ranking combination.</dd></div>
+        </dl>
+      </div>
+      <div class="example-hd">Example — a 9-voter election with candidates A, B, C</div>
+      <table class="pref-table">
+        <tr><th>Rank</th><th>4 voters</th><th>3 voters</th><th>2 voters</th></tr>
+        <tr><td>1st</td><td>A</td><td>B</td><td>C</td></tr>
+        <tr><td>2nd</td><td>B</td><td>C</td><td>B</td></tr>
+        <tr><td>3rd</td><td>C</td><td>A</td><td>A</td></tr>
+      </table>
+      <div class="result">This schedule says: 4 voters prefer A &gt; B &gt; C, 3 prefer B &gt; C &gt; A, and 2 prefer C &gt; B &gt; A. We'll use this same ballot in several methods below — and get different winners depending on the method.</div>
+    </div>
+  </div>
+
+  <!-- 2. Plurality -->
+  <div class="section-item" id="s2">
+    <button class="sec-header" onclick="toggle('s2')">
+      <span class="sec-num">02</span>
+      <span class="sec-title">Plurality Method</span>
+      <span class="sec-tag tag-teal">Method</span>
+      <span class="sec-chevron">▼</span>
+    </button>
+    <div class="sec-body">
+      <div class="concept">
+        The <strong>plurality method</strong> is the most familiar: whoever gets the most first-place votes wins — even without a majority. It's simple, but it ignores everything voters feel about candidates ranked 2nd or 3rd.
+      </div>
+      <div class="example-hd">Applying plurality to our 9-voter example</div>
+      <table class="pref-table">
+        <tr><th>Candidate</th><th>First-Place Votes</th></tr>
+        <tr><td>A</td><td>4</td></tr>
+        <tr><td>B</td><td>3</td></tr>
+        <tr><td>C</td><td>2</td></tr>
+      </table>
+      <div class="result"><strong>Winner: A</strong> with 4/9 votes — a plurality, but not a majority. Notice that 5 out of 9 voters ranked A last.</div>
+      <div class="think"><strong>Think about it:</strong> Is it fair to elect a candidate that the majority of voters ranked last? What information did we ignore?</div>
+    </div>
+  </div>
+
+  <!-- 3. IRV -->
+  <div class="section-item" id="s3">
+    <button class="sec-header" onclick="toggle('s3')">
+      <span class="sec-num">03</span>
+      <span class="sec-title">Instant Runoff Voting (IRV)</span>
+      <span class="sec-tag tag-teal">Method</span>
+      <span class="sec-chevron">▼</span>
+    </button>
+    <div class="sec-body">
+      <div class="concept">
+        <strong>Instant runoff voting (IRV)</strong>, also called the <strong>plurality-with-elimination method</strong>, runs repeated rounds: in each round, the candidate with the fewest first-place votes is eliminated and those voters' votes transfer to their next choice. Continue until one candidate has a majority.
+        <br><br>
+        IRV is used in Australian federal elections, ranked-choice elections in New York City and Alaska, and was adopted (and later repealed) in Burlington, VT.
+      </div>
+      <div class="example-hd">Round-by-round with our 9-voter ballot</div>
+      <div class="concept" style="color:var(--text)">
+        <strong>Round 1:</strong> A=4, B=3, C=2. C has fewest — eliminated. C's 2 voters had B as 2nd choice.<br>
+        <strong>Round 2:</strong> A=4, B=5. B now has a majority.
+      </div>
+      <div class="result"><strong>Winner: B</strong> — different from plurality! IRV elected the candidate who was everyone's second choice or better.</div>
+      <div class="think"><strong>Think about it:</strong> The Burlington problem was about <em>monotonicity</em> — a candidate can actually lose by gaining more votes. Can you think of how that could happen?</div>
+    </div>
+  </div>
+
+  <!-- 4. Borda Count -->
+  <div class="section-item" id="s4">
+    <button class="sec-header" onclick="toggle('s4')">
+      <span class="sec-num">04</span>
+      <span class="sec-title">Borda Count</span>
+      <span class="sec-tag tag-teal">Method</span>
+      <span class="sec-chevron">▼</span>
+    </button>
+    <div class="sec-body">
+      <div class="concept">
+        In the <strong>Borda count</strong>, each rank earns points. With n candidates, a 1st-place vote is worth n−1 points, 2nd place is n−2, and so on down to 0. The candidate with the most total points wins.
+        <br><br>
+        Proposed by Jean-Charles de Borda in 1770. Still used today in some sports awards (NFL MVP, Heisman Trophy) and political elections in several small countries.
+      </div>
+      <div class="example-hd">Point values: 1st = 2 pts, 2nd = 1 pt, 3rd = 0 pts</div>
+      <table class="pref-table">
+        <tr><th>Candidate</th><th>Points (4 voters)</th><th>Points (3 voters)</th><th>Points (2 voters)</th><th>Total</th></tr>
+        <tr><td>A</td><td>4×2 = 8</td><td>3×0 = 0</td><td>2×0 = 0</td><td>8</td></tr>
+        <tr><td>B</td><td>4×1 = 4</td><td>3×2 = 6</td><td>2×1 = 2</td><td>12</td></tr>
+        <tr><td>C</td><td>4×0 = 0</td><td>3×1 = 3</td><td>2×2 = 4</td><td>7</td></tr>
+      </table>
+      <div class="result"><strong>Winner: B</strong> with 12 points. Same winner as IRV this time — but that won't always be the case.</div>
+    </div>
+  </div>
+
+  <!-- 5. Condorcet -->
+  <div class="section-item" id="s5">
+    <button class="sec-header" onclick="toggle('s5')">
+      <span class="sec-num">05</span>
+      <span class="sec-title">Condorcet Method &amp; Criterion</span>
+      <span class="sec-tag tag-teal">Method + Criterion</span>
+      <span class="sec-chevron">▼</span>
+    </button>
+    <div class="sec-body">
+      <div class="concept">
+        A <strong>Condorcet winner</strong> is a candidate who beats every other candidate in a head-to-head comparison using the preference data. The <strong>Condorcet criterion</strong> says: if a Condorcet winner exists, they should win the election.
+        <br><br>
+        Not all elections have a Condorcet winner (this is called a <em>Condorcet paradox</em>). And several common methods — including plurality and Borda — can fail to elect the Condorcet winner when one exists.
+      </div>
+      <div class="example-hd">Head-to-head comparisons in our 9-voter example</div>
+      <div class="concept" style="color:var(--text)">
+        <strong>A vs. B:</strong> 4 voters prefer A over B; 5 prefer B over A. → B wins.<br>
+        <strong>A vs. C:</strong> 4 prefer A over C; 5 prefer C over A. → C wins.<br>
+        <strong>B vs. C:</strong> 7 prefer B over C; 2 prefer C over B. → B wins.
+      </div>
+      <div class="result">B beats both A and C head-to-head — <strong>B is the Condorcet winner.</strong> Both IRV and Borda elected B in this example. Plurality did not.</div>
+      <div class="think"><strong>Think about it:</strong> Can you construct a 3-candidate election where A beats B, B beats C, and C beats A? (This is called a <em>Condorcet cycle</em> — and it has no winner.)</div>
+    </div>
+  </div>
+
+  <!-- 6. Fairness Criteria -->
+  <div class="section-item" id="s6">
+    <button class="sec-header" onclick="toggle('s6')">
+      <span class="sec-num">06</span>
+      <span class="sec-title">The Four Fairness Criteria</span>
+      <span class="sec-tag tag-teal">Criteria</span>
+      <span class="sec-chevron">▼</span>
+    </button>
+    <div class="sec-body">
+      <div class="concept">
+        How do we judge whether a voting method is "fair"? Mathematicians have proposed several criteria — reasonable properties any fair election should satisfy. The four main ones:
+      </div>
+      <div class="vocab" style="margin-top:.9rem">
+        <dl>
+          <div style="margin-bottom:.6rem"><dt>Majority Criterion</dt><dd>If a candidate has a majority of first-place votes, they should win.</dd></div>
+          <div style="margin-bottom:.6rem"><dt>Condorcet Criterion</dt><dd>If a Condorcet winner exists, they should win the election.</dd></div>
+          <div style="margin-bottom:.6rem"><dt>Monotonicity Criterion</dt><dd>Increasing support for a winning candidate should not cause them to lose.</dd></div>
+          <div><dt>Independence of Irrelevant Alternatives (IIA)</dt><dd>Removing a losing candidate should not change the winner.</dd></div>
+        </dl>
+      </div>
+      <div class="result" style="margin-top:.9rem">
+        Borda count fails the majority and Condorcet criteria. IRV fails monotonicity. Plurality fails Condorcet and IIA. Every common method fails at least one criterion. This brings us to the big question…
+      </div>
+    </div>
+  </div>
+
+  <!-- 7. Arrow's Impossibility -->
+  <div class="section-item featured" id="s7">
+    <button class="sec-header" onclick="toggle('s7')">
+      <span class="sec-num">07</span>
+      <span class="sec-title">Arrow's Impossibility Theorem</span>
+      <span class="sec-tag tag-gold">★ The Big Idea</span>
+      <span class="sec-chevron">▼</span>
+    </button>
+    <div class="sec-body">
+      <div class="concept">
+        In 1951, economist Kenneth Arrow published his doctoral thesis and won the Nobel Prize for it. His result, now called <strong>Arrow's Impossibility Theorem</strong>, showed that no voting system can satisfy all four fairness criteria simultaneously — as long as there are three or more candidates.
+      </div>
+      <div class="arrow-box">
+        <strong>Arrow's Impossibility Theorem (informal):</strong> There is no ranked-choice voting method that satisfies the following three conditions at once:
+        <br><br>
+        <strong>1. No dictator</strong> — the election outcome doesn't just reflect one voter's preferences.<br>
+        <strong>2. Pareto efficiency</strong> — if every voter prefers A over B, the election result must rank A over B.<br>
+        <strong>3. Independence of irrelevant alternatives</strong> — the ranking of A vs. B depends only on voters' opinions about A and B, not on how they feel about C.
+        <br><br>
+        Any method satisfying the first two <em>must</em> violate the third.
+      </div>
+      <div class="concept" style="margin-top:1rem">
+        This is one of the most famous results in social choice theory. It doesn't say elections are hopeless — it says there's no perfect system. Every method involves a tradeoff. The question shifts from "which system is perfect?" to "which imperfection can we live with?"
+      </div>
+      <div class="think"><strong>Think about it:</strong> Arrow's theorem applies to <em>ranked</em> voting. Does approval voting (where you vote for as many candidates as you like) escape the theorem? Look it up after you've thought about it.</div>
+    </div>
+  </div>
+
+  <!-- 8. Approval Voting -->
+  <div class="section-item" id="s8">
+    <button class="sec-header" onclick="toggle('s8')">
+      <span class="sec-num">08</span>
+      <span class="sec-title">Approval Voting</span>
+      <span class="sec-tag tag-teal">Alternative</span>
+      <span class="sec-chevron">▼</span>
+    </button>
+    <div class="sec-body">
+      <div class="concept">
+        <strong>Approval voting</strong> changes the question entirely: instead of ranking candidates, voters approve or disapprove of each one. The candidate with the most approvals wins.
+        <br><br>
+        Because it's not a ranked system, it sidesteps Arrow's theorem — but it introduces different problems. The outcome depends heavily on how many candidates voters choose to approve, which itself can be strategic.
+        <br><br>
+        Used by the United Nations, IEEE, and several professional societies. Adopted for St. Louis municipal elections in 2020.
+      </div>
+      <div class="stl-box">
+        <strong>Real World — St. Louis:</strong> In 2020, St. Louis voters approved a ballot measure replacing plurality primaries with an approval voting system called <em>nonpartisan approval voting</em>. The top two vote-getters advance to a runoff. The first election under this system was held in 2021. Supporters argued it reduces spoiler effects and encourages more candidates to run. Researchers are still studying its long-term effects.
+      </div>
+    </div>
+  </div>
+
+  <!-- 9. Want to go deeper? -->
+  <div class="section-item" id="s9">
+    <button class="sec-header" onclick="toggle('s9')">
+      <span class="sec-num">↗</span>
+      <span class="sec-title">Want to Go Deeper?</span>
+      <span class="sec-chevron">▼</span>
+    </button>
+    <div class="sec-body">
+      <div class="concept">
+        If this grabbed your interest, here are some directions to explore:
+      </div>
+      <ul style="margin-top:.8rem;padding-left:1.3rem;font-size:.88rem;color:var(--sub);line-height:2">
+        <li><strong style="color:var(--text)">3Blue1Brown</strong> — "What's the fairest way to share a cake?" (related ideas on fair division)</li>
+        <li><strong style="color:var(--text)">CGP Grey</strong> on YouTube — excellent video explainers on voting systems</li>
+        <li><strong style="color:var(--text)">Social Choice and Individual Values</strong> by Kenneth Arrow (the original, surprisingly readable)</li>
+        <li><strong style="color:var(--text)">The Arithmetic of Voting</strong> by Donald Saari — argues Borda count is underrated</li>
+        <li><strong style="color:var(--text)">electionscience.org</strong> — advocates for approval voting with real-world data</li>
+      </ul>
+    </div>
+  </div>
+
+</div><!-- /sections -->
+
+<footer>
+  <a href="./index.html">← Back to Home</a>
+  &nbsp;·&nbsp;
+  <a href="./gerry.html">Gerrymandering →</a>
+</footer>
+
+<script>
+function toggle(id) {
+  document.getElementById(id).classList.toggle('open');
+}
+</script>
+</body>
+</html>

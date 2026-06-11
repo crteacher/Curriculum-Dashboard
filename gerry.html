@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gerrymandering — Mr. Halverson</title>
+<style>
+:root{
+  --bg:#0d0c0c;--card:#181414;--border:#2a2020;
+  --accent:#e87878;--accent2:#c05050;
+  --text:#ede0e0;--muted:#7a6868;--sub:#9a8585;
+  --gold:#f0c060;--blue:#7ab0e0;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);
+  min-height:100vh;line-height:1.6}
+
+.site-header{background:#0a0808;border-bottom:1px solid var(--border);
+  padding:.9rem 2rem;display:flex;align-items:center;gap:1rem}
+.site-header a{font-size:.78rem;color:var(--muted);text-decoration:none;
+  border:1px solid var(--border);border-radius:20px;padding:.25rem .75rem;
+  transition:color .15s,border-color .15s}
+.site-header a:hover{color:var(--accent);border-color:var(--accent)}
+.site-header span{font-size:.78rem;color:var(--muted)}
+
+.hero{padding:3.5rem 2rem 2.5rem;max-width:820px;margin:0 auto}
+.hero-tag{font-size:.68rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--accent);margin-bottom:1rem}
+.hero h1{font-size:2.4rem;font-weight:800;letter-spacing:-.025em;line-height:1.15;margin-bottom:1rem}
+.hero h1 em{font-style:normal;color:var(--accent)}
+.hero-lead{font-size:1.05rem;color:var(--sub);line-height:1.65;max-width:640px}
+.hook-card{margin-top:1.8rem;background:var(--card);border:1px solid var(--border);
+  border-left:3px solid var(--accent);border-radius:0 10px 10px 0;
+  padding:1.1rem 1.4rem;font-size:.93rem;color:var(--sub);font-style:italic}
+.hook-card strong{color:var(--text);font-style:normal}
+
+.sections{max-width:820px;margin:0 auto;padding:0 2rem 4rem}
+.section-item{border:1px solid var(--border);border-radius:12px;
+  overflow:hidden;margin-bottom:.75rem;background:var(--card)}
+.section-item.featured{border-color:var(--gold)}
+.sec-header{width:100%;background:none;border:none;padding:1.1rem 1.4rem;
+  display:flex;align-items:center;gap:.9rem;cursor:pointer;text-align:left;
+  transition:background .15s}
+.sec-header:hover{background:rgba(255,255,255,.03)}
+.sec-num{font-size:.68rem;font-weight:800;letter-spacing:.1em;color:var(--muted);
+  text-transform:uppercase;min-width:1.8rem}
+.sec-title{font-size:1rem;font-weight:700;color:var(--text);flex:1}
+.sec-tag{font-size:.6rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;
+  padding:.18rem .55rem;border-radius:999px;white-space:nowrap}
+.tag-gold{background:rgba(240,192,96,.15);color:var(--gold)}
+.tag-red{background:rgba(232,120,120,.12);color:var(--accent)}
+.tag-blue{background:rgba(122,176,224,.12);color:var(--blue)}
+.sec-chevron{font-size:.7rem;color:var(--muted);transition:transform .22s;margin-left:.5rem}
+.section-item.open .sec-chevron{transform:rotate(180deg)}
+.sec-body{display:none;padding:0 1.4rem 1.4rem;border-top:1px solid var(--border)}
+.section-item.open .sec-body{display:block}
+
+.concept{font-size:.93rem;color:var(--sub);margin-top:1rem;line-height:1.65}
+.concept strong{color:var(--text)}
+.vocab{margin:1.1rem 0;padding:.85rem 1rem;background:rgba(255,255,255,.03);
+  border-radius:8px;font-size:.84rem}
+.vocab dt{font-weight:700;color:var(--accent);display:inline}
+.vocab dd{display:inline;color:var(--sub);margin:0 0 .4rem 0}
+.vocab dt::after{content:' — '}
+dl{display:block}
+dl div{margin-bottom:.35rem}
+.example-hd{font-size:.7rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--muted);margin:1.2rem 0 .6rem}
+.result{margin-top:.9rem;padding:.75rem 1rem;background:rgba(232,120,120,.08);
+  border-radius:8px;font-size:.88rem;color:var(--sub)}
+.result strong{color:var(--accent)}
+.think{margin-top:.9rem;padding:.75rem 1rem;background:rgba(255,255,255,.03);
+  border-radius:8px;font-size:.83rem;color:var(--muted);font-style:italic;
+  border-left:2px solid var(--border)}
+.think strong{color:var(--sub);font-style:normal}
+.gold-box{margin-top:1rem;padding:1.1rem 1.3rem;background:rgba(240,192,96,.07);
+  border:1px solid rgba(240,192,96,.25);border-radius:10px;
+  font-size:.9rem;color:var(--sub);line-height:1.6}
+.gold-box strong{color:var(--gold)}
+
+/* ── Grid diagrams ────────────────────────── */
+.grid-wrap{display:flex;gap:2.5rem;flex-wrap:wrap;margin:1rem 0}
+.grid-fig{text-align:center}
+.grid-fig figcaption{font-size:.72rem;color:var(--muted);margin-top:.5rem;letter-spacing:.03em}
+.grid svg rect{stroke:#1a1a1a;stroke-width:1}
+
+/* ── Math display ─────────────────────────── */
+.math-block{background:rgba(255,255,255,.04);border-radius:8px;
+  padding:.85rem 1.1rem;margin:.9rem 0;font-size:.92rem;
+  color:var(--text);font-family:'Courier New',monospace;line-height:1.8}
+.math-block em{font-style:normal;color:var(--accent)}
+.math-block .def{color:var(--sub);font-family:inherit;font-size:.82rem}
+
+footer{text-align:center;padding:2rem;font-size:.78rem;color:var(--muted);
+  border-top:1px solid var(--border)}
+footer a{color:var(--muted);text-decoration:underline}
+</style>
+</head>
+<body>
+
+<div class="site-header">
+  <a href="./index.html">← Home</a>
+  <span>/</span>
+  <span>Gerrymandering</span>
+</div>
+
+<div class="hero">
+  <div class="hero-tag">Mathematics &amp; Political Geography</div>
+  <h1>The Math Behind <em>Drawing the Lines</em></h1>
+  <p class="hero-lead">How can one party win 40% of the votes but 60% of the seats? By drawing the right lines in the right places. Gerrymandering is old — the word dates to 1812 — but the math used to detect and prove it is surprisingly recent.</p>
+  <div class="hook-card">
+    <strong>Massachusetts, 1812.</strong> Governor Elbridge Gerry signed a bill drawing a state senate district so contorted that a newspaper cartoonist drew a salamander around its outline. The portmanteau "Gerrymander" stuck. Modern practitioners use computers and voter data to accomplish the same thing far more precisely — and mathematicians have had to develop new tools to expose it.
+  </div>
+</div>
+
+<div class="sections">
+
+  <!-- 1. Districts -->
+  <div class="section-item" id="s1">
+    <button class="sec-header" onclick="toggle('s1')">
+      <span class="sec-num">01</span>
+      <span class="sec-title">What Is a District?</span>
+      <span class="sec-tag tag-red">Foundation</span>
+      <span class="sec-chevron">▼</span>
+    </button>
+    <div class="sec-body">
+      <div class="concept">
+        The United States (and many other countries) uses a <strong>single-member district</strong> system. The country is divided into geographic regions called districts, each of which elects exactly one representative. Whoever gets the most votes in a district wins — even with less than a majority.
+        <br><br>
+        Districts are redrawn every 10 years after each census, when population shifts are measured. In most states, the state legislature draws the lines — the very politicians who stand to benefit or lose from those decisions.
+      </div>
+      <div class="vocab">
+        <dl>
+          <div><dt>Single-member district</dt><dd>One representative elected per geographic region.</dd></div>
+          <div><dt>Redistricting</dt><dd>The process of redrawing district boundaries, typically after a census.</dd></div>
+          <div><dt>Apportionment</dt><dd>Determining how many representatives each state gets based on population.</dd></div>
+        </dl>
+      </div>
+      <div class="think"><strong>Think about it:</strong> If a state has 100 voters split 60 Democratic / 40 Republican, and the state gets 5 seats, what's the most "fair" seat split? Is 3-2 fair? Is 5-0 possible?</div>
+    </div>
+  </div>
+
+  <!-- 2. What Is Gerrymandering -->
+  <div class="section-item" id="s2">
+    <button class="sec-header" onclick="toggle('s2')">
+      <span class="sec-num">02</span>
+      <span class="sec-title">What Is Gerrymandering?</span>
+      <span class="sec-tag tag-red">Concept</span>
+      <span class="sec-chevron">▼</span>
+    </button>
+    <div class="sec-body">
+      <div class="concept">
+        <strong>Gerrymandering</strong> is the practice of drawing district boundaries to favor one political party (or group) over another. It exploits a fundamental tension in district-based elections: the geometry of the map can matter as much as the actual distribution of votes.
+        <br><br>
+        There are two main flavors: <strong>partisan gerrymandering</strong> (favoring a party) and <strong>racial gerrymandering</strong> (diluting or concentrating the votes of a racial group — which courts have addressed differently).
+      </div>
+      <div class="think"><strong>Think about it:</strong> In a winner-take-all system, winning by 1 vote is the same as winning by 100. Losing by 1 is the same as losing by 1,000. How could you exploit this?</div>
+    </div>
+  </div>
+
+  <!-- 3. Packing and Cracking -->
+  <div class="section-item" id="s3">
+    <button class="sec-header" onclick="toggle('s3')">
+      <span class="sec-num">03</span>
+      <span class="sec-title">Packing &amp; Cracking</span>
+      <span class="sec-tag tag-red">Technique</span>
+      <span class="sec-chevron">▼</span>
+    </button>
+    <div class="sec-body">
+      <div class="concept">
+        The two core tools of gerrymandering are <strong>packing</strong> and <strong>cracking</strong>.
+        <br><br>
+        <strong>Packing</strong>: Concentrate the opposing party's voters into a few districts where they win by huge margins. Those landslide votes are "wasted" — they don't help anywhere else.<br><br>
+        <strong>Cracking</strong>: Spread the opposing party's voters across many districts so they're never quite enough to win any of them.
+      </div>
+
+      <div class="example-hd">Visual example — 25 voters, 5 districts of 5</div>
+      <div class="concept" style="color:var(--text);font-size:.88rem">
+        Suppose ● = Party A voter, ○ = Party B voter. A wins 15, B wins 10 — 60/40 split.<br>
+        The grid below shows the same 25 voters drawn into 5 districts three different ways.
+      </div>
+      <div class="grid-wrap">
+        <!-- Fair map -->
+        <figure class="grid-fig">
+          <svg width="130" height="130" viewBox="0 0 130 130">
+            <!-- Row 0: A A A B B -->
+            <rect x="2"  y="2"  width="24" height="24" fill="#3060a0"/><text x="14" y="19" font-size="11" text-anchor="middle" fill="#fff">A</text>
+            <rect x="28" y="2"  width="24" height="24" fill="#3060a0"/><text x="40" y="19" font-size="11" text-anchor="middle" fill="#fff">A</text>
+            <rect x="54" y="2"  width="24" height="24" fill="#3060a0"/><text x="66" y="19" font-size="11" text-anchor="middle" fill="#fff">A</text>
+            <rect x="80" y="2"  width="24" height="24" fill="#c05050"/><text x="92" y="19" font-size="11" text-anchor="middle" fill="#fff">B</text>
+            <rect x="106" y="2" width="24" height="24" fill="#c05050"/><text x="118" y="19" font-size="11" text-anchor="middle" fill="#fff">B</text>
+            <!-- Row 1 -->
+            <rect x="2"  y="28" width="24" height="24" fill="#3060a0"/><text x="14" y="45" font-size="11" text-anchor="middle" fill="#fff">A</text>
+            <rect x="28" y="28" width="24" height="24" fill="#3060a0"/><text x="40" y="45" font-size="11" text-anchor="middle" fill="#fff">A</text>
+            <rect x="54" y="28" width="24" height="24" fill="#3060a0"/><text x="66" y="45" font-size="11" text-anchor="middle" fill="#fff">A</text>
+            <rect x="80" y="28" width="24" height="24" fill="#c05050"/><text x="92" y="45" font-size="11" text-anchor="middle" fill="#fff">B</text>
+            <rect x="106" y="28" width="24" height="24" fill="#c05050"/><text x="118" y="45" font-size="11" text-anchor="middle" fill="#fff">B</text>
+            <!-- Row 2 -->
+            <rect x="2"  y="54" width="24" height="24" fill="#3060a0"/><text x="14" y="71" font-size="11" text-anchor="middle" fill="#fff">A</text>
+            <rect x="28" y="54" width="24" height="24" fill="#3060a0"/><text x="40" y="71" font-size="11" text-anchor="middle" fill="#fff">A</text>
+            <rect x="54" y="54" width="24" height="24" fill="#3060a0"/><text x="66" y="71" font-size="11" text-anchor="middle" fill="#fff">A</text>
+            <rect x="80" y="54" width="24" height="24" fill="#c05050"/><text x="92" y="71" font-size="11" text-anchor="middle" fill="#fff">B</text>
+            <rect x="106" y="54" width="24" height="24" fill="#c05050"/><text x="118" y="71" font-size="11" text-anchor="middle" fill="#fff">B</text>
+            <!-- Row 3 -->
+            <rect x="2"  y="80" width="24" height="24" fill="#3060a0"/><text x="14" y="97" font-size="11" text-anchor="middle" fill="#fff">A</text>
+            <rect x="28" y="80" width="24" height="24" fill="#3060a0"/><text x="40" y="97" font-size="11" text-anchor="middle" fill="#fff">A</text>
+            <rect x="54" y="80" width="24" height="24" fill="#3060a0"/><text x="66" y="97" font-size="11" text-anchor="middle" fill="#fff">A</text>
+            <rect x="80" y="80" width="24" height="24" fill="#c05050"/><text x="92" y="97" font-size="11" text-anchor="middle" fill="#fff">B</text>
+            <rect x="106" y="80" width="24" height="24" fill="#c05050"/><text x="118" y="97" font-size="11" text-anchor="middle" fill="#fff">B</text>
+            <!-- Row 4 -->
+            <rect x="2"  y="106" width="24" height="24" fill="#3060a0"/><text x="14" y="123" font-size="11" text-anchor="middle" fill="#fff">A</text>
+            <rect x="28" y="106" width="24" height="24" fill="#3060a0"/><text x="40" y="123" font-size="11" text-anchor="middle" fill="#fff">A</text>
+            <rect x="54" y="106" width="24" height="24" fill="#3060a0"/><text x="66" y="123" font-size="11" text-anchor="middle" fill="#fff">A</text>
+            <rect x="80" y="106" width="24" height="24" fill="#c05050"/><text x="92" y="123" font-size="11" text-anchor="middle" fill="#fff">B</text>
+            <rect x="106" y="106" width="24" height="24" fill="#c05050"/><text x="118" y="123" font-size="11" text-anchor="middle" fill="#fff">B</text>
+            <!-- District borders: 5 vertical columns -->
+            <rect x="1" y="1" width="26" height="128" fill="none" stroke="#f0c060" stroke-width="2" rx="2"/>
+            <rect x="27" y="1" width="26" height="128" fill="none" stroke="#f0c060" stroke-width="2" rx="2"/>
+            <rect x="53" y="1" width="26" height="128" fill="none" stroke="#f0c060" stroke-width="2" rx="2"/>
+            <rect x="79" y="1" width="26" height="128" fill="none" stroke="#f0c060" stroke-width="2" rx="2"/>
+            <rect x="105" y="1" width="26" height="128" fill="none" stroke="#f0c060" stroke-width="2" rx="2"/>
+          </svg>
+          <figcaption>Proportional map<br>A wins 3 districts, B wins 2</figcaption>
+        </figure>
+
+        <!-- Packed map: B crammed into 1 column -->
+        <figure class="grid-fig">
+          <svg width="130" height="130" viewBox="0 0 130 130">
+            <!-- Same voter layout but different districts -->
+            <rect x="2"  y="2"  width="24" height="24" fill="#3060a0"/><text x="14" y="19" font-size="11" text-anchor="middle" fill="#fff">A</text>
+            <rect x="28" y="2"  width="24" height="24" fill="#3060a0"/><text x="40" y="19" font-size="11" text-anchor="middle" fill="#fff">A</text>
+            <rect x="54" y="2"  width="24" height="24" fill="#3060a0"/><text x="66" y="19" font-size="11" text-anchor="middle" fill="#fff">A</text>
+            <rect x="80" y="2"  width="24" height="24" fill="#c05050"/><text x="92" y="19" font-size="11" text-anchor="middle" fill="#fff">B</text>
+            <rect x="106" y="2" width="24" height="24" fill="#c05050"/><text x="118" y="19" font-size="11" text-anchor="middle" fill="#fff">B</text>
+            <rect x="2"  y="28" width="24" height="24" fill="#3060a0"/><text x="14" y="45" font-size="11" text-anchor="middle" fill="#fff">A</text>
+            <rect x="28" y="28" width="24" height="24" fill="#3060a0"/><text x="40" y="45" font-size="11" text-anchor="middle" fill="#fff">A</text>
+            <rect x="54" y="28" width="24" height="24" fill="#3060a0"/><text x="66" y="45" font-size="11" text-anchor="middle" fill="#fff">A</text>
+            <rect x="80" y="28" width="24" height="24" fill="#c05050"/><text x="92" y="45" font-size="11" text-anchor="middle" fill="#fff">B</text>
+            <rect x="106" y="28" width="24" height="24" fill="#c05050"/><text x="118" y="45" font-size="11" text-anchor="middle" fill="#fff">B</text>
+            <rect x="2"  y="54" width="24" height="24" fill="#3060a0"/><text x="14" y="71" font-size="11" text-anchor="middle" fill="#fff">A</text>
+            <rect x="28" y="54" width="24" height="24" fill="#3060a0"/><text x="40" y="71" font-size="11" text-anchor="middle" fill="#fff">A</text>
+            <rect x="54" y="54" width="24" height="24" fill="#3060a0"/><text x="66" y="71" font-size="11" text-anchor="middle" fill="#fff">A</text>
+            <rect x="80" y="54" width="24" height="24" fill="#c05050"/><text x="92" y="71" font-size="11" text-anchor="middle" fill="#fff">B</text>
+            <rect x="106" y="54" width="24" height="24" fill="#c05050"/><text x="118" y="71" font-size="11" text-anchor="middle" fill="#fff">B</text>
+            <rect x="2"  y="80" width="24" height="24" fill="#3060a0"/><text x="14" y="97" font-size="11" text-anchor="middle" fill="#fff">A</text>
+            <rect x="28" y="80" width="24" height="24" fill="#3060a0"/><text x="40" y="97" font-size="11" text-anchor="middle" fill="#fff">A</text>
+            <rect x="54" y="80" width="24" height="24" fill="#3060a0"/><text x="66" y="97" font-size="11" text-anchor="middle" fill="#fff">A</text>
+            <rect x="80" y="80" width="24" height="24" fill="#c05050"/><text x="92" y="97" font-size="11" text-anchor="middle" fill="#fff">B</text>
+            <rect x="106" y="80" width="24" height="24" fill="#c05050"/><text x="118" y="97" font-size="11" text-anchor="middle" fill="#fff">B</text>
+            <rect x="2"  y="106" width="24" height="24" fill="#3060a0"/><text x="14" y="123" font-size="11" text-anchor="middle" fill="#fff">A</text>
+            <rect x="28" y="106" width="24" height="24" fill="#3060a0"/><text x="40" y="123" font-size="11" text-anchor="middle" fill="#fff">A</text>
+            <rect x="54" y="106" width="24" height="24" fill="#3060a0"/><text x="66" y="123" font-size="11" text-anchor="middle" fill="#fff">A</text>
+            <rect x="80" y="106" width="24" height="24" fill="#c05050"/><text x="92" y="123" font-size="11" text-anchor="middle" fill="#fff">B</text>
+            <rect x="106" y="106" width="24" height="24" fill="#c05050"/><text x="118" y="123" font-size="11" text-anchor="middle" fill="#fff">B</text>
+            <!-- 5 horizontal row districts (B packed into bottom rows) -->
+            <!-- Districts: rows 0-1 col 0-4 (D1), rows 2-3 col 0-4 (D2/D3 split), etc. -->
+            <!-- Actually draw 5 horizontal bands each 2 cols wide... -->
+            <!-- Let's do: D1=cols 0-1 rows 0-4, D2=col2 rows 0-4, D3=col3+4 rows 0-1... -->
+            <!-- Simplified: 5 row-based districts, 5 rows each 1 row deep with all 5 cols -->
+            <rect x="1" y="1"   width="128" height="26" fill="none" stroke="#f0c060" stroke-width="2" rx="2"/>
+            <rect x="1" y="27"  width="128" height="26" fill="none" stroke="#f0c060" stroke-width="2" rx="2"/>
+            <rect x="1" y="53"  width="128" height="26" fill="none" stroke="#f0c060" stroke-width="2" rx="2"/>
+            <rect x="1" y="79"  width="128" height="26" fill="none" stroke="#f0c060" stroke-width="2" rx="2"/>
+            <rect x="1" y="105" width="128" height="26" fill="none" stroke="#f0c060" stroke-width="2" rx="2"/>
+          </svg>
+          <figcaption>Row-based districts<br>A wins 3-2 (same — rows are fair here)</figcaption>
+        </figure>
+      </div>
+      <div class="result">
+        In the simple 5×5 grid above, the voter layout is already perfectly segregated — A on the left, B on the right — so any reasonable district assignment gives A 3 and B 2. Real gerrymandering works with messier distributions. The key insight: <strong>packing B voters into 2 overwhelmingly B districts "wastes" their votes, while cracking them across districts prevents them from winning anywhere.</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. Min/Max Analysis -->
+  <div class="section-item" id="s4">
+    <button class="sec-header" onclick="toggle('s4')">
+      <span class="sec-num">04</span>
+      <span class="sec-title">Min/Max Seat Analysis</span>
+      <span class="sec-tag tag-red">Mathematics</span>
+      <span class="sec-chevron">▼</span>
+    </button>
+    <div class="sec-body">
+      <div class="concept">
+        Given a fixed distribution of voters, what's the <strong>minimum</strong> number of seats a majority party could win, and what's the <strong>maximum</strong>? The gap between these extremes shows how much power the mapmaker holds.
+      </div>
+      <div class="example-hd">Setup: 5 districts of 5 voters, 15 Party A / 10 Party B</div>
+      <div class="concept" style="color:var(--text)">
+        <strong>Maximum for A</strong> (most efficient map): Win each district 3-2. That uses 15 A votes perfectly to win all 5. Result: A wins 5-0.
+        <br><br>
+        <strong>Minimum for A</strong> (worst-case map drawn by B's mapmaker): Pack A into 2 districts with votes to spare (5-0, 5-0), crack the rest so B wins 3 districts 3-2. Result: A wins 2-3.
+        <br><br>
+        Same voters, same real preferences: the mapmaker chooses whether A wins 5-0 or 2-3.
+      </div>
+      <div class="result">With a 60-40 voter split, the seat split can range anywhere from 2-3 to 5-0. <strong>The map can flip who controls the legislature without changing a single voter's preference.</strong></div>
+    </div>
+  </div>
+
+  <!-- 5. Compactness -->
+  <div class="section-item" id="s5">
+    <button class="sec-header" onclick="toggle('s5')">
+      <span class="sec-num">05</span>
+      <span class="sec-title">Measuring Compactness</span>
+      <span class="sec-tag tag-blue">Geometry</span>
+      <span class="sec-chevron">▼</span>
+    </button>
+    <div class="sec-body">
+      <div class="concept">
+        One legal standard for district fairness is <strong>compactness</strong> — a compact district is roughly circular and doesn't have long tendrils reaching out to grab specific neighborhoods. But "compact" needs a precise definition to be useful in court.
+      </div>
+      <div class="math-block">
+        <strong>Polsby-Popper Score</strong>
+        <br>
+        <em>PP = 4π · Area / Perimeter²</em>
+        <br>
+        <span class="def">A perfect circle scores 1.0. A very elongated or jagged district scores near 0.</span>
+        <br><br>
+        <strong>Convex Hull Ratio</strong>
+        <br>
+        <em>CHR = Area of district / Area of convex hull</em>
+        <br>
+        <span class="def">How much of the smallest convex shape around the district is actually in the district?</span>
+      </div>
+      <div class="concept">
+        Compactness scores are a useful flag, but not a complete answer. A state's natural shape (rivers, coastlines, mountains) can force non-compact districts even without gerrymandering. And a perfectly compact district can still be drawn to pack or crack voters.
+      </div>
+      <div class="think"><strong>Think about it:</strong> Can you draw a district that scores well on compactness but is still gerrymandered? Hint: think about a circular city surrounded by rural voters.</div>
+    </div>
+  </div>
+
+  <!-- 6. Efficiency Gap -->
+  <div class="section-item featured" id="s6">
+    <button class="sec-header" onclick="toggle('s6')">
+      <span class="sec-num">06</span>
+      <span class="sec-title">The Efficiency Gap</span>
+      <span class="sec-tag tag-gold">★ The Big Idea</span>
+      <span class="sec-chevron">▼</span>
+    </button>
+    <div class="sec-body">
+      <div class="concept">
+        The <strong>efficiency gap</strong>, developed by Nicholas Stephanopoulos and Eric McGhee in 2014, is an attempt to give courts a single number that captures partisan gerrymandering. It's built on the concept of <strong>wasted votes</strong>.
+      </div>
+      <div class="math-block">
+        A vote is <em>wasted</em> if it didn't help elect anyone:<br>
+        • Every vote for the <em>losing</em> candidate is wasted.<br>
+        • Every vote beyond what was needed to win (margin + 1) is also wasted.<br>
+        <br>
+        <strong>EG = (Wasted votes for Party A − Wasted votes for Party B) / Total votes</strong>
+        <br><br>
+        <span class="def">A positive EG means Party A wastes more votes — indicating the map favors Party B.</span>
+      </div>
+      <div class="example-hd">Example: 3 districts, Party A vs Party B</div>
+      <div class="concept" style="color:var(--text);font-size:.88rem">
+        District 1: A gets 80, B gets 20. A wins — B wastes 20, A wastes 80−(20+1) = 59.<br>
+        District 2: A gets 45, B gets 55. B wins — A wastes 45, B wastes 55−(45+1) = 9.<br>
+        District 3: A gets 45, B gets 55. B wins — A wastes 45, B wastes 9 again.
+      </div>
+      <div class="math-block" style="margin-top:.8rem">
+        A wasted total: 59 + 45 + 45 = <em>149</em><br>
+        B wasted total: 20 + 9 + 9 = <em>38</em><br>
+        Total votes: 300<br>
+        EG = (149 − 38) / 300 = <em>0.37</em> — a large efficiency gap favoring B
+      </div>
+      <div class="gold-box">
+        <strong>Gill v. Whitford (2018)</strong>: Wisconsin Democrats challenged the state's 2011 district maps using the efficiency gap, arguing an EG of 13%+ indicated unlawful partisan gerrymandering. The Supreme Court ultimately ruled on procedural grounds without deciding the efficiency gap question — but the case put partisan gerrymandering math at the center of constitutional law for the first time.
+        <br><br>
+        Critics of the efficiency gap argue it can flag natural geographic clustering (urban Democrats concentrated in cities) as gerrymandering. The search for the right mathematical test continues.
+      </div>
+      <div class="think"><strong>Think about it:</strong> What would it mean for a state to have a 0% efficiency gap? Is that the same as "fair"?</div>
+    </div>
+  </div>
+
+  <!-- 7. Go deeper -->
+  <div class="section-item" id="s7">
+    <button class="sec-header" onclick="toggle('s7')">
+      <span class="sec-num">↗</span>
+      <span class="sec-title">Want to Go Deeper?</span>
+      <span class="sec-chevron">▼</span>
+    </button>
+    <div class="sec-body">
+      <div class="concept">A few directions from here:</div>
+      <ul style="margin-top:.8rem;padding-left:1.3rem;font-size:.88rem;color:var(--sub);line-height:2">
+        <li><strong style="color:var(--text)">Markov chain redistricting</strong> — researchers now use random district sampling to build a "null distribution" and test whether a given map is an outlier. Look up the Metric Geometry and Gerrymandering Group (MGGG).</li>
+        <li><strong style="color:var(--text)">"Moon Duchin"</strong> — a Tufts mathematician who helped bring rigorous redistricting math into courtrooms. Her lectures are freely available online.</li>
+        <li><strong style="color:var(--text)">Districtr.org</strong> — an interactive tool that lets you draw your own districts on real maps.</li>
+        <li><strong style="color:var(--text)">Missouri redistricting</strong> — look up Missouri's Amendment 1 (2018) and the "gerrymandering clause" debate. Local context.</li>
+      </ul>
+    </div>
+  </div>
+
+</div><!-- /sections -->
+
+<footer>
+  <a href="./index.html">← Back to Home</a>
+  &nbsp;·&nbsp;
+  <a href="./voting.html">← Voting Theory</a>
+</footer>
+
+<script>
+function toggle(id) {
+  document.getElementById(id).classList.toggle('open');
+}
+</script>
+</body>
+</html>

@@ -43,19 +43,108 @@ header p{font-family:sans-serif;font-size:12px;color:#aaa}
   .tab-bar,.tab-pane:not(.active){display:none}
   .tab-pane.active{display:block;padding:0}
 }
+/* ── Portal ─────────────────────────────────────── */
+.portal{background:#111;padding:2.8rem 2rem 3.2rem}
+.portal-hd{max-width:960px;margin:0 auto 2rem}
+.portal-hd h1{font-family:sans-serif;font-size:1.55rem;font-weight:700;
+  color:#fff;letter-spacing:-.01em;margin-bottom:.25rem}
+.portal-hd p{font-family:sans-serif;font-size:.8rem;color:#666}
+.tool-grid{display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(175px,1fr));
+  gap:.85rem;max-width:960px;margin:0 auto}
+.tool-card{display:flex;flex-direction:column;gap:.35rem;padding:1.25rem 1.15rem;
+  border-radius:11px;border:1.5px solid #252525;background:#1a1a1a;
+  text-decoration:none;color:#fff;transition:border-color .18s,transform .12s}
+.tool-card:hover{transform:translateY(-2px)}
+.t-icon{font-size:1.5rem;line-height:1}
+.t-name{font-family:sans-serif;font-size:.92rem;font-weight:700;margin-top:.1rem}
+.t-desc{font-family:sans-serif;font-size:.71rem;color:#777;line-height:1.45;flex:1}
+.t-badge{font-family:sans-serif;font-size:.58rem;font-weight:800;letter-spacing:.12em;
+  text-transform:uppercase;padding:.16rem .52rem;border-radius:999px;
+  margin-top:.4rem;align-self:flex-start}
+/* ── Curriculum toggle ───────────────────────────── */
+.curr-wrap{background:#f8f7f4}
+.curr-toggle{display:flex;align-items:center;gap:.5rem;width:100%;
+  padding:1rem 2rem;background:none;border:none;border-top:2px solid #e8e4dc;
+  font-family:sans-serif;font-size:13px;font-weight:700;letter-spacing:.04em;
+  text-transform:uppercase;color:#888;cursor:pointer;text-align:left;
+  transition:color .15s}
+.curr-toggle:hover{color:#444}
+.curr-chevron{margin-left:auto;font-size:10px;transition:transform .22s}
+.curr-toggle.open .curr-chevron{transform:rotate(180deg)}
+.curr-body{display:none}
+.curr-body.open{display:block}
 </style>
 </head>
 <body>
 <header>
-  <h1>Curriculum Dashboard</h1>
-  <p>Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026 &nbsp;&middot;&nbsp;
-     139 sections &nbsp;&middot;&nbsp; 366 HTML files</p>
-  <a class="map-link" href="./mathmap.html">Math Map ↗</a>
-  <a class="map-link" href="./warmup.html">Daily Warm-Up ↗</a>
-  <a class="map-link" href="./donow-ca.html">CA Do Now ↗</a>
-  <a class="map-link" href="./donow-calc1.html">Calc 1 Do Now ↗</a>
-  <a class="map-link" href="./puzzle.html">Puzzle of the Week ↗</a>
+  <h1>Mr. Halverson</h1>
+  <p>Cardinal Ritter College Prep &nbsp;&middot;&nbsp; Calculus · College Algebra · PreCalculus</p>
 </header>
+<section class="portal">
+  <div class="portal-hd">
+    <h1>Welcome</h1>
+    <p>Pick a tool below, or scroll down to browse the curriculum map.</p>
+  </div>
+  <div class="tool-grid">
+
+    <a class="tool-card" href="./warmup.html" style="border-color:#1d2d45">
+      <span class="t-icon">📅</span>
+      <span class="t-name">Daily Warm-Up</span>
+      <span class="t-desc">Random review problem pulled from any completed section.</span>
+      <span class="t-badge" style="background:#1d2d45;color:#4f8ef7">Daily</span>
+    </a>
+
+    <a class="tool-card" href="./donow-ca.html" style="border-color:#1a3328">
+      <span class="t-icon">✏️</span>
+      <span class="t-name">CA Do Now</span>
+      <span class="t-desc">Auto-graded College Algebra practice — two sections, new problems every day.</span>
+      <span class="t-badge" style="background:#1a3328;color:#5ccb87">Graded</span>
+    </a>
+
+    <a class="tool-card" href="./donow-calc1.html" style="border-color:#182a40">
+      <span class="t-icon">∫</span>
+      <span class="t-name">Calc 1 Do Now</span>
+      <span class="t-desc">Limits and derivative rules — quick checks from completed sections.</span>
+      <span class="t-badge" style="background:#182a40;color:#6ab3f5">Graded</span>
+    </a>
+
+    <a class="tool-card" href="./puzzle.html" style="border-color:#362b0e">
+      <span class="t-icon">🧩</span>
+      <span class="t-name">Puzzle of the Week</span>
+      <span class="t-desc">A new challenge every week. Sit with it. Bring your best thinking to class.</span>
+      <span class="t-badge" style="background:#362b0e;color:#f0b429">Weekly</span>
+    </a>
+
+    <a class="tool-card" href="./mathmap.html" style="border-color:#28193a">
+      <span class="t-icon">🗺️</span>
+      <span class="t-name">Math Map</span>
+      <span class="t-desc">Visual roadmap of the full curriculum — see the big picture.</span>
+      <span class="t-badge" style="background:#28193a;color:#b08cf5">Reference</span>
+    </a>
+
+    <a class="tool-card" href="./voting.html" style="border-color:#183038">
+      <span class="t-icon">🗳️</span>
+      <span class="t-name">Voting Theory</span>
+      <span class="t-desc">What makes an election fair? Mathematicians have spent centuries trying to answer that.</span>
+      <span class="t-badge" style="background:#183038;color:#5bc8d4">Explore</span>
+    </a>
+
+    <a class="tool-card" href="./gerry.html" style="border-color:#381818">
+      <span class="t-icon">📐</span>
+      <span class="t-name">Gerrymandering</span>
+      <span class="t-desc">The math behind drawing district lines — and the math that exposes manipulation.</span>
+      <span class="t-badge" style="background:#381818;color:#e87878">Explore</span>
+    </a>
+
+  </div>
+</section>
+<div class="curr-wrap">
+<button class="curr-toggle" id="currToggle" onclick="toggleCurr()">
+  📚 Curriculum Map &nbsp;—&nbsp; 139 sections across 4 courses
+  <span class="curr-chevron">▼</span>
+</button>
+<div class="curr-body" id="currBody">
 <div class="tab-bar"><button class="tab-btn active" onclick="showTab('calc1')" id="btn-calc1" style="--c:#185fa5;--l:#eef3f9">Calculus I <span class="cnt">(29)</span></button><button class="tab-btn " onclick="showTab('calc2')" id="btn-calc2" style="--c:#7a1a1a;--l:#f9eeed">Calculus II <span class="cnt">(29)</span></button><button class="tab-btn " onclick="showTab('ca')" id="btn-ca" style="--c:#1a7a3a;--l:#edf7f0">College Algebra <span class="cnt">(38)</span></button><button class="tab-btn " onclick="showTab('precalc')" id="btn-precalc" style="--c:#8b3a8b;--l:#f5edf5">PreCalculus <span class="cnt">(43)</span></button></div>
 <div class="tab-pane active" id="pane-calc1"><div class="pane-header" style="border-color:#185fa5;color:#185fa5">Calculus I &mdash; 29 sections</div><div class="row">  <span class="dot" style="background:#185fa5"></span>  <span class="label">Limits</span>  <span class="pills"><a class="pill" href="./Calc 1/Calc_1_1_Limits_Notes_INSTRUCTOR.html" style="background:#185fa5;color:#fff" title="./Calc 1/Calc_1_1_Limits_Notes_INSTRUCTOR.html">Notes&nbsp;I</a><a class="pill" href="./Calc 1/Calc_1_1_Limits_Notes_STUDENT.html" style="background:#185fa5;color:#fff" title="./Calc 1/Calc_1_1_Limits_Notes_STUDENT.html">Notes&nbsp;S</a><a class="pill" href="./Calc 1/Calc_1_1_Limits_Practice.html" style="background:#c9860a;color:#fff" title="./Calc 1/Calc_1_1_Limits_Practice.html">Practice</a></span></div>
 <div class="row">  <span class="dot" style="background:#185fa5"></span>  <span class="label">One-Sided Limits</span>  <span class="pills"><a class="pill" href="./Calc 1/Calc_1_1_5_One_Sided_Limits_Notes_INSTRUCTOR.html" style="background:#185fa5;color:#fff" title="./Calc 1/Calc_1_1_5_One_Sided_Limits_Notes_INSTRUCTOR.html">Notes&nbsp;I</a><a class="pill" href="./Calc 1/Calc_1_1_5_One_Sided_Limits_Notes_STUDENT.html" style="background:#185fa5;color:#fff" title="./Calc 1/Calc_1_1_5_One_Sided_Limits_Notes_STUDENT.html">Notes&nbsp;S</a><a class="pill" href="./Calc 1/Calc_1_1_5_One_Sided_Limits_Practice.html" style="background:#c9860a;color:#fff" title="./Calc 1/Calc_1_1_5_One_Sided_Limits_Practice.html">Practice</a></span></div>
@@ -193,12 +282,19 @@ header p{font-family:sans-serif;font-size:12px;color:#aaa}
 <div class="row">  <span class="dot" style="background:#c9860a"></span>  <span class="label">Polar Coordinate Graphs</span>  <span class="pills"><a class="pill" href="./PreCalc/PC_8_4_Polar_Coordinate_Graphs_Notes_INSTRUCTOR.html" style="background:#8b3a8b;color:#fff" title="./PreCalc/PC_8_4_Polar_Coordinate_Graphs_Notes_INSTRUCTOR.html">Notes&nbsp;I</a><a class="pill" href="./PreCalc/PC_8_4_Polar_Coordinate_Graphs_Notes_STUDENT.html" style="background:#8b3a8b;color:#fff" title="./PreCalc/PC_8_4_Polar_Coordinate_Graphs_Notes_STUDENT.html">Notes&nbsp;S</a><span class="pill na">Practice&nbsp;TBD</span></span></div>
 <div class="row">  <span class="dot" style="background:#c9860a"></span>  <span class="label">Conic Sections</span>  <span class="pills"><a class="pill" href="./PreCalc/PC_8_5_Conic_Sections_Notes_INSTRUCTOR.html" style="background:#8b3a8b;color:#fff" title="./PreCalc/PC_8_5_Conic_Sections_Notes_INSTRUCTOR.html">Notes&nbsp;I</a><a class="pill" href="./PreCalc/PC_8_5_Conic_Sections_Notes_STUDENT.html" style="background:#8b3a8b;color:#fff" title="./PreCalc/PC_8_5_Conic_Sections_Notes_STUDENT.html">Notes&nbsp;S</a><span class="pill na">Practice&nbsp;TBD</span></span></div>
 <div class="row">  <span class="dot" style="background:#c9860a"></span>  <span class="label">Parametric Equations</span>  <span class="pills"><a class="pill" href="./PreCalc/PC_8_6_Parametric_Equations_Notes_INSTRUCTOR.html" style="background:#8b3a8b;color:#fff" title="./PreCalc/PC_8_6_Parametric_Equations_Notes_INSTRUCTOR.html">Notes&nbsp;I</a><a class="pill" href="./PreCalc/PC_8_6_Parametric_Equations_Notes_STUDENT.html" style="background:#8b3a8b;color:#fff" title="./PreCalc/PC_8_6_Parametric_Equations_Notes_STUDENT.html">Notes&nbsp;S</a><span class="pill na">Practice&nbsp;TBD</span></span></div></div>
+</div></div><!-- /curr-body /curr-wrap -->
 <script>
 function showTab(id) {
   document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('pane-' + id).classList.add('active');
   document.getElementById('btn-' + id).classList.add('active');
+}
+function toggleCurr() {
+  const btn  = document.getElementById('currToggle');
+  const body = document.getElementById('currBody');
+  btn.classList.toggle('open');
+  body.classList.toggle('open');
 }
 </script>
 </body>

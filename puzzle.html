@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Puzzle of the Week — Mr. Halverson</title>
+  <title>Daily Puzzle — Mr. Halverson</title>
   <style>
     :root {
       --bg: #0f1117;
@@ -126,42 +126,40 @@
     }
     .source-link:hover { color: var(--accent); }
 
-    /* Puzzle index strip */
-    .puzzle-index {
+    /* Day counter */
+    .day-counter {
       margin-top: 1.8rem;
       max-width: 720px;
       width: 100%;
     }
-    .index-label {
-      font-size: .72rem;
-      font-weight: 700;
-      letter-spacing: .12em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: .75rem;
-    }
-    .index-dots {
-      display: flex;
-      flex-wrap: wrap;
-      gap: .45rem;
-    }
-    .index-dot {
-      width: 28px;
-      height: 28px;
-      border-radius: 6px;
-      border: 1px solid var(--border);
-      background: var(--card);
-      font-size: .72rem;
-      font-weight: 600;
-      color: var(--muted);
+    .counter-inner {
       display: flex;
       align-items: center;
-      justify-content: center;
-      transition: border-color .15s, color .15s;
+      gap: 1rem;
+      padding: .9rem 1.1rem;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
     }
-    .index-dot.past    { border-color: rgba(79,142,247,.3); color: var(--accent); background: rgba(79,142,247,.07); }
-    .index-dot.current { border-color: var(--gold); color: var(--gold); background: rgba(240,180,41,.12); font-weight: 700; }
-    .index-dot.future  { opacity: .3; }
+    .counter-nums {
+      font-size: .82rem;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+    .counter-nums strong { color: var(--gold); font-size: 1rem; }
+    .progress-bar-track {
+      flex: 1;
+      height: 5px;
+      background: rgba(255,255,255,.07);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: var(--gold);
+      border-radius: 999px;
+      transition: width .4s ease;
+    }
 
     /* Challenge links */
     .links-section {
@@ -219,10 +217,7 @@
   <div style="text-align:center;color:var(--muted);padding:2rem">Loading…</div>
 </div>
 
-<div class="puzzle-index">
-  <div class="index-label">All puzzles this year</div>
-  <div class="index-dots" id="indexDots"></div>
-</div>
+<div class="day-counter" id="dayCounter"></div>
 
 <div class="links-section">
   <div class="links-label">More challenges</div>
@@ -272,7 +267,9 @@
 <script>
 /* ─────────────────────────────────────────────
    CONFIGURATION
-   Change CADENCE_DAYS to 30 when ready for monthly cadence.
+   1  = daily   (current)
+   7  = weekly
+   30 = monthly
 ───────────────────────────────────────────── */
 const CADENCE_DAYS = 7;
 
@@ -415,56 +412,160 @@ Everyone can row.
 
 Can all six get across? If so, how?`,
     source: "https://en.wikipedia.org/wiki/Missionaries_and_cannibals_problem"
+  },
+
+  {
+    title: "The Locker Problem",
+    category: "Counting / Number Theory",
+    body: `A school has 100 lockers and 100 students, all lockers starting closed.
+
+Student 1 opens every locker. Student 2 toggles every 2nd locker (closes #2, #4, #6, …). Student 3 toggles every 3rd locker. This continues until Student 100 toggles only locker #100.
+
+Which lockers are open at the end?
+
+Once you have the answer, ask yourself: why those ones? What do they have in common? Can you explain it without just checking each locker individually?`
+  },
+
+  {
+    title: "The 100 Prisoners",
+    category: "Probability / Strategy",
+    body: `100 prisoners are each assigned a unique number from 1–100. A warden places slips numbered 1–100 into 100 boxes, randomly arranged in a room. Each prisoner may enter the room alone, open up to 50 boxes, then leave without communicating with anyone else.
+
+If every prisoner finds their own number, they all go free. If even one fails, they all remain imprisoned.
+
+The prisoners may agree on a strategy beforehand, but once the process starts they cannot communicate.
+
+A random strategy gives each prisoner a 50% chance, so the group's probability of success is (1/2)^100 — essentially zero. But there exists a strategy that succeeds with probability greater than 30%.
+
+What is it?`
+  },
+
+  {
+    title: "The Birthday Problem",
+    category: "Probability",
+    body: `How many people need to be in a room before there is a greater than 50% chance that at least two of them share a birthday?
+
+Make a guess before you calculate.
+
+Assume birthdays are uniformly distributed across 365 days (ignore leap years). Work out the exact probability for small group sizes and find the tipping point.
+
+Most people's intuition is off by a factor of 10.`
+  },
+
+  {
+    title: "The Mutilated Chessboard",
+    category: "Combinatorics / Proof",
+    body: `Take a standard 8×8 chessboard and remove two squares from diagonally opposite corners — say the top-left and bottom-right.
+
+You have 31 dominoes, each of which covers exactly two adjacent squares.
+
+Can you tile the remaining 62 squares perfectly with the 31 dominoes?
+
+If yes, show how. If no, prove it is impossible — and do so without exhaustive checking.`
+  },
+
+  {
+    title: "The Josephus Problem",
+    category: "Patterns / Number Theory",
+    body: `n people stand in a circle numbered 1 through n. Starting from person 1, every second person is eliminated — person 2 is out first, then person 4, then person 6, and so on, looping around until one person remains.
+
+For n = 10, who is the last one standing?
+
+Now try n = 16. And n = 100. Do you notice a pattern? Can you find a formula for the survivor's position given any n?`,
+  },
+
+  {
+    title: "The Broken Stick",
+    category: "Geometric Probability",
+    body: `You pick two points at random along a stick and break the stick at both points, creating three pieces.
+
+What is the probability that the three pieces can form a triangle?
+
+Hint: think about what condition the three lengths must satisfy, then think about how to represent all possible break points geometrically.`
+  },
+
+  {
+    title: "The Pirate Game",
+    category: "Game Theory / Logic",
+    body: `Five pirates — ranked 1 (most senior) through 5 — find 100 gold coins. They divide by vote: the most senior living pirate proposes a split, then all pirates vote. If at least half approve (including the proposer), the split stands. If not, that pirate is thrown overboard and the next most senior proposes.
+
+Pirates are perfectly rational, and their priorities in order are: (1) survive, (2) maximize gold, (3) enjoy seeing others thrown overboard.
+
+What does Pirate 1 propose — and why does the proposal actually get accepted?
+
+Work backwards from the simplest case.`
+  },
+
+  {
+    title: "The Königsberg Bridge Problem",
+    category: "Graph Theory",
+    body: `The city of Königsberg (now Kaliningrad) was built across a river with two islands, connected by seven bridges. The residents had a standing puzzle: can you walk through the city crossing each bridge exactly once?
+
+In 1736, Leonhard Euler solved the problem — and in doing so, invented a new branch of mathematics.
+
+Draw the city as a simple diagram of dots (landmasses) and lines (bridges). Can you take a walk that crosses each line exactly once? If not, can you explain precisely why — in a way that would work for any such diagram?`
   }
 ];
 
 /* ─────────────────────────────────────────────
    UTILITIES
 ───────────────────────────────────────────── */
-// Epoch Monday for consistent week numbering
 const EPOCH = new Date('2025-08-18T00:00:00'); // First day of school year
+const YEAR_END = new Date('2026-05-22T00:00:00');
 
 function currentPeriodIndex() {
   const now = new Date();
   const msPerPeriod = CADENCE_DAYS * 24 * 3600 * 1000;
-  return Math.floor((now - EPOCH) / msPerPeriod);
+  return Math.max(0, Math.floor((now - EPOCH) / msPerPeriod));
 }
 
-function weekStartDate(periodIdx) {
-  const ms = EPOCH.getTime() + periodIdx * CADENCE_DAYS * 24 * 3600 * 1000;
+function periodStartDate(idx) {
+  const ms = EPOCH.getTime() + idx * CADENCE_DAYS * 24 * 3600 * 1000;
   return new Date(ms);
 }
 
 function fmtDate(d) {
+  return d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+}
+function fmtShort(d) {
   return d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
 }
 
 function totalPeriodsThisYear() {
-  // Approx end of school year
-  const end = new Date('2026-05-22T00:00:00');
   const msPerPeriod = CADENCE_DAYS * 24 * 3600 * 1000;
-  return Math.ceil((end - EPOCH) / msPerPeriod);
+  return Math.ceil((YEAR_END - EPOCH) / msPerPeriod);
+}
+
+function cadenceLabel() {
+  if (CADENCE_DAYS === 1)  return 'Day';
+  if (CADENCE_DAYS <= 10) return 'Week';
+  return 'Month';
+}
+
+function periodTitle() {
+  if (CADENCE_DAYS === 1)  return 'Daily Puzzle';
+  if (CADENCE_DAYS <= 10) return 'Puzzle of the Week';
+  return 'Puzzle of the Month';
 }
 
 /* ─────────────────────────────────────────────
    RENDER
 ───────────────────────────────────────────── */
 function init() {
-  const idx = currentPeriodIndex();
-  // Clamp to non-negative; cycle through puzzle library
-  const safeIdx = Math.max(0, idx);
+  const safeIdx = currentPeriodIndex();
   const puzzleIdx = safeIdx % PUZZLES.length;
   const puzzle = PUZZLES[puzzleIdx];
 
-  // Week label
-  const start = weekStartDate(safeIdx);
-  const end   = weekStartDate(safeIdx + 1);
-  const cadenceWord = CADENCE_DAYS >= 28 ? 'Month' : 'Week';
-  const rangeStr = CADENCE_DAYS >= 28
+  // Period label
+  const start = periodStartDate(safeIdx);
+  const end   = periodStartDate(safeIdx + 1);
+  const word  = cadenceLabel();
+  const rangeStr = CADENCE_DAYS === 1
     ? fmtDate(start)
-    : `${fmtDate(start)} – ${fmtDate(end)}`;
-  document.getElementById('weekLabel').textContent =
-    `${cadenceWord} of ${safeIdx + 1} · ${rangeStr}`;
+    : CADENCE_DAYS >= 28
+      ? fmtShort(start)
+      : `${fmtShort(start)} – ${fmtShort(end)}`;
+  document.getElementById('weekLabel').textContent = `${word} ${safeIdx + 1} · ${rangeStr}`;
 
   // Main card
   const sourceHtml = puzzle.source
@@ -486,16 +587,16 @@ function init() {
     ${sourceHtml}
   `;
 
-  // Index dots
+  // Progress counter
   const total = Math.max(totalPeriodsThisYear(), safeIdx + 1);
-  const dots = document.getElementById('indexDots');
-  for (let i = 0; i < total; i++) {
-    const d = document.createElement('div');
-    d.className = 'index-dot ' + (i < safeIdx ? 'past' : i === safeIdx ? 'current' : 'future');
-    d.title = `Puzzle #${i + 1} — ${fmtDate(weekStartDate(i))}`;
-    d.textContent = i + 1;
-    dots.appendChild(d);
-  }
+  const pct = Math.min(100, Math.round((safeIdx + 1) / total * 100));
+  document.getElementById('dayCounter').innerHTML = `
+    <div class="counter-inner">
+      <div class="counter-nums">${word} <strong>${safeIdx + 1}</strong> of ${total}</div>
+      <div class="progress-bar-track">
+        <div class="progress-bar-fill" style="width:${pct}%"></div>
+      </div>
+    </div>`;
 }
 
 init();
