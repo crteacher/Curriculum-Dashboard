@@ -122,9 +122,14 @@ function renderList(data,id){document.getElementById(id).innerHTML=data.map(d=>d
 renderList(CA_EXITS,'caExitList');renderList(C2_EXITS,'c2ExitList');
 fetch('./state.json').then(r=>r.json()).then(state=>{
   function fill(secId,map,dayEl,qEl){
-    const e=map[secId];
+    let e=map[secId];
+    if(!e||!e.exit){
+      // Current section not in this plan — pick a random one from the plan
+      const opts=Object.values(map).filter(x=>x.exit);
+      e=opts[Math.floor(Math.random()*opts.length)]||null;
+    }
     if(e&&e.exit){document.getElementById(dayEl).textContent='Day '+e.day+' · '+e.title;document.getElementById(qEl).textContent=e.exit;}
-    else{document.getElementById(qEl).innerHTML='<span class="et-none">No exit ticket for current section.</span>';}
+    else{document.getElementById(qEl).innerHTML='<span class="et-none">No exit ticket available.</span>';}
   }
   fill(state.courses?.collegeAlgebra?.currentSection,CA_MAP,'etCaDay','etCaQ');
   fill(state.courses?.calc2?.currentSection,C2_MAP,'etC2Day','etC2Q');
