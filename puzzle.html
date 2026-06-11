@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Puzzle of the Week — Mr. Halverson</title>
+  <style>
+    :root {
+      --bg: #0f1117;
+      --card: #1a1d27;
+      --accent: #4f8ef7;
+      --text: #e8eaf0;
+      --muted: #7a7f96;
+      --border: #2a2d3d;
+      --gold: #f0b429;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2.5rem 1rem 3rem;
+    }
+
+    .page-header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+    .page-header .week-label {
+      font-size: .78rem;
+      color: var(--muted);
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      margin-bottom: .4rem;
+    }
+    .page-header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+    }
+    .page-header h1 span { color: var(--gold); }
+
+    /* Main puzzle card */
+    .puzzle-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2.2rem 2.5rem;
+      max-width: 720px;
+      width: 100%;
+      box-shadow: 0 10px 50px rgba(0,0,0,.45);
+    }
+
+    .puzzle-meta {
+      display: flex;
+      align-items: center;
+      gap: .65rem;
+      margin-bottom: 1.4rem;
+      flex-wrap: wrap;
+    }
+    .puzzle-num {
+      font-size: .68rem;
+      font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .cat-tag {
+      font-size: .66rem;
+      font-weight: 700;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+      padding: .22rem .7rem;
+      border-radius: 999px;
+      background: rgba(240,180,41,.15);
+      color: var(--gold);
+    }
+
+    .puzzle-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      line-height: 1.25;
+      margin-bottom: 1.2rem;
+    }
+
+    .puzzle-body {
+      font-size: 1.02rem;
+      line-height: 1.8;
+      color: var(--text);
+      white-space: pre-line;
+    }
+    .puzzle-body strong { color: var(--gold); }
+
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin: 1.6rem 0;
+    }
+
+    .discuss-note {
+      display: flex;
+      align-items: flex-start;
+      gap: .75rem;
+      font-size: .88rem;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+    .discuss-note .icon {
+      font-size: 1.1rem;
+      margin-top: .05rem;
+      flex-shrink: 0;
+    }
+
+    .source-link {
+      display: inline-flex;
+      align-items: center;
+      gap: .3rem;
+      margin-top: 1.2rem;
+      font-size: .78rem;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color .2s;
+    }
+    .source-link:hover { color: var(--accent); }
+
+    /* Puzzle index strip */
+    .puzzle-index {
+      margin-top: 1.8rem;
+      max-width: 720px;
+      width: 100%;
+    }
+    .index-label {
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: .75rem;
+    }
+    .index-dots {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .45rem;
+    }
+    .index-dot {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      font-size: .72rem;
+      font-weight: 600;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color .15s, color .15s;
+    }
+    .index-dot.past    { border-color: rgba(79,142,247,.3); color: var(--accent); background: rgba(79,142,247,.07); }
+    .index-dot.current { border-color: var(--gold); color: var(--gold); background: rgba(240,180,41,.12); font-weight: 700; }
+    .index-dot.future  { opacity: .3; }
+
+    /* Challenge links */
+    .links-section {
+      margin-top: 1.8rem;
+      max-width: 720px;
+      width: 100%;
+    }
+    .links-label {
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: .75rem;
+    }
+    .link-list {
+      display: flex;
+      flex-direction: column;
+      gap: .5rem;
+    }
+    .challenge-link {
+      display: flex;
+      align-items: flex-start;
+      gap: .6rem;
+      padding: .75rem 1rem;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      text-decoration: none;
+      transition: border-color .2s, background .2s;
+    }
+    .challenge-link:hover { border-color: rgba(79,142,247,.4); background: rgba(79,142,247,.06); }
+    .challenge-link .link-icon { font-size: 1rem; flex-shrink: 0; margin-top: .05rem; }
+    .challenge-link .link-info {}
+    .challenge-link .link-name { font-size: .9rem; font-weight: 600; color: var(--text); }
+    .challenge-link .link-desc { font-size: .78rem; color: var(--muted); margin-top: .1rem; }
+
+    .page-footer {
+      margin-top: 2rem;
+      color: var(--muted);
+      font-size: .78rem;
+      text-align: center;
+    }
+    .page-footer a { color: var(--muted); text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="week-label" id="weekLabel"></div>
+  <h1>Puzzle of the <span>Week</span></h1>
+</div>
+
+<div class="puzzle-card" id="puzzleCard">
+  <div style="text-align:center;color:var(--muted);padding:2rem">Loading…</div>
+</div>
+
+<div class="puzzle-index">
+  <div class="index-label">All puzzles this year</div>
+  <div class="index-dots" id="indexDots"></div>
+</div>
+
+<div class="links-section">
+  <div class="links-label">More challenges</div>
+  <div class="link-list">
+    <a class="challenge-link" href="https://mathriddles.williams.edu/" target="_blank">
+      <span class="link-icon">🧮</span>
+      <div class="link-info">
+        <div class="link-name">Williams Math Riddles</div>
+        <div class="link-desc">Curated collection ranging from accessible to genuinely hard</div>
+      </div>
+    </a>
+    <a class="challenge-link" href="https://thefiddler.substack.com/" target="_blank">
+      <span class="link-icon">🎲</span>
+      <div class="link-info">
+        <div class="link-name">The Fiddler (Substack)</div>
+        <div class="link-desc">Weekly probability and math puzzles — varies in difficulty</div>
+      </div>
+    </a>
+    <a class="challenge-link" href="https://murdle.com/" target="_blank">
+      <span class="link-icon">🔍</span>
+      <div class="link-info">
+        <div class="link-name">Murdle</div>
+        <div class="link-desc">Daily logic deduction puzzles</div>
+      </div>
+    </a>
+    <a class="challenge-link" href="https://projecteuler.net/" target="_blank">
+      <span class="link-icon">💻</span>
+      <div class="link-info">
+        <div class="link-name">Project Euler</div>
+        <div class="link-desc">Math problems that reward writing code — good for the ambitious</div>
+      </div>
+    </a>
+    <a class="challenge-link" href="https://artisanalsudoku.substack.com/" target="_blank">
+      <span class="link-icon">🟦</span>
+      <div class="link-info">
+        <div class="link-name">Artisanal Sudoku</div>
+        <div class="link-desc">Beautifully crafted Sudoku variants beyond the standard puzzle</div>
+      </div>
+    </a>
+  </div>
+</div>
+
+<div class="page-footer">
+  <a href="index.html">← Dashboard</a>
+</div>
+
+<script>
+/* ─────────────────────────────────────────────
+   CONFIGURATION
+   Change CADENCE_DAYS to 30 when ready for monthly cadence.
+───────────────────────────────────────────── */
+const CADENCE_DAYS = 7;
+
+/* ─────────────────────────────────────────────
+   PUZZLE LIBRARY
+   Add new puzzles by appending to this array.
+   Fields: title, category, body, source (optional URL)
+───────────────────────────────────────────── */
+const PUZZLES = [
+  {
+    title: "The Torch Bridge",
+    category: "Logic",
+    body: `Adam, Bob, Claire, and Dave need to cross a rickety bridge at night. The bridge can only hold two people at a time, they have one torch (which must accompany every crossing), and they must minimize total crossing time.
+
+Their crossing speeds: Adam — 1 min, Bob — 2 min, Claire — 5 min, Dave — 10 min. When two people cross together, they move at the slower person's pace.
+
+Adam thinks for a moment and says the group can cross in exactly 17 minutes. There is no trick.
+
+How?`,
+    source: "http://puzzles.nigelcoldwell.co.uk/twentyfive.htm"
+  },
+  {
+    title: "Rope Around the Earth",
+    category: "Geometry",
+    body: `Imagine a rope stretched all the way around the Earth's equator, lying flat on the ground. (Assume the Earth is a perfect sphere with a radius of 6,378 km.)
+
+You want to raise the rope so that it hovers exactly 1 meter off the ground all the way around.
+
+How much extra rope do you need to add?
+
+Your answer might surprise you.`
+  },
+  {
+    title: "The Water Containers",
+    category: "Logic",
+    body: `You have a 3-liter jug and a 5-liter jug. Neither has any markings except for the total volume label. You have a running tap.
+
+Using only these two containers and the tap, measure out exactly 4 liters of water.
+
+Bonus: Can you generalize your method? For which target volumes does a strategy always exist?`,
+    source: "http://puzzles.nigelcoldwell.co.uk/twentytwo.htm"
+  },
+  {
+    title: "Brick in a Boat",
+    category: "Physics / Reasoning",
+    body: `A man is sitting in a rowing boat on a lake. In the boat with him is a brick. He picks up the brick and throws it overboard — it sinks quickly to the bottom of the lake.
+
+Does the water level in the lake go up, go down, or stay the same after the brick sinks?
+
+Explain your reasoning.`
+  },
+  {
+    title: "The Burning Fuse",
+    category: "Logic",
+    body: `You have a fuse that burns in exactly one minute. The fuse is not uniform — it may burn slowly in some places and quickly in others, so you cannot measure time by how much is left.
+
+You have a box of matches and no watch.
+
+Part 1: How do you measure exactly 30 seconds?
+Part 2: If you had a second identical fuse, how would you measure exactly 45 seconds?`,
+    source: "http://puzzles.nigelcoldwell.co.uk/seventeen.htm"
+  },
+  {
+    title: "The Bucket Problem",
+    category: "Logic",
+    body: `You have a 6-gallon bucket and a 7-gallon bucket. No other measuring tools.
+
+How can you measure out exactly 3 gallons of water?`
+  },
+  {
+    title: "Squares on a Chessboard",
+    category: "Counting",
+    body: `How many squares are there on a standard 8×8 chessboard?
+
+The answer is not 64.
+
+A square can be any size — 1×1, 2×2, 3×3, all the way up to 8×8. Count them all.
+
+Can you write a formula for an n×n board?`
+  },
+  {
+    title: "The Bread Shares",
+    category: "Fairness / Reasoning",
+    body: `Two travelers share a meal with a stranger named Ali. The first traveler contributed 5 loaves of bread, the second contributed 3 loaves. All eight loaves were eaten equally among the three.
+
+When Ali left, he gave them 8 coins as thanks. The second traveler said they should split it 4-4, since they both gave food. The first traveler said it should be 5-3, matching their contributions.
+
+They asked Ali to decide. Ali said: "The fair split is 7 coins for the first traveler and 1 coin for the second."
+
+Why is Ali's answer actually the most mathematically correct?`
+  },
+  {
+    title: "The Polling Place String",
+    category: "Geometry",
+    body: `A polling place is a square building with sides of exactly 100 feet. A string also 100 feet long is tied to a door in the middle of one side of the building.
+
+An election official holds the free end of the string.
+
+What is the total area of the region outside the building that she can reach while holding the string taut?`
+  },
+  {
+    title: "The Three Wise Men",
+    category: "Logic",
+    body: `Three wise men stand in a line, each wearing a hat chosen from a set of 5 hats: 2 black and 3 white. The man at the back can see both others. The man in the middle can see only the man in front. The man at the front can see no one.
+
+No one can see their own hat.
+
+After a long silence, the man at the front — who can see nothing — confidently announces: "My hat is white."
+
+He is correct. How did he figure it out?`
+  },
+  {
+    title: "Hilbert's Hotel",
+    category: "Infinity",
+    body: `A hotel has infinitely many rooms, numbered 1, 2, 3, 4, … and every single room is occupied.
+
+A new guest arrives and asks for a room. The manager says, "No problem," and accommodates the guest without evicting anyone.
+
+How?
+
+Follow-up: A bus arrives carrying infinitely many new guests. Can the manager fit them all in?`
+  },
+  {
+    title: "The Monty Hall Problem",
+    category: "Probability",
+    body: `You're on a game show. There are three doors. Behind one is a car; behind the other two are goats. You pick Door 1.
+
+The host — who knows what's behind each door — opens Door 3 to reveal a goat. He then offers you a choice: stick with Door 1, or switch to Door 2.
+
+Should you switch, stick, or does it not matter?
+
+Most people's first instinct is wrong. Can you prove the right answer?`
+  },
+  {
+    title: "Missionaries and Cannibals",
+    category: "Logic",
+    body: `Three missionaries and three cannibals need to cross a river using a boat that holds at most two people. At no point — on either bank or in the boat — can cannibals outnumber missionaries (or the missionaries will be eaten).
+
+Everyone can row.
+
+Can all six get across? If so, how?`,
+    source: "https://en.wikipedia.org/wiki/Missionaries_and_cannibals_problem"
+  }
+];
+
+/* ─────────────────────────────────────────────
+   UTILITIES
+───────────────────────────────────────────── */
+// Epoch Monday for consistent week numbering
+const EPOCH = new Date('2025-08-18T00:00:00'); // First day of school year
+
+function currentPeriodIndex() {
+  const now = new Date();
+  const msPerPeriod = CADENCE_DAYS * 24 * 3600 * 1000;
+  return Math.floor((now - EPOCH) / msPerPeriod);
+}
+
+function weekStartDate(periodIdx) {
+  const ms = EPOCH.getTime() + periodIdx * CADENCE_DAYS * 24 * 3600 * 1000;
+  return new Date(ms);
+}
+
+function fmtDate(d) {
+  return d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+}
+
+function totalPeriodsThisYear() {
+  // Approx end of school year
+  const end = new Date('2026-05-22T00:00:00');
+  const msPerPeriod = CADENCE_DAYS * 24 * 3600 * 1000;
+  return Math.ceil((end - EPOCH) / msPerPeriod);
+}
+
+/* ─────────────────────────────────────────────
+   RENDER
+───────────────────────────────────────────── */
+function init() {
+  const idx = currentPeriodIndex();
+  // Clamp to non-negative; cycle through puzzle library
+  const safeIdx = Math.max(0, idx);
+  const puzzleIdx = safeIdx % PUZZLES.length;
+  const puzzle = PUZZLES[puzzleIdx];
+
+  // Week label
+  const start = weekStartDate(safeIdx);
+  const end   = weekStartDate(safeIdx + 1);
+  const cadenceWord = CADENCE_DAYS >= 28 ? 'Month' : 'Week';
+  const rangeStr = CADENCE_DAYS >= 28
+    ? fmtDate(start)
+    : `${fmtDate(start)} – ${fmtDate(end)}`;
+  document.getElementById('weekLabel').textContent =
+    `${cadenceWord} of ${safeIdx + 1} · ${rangeStr}`;
+
+  // Main card
+  const sourceHtml = puzzle.source
+    ? `<a class="source-link" href="${puzzle.source}" target="_blank">↗ Source / hints</a>`
+    : '';
+
+  document.getElementById('puzzleCard').innerHTML = `
+    <div class="puzzle-meta">
+      <span class="puzzle-num">Puzzle #${safeIdx + 1}</span>
+      <span class="cat-tag">${puzzle.category}</span>
+    </div>
+    <div class="puzzle-title">${puzzle.title}</div>
+    <div class="puzzle-body">${puzzle.body.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')}</div>
+    <div class="divider"></div>
+    <div class="discuss-note">
+      <span class="icon">💬</span>
+      <span>Sit with it. Bring your best thinking to class — there's no answer here.</span>
+    </div>
+    ${sourceHtml}
+  `;
+
+  // Index dots
+  const total = Math.max(totalPeriodsThisYear(), safeIdx + 1);
+  const dots = document.getElementById('indexDots');
+  for (let i = 0; i < total; i++) {
+    const d = document.createElement('div');
+    d.className = 'index-dot ' + (i < safeIdx ? 'past' : i === safeIdx ? 'current' : 'future');
+    d.title = `Puzzle #${i + 1} — ${fmtDate(weekStartDate(i))}`;
+    d.textContent = i + 1;
+    dots.appendChild(d);
+  }
+}
+
+init();
+</script>
+</body>
+</html>
