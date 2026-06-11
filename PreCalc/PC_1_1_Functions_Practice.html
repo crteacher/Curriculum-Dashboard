@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Functions &mdash; Practice</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.7}
+  .container{max-width:820px;margin:0 auto;padding:2rem 1.5rem 4rem}
+  h1{font-size:26px;font-weight:700;margin-bottom:4px}
+  .subtitle{font-size:14px;color:#666;margin-bottom:2rem;font-family:sans-serif}
+  .section{margin-bottom:2.5rem}
+  .section-title{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;
+    color:#777;font-family:sans-serif;margin-bottom:1rem;border-bottom:1px solid #ddd;padding-bottom:6px}
+  .concept{background:#d9e8f5;border-left:4px solid #185fa5;border-radius:0 8px 8px 0;
+    padding:.85rem 1.1rem;font-size:15px;margin-bottom:1rem}
+  .concept-label{font-family:sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;
+    letter-spacing:.07em;color:#185fa5;display:block;margin-bottom:.35rem}
+  .score-bar{display:flex;align-items:center;gap:12px;margin-bottom:1.25rem;
+    font-family:sans-serif;font-size:14px;flex-wrap:wrap}
+  .score-display{font-weight:700;font-size:18px;min-width:60px}
+  .score-label{color:#777;font-size:13px}
+  .score-note{font-size:12px;color:#999;font-style:italic}
+  .progress{flex:1;min-width:80px;height:6px;background:#e5e1d8;border-radius:3px;overflow:hidden}
+  .progress-fill{height:100%;background:#185fa5;border-radius:3px;transition:width .4s}
+  .reset-btn{font-size:12px;background:none;border:1px solid #bbb;border-radius:5px;
+    padding:4px 10px;cursor:pointer;color:#666;font-family:sans-serif;white-space:nowrap}
+  .reset-btn:hover{background:#eee}
+  .problems{display:grid;grid-template-columns:repeat(auto-fill,minmax(370px,1fr));gap:14px}
+  .card{background:#fff;border:1.5px solid #ddd;border-radius:10px;overflow:hidden;transition:border-color .25s}
+  .card.correct{border-color:#3a7a3a}.card.wrong{border-color:#b03030}.card.peeked{border-color:#b8860b}
+  .card-body{padding:14px 16px}
+  .card-meta{font-family:sans-serif;font-size:12px;color:#888;margin-bottom:4px}
+  .card-expr{font-size:17px;margin-bottom:12px;line-height:2.2;overflow-x:auto}
+  .katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}
+  .input-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .ans-input{font-family:'Courier New',monospace;font-size:14px;border:1px solid #ccc;
+    border-radius:6px;padding:7px 10px;flex:1;min-width:120px;background:#fafaf8;
+    color:#1a1a1a;outline:none}
+  .ans-input:focus{border-color:#185fa5;background:#fff}
+  .ans-input.ok{border-color:#3a7a3a;background:#f0faf0}
+  .ans-input.bad{border-color:#b03030;background:#fdf0f0}
+  .check-btn{font-family:sans-serif;font-size:13px;background:#1a1a1a;color:#fff;
+    border:none;border-radius:6px;padding:7px 14px;cursor:pointer}
+  .check-btn:hover{background:#333}.check-btn:disabled{background:#aaa;cursor:default}
+  .hint{font-family:sans-serif;font-size:12px;color:#888;margin-top:7px}
+  .feedback{font-family:sans-serif;font-size:13px;margin-top:10px;padding:8px 12px;
+    border-radius:6px;display:none;line-height:1.5}
+  .feedback.correct{display:block;background:#eaf5ea;color:#1a5a1a}
+  .feedback.wrong{display:block;background:#faeaea;color:#7a1a1a}
+  .feedback.peeked{display:block;background:#fdf8e8;color:#7a5a00}
+  .reveal-link{font-family:sans-serif;font-size:12px;color:#999;cursor:pointer;
+    text-decoration:underline;margin-top:8px;display:inline-block}
+  .reveal-link:hover{color:#555}
+  .revealed-answer{display:none;margin-top:8px;font-family:sans-serif;font-size:13px;
+    color:#444;background:#f5f3ef;border-radius:6px;padding:8px 11px;line-height:1.8;overflow-x:auto}
+  code{font-family:'Courier New',monospace;background:#f0ede7;padding:1px 5px;border-radius:3px;font-size:12px}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Functions</h1>
+  <p class="subtitle">PreCalc &nbsp;&middot;&nbsp; &sect;1.1 &nbsp;&middot;&nbsp; Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026</p>
+  <div class="section">
+    <div class="section-title">Core Ideas</div>
+    <div class="concept">
+      <span class="concept-label">Function Definition</span>
+      A <strong>function</strong> $f$ is a rule that assigns each input $x$ in the domain exactly one output $f(x)$ in the range.
+      The <strong>vertical line test</strong>: a graph represents a function if and only if every vertical line crosses it at most once.
+    </div>
+    <div class="concept">
+      <span class="concept-label">Domain and Range</span>
+      The <strong>domain</strong> is the set of all valid inputs; the <strong>range</strong> is the set of all resulting outputs.
+      For algebraic functions: exclude $x$-values that cause division by zero or a negative under an even root.
+    </div>
+    <div class="concept">
+      <span class="concept-label">Function Notation</span>
+      $f(a)$ means "evaluate $f$ at $x = a$": substitute $a$ for every $x$.
+      For example, if $f(x)=x^2-3x$, then $f(2)=4-6=-2$.
+    </div>
+  </div>
+  <div class="section">
+    <div class="section-title">Practice Problems</div>
+    <p style="font-family:sans-serif;font-size:13px;color:#666;margin-bottom:1rem;">
+      Enter intervals in interval notation like <code>(-inf,inf)</code> or <code>[2,inf)</code>.
+      Enter ordered pairs like <code>(3,-1)</code>. Press <strong>Check</strong> or hit Enter.
+    </p>
+    <div class="score-bar">
+      <span class="score-label">Score:</span>
+      <span class="score-display" id="score">0 / 8</span>
+      <span class="score-note">first attempt only</span>
+      <div class="progress"><div class="progress-fill" id="prog" style="width:0%"></div></div>
+      <button class="reset-btn" onclick="resetAll()">New set &#8635;</button>
+    </div>
+    <div class="problems" id="problems"></div>
+  </div>
+</div>
+<script>
+function _rf(){const b=new Uint32Array(1);crypto.getRandomValues(b);return b[0]/4294967296;}
+function rInt(n){return Math.floor(_rf()*n);}
+function shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=rInt(i+1);[a[i],a[j]]=[a[j],a[i]];}return a;}
+function choose(arr){return arr[rInt(arr.length)];}
+function norm(s){return s.trim().toLowerCase().replace(/\s+/g,'').replace(/[−‐]/g,'-').replace(/∞/g,'inf').replace(/∪/g,'u');}
+function ok(user,acc){return acc.some(a=>norm(user)===norm(a));}
+function gen1(){const a=choose([1,2,-1]);const b=choose([3,-2,4,-3]);const c=choose([1,-1,2,-2]);const x=choose([2,3,-1,-2,0]);const val=a*x*x+b*x+c;const aStr=a===1?'':(a===-1?'-':String(a));const bStr=b>0?`+${b}x`:(b<0?`${b}x`:'');const cStr=c>0?`+${c}`:(c<0?String(c):'');return{latex:`\\text{If } f(x)=${aStr}x^2${bStr}${cStr},\\text{ find } f(${x}).`,answer:[String(val)],hint:'What operation replaces the variable in function notation?',step:`f(${x})=${a}(${x})^2${b>0?'+':''}${b}(${x})${c>=0?'+':''}${c}=${val}`};}
+function gen2(){const c=choose([2,3,4,5,-1,-2,-3]);return{latex:`\\text{Find the domain of } f(x)=\\dfrac{x+1}{x-${c}}.`,answer:[`(-inf,${c})u(${c},inf)`],hint:'Which input value makes the denominator equal zero?',step:`x-${c}\\neq 0\\Rightarrow x\\neq ${c},\\; \\text{domain: }(-\\infty,${c})\\cup(${c},\\infty)`};}
+function gen3(){const c=choose([1,4,9,16,-1,-4]);const sign=choose([1,-1]);const expr=sign===1?`x-${c}`:`x+${Math.abs(c)}`;const bound=sign===1?c:-Math.abs(c);return{latex:`\\text{Find the domain of } f(x)=\\sqrt{${expr}}.`,answer:[`[${bound},inf)`],hint:'What condition must hold for the expression inside a square root?',step:`${expr}\\geq 0\\Rightarrow x\\geq ${bound}`};}
+function gen4(){const isFn=choose([true,false]);let pairs,display;if(isFn){const xs=shuffle([1,2,3,4]).slice(0,3);pairs=xs.map(x=>({x,y:x+rInt(5)-2}));display=pairs.map(p=>`(${p.x},${p.y})`).join(',\\;');}else{const x=choose([2,3,4]);pairs=[{x,y:1},{x,y:-1},{x:x+1,y:2}];display=pairs.map(p=>`(${p.x},${p.y})`).join(',\\;');}return{latex:`\\text{Is } \\{${display}\\} \\text{ a function? (yes/no)}`,answer:[isFn?'yes':'no'],hint:'Does any input value appear more than once with a different output?',step:isFn?'\\text{Each input appears exactly once}\\Rightarrow\\text{yes}':`x=${pairs[0].x}\\text{ maps to two different outputs}\\Rightarrow\\text{no}`};}
+function gen5(){const cutoff=choose([0,1,2,-1]);const x1=cutoff-choose([1,2]);const x2=cutoff+choose([1,2]);const a1=choose([2,3,-1,-2]);const b2=choose([1,4,9]);const v1=a1*x1;const v2=x2*x2+b2;const pick=choose([true,false]);const xEval=pick?x1:x2;const answer=pick?String(v1):String(v2);return{latex:`f(x)=\\begin{cases}${a1}x & x<${cutoff}\\\\ x^2+${b2} & x\\geq ${cutoff}\\end{cases}\\quad\\text{Find }f(${xEval}).`,answer:[answer],hint:'Which piece of the function applies based on where the input falls?',step:pick?`${xEval}<${cutoff},\\text{ so use }${a1}x:\\;${a1}(${xEval})=${v1}`:`${xEval}\\geq${cutoff},\\text{ so use }x^2+${b2}:\\;(${xEval})^2+${b2}=${v2}`};}
+function gen6(){const m=choose([2,3,4,5]);const b=choose([1,-1,3,-2]);const bStr=b>=0?`+${b}`:String(b);return{latex:`\\text{If }f(x)=${m}x${bStr},\\text{ find }f(a+h).`,answer:[`${m}a+${m}h${bStr}`,`${m}(a+h)${bStr}`],hint:'What gets substituted in place of the variable in the formula?',step:`f(a+h)=${m}(a+h)${bStr}=${m}a+${m}h${bStr}`};}
+function gen7(){const m=choose([2,3,-1,-2]);const b=choose([1,-1,2,-2]);const xs=[-2,-1,0,1,2];const ys=[...new Set(xs.map(x=>m*x+b))].sort((a,z)=>a-z);const rangeStr='{'+ys.join(',')+'}';return{latex:`\\text{For }f(x)=${m}x${b>=0?'+'+b:b}\\text{ with domain }\\{-2,-1,0,1,2\\},\\text{ find the range.}`,answer:[rangeStr,'{'+ys.join(', ')+'}'],hint:'What set of values does the output produce for the given inputs?',step:`f(-2)=${m*(-2)+b},f(-1)=${m*(-1)+b},f(0)=${b},f(1)=${m+b},f(2)=${2*m+b};\\text{ range}=${rangeStr}`};}
+function gen8(){const fail=choose([true,false]);const crossings=fail?choose([2,3]):1;return{latex:`\\text{A vertical line crosses a graph }${crossings}\\text{ time(s). Is the graph a function? (yes/no)}`,answer:[fail?'no':'yes'],hint:'What does the vertical line test say about functions?',step:fail?`${crossings}\\text{ crossings}\\Rightarrow\\text{one input has two outputs}\\Rightarrow\\text{no}`:`1\\text{ crossing at every vertical line}\\Rightarrow\\text{yes}`};}
+const GENERATORS=[gen1,gen2,gen3,gen4,gen5,gen6,gen7,gen8];
+let ACTIVE,correct,flags,attempted,peeked;
+function init(){ACTIVE=shuffle(GENERATORS.map(g=>g()));correct=0;flags=Array(8).fill(false);attempted=Array(8).fill(false);peeked=Array(8).fill(false);}
+function buildCards(){const wrap=document.getElementById('problems');wrap.innerHTML='';ACTIVE.forEach((p,i)=>{const div=document.createElement('div');div.className='card';div.id='card-'+i;div.innerHTML=`<div class="card-body"><div class="card-meta">Problem ${i+1}</div><div class="card-expr" id="expr-${i}"></div><div class="input-row"><input class="ans-input" id="ai-${i}" placeholder="answer"/><button class="check-btn" id="chk-${i}" onclick="check(${i})">Check</button></div><div class="hint">${p.hint}</div><div class="feedback" id="fb-${i}"></div><span class="reveal-link" id="rl-${i}" onclick="reveal(${i})">Show solution</span><div class="revealed-answer" id="ra-${i}"></div></div>`;wrap.appendChild(div);document.getElementById('ai-'+i).addEventListener('keydown',e=>{if(e.key==='Enter')check(i);});katex.render(p.latex,document.getElementById('expr-'+i),{throwOnError:false,displayMode:true});});}
+function check(i){const p=ACTIVE[i],inp=document.getElementById('ai-'+i),fb=document.getElementById('fb-'+i),card=document.getElementById('card-'+i),good=ok(inp.value,p.answer);inp.className='ans-input';if(good){inp.className='ans-input ok';fb.className='feedback correct';fb.textContent='✓ Correct!';card.className='card correct';if(!flags[i]&&!attempted[i]&&!peeked[i]){flags[i]=true;correct++;updateScore();}attempted[i]=true;document.getElementById('chk-'+i).disabled=true;inp.readOnly=true;}else{attempted[i]=true;inp.className='ans-input bad';fb.className='feedback wrong';fb.textContent='✗ Not quite — try again or show the solution.';card.className=peeked[i]?'card peeked':'card wrong';}}
+function reveal(i){const p=ACTIVE[i],box=document.getElementById('ra-'+i),lnk=document.getElementById('rl-'+i);if(box.style.display==='block'){box.style.display='none';lnk.textContent='Show solution';}else{if(!flags[i]){peeked[i]=true;document.getElementById('card-'+i).className='card peeked';if(!attempted[i]){const fb=document.getElementById('fb-'+i);fb.className='feedback peeked';fb.textContent='⚠ Solution revealed — no point awarded.';}}box.innerHTML='<strong>Solution:</strong><br>';const span=document.createElement('span');box.appendChild(span);katex.render(p.step,span,{throwOnError:false,displayMode:true});box.style.display='block';lnk.textContent='Hide solution';}}
+function updateScore(){const n=ACTIVE.length;document.getElementById('score').textContent=correct+' / '+n;document.getElementById('prog').style.width=Math.round(correct/n*100)+'%';}
+function resetAll(){init();buildCards();updateScore();}
+</script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script>renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});init();buildCards();updateScore();</script>
+</body>
+</html>
