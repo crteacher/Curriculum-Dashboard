@@ -2,226 +2,271 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Review — Cardinal Ritter Prep Math</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Section Review — Cardinal Ritter Prep</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:#0d1117;color:#e6edf3;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh}
-header{background:#161b22;border-bottom:1px solid #30363d;padding:1.1rem 1.5rem;display:flex;align-items:center;gap:1rem;flex-wrap:wrap}
-.back{color:#8b949e;text-decoration:none;font-size:.85rem}.back:hover{color:#e6edf3}
-header h1{font-size:1.2rem;font-weight:700;flex:1}
+body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;min-height:100vh}
 
-/* Course toggle */
-.course-toggle{display:flex;gap:.5rem;padding:1rem 1.5rem .5rem;max-width:900px;margin:0 auto}
-.course-btn{padding:.4rem 1.1rem;border-radius:20px;font-size:.82rem;font-weight:600;cursor:pointer;border:1px solid #30363d;background:#161b22;color:#8b949e;transition:all .15s}
-.course-btn.active.ca{background:#5bc8d41a;border-color:#5bc8d4;color:#5bc8d4}
-.course-btn.active.c2{background:#a78bfa1a;border-color:#a78bfa;color:#a78bfa}
+/* ── Header ─────────────────────────────────────────────────────────── */
+.page-header{display:flex;align-items:center;gap:1rem;padding:.9rem 1.5rem;
+  border-bottom:2px solid #1a1a1a;background:#f8f7f4;flex-wrap:wrap}
+.back-link{font-family:sans-serif;font-size:12px;font-weight:600;color:#777;
+  text-decoration:none;border:1px solid #ccc;border-radius:14px;padding:3px 11px;
+  transition:all .15s}
+.back-link:hover{color:#1a1a1a;border-color:#888}
+.page-title{font-size:17px;font-weight:700;flex:1}
+.course-toggle{display:flex;gap:6px}
+.course-btn{font-family:sans-serif;font-size:12px;font-weight:700;padding:4px 14px;
+  border-radius:14px;border:1.5px solid #ccc;background:#fff;cursor:pointer;
+  transition:all .15s;letter-spacing:.02em}
+.course-btn.active.ca{background:#1a7a3a;color:#fff;border-color:#1a7a3a}
+.course-btn.active.c2{background:#7a1a1a;color:#fff;border-color:#7a1a1a}
+.course-btn:not(.active):hover{border-color:#888}
 
-/* Section picker */
-.section-row{padding:.25rem 1.5rem .75rem;max-width:900px;margin:0 auto;display:flex;align-items:center;gap:.75rem;flex-wrap:wrap}
-.section-row label{font-size:.78rem;color:#8b949e;font-weight:600;text-transform:uppercase;letter-spacing:.05em;white-space:nowrap}
-select#sectionPicker{background:#161b22;border:1px solid #30363d;color:#e6edf3;padding:.4rem .8rem;border-radius:8px;font-size:.85rem;cursor:pointer;flex:1;max-width:420px}
-select#sectionPicker:focus{outline:none;border-color:#555}
-.prob-count{font-size:.75rem;color:#8b949e;white-space:nowrap}
+/* ── Container ──────────────────────────────────────────────────────── */
+.container{max-width:860px;margin:0 auto;padding:1.75rem 1.5rem 4rem}
 
-/* Problem cards */
-.problems-wrap{max-width:900px;margin:0 auto;padding:0 1.5rem 3rem}
-.prob-card{background:#161b22;border:1px solid #30363d;border-radius:10px;padding:1.25rem 1.4rem;margin-bottom:.85rem}
-.prob-card.ca-card{border-left:3px solid #5bc8d466}
-.prob-card.c2-card{border-left:3px solid #a78bfa66}
-.prob-num{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#8b949e;margin-bottom:.5rem}
-.prob-text{font-size:.975rem;line-height:1.75}
-.prob-text .katex-display{margin:.5rem 0}
+/* ── Grid view ──────────────────────────────────────────────────────── */
+.grid-intro{font-family:sans-serif;font-size:13px;color:#666;margin-bottom:1.5rem}
+.unit-block{margin-bottom:1.75rem}
+.unit-label{font-family:sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;
+  letter-spacing:.08em;color:#888;margin-bottom:.6rem;padding-bottom:5px;
+  border-bottom:1px solid #ddd}
+.section-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
+.sec-card{background:#fff;border:1.5px solid #ddd;border-radius:10px;padding:.9rem 1rem;
+  cursor:pointer;transition:border-color .18s,box-shadow .18s;font-family:sans-serif}
+.sec-card.ca:hover{border-color:#1a7a3a;box-shadow:0 0 0 2px rgba(26,122,58,.12)}
+.sec-card.c2:hover{border-color:#7a1a1a;box-shadow:0 0 0 2px rgba(122,26,26,.12)}
+.sec-card.random-card{border-style:dashed;background:#fafaf8}
+.sec-card-num{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;
+  color:#aaa;margin-bottom:3px}
+.sec-card-title{font-size:13px;font-weight:600;color:#1a1a1a;line-height:1.35;margin-bottom:4px}
+.sec-card-count{font-size:11px;color:#999}
 
-/* Controls */
-.controls{display:flex;gap:.75rem;align-items:center;padding:.5rem 1.5rem 1rem;max-width:900px;margin:0 auto;flex-wrap:wrap}
-.new-set-btn{padding:.5rem 1.3rem;border-radius:20px;font-size:.85rem;font-weight:600;cursor:pointer;border:1px solid;transition:all .15s;background:transparent}
-.new-set-btn.ca{color:#5bc8d4;border-color:#5bc8d4}.new-set-btn.ca:hover{background:#5bc8d41a}
-.new-set-btn.c2{color:#a78bfa;border-color:#a78bfa}.new-set-btn.c2:hover{background:#a78bfa1a}
-.set-note{font-size:.75rem;color:#8b949e}
+/* ── Problem view ───────────────────────────────────────────────────── */
+.prob-header{display:flex;align-items:baseline;gap:.75rem;flex-wrap:wrap;
+  margin-bottom:1.5rem;padding-bottom:10px;border-bottom:2px solid #1a1a1a}
+.prob-section-title{font-size:18px;font-weight:700;flex:1}
+.prob-meta{font-family:sans-serif;font-size:12px;color:#888}
+.prob-actions{display:flex;gap:8px;margin-bottom:1.5rem;flex-wrap:wrap}
+.action-btn{font-family:sans-serif;font-size:13px;font-weight:600;padding:7px 16px;
+  border-radius:7px;border:1.5px solid #ccc;background:#fff;cursor:pointer;
+  transition:all .15s}
+.action-btn:hover{border-color:#888;background:#f5f3ef}
+.action-btn.primary{background:#1a1a1a;color:#fff;border-color:#1a1a1a}
+.action-btn.primary:hover{background:#333}
 
-/* Empty / loading states */
-.state-msg{text-align:center;padding:3rem 1rem;color:#8b949e;font-size:.9rem;font-style:italic}
-
-/* No problems notice */
-.no-probs{background:#161b22;border:1px solid #30363d;border-radius:10px;padding:1.5rem;text-align:center;color:#8b949e;font-size:.88rem}
+/* ── Problem cards ──────────────────────────────────────────────────── */
+.problems{display:grid;grid-template-columns:repeat(auto-fill,minmax(370px,1fr));gap:12px}
+.prob-card{background:#fff;border:1.5px solid #ddd;border-radius:10px;overflow:hidden}
+.prob-card-body{padding:14px 16px}
+.prob-num{font-family:sans-serif;font-size:11px;color:#aaa;font-weight:600;
+  text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px}
+.prob-text{font-size:16px;line-height:2;overflow-x:auto}
+.katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}
 </style>
 </head>
 <body>
-<header>
-  <a href="./index.html" class="back">← Portal</a>
-  <h1>📚 Review</h1>
-</header>
 
-<div class="course-toggle">
-  <button class="course-btn active ca" id="btnCA" onclick="setCourse('ca')">College Algebra</button>
-  <button class="course-btn c2" id="btnC2" onclick="setCourse('c2')">Calculus 2</button>
+<div class="page-header">
+  <a href="./index.html" class="back-link">← Portal</a>
+  <span class="page-title">📚 Section Review</span>
+  <div class="course-toggle">
+    <button class="course-btn ca" id="btnCA" onclick="setCourse('ca')">College Algebra</button>
+    <button class="course-btn c2" id="btnC2" onclick="setCourse('c2')">Calculus 2</button>
+  </div>
 </div>
 
-<div class="section-row">
-  <label>Section</label>
-  <select id="sectionPicker" onchange="loadSection()">
-    <option value="">Loading…</option>
-  </select>
-  <span class="prob-count" id="probCount"></span>
-</div>
+<div class="container">
+  <!-- Grid view -->
+  <div id="gridView">
+    <p class="grid-intro" id="gridIntro">Loading sections…</p>
+    <div id="unitBlocks"></div>
+  </div>
 
-<div class="controls">
-  <button class="new-set-btn ca" id="newSetBtn" onclick="newSet()">↺ New Set</button>
-  <span class="set-note" id="setNote"></span>
-</div>
-
-<div class="problems-wrap" id="problemsWrap">
-  <div class="state-msg" id="stateMsg">Loading…</div>
+  <!-- Problem view -->
+  <div id="problemView" style="display:none">
+    <div class="prob-header">
+      <div class="prob-section-title" id="probTitle"></div>
+      <div class="prob-meta" id="probMeta"></div>
+    </div>
+    <div class="prob-actions">
+      <button class="action-btn" onclick="showGrid()">← All Sections</button>
+      <button class="action-btn primary" onclick="newSet()">New Set</button>
+    </div>
+    <div class="problems" id="problemsWrap"></div>
+  </div>
 </div>
 
 <script>
-// ── Math rendering ──────────────────────────────────────────────────────────
+const PROBS_PER_SET = 5;
+const urlSection = new URLSearchParams(window.location.search).get('section');
+
+let _state, _sections, _units;
+let _currentCourse = 'ca';
+let _currentSec = null;
+let _available = {};  // courseKey -> array of sections with reviewProblems
+let _secMap = {};     // id -> section object
+
+// ── Math rendering ───────────────────────────────────────────────────────────
 function renderMath(text) {
   if (!text) return '';
-  // Unescape HTML entities
-  text = text.replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>')
-             .replace(/&ldquo;/g,'"').replace(/&rdquo;/g,'"').replace(/&mdash;/g,'—');
-  // Split on math delimiters: $$, $, \[...\], \(...\)
   const parts = text.split(/(\$\$[\s\S]*?\$\$|\$[^$\n]*?\$|\\\[[\s\S]*?\\\]|\\\([\s\S]*?\\\))/g);
   return parts.map(p => {
     let display = false, tex = null;
-    if (p.startsWith('$$') && p.endsWith('$$'))       { display=true;  tex=p.slice(2,-2); }
-    else if (p.startsWith('$') && p.endsWith('$'))    { display=false; tex=p.slice(1,-1); }
-    else if (p.startsWith('\\[') && p.endsWith('\\]')){ display=true;  tex=p.slice(2,-2); }
-    else if (p.startsWith('\\(') && p.endsWith('\\)')){ display=false; tex=p.slice(2,-2); }
+    if (p.startsWith('$$') && p.endsWith('$$'))         { display = true;  tex = p.slice(2,-2); }
+    else if (p.startsWith('$') && p.endsWith('$'))      { display = false; tex = p.slice(1,-1); }
+    else if (p.startsWith('\\[') && p.endsWith('\\]')) { display = true;  tex = p.slice(2,-2); }
+    else if (p.startsWith('\\(') && p.endsWith('\\)')) { display = false; tex = p.slice(2,-2); }
     if (tex !== null) {
-      tex = tex.replace(/\\displaystyle\b/g,'').trim();
-      try { return katex.renderToString(tex, {displayMode:display, throwOnError:false}); }
+      try { return katex.renderToString(tex.trim(), {displayMode:display, throwOnError:false}); }
       catch(e) { return p; }
     }
     return p;
   }).join('');
 }
 
-// ── State ───────────────────────────────────────────────────────────────────
-let sectionsData = null;
-let stateData = null;
-let currentCourse = 'ca';
-let currentSectionId = null;
-let currentProblems = [];
-const PROBS_PER_SET = 5;
-
-// ── Boot ────────────────────────────────────────────────────────────────────
-// Parse ?section= URL param
-const urlSection = new URLSearchParams(window.location.search).get('section');
-
-Promise.all([
-  fetch('./state.json').then(r=>r.json()),
-  fetch('./sections.json').then(r=>r.json())
-]).then(([state, sections]) => {
-  stateData = state;
-  sectionsData = sections;
-  // Auto-detect course from URL param
-  const initCourse = urlSection && urlSection.startsWith('C2_') ? 'c2' : 'ca';
-  setCourse(initCourse);
-}).catch(() => {
-  document.getElementById('stateMsg').textContent = 'Could not load data.';
-});
-
-// ── Course toggle ───────────────────────────────────────────────────────────
+// ── Course toggle ────────────────────────────────────────────────────────────
 function setCourse(course) {
-  currentCourse = course;
-  document.getElementById('btnCA').className = 'course-btn' + (course==='ca' ? ' active ca' : '');
-  document.getElementById('btnC2').className = 'course-btn' + (course==='c2' ? ' active c2' : '');
-  document.getElementById('newSetBtn').className = 'new-set-btn ' + course;
-  populatePicker();
+  _currentCourse = course;
+  document.getElementById('btnCA').className = 'course-btn ca' + (course==='ca' ? ' active' : '');
+  document.getElementById('btnC2').className = 'course-btn c2' + (course==='c2' ? ' active' : '');
+  buildGrid();
+  showGrid();
 }
 
-// ── Build section picker from completed sections ─────────────────────────────
-function populatePicker() {
-  const picker = document.getElementById('sectionPicker');
-  const courseKey = currentCourse === 'ca' ? 'collegeAlgebra' : 'calc2';
-  const completedIds = stateData?.courses?.[courseKey]?.completedSections || [];
-  const currentId   = stateData?.courses?.[courseKey]?.currentSection;
+// ── Build section grid ───────────────────────────────────────────────────────
+function buildGrid() {
+  const courseKey = _currentCourse === 'ca' ? 'collegeAlgebra' : 'calc2';
+  const completedIds = _state?.courses?.[courseKey]?.completedSections || [];
+  const currentId   = _state?.courses?.[courseKey]?.currentSection;
   const allIds = currentId ? [...completedIds, currentId] : completedIds;
 
-  // Build lookup from sections.json
-  const courseArr = sectionsData?.[courseKey] || [];
-  const secMap = {};
-  courseArr.forEach(s => secMap[s.id] = s);
+  const courseArr = _sections?.[courseKey] || [];
+  courseArr.forEach(s => _secMap[s.id] = s);
 
-  // Filter to sections that have review problems
-  const available = allIds.filter(id => {
-    const s = secMap[id];
-    return s && s.reviewProblems && s.reviewProblems.length > 0;
-  });
+  const pool = courseArr.filter(s =>
+    allIds.includes(s.id) && s.reviewProblems && s.reviewProblems.length > 0
+  );
+  _available[courseKey] = pool;
 
-  picker.innerHTML = '';
-  if (available.length === 0) {
-    picker.innerHTML = '<option value="">No review problems yet</option>';
-    document.getElementById('problemsWrap').innerHTML = '<div class="no-probs">No review problems available for completed sections yet.</div>';
-    document.getElementById('probCount').textContent = '';
+  const unitList = _units?.[courseKey] || [];
+  const container = document.getElementById('unitBlocks');
+  const cls = _currentCourse;
+
+  if (!pool.length) {
+    document.getElementById('gridIntro').textContent =
+      'No review problems available yet — check back after your first completed section.';
+    container.innerHTML = '';
     return;
   }
 
-  available.forEach(id => {
-    const s = secMap[id];
-    const opt = document.createElement('option');
-    opt.value = id;
-    opt.textContent = '§' + s.section + ' — ' + s.title + ' (' + s.reviewProblems.length + ')';
-    picker.appendChild(opt);
+  document.getElementById('gridIntro').textContent =
+    'Pick a section to practice, or grab a random one.';
+
+  let html = `<div class="unit-block">
+    <div class="unit-label">Quick Start</div>
+    <div class="section-grid">
+      <div class="sec-card random-card ${cls}" onclick="loadRandom()">
+        <div class="sec-card-num">🎲 Random</div>
+        <div class="sec-card-title">Surprise me</div>
+        <div class="sec-card-count">${pool.length} sections available</div>
+      </div>
+    </div>
+  </div>`;
+
+  unitList.forEach(unit => {
+    const unitSecs = pool.filter(s => unit.sections.includes(s.id));
+    if (!unitSecs.length) return;
+    const shortName = unit.name.replace(/^Unit \S+ — /, '');
+    html += `<div class="unit-block">
+      <div class="unit-label">${shortName}</div>
+      <div class="section-grid">`;
+    unitSecs.forEach(s => {
+      html += `<div class="sec-card ${cls}" onclick="loadSection('${s.id}')">
+        <div class="sec-card-num">§${s.section}</div>
+        <div class="sec-card-title">${s.title}</div>
+        <div class="sec-card-count">${s.reviewProblems.length} problems</div>
+      </div>`;
+    });
+    html += `</div></div>`;
   });
 
-  // Default to URL param section if present and available, else last completed
-  if (urlSection && available.includes(urlSection)) {
-    picker.value = urlSection;
-  } else {
-    picker.value = available[available.length - 1];
-  }
-  loadSection();
+  container.innerHTML = html;
 }
 
-// ── Load problems for selected section ──────────────────────────────────────
-function loadSection() {
-  const picker = document.getElementById('sectionPicker');
-  currentSectionId = picker.value;
-  if (!currentSectionId) return;
+// ── Views ────────────────────────────────────────────────────────────────────
+function showGrid() {
+  document.getElementById('gridView').style.display = 'block';
+  document.getElementById('problemView').style.display = 'none';
+}
 
-  const courseKey = currentCourse === 'ca' ? 'collegeAlgebra' : 'calc2';
-  const courseArr = sectionsData?.[courseKey] || [];
-  const sec = courseArr.find(s => s.id === currentSectionId);
-  if (!sec || !sec.reviewProblems) {
-    document.getElementById('problemsWrap').innerHTML = '<div class="no-probs">No review problems for this section.</div>';
-    document.getElementById('probCount').textContent = '';
-    return;
-  }
+function showProblems() {
+  document.getElementById('gridView').style.display = 'none';
+  document.getElementById('problemView').style.display = 'block';
+}
 
-  currentProblems = [...sec.reviewProblems];
-  document.getElementById('probCount').textContent = currentProblems.length + ' problems in pool';
+// ── Load section ─────────────────────────────────────────────────────────────
+function loadSection(id) {
+  const sec = _secMap[id];
+  if (!sec?.reviewProblems?.length) return;
+  _currentSec = sec;
+  document.getElementById('probTitle').textContent = '§' + sec.section + ' — ' + sec.title;
+  document.getElementById('probMeta').textContent = sec.reviewProblems.length + ' problems in pool';
   newSet();
+  showProblems();
 }
 
-// ── Display a random set of PROBS_PER_SET problems ───────────────────────────
+function loadRandom() {
+  const courseKey = _currentCourse === 'ca' ? 'collegeAlgebra' : 'calc2';
+  const pool = _available[courseKey] || [];
+  if (!pool.length) return;
+  loadSection(pool[Math.floor(Math.random() * pool.length)].id);
+}
+
+// ── Render problem set ────────────────────────────────────────────────────────
 function newSet() {
-  if (!currentProblems.length) return;
-
-  // Shuffle and pick
-  const shuffled = [...currentProblems].sort(() => Math.random() - 0.5);
-  const set = shuffled.slice(0, PROBS_PER_SET);
-  const cardClass = currentCourse === 'ca' ? 'ca-card' : 'c2-card';
-
-  const html = set.map((prob, i) =>
-    '<div class="prob-card ' + cardClass + '">' +
-    '<div class="prob-num">Problem ' + (i+1) + '</div>' +
-    '<div class="prob-text">' + renderMath(prob) + '</div>' +
-    '</div>'
+  if (!_currentSec?.reviewProblems?.length) return;
+  const set = [..._currentSec.reviewProblems]
+    .sort(() => Math.random() - .5)
+    .slice(0, PROBS_PER_SET);
+  document.getElementById('problemsWrap').innerHTML = set.map((prob, i) =>
+    `<div class="prob-card"><div class="prob-card-body">
+      <div class="prob-num">Problem ${i + 1}</div>
+      <div class="prob-text">${renderMath(prob)}</div>
+    </div></div>`
   ).join('');
-
-  document.getElementById('problemsWrap').innerHTML = html;
-  document.getElementById('stateMsg') && (document.getElementById('stateMsg').style.display='none');
-
-  const remaining = currentProblems.length;
-  document.getElementById('setNote').textContent =
-    'Showing ' + set.length + ' of ' + remaining + ' problems · shuffled each time';
 }
+
+// ── Boot ──────────────────────────────────────────────────────────────────────
+Promise.all([
+  fetch('./state.json').then(r => r.json()),
+  fetch('./sections.json').then(r => r.json())
+]).then(([state, sections]) => {
+  _state    = state;
+  _sections = sections;
+  _units    = sections.units || {};
+
+  const initCourse = urlSection?.startsWith('C2_') ? 'c2' : 'ca';
+  _currentCourse = initCourse;
+  document.getElementById('btnCA').className = 'course-btn ca' + (initCourse==='ca' ? ' active' : '');
+  document.getElementById('btnC2').className = 'course-btn c2' + (initCourse==='c2' ? ' active' : '');
+
+  buildGrid();
+
+  // If URL param matches an available section, jump straight to it
+  if (urlSection) {
+    const sec = _secMap[urlSection];
+    if (sec?.reviewProblems?.length) { loadSection(urlSection); return; }
+  }
+
+  showGrid();
+}).catch(() => {
+  document.getElementById('gridIntro').textContent = 'Could not load section data.';
+});
 </script>
 </body>
 </html>
