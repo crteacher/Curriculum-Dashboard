@@ -1318,19 +1318,26 @@ async function init() {
     return;
   }
 
-  // Pick 2 sections — stable per (date × sectionID), recency-biased.
-  // Scoring by sectionID (not pool index) means the daily picks don't shift
-  // when the pool grows or shrinks during the day.
-  const scored = doneSections.map((s, i) => {
-    const baseScore = hashStr(today + s.id) / 0xffffffff; // deterministic [0,1] per section per day
-    const recencyBoost = Math.pow(1.12, i);               // exponential: more recently completed = higher
-    return { sec: s, score: baseScore * recencyBoost };
-  });
-  scored.sort((a, b) => b.score - a.score);
+  // If ?section=CA_4_3 is in the URL, lock to that section (used by review day chips)
+  const urlSection = new URLSearchParams(window.location.search).get('section');
+  const lockedSection = urlSection ? doneSections.find(s => s.id === urlSection) : null;
 
-  const secs = scored.length === 1
-    ? [scored[0].sec, scored[0].sec]
-    : [scored[0].sec, scored[1].sec];
+  let secs;
+  if (lockedSection) {
+    secs = [lockedSection, lockedSection];
+    document.getElementById('subtitle').textContent = `Review: §${lockedSection.section} — ${lockedSection.title}`;
+  } else {
+    // Pick 2 sections — stable per (date × sectionID), recency-biased.
+    const scored = doneSections.map((s, i) => {
+      const baseScore = hashStr(today + s.id) / 0xffffffff;
+      const recencyBoost = Math.pow(1.12, i);
+      return { sec: s, score: baseScore * recencyBoost };
+    });
+    scored.sort((a, b) => b.score - a.score);
+    secs = scored.length === 1
+      ? [scored[0].sec, scored[0].sec]
+      : [scored[0].sec, scored[1].sec];
+  }
 
   let html = '<div class="problems-grid">';
   secs.forEach((sec, idx) => {
