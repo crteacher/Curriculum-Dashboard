@@ -110,13 +110,18 @@ let currentProblems = [];
 const PROBS_PER_SET = 5;
 
 // ── Boot ────────────────────────────────────────────────────────────────────
+// Parse ?section= URL param
+const urlSection = new URLSearchParams(window.location.search).get('section');
+
 Promise.all([
   fetch('./state.json').then(r=>r.json()),
   fetch('./sections.json').then(r=>r.json())
 ]).then(([state, sections]) => {
   stateData = state;
   sectionsData = sections;
-  setCourse('ca');
+  // Auto-detect course from URL param
+  const initCourse = urlSection && urlSection.startsWith('C2_') ? 'c2' : 'ca';
+  setCourse(initCourse);
 }).catch(() => {
   document.getElementById('stateMsg').textContent = 'Could not load data.';
 });
@@ -165,8 +170,12 @@ function populatePicker() {
     picker.appendChild(opt);
   });
 
-  // Default to last completed (most recent)
-  picker.value = available[available.length - 1];
+  // Default to URL param section if present and available, else last completed
+  if (urlSection && available.includes(urlSection)) {
+    picker.value = urlSection;
+  } else {
+    picker.value = available[available.length - 1];
+  }
   loadSection();
 }
 
