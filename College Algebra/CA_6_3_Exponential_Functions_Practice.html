@@ -193,7 +193,7 @@ function gen5() {
   const x = rInt(3) + 1;
   const val = a * Math.pow(2, x);
   return {
-    latex:  `\\text{A quantity starts at }${a}\\text{ and doubles each step. Find the value after }${x}\\text{ step(s).}`,
+    latex:  `\\text{A quantity starts at ${a} and doubles each step. Find the value after ${x} step(s).}`,
     answer: [String(val)],
     hint:   'What is the base in a model where the quantity doubles each period?',
     step:   `${a}\\cdot2^{${x}}=${a}\\cdot${Math.pow(2,x)}=${val}`
@@ -206,7 +206,7 @@ function gen6() {
   const x = rInt(2) + 1;   // x = 1 or 2
   const val = a * Math.pow(3, x);
   return {
-    latex:  `\\text{A quantity starts at }${a}\\text{ and triples each step. Find the value after }${x}\\text{ step(s).}`,
+    latex:  `\\text{A quantity starts at ${a} and triples each step. Find the value after ${x} step(s).}`,
     answer: [String(val)],
     hint:   'What is the base in an exponential model where the quantity triples per period?',
     step:   `${a}\\cdot3^{${x}}=${a}\\cdot${Math.pow(3,x)}=${val}`
@@ -219,7 +219,7 @@ function gen7() {
   const a = Math.pow(2, x) * (rInt(5) + 1);   // ensure integer result
   const val = a / Math.pow(2, x);
   return {
-    latex:  `\\text{A quantity starts at }${a}\\text{ and halves each step. Find the value after }${x}\\text{ step(s).}`,
+    latex:  `\\text{A quantity starts at ${a} and halves each step. Find the value after ${x} step(s).}`,
     answer: [String(val)],
     hint:   'What fraction represents halving as an exponential base?',
     step:   `${a}\\cdot\\left(\\tfrac{1}{2}\\right)^{${x}}=\\dfrac{${a}}{${Math.pow(2,x)}}=${val}`
