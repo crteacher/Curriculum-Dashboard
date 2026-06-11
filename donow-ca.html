@@ -559,18 +559,21 @@ GEN['CA_3_5'] = function() {
 
 // --- 4.1  Solving by Factoring  x² + bx + c = 0 ---
 GEN['CA_4_1'] = function() {
+  // r1, r2 are the ROOTS: (x - r1)(x - r2) = x² - (r1+r2)x + r1*r2
   const r1 = ri(-7, 7);
   let r2 = ri(-7, 7);
   if (r2 === r1) r2 = r1 + pick([-2, -1, 1, 2]);
-  const b = r1 + r2;
+  const b = -(r1 + r2); // coefficient of x
   const c = r1 * r2;
+  const f1 = r1 <= 0 ? `+ ${Math.abs(r1)}` : `- ${r1}`;
+  const f2 = r2 <= 0 ? `+ ${Math.abs(r2)}` : `- ${r2}`;
   return {
     html: `Solve by factoring: ${kD(quadTex(1, b, c) + ' = 0')} Enter both solutions:`,
     type: 'numeric2',
     answers: [Math.min(r1, r2), Math.max(r1, r2)],
     labels: ['smaller x', 'larger x'],
     solutionHtml:
-      kD(`(x ${-r1 > 0 ? '+ ' + (-r1) : '- ' + Math.abs(-r1)})(x ${-r2 > 0 ? '+ ' + (-r2) : '- ' + Math.abs(-r2)}) = 0`) +
+      kD(`(x ${f1})(x ${f2}) = 0`) +
       kD(`x = ${r1} \\text{ or } x = ${r2}`)
   };
 };
