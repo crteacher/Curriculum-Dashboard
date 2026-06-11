@@ -1307,7 +1307,7 @@ async function init() {
     document.getElementById('subtitle').textContent = 'No class today — here\'s some review practice.';
   }
 
-  const caState = state.courses?.collegeAlgebra;
+  const caState = state.collegeAlgebra;
   const allSections = sections.collegeAlgebra || [];
   const completed = caState?.completedSections || [];
   // Only pick sections that have a generator (skip fallback-only sections)
