@@ -1,63 +1,45 @@
 {
-  "lastCheckin": "2026-06-10",
+  "lastCheckin": "2026-08-25",
   "courses": {
     "collegeAlgebra": {
       "period": "A",
-      "currentSection": "CA_6_2",
-      "completedSections": [
-        "CA_1_1",
-        "CA_1_2",
-        "CA_1_3",
-        "CA_1_4",
-        "CA_1_5",
-        "CA_1_6",
-        "CA_2_1",
-        "CA_2_2",
-        "CA_2_3",
-        "CA_2_4",
-        "CA_3_1",
-        "CA_3_2",
-        "CA_3_3",
-        "CA_3_4",
-        "CA_3_5",
-        "CA_4_0",
-        "CA_4_1",
-        "CA_4_2",
-        "CA_4_3",
-        "CA_4_4",
-        "CA_4_5",
-        "CA_5_1",
-        "CA_5_2",
-        "CA_6_1"
-      ]
+      "currentSection": "CA_1_2",
+      "completedSections": ["CA_1_1"]
     },
     "calc1": {
       "period": "B",
       "currentSection": null,
-      "completedSections": [
-        "Calc_1_1",
-        "Calc_1_1_5",
-        "Calc_1_2",
-        "Calc_1_3",
-        "Calc_1_4",
-        "Calc_1_5",
-        "Calc_2_1",
-        "Calc_2_2",
-        "Calc_2_2_5",
-        "Calc_2_2_6",
-        "Calc_2_3",
-        "Calc_2_4",
-        "Calc_2_4_5",
-        "Calc_2_5",
-        "Calc_2_7",
-        "Calc_2_8"
-      ],
+      "completedSections": [],
       "note": "S1 complete"
     },
     "calc2": {
       "period": "AB",
-      "currentSection": "C2_01",
-      "completedSections": []
+      "currentSection": "C2_02",
+      "completedSections": ["C2_01"]
     }
+  },
+  "schedule": {
+    "active": true,
+    "title": "First Two Weeks",
+    "collegeAlgebra": [
+      {"day":1, "type":"setup",  "title":"Syllabus & Online Setup", "note":"Set up MyOpenMath, Khan Academy, and bookmark this dashboard."},
+      {"day":2, "type":"lesson", "sectionId":"CA_1_1"},
+      {"day":3, "type":"lesson", "sectionId":"CA_1_2"},
+      {"day":4, "type":"lesson", "sectionId":"CA_1_3"},
+      {"day":5, "type":"quiz",   "title":"Quiz — §1.1 & §1.2", "sections":["CA_1_1","CA_1_2"]}
+    ],
+    "calc2": [
+      {"day":1,  "type":"setup",  "title":"Syllabus & Online Setup", "note":"Set up MyOpenMath, Khan Academy, and bookmark this dashboard."},
+      {"day":2,  "type":"lesson", "sectionId":"C2_01"},
+      {"day":3,  "type":"lesson", "sectionId":"C2_02"},
+      {"day":4,  "type":"quiz",   "title":"Quiz — §1 & §2", "sections":["C2_01","C2_02"]},
+      {"day":5,  "type":"lesson", "sectionId":"C2_03"},
+      {"day":6,  "type":"lesson", "sectionId":"C2_04"},
+      {"day":7,  "type":"lesson", "sectionId":"C2_05"},
+      {"day":8,  "type":"quiz",   "title":"Quiz — §5", "sections":["C2_05"]},
+      {"day":9,  "type":"lesson", "sectionId":"C2_06"},
+      {"day":10, "type":"lesson", "sectionId":"C2_07"},
+      {"day":11, "type":"lesson", "sectionId":"C2_08"}
+    ]
   }
 }
