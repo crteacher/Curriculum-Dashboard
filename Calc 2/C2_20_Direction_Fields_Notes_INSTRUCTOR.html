@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Direction Fields &mdash; Notes</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75;font-size:15px}
+.container{max-width:900px;margin:0 auto;padding:2rem 1.5rem 4rem}
+.page-title{font-size:28px;font-weight:700;margin-bottom:4px}
+.page-sub{font-family:sans-serif;font-size:13px;color:#666;margin-bottom:1.6rem}
+.opening-q{background:#eef3f9;border-left:4px solid #185fa5;border-radius:0 8px 8px 0;
+  padding:1rem 1.2rem;font-size:15px;margin-bottom:1.5rem;font-style:italic;line-height:1.75}
+.section-head{font-family:sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;
+  letter-spacing:.08em;color:#185fa5;margin-top:1.4rem;margin-bottom:.6rem;
+  border-bottom:1px solid #c8d8ec;padding-bottom:4px}
+.accent-box{background:#d9e8f5;border-left:4px solid #185fa5;border-radius:0 8px 8px 0;
+  padding:.9rem 1.1rem;font-size:14px;margin-bottom:.85rem;line-height:1.95}
+.accent-box ul{margin-left:1.3rem;margin-top:.3rem}
+.accent-box li{margin-bottom:.15rem}
+.accent-box p{margin-bottom:.4rem}
+.body-text{font-size:14px;line-height:1.75;margin-bottom:.85rem}
+.spacer{height:1rem}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:.5rem}
+.col{min-width:0}
+.examples-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem}
+.ex-block{border:1.5px solid #ddd;border-radius:9px;padding:1rem 1.1rem;background:#fff}
+.ex-label{font-family:sans-serif;font-size:11px;font-weight:700;color:#185fa5;
+  text-transform:uppercase;letter-spacing:.05em;margin-bottom:.45rem}
+.ex-body{font-size:14px;line-height:1.75;margin-bottom:.5rem}
+.ex-canvas-wrap{text-align:center;margin:.4rem 0 .55rem}
+.ex-canvas-wrap canvas{border:1px solid #ddd;border-radius:5px;display:inline-block}
+.ex-answer.instructor{background:#fef9e7;border-left:3px solid #c9860a;border-radius:0 6px 6px 0;
+  padding:.6rem .9rem;font-size:13.5px;color:#5a3e00;line-height:1.85}
+.ex-answer.student{height:3.5rem;border-bottom:1.5px solid #bbb;margin-top:.4rem}
+.practice{margin-bottom:1.5rem}
+.pr-row{display:grid;grid-template-columns:1.6rem 1fr 210px;gap:.75rem;
+  align-items:start;padding:.6rem 0;border-bottom:1px solid #ece8e0}
+.pr-num{font-family:sans-serif;font-weight:700;font-size:14px;color:#185fa5;padding-top:2px}
+.pr-prob{font-size:14px;line-height:1.75}
+.pr-ans.instructor{font-size:13px;color:#5a3e00;background:#fef9e7;border-radius:5px;
+  padding:4px 9px;line-height:1.75}
+.pr-ans.student{border-bottom:1.5px solid #bbb;min-height:2.2rem}
+.st-work{width:100%;min-height:3rem;border:1px solid #ccc;border-radius:5px;
+  padding:.35rem .5rem;font-family:Georgia,serif;font-size:13px;resize:vertical;
+  background:#fafafa;display:block;margin-bottom:.3rem}
+.st-btn-sm{font-family:sans-serif;font-size:9px;font-weight:700;color:#185fa5;
+  background:none;border:1px solid #185fa5;border-radius:3px;
+  padding:1px 6px;cursor:pointer;margin-bottom:.15rem;display:inline-block}
+.st-btn-sm:hover{background:#eef3f9}
+.st-ans-hidden{display:none;background:#fef9e7;border-left:3px solid #c9860a;
+  border-radius:0 5px 5px 0;padding:.4rem .7rem;font-size:13px;
+  color:#5a3e00;line-height:1.85}
+.st-ans-hidden.visible{display:block}
+.katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}
+@media print{
+  body{background:white;font-size:10pt;line-height:1.5}
+  .container{padding:0;max-width:none}
+  .page-sub{margin-bottom:.8rem}
+  .opening-q{padding:.5rem .8rem;margin-bottom:.8rem;font-size:10pt;line-height:1.5;break-inside:avoid;
+    background:#eef3f9 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .section-head{margin-top:.7rem;margin-bottom:.35rem}
+  .spacer{height:.3rem}
+  .accent-box{padding:.5rem .75rem;margin-bottom:.5rem;font-size:10pt;line-height:1.55;
+    background:#e8f0f8 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .accent-box p{margin-bottom:.2rem}
+  .body-text{font-size:10pt;line-height:1.5;margin-bottom:.5rem}
+  .two-col{gap:1rem;margin-bottom:.3rem;break-inside:avoid}
+  .examples-grid{gap:.6rem;margin-bottom:.8rem;break-inside:avoid}
+  .ex-block{padding:.55rem .75rem;border:1px solid #ccc;break-inside:avoid}
+  .ex-body{font-size:10pt;line-height:1.5;margin-bottom:.3rem}
+  .ex-answer.instructor{padding:.35rem .7rem;font-size:9.5pt;line-height:1.55;
+    background:#fef9e7 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .ex-answer.student{height:2.5rem}
+  .practice{margin-bottom:.8rem}
+  .pr-row{padding:.3rem 0;break-inside:avoid}
+  .pr-prob{font-size:10pt;line-height:1.5}
+  .pr-ans.instructor{font-size:9.5pt;padding:2px 7px;line-height:1.55;
+    background:#fef9e7 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .pr-ans.student{min-height:1.6rem}
+  .st-work{background:none;border:none;border-bottom:1.5px solid #bbb;
+    border-radius:0;min-height:2.6rem;resize:none}
+  .st-btn-sm{display:none}
+  .st-ans-hidden{display:none !important}
+}
+@page{margin:.55in .65in;size:letter}
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1 class="page-title">Direction Fields</h1>
+<p class="page-sub">Calc 2 &nbsp;&middot;&nbsp; &sect;20 &nbsp;&middot;&nbsp; Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026 &nbsp;&middot;&nbsp; <strong>INSTRUCTOR</strong></p>
+<div class="opening-q">We can write a differential equation like $\dfrac{dy}{dx} = y(2-y)$ without being able to solve it algebraically. Is there a way to visualize the behavior of its solutions anyway?</div>
+
+<div class="two-col">
+<div class="col">
+<div class="section-head">Direction Fields</div>
+<div class="accent-box">
+<p>Given a first-order DE $\dfrac{dy}{dx} = f(x,y)$, its <strong>direction field</strong> (slope field) is drawn by placing a short line segment at each point $(x,y)$ with slope $f(x,y)$.</p>
+<p>Each segment is tangent to whatever solution curve passes through that point. Sketching many segments reveals the shape of the solution family.</p>
+</div>
+</div>
+<div class="col">
+<div class="section-head">Equilibrium Solutions &amp; Stability</div>
+<div class="accent-box">
+<p>For an <strong>autonomous</strong> DE $\dfrac{dy}{dx} = f(y)$ (no $x$ in $f$), an <strong>equilibrium solution</strong> is a constant $y = c$ where $f(c) = 0$.</p>
+<ul>
+<li><strong>Stable:</strong> nearby solutions move toward $y = c$</li>
+<li><strong>Unstable:</strong> nearby solutions move away from $y = c$</li>
+</ul>
+<p>Horizontal segments in the direction field indicate equilibria.</p>
+</div>
+</div>
+</div>
+
+<div class="section-head">Worked Examples</div>
+<div class="examples-grid">
+
+<div class="ex-block">
+  <div class="ex-label">Example 1 &mdash; $dy/dx = x$</div>
+  <div class="ex-body">Sketch the direction field. Describe the solutions.</div>
+  <div class="ex-canvas-wrap"><canvas id="f1" width="220" height="220"></canvas></div>
+  <div class="ex-answer instructor">Slopes depend only on $x$ — all points on a vertical line $x = c$ share the same slope $c$. The field fans left (negative slopes for $x&lt;0$) and right (positive for $x&gt;0$). Solutions are $y = \frac{1}{2}x^2 + C$ (upward parabolas).</div>
+</div>
+
+<div class="ex-block">
+  <div class="ex-label">Example 2 &mdash; $dy/dx = 1 - y$</div>
+  <div class="ex-body">Find any equilibria. Classify as stable or unstable.</div>
+  <div class="ex-canvas-wrap"><canvas id="f2" width="220" height="220"></canvas></div>
+  <div class="ex-answer instructor">Set $1-y=0$: equilibrium at $\mathbf{y=1}$. For $y&lt;1$: $f&gt;0$ (solutions rise toward 1). For $y&gt;1$: $f&lt;0$ (solutions fall toward 1). <strong>Stable equilibrium.</strong> All solution curves approach $y=1$ as $x\to+\infty$.</div>
+</div>
+
+<div class="ex-block">
+  <div class="ex-label">Example 3 &mdash; $dy/dx = y(2-y)$</div>
+  <div class="ex-body">Find all equilibria and classify each.</div>
+  <div class="ex-canvas-wrap"><canvas id="f3" width="220" height="220"></canvas></div>
+  <div class="ex-answer instructor">Set $y(2-y)=0$: equilibria at $\mathbf{y=0}$ and $\mathbf{y=2}$. For $0&lt;y&lt;2$: $f&gt;0$ (rising). For $y&gt;2$ or $y&lt;0$: $f&lt;0$ (falling). $y=2$ is <strong>stable</strong>; $y=0$ is <strong>unstable</strong>. Logistic growth pattern.</div>
+</div>
+
+<div class="ex-block">
+  <div class="ex-label">Example 4 &mdash; $dy/dx = xy$</div>
+  <div class="ex-body">Describe the slope pattern quadrant by quadrant. What are the zero-slope curves?</div>
+  <div class="ex-canvas-wrap"><canvas id="f4" width="220" height="220"></canvas></div>
+  <div class="ex-answer instructor">Zero slopes where $x=0$ or $y=0$ (the axes). QI &amp; QIII: $xy&gt;0$ → positive slopes. QII &amp; QIV: $xy&lt;0$ → negative slopes. Solutions are $y = Ce^{x^2/2}$ (grows rapidly for large $|x|$).</div>
+</div>
+
+</div>
+
+<div class="section-head">Practice Problems</div>
+<div class="practice">
+<div class="pr-row">
+  <div class="pr-num">1.</div>
+  <div class="pr-prob">For $dy/dx = -y$: find any equilibria, classify them, and describe what happens to all solution curves as $x \to +\infty$.</div>
+  <div class="pr-ans instructor">Equilibrium at $y=0$. For $y&gt;0$: $f=-y&lt;0$ (decreasing); for $y&lt;0$: $f&gt;0$ (increasing). <strong>Stable.</strong> All solutions $\to 0$ as $x\to+\infty$.</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">2.</div>
+  <div class="pr-prob">Find all equilibria of $dy/dx = y^2 - 1$ and classify each as stable or unstable.</div>
+  <div class="pr-ans instructor">$y^2-1=0 \Rightarrow y=\pm 1$. For $y\in(-1,1)$: $f&lt;0$ (decreasing toward $-1$, away from $1$). So $y=1$ is <strong>unstable</strong>, $y=-1$ is <strong>stable</strong>.</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">3.</div>
+  <div class="pr-prob">For $dy/dx = x - 1$: along what vertical line are all slopes zero? For $x > 1$, are solutions increasing or decreasing?</div>
+  <div class="pr-ans instructor">Slopes are zero on $x=1$. For $x&gt;1$: $f=x-1&gt;0$, so solutions are <strong>increasing</strong>.</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">4.</div>
+  <div class="pr-prob">A direction field shows horizontal segments along $y = 3$ and $y = -1$, with solutions above $y=3$ increasing and solutions between the two lines also increasing. Which DE is most consistent: (A) $dy/dx = (y-3)(y+1)$ or (B) $dy/dx = (3-y)(y+1)$?</div>
+  <div class="pr-ans instructor">Choice <strong>(B)</strong> $dy/dx=(3-y)(y+1)$. For $y&gt;3$: $(3-y)&lt;0,(y+1)&gt;0$ so $f&lt;0$ — solutions decrease (correct). Between lines: both factors positive, $f&gt;0$ — solutions increase (correct).</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">5.</div>
+  <div class="pr-prob">For $dy/dx = \sin(y)$: identify two equilibrium values in $[0,2\pi]$ and determine which is stable.</div>
+  <div class="pr-ans instructor">$\sin(y)=0$ at $y=0$ and $y=\pi$ in $[0,2\pi]$. Near $y=0$: $\sin(y)&gt;0$ for $0&lt;y&lt;\pi$ (solutions move away) → <strong>unstable</strong>. Near $y=\pi$: solutions approach from both sides → <strong>stable</strong>.</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">6.</div>
+  <div class="pr-prob">A population model gives $dy/dx = 0.2y(1 - y/100)$ where $y$ is population. What are the equilibria? Which is stable, and what does it represent?</div>
+  <div class="pr-ans instructor">Equilibria: $y=0$ (unstable) and $y=100$ (stable). $y=100$ is the <strong>carrying capacity</strong> — the population the environment can sustain long-term.</div>
+</div>
+</div>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+
+<script>
+
+function drawField(id, f, xMin, xMax, yMin, yMax, nx, ny) {
+  var canvas = document.getElementById(id);
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  var W = canvas.width, H = canvas.height;
+
+  var toSX = function(x){ return (x - xMin)/(xMax - xMin)*W; };
+  var toSY = function(y){ return H - (y - yMin)/(yMax - yMin)*H; };
+
+  // Background
+  ctx.fillStyle = '#fafcff';
+  ctx.fillRect(0,0,W,H);
+
+  // Light grid
+  ctx.strokeStyle = '#e2e8f0';
+  ctx.lineWidth = 0.5;
+  for (var xi = Math.ceil(xMin); xi <= xMax; xi++) {
+    ctx.beginPath(); ctx.moveTo(toSX(xi),0); ctx.lineTo(toSX(xi),H); ctx.stroke();
+  }
+  for (var yi = Math.ceil(yMin); yi <= yMax; yi++) {
+    ctx.beginPath(); ctx.moveTo(0,toSY(yi)); ctx.lineTo(W,toSY(yi)); ctx.stroke();
+  }
+
+  // Axes
+  ctx.strokeStyle = '#888';
+  ctx.lineWidth = 1;
+  if (yMin < 0 && yMax > 0) {
+    ctx.beginPath(); ctx.moveTo(0,toSY(0)); ctx.lineTo(W,toSY(0)); ctx.stroke();
+  }
+  if (xMin < 0 && xMax > 0) {
+    ctx.beginPath(); ctx.moveTo(toSX(0),0); ctx.lineTo(toSX(0),H); ctx.stroke();
+  }
+
+  // Tick labels
+  ctx.fillStyle = '#777';
+  ctx.font = '9px sans-serif';
+  ctx.textAlign = 'center';
+  for (var xl = Math.ceil(xMin); xl <= xMax; xl++) {
+    if (xl === 0) continue;
+    ctx.fillText(xl, toSX(xl), Math.min(toSY(0)+11, H-2));
+  }
+  ctx.textAlign = 'right';
+  for (var yl = Math.ceil(yMin); yl <= yMax; yl++) {
+    if (yl === 0) continue;
+    ctx.fillText(yl, Math.max(toSX(0)-3, 14), toSY(yl)+3);
+  }
+
+  // Direction field
+  var dx = (xMax-xMin)/(nx-1);
+  var dy = (yMax-yMin)/(ny-1);
+  var pxPerX = W/(xMax-xMin);
+  var pxPerY = H/(yMax-yMin);
+  var segLen = Math.min(pxPerX*dx, pxPerY*dy)*0.42;
+
+  ctx.strokeStyle = '#185fa5';
+  ctx.lineWidth = 1.4;
+
+  for (var i = 0; i < nx; i++) {
+    for (var j = 0; j < ny; j++) {
+      var x = xMin + i*dx;
+      var y = yMin + j*dy;
+      var m;
+      try { m = f(x,y); } catch(e) { continue; }
+      if (!isFinite(m) || isNaN(m)) continue;
+      var angle = Math.atan(m);
+      var ddx = segLen * Math.cos(angle);
+      var ddy = segLen * Math.sin(angle);
+      var px = toSX(x), py = toSY(y);
+      ctx.beginPath();
+      ctx.moveTo(px - ddx, py + ddy);
+      ctx.lineTo(px + ddx, py - ddy);
+      ctx.stroke();
+    }
+  }
+}
+
+function drawAll() {
+  drawField('f1', function(x,y){ return x; },        -3,3,-3,3, 13,13);
+  drawField('f2', function(x,y){ return 1-y; },      -3,3,-1,4, 13,13);
+  drawField('f3', function(x,y){ return y*(2-y); },  -3,3,-1,3.5, 13,13);
+  drawField('f4', function(x,y){ return x*y; },      -3,3,-3,3, 13,13);
+}
+window.addEventListener('load', drawAll);
+
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left: '$$', right: '$$', display: true},
+      {left: '$',  right: '$',  display: false}
+    ],
+    throwOnError: false
+  });
+</script>
+</body>
+</html>
