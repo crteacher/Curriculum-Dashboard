@@ -94,6 +94,52 @@ dl div{margin-bottom:.35rem}
 footer{text-align:center;padding:2rem;font-size:.78rem;color:var(--muted);
   border-top:1px solid var(--border)}
 footer a{color:var(--muted);text-decoration:underline}
+
+/* ── Game card ────────────────────────────── */
+.game-card{margin:0 0 1rem;padding:1.1rem 1.4rem;
+  background:rgba(240,192,96,.07);border:1px solid rgba(240,192,96,.3);
+  border-radius:10px;display:flex;align-items:center;gap:1.2rem;flex-wrap:wrap}
+.game-card .gc-icon{font-size:2.2rem;flex-shrink:0}
+.game-card .gc-text{flex:1;min-width:180px}
+.game-card .gc-title{font-weight:700;color:var(--gold);font-size:.95rem;margin-bottom:.3rem}
+.game-card .gc-desc{font-size:.82rem;color:var(--sub);line-height:1.5}
+.game-card a{display:inline-block;background:var(--gold);color:#111;
+  font-weight:800;font-size:.83rem;padding:.5rem 1.3rem;border-radius:8px;
+  text-decoration:none;transition:opacity .15s;white-space:nowrap;flex-shrink:0}
+.game-card a:hover{opacity:.85}
+
+/* ── Interactive grid ─────────────────────── */
+.dist-ctrl{display:flex;gap:.5rem;flex-wrap:wrap;margin:1rem 0 .75rem;align-items:center}
+.dist-btn{padding:.4rem 1rem;border-radius:6px;border:2.5px solid;font-size:.8rem;
+  font-weight:800;cursor:pointer;background:none;transition:opacity .15s;color:#fff}
+.dist-btn.inactive{opacity:.35}
+.reset-btn{padding:.38rem .9rem;border-radius:6px;border:1px solid var(--border);
+  color:var(--muted);font-size:.78rem;background:none;cursor:pointer;margin-left:auto}
+.reset-btn:hover{border-color:var(--accent);color:var(--accent)}
+.dist-grid{display:grid;grid-template-columns:repeat(4,58px);gap:5px;margin:0 0 1rem}
+.g-cell{width:58px;height:58px;border-radius:7px;cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  font-weight:900;font-size:1.15rem;border:3px solid transparent;
+  transition:transform .1s,border-color .12s;user-select:none;position:relative}
+.g-cell:hover{transform:scale(1.07)}
+.g-cell .d-tag{position:absolute;bottom:3px;right:5px;
+  font-size:.58rem;font-weight:900;letter-spacing:.04em}
+.dist-results{font-size:.87rem;color:var(--sub);line-height:1.9;
+  padding:.85rem 1.1rem;background:rgba(255,255,255,.03);border-radius:8px;min-height:60px}
+.d-win-a{font-weight:700;color:#7ab0e0}
+.d-win-b{font-weight:700;color:var(--accent)}
+.d-tie{font-weight:700;color:var(--gold)}
+.dist-hint{margin-top:.85rem;font-size:.8rem;color:var(--muted);font-style:italic;
+  border-left:2px solid var(--border);padding-left:.75rem}
+.dist-hint strong{font-style:normal;color:var(--sub)}
+.show-btn{display:inline-flex;align-items:center;gap:.4rem;background:none;
+  border:1px solid var(--border);border-radius:6px;color:var(--muted);
+  font-size:.78rem;padding:.35rem .85rem;cursor:pointer;margin-top:.65rem;
+  transition:border-color .15s,color .15s}
+.show-btn:hover{border-color:var(--accent);color:var(--accent)}
+.ans-reveal{margin-top:.85rem;padding:.9rem 1.1rem;background:rgba(232,120,120,.07);
+  border-radius:8px;font-size:.87rem;color:var(--sub);line-height:1.75}
+.ans-reveal strong{color:var(--text)}
 </style>
 </head>
 <body>
@@ -114,6 +160,16 @@ footer a{color:var(--muted);text-decoration:underline}
 </div>
 
 <div class="sections">
+
+  <!-- Game card -->
+  <div class="game-card">
+    <span class="gc-icon">🕹️</span>
+    <div class="gc-text">
+      <div class="gc-title">Try It: GerryMander — the Puzzle Game</div>
+      <div class="gc-desc">Draw actual voting districts using packing and cracking to win elections. Built around <em>Gill v. Whitford</em> — the same case in section 06 below.</div>
+    </div>
+    <a href="https://gametheorytest.com/gerry/game/" target="_blank" rel="noopener">Play the Game ↗</a>
+  </div>
 
   <!-- 1. Districts -->
   <div class="section-item" id="s1">
@@ -272,6 +328,34 @@ footer a{color:var(--muted);text-decoration:underline}
     </div>
   </div>
 
+  <!-- 3b. Interactive Grid -->
+  <div class="section-item" id="s3b">
+    <button class="sec-header" onclick="toggle('s3b')">
+      <span class="sec-num">⊞</span>
+      <span class="sec-title">Draw Your Own Districts</span>
+      <span class="sec-tag tag-red">Interactive</span>
+      <span class="sec-chevron">▼</span>
+    </button>
+    <div class="sec-body">
+      <div class="concept">
+        The grid below has <strong>12 voters</strong> — 6 for Party A (blue) and 6 for Party B (red), arranged in a 3×4 map. Draw <strong>3 districts of 4 voters each</strong> by selecting a district and clicking cells.
+        <br><br>
+        Challenge: can you draw the districts so A wins 2 out of 3? So B wins 2 out of 3? It should be possible both ways with the same voter map.
+      </div>
+      <div class="dist-ctrl">
+        <button class="dist-btn" id="dbtn1" onclick="setDist(1)" style="border-color:#4a80d0;color:#7ab0e0">District 1</button>
+        <button class="dist-btn inactive" id="dbtn2" onclick="setDist(2)" style="border-color:#c05050;color:#e87878">District 2</button>
+        <button class="dist-btn inactive" id="dbtn3" onclick="setDist(3)" style="border-color:#2a8a4a;color:#70c070">District 3</button>
+        <button class="reset-btn" onclick="resetGrid()">↺ Reset</button>
+      </div>
+      <div id="distGrid" class="dist-grid"></div>
+      <div id="distResults" class="dist-results">Select a district and click cells to assign them. Each district needs exactly 4 voters.</div>
+      <div class="dist-hint">
+        <strong>Stuck?</strong> Recall the two strategies: <em>packing</em> (concentrate the opponent into one district so they "waste" votes winning big) and <em>cracking</em> (split the opponent's voters so they never have enough to win anywhere).
+      </div>
+    </div>
+  </div>
+
   <!-- 4. Min/Max Analysis -->
   <div class="section-item" id="s4">
     <button class="sec-header" onclick="toggle('s4')">
@@ -293,6 +377,21 @@ footer a{color:var(--muted);text-decoration:underline}
         Same voters, same real preferences: the mapmaker chooses whether A wins 5-0 or 2-3.
       </div>
       <div class="result">With a 60-40 voter split, the seat split can range anywhere from 2-3 to 5-0. <strong>The map can flip who controls the legislature without changing a single voter's preference.</strong></div>
+      <div class="example-hd" style="margin-top:1.2rem">Practice — Min/Max Analysis</div>
+      <div class="concept" style="color:var(--text)">
+        A state has <strong>3 districts of 5 voters</strong>. Party A has 9 voters total; Party B has 6 voters total. What is the maximum number of districts A can win? The minimum?
+      </div>
+      <button class="show-btn" onclick="showAns('a-mm1')">Show Answer ▾</button>
+      <div class="ans-reveal" id="a-mm1" style="display:none">
+        <strong>Maximum for A</strong> — win as many districts as efficiently as possible:<br>
+        Win each district 3-2: uses 9 A-votes perfectly across 3 districts. Result: <strong>A wins all 3</strong>.<br><br>
+        <strong>Minimum for A</strong> — B's mapmaker packs A:<br>
+        D1: 5A, 0B → A wins by landslide (5 A-votes "wasted")<br>
+        D2: 2A, 3B → B wins<br>
+        D3: 2A, 3B → B wins<br>
+        Result: <strong>A wins only 1 out of 3</strong>, despite having 60% of the voters.<br><br>
+        The swing: A goes from 3-0 to 1-2 without any voter changing their preference — only the map changes.
+      </div>
     </div>
   </div>
 
@@ -400,6 +499,95 @@ footer a{color:var(--muted);text-decoration:underline}
 function toggle(id) {
   document.getElementById(id).classList.toggle('open');
 }
+function showAns(id) {
+  const el = document.getElementById(id);
+  const btn = el.previousElementSibling;
+  const visible = el.style.display !== 'none';
+  el.style.display = visible ? 'none' : 'block';
+  btn.textContent = visible ? 'Show Answer ▾' : 'Hide Answer ▴';
+}
+
+/* ── Interactive districting grid ─────────── */
+const VOTER_GRID = [
+  ['A','A','A','B'],
+  ['A','A','B','B'],
+  ['A','B','B','B']
+];
+const DIST_COLORS = ['transparent','#4a80d0','#c05050','#2a8a4a'];
+const VOTER_BG    = { A:'#1c3060', B:'#601818' };
+const VOTER_FG    = { A:'#7ab0e0', B:'#e87878' };
+const DIST_TAGS   = ['','D1','D2','D3'];
+let cellD = Array.from({length:3}, () => Array(4).fill(0));
+let activeDist = 1;
+
+function buildGrid() {
+  const g = document.getElementById('distGrid');
+  if (!g) return;
+  g.innerHTML = '';
+  for (let r = 0; r < 3; r++) {
+    for (let c = 0; c < 4; c++) {
+      const v = VOTER_GRID[r][c];
+      const d = cellD[r][c];
+      const cell = document.createElement('div');
+      cell.className = 'g-cell';
+      cell.style.background = VOTER_BG[v];
+      cell.style.color = VOTER_FG[v];
+      cell.style.borderColor = d > 0 ? DIST_COLORS[d] : 'transparent';
+      cell.innerHTML = v + (d > 0 ? `<span class="d-tag">${DIST_TAGS[d]}</span>` : '');
+      cell.addEventListener('click', () => { cellD[r][c] = activeDist; buildGrid(); updateResults(); });
+      g.appendChild(cell);
+    }
+  }
+}
+
+function setDist(n) {
+  activeDist = n;
+  [1,2,3].forEach(i => {
+    const btn = document.getElementById('dbtn' + i);
+    if (btn) btn.className = 'dist-btn' + (i === n ? '' : ' inactive');
+  });
+}
+
+function resetGrid() {
+  cellD = Array.from({length:3}, () => Array(4).fill(0));
+  buildGrid();
+  document.getElementById('distResults').innerHTML =
+    'Select a district and click cells to assign them. Each district needs exactly 4 voters.';
+}
+
+function updateResults() {
+  const cnt = {1:{A:0,B:0}, 2:{A:0,B:0}, 3:{A:0,B:0}};
+  let assigned = 0;
+  for (let r=0; r<3; r++) for (let c=0; c<4; c++) {
+    const d = cellD[r][c];
+    if (d > 0) { cnt[d][VOTER_GRID[r][c]]++; assigned++; }
+  }
+  const el = document.getElementById('distResults');
+  if (!el) return;
+  if (assigned < 12) { el.innerHTML = `${assigned}/12 cells assigned. Fill all cells to see results.`; return; }
+  const sizes = [1,2,3].map(d => cnt[d].A + cnt[d].B);
+  if (sizes.some(s => s !== 4)) {
+    el.innerHTML = `Each district must have exactly 4 voters. Current sizes: D1=${sizes[0]}, D2=${sizes[1]}, D3=${sizes[2]}.`;
+    return;
+  }
+  let aW=0, bW=0, html='';
+  for (let d=1; d<=3; d++) {
+    const {A,B} = cnt[d];
+    let outcome;
+    if (A > B)      outcome = `<span class="d-win-a">A wins</span>`;
+    else if (B > A) outcome = `<span class="d-win-b">B wins</span>`;
+    else            outcome = `<span class="d-tie">Tie</span>`;
+    html += `<strong style="color:#aaa">${DIST_TAGS[d]}:</strong> Party A ${A} — Party B ${B} → ${outcome}<br>`;
+    if (A > B) aW++; else if (B > A) bW++;
+  }
+  html += `<br><strong>Result: Party A wins ${aW} district${aW!==1?'s':''}, Party B wins ${bW}.</strong>`;
+  if (aW===2) html += ' 🔵 A gerrymandered successfully.';
+  if (bW===2) html += ' 🔴 B gerrymandered successfully.';
+  if (aW===1 && bW===1) html += ' ⚖️ Tied map — one district is a tie.';
+  el.innerHTML = html;
+}
+
+document.addEventListener('DOMContentLoaded', () => { buildGrid(); });
 </script>
 </body>
 </html>

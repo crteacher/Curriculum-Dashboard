@@ -98,6 +98,21 @@ dl div{margin-bottom:.35rem}
 footer{text-align:center;padding:2rem;font-size:.78rem;color:var(--muted);
   border-top:1px solid var(--border)}
 footer a{color:var(--muted);text-decoration:underline}
+
+/* ── Practice problems ───────────────────── */
+.practice-label{font-size:.7rem;font-weight:800;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--muted);margin:0 0 1rem;padding-top:.5rem}
+.show-btn{display:inline-flex;align-items:center;gap:.4rem;background:none;
+  border:1px solid var(--border);border-radius:6px;color:var(--muted);
+  font-size:.78rem;padding:.35rem .85rem;cursor:pointer;margin-top:.65rem;
+  transition:border-color .15s,color .15s}
+.show-btn:hover{border-color:var(--accent);color:var(--accent)}
+.ans-reveal{margin-top:.85rem;padding:.9rem 1.1rem;background:rgba(91,200,212,.07);
+  border-radius:8px;font-size:.87rem;color:var(--sub);line-height:1.75}
+.ans-reveal strong{color:var(--text)}
+.win{color:var(--accent);font-weight:700}
+.violation{color:#f07070;font-weight:700}
+.ok{color:#70c070;font-weight:700}
 </style>
 </head>
 <body>
@@ -347,6 +362,165 @@ footer a{color:var(--muted);text-decoration:underline}
 
 </div><!-- /sections -->
 
+<!-- ── Practice Problems ──────────────────────────────────── -->
+<div class="sections" style="padding-top:0">
+  <p class="practice-label">Practice Problems</p>
+
+  <!-- P1: Plurality + Condorcet -->
+  <div class="section-item" id="p1">
+    <button class="sec-header" onclick="toggle('p1')">
+      <span class="sec-num">P1</span>
+      <span class="sec-title">Plurality &amp; Condorcet</span>
+      <span class="sec-tag tag-teal">Methods 02 &amp; 05</span>
+      <span class="sec-chevron">▼</span>
+    </button>
+    <div class="sec-body">
+      <div class="concept">Find the plurality winner. Then determine whether a Condorcet winner exists — and if so, who it is.</div>
+      <div class="example-hd">Preference Schedule (19 voters)</div>
+      <table class="pref-table">
+        <tr><th>Rank</th><th>7 voters</th><th>6 voters</th><th>6 voters</th></tr>
+        <tr><td>1st</td><td>A</td><td>B</td><td>C</td></tr>
+        <tr><td>2nd</td><td>B</td><td>C</td><td>B</td></tr>
+        <tr><td>3rd</td><td>C</td><td>A</td><td>A</td></tr>
+      </table>
+      <button class="show-btn" onclick="showAns('a-p1')">Show Answer ▾</button>
+      <div class="ans-reveal" id="a-p1" style="display:none">
+        <strong>Plurality:</strong> A = 7, B = 6, C = 6. <span class="win">Plurality winner: A.</span><br><br>
+        <strong>Condorcet comparisons:</strong><br>
+        A vs B: 7 prefer A; 12 prefer B → <strong>B wins</strong><br>
+        A vs C: 7 prefer A; 12 prefer C → <strong>C wins</strong><br>
+        B vs C: 7+6 = 13 prefer B; 6 prefer C → <strong>B wins</strong><br><br>
+        <span class="win">Condorcet winner: B</span> (beats every other candidate head-to-head).<br><br>
+        Notice the conflict: Plurality elected A — the candidate 12 out of 19 voters ranked last. B is the Condorcet winner but finished second in first-place votes.
+      </div>
+    </div>
+  </div>
+
+  <!-- P2: IRV -->
+  <div class="section-item" id="p2">
+    <button class="sec-header" onclick="toggle('p2')">
+      <span class="sec-num">P2</span>
+      <span class="sec-title">Instant Runoff Voting</span>
+      <span class="sec-tag tag-teal">Method 03</span>
+      <span class="sec-chevron">▼</span>
+    </button>
+    <div class="sec-body">
+      <div class="concept">Use IRV (plurality with elimination) to determine the winner. Show your work round by round.</div>
+      <div class="example-hd">Preference Schedule (21 voters)</div>
+      <table class="pref-table">
+        <tr><th>Rank</th><th>8 voters</th><th>7 voters</th><th>6 voters</th></tr>
+        <tr><td>1st</td><td>A</td><td>B</td><td>C</td></tr>
+        <tr><td>2nd</td><td>B</td><td>C</td><td>B</td></tr>
+        <tr><td>3rd</td><td>C</td><td>A</td><td>A</td></tr>
+      </table>
+      <button class="show-btn" onclick="showAns('a-p2')">Show Answer ▾</button>
+      <div class="ans-reveal" id="a-p2" style="display:none">
+        <strong>Round 1:</strong> A = 8, B = 7, C = 6. C has fewest — eliminated.<br>
+        C's 6 voters have B as their 2nd choice → transfer to B.<br><br>
+        <strong>Round 2:</strong> A = 8, B = 7 + 6 = 13. A majority would require 11. B has 13 &gt; 11.<br><br>
+        <span class="win">IRV winner: B.</span><br><br>
+        Compare to plurality: plurality would have elected A (8 votes). IRV recognized that B was a stronger consensus candidate.
+      </div>
+    </div>
+  </div>
+
+  <!-- P3: Borda Count -->
+  <div class="section-item" id="p3">
+    <button class="sec-header" onclick="toggle('p3')">
+      <span class="sec-num">P3</span>
+      <span class="sec-title">Borda Count</span>
+      <span class="sec-tag tag-teal">Method 04</span>
+      <span class="sec-chevron">▼</span>
+    </button>
+    <div class="sec-body">
+      <div class="concept">Use the Borda count to find the winner. With 3 candidates: 1st = 2 pts, 2nd = 1 pt, 3rd = 0 pts. This one might surprise you.</div>
+      <div class="example-hd">Preference Schedule (30 voters)</div>
+      <table class="pref-table">
+        <tr><th>Rank</th><th>10 voters</th><th>10 voters</th><th>10 voters</th></tr>
+        <tr><td>1st</td><td>A</td><td>B</td><td>C</td></tr>
+        <tr><td>2nd</td><td>B</td><td>C</td><td>A</td></tr>
+        <tr><td>3rd</td><td>C</td><td>A</td><td>B</td></tr>
+      </table>
+      <button class="show-btn" onclick="showAns('a-p3')">Show Answer ▾</button>
+      <div class="ans-reveal" id="a-p3" style="display:none">
+        A: 10×2 + 10×0 + 10×1 = 20 + 0 + 10 = <strong>30 pts</strong><br>
+        B: 10×1 + 10×2 + 10×0 = 10 + 20 + 0 = <strong>30 pts</strong><br>
+        C: 10×0 + 10×1 + 10×2 = 0 + 10 + 20 = <strong>30 pts</strong><br><br>
+        <span class="win">Three-way tie — 30 points each.</span><br><br>
+        This election has a perfectly symmetric <em>Condorcet cycle</em>: A beats B, B beats C, and C beats A head-to-head. No candidate is universally preferred, and every method struggles here. There is no "correct" winner.
+      </div>
+    </div>
+  </div>
+
+  <!-- P4: Fairness Criteria Violation -->
+  <div class="section-item" id="p4">
+    <button class="sec-header" onclick="toggle('p4')">
+      <span class="sec-num">P4</span>
+      <span class="sec-title">Catching a Fairness Violation</span>
+      <span class="sec-tag tag-teal">Criteria 06</span>
+      <span class="sec-chevron">▼</span>
+    </button>
+    <div class="sec-body">
+      <div class="concept">Find the Borda count winner. Then check: does the result violate the Majority Criterion? The Condorcet Criterion? (You'll need to do the head-to-head comparisons.)</div>
+      <div class="example-hd">Preference Schedule (21 voters)</div>
+      <table class="pref-table">
+        <tr><th>Rank</th><th>11 voters</th><th>9 voters</th><th>1 voter</th></tr>
+        <tr><td>1st</td><td>A</td><td>B</td><td>C</td></tr>
+        <tr><td>2nd</td><td>B</td><td>C</td><td>B</td></tr>
+        <tr><td>3rd</td><td>C</td><td>A</td><td>A</td></tr>
+      </table>
+      <button class="show-btn" onclick="showAns('a-p4')">Show Answer ▾</button>
+      <div class="ans-reveal" id="a-p4" style="display:none">
+        <strong>Borda Count (2-1-0):</strong><br>
+        A: 11×2 + 9×0 + 1×0 = <strong>22 pts</strong><br>
+        B: 11×1 + 9×2 + 1×1 = 11 + 18 + 1 = <strong>30 pts</strong><br>
+        C: 11×0 + 9×1 + 1×2 = 0 + 9 + 2 = <strong>11 pts</strong><br>
+        <span class="win">Borda winner: B.</span><br><br>
+        <strong>Majority check:</strong> A has 11/21 ≈ 52% of first-place votes — a majority. But Borda elected B. <span class="violation">Majority Criterion violated. ✗</span><br><br>
+        <strong>Condorcet check:</strong><br>
+        A vs B: 11 prefer A; 10 prefer B → A wins head-to-head<br>
+        A vs C: 11+9 = 20 prefer A; 1 prefers C → A wins head-to-head<br>
+        A is the Condorcet winner, but Borda elected B. <span class="violation">Condorcet Criterion violated. ✗</span><br><br>
+        This is the most common type of "trap" election — a clear majority candidate loses to Borda because the minority's second-place votes pile up.
+      </div>
+    </div>
+  </div>
+
+  <!-- P5: STL Voting -->
+  <div class="section-item" id="p5">
+    <button class="sec-header" onclick="toggle('p5')">
+      <span class="sec-num">P5</span>
+      <span class="sec-title">STL-Style Approval + Runoff</span>
+      <span class="sec-tag tag-teal">Method 08</span>
+      <span class="sec-chevron">▼</span>
+    </button>
+    <div class="sec-body">
+      <div class="concept">Use the St. Louis method: assume each voter <em>approves</em> their top two choices. The two candidates with the most approvals advance to a head-to-head runoff.</div>
+      <div class="example-hd">Preference Schedule (41 voters)</div>
+      <table class="pref-table">
+        <tr><th>Rank</th><th>11 voters</th><th>10 voters</th><th>12 voters</th><th>8 voters</th></tr>
+        <tr><td>1st</td><td>A</td><td>B</td><td>C</td><td>B</td></tr>
+        <tr><td>2nd</td><td>B</td><td>C</td><td>A</td><td>A</td></tr>
+        <tr><td>3rd</td><td>C</td><td>A</td><td>B</td><td>C</td></tr>
+      </table>
+      <button class="show-btn" onclick="showAns('a-p5')">Show Answer ▾</button>
+      <div class="ans-reveal" id="a-p5" style="display:none">
+        <strong>Approval totals</strong> (voters approve their top 2):<br>
+        A: approved by cols 1 (1st), 3 (2nd), 4 (2nd) = 11 + 12 + 8 = <strong>31 approvals</strong><br>
+        B: approved by cols 1 (2nd), 2 (1st), 4 (1st) = 11 + 10 + 8 = <strong>29 approvals</strong><br>
+        C: approved by cols 2 (2nd), 3 (1st) = 10 + 12 = <strong>22 approvals</strong><br><br>
+        Top 2 advance: <strong>A and B</strong>. C is eliminated.<br><br>
+        <strong>Head-to-head runoff, A vs B:</strong><br>
+        Prefer A: cols 1 (A&gt;B), col 3 (A&gt;B) = 11 + 12 = 23<br>
+        Prefer B: cols 2, col 4 = 10 + 8 = 18<br><br>
+        <span class="win">Runoff winner: A.</span><br><br>
+        Note: Plurality would have elected C (12 first-place votes). The STL system — approval round + head-to-head — elected A, who has far broader support.
+      </div>
+    </div>
+  </div>
+
+</div><!-- /practice sections -->
+
 <footer>
   <a href="./index.html">← Back to Home</a>
   &nbsp;·&nbsp;
@@ -356,6 +530,13 @@ footer a{color:var(--muted);text-decoration:underline}
 <script>
 function toggle(id) {
   document.getElementById(id).classList.toggle('open');
+}
+function showAns(id) {
+  const el = document.getElementById(id);
+  const btn = el.previousElementSibling;
+  const visible = el.style.display !== 'none';
+  el.style.display = visible ? 'none' : 'block';
+  btn.textContent = visible ? 'Show Answer ▾' : 'Hide Answer ▴';
 }
 </script>
 </body>
