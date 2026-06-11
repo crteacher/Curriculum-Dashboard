@@ -55,6 +55,10 @@ details[open] .chevron{transform:rotate(90deg)}
 .grm-label{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#7a7570;padding-top:.15rem;white-space:nowrap}
 .grm-value{font-size:.875rem;line-height:1.7}
 .grm-value .katex-display{margin:.35rem 0}
+.inline-quiz-banner{display:flex;align-items:baseline;gap:.5rem;flex-wrap:wrap;padding:.5rem .75rem;margin-bottom:.65rem;background:#fff8e6;border:1px solid #e8d48a;border-radius:6px}
+.quiz-icon{font-size:.9rem}
+.quiz-label{font-weight:700;font-size:.83rem;color:#7a5c00}
+.quiz-note{font-size:.75rem;color:#9a7a20}
 .ex-block{margin:.2rem 0 .45rem;padding:.4rem .65rem;background:#f5f3ef;border-radius:6px;border:1px solid #e4e0d8}
 .ex-technique{display:block;font-size:.72rem;font-weight:600;color:#8b6914;letter-spacing:.04em;text-transform:uppercase;margin-bottom:.18rem;opacity:.85}
 .ex-prob{display:block;font-size:.87rem}
@@ -132,10 +136,15 @@ function pracLink(course,sec){
   return`<br><a href="${folder}/${sec.practiceFile}.html" class="prac-link" target="_blank">📄 Practice Worksheet</a>`;
 }
 
-function buildLessonCard(course,sec,dayNum,isOpen){
+function buildLessonCard(course,sec,dayNum,isOpen,schedItem){
   const doNow=course==='ca'?'./donow-ca.html':'./warmup.html';
   const we=sec.workedExamples||[],pp=sec.practiceProblems||[];
   let body='';
+  // Embedded quiz — happens at start of class, lesson continues after
+  if(schedItem?.startQuiz){
+    const q=schedItem.startQuiz;
+    body+=`<div class="inline-quiz-banner"><span class="quiz-icon">✏️</span><span class="quiz-label">${q.title}</span><span class="quiz-note">Short quiz — first 10–15 min. Individual &amp; silent. Rest of lesson follows.</span></div>`;
+  }
   body+=grm('SWBAT',mEl(sec.swbat||'—'));
   body+=grm('DO NOW',`<a href="${doNow}" class="do-now-link ${course}" target="_blank">Open Do Now →</a>`);
   // I Do: first 2 worked examples — teacher-led lecture demos
@@ -181,27 +190,30 @@ function renderSchedule(colEl,course,schedule,currentId,secMap){
   schedule.forEach(item=>{
     const day=item.day;
     if(item.type==='setup') html+=buildSetupCard(course,day,item);
-    else if(item.type==='lesson'){const sec=secMap[item.sectionId];if(sec)html+=buildLessonCard(course,sec,day,item.sectionId===currentId);}
-    else if(item.type==='quiz') html+=buildQuizCard(course,day,item,secMap);
+    else if(item.type==='lesson'){const sec=secMap[item.sectionId];if(sec)html+=buildLessonCard(course,sec,day,item.sectionId===currentId,item);}
+    else if(item.type==='review') html+=buildReviewCard(course,day,item,secMap);
+    else if(item.type==='exam') html+=buildExamCard(course,day,item);
   });
   colEl.innerHTML=html;
 }
 
-function buildReviewCard(course,dayNum,unit,secMap){
+function buildReviewCard(course,dayNum,item,secMap){
   const doNow=course==='ca'?'./donow-ca.html':'./warmup.html';
-  const chips=unit.sections.map(id=>{const s=secMap[id];if(!s||!s.reviewProblems?.length)return'';
+  const secs=item.sections||[];
+  const chips=secs.map(id=>{const s=secMap[id];if(!s||!s.reviewProblems?.length)return'';
     return`<a href="./review.html?section=${id}" class="chip ${course}" target="_blank">§${s.section} ${s.title}</a>`;}).filter(Boolean).join('');
   let body='<div class="review-intro">Students review exam-style problems by section. Click a chip to open that section\'s review set.</div>';
   body+=grm('DO NOW',`<a href="${doNow}" class="do-now-link ${course}" target="_blank">Open Do Now →</a>`);
   if(chips)body+=grm('Sections',`<div class="chips-wrap">${chips}</div>`);
   body+=grm('Structure','<span style="color:#8b949e;font-size:.83rem">Students work through 5-problem sets from each section. Shuffle for a new set. Whole-class debrief on common errors.</span>');
-  const unitShort=unit.name.replace(/^Unit \S+ — /,'');
-  return`<details class="lesson-card ${course} review-day"><summary class="lesson-summary"><span class="day-badge review">Day ${dayNum}</span><span class="lesson-title">📚 Review Day — ${unitShort}</span><span class="lesson-date">Fall 2026</span><span class="chevron">›</span></summary><div class="lesson-body">${body}</div></details>`;
+  const label=item.title||'Exam Review';
+  return`<details class="lesson-card ${course} review-day"><summary class="lesson-summary"><span class="day-badge review">Day ${dayNum}</span><span class="lesson-title">📚 ${label}</span><span class="lesson-date">Fall 2026</span><span class="chevron">›</span></summary><div class="lesson-body">${body}</div></details>`;
 }
 
-function buildExamCard(course,dayNum){
+function buildExamCard(course,dayNum,item){
+  const label=item?.title||'Exam Day';
   const body=grm('Structure','<span style="color:#8b949e;font-size:.83rem">Silent individual assessment. Full period. Equation cards and calculators only — no notes. Collect before bell.</span>');
-  return`<details class="lesson-card ${course} exam-day"><summary class="lesson-summary"><span class="day-badge exam">Day ${dayNum}</span><span class="lesson-title">✏️ Exam Day</span><span class="lesson-date">Fall 2026</span><span class="chevron">›</span></summary><div class="lesson-body">${body}</div></details>`;
+  return`<details class="lesson-card ${course} exam-day"><summary class="lesson-summary"><span class="day-badge exam">Day ${dayNum}</span><span class="lesson-title">✏️ ${label}</span><span class="lesson-date">Fall 2026</span><span class="chevron">›</span></summary><div class="lesson-body">${body}</div></details>`;
 }
 
 function renderColumn(colEl,course,currentId,unit,secMap){
