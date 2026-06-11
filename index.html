@@ -2,28 +2,64 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Curriculum Dashboard &mdash; Halverson</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;min-height:100vh}
-header{background:#1a1a1a;color:#fff;padding:1.2rem 2rem;display:flex;align-items:center;gap:1.5rem}
-.map-link{margin-left:auto;font-family:sans-serif;font-size:12px;font-weight:600;
-  color:#aaa;text-decoration:none;border:1px solid #444;border-radius:14px;
-  padding:4px 12px;white-space:nowrap;transition:all .15s}
-.map-link:hover{color:#fff;border-color:#888}
-header h1{font-size:22px;font-weight:700;letter-spacing:.01em}
-header p{font-family:sans-serif;font-size:12px;color:#aaa}
-.tab-bar{display:flex;gap:.5rem;padding:1.2rem 2rem .6rem;flex-wrap:wrap}
-.tab-btn{font-family:sans-serif;font-size:13px;font-weight:600;padding:.45rem 1.1rem;
-  border:2px solid var(--c);border-radius:20px;cursor:pointer;
+body{font-family:Georgia,serif;background:#f9f7f3;color:#1a1614;min-height:100vh}
+
+/* ── Header ────────────────────────────────────────────────────────── */
+header{background:#6b1a26;color:#fff;padding:1.1rem 2rem;display:flex;align-items:center;gap:1.5rem}
+header h1{font-family:Georgia,serif;font-size:20px;font-weight:700;letter-spacing:.01em}
+header p{font-family:sans-serif;font-size:11px;color:rgba(255,255,255,.6);
+  letter-spacing:.05em;text-transform:uppercase;margin-top:3px}
+
+/* ── Portal ─────────────────────────────────────────────────────────── */
+.portal{background:#f9f7f3;padding:2.5rem 2rem 3rem;border-bottom:1px solid #e4e0d8}
+.portal-hd{max-width:960px;margin:0 auto 1.75rem}
+.portal-hd h1{font-family:Georgia,serif;font-size:1.45rem;font-weight:700;
+  color:#1a1614;margin-bottom:.2rem}
+.portal-hd p{font-family:sans-serif;font-size:.8rem;color:#7a7570}
+.tool-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));
+  gap:.85rem;max-width:960px;margin:0 auto}
+.tool-card{display:flex;flex-direction:column;gap:.3rem;padding:1.25rem 1.15rem;
+  border-radius:8px;border:1px solid #e4e0d8;background:#fff;
+  text-decoration:none;color:#1a1614;transition:border-color .18s,box-shadow .18s}
+.tool-card:hover{border-color:#6b1a26;box-shadow:0 2px 10px rgba(107,26,38,.08)}
+.t-name{font-family:Georgia,serif;font-size:15px;font-weight:700;color:#1a1614}
+.t-desc{font-family:sans-serif;font-size:12px;color:#7a7570;line-height:1.5;flex:1}
+.t-badge{font-family:sans-serif;font-size:.58rem;font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;padding:.16rem .52rem;border-radius:999px;
+  margin-top:.4rem;align-self:flex-start}
+
+/* ── Curriculum toggle ──────────────────────────────────────────────── */
+.curr-wrap{background:#f9f7f3}
+.curr-toggle{display:flex;align-items:center;gap:.5rem;width:100%;
+  padding:1rem 2rem;background:none;border:none;border-top:1px solid #e4e0d8;
+  font-family:sans-serif;font-size:12px;font-weight:700;letter-spacing:.06em;
+  text-transform:uppercase;color:#7a7570;cursor:pointer;text-align:left;
+  transition:color .15s}
+.curr-toggle:hover{color:#6b1a26}
+.curr-chevron{margin-left:auto;font-size:10px;transition:transform .22s}
+.curr-toggle.open .curr-chevron{transform:rotate(180deg)}
+.curr-body{display:none}
+.curr-body.open{display:block}
+
+/* ── Course tabs ─────────────────────────────────────────────────────── */
+.tab-bar{display:flex;gap:.5rem;padding:1.2rem 2rem .6rem;flex-wrap:wrap;
+  background:#f9f7f3;border-bottom:1px solid #e4e0d8}
+.tab-btn{font-family:sans-serif;font-size:12px;font-weight:700;padding:.4rem 1rem;
+  border:1.5px solid var(--c);border-radius:20px;cursor:pointer;
   background:#fff;color:var(--c);transition:all .15s}
 .tab-btn.active,.tab-btn:hover{background:var(--c);color:#fff}
 .tab-btn .cnt{font-weight:400;opacity:.85}
-.tab-pane{display:none;padding:.5rem 2rem 3rem}
+.tab-pane{display:none;padding:.5rem 2rem 3rem;background:#f9f7f3}
 .tab-pane.active{display:block}
 .pane-header{font-family:sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;
   letter-spacing:.08em;padding-bottom:6px;margin-bottom:.5rem;
   border-bottom:2px solid;margin-top:.5rem}
+
+/* ── Section rows ────────────────────────────────────────────────────── */
 .row{display:grid;grid-template-columns:14px 1fr auto;align-items:center;
   gap:.6rem;padding:.45rem 0;border-bottom:1px solid #ece8e0}
 .row:last-child{border-bottom:none}
@@ -33,8 +69,9 @@ header p{font-family:sans-serif;font-size:12px;color:#aaa}
 .pill{font-family:sans-serif;font-size:10px;font-weight:700;padding:2px 8px;
   border-radius:10px;text-decoration:none;white-space:nowrap;transition:opacity .15s}
 .pill:hover{opacity:.8}
-.pill.missing{background:#e8e8e8;color:#999}
-.pill.na{background:#f0f0f0;color:#bbb}
+.pill.missing{background:#e8e4da;color:#999}
+.pill.na{background:#f0ede7;color:#bbb}
+
 @media(max-width:600px){
   .row{grid-template-columns:12px 1fr;gap:.4rem}
   .pills{grid-column:2;justify-content:flex-start}
@@ -43,43 +80,12 @@ header p{font-family:sans-serif;font-size:12px;color:#aaa}
   .tab-bar,.tab-pane:not(.active){display:none}
   .tab-pane.active{display:block;padding:0}
 }
-/* ── Portal ─────────────────────────────────────── */
-.portal{background:#111;padding:2.8rem 2rem 3.2rem}
-.portal-hd{max-width:960px;margin:0 auto 2rem}
-.portal-hd h1{font-family:sans-serif;font-size:1.55rem;font-weight:700;
-  color:#fff;letter-spacing:-.01em;margin-bottom:.25rem}
-.portal-hd p{font-family:sans-serif;font-size:.8rem;color:#666}
-.tool-grid{display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(175px,1fr));
-  gap:.85rem;max-width:960px;margin:0 auto}
-.tool-card{display:flex;flex-direction:column;gap:.35rem;padding:1.25rem 1.15rem;
-  border-radius:11px;border:1.5px solid #252525;background:#1a1a1a;
-  text-decoration:none;color:#fff;transition:border-color .18s,transform .12s}
-.tool-card:hover{transform:translateY(-2px)}
-.t-icon{font-size:1.5rem;line-height:1}
-.t-name{font-family:sans-serif;font-size:.92rem;font-weight:700;margin-top:.1rem}
-.t-desc{font-family:sans-serif;font-size:.71rem;color:#777;line-height:1.45;flex:1}
-.t-badge{font-family:sans-serif;font-size:.58rem;font-weight:800;letter-spacing:.12em;
-  text-transform:uppercase;padding:.16rem .52rem;border-radius:999px;
-  margin-top:.4rem;align-self:flex-start}
-/* ── Curriculum toggle ───────────────────────────── */
-.curr-wrap{background:#f8f7f4}
-.curr-toggle{display:flex;align-items:center;gap:.5rem;width:100%;
-  padding:1rem 2rem;background:none;border:none;border-top:2px solid #e8e4dc;
-  font-family:sans-serif;font-size:13px;font-weight:700;letter-spacing:.04em;
-  text-transform:uppercase;color:#888;cursor:pointer;text-align:left;
-  transition:color .15s}
-.curr-toggle:hover{color:#444}
-.curr-chevron{margin-left:auto;font-size:10px;transition:transform .22s}
-.curr-toggle.open .curr-chevron{transform:rotate(180deg)}
-.curr-body{display:none}
-.curr-body.open{display:block}
 </style>
 </head>
 <body>
 <header>
   <h1>Dr. Halverson</h1>
-  <p>Cardinal Ritter College Prep &nbsp;&middot;&nbsp; Calculus · College Algebra · PreCalculus</p>
+  <p>Cardinal Ritter College Prep &nbsp;&middot;&nbsp; Calculus &middot; College Algebra &middot; PreCalculus</p>
 </header>
 <section class="portal">
   <div class="portal-hd">
@@ -88,81 +94,71 @@ header p{font-family:sans-serif;font-size:12px;color:#aaa}
   </div>
   <div class="tool-grid">
 
-    <a class="tool-card" href="./warmup.html" style="border-color:#1d2d45">
-      <span class="t-icon">📅</span>
+    <a class="tool-card" href="./warmup.html">
       <span class="t-name">Daily Warm-Up</span>
-      <span class="t-desc">Random review problem pulled from any completed section.</span>
-      <span class="t-badge" style="background:#1d2d45;color:#4f8ef7">Daily</span>
+      <span class="t-desc">Choose a section and get a review problem — works any time.</span>
+      <span class="t-badge" style="background:#dce8f5;color:#185fa5">Daily</span>
     </a>
 
-    <a class="tool-card" href="./donow-ca.html" style="border-color:#1a3328">
-      <span class="t-icon">✏️</span>
+    <a class="tool-card" href="./donow-ca.html">
       <span class="t-name">CA Do Now</span>
       <span class="t-desc">Auto-graded College Algebra practice — two sections, new problems every day.</span>
-      <span class="t-badge" style="background:#1a3328;color:#5ccb87">Graded</span>
+      <span class="t-badge" style="background:#d8efe1;color:#1a5c2e">Graded</span>
     </a>
 
-    <a class="tool-card" href="./exit-ticket.html" style="border-color:#2a1e3a">
-      <span class="t-icon">📝</span>
+    <a class="tool-card" href="./exit-ticket.html">
       <span class="t-name">Exit Ticket</span>
       <span class="t-desc">Today's question plus yesterday's answer — start and end of every lesson.</span>
-      <span class="t-badge" style="background:#2a1e3a;color:#a78bfa">Daily</span>
+      <span class="t-badge" style="background:#ede8f5;color:#5a3a8a">Daily</span>
     </a>
 
-    <a class="tool-card" href="./donow-calc1.html" style="border-color:#182a40">
-      <span class="t-icon">∫</span>
+    <a class="tool-card" href="./donow-calc1.html">
       <span class="t-name">Calc 1 Do Now</span>
       <span class="t-desc">Limits and derivative rules — quick checks from completed sections.</span>
-      <span class="t-badge" style="background:#182a40;color:#6ab3f5">Graded</span>
+      <span class="t-badge" style="background:#dce8f5;color:#185fa5">Graded</span>
     </a>
 
-    <a class="tool-card" href="./puzzle.html" style="border-color:#362b0e">
-      <span class="t-icon">🧩</span>
+    <a class="tool-card" href="./puzzle.html">
       <span class="t-name">Puzzle of the Week</span>
       <span class="t-desc">A new challenge every week. Sit with it. Bring your best thinking to class.</span>
-      <span class="t-badge" style="background:#362b0e;color:#f0b429">Weekly</span>
+      <span class="t-badge" style="background:#f5edd8;color:#8a5a1a">Weekly</span>
     </a>
 
-    <a class="tool-card" href="./mathmap.html" style="border-color:#28193a">
-      <span class="t-icon">🗺️</span>
+    <a class="tool-card" href="./mathmap.html">
       <span class="t-name">Math Map</span>
       <span class="t-desc">Visual roadmap of the full curriculum — see the big picture.</span>
-      <span class="t-badge" style="background:#28193a;color:#b08cf5">Reference</span>
+      <span class="t-badge" style="background:#ede8f5;color:#5a3a8a">Reference</span>
     </a>
 
-    <a class="tool-card" href="./voting.html" style="border-color:#183038">
-      <span class="t-icon">🗳️</span>
+    <a class="tool-card" href="./voting.html">
       <span class="t-name">Voting Theory</span>
       <span class="t-desc">What makes an election fair? Mathematicians have spent centuries trying to answer that.</span>
-      <span class="t-badge" style="background:#183038;color:#5bc8d4">Explore</span>
+      <span class="t-badge" style="background:#d8eff0;color:#1a5a5c">Explore</span>
     </a>
 
-    <a class="tool-card" href="./gerry.html" style="border-color:#381818">
-      <span class="t-icon">📐</span>
+    <a class="tool-card" href="./gerry.html">
       <span class="t-name">Gerrymandering</span>
       <span class="t-desc">The math behind drawing district lines — and the math that exposes manipulation.</span>
-      <span class="t-badge" style="background:#381818;color:#e87878">Explore</span>
+      <span class="t-badge" style="background:#f5d8d8;color:#7a1a1a">Explore</span>
     </a>
 
-    <a class="tool-card" href="./lesson-plan.html" style="border-color:#1e2a1e">
-      <span class="t-icon">📋</span>
+    <a class="tool-card" href="./lesson-plan.html">
       <span class="t-name">This Week's Plan</span>
       <span class="t-desc">What we're covering in the next 5 class days — topics, objectives, and practice links.</span>
-      <span class="t-badge" style="background:#1e2a1e;color:#7ec87e">Weekly</span>
+      <span class="t-badge" style="background:#d8efe1;color:#1a5c2e">Weekly</span>
     </a>
 
-    <a class="tool-card" href="./review.html" style="border-color:#1e2a1a">
-      <span class="t-icon">📚</span>
-      <span class="t-name">Review</span>
-      <span class="t-desc">Real exam problems by section — pick a topic, get a fresh set to practice.</span>
-      <span class="t-badge" style="background:#1e2a1a;color:#7ec87e">Practice</span>
+    <a class="tool-card" href="./review.html">
+      <span class="t-name">Section Review</span>
+      <span class="t-desc">Practice problems by section — pick a topic, get a fresh set.</span>
+      <span class="t-badge" style="background:#f0ede7;color:#7a7570">Practice</span>
     </a>
 
   </div>
 </section>
 <div class="curr-wrap">
 <button class="curr-toggle" id="currToggle" onclick="toggleCurr()">
-  📚 Curriculum Map &nbsp;—&nbsp; 139 sections across 4 courses
+  Curriculum Map &nbsp;—&nbsp; 139 sections across 4 courses
   <span class="curr-chevron">▼</span>
 </button>
 <div class="curr-body" id="currBody">

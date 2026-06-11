@@ -1,352 +1,349 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Daily Warm-Up — Mr. Halverson</title>
-  <style>
-    :root {
-      --bg: #0f1117;
-      --card: #1a1d27;
-      --accent: #4f8ef7;
-      --accent2: #7c5cbf;
-      --text: #e8eaf0;
-      --muted: #7a7f96;
-      --border: #2a2d3d;
-      --ca-color: #2a7a4a;
-      --calc-color: #185fa5;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: 'Segoe UI', system-ui, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 2rem 1rem;
-    }
-    .header {
-      text-align: center;
-      margin-bottom: 2.5rem;
-    }
-    .header .date {
-      font-size: 1rem;
-      color: var(--muted);
-      letter-spacing: .08em;
-      text-transform: uppercase;
-      margin-bottom: .4rem;
-    }
-    .header h1 { font-size: 2.2rem; font-weight: 700; letter-spacing: -.02em; }
-    .header h1 span { color: var(--accent); }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daily Warm-Up — Cardinal Ritter Prep</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#f9f7f3;color:#1a1614;min-height:100vh}
 
-    .card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 2rem 2.5rem;
-      max-width: 680px;
-      width: 100%;
-      box-shadow: 0 8px 40px rgba(0,0,0,.4);
-    }
+/* ── Header ─────────────────────────────────────────────────────────── */
+.page-header{background:#6b1a26;color:#fff;padding:1.1rem 2rem;
+  display:flex;align-items:center;gap:1rem;flex-wrap:wrap}
+.page-header h1{font-family:Georgia,serif;font-size:18px;font-weight:700;flex:1}
+.page-header p{font-family:sans-serif;font-size:11px;color:rgba(255,255,255,.6);
+  letter-spacing:.05em;text-transform:uppercase}
+.back-link{font-family:sans-serif;font-size:11px;font-weight:600;
+  color:rgba(255,255,255,.7);text-decoration:none;
+  border:1px solid rgba(255,255,255,.3);border-radius:14px;padding:3px 11px;
+  transition:all .15s;white-space:nowrap}
+.back-link:hover{color:#fff;border-color:rgba(255,255,255,.7)}
 
-    /* Course picker */
-    .picker-prompt {
-      text-align: center;
-      font-size: 1.1rem;
-      color: var(--muted);
-      margin-bottom: 1.8rem;
-    }
-    .course-btns {
-      display: flex;
-      gap: 1rem;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-    .course-btn {
-      flex: 1;
-      min-width: 180px;
-      padding: 1.4rem 1rem;
-      border-radius: 12px;
-      border: 2px solid var(--border);
-      background: transparent;
-      color: var(--text);
-      font-size: 1.05rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: border-color .2s, background .2s, transform .1s;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: .5rem;
-    }
-    .course-btn .course-icon { font-size: 1.8rem; }
-    .course-btn.ca:hover    { border-color: var(--ca-color);   background: rgba(42,122,74,.12); }
-    .course-btn.calc:hover  { border-color: var(--calc-color); background: rgba(24,95,165,.12); }
-    .course-btn.donow:hover { border-color: var(--accent);     background: rgba(79,142,247,.12); }
-    .course-btn:active { transform: scale(.97); }
-    .donow-badge {
-      font-size: .62rem; font-weight: 700; letter-spacing: .1em;
-      text-transform: uppercase; background: var(--accent);
-      color: #fff; padding: .15rem .5rem; border-radius: 999px;
-    }
+/* ── Container ──────────────────────────────────────────────────────── */
+.container{max-width:780px;margin:0 auto;padding:2rem 1.5rem 4rem}
 
-    /* Warm-up content */
-    .do-now-label {
-      font-size: .8rem;
-      font-weight: 700;
-      letter-spacing: .15em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: .5rem;
-    }
-    .section-title { font-size: 1.7rem; font-weight: 700; line-height: 1.25; margin-bottom: .4rem; }
-    .section-num   { font-size: 1rem; color: var(--muted); margin-bottom: 1.4rem; }
-    .swbat {
-      font-size: .95rem; color: var(--muted); line-height: 1.55;
-      margin-bottom: 1.6rem; padding: .9rem 1.1rem;
-      background: rgba(255,255,255,.04);
-      border-left: 3px solid var(--accent);
-      border-radius: 0 8px 8px 0;
-    }
-    .swbat strong { color: var(--text); font-weight: 600; }
+/* ── Course picker ──────────────────────────────────────────────────── */
+.picker-wrap{text-align:center;padding:3rem 1rem}
+.picker-label{font-family:sans-serif;font-size:12px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.08em;color:#7a7570;margin-bottom:1.25rem}
+.course-btns{display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap}
+.course-btn{font-family:Georgia,serif;font-size:16px;font-weight:700;
+  padding:.75rem 2rem;border-radius:8px;border:1.5px solid #e4e0d8;
+  background:#fff;color:#1a1614;cursor:pointer;transition:all .18s}
+.course-btn:hover{border-color:#6b1a26;color:#6b1a26}
+.course-btn.ca:hover{border-color:#1a5c2e;color:#1a5c2e}
+.course-btn.calc:hover{border-color:#185fa5;color:#185fa5}
 
-    .practice-btn {
-      display: inline-flex; align-items: center; gap: .5rem;
-      background: var(--accent); color: #fff; text-decoration: none;
-      font-weight: 600; font-size: 1rem;
-      padding: .75rem 1.5rem; border-radius: 8px;
-      transition: background .2s, transform .1s;
-    }
-    .practice-btn:hover { background: #3a7ae0; transform: translateY(-1px); }
+/* ── Section grid ───────────────────────────────────────────────────── */
+.grid-header{display:flex;align-items:center;gap:.75rem;margin-bottom:1.5rem;flex-wrap:wrap}
+.grid-title{font-size:1.1rem;font-weight:700;flex:1}
+.ghost-btn{font-family:sans-serif;font-size:12px;font-weight:600;
+  padding:5px 13px;border-radius:7px;border:1px solid #e4e0d8;
+  background:#fff;color:#7a7570;cursor:pointer;transition:all .15s}
+.ghost-btn:hover{border-color:#6b1a26;color:#6b1a26}
+.unit-block{margin-bottom:1.75rem}
+.unit-label{font-family:sans-serif;font-size:11px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.08em;color:#888;
+  margin-bottom:.6rem;padding-bottom:5px;border-bottom:1px solid #e8e4da}
+.section-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px}
+.sec-card{background:#fff;border:1.5px solid #e4e0d8;border-radius:8px;
+  padding:.85rem 1rem;cursor:pointer;transition:border-color .18s,box-shadow .18s;
+  font-family:sans-serif;text-align:left}
+.sec-card.ca:hover{border-color:#1a5c2e;box-shadow:0 0 0 2px rgba(26,92,46,.1)}
+.sec-card.calc:hover{border-color:#185fa5;box-shadow:0 0 0 2px rgba(24,95,165,.1)}
+.sec-card.random{border-style:dashed;background:#faf9f6}
+.sec-card.random:hover{border-color:#6b1a26;box-shadow:0 0 0 2px rgba(107,26,38,.1)}
+.sec-num{font-size:10px;font-weight:700;text-transform:uppercase;
+  letter-spacing:.06em;color:#bbb;margin-bottom:3px}
+.sec-title{font-size:13px;font-weight:600;color:#1a1614;line-height:1.35;margin-bottom:3px}
+.sec-count{font-size:11px;color:#aaa}
 
-    .course-tag {
-      display: inline-block;
-      font-size: .72rem; font-weight: 700;
-      letter-spacing: .1em; text-transform: uppercase;
-      padding: .3rem .8rem; border-radius: 999px;
-      margin-bottom: 1.2rem;
-    }
-    .tag-ca   { background: rgba(42,122,74,.25);  color: #5ccb87; }
-    .tag-calc { background: rgba(24,95,165,.25);  color: #6ab3f5; }
-    .tag-review { background: rgba(124,92,191,.2); color: #b08cf5; }
+/* ── Warmup card ────────────────────────────────────────────────────── */
+.warmup-nav{display:flex;align-items:center;gap:.75rem;margin-bottom:1.75rem;flex-wrap:wrap}
+.warmup-card{background:#fff;border:1px solid #e4e0d8;border-radius:10px;
+  padding:2rem 2.25rem;margin-bottom:1.25rem}
+.warmup-tag{display:inline-block;font-family:sans-serif;font-size:.6rem;
+  font-weight:700;text-transform:uppercase;letter-spacing:.1em;
+  padding:.2rem .6rem;border-radius:999px;margin-bottom:1rem}
+.warmup-tag.ca{background:#d8efe1;color:#1a5c2e}
+.warmup-tag.calc{background:#dce8f5;color:#185fa5}
+.warmup-tag.review{background:#f0ede7;color:#7a7570}
+.warmup-section{font-size:.8rem;font-family:sans-serif;color:#7a7570;margin-bottom:.25rem}
+.warmup-title{font-size:1.35rem;font-weight:700;margin-bottom:.2rem}
+.warmup-num{font-family:sans-serif;font-size:.78rem;color:#aaa;margin-bottom:1.25rem}
+.warmup-divider{border:none;border-top:1px solid #e8e4da;margin:1.1rem 0}
+.warmup-swbat-label{font-family:sans-serif;font-size:.65rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:.08em;color:#aaa;margin-bottom:.3rem}
+.warmup-swbat{font-size:.95rem;line-height:1.7;color:#3a3430}
+.practice-btn{display:inline-flex;align-items:center;gap:.4rem;margin-top:1.25rem;
+  font-family:sans-serif;font-size:13px;font-weight:600;
+  padding:.55rem 1.25rem;border-radius:7px;border:1.5px solid #e4e0d8;
+  background:#fff;color:#1a1614;text-decoration:none;transition:all .18s}
+.practice-btn:hover{border-color:#1a1614;background:#f5f3ef}
+.warmup-actions{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:.75rem}
+.action-btn{font-family:sans-serif;font-size:12px;font-weight:600;
+  padding:6px 14px;border-radius:7px;border:1px solid #e4e0d8;
+  background:#fff;color:#7a7570;cursor:pointer;transition:all .15s}
+.action-btn:hover{border-color:#6b1a26;color:#6b1a26}
 
-    .shuffle-btn {
-      display: inline-flex; align-items: center; gap: .4rem;
-      background: transparent; border: 1px solid var(--border);
-      color: var(--muted); font-size: .82rem;
-      padding: .4rem .85rem; border-radius: 6px; cursor: pointer;
-      margin-top: 1rem;
-      transition: border-color .2s, color .2s;
-    }
-    .shuffle-btn:hover { border-color: var(--accent); color: var(--accent); }
-
-    .back-btn {
-      display: inline-flex; align-items: center; gap: .3rem;
-      background: transparent; border: none;
-      color: var(--muted); font-size: .82rem;
-      padding: 0; cursor: pointer; margin-top: 1.2rem;
-      transition: color .2s;
-    }
-    .back-btn:hover { color: var(--text); }
-
-    .empty-state { text-align: center; padding: 1rem 0; }
-    .empty-state .icon { font-size: 2.5rem; margin-bottom: .8rem; }
-    .empty-state h2 { font-size: 1.3rem; margin-bottom: .5rem; }
-    .empty-state p { color: var(--muted); font-size: .95rem; }
-
-    .footer { margin-top: 2rem; color: var(--muted); font-size: .78rem; text-align: center; }
-    .footer a { color: var(--muted); text-decoration: underline; }
-
-    .loading { text-align: center; color: var(--muted); font-size: 1.1rem; }
-    .dot-spin::after { content: '.'; animation: dots 1.2s steps(4, end) infinite; }
-    @keyframes dots { 0%{content:'.'}25%{content:'..'}50%{content:'...'}75%{content:'....'}  }
-  </style>
+/* ── States ─────────────────────────────────────────────────────────── */
+.state-msg{text-align:center;padding:3rem 1rem;font-family:sans-serif;
+  font-size:.9rem;color:#aaa;font-style:italic}
+.katex-display{overflow-x:auto;padding:2px 0}
+</style>
 </head>
 <body>
 
-<div class="header">
-  <div class="date" id="dateDisplay"></div>
-  <h1>Daily <span>Warm-Up</span></h1>
+<div class="page-header">
+  <a href="./index.html" class="back-link">← Portal</a>
+  <div>
+    <h1>Daily Warm-Up</h1>
+    <p>Cardinal Ritter College Prep &nbsp;&middot;&nbsp; Mathematics</p>
+  </div>
 </div>
 
-<div class="card" id="mainCard">
-  <div class="loading">Loading<span class="dot-spin"></span></div>
-</div>
+<div class="container">
+  <!-- View 1: Course picker -->
+  <div id="viewPicker" class="picker-wrap">
+    <div class="picker-label">Which class are you in?</div>
+    <div class="course-btns">
+      <button class="course-btn ca" onclick="showGrid('ca')">College Algebra</button>
+      <button class="course-btn calc" onclick="showGrid('calc')">Calculus</button>
+    </div>
+  </div>
 
-<div class="footer">
-  <a href="index.html">← Back to Dashboard</a>
-  &nbsp;·&nbsp;
-  <a href="donow-ca.html">CA Do Now (graded) ↗</a>
+  <!-- View 2: Section grid -->
+  <div id="viewGrid" style="display:none">
+    <div class="grid-header">
+      <div class="grid-title" id="gridTitle"></div>
+      <button class="ghost-btn" onclick="showPicker()">← Change class</button>
+    </div>
+    <div id="unitBlocks"></div>
+  </div>
+
+  <!-- View 3: Warmup card -->
+  <div id="viewWarmup" style="display:none">
+    <div class="warmup-nav">
+      <button class="ghost-btn" onclick="backToGrid()">← Pick a different section</button>
+    </div>
+    <div class="warmup-card" id="warmupCard"></div>
+    <div class="warmup-actions">
+      <button class="action-btn" id="newProbBtn" onclick="newProblem()">New problem</button>
+    </div>
+  </div>
 </div>
 
 <script>
-const BASE = 'https://crteacher.github.io/Curriculum-Dashboard/';
-const S1_START = '2025-08-20', S1_END = '2025-12-15';
-const S2_START = '2026-01-06', S2_END = '2026-05-22';
+// ── Config ───────────────────────────────────────────────────────────────────
+const S1_START = '2025-08-01', S1_END = '2025-12-31';
+const S2_START = '2026-01-01', S2_END = '2026-06-30';
 
-function todayStr() {
-  const d = new Date();
-  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
-}
-function formatDateDisplay(str) {
-  return new Date(str+'T12:00:00').toLocaleDateString('en-US',
-    {weekday:'long',month:'long',day:'numeric',year:'numeric'});
-}
-function inSemester(d,s,e){ return d>=s && d<=e; }
+let _state, _sections, _units, _calendar;
+let _today;
+let _courseChoice = 'ca';   // 'ca' or 'calc'
+let _courseKey = 'collegeAlgebra';
+let _secMap = {};
+let _available = [];
+let _currentSec = null;
 
-function weightedPick(arr) {
-  if (!arr.length) return null;
-  const w = arr.map((_,i) => Math.pow(1.04,i));
-  const t = w.reduce((a,b)=>a+b,0);
-  let r = Math.random()*t;
-  for(let i=0;i<arr.length;i++){ r-=w[i]; if(r<=0) return arr[i]; }
-  return arr[arr.length-1];
-}
-
-// Globals
-let _calendar, _state, _sections, _today;
-let _allDone = {}; // courseKey -> doneSections array
-let _picked  = {}; // courseKey -> currently shown section
-
-function getCourseKey(courseChoice, today) {
-  // courseChoice: 'ca' or 'calc'
-  if (courseChoice === 'ca') return 'collegeAlgebra';
-  // For calc: pick calc1 (S1) or calc2 (S2) based on date
-  if (inSemester(today, S1_START, S1_END)) return 'calc1';
-  if (inSemester(today, S2_START, S2_END)) return 'calc2';
-  // Off-season: pick whichever has completed sections
-  const c1done = (_state.courses.calc1?.completedSections||[]).length;
-  const c2done = (_state.courses.calc2?.completedSections||[]).length;
-  return c2done >= c1done ? 'calc2' : 'calc1';
+// ── Math ─────────────────────────────────────────────────────────────────────
+function renderMath(text) {
+  if (!text) return '';
+  const parts = text.split(/(\$\$[\s\S]*?\$\$|\$[^$\n]*?\$|\\\[[\s\S]*?\\\]|\\\([\s\S]*?\\\))/g);
+  return parts.map(p => {
+    let display = false, tex = null;
+    if (p.startsWith('$$') && p.endsWith('$$'))         { display = true;  tex = p.slice(2,-2); }
+    else if (p.startsWith('$') && p.endsWith('$'))      { display = false; tex = p.slice(1,-1); }
+    else if (p.startsWith('\\[') && p.endsWith('\\]')) { display = true;  tex = p.slice(2,-2); }
+    else if (p.startsWith('\\(') && p.endsWith('\\)')) { display = false; tex = p.slice(2,-2); }
+    if (tex !== null) {
+      try { return katex.renderToString(tex.trim(), {displayMode:display, throwOnError:false}); }
+      catch(e) { return p; }
+    }
+    return p;
+  }).join('');
 }
 
-function isSchoolDay(today) {
-  return _calendar.aDays.includes(today) || _calendar.bDays.includes(today);
+// ── Helpers ──────────────────────────────────────────────────────────────────
+function fmtDate(str) {
+  return new Date(str + 'T12:00:00').toLocaleDateString('en-US',
+    {weekday:'long', month:'long', day:'numeric', year:'numeric'});
+}
+function inSemester(d, s, e) { return d >= s && d <= e; }
+
+function resolveCourseKey(choice) {
+  if (choice === 'ca') return 'collegeAlgebra';
+  if (inSemester(_today, S1_START, S1_END)) return 'calc1';
+  if (inSemester(_today, S2_START, S2_END)) return 'calc2';
+  const c1 = (_state.courses.calc1?.completedSections||[]).length;
+  const c2 = (_state.courses.calc2?.completedSections||[]).length;
+  return c2 >= c1 ? 'calc2' : 'calc1';
 }
 
-function renderWarmup(courseChoice) {
-  const card = document.getElementById('mainCard');
-  const today = _today;
-  const courseKey = getCourseKey(courseChoice, today);
-  const courseState = _state.courses[courseKey];
-  const courseName = courseKey === 'collegeAlgebra' ? 'College Algebra' :
-                     courseKey === 'calc1' ? 'Calculus 1' : 'Calculus 2';
-  const tagClass = courseChoice === 'ca' ? 'tag-ca' : 'tag-calc';
-
-  const completed = courseState?.completedSections || [];
-  const allSections = _sections[courseKey === 'collegeAlgebra' ? 'collegeAlgebra' :
-                                courseKey === 'calc1' ? 'calc1' : 'calc2'] || [];
-  const doneSections = allSections.filter(s => completed.includes(s.id));
-
-  if (!doneSections.length) {
-    card.innerHTML = `
-      <span class="course-tag ${tagClass}">${courseName}</span>
-      <div class="empty-state">
-        <div class="icon">📚</div>
-        <h2>Nothing yet!</h2>
-        <p>Warm-ups appear here after your first completed section.<br>Check back soon.</p>
-      </div>
-      <button class="back-btn" onclick="showPicker()">← Choose a different class</button>`;
-    return;
-  }
-
-  _allDone[courseKey] = doneSections;
-  if (!_picked[courseKey]) _picked[courseKey] = weightedPick(doneSections);
-  const s = _picked[courseKey];
-
-  const schoolDay = isSchoolDay(today);
-  const label = schoolDay ? 'Do Now' : 'Review';
-  const reviewNote = schoolDay ? '' :
-    `<p style="color:var(--muted);font-size:.82rem;margin-bottom:1rem">No class today — here's a review problem.</p>`;
-
-  const folder = courseKey === 'collegeAlgebra' ? 'College Algebra' :
-                 courseKey === 'calc1' ? 'Calc 1' : 'Calc 2';
-  const baseName = s.practiceFile.replace(/\.(html|docx|pdf)$/i, '');
-  const practiceUrl = BASE + encodeURIComponent(folder) + '/' + encodeURIComponent(baseName) + '.html';
-
-  card.innerHTML = `
-    <span class="course-tag ${schoolDay ? tagClass : 'tag-review'}">${courseName}${schoolDay ? '' : ' · Review'}</span>
-    ${reviewNote}
-    <div class="do-now-label">${label}</div>
-    <div class="section-title">${s.title}</div>
-    <div class="section-num">Section ${s.section}</div>
-    <div class="swbat"><strong>Today you'll review:</strong> ${s.swbat}.</div>
-    ${s.hasPractice ? `
-      <a class="practice-btn" href="${practiceUrl}" target="_blank">
-        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <path d="M9 18l6-6-6-6"/>
-        </svg>
-        Open Practice Problems
-      </a>` : `<p style="color:var(--muted);font-size:.9rem">Practice problems coming soon.</p>`}
-    <br>
-    <div style="display:flex;gap:.7rem;flex-wrap:wrap;margin-top:.2rem">
-      <button class="shuffle-btn" onclick="shuffle('${courseKey}')">
-        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/>
-          <polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/>
-        </svg>
-        Different section
-      </button>
-      <button class="back-btn" onclick="showPicker()">← Different class</button>
-    </div>`;
+function isSchoolDay() {
+  return _calendar?.aDays?.includes(_today) || _calendar?.bDays?.includes(_today);
 }
 
-function shuffle(courseKey) {
-  const pool = (_allDone[courseKey] || []).filter(s => s.id !== _picked[courseKey]?.id);
-  if (!pool.length) return;
-  _picked[courseKey] = weightedPick(pool);
-  const choice = courseKey === 'collegeAlgebra' ? 'ca' : 'calc';
-  renderWarmup(choice);
-}
-
+// ── Views ────────────────────────────────────────────────────────────────────
 function showPicker() {
-  const card = document.getElementById('mainCard');
-  const today = _today;
-  const schoolDay = isSchoolDay(today);
-  const subtitle = schoolDay ? "Which class are you in?" : "Pick a class for review practice:";
-
-  card.innerHTML = `
-    <p class="picker-prompt">${subtitle}</p>
-    <div class="course-btns">
-      <button class="course-btn ca" onclick="renderWarmup('ca')">
-        <span class="course-icon">📐</span>
-        College Algebra
-        <span style="font-size:.75rem;color:var(--muted);font-weight:400">review (ungraded)</span>
-      </button>
-      <button class="course-btn calc" onclick="renderWarmup('calc')">
-        <span class="course-icon">∫</span>
-        Calculus
-      </button>
-    </div>`;
+  document.getElementById('viewPicker').style.display = 'block';
+  document.getElementById('viewGrid').style.display = 'none';
+  document.getElementById('viewWarmup').style.display = 'none';
 }
 
-async function init() {
-  _today = todayStr();
-  document.getElementById('dateDisplay').textContent = formatDateDisplay(_today);
+function showGrid(choice) {
+  _courseChoice = choice || _courseChoice;
+  _courseKey = resolveCourseKey(_courseChoice);
 
-  try {
-    [_calendar, _state, _sections] = await Promise.all([
-      fetch(BASE + 'calendar.json').then(r => r.json()),
-      fetch(BASE + 'state.json').then(r => r.json()),
-      fetch(BASE + 'sections.json').then(r => r.json()),
-    ]);
-  } catch(e) {
-    document.getElementById('mainCard').innerHTML = `
-      <div class="empty-state">
-        <div class="icon">⚠️</div>
-        <h2>Couldn't load data</h2>
-        <p>Check your connection and try refreshing.</p>
-      </div>`;
-    return;
+  const completedIds = _state?.courses?.[_courseKey]?.completedSections || [];
+  const currentId   = _state?.courses?.[_courseKey]?.currentSection;
+  const allIds = currentId ? [...completedIds, currentId] : completedIds;
+
+  const courseArr = _sections?.[_courseKey] || [];
+  _secMap = {};
+  courseArr.forEach(s => _secMap[s.id] = s);
+  _available = courseArr.filter(s =>
+    allIds.includes(s.id) && s.reviewProblems && s.reviewProblems.length > 0
+  );
+
+  const courseName = _courseKey === 'collegeAlgebra' ? 'College Algebra' :
+                     _courseKey === 'calc1' ? 'Calculus 1' : 'Calculus 2';
+  document.getElementById('gridTitle').textContent = courseName + ' — Choose a Section';
+
+  const unitList = (_units?.[_courseKey === 'collegeAlgebra' ? 'collegeAlgebra' : 'calc2']) || [];
+  let html = '';
+
+  if (!_available.length) {
+    html = '<div class="state-msg">No review problems yet — check back after your first completed section.</div>';
+  } else {
+    // Random card
+    html += `<div class="unit-block">
+      <div class="unit-label">Quick Start</div>
+      <div class="section-grid">
+        <div class="sec-card random" onclick="loadSection(null)">
+          <div class="sec-num">🎲 Random</div>
+          <div class="sec-title">Surprise me</div>
+          <div class="sec-count">${_available.length} sections available</div>
+        </div>
+      </div>
+    </div>`;
+
+    const cls = _courseChoice;
+    // Group by unit if units exist, else flat list
+    if (unitList.length) {
+      unitList.forEach(unit => {
+        const secs = _available.filter(s => unit.sections.includes(s.id));
+        if (!secs.length) return;
+        const short = unit.name.replace(/^Unit \S+ — /, '');
+        html += `<div class="unit-block"><div class="unit-label">${short}</div><div class="section-grid">`;
+        secs.forEach(s => {
+          html += `<div class="sec-card ${cls}" onclick="loadSection('${s.id}')">
+            <div class="sec-num">§${s.section}</div>
+            <div class="sec-title">${s.title}</div>
+            <div class="sec-count">${s.reviewProblems.length} problems</div>
+          </div>`;
+        });
+        html += `</div></div>`;
+      });
+    } else {
+      html += `<div class="unit-block"><div class="section-grid">`;
+      _available.forEach(s => {
+        html += `<div class="sec-card ${_courseChoice}" onclick="loadSection('${s.id}')">
+          <div class="sec-num">§${s.section}</div>
+          <div class="sec-title">${s.title}</div>
+          <div class="sec-count">${s.reviewProblems.length} problems</div>
+        </div>`;
+      });
+      html += `</div></div>`;
+    }
   }
 
-  showPicker();
+  document.getElementById('unitBlocks').innerHTML = html;
+  document.getElementById('viewPicker').style.display = 'none';
+  document.getElementById('viewGrid').style.display = 'block';
+  document.getElementById('viewWarmup').style.display = 'none';
 }
 
-init();
+function backToGrid() {
+  document.getElementById('viewGrid').style.display = 'block';
+  document.getElementById('viewWarmup').style.display = 'none';
+}
+
+// ── Load section + render warmup ─────────────────────────────────────────────
+function loadSection(id) {
+  if (!id) {
+    // random
+    if (!_available.length) return;
+    _currentSec = _available[Math.floor(Math.random() * _available.length)];
+  } else {
+    _currentSec = _secMap[id];
+  }
+  if (!_currentSec) return;
+  renderWarmup();
+  document.getElementById('viewGrid').style.display = 'none';
+  document.getElementById('viewWarmup').style.display = 'block';
+}
+
+function newProblem() {
+  if (_currentSec) renderWarmup();
+}
+
+function renderWarmup() {
+  const sec = _currentSec;
+  const schoolDay = isSchoolDay();
+  const label = schoolDay ? 'Do Now' : 'Review';
+  const tagClass = _courseChoice === 'ca' ? 'ca' : (_courseChoice === 'calc' ? 'calc' : 'review');
+
+  const problems = sec.reviewProblems || [];
+  const prob = problems.length
+    ? problems[Math.floor(Math.random() * problems.length)]
+    : null;
+
+  const folder = _courseKey === 'collegeAlgebra' ? 'College%20Algebra' :
+                 _courseKey === 'calc1' ? 'Calc%201' : 'Calc%202';
+  const BASE = './';
+  const practiceUrl = sec.hasPractice && sec.practiceFile
+    ? `${BASE}${folder}/${encodeURIComponent(sec.practiceFile.replace(/\.(html|docx|pdf)$/i,''))}.html`
+    : null;
+
+  const courseName = _courseKey === 'collegeAlgebra' ? 'College Algebra' :
+                     _courseKey === 'calc1' ? 'Calculus 1' : 'Calculus 2';
+
+  document.getElementById('warmupCard').innerHTML = `
+    <span class="warmup-tag ${tagClass}">${courseName} &nbsp;&middot;&nbsp; ${label}</span>
+    <div class="warmup-section">Section ${sec.section}</div>
+    <div class="warmup-title">${sec.title}</div>
+    <hr class="warmup-divider">
+    <div class="warmup-swbat-label">Today you'll review</div>
+    <div class="warmup-swbat">${renderMath(sec.swbat || '—')}</div>
+    ${prob ? `<hr class="warmup-divider">
+    <div class="warmup-swbat-label">Problem</div>
+    <div class="warmup-swbat">${renderMath(prob)}</div>` : ''}
+    ${practiceUrl ? `<a class="practice-btn" href="${practiceUrl}" target="_blank">
+      Open Practice Problems →
+    </a>` : ''}
+  `;
+}
+
+// ── Boot ──────────────────────────────────────────────────────────────────────
+Promise.all([
+  fetch('./calendar.json').then(r => r.json()).catch(() => ({})),
+  fetch('./state.json').then(r => r.json()),
+  fetch('./sections.json').then(r => r.json())
+]).then(([calendar, state, sections]) => {
+  _calendar  = calendar;
+  _state     = state;
+  _sections  = sections;
+  _units     = sections.units || {};
+  _today     = new Date().toISOString().slice(0,10);
+  showPicker();
+}).catch(() => {
+  document.getElementById('viewPicker').innerHTML =
+    '<div class="state-msg">Could not load data.</div>';
+});
 </script>
 </body>
 </html>
