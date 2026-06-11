@@ -236,7 +236,10 @@
 ───────────────────────────────────────────── */
 const BASE = 'https://crteacher.github.io/Curriculum-Dashboard/';
 
-function todayStr() { return new Date().toISOString().slice(0,10); }
+function todayStr() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
 function fmtDate(s) {
   return new Date(s + 'T12:00:00').toLocaleDateString('en-US',
     { weekday:'long', month:'long', day:'numeric', year:'numeric' });
@@ -1315,25 +1318,19 @@ async function init() {
     return;
   }
 
-  // Pick 2 sections — date-seeded, recency-biased (recent sections ~3x more likely)
-  function seededWeightedPick(pool, dateStr, salt) {
-    const weights = pool.map((_, i) => Math.pow(1.06, i)); // exponential: later = more recent = higher weight
-    const total = weights.reduce((a, b) => a + b, 0);
-    const h = hashStr(dateStr + salt);
-    let target = (h / 0xffffffff) * total;
-    for (let i = 0; i < pool.length; i++) {
-      target -= weights[i];
-      if (target <= 0) return i;
-    }
-    return pool.length - 1;
-  }
+  // Pick 2 sections — stable per (date × sectionID), recency-biased.
+  // Scoring by sectionID (not pool index) means the daily picks don't shift
+  // when the pool grows or shrinks during the day.
+  const scored = doneSections.map((s, i) => {
+    const baseScore = hashStr(today + s.id) / 0xffffffff; // deterministic [0,1] per section per day
+    const recencyBoost = Math.pow(1.12, i);               // exponential: more recently completed = higher
+    return { sec: s, score: baseScore * recencyBoost };
+  });
+  scored.sort((a, b) => b.score - a.score);
 
-  const n = doneSections.length;
-  let i1 = seededWeightedPick(doneSections, today, 'prob1');
-  let i2 = seededWeightedPick(doneSections, today, 'prob2');
-  if (n > 1 && i2 === i1) i2 = (i1 + 1) % n;
-
-  const secs = n === 1 ? [doneSections[0], doneSections[0]] : [doneSections[i1], doneSections[i2]];
+  const secs = scored.length === 1
+    ? [scored[0].sec, scored[0].sec]
+    : [scored[0].sec, scored[1].sec];
 
   let html = '<div class="problems-grid">';
   secs.forEach((sec, idx) => {
