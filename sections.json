@@ -3969,7 +3969,54 @@
       "title": "Moments and Center of Mass",
       "swbat": "calculate moments and center of mass for planar regions using integration",
       "practiceFile": "C2_12_Moments_Center_of_Mass_Practice",
-      "hasPractice": true
+      "hasPractice": true,
+      "doNowQ": "We know integration finds area. Can it also locate the balance point &mdash; the centroid &mdash; of a flat region?",
+      "workedExamples": [
+        {
+          "problem": "Find $\\bar x$ and $\\bar y$ for the region under $y=\\sqrt{x}$ on $[0,4]$.",
+          "answer": "$A=\\int_0^4\\sqrt{x}\\,dx=\\frac{2}{3}x^{3/2}\\big|_0^4=\\frac{16}{3}$. Then $\\bar x=\\frac{3}{16}\\int_0^4 x\\sqrt{x}\\,dx=\\frac{3}{16}\\cdot\\frac{64}{5}=\\dfrac{12}{5}$, $\\bar y=\\frac{3}{32}\\int_0^4 x\\,dx=\\frac{3}{32}\\cdot 8=\\dfrac{3}{4}$. Centroid: $\\left(\\frac{12}{5},\\frac{3}{4}\\right)$."
+        },
+        {
+          "problem": "Find the centroid of the region under $y=x^2$ on $[0,2]$. (Matches the diagram above.)",
+          "answer": "$A=\\frac{8}{3}$. $\\bar x=\\frac{3}{8}\\int_0^2 x^3\\,dx=\\frac{3}{8}\\cdot 4=\\dfrac{3}{2}$. $\\bar y=\\frac{3}{16}\\int_0^2 x^4\\,dx=\\frac{3}{16}\\cdot\\frac{32}{5}=\\dfrac{6}{5}$. Centroid: $\\left(\\frac{3}{2},\\frac{6}{5}\\right)$."
+        },
+        {
+          "problem": "Find the centroid of the region between $y=x$ and $y=x^2$ on $[0,1]$.",
+          "answer": "$A=\\int_0^1(x-x^2)\\,dx=\\frac{1}{6}$. $\\bar x=6\\int_0^1(x^2-x^3)\\,dx=\\dfrac{1}{2}$. $\\bar y=3\\int_0^1(x^2-x^4)\\,dx=\\dfrac{2}{5}$. Centroid: $\\left(\\frac{1}{2},\\frac{2}{5}\\right)$."
+        },
+        {
+          "problem": "Find the centroid of the region inside $y=\\sqrt{4-x^2}$ (upper semicircle, radius 2).",
+          "answer": "By symmetry $\\bar x=0$. $A=2\\pi$. $\\bar y=\\frac{1}{4\\pi}\\int_{-2}^{2}(4-x^2)\\,dx=\\frac{1}{4\\pi}\\cdot\\frac{32}{3}=\\dfrac{8}{3\\pi}\\approx 0.849$. Centroid: $\\left(0,\\frac{8}{3\\pi}\\right)$."
+        }
+      ],
+      "practiceProblems": [
+        {
+          "problem": "Find $\\bar x$ for the region under $y=2x$ on $[0,3]$.",
+          "answer": "$A=9$; $\\bar x=\\frac{1}{9}\\int_0^3 2x^2\\,dx=2$"
+        },
+        {
+          "problem": "Find the centroid of the region under $y=e^x$ on $[0,1]$.",
+          "answer": "$A=e-1$; $\\bar x=\\frac{1}{e-1}\\int_0^1 xe^x\\,dx=\\frac{1}{e-1}\\cdot 1=\\frac{1}{e-1}$; $\\bar y=\\frac{e+1}{4}$"
+        },
+        {
+          "problem": "Find $\\bar y$ for the region between $y=x$ and $y=x^2$ on $[0,1]$.",
+          "answer": "$\\bar y=3\\int_0^1(x^2-x^4)\\,dx=3\\cdot\\frac{7}{15}=\\dfrac{7}{5}$... let me correct: $\\bar y=\\frac{1}{2A}\\int_0^1(x^2-x^4)\\,dx=3\\int_0^1(x^2-x^4)\\,dx$... $\\int_0^1(x^2-x^4)\\,dx=\\frac{1}{3}-\\frac{1}{5}=\\frac{2}{15}$; $\\bar y=3\\cdot\\frac{2}{15}=\\frac{2}{5}$"
+        },
+        {
+          "problem": "Explain without computing why $\\bar x=0$ for any region symmetric about the $y$-axis.",
+          "answer": "$xf(x)$ is an odd function on any interval $[-a,a]$ (odd $\\times$ even), so $M_y=\\int_{-a}^a xf(x)\\,dx=0$, giving $\\bar x=M_y/m=0$."
+        },
+        {
+          "problem": "Find the centroid of the triangle with vertices $(0,0)$, $(4,0)$, $(0,2)$.",
+          "answer": "Centroid of any triangle: average of vertices. $\\bar x=\\frac{0+4+0}{3}=\\frac{4}{3}$, $\\bar y=\\frac{0+0+2}{3}=\\frac{2}{3}$."
+        },
+        {
+          "problem": "A lamina covers $1\\le x\\le 3$ under $y=1/x$. Find $\\bar x$.",
+          "answer": "$A=\\ln 3$; $\\bar x=\\frac{1}{\\ln 3}\\int_1^3\\frac{x}{x}\\,dx=\\frac{1}{\\ln 3}\\int_1^3 1\\,dx=\\frac{2}{\\ln 3}\\approx 1.82$"
+        }
+      ],
+      "exitTicket": "A lamina covers $1\\le x\\le 3$ under $y=1/x$. Find $\\bar x$.",
+      "exitTicketAnswer": "$A=\\ln 3$; $\\bar x=\\frac{1}{\\ln 3}\\int_1^3\\frac{x}{x}\\,dx=\\frac{1}{\\ln 3}\\int_1^3 1\\,dx=\\frac{2}{\\ln 3}\\approx 1.82$"
     },
     {
       "id": "C2_13",
@@ -4087,7 +4134,54 @@
       "title": "Trig Substitution",
       "swbat": "evaluate integrals with radical expressions using trigonometric substitution",
       "practiceFile": "C2_15_Trig_Substitution_Practice",
-      "hasPractice": true
+      "hasPractice": true,
+      "doNowQ": "Integrals involving $\\sqrt{a^2-x^2}$, $\\sqrt{a^2+x^2}$, or $\\sqrt{x^2-a^2}$ resist $u$-substitution. Can a trig identity collapse the square root?",
+      "workedExamples": [
+        {
+          "problem": "Use the appropriate substitution and convert back to $x$.",
+          "answer": "Let $x=3\\sin\\theta$, $dx=3\\cos\\theta\\,d\\theta$. $\\sqrt{{9-x^2}}=3\\cos\\theta$. Integral becomes $\\int 9\\cos^2\\theta\\,d\\theta=\\frac{{9}}{{2}}(\\theta+\\sin\\theta\\cos\\theta)+C=\\frac{{9}}{{2}}\\arcsin\\frac{{x}}{{3}}+\\frac{{x\\sqrt{{9-x^2}}}}{{2}}+C$."
+        },
+        {
+          "problem": "Identify the case and evaluate.",
+          "answer": "Let $x=2\\tan\\theta$, $dx=2\\sec^2\\theta\\,d\\theta$. $\\sqrt{{4+x^2}}=2\\sec\\theta$. Integral: $\\int\\frac{{2\\sec^2\\theta}}{{4\\tan^2\\theta\\cdot 2\\sec\\theta}}\\,d\\theta=\\frac{{1}}{{4}}\\int\\frac{{\\sec\\theta}}{{\\tan^2\\theta}}\\,d\\theta=\\frac{{1}}{{4}}\\int\\csc\\theta\\cot\\theta\\,d\\theta=-\\frac{{\\csc\\theta}}{{4}}+C=-\\frac{{\\sqrt{{4+x^2}}}}{{4x}}+C$."
+        },
+        {
+          "problem": "Use the secant substitution.",
+          "answer": "Let $x=\\sec\\theta$, $dx=\\sec\\theta\\tan\\theta\\,d\\theta$. $\\sqrt{{x^2-1}}=\\tan\\theta$. Integral: $\\int\\frac{{\\tan\\theta\\cdot\\sec\\theta\\tan\\theta}}{{\\sec\\theta}}\\,d\\theta=\\int\\tan^2\\theta\\,d\\theta=\\tan\\theta-\\theta+C=\\sqrt{{x^2-1}}-\\text{{arcsec}}(x)+C$."
+        },
+        {
+          "problem": "Evaluate $\\displaystyle\\int_0^{\\sqrt{2}} x^2\\sqrt{4-x^2}\\,dx$.",
+          "answer": "Let $x=2\\sin\\theta$. Limits: $x=0\\to\\theta=0$, $x=\\sqrt{{2}}\\to\\theta=\\pi/4$. Integral: $\\int_0^{{\\pi/4}}4\\sin^2\\theta\\cdot 2\\cos\\theta\\cdot 2\\cos\\theta\\,d\\theta=16\\int_0^{{\\pi/4}}\\sin^2\\theta\\cos^2\\theta\\,d\\theta=4\\int_0^{{\\pi/4}}\\sin^2(2\\theta)\\,d\\theta=\\pi/2-1$."
+        }
+      ],
+      "practiceProblems": [
+        {
+          "problem": "Evaluate $\\displaystyle\\int_0^1\\sqrt{1-x^2}\\,dx$ using trig sub (or geometry).",
+          "answer": "$x=\\sin\\theta$: $\\int_0^1\\sqrt{{1-x^2}}\\,dx=\\frac{{\\pi}}{{4}}$ (area of quarter circle)"
+        },
+        {
+          "problem": "Evaluate $\\displaystyle\\int\\dfrac{dx}{(1+x^2)^{3/2}}$.",
+          "answer": "$x=\\tan\\theta$: $\\int\\frac{{1}}{{(1+x^2)^{{3/2}}}}\\,dx=\\int\\cos\\theta\\,d\\theta=\\sin\\theta+C=\\frac{{x}}{{\\sqrt{{1+x^2}}}}+C$"
+        },
+        {
+          "problem": "Evaluate $\\displaystyle\\int\\dfrac{dx}{x^2\\sqrt{x^2-9}}$.",
+          "answer": "$x=3\\sec\\theta$: $\\int\\frac{{dx}}{{x^2\\sqrt{{x^2-9}}}}\\,dx=\\frac{{\\sqrt{{x^2-9}}}}{{9x}}+C$"
+        },
+        {
+          "problem": "Evaluate $\\displaystyle\\int_0^5 x^2\\sqrt{25-x^2}\\,dx$.",
+          "answer": "$x=5\\sin\\theta$: $\\int_0^5 x^2\\sqrt{{25-x^2}}\\,dx=\\frac{{625\\pi}}{{16}}$"
+        },
+        {
+          "problem": "Evaluate $\\displaystyle\\int\\dfrac{dx}{(x^2+4x+8)^{3/2}}$ (hint: complete the square first).",
+          "answer": "Complete the square: $x^2+4x+8=(x+2)^2+4$. Let $u=x+2$, $u=2\\tan\\theta$: $\\int\\frac{{du}}{{(u^2+4)^{{3/2}}}}=\\frac{{u}}{{4\\sqrt{{u^2+4}}}}+C=\\frac{{x+2}}{{4\\sqrt{{x^2+4x+8}}}}+C$"
+        },
+        {
+          "problem": "Evaluate $\\displaystyle\\int\\sqrt{1-x^2}\\,dx$.",
+          "answer": "$x=\\sin\\theta$: same form as $\\int\\sqrt{{1-x^2}}\\,dx=\\frac{{x\\sqrt{{1-x^2}}}}{{2}}+\\frac{{1}}{{2}}\\arcsin x+C$"
+        }
+      ],
+      "exitTicket": "Evaluate $\\displaystyle\\int\\sqrt{1-x^2}\\,dx$.",
+      "exitTicketAnswer": "$x=\\sin\\theta$: same form as $\\int\\sqrt{{1-x^2}}\\,dx=\\frac{{x\\sqrt{{1-x^2}}}}{{2}}+\\frac{{1}}{{2}}\\arcsin x+C$"
     },
     {
       "id": "C2_16",
@@ -4315,7 +4409,54 @@
       "title": "Direction Fields",
       "swbat": "sketch and interpret direction fields and identify equilibrium solutions",
       "practiceFile": "C2_20_Direction_Fields_Practice",
-      "hasPractice": true
+      "hasPractice": true,
+      "doNowQ": "We can write a differential equation like $\\dfrac{dy}{dx} = y(2-y)$ without being able to solve it algebraically. Is there a way to visualize the behavior of its solutions anyway?",
+      "workedExamples": [
+        {
+          "problem": "Sketch the direction field. Describe the solutions.",
+          "answer": "Slopes depend only on $x$ \u2014 all points on a vertical line $x = c$ share the same slope $c$. The field fans left (negative slopes for $x&lt;0$) and right (positive for $x&gt;0$). Solutions are $y = \\frac{1}{2}x^2 + C$ (upward parabolas)."
+        },
+        {
+          "problem": "Find any equilibria. Classify as stable or unstable.",
+          "answer": "Set $1-y=0$: equilibrium at $\\mathbf{y=1}$. For $y&lt;1$: $f&gt;0$ (solutions rise toward 1). For $y&gt;1$: $f&lt;0$ (solutions fall toward 1). Stable equilibrium. All solution curves approach $y=1$ as $x\\to+\\infty$."
+        },
+        {
+          "problem": "Find all equilibria and classify each.",
+          "answer": "Set $y(2-y)=0$: equilibria at $\\mathbf{y=0}$ and $\\mathbf{y=2}$. For $0&lt;y&lt;2$: $f&gt;0$ (rising). For $y&gt;2$ or $y&lt;0$: $f&lt;0$ (falling). $y=2$ is stable; $y=0$ is unstable. Logistic growth pattern."
+        },
+        {
+          "problem": "Describe the slope pattern quadrant by quadrant. What are the zero-slope curves?",
+          "answer": "Zero slopes where $x=0$ or $y=0$ (the axes). QI &amp; QIII: $xy&gt;0$ \u2192 positive slopes. QII &amp; QIV: $xy&lt;0$ \u2192 negative slopes. Solutions are $y = Ce^{x^2/2}$ (grows rapidly for large $|x|$)."
+        }
+      ],
+      "practiceProblems": [
+        {
+          "problem": "For $dy/dx = -y$: find any equilibria, classify them, and describe what happens to all solution curves as $x \\to +\\infty$.",
+          "answer": "Equilibrium at $y=0$. For $y&gt;0$: $f=-y&lt;0$ (decreasing); for $y&lt;0$: $f&gt;0$ (increasing). Stable. All solutions $\\to 0$ as $x\\to+\\infty$."
+        },
+        {
+          "problem": "Find all equilibria of $dy/dx = y^2 - 1$ and classify each as stable or unstable.",
+          "answer": "$y^2-1=0 \\Rightarrow y=\\pm 1$. For $y\\in(-1,1)$: $f&lt;0$ (decreasing toward $-1$, away from $1$). So $y=1$ is unstable, $y=-1$ is stable."
+        },
+        {
+          "problem": "For $dy/dx = x - 1$: along what vertical line are all slopes zero? For $x > 1$, are solutions increasing or decreasing?",
+          "answer": "Slopes are zero on $x=1$. For $x&gt;1$: $f=x-1&gt;0$, so solutions are increasing."
+        },
+        {
+          "problem": "A direction field shows horizontal segments along $y = 3$ and $y = -1$, with solutions above $y=3$ increasing and solutions between the two lines also increasing. Which DE is most consistent: (A) $dy/dx = (y-3)(y+1)$ or (B) $dy/dx = (3-y)(y+1)$?",
+          "answer": "Choice (B) $dy/dx=(3-y)(y+1)$. For $y&gt;3$: $(3-y)&lt;0,(y+1)&gt;0$ so $f&lt;0$ \u2014 solutions decrease (correct). Between lines: both factors positive, $f&gt;0$ \u2014 solutions increase (correct)."
+        },
+        {
+          "problem": "For $dy/dx = \\sin(y)$: identify two equilibrium values in $[0,2\\pi]$ and determine which is stable.",
+          "answer": "$\\sin(y)=0$ at $y=0$ and $y=\\pi$ in $[0,2\\pi]$. Near $y=0$: $\\sin(y)&gt;0$ for $0&lt;y&lt;\\pi$ (solutions move away) \u2192 unstable. Near $y=\\pi$: solutions approach from both sides \u2192 stable."
+        },
+        {
+          "problem": "A population model gives $dy/dx = 0.2y(1 - y/100)$ where $y$ is population. What are the equilibria? Which is stable, and what does it represent?",
+          "answer": "Equilibria: $y=0$ (unstable) and $y=100$ (stable). $y=100$ is the carrying capacity \u2014 the population the environment can sustain long-term."
+        }
+      ],
+      "exitTicket": "A population model gives $dy/dx = 0.2y(1 - y/100)$ where $y$ is population. What are the equilibria? Which is stable, and what does it represent?",
+      "exitTicketAnswer": "Equilibria: $y=0$ (unstable) and $y=100$ (stable). $y=100$ is the carrying capacity \u2014 the population the environment can sustain long-term."
     },
     {
       "id": "C2_21",
