@@ -210,7 +210,7 @@ function showGrid(choice) {
   );
 
   const courseName = _courseKey === 'collegeAlgebra' ? 'College Algebra' :
-                     _courseKey === 'calc1' ? 'Calculus 1' : 'Calculus 2';
+                     'Calculus';
   document.getElementById('gridTitle').textContent = courseName + ' — Choose a Section';
 
   const unitList = (_units?.[_courseKey === 'collegeAlgebra' ? 'collegeAlgebra' : 'calc2']) || [];
@@ -310,7 +310,7 @@ function renderWarmup() {
     : null;
 
   const courseName = _courseKey === 'collegeAlgebra' ? 'College Algebra' :
-                     _courseKey === 'calc1' ? 'Calculus 1' : 'Calculus 2';
+                     'Calculus';
 
   document.getElementById('warmupCard').innerHTML = `
     <span class="warmup-tag ${tagClass}">${courseName} &nbsp;&middot;&nbsp; ${label}</span>

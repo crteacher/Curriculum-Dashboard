@@ -1,0 +1,2167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Do Now — Dr. Halverson</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+  <style>
+    :root {
+      --bg: #f9f7f3;
+      --card: #ffffff;
+      --text: #1a1614;
+      --muted: #7a7570;
+      --border: #e4e0d8;
+      --ca:    #1a5c2e;
+      --calc:  #185fa5;
+      --pc:    #7a3b8a;
+      --green: #1a5c2e;
+      --red:   #b91c1c;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 2rem 1rem 3rem;
+    }
+    .site-nav { background: #6b1a26; padding: .65rem 1.5rem; margin: -2rem -1rem 2rem; }
+    .site-nav a { color: rgba(255,255,255,.9); text-decoration: none; font-size: .85rem; font-family: Georgia, serif; }
+    .site-nav a:hover { color: #fff; }
+
+    .page-header { text-align: center; margin-bottom: 2rem; }
+    .page-header .date-label {
+      font-size: .82rem; color: var(--muted);
+      letter-spacing: .1em; text-transform: uppercase; margin-bottom: .35rem;
+    }
+    .page-header h1 { font-size: 2rem; font-weight: 700; color: #6b1a26; }
+    .page-header .subtitle { font-size: .9rem; color: var(--muted); margin-top: .4rem; }
+
+    /* Course grid — matches exit-ticket layout */
+    .courses-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.5rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .course-card {
+      background: var(--card);
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .course-card.ca    { border-color: #1a5c2e44; }
+    .course-card.calc { border-color: #185fa544; }
+    .course-card.pc    { border-color: #7a3b8a44; }
+    .course-card.inactive { opacity: .55; }
+
+    .course-label {
+      font-size: .7rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .1em;
+    }
+    .ca    .course-label { color: var(--ca); }
+    .calc .course-label { color: var(--calc); }
+    .pc    .course-label { color: var(--pc); }
+
+    .sec-badge {
+      display: inline-block;
+      font-size: .67rem; font-weight: 700;
+      letter-spacing: .07em; text-transform: uppercase;
+      padding: .18rem .6rem; border-radius: 999px;
+    }
+    .ca    .sec-badge { background: #e8f5ed; color: var(--ca); }
+    .calc .sec-badge { background: #e8f0fa; color: var(--calc); }
+    .pc    .sec-badge { background: #f3eafa; color: var(--pc); }
+
+    .prob-statement { font-size: .97rem; line-height: 1.7; }
+    .prob-statement .katex-display { margin: .5rem 0; }
+
+    /* Inputs */
+    .answer-area { display: flex; flex-direction: column; gap: .5rem; }
+    .input-row { display: flex; align-items: center; gap: .5rem; }
+    .input-label { font-size: .82rem; color: var(--muted); white-space: nowrap; }
+    .ans-input {
+      flex: 1; background: #f0ece6;
+      border: 1px solid var(--border); border-radius: 7px;
+      color: var(--text); font-size: 1rem;
+      padding: .45rem .7rem; outline: none; transition: border-color .2s;
+    }
+    .ans-input:focus { border-color: #888; }
+    .ans-input:disabled { opacity: .45; }
+    .ans-hint { font-size: .73rem; color: var(--muted); }
+
+    /* MCQ */
+    .mcq-opts { display: flex; flex-direction: column; gap: .4rem; }
+    .mcq-btn {
+      background: #f0ece6; border: 1px solid var(--border);
+      border-radius: 8px; color: var(--text);
+      font-size: .9rem; padding: .5rem .9rem;
+      cursor: pointer; text-align: left;
+      transition: border-color .2s, background .2s;
+    }
+    .mcq-btn[disabled] { cursor: default; }
+    .mcq-btn.correct { border-color: var(--green) !important; background: rgba(52,199,123,.12) !important; color: var(--green); }
+    .mcq-btn.wrong   { border-color: var(--red)   !important; background: rgba(247,79,79,.1)  !important; color: var(--red); opacity: .65; }
+    .mcq-btn.reveal  { border-color: var(--green) !important; background: rgba(52,199,123,.08) !important; color: var(--green); }
+
+    /* Check button — accent matches course */
+    .check-btn {
+      border: none; border-radius: 8px;
+      font-size: .9rem; font-weight: 600;
+      padding: .55rem 1.1rem; cursor: pointer;
+      align-self: flex-start; color: #fff;
+      transition: opacity .2s;
+    }
+    .check-btn:hover:not([disabled]) { opacity: .85; }
+    .check-btn[disabled] { opacity: .4; cursor: default; }
+    .ca    .check-btn { background: var(--ca); }
+    .calc .check-btn { background: var(--calc); }
+    .pc    .check-btn { background: var(--pc); }
+
+    /* Feedback */
+    .feedback { border-radius: 8px; padding: .65rem .9rem; font-size: .86rem; line-height: 1.55; display: none; }
+    .feedback.show { display: block; }
+    .feedback.correct-fb { background: rgba(52,199,123,.1);  border: 1px solid rgba(52,199,123,.28); }
+    .feedback.wrong-fb   { background: rgba(247,79,79,.08); border: 1px solid rgba(247,79,79,.22); }
+    .solution-label {
+      font-size: .68rem; font-weight: 700; letter-spacing: .1em;
+      text-transform: uppercase; color: var(--muted);
+      margin-top: .5rem; margin-bottom: .15rem; display: block;
+    }
+    .solution-body { line-height: 1.6; }
+    .solution-body .katex-display { margin: .35rem 0; }
+
+    /* Fallback / inactive */
+    .prac-fallback { font-size: .88rem; color: var(--muted); line-height: 1.5; }
+    .prac-btn {
+      display: inline-flex; align-items: center; gap: .4rem;
+      background: #f0ece6; border: 1px solid var(--border);
+      border-radius: 8px; color: var(--text);
+      font-size: .88rem; font-weight: 600;
+      padding: .5rem .9rem; text-decoration: none; margin-top: .5rem;
+      transition: background .2s; align-self: flex-start;
+    }
+    .prac-btn:hover { background: #e4e0d8; }
+
+    .none-msg { color: var(--muted); font-size: .9rem; font-style: italic; }
+
+    .page-footer { text-align: center; margin-top: 2rem; color: var(--muted); font-size: .78rem; }
+    .page-footer a { color: var(--muted); text-decoration: underline; }
+  </style>
+</head>
+<body>
+<nav class="site-nav"><a href="./index.html">← Portal</a></nav>
+
+<div class="page-header">
+  <div class="date-label" id="dateLabel"></div>
+  <h1>Do Now</h1>
+  <div class="subtitle">Same topic for everyone — your own numbers.</div>
+</div>
+
+<div class="courses-grid" id="mainArea">
+  <div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--muted)">Loading…</div>
+</div>
+
+<div class="page-footer">
+  <a href="index.html">← Dashboard</a>
+</div>
+
+<script>
+const BASE = 'https://crteacher.github.io/Curriculum-Dashboard/';
+
+function todayStr() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+function fmtDate(s) {
+  return new Date(s + 'T12:00:00').toLocaleDateString('en-US',
+    { weekday:'long', month:'long', day:'numeric', year:'numeric' });
+}
+
+function ri(a, b) { return Math.floor(Math.random() * (b - a + 1)) + a; }
+function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+// Math helpers
+function gcd(a, b) { a = Math.abs(a); b = Math.abs(b); while (b) { [a, b] = [b, a % b]; } return a; }
+
+function reduceFrac(n, d) {
+  if (d === 0) return [n, d];
+  const g = gcd(Math.abs(n), Math.abs(d));
+  n /= g; d /= g;
+  if (d < 0) { n = -n; d = -d; }
+  return [n, d];
+}
+
+// Build LaTeX fraction string (returns integer if denominator is 1)
+function fracTex(n, d) {
+  [n, d] = reduceFrac(n, d);
+  if (d === 1) return `${n}`;
+  return `\\dfrac{${n}}{${d}}`;
+}
+
+// Build polynomial term string for LaTeX
+function termTex(coeff, varStr, power) {
+  // power 0 → constant, power 1 → varStr, power 2 → varStr^2
+  if (coeff === 0) return '';
+  let base = '';
+  if (power === 0) base = '';
+  else if (power === 1) base = varStr;
+  else base = `${varStr}^${power}`;
+  const absC = Math.abs(coeff);
+  if (base === '') return `${coeff}`;
+  if (absC === 1) return coeff > 0 ? base : `-${base}`;
+  return `${coeff}${base}`;
+}
+
+// Build linear "ax + b" expression for LaTeX
+function linearTex(a, b, v = 'x') {
+  if (a === 0 && b === 0) return '0';
+  const aStr = termTex(a, v, 1);
+  if (b === 0) return aStr || '0';
+  if (a === 0) return `${b}`;
+  return b > 0 ? `${aStr} + ${b}` : `${aStr} - ${Math.abs(b)}`;
+}
+
+// Build quadratic "ax² + bx + c" for LaTeX
+function quadTex(a, b, c, v = 'x') {
+  let parts = [];
+  if (a !== 0) parts.push(termTex(a, v, 2));
+  if (b !== 0) {
+    const bStr = termTex(Math.abs(b), v, 1);
+    if (parts.length) parts.push(b > 0 ? `+ ${bStr}` : `- ${bStr}`);
+    else parts.push(termTex(b, v, 1));
+  }
+  if (c !== 0) {
+    if (parts.length) parts.push(c > 0 ? `+ ${c}` : `- ${Math.abs(c)}`);
+    else parts.push(`${c}`);
+  }
+  return parts.join(' ') || '0';
+}
+
+// KaTeX render helpers
+function kD(tex) { // display mode
+  try { return katex.renderToString(tex, { displayMode: true, throwOnError: false }); }
+  catch(e) { return tex; }
+}
+function kI(tex) { // inline mode
+  try { return katex.renderToString(tex, { displayMode: false, throwOnError: false }); }
+  catch(e) { return tex; }
+}
+
+// Parse student numeric input (handles fractions "3/4", decimals, integers)
+function parseNum(s) {
+  if (!s || !s.trim()) return NaN;
+  s = s.trim().replace(/\s+/g, '');
+  const m = s.match(/^(-?\d+)\/(-?\d+)$/);
+  if (m) return parseInt(m[1]) / parseInt(m[2]);
+  return parseFloat(s);
+}
+function approxEq(a, b, tol = 1e-6) { return Math.abs(a - b) < tol; }
+
+
+/* ─────────────────────────────────────────────
+   PROBLEM GENERATORS
+   Each returns a problem descriptor object.
+   Types: 'numeric' | 'numeric2' | 'mcq' | 'complex2'
+───────────────────────────────────────────── */
+
+/* ═══════════════════════════════════════════
+   GEN FUNCTIONS — COLLEGE ALGEBRA
+═══════════════════════════════════════════ */
+const GEN = {};
+
+// --- 1.1  Solving Linear Equations  ax + b = c ---
+GEN['CA_1_1'] = function() {
+  const a = ri(2, 8);
+  const x = ri(-7, 7);
+  const b = ri(-12, 12);
+  const c = a * x + b;
+  const bSign = b > 0 ? `+ ${b}` : b < 0 ? `- ${Math.abs(b)}` : '';
+  const eq = b === 0 ? `${a}x = ${c}` : `${a}x ${bSign} = ${c}`;
+  const step = c - b;
+  return {
+    html: `Solve for ${kI('x')}: ${kD(eq)}`,
+    type: 'numeric',
+    answer: x,
+    solutionHtml:
+      kD(`${a}x = ${c} ${b >= 0 ? '-' : '+'} ${Math.abs(b)} = ${step}`) +
+      kD(`x = ${fracTex(step, a)} = ${x}`)
+  };
+};
+
+// --- 1.2  Solutions of Linear Equations (one / none / infinite)  MCQ ---
+GEN['CA_1_2'] = function() {
+  const a = ri(2, 7);
+  const b = ri(-8, 8);
+  const caseType = ri(0, 2);
+  let eq, answer, explanation;
+  if (caseType === 0) {
+    // Different coefficients → one solution
+    const a2 = a === 2 ? 3 : 2;
+    const d = ri(-8, 8);
+    eq = `${linearTex(a, b)} = ${linearTex(a2, d)}`;
+    answer = 0;
+    explanation = `The coefficients of ${kI('x')} are different (${a} vs ${a2}), so there is exactly one solution.`;
+  } else if (caseType === 1) {
+    // Same coefficient, different constant → no solution
+    const d = b + (b === 0 ? ri(1,5) : (Math.random() < .5 ? ri(1,5) : -ri(1,5)));
+    eq = `${linearTex(a, b)} = ${linearTex(a, d)}`;
+    answer = 1;
+    explanation = `After subtracting ${kI(`${a}x`)} from both sides: ${kI(`${b} = ${d}`)}, which is false — no solution.`;
+  } else {
+    // Identical → infinitely many
+    eq = `${linearTex(a, b)} = ${linearTex(a, b)}`;
+    answer = 2;
+    explanation = `Both sides are identical — every value of ${kI('x')} is a solution.`;
+  }
+  return {
+    html: `How many solutions does this equation have?${kD(eq)}`,
+    type: 'mcq',
+    choices: ['One solution', 'No solution', 'Infinitely many solutions'],
+    correctIdx: answer,
+    solutionHtml: explanation
+  };
+};
+
+// --- 1.3  Interval Notation / Inequalities  ax + b < c  (ask for boundary) ---
+GEN['CA_1_3'] = function() {
+  const a = ri(2, 6);
+  const b = ri(-10, 10);
+  const c = ri(-10, 10);
+  // a*x + b < c  →  x < (c-b)/a
+  const [num, den] = reduceFrac(c - b, a);
+  const bound = num / den;
+  const sym = pick(['<', '\\le', '>', '\\ge']);
+  // Flip direction if a < 0 (but we keep a > 0 here for simplicity)
+  const dirLabel = (sym === '<' || sym === '\\le') ? 'less than' : 'greater than';
+  return {
+    html: `Solve: ${kD(`${a}x ${b >= 0 ? '+ ' + b : '- ' + Math.abs(b)} ${sym} ${c}`)}
+           Enter the boundary value (exact, as a fraction or integer):`,
+    type: 'numeric',
+    answer: bound,
+    solutionHtml:
+      kD(`${a}x ${sym} ${c} ${b >= 0 ? '-' : '+'} ${Math.abs(b)} = ${c - b}`) +
+      kD(`x ${sym} ${fracTex(c - b, a)}`)
+  };
+};
+
+// --- 1.6  Absolute Value Equations  |x + b| = c ---
+GEN['CA_1_6'] = function() {
+  // Keep it: a = 1 for clean algebra
+  const b = ri(-6, 6);
+  const c = ri(1, 9);
+  const x1 = c - b;   // from  x + b = c
+  const x2 = -c - b;  // from  x + b = -c
+  const bSign = b > 0 ? `+ ${b}` : b < 0 ? `- ${Math.abs(b)}` : '';
+  const inner = b === 0 ? 'x' : `x ${bSign}`;
+  return {
+    html: `Solve: ${kD(`|${inner}| = ${c}`)} Enter both solutions (smaller, then larger):`,
+    type: 'numeric2',
+    answers: [Math.min(x1, x2), Math.max(x1, x2)],
+    labels: ['smaller', 'larger'],
+    solutionHtml:
+      `Set up two equations:` +
+      kD(`${inner} = ${c}  \\implies  x = ${c - b}`) +
+      kD(`${inner} = -${c} \\implies  x = ${-c - b}`)
+  };
+};
+
+// --- 2.1  Slope from two points ---
+GEN['CA_2_1'] = function() {
+  // Pick rise and run, build two points
+  const rise = ri(-7, 7);
+  const run = ri(1, 6) * (Math.random() < .5 ? 1 : -1);
+  const x1 = ri(-4, 4);
+  const y1 = ri(-5, 5);
+  const x2 = x1 + run;
+  const y2 = y1 + rise;
+  const [rN, rD] = reduceFrac(rise, run);
+  const slopeVal = rN / rD;
+  return {
+    html: `Find the slope of the line through ${kI(`(${x1},\\ ${y1})`)} and ${kI(`(${x2},\\ ${y2})`)}.<br>
+           <span class="ans-hint">Enter as a fraction (e.g. <code>-3/2</code>) or integer.</span>`,
+    type: 'numeric',
+    answer: slopeVal,
+    solutionHtml:
+      kD(`m = \\frac{y_2 - y_1}{x_2 - x_1} = \\frac{${y2} - (${y1})}{${x2} - (${x1})} = \\frac{${rise}}{${run}} = ${rD === 1 ? rN : fracTex(rN, rD)}`)
+  };
+};
+
+// --- 2.2  Slope-intercept form: given m and a point, find y-intercept ---
+GEN['CA_2_2'] = function() {
+  const m = ri(-5, 5) || 1; // avoid 0
+  const x0 = ri(-4, 4);
+  const y0 = ri(-8, 8);
+  const b = y0 - m * x0;
+  const mStr = m === 1 ? '' : m === -1 ? '-' : `${m}`;
+  return {
+    html: `A line has slope ${kI(`m = ${m}`)} and passes through ${kI(`(${x0},\\ ${y0})`)}.
+           What is the ${kI('y')}-intercept?`,
+    type: 'numeric',
+    answer: b,
+    solutionHtml:
+      `Use ${kI('y = mx + b')}: substitute the point and slope.` +
+      kD(`${y0} = ${m}(${x0}) + b`) +
+      kD(`b = ${y0} - ${m >=0 ? m+'(' : '('+m+'('}${x0}) = ${y0} - (${m * x0}) = ${b}`)
+  };
+};
+
+// --- 3.1  Function evaluation ---
+GEN['CA_3_1'] = function() {
+  const type = pick([0, 1]); // 0 = linear, 1 = quadratic
+  if (type === 0) {
+    const a = ri(-5, 5) || 2;
+    const b = ri(-8, 8);
+    const x = ri(-4, 4);
+    const ans = a * x + b;
+    return {
+      html: `Let ${kI(`f(x) = ${linearTex(a, b)}`)}.  Find ${kI(`f(${x})`)}:`,
+      type: 'numeric',
+      answer: ans,
+      solutionHtml: kD(`f(${x}) = ${a}(${x}) + ${b} = ${a*x} + ${b} = ${ans}`)
+    };
+  } else {
+    const a = ri(1, 3);
+    const b = ri(-4, 4);
+    const c = ri(-6, 6);
+    const x = ri(-3, 3);
+    const ans = a * x * x + b * x + c;
+    return {
+      html: `Let ${kI(`f(x) = ${quadTex(a, b, c)}`)}.  Find ${kI(`f(${x})`)}:`,
+      type: 'numeric',
+      answer: ans,
+      solutionHtml: kD(`f(${x}) = ${a}(${x})^2 + ${b}(${x}) + ${c} = ${a*x*x} ${b*x >= 0 ? '+' : ''} ${b*x} + ${c} = ${ans}`)
+    };
+  }
+};
+
+// --- 3.3  Function composition f(g(x)) at a point ---
+GEN['CA_3_3'] = function() {
+  const a = ri(-4, 4) || 1;
+  const b = ri(-5, 5);
+  const c = ri(-4, 4) || 2;
+  const d = ri(-5, 5);
+  const x = ri(-3, 3);
+  // f(x) = ax + b, g(x) = cx + d
+  // f(g(x)) = a(cx+d)+b = acx + ad + b
+  const gx = c * x + d;
+  const fgx = a * gx + b;
+  const opType = pick(['composition', 'sum']);
+  if (opType === 'composition') {
+    return {
+      html: `Let ${kI(`f(x) = ${linearTex(a, b)}`)} and ${kI(`g(x) = ${linearTex(c, d)}`)}.
+             Find ${kI(`f(g(${x}))`)}:`,
+      type: 'numeric',
+      answer: fgx,
+      solutionHtml:
+        kD(`g(${x}) = ${c}(${x}) + ${d} = ${gx}`) +
+        kD(`f(g(${x})) = f(${gx}) = ${a}(${gx}) + ${b} = ${fgx}`)
+    };
+  } else {
+    const sumAns = (a + c) * x + (b + d);
+    return {
+      html: `Let ${kI(`f(x) = ${linearTex(a, b)}`)} and ${kI(`g(x) = ${linearTex(c, d)}`)}.
+             Find ${kI(`(f + g)(${x})`)}:`,
+      type: 'numeric',
+      answer: sumAns,
+      solutionHtml:
+        kD(`(f+g)(${x}) = f(${x}) + g(${x}) = (${a*x + b}) + (${c*x + d}) = ${sumAns}`)
+    };
+  }
+};
+
+// --- 3.5  Inverse functions: find f⁻¹(c) where f is linear ---
+GEN['CA_3_5'] = function() {
+  const a = ri(2, 7);
+  const b = ri(-8, 8);
+  const yVal = ri(-6, 6) * a + b; // ensures x = (yVal - b)/a is integer
+  const xAns = (yVal - b) / a;
+  return {
+    html: `Let ${kI(`f(x) = ${linearTex(a, b)}`)}.  Find ${kI(`f^{-1}(${yVal})`)}:`,
+    type: 'numeric',
+    answer: xAns,
+    solutionHtml:
+      `Set ${kI(`y = ${linearTex(a, b)}`)} and solve for ${kI('x')}:` +
+      kD(`${yVal} = ${a}x + ${b} \\implies x = ${fracTex(yVal - b, a)} = ${xAns}`)
+  };
+};
+
+// --- 4.1  Solving by Factoring  x² + bx + c = 0 ---
+GEN['CA_4_1'] = function() {
+  // r1, r2 are the ROOTS: (x - r1)(x - r2) = x² - (r1+r2)x + r1*r2
+  const r1 = ri(-7, 7);
+  let r2 = ri(-7, 7);
+  if (r2 === r1) r2 = r1 + pick([-2, -1, 1, 2]);
+  const b = -(r1 + r2); // coefficient of x
+  const c = r1 * r2;
+  const f1 = r1 <= 0 ? `+ ${Math.abs(r1)}` : `- ${r1}`;
+  const f2 = r2 <= 0 ? `+ ${Math.abs(r2)}` : `- ${r2}`;
+  return {
+    html: `Solve by factoring: ${kD(quadTex(1, b, c) + ' = 0')} Enter both solutions:`,
+    type: 'numeric2',
+    answers: [Math.min(r1, r2), Math.max(r1, r2)],
+    labels: ['smaller x', 'larger x'],
+    solutionHtml:
+      kD(`(x ${f1})(x ${f2}) = 0`) +
+      kD(`x = ${r1} \\text{ or } x = ${r2}`)
+  };
+};
+
+// --- 4.3  Completing the Square — find vertex ---
+GEN['CA_4_3'] = function() {
+  const h = ri(-5, 5);
+  const k = ri(-8, 8);
+  // f(x) = (x-h)² + k = x² - 2hx + h² + k
+  const b = -2 * h;
+  const c = h * h + k;
+  return {
+    html: `Find the vertex of: ${kD(quadTex(1, b, c))} by completing the square.`,
+    type: 'numeric2',
+    answers: [h, k],
+    labels: ['h  (x-coordinate)', 'k  (y-coordinate)'],
+    solutionHtml:
+      kD(`x^2 ${b >= 0 ? '+' : ''} ${b}x + ${c}`) +
+      kD(`= \\left(x ${h <= 0 ? '+' + (-h) : '- ' + h}\\right)^2 + ${k}`) +
+      `Vertex: ${kI(`(${h},\\ ${k})`)}`,
+  };
+};
+
+// --- 4.4  Quadratic Formula (generate with integer roots so check is clean) ---
+GEN['CA_4_4'] = function() {
+  const r1 = ri(-6, 6);
+  let r2 = ri(-6, 6);
+  if (r2 === r1) r2 = r1 + pick([-3, -2, -1, 1, 2, 3]);
+  const b = -(r1 + r2);
+  const c = r1 * r2;
+  const disc = b * b - 4 * c;
+  return {
+    html: `Use the quadratic formula to solve: ${kD(quadTex(1, b, c) + ' = 0')} Enter both solutions:`,
+    type: 'numeric2',
+    answers: [Math.min(r1, r2), Math.max(r1, r2)],
+    labels: ['smaller root', 'larger root'],
+    solutionHtml:
+      kD(`x = \\frac{-${b} \\pm \\sqrt{${b}^2 - 4(${c})}}{2} = \\frac{${-b} \\pm \\sqrt{${disc}}}{2}`) +
+      kD(`x = ${r1} \\text{ or } x = ${r2}`)
+  };
+};
+
+// --- 5.1  Powers of i ---
+GEN['CA_5_1'] = function() {
+  const n = ri(1, 20);
+  const rem = ((n % 4) + 4) % 4;
+  const answers = ['1', 'i', '-1', '-i'];
+  const texAns = ['1', 'i', '-1', '-i'];
+  const correct = rem; // 0→1, 1→i, 2→-1, 3→-i
+  return {
+    html: `Simplify: ${kD(`i^{${n}}`)}`,
+    type: 'mcq',
+    choices: answers,
+    correctIdx: correct,
+    solutionHtml:
+      `${kI(`${n} \\div 4`)} has remainder ${rem}, so ${kI(`i^{${n}} = i^${rem} = ${texAns[correct]}`)}. ` +
+      `(The cycle is ${kI('i^1=i,\\ i^2=-1,\\ i^3=-i,\\ i^4=1')}.)`
+  };
+};
+
+// --- 5.2  Multiplying Complex Numbers (a+bi)(c+di) ---
+GEN['CA_5_2'] = function() {
+  const a = ri(-5, 5);
+  const b = ri(-5, 5);
+  const c = ri(-5, 5);
+  const d = ri(-5, 5);
+  const real = a * c - b * d;
+  const imag = a * d + b * c;
+  const showCx = (re, im) => {
+    if (im === 0) return `${re}`;
+    if (re === 0) return im === 1 ? 'i' : im === -1 ? '-i' : `${im}i`;
+    const iStr = Math.abs(im) === 1 ? 'i' : `${Math.abs(im)}i`;
+    return `${re} ${im > 0 ? '+' : '-'} ${iStr}`;
+  };
+  const aStr = showCx(a, b);
+  const bStr = showCx(c, d);
+  return {
+    html: `Multiply: ${kD(`(${aStr})(${bStr})`)} Enter the real and imaginary parts of the result:`,
+    type: 'complex2',
+    realPart: real,
+    imagPart: imag,
+    solutionHtml:
+      kD(`(${aStr})(${bStr}) = ${a*c} ${b*c >= 0 ? '+' : ''}${b*c}i ${a*d >= 0 ? '+' : ''}${a*d}i ${b*d >= 0 ? '+' : ''}${b*d}i^2`) +
+      kD(`= ${a*c} + ${a*d + b*c}i - ${b*d} = ${real} ${imag >= 0 ? '+ ' + imag : imag}i`)
+  };
+};
+
+// --- 6.1  Exponent Rules ---
+GEN['CA_6_1'] = function() {
+  const ruleType = ri(0, 2);
+  const m = ri(2, 8);
+  const n = ri(1, 6);
+  if (ruleType === 0) {
+    // x^m · x^n = x^(m+n)
+    return {
+      html: `Simplify: ${kD(`x^{${m}} \\cdot x^{${n}}`)} Write your answer as ${kI(`x^k`)}. What is ${kI('k')}?`,
+      type: 'numeric', answer: m + n,
+      solutionHtml: kD(`x^{${m}} \\cdot x^{${n}} = x^{${m}+${n}} = x^{${m+n}}`)
+    };
+  } else if (ruleType === 1) {
+    // (x^m)^n = x^(mn)
+    return {
+      html: `Simplify: ${kD(`\\left(x^{${m}}\\right)^{${n}}`)} Write your answer as ${kI(`x^k`)}. What is ${kI('k')}?`,
+      type: 'numeric', answer: m * n,
+      solutionHtml: kD(`\\left(x^{${m}}\\right)^{${n}} = x^{${m} \\cdot ${n}} = x^{${m*n}}`)
+    };
+  } else {
+    // x^(m+n) / x^n = x^m
+    const p = m + n;
+    return {
+      html: `Simplify: ${kD(`\\frac{x^{${p}}}{x^{${n}}}`)} Write your answer as ${kI(`x^k`)}. What is ${kI('k')}?`,
+      type: 'numeric', answer: m,
+      solutionHtml: kD(`\\frac{x^{${p}}}{x^{${n}}} = x^{${p}-${n}} = x^{${m}}`)
+    };
+  }
+};
+
+// --- 6.3  Exponential Functions: evaluate a^x ---
+GEN['CA_6_3'] = function() {
+  const base = pick([2, 3, 5, 10]);
+  const exp = ri(-2, 4);
+  let ans, ansStr;
+  if (exp >= 0) {
+    ans = Math.pow(base, exp);
+    ansStr = `${ans}`;
+  } else {
+    // Negative exponent → fraction
+    ans = 1 / Math.pow(base, -exp);
+    ansStr = `1/${Math.pow(base, -exp)}`;
+  }
+  return {
+    html: `Evaluate: ${kD(`${base}^{${exp}}`)}
+           <span class="ans-hint">Enter as an integer or fraction (e.g. <code>1/8</code>).</span>`,
+    type: 'numeric',
+    answer: ans,
+    solutionHtml:
+      exp >= 0
+        ? kD(`${base}^{${exp}} = ${ans}`)
+        : kD(`${base}^{${exp}} = \\frac{1}{${base}^{${-exp}}} = \\frac{1}{${Math.pow(base,-exp)}}`)
+  };
+};
+
+// --- S.5  Inclusion-Exclusion ---
+GEN['CA_S_5'] = function() {
+  const a = ri(10, 30);
+  const b = ri(8, 25);
+  const inter = ri(2, Math.min(a, b) - 2);
+  const union = a + b - inter;
+  return {
+    html: `In a class, ${kI(`${a}`)} students play a sport, ${kI(`${b}`)} play an instrument, and ${kI(`${inter}`)} do both.
+           How many students participate in <em>at least one</em> of these activities?`,
+    type: 'numeric',
+    answer: union,
+    solutionHtml: kD(`|A \\cup B| = |A| + |B| - |A \\cap B| = ${a} + ${b} - ${inter} = ${union}`)
+  };
+};
+
+// --- S.6  Basic Probability ---
+GEN['CA_S_6'] = function() {
+  const colors = ['red', 'blue', 'green', 'yellow', 'purple'];
+  const nColors = ri(2, 4);
+  const chosen = colors.slice(0, nColors);
+  const counts = chosen.map(() => ri(2, 9));
+  const total = counts.reduce((s, v) => s + v, 0);
+  const idx = ri(0, nColors - 1);
+  const [pN, pD] = reduceFrac(counts[idx], total);
+  const pVal = pN / pD;
+  const marbleDesc = chosen.map((c, i) => `${counts[i]} ${c}`).join(', ');
+  return {
+    html: `A bag contains ${marbleDesc} marbles (${total} total). One marble is drawn at random.
+           What is the probability it is <strong>${chosen[idx]}</strong>?
+           <span class="ans-hint">Enter as a fraction (e.g. <code>3/7</code>) or decimal.</span>`,
+    type: 'numeric',
+    answer: pVal,
+    solutionHtml: kD(`P(\\text{${chosen[idx]}}) = \\frac{${counts[idx]}}{${total}} = ${pD === 1 ? pN : fracTex(pN, pD)}`)
+  };
+};
+
+// --- S.7  Multiplication Principle ---
+GEN['CA_S_7'] = function() {
+  const type = ri(0, 1);
+  if (type === 0) {
+    const a = ri(3, 8), b = ri(3, 8), c = ri(2, 6);
+    const ans = a * b * c;
+    return {
+      html: `A meal consists of ${kI(`${a}`)} choices of entrée, ${kI(`${b}`)} sides, and ${kI(`${c}`)} drinks.
+             How many different meals are possible?`,
+      type: 'numeric',
+      answer: ans,
+      solutionHtml: kD(`${a} \\times ${b} \\times ${c} = ${ans}`)
+    };
+  } else {
+    const letters = ri(4, 7);
+    const digits = ri(3, 5);
+    const ans = 26 ** letters * 10 ** digits;
+    // keep small
+    const lSmall = ri(2, 3), dSmall = ri(2, 3);
+    const ansSmall = 26 ** lSmall * 10 ** dSmall;
+    return {
+      html: `A password consists of ${lSmall} letters (A–Z) followed by ${dSmall} digits (0–9).
+             How many passwords are possible? (Letters and digits can repeat.)`,
+      type: 'numeric',
+      answer: ansSmall,
+      solutionHtml: kD(`26^{${lSmall}} \\times 10^{${dSmall}} = ${Math.pow(26, lSmall)} \\times ${Math.pow(10, dSmall)} = ${ansSmall}`)
+    };
+  }
+};
+
+// --- S.8  Permutations and Combinations ---
+GEN['CA_S_8'] = function() {
+  const n = ri(5, 10);
+  const r = ri(2, Math.min(n - 1, 4));
+  const usePerm = Math.random() < .5;
+
+  function fact(x) { let f = 1; for (let i = 2; i <= x; i++) f *= i; return f; }
+  function P(nn, rr) { return fact(nn) / fact(nn - rr); }
+  function C(nn, rr) { return fact(nn) / (fact(rr) * fact(nn - rr)); }
+
+  if (usePerm) {
+    const ans = P(n, r);
+    return {
+      html: `In how many ways can ${r} students be chosen <strong>and arranged</strong> from a group of ${n}?
+             (Order matters.)`,
+      type: 'numeric',
+      answer: ans,
+      solutionHtml:
+        kD(`P(${n},${r}) = \\frac{${n}!}{(${n}-${r})!} = \\frac{${n}!}{${n-r}!} = ${ans}`)
+    };
+  } else {
+    const ans = C(n, r);
+    return {
+      html: `In how many ways can ${r} students be chosen from a group of ${n}?
+             (Order does not matter.)`,
+      type: 'numeric',
+      answer: ans,
+      solutionHtml:
+        kD(`C(${n},${r}) = \\binom{${n}}{${r}} = \\frac{${n}!}{${r}!\\cdot${n-r}!} = ${ans}`)
+    };
+  }
+};
+
+// --- 1.4  Compound Inequalities  a < bx + c < d ---
+GEN['CA_1_4'] = function() {
+  const b = ri(2, 5);
+  const c = ri(-6, 6);
+  // Pick nice integer answers: x1 < x2
+  const x1 = ri(-5, 3);
+  const x2 = ri(x1 + 1, x1 + 6);
+  // b*x1 + c < b*x + c < b*x2 + c
+  const lo = b * x1 + c;
+  const hi = b * x2 + c;
+  const sym = pick(['<', '\\le']);
+  return {
+    html: `Solve the compound inequality: ${kD(`${lo} ${sym} ${b}x + ${c} ${sym} ${hi}`)} Enter the lower and upper bounds of ${kI('x')}:`,
+    type: 'numeric2',
+    answers: [x1, x2],
+    labels: ['lower bound', 'upper bound'],
+    solutionHtml:
+      kD(`${lo} - ${c} ${sym} ${b}x ${sym} ${hi} - ${c}`) +
+      kD(`${lo - c} ${sym} ${b}x ${sym} ${hi - c}`) +
+      kD(`${fracTex(lo - c, b)} ${sym} x ${sym} ${fracTex(hi - c, b)}`)
+  };
+};
+
+// --- 2.4  Parallel and Perpendicular Lines ---
+GEN['CA_2_4'] = function() {
+  const rise = ri(-5, 5) || 1;
+  const run = ri(1, 5) * (Math.random() < .5 ? 1 : -1);
+  const [mN, mD] = reduceFrac(rise, run);
+  const slopeVal = mN / mD;
+  const slopeTex = mD === 1 ? `${mN}` : fracTex(mN, mD);
+  const usePerp = Math.random() < .5;
+  if (usePerp) {
+    // Perpendicular slope = -mD/mN
+    const [pN, pD] = reduceFrac(-mD, mN);
+    return {
+      html: `A line has slope ${kI(slopeTex)}. What is the slope of a line <strong>perpendicular</strong> to it?
+             <span class="ans-hint">Enter as a fraction or integer.</span>`,
+      type: 'numeric',
+      answer: pN / pD,
+      solutionHtml: kD(`m_{\\perp} = -\\frac{1}{m} = -\\frac{${mD}}{${mN}} = ${fracTex(pN, pD)}`)
+    };
+  } else {
+    return {
+      html: `A line has slope ${kI(slopeTex)}. What is the slope of a line <strong>parallel</strong> to it?
+             <span class="ans-hint">Enter as a fraction or integer.</span>`,
+      type: 'numeric',
+      answer: slopeVal,
+      solutionHtml: `Parallel lines have equal slopes: ${kI(`m_{\\parallel} = ${slopeTex}`)}`
+    };
+  }
+};
+
+// --- 4.0  Binomials & Factoring Review: expand (x+a)(x+b) ---
+GEN['CA_4_0'] = function() {
+  const r1 = ri(-7, 7);
+  let r2 = ri(-7, 7);
+  if (r2 === r1) r2 = r1 + pick([-2, -1, 1, 2]);
+  const b = r1 + r2, c = r1 * r2;
+  const type = pick(['expand', 'factor']);
+  if (type === 'expand') {
+    const a1 = r1 >= 0 ? `+ ${r1}` : `- ${Math.abs(r1)}`;
+    const a2 = r2 >= 0 ? `+ ${r2}` : `- ${Math.abs(r2)}`;
+    return {
+      html: `Expand: ${kD(`(x ${a1})(x ${a2})`)} Your answer is ${kI(`x^2 + bx + c`)}. Enter ${kI('b')} and ${kI('c')}:`,
+      type: 'numeric2',
+      answers: [b, c],
+      labels: ['b', 'c'],
+      solutionHtml: kD(`(x ${a1})(x ${a2}) = x^2 + (${r1}+${r2})x + (${r1})(${r2}) = ${quadTex(1, b, c)}`)
+    };
+  } else {
+    return {
+      html: `Factor: ${kD(quadTex(1, b, c) + ' = (x + p)(x + q)')} Enter ${kI('p')} and ${kI('q')}:`,
+      type: 'numeric2',
+      answers: [Math.min(r1, r2), Math.max(r1, r2)],
+      labels: ['smaller value', 'larger value'],
+      solutionHtml: kD(`${quadTex(1, b, c)} = (x ${r1 >= 0 ? '+ ' + r1 : '- ' + Math.abs(r1)})(x ${r2 >= 0 ? '+ ' + r2 : '- ' + Math.abs(r2)})`)
+    };
+  }
+};
+
+// --- 4.2  Graphing Quadratics: find vertex from standard form ---
+GEN['CA_4_2'] = function() {
+  const a = pick([-3, -2, -1, 1, 2, 3]);
+  const h = ri(-5, 5);
+  const k = ri(-8, 8);
+  const bCoeff = -2 * a * h;
+  const cCoeff = a * h * h + k;
+  return {
+    html: `Find the vertex of the parabola: ${kD(quadTex(a, bCoeff, cCoeff))} Enter the vertex ${kI('(h, k)')}:`,
+    type: 'numeric2',
+    answers: [h, k],
+    labels: ['h  (x-coordinate)', 'k  (y-coordinate)'],
+    solutionHtml:
+      kD(`h = -\\frac{b}{2a} = -\\frac{${bCoeff}}{2(${a})} = -\\frac{${bCoeff}}{${2*a}} = ${h}`) +
+      kD(`k = f(${h}) = ${a}(${h})^2 + ${bCoeff}(${h}) + ${cCoeff} = ${k}`)
+  };
+};
+
+// --- 4.5  Quadratic Inequalities: find boundary values ---
+GEN['CA_4_5'] = function() {
+  const r1 = ri(-6, 6);
+  let r2 = ri(-6, 6);
+  if (r2 === r1) r2 = r1 + pick([-2, -1, 1, 2]);
+  const [lo, hi] = [Math.min(r1, r2), Math.max(r1, r2)];
+  const b = -(r1 + r2), c = r1 * r2;
+  const sym = pick(['<', '>', '\\le', '\\ge']);
+  return {
+    html: `Solve: ${kD(quadTex(1, b, c) + ` ${sym} 0`)} Enter the two boundary values (the roots):`,
+    type: 'numeric2',
+    answers: [lo, hi],
+    labels: ['smaller root', 'larger root'],
+    solutionHtml:
+      kD(`${quadTex(1, b, c)} = (x ${-r1 > 0 ? '+ ' + (-r1) : '- ' + Math.abs(r1)})(x ${-r2 > 0 ? '+ ' + (-r2) : '- ' + Math.abs(r2)}) = 0`) +
+      `Roots: ${kI(`x = ${lo}`)} and ${kI(`x = ${hi}`)}`
+  };
+};
+
+// --- 6.2  Simplifying Radicals ---
+GEN['CA_6_2'] = function() {
+  // √(a²·b) = a√b where b is square-free
+  const a = ri(2, 7);
+  const squareFrees = [2, 3, 5, 6, 7, 10, 11, 13];
+  const b = pick(squareFrees);
+  const radicand = a * a * b;
+  const type = pick(['simplify', 'coefficient']);
+  if (type === 'simplify') {
+    return {
+      html: `Simplify: ${kD(`\\sqrt{${radicand}}`)} Your answer is ${kI(`a\\sqrt{b}`)}. Enter the coefficient ${kI('a')}:`,
+      type: 'numeric',
+      answer: a,
+      solutionHtml: kD(`\\sqrt{${radicand}} = \\sqrt{${a*a} \\cdot ${b}} = ${a}\\sqrt{${b}}`)
+    };
+  } else {
+    return {
+      html: `Simplify: ${kD(`\\sqrt{${radicand}}`)} Enter the entire result as ${kI(`a\\sqrt{b}`)} — what is ${kI('b')} (the value under the radical after simplifying)?`,
+      type: 'numeric',
+      answer: b,
+      solutionHtml: kD(`\\sqrt{${radicand}} = \\sqrt{${a*a} \\cdot ${b}} = ${a}\\sqrt{${b}}`)
+    };
+  }
+};
+
+// --- S.2  Set Operations ---
+GEN['CA_S_2'] = function() {
+  const aSize = ri(5, 15);
+  const bSize = ri(5, 15);
+  const inter = ri(1, Math.min(aSize, bSize) - 1);
+  const union = aSize + bSize - inter;
+  const type = ri(0, 2);
+  if (type === 0) {
+    return {
+      html: `Sets A and B have ${kI(`|A| = ${aSize}`)}, ${kI(`|B| = ${bSize}`)}, and ${kI(`|A \\cap B| = ${inter}`)}. Find ${kI(`|A \\cup B|`)}:`,
+      type: 'numeric', answer: union,
+      solutionHtml: kD(`|A \\cup B| = |A| + |B| - |A \\cap B| = ${aSize} + ${bSize} - ${inter} = ${union}`)
+    };
+  } else if (type === 1) {
+    return {
+      html: `Sets A and B have ${kI(`|A| = ${aSize}`)}, ${kI(`|B| = ${bSize}`)}, and ${kI(`|A \\cup B| = ${union}`)}. Find ${kI(`|A \\cap B|`)}:`,
+      type: 'numeric', answer: inter,
+      solutionHtml: kD(`|A \\cap B| = |A| + |B| - |A \\cup B| = ${aSize} + ${bSize} - ${union} = ${inter}`)
+    };
+  } else {
+    const onlyA = aSize - inter;
+    return {
+      html: `In a Venn diagram, ${kI(inter)} elements are in both A and B, and ${kI(onlyA)} are in A only. How many total elements are in A?`,
+      type: 'numeric', answer: aSize,
+      solutionHtml: kD(`|A| = \\text{only A} + |A \\cap B| = ${onlyA} + ${inter} = ${aSize}`)
+    };
+  }
+};
+
+// --- S.3  Subsets: count subsets of a set ---
+GEN['CA_S_3'] = function() {
+  const n = ri(2, 6);
+  const ans = Math.pow(2, n);
+  const type = pick(['total', 'proper']);
+  if (type === 'total') {
+    return {
+      html: `A set has ${n} elements. How many subsets does it have (including the empty set and itself)?`,
+      type: 'numeric', answer: ans,
+      solutionHtml: kD(`2^n = 2^{${n}} = ${ans}`)
+    };
+  } else {
+    return {
+      html: `A set has ${n} elements. How many <strong>proper</strong> subsets does it have (excluding the set itself)?`,
+      type: 'numeric', answer: ans - 1,
+      solutionHtml: kD(`2^n - 1 = 2^{${n}} - 1 = ${ans - 1}`)
+    };
+  }
+};
+
+// --- S.4  Venn Diagrams: fill in the missing value ---
+GEN['CA_S_4'] = function() {
+  const onlyA = ri(3, 12);
+  const onlyB = ri(3, 12);
+  const both  = ri(2, 8);
+  const neither = ri(0, 5);
+  const total = onlyA + onlyB + both + neither;
+  const type = ri(0, 2);
+  if (type === 0) {
+    return {
+      html: `A Venn diagram shows: only A = ${onlyA}, only B = ${onlyB}, both A and B = ${both}, neither = ${neither}. How many total elements are there?`,
+      type: 'numeric', answer: total,
+      solutionHtml: kD(`${onlyA} + ${onlyB} + ${both} + ${neither} = ${total}`)
+    };
+  } else if (type === 1) {
+    return {
+      html: `Total elements = ${total}, only A = ${onlyA}, only B = ${onlyB}, neither = ${neither}. How many are in <strong>both</strong> A and B?`,
+      type: 'numeric', answer: both,
+      solutionHtml: kD(`\\text{both} = ${total} - ${onlyA} - ${onlyB} - ${neither} = ${both}`)
+    };
+  } else {
+    return {
+      html: `Total = ${total}, only B = ${onlyB}, both = ${both}, neither = ${neither}. How many are in A only?`,
+      type: 'numeric', answer: onlyA,
+      solutionHtml: kD(`\\text{only A} = ${total} - ${onlyB} - ${both} - ${neither} = ${onlyA}`)
+    };
+  }
+};
+
+// --- S.9  Counting with Repetition / Further Counting ---
+GEN['CA_S_9'] = function() {
+  const type = pick(['repetition', 'restriction']);
+  if (type === 'repetition') {
+    const n = ri(4, 8);
+    const r = ri(2, 3);
+    function fact(x) { let f = 1; for (let i = 2; i <= x; i++) f *= i; return f; }
+    function C(nn, rr) { return fact(nn) / (fact(rr) * fact(nn - rr)); }
+    const ans = C(n + r - 1, r);
+    return {
+      html: `How many ways can you choose ${r} items from ${n} types if <strong>repetition is allowed</strong> and order does not matter?`,
+      type: 'numeric', answer: ans,
+      solutionHtml: kD(`C(n + r - 1,\\, r) = C(${n + r - 1},\\, ${r}) = \\frac{${n + r - 1}!}{${r}! \\cdot ${n - 1}!} = ${ans}`)
+    };
+  } else {
+    // Arrange n items, k are identical
+    const n = ri(4, 7);
+    const k = ri(2, Math.min(3, n - 1));
+    function fact(x) { let f = 1; for (let i = 2; i <= x; i++) f *= i; return f; }
+    const ans = fact(n) / fact(k);
+    return {
+      html: `How many distinct arrangements of ${n} items are there if ${k} of them are identical?`,
+      type: 'numeric', answer: ans,
+      solutionHtml: kD(`\\frac{${n}!}{${k}!} = \\frac{${fact(n)}}{${fact(k)}} = ${ans}`)
+    };
+  }
+};
+
+// --- S.10  Partitions (multinomial arrangements) ---
+GEN['CA_S_10'] = function() {
+  function fact(x) { let f = 1; for (let i = 2; i <= x; i++) f *= i; return f; }
+  const k1 = ri(2, 4);
+  const k2 = ri(2, 4);
+  const k3 = ri(1, 3);
+  const n = k1 + k2 + k3;
+  const ans = fact(n) / (fact(k1) * fact(k2) * fact(k3));
+  const items = ['red', 'blue', 'green'];
+  return {
+    html: `How many distinct arrangements of ${n} objects are there if ${k1} are ${items[0]}, ${k2} are ${items[1]}, and ${k3} are ${items[2]}?`,
+    type: 'numeric', answer: ans,
+    solutionHtml: kD(`\\frac{${n}!}{${k1}! \\cdot ${k2}! \\cdot ${k3}!} = \\frac{${fact(n)}}{${fact(k1)} \\cdot ${fact(k2)} \\cdot ${fact(k3)}} = ${ans}`)
+  };
+};
+
+// --- S.11  Probability with Permutations & Combinations ---
+GEN['CA_S_11'] = function() {
+  const n = ri(6, 10);
+  const r = ri(2, 3);
+  function fact(x) { let f = 1; for (let i = 2; i <= x; i++) f *= i; return f; }
+  function C(nn, rr) { return fact(nn) / (fact(rr) * fact(nn - rr)); }
+  const favColor = pick(['red', 'blue', 'green']);
+  const nFav = ri(r, Math.min(n - 1, r + 2));
+  const fav = C(nFav, r);
+  const total = C(n, r);
+  const [pN, pD] = reduceFrac(fav, total);
+  return {
+    html: `A bag has ${n} marbles: ${nFav} ${favColor} and ${n - nFav} other colors.
+           If ${r} marbles are drawn at random (without replacement), what is the probability all are ${favColor}?
+           <span class="ans-hint">Enter as a fraction.</span>`,
+    type: 'numeric',
+    answer: pN / pD,
+    solutionHtml:
+      kD(`P = \\frac{C(${nFav},${r})}{C(${n},${r})} = \\frac{${fav}}{${total}} = ${pD === 1 ? pN : fracTex(pN, pD)}`)
+  };
+};
+
+
+/* ─────────────────────────────────────────────
+   RENDERING
+───────────────────────────────────────────── */
+
+/* ═══════════════════════════════════════════
+   GEN FUNCTIONS — CALC 1
+═══════════════════════════════════════════ */
+
+// ── §1.1  Evaluate a limit by factoring ──────────────────────────────────────
+// lim_{x→r} (x² − (r+s)x + r·s) / (x − r) = r − s
+GEN['Calc_1_1'] = function() {
+  let r, s;
+  do { r = ri(-5, 5); s = ri(-5, 5); } while (r === s || r === 0);
+  const sumRS  = r + s;
+  const prodRS = r * s;
+  // numerator factors as (x−r)(x−s)
+  const bCoeff = -sumRS;    // coefficient of x in expanded numerator
+  const cCoeff = prodRS;
+  const denom  = r > 0 ? `x - ${r}` : `x + ${Math.abs(r)}`;
+  const numTex = polyTex([{c:1,v:'x',p:2},{c:bCoeff,v:'x',p:1},{c:cCoeff,v:'x',p:0}]);
+  const ans = r - s;
+  const factored2 = s > 0 ? `x - ${s}` : `x + ${Math.abs(s)}`;
+  return {
+    html: `Evaluate: ${kD(`\\lim_{x \\to ${r}} \\frac{${numTex}}{${denom}}`)}
+           <span class="ans-hint">Factor the numerator first.</span>`,
+    type: 'numeric',
+    answer: ans,
+    solutionHtml:
+      kD(`\\frac{${numTex}}{${denom}} = \\frac{(${denom})(${factored2})}{${denom}} = ${factored2}`) +
+      kD(`\\lim_{x \\to ${r}} (${factored2}) = ${r} ${s >= 0 ? '- ' + s : '+ ' + Math.abs(s)} = ${ans}`)
+  };
+};
+
+// ── §1.2  Limit of a polynomial (direct substitution) ────────────────────────
+GEN['Calc_1_2'] = function() {
+  const a = ri(-4, 4) || 1;
+  const b = ri(-6, 6);
+  const c = ri(-8, 8);
+  const x0 = ri(-4, 4);
+  const ans = a * x0 * x0 + b * x0 + c;
+  const fTex = polyTex([{c:a,v:'x',p:2},{c:b,v:'x',p:1},{c:c,v:'x',p:0}]);
+  return {
+    html: `Evaluate: ${kD(`\\lim_{x \\to ${x0}} \\left(${fTex}\\right)`)}`,
+    type: 'numeric',
+    answer: ans,
+    solutionHtml:
+      `Since this is a polynomial, substitute directly:` +
+      kD(`${a}(${x0})^2 + ${b}(${x0}) + (${c}) = ${a*x0*x0} ${b*x0 >= 0 ? '+' : ''} ${b*x0} ${c >= 0 ? '+' : ''} ${c} = ${ans}`)
+  };
+};
+
+// ── §1.4  Limit at infinity (rational function, equal degrees) ────────────────
+GEN['Calc_1_4'] = function() {
+  const a = ri(1, 5) * pick([-1,1]);
+  const b = ri(-8, 8);
+  let c;
+  do { c = ri(1, 5) * pick([-1,1]); } while (c === 0);
+  const d = ri(-8, 8);
+  const [pN, pD] = reduceFrac(a, c);
+  const ansVal = pN / pD;
+  return {
+    html: `Evaluate: ${kD(`\\lim_{x \\to \\infty} \\frac{${a}x^2 ${b >= 0 ? '+' : '-'} ${Math.abs(b)}}{${c}x^2 ${d >= 0 ? '+' : '-'} ${Math.abs(d)}}`)}
+           <span class="ans-hint">Enter as a fraction if needed (e.g. <code>2/3</code>).</span>`,
+    type: 'numeric',
+    answer: ansVal,
+    solutionHtml:
+      kD(`\\lim_{x \\to \\infty} \\frac{${a}x^2 + ${b}}{${c}x^2 + ${d}}
+         = \\lim_{x \\to \\infty} \\frac{${a} + ${b}/x^2}{${c} + ${d}/x^2}
+         = \\frac{${a}}{${c}} = ${fracTex(pN, pD)}`)
+  };
+};
+
+// ── §2.2  Limit definition of the derivative ─────────────────────────────────
+// f(x) = ax² + bx,  find f′(x₀) using the limit definition
+GEN['Calc_2_2'] = function() {
+  const a = ri(1, 4) * pick([-1,1]);
+  const b = ri(-5, 5);
+  const x0 = ri(-3, 3);
+  // f′(x₀) = 2a·x₀ + b
+  const ans = 2 * a * x0 + b;
+  const fTex = polyTex([{c:a,v:'x',p:2},{c:b,v:'x',p:1}]);
+  return {
+    html: `Let ${kI(`f(x) = ${fTex}`)}. Using the <strong>limit definition</strong>,
+           find ${kI(`f'(${x0})`)}:
+           ${kD(`f'(${x0}) = \\lim_{h \\to 0} \\frac{f(${x0}+h) - f(${x0})}{h}`)}`,
+    type: 'numeric',
+    answer: ans,
+    solutionHtml:
+      kD(`f(${x0}+h) = ${a}(${x0}+h)^2 + ${b}(${x0}+h)
+         = ${a}(${x0*x0}+${2*x0}h+h^2) ${b >= 0 ? '+' : ''}${b*x0} ${b >= 0 ? '+' : ''}${b}h`) +
+      kD(`\\frac{f(${x0}+h)-f(${x0})}{h}
+         = \\frac{${2*a*x0 + b}h + ${a}h^2}{h}
+         = ${2*a*x0 + b} + ${a}h`) +
+      kD(`\\lim_{h \\to 0}\\left(${2*a*x0 + b} + ${a}h\\right) = ${ans}`)
+  };
+};
+
+// ── §2.3  Power Rule: evaluate f′(x₀) ────────────────────────────────────────
+GEN['Calc_2_3'] = function() {
+  const n = ri(2, 5);
+  const m = ri(1, n - 1); // ensure m ≠ n
+  const a = ri(-4, 4) || 1;
+  const b = ri(-4, 4) || 1;
+  const x0 = pick([1, -1, 2]);
+  // f(x) = ax^n + bx^m
+  // f′(x) = a·n·x^(n-1) + b·m·x^(m-1)
+  const ans = a * n * Math.pow(x0, n - 1) + b * m * Math.pow(x0, m - 1);
+  const fTex = polyTex([{c:a,v:'x',p:n},{c:b,v:'x',p:m}]);
+  const fpTex = polyTex([{c:a*n,v:'x',p:n-1},{c:b*m,v:'x',p:m-1}]);
+  return {
+    html: `Let ${kI(`f(x) = ${fTex}`)}. Find ${kI(`f'(${x0})`)}:`,
+    type: 'numeric',
+    answer: ans,
+    solutionHtml:
+      kD(`f'(x) = ${fpTex}`) +
+      kD(`f'(${x0}) = ${a*n}(${x0})^{${n-1}} + ${b*m}(${x0})^{${m-1}} = ${ans}`)
+  };
+};
+
+// ── §2.4  Trig / Exp / Log derivatives ───────────────────────────────────────
+GEN['Calc_2_4'] = function() {
+  const type = pick(['sin_cos', 'log_poly']);
+
+  if (type === 'sin_cos') {
+    const a = ri(-5, 5) || 1;
+    const b = ri(-5, 5) || 1;
+    const evalPt = pick(['0', '\\pi/2', '\\pi']);
+    const xVal   = evalPt === '0' ? 0 : evalPt === '\\pi/2' ? Math.PI / 2 : Math.PI;
+    // f(x) = a·sin(x) + b·cos(x)
+    // f′(x) = a·cos(x) − b·sin(x)
+    const ans = Math.round(a * Math.cos(xVal) - b * Math.sin(xVal));
+    const fTex = `${a}\\sin(x) ${b >= 0 ? '+' : '-'} ${Math.abs(b)}\\cos(x)`;
+    const fpTex = `${a}\\cos(x) ${b >= 0 ? '-' : '+'} ${Math.abs(b)}\\sin(x)`;
+    return {
+      html: `Let ${kI(`f(x) = ${fTex}`)}. Find ${kI(`f'(${evalPt})`)}:`,
+      type: 'numeric',
+      answer: ans,
+      solutionHtml:
+        kD(`f'(x) = ${fpTex}`) +
+        kD(`f'(${evalPt}) = ${a}\\cdot${a > 0 ? '' : ''}\\cos(${evalPt}) - ${b}\\cdot\\sin(${evalPt}) = ${ans}`)
+    };
+  } else {
+    // f(x) = a·ln(x) + b·x^n, find f′(1) = a + b·n
+    const a = ri(-5, 5) || 1;
+    const n = ri(2, 4);
+    const b = ri(-4, 4) || 1;
+    const ans = a + b * n;
+    return {
+      html: `Let ${kI(`f(x) = ${a}\\ln(x) ${b >= 0 ? '+' : '-'} ${Math.abs(b)}x^{${n}}`)}. Find ${kI(`f'(1)`)}:`,
+      type: 'numeric',
+      answer: ans,
+      solutionHtml:
+        kD(`f'(x) = \\frac{${a}}{x} ${b >= 0 ? '+' : '-'} ${Math.abs(b*n)}x^{${n-1}}`) +
+        kD(`f'(1) = \\frac{${a}}{1} ${b*n >= 0 ? '+' : '-'} ${Math.abs(b*n)}(1)^{${n-1}} = ${a} ${b*n >= 0 ? '+' : '-'} ${Math.abs(b*n)} = ${ans}`)
+    };
+  }
+};
+
+// ── §2.4.5  Rates of Change: instantaneous velocity ──────────────────────────
+GEN['Calc_2_4_5'] = function() {
+  const a = ri(1, 5) * pick([-1,1]);
+  const b = ri(-6, 6);
+  const c = ri(-10, 10);
+  const t0 = ri(1, 5);
+  // s(t) = at² + bt + c,  v(t) = 2at + b,  v(t₀) = 2a·t₀ + b
+  const ans = 2 * a * t0 + b;
+  const sTex = polyTex([{c:a,v:'t',p:2},{c:b,v:'t',p:1},{c:c,v:'t',p:0}]);
+  return {
+    html: `A particle's position is ${kI(`s(t) = ${sTex}`)} (in meters, ${kI('t')} in seconds).
+           Find the <strong>instantaneous velocity</strong> at ${kI(`t = ${t0}`)}:`,
+    type: 'numeric',
+    answer: ans,
+    solutionHtml:
+      kD(`v(t) = s'(t) = ${polyTex([{c:2*a,v:'t',p:1},{c:b,v:'t',p:0}])}`) +
+      kD(`v(${t0}) = ${2*a}(${t0}) + ${b} = ${2*a*t0} ${b >= 0 ? '+' : ''} ${b} = ${ans} \\text{ m/s}`)
+  };
+};
+
+// ── §2.5  Product Rule ────────────────────────────────────────────────────────
+// f(x) = x^n · (ax + b),  find f′(1) = n·(a+b) + a
+GEN['Calc_2_5'] = function() {
+  const type = pick(['product', 'quotient']);
+
+  if (type === 'product') {
+    const n = ri(2, 4);
+    const a = ri(-4, 4) || 1;
+    const b = ri(-4, 4) || 1;
+    // f(x) = x^n·(ax+b)
+    // f′(x) = n·x^(n-1)·(ax+b) + x^n·a
+    // f′(1) = n·(a+b) + a
+    const ans = n * (a + b) + a;
+    const lTex = linearTex(a, b);
+    return {
+      html: `Let ${kI(`f(x) = x^{${n}}(${lTex})`)}. Use the <strong>product rule</strong> to find ${kI(`f'(1)`)}:`,
+      type: 'numeric',
+      answer: ans,
+      solutionHtml:
+        kD(`f'(x) = ${n}x^{${n-1}}(${lTex}) + x^{${n}} \\cdot ${a}`) +
+        kD(`f'(1) = ${n}(${a}+${b}) + ${a} = ${n*(a+b)} + ${a} = ${ans}`)
+    };
+  } else {
+    // Quotient: f(x) = (ax² + b) / (cx + d),  find f′(0) = −bc / d²
+    let a2, b2, c2, d2;
+    do {
+      a2 = ri(1, 4);
+      b2 = ri(1, 5) * pick([-1,1]);
+      c2 = ri(1, 4) * pick([-1,1]);
+      d2 = ri(1, 4) * pick([-1,1]);
+    } while (d2 === 0);
+    // f′(x) = [2a2·x·(c2·x+d2) − (a2·x²+b2)·c2] / (c2·x+d2)²
+    // f′(0) = [0 − b2·c2] / d2² = −b2·c2 / d2²
+    const [pN, pD] = reduceFrac(-b2 * c2, d2 * d2);
+    const ansVal = pN / pD;
+    const numTex = polyTex([{c:a2,v:'x',p:2},{c:b2,v:'x',p:0}]);
+    const denTex = linearTex(c2, d2);
+    return {
+      html: `Let ${kI(`f(x) = \\dfrac{${numTex}}{${denTex}}`)}. Use the <strong>quotient rule</strong> to find ${kI(`f'(0)`)}:
+             <span class="ans-hint">Enter as a fraction if needed (e.g. <code>3/4</code>).</span>`,
+      type: 'numeric',
+      answer: ansVal,
+      solutionHtml:
+        kD(`f'(x) = \\frac{${2*a2}x \\cdot (${denTex}) - (${numTex}) \\cdot ${c2}}{(${denTex})^2}`) +
+        kD(`f'(0) = \\frac{0 - ${b2}\\cdot${c2}}{(${d2})^2} = \\frac{${-b2*c2}}{${d2*d2}} = ${fracTex(pN, pD)}`)
+    };
+  }
+};
+
+// ── §2.7  Chain Rule ──────────────────────────────────────────────────────────
+GEN['Calc_2_7'] = function() {
+  const type = pick(['power', 'poly_squared']);
+
+  if (type === 'power') {
+    // f(x) = (ax + b)^n,  f′(c) = n·a·(a·c + b)^(n-1)
+    const n = pick([2, 3]);
+    const a = ri(1, 3) * pick([-1,1]);
+    const b = ri(-4, 4);
+    const x0 = pick([0, 1, -1, 2]);
+    const inner = a * x0 + b;
+    const ans = n * a * Math.pow(inner, n - 1);
+    const innerTex = linearTex(a, b);
+    return {
+      html: `Let ${kI(`f(x) = (${innerTex})^{${n}}`)}. Use the <strong>chain rule</strong> to find ${kI(`f'(${x0})`)}:`,
+      type: 'numeric',
+      answer: ans,
+      solutionHtml:
+        kD(`f'(x) = ${n}(${innerTex})^{${n-1}} \\cdot ${a}`) +
+        kD(`f'(${x0}) = ${n}(${a}\\cdot${x0}+${b})^{${n-1}} \\cdot ${a} = ${n} \\cdot ${inner}^{${n-1}} \\cdot ${a} = ${ans}`)
+    };
+  } else {
+    // f(x) = (x² + a)^n,  f′(1) = n·(1+a)^(n-1)·2
+    const n = pick([2, 3]);
+    const a = ri(1, 4);
+    const ans = n * 2 * Math.pow(1 + a, n - 1);
+    return {
+      html: `Let ${kI(`f(x) = (x^2 + ${a})^{${n}}`)}. Use the <strong>chain rule</strong> to find ${kI(`f'(1)`)}:`,
+      type: 'numeric',
+      answer: ans,
+      solutionHtml:
+        kD(`f'(x) = ${n}(x^2+${a})^{${n-1}} \\cdot 2x`) +
+        kD(`f'(1) = ${n}(1+${a})^{${n-1}} \\cdot 2 = ${n} \\cdot ${Math.pow(1+a,n-1)} \\cdot 2 = ${ans}`)
+    };
+  }
+};
+
+// ── §2.8  General Derivative Strategies (mixed) ───────────────────────────────
+// Product of (ax+b)² and (cx+d), find f′(0) = b·(2ad − bc) ... actually:
+// f(x) = (ax+b)²·(cx+d)
+// f′(x) = 2a(ax+b)(cx+d) + (ax+b)²·c
+// f′(0) = 2a·b·d + b²·c
+GEN['Calc_2_8'] = function() {
+  const type = pick(['product_chain', 'log_chain']);
+
+  if (type === 'product_chain') {
+    const a = ri(1, 3);
+    const b = ri(-4, 4) || 1;
+    const c = ri(1, 3) * pick([-1,1]);
+    const d = ri(-4, 4) || 1;
+    // f(x) = (ax+b)²·(cx+d)
+    const ans = 2 * a * b * d + b * b * c;
+    const u = linearTex(a, b);
+    const v = linearTex(c, d);
+    return {
+      html: `Let ${kI(`f(x) = (${u})^2(${v})`)}. Find ${kI(`f'(0)`)} using product and chain rules:`,
+      type: 'numeric',
+      answer: ans,
+      solutionHtml:
+        kD(`f'(x) = 2(${a})(${u})(${v}) + (${u})^2 \\cdot ${c}`) +
+        kD(`f'(0) = 2(${a})(${b})(${d}) + (${b})^2(${c}) = ${2*a*b*d} + ${b*b*c} = ${ans}`)
+    };
+  } else {
+    // f(x) = ln(ax + 1),  f′(x) = a/(ax+1),  f′(0) = a
+    const a = ri(2, 6);
+    return {
+      html: `Let ${kI(`f(x) = \\ln(${a}x + 1)`)}. Find ${kI(`f'(0)`)} using the chain rule:`,
+      type: 'numeric',
+      answer: a,
+      solutionHtml:
+        kD(`f'(x) = \\frac{1}{${a}x+1} \\cdot ${a} = \\frac{${a}}{${a}x+1}`) +
+        kD(`f'(0) = \\frac{${a}}{${a}(0)+1} = \\frac{${a}}{1} = ${a}`)
+    };
+  }
+};
+
+
+/* ─────────────────────────────────────────────
+   RENDERING
+───────────────────────────────────────────── */
+
+/* ═══════════════════════════════════════════
+   GEN FUNCTIONS — PRECALC
+═══════════════════════════════════════════ */
+
+// ── §1.1  Introduction to Functions ──────────────────────────────────
+GEN['PC_1_1'] = function() {
+  const type = ri(0,1);
+  if (type === 0) {
+    // Evaluate f(x) = ax² + bx + c at a given input
+    const a = pick([1,2,-1,-2]);
+    const b = ri(-4,4);
+    const c = ri(-6,6);
+    const x = ri(-3,3);
+    const ans = a*x*x + b*x + c;
+    return {
+      html: `Let ${kI(`f(x)=${a===1?'':(a===-1?'-':a)}x^2 ${b>=0?'+ '+b:'- '+Math.abs(b)}x ${c>=0?'+ '+c:'- '+Math.abs(c)}`)}. Find ${kI(`f(${x})`)}:`,
+      type: 'numeric',
+      answer: ans,
+      solutionHtml: kD(`f(${x}) = ${a}(${x})^2 ${b>=0?'+':''} ${b}(${x}) + ${c} = ${a*x*x} ${b*x>=0?'+':''} ${b*x} + ${c} = ${ans}`)
+    };
+  } else {
+    // Is this relation a function? MCQ
+    const isFunc = ri(0,1);
+    let pairs, correctIdx, explanation;
+    if (isFunc) {
+      const xs=[1,2,3,4]; const ys=xs.map(()=>ri(-5,5));
+      pairs = xs.map((x,i)=>`(${x},${ys[i]})`).join(', ');
+      correctIdx=0;
+      explanation='Each input appears exactly once — this is a function.';
+    } else {
+      const x0=ri(1,4);
+      const y1=ri(-5,5); let y2=ri(-5,5); while(y2===y1)y2=ri(-5,5);
+      const other=ri(-5,5);
+      pairs=`(${x0},${y1}), (${x0+1},${other}), (${x0},${y2})`;
+      correctIdx=1;
+      explanation=`Input ${x0} maps to both ${y1} and ${y2} — each input must have exactly one output.`;
+    }
+    return {
+      html: `Is ${kI(`\\{${pairs}\\}`)} a function?`,
+      type: 'mcq',
+      choices: ['Yes — it is a function', 'No — it is not a function'],
+      correctIdx,
+      solutionHtml: explanation
+    };
+  }
+};
+
+// ── §1.1b  Library of Functions & One-to-One ─────────────────────────
+GEN['PC_1_1b'] = function() {
+  const type = ri(0,1);
+  if (type === 0) {
+    // Which function is one-to-one?
+    const correct = pick(['f(x)=x^3','f(x)=\\sqrt{x}','f(x)=x']);
+    const wrong1  = pick(['f(x)=x^2','f(x)=|x|']);
+    const wrong2  = 'f(x)=x^2-4';
+    const choices = [correct,wrong1,wrong2].sort(()=>Math.random()-.5);
+    const idx = choices.indexOf(correct);
+    return {
+      html: `Which of these functions is one-to-one (passes the Horizontal Line Test)?`,
+      type: 'mcq',
+      choices: choices.map(c=>kI(c)),
+      correctIdx: idx,
+      solutionHtml: `${kI(correct)} is one-to-one — every horizontal line crosses its graph at most once.`
+    };
+  } else {
+    // Evaluate a parent function
+    const fns = [
+      {name:'f(x)=\\sqrt{x}',fn:x=>Math.sqrt(x),inputs:[0,1,4,9,16]},
+      {name:'f(x)=|x|',fn:x=>Math.abs(x),inputs:[-3,-1,0,2,5]},
+      {name:'f(x)=x^3',fn:x=>x*x*x,inputs:[-2,-1,0,1,2]},
+    ];
+    const {name,fn,inputs}=pick(fns);
+    const x=pick(inputs);
+    const ans=fn(x);
+    return {
+      html: `Let ${kI(name)}. Find ${kI(`f(${x})`)}:`,
+      type: 'numeric',
+      answer: ans,
+      solutionHtml: kI(`f(${x}) = ${ans}`)
+    };
+  }
+};
+
+// ── §1.2a  Domain, Range & Interval Notation ─────────────────────────
+GEN['PC_1_2a'] = function() {
+  const type = ri(0,2);
+  if (type === 0) {
+    // Domain of rational: 1/(x-a)
+    const a = ri(-6,6);
+    return {
+      html: `Find the domain of ${kI(`f(x)=\\dfrac{1}{x-${a}}`)}. The excluded value is:`,
+      type: 'numeric',
+      answer: a,
+      solutionHtml: `Set denominator ${kI(`x-${a}\\neq 0`)} → ${kI(`x\\neq ${a}`)}. Domain: ${kI(`(-\\infty,${a})\\cup(${a},\\infty)`)}`
+    };
+  } else if (type === 1) {
+    // Domain of square root: sqrt(x - a)
+    const a = ri(-5,5);
+    return {
+      html: `Find the domain of ${kI(`f(x)=\\sqrt{x-${a}}`)}. The smallest value in the domain is:`,
+      type: 'numeric',
+      answer: a,
+      solutionHtml: `Need ${kI(`x-${a}\\geq 0`)} → ${kI(`x\\geq ${a}`)}. Domain: ${kI(`[${a},\\infty)`)}`
+    };
+  } else {
+    // Interval notation MCQ
+    const a=ri(-4,4); const b=ri(a+1,a+6);
+    const incL=ri(0,1); const incR=ri(0,1);
+    const lBrk=incL?'[':'('; const rBrk=incR?']':')';
+    const choices=[
+      `${lBrk}${a}, ${b}${rBrk}`,
+      `${incL?'(':'{'}${a}, ${b}${incR?')':'}'}`,
+      `${incL?'(':'['}${a}, ${b}${incR?']':'['}`,
+    ].sort(()=>Math.random()-.5);
+    const correct=`${lBrk}${a}, ${b}${rBrk}`;
+    const idx=choices.indexOf(correct);
+    const cond = `${incL?`${a}\\leq x`:`${a}< x`}${incR?`\\leq ${b}`:`< ${b}`}`;
+    return {
+      html: `Write ${kI(cond)} in interval notation:`,
+      type: 'mcq',
+      choices,
+      correctIdx: idx<0?0:idx,
+      solutionHtml: `${kI(cond)} in interval notation is ${correct}.`
+    };
+  }
+};
+
+// ── §1.2b  Piecewise Functions ───────────────────────────────────────
+GEN['PC_1_2b'] = function() {
+  // Evaluate piecewise f(x) = { ax+b if x<k, cx+d if x>=k }
+  const k  = ri(-2,3);
+  const a1 = ri(1,4); const b1 = ri(-5,5);
+  const a2 = ri(-3,-1); const b2 = ri(-5,5);
+  // Pick input: one from each piece
+  const x1 = k - ri(1,4); // strictly less than k
+  const x2 = k + ri(0,3); // >= k
+  const xAsk = ri(0,1)===0 ? x1 : x2;
+  const ans = xAsk < k ? a1*xAsk+b1 : a2*xAsk+b2;
+  return {
+    html: `Given ${kI(`f(x)=\\begin{cases}${a1}x+${b1} & x < ${k}\\\\ ${a2}x+${b2} & x \\geq ${k}\\end{cases}`)}, find ${kI(`f(${xAsk})`)}:`,
+    type: 'numeric',
+    answer: ans,
+    solutionHtml: xAsk<k
+      ? kD(`\\text{Since }${xAsk}<${k},\\text{ use first piece: }f(${xAsk})=${a1}(${xAsk})+${b1}=${ans}`)
+      : kD(`\\text{Since }${xAsk}\\geq${k},\\text{ use second piece: }f(${xAsk})=${a2}(${xAsk})+${b2}=${ans}`)
+  };
+};
+
+// ── §1.3  Graph Properties ────────────────────────────────────────────
+GEN['PC_1_3'] = function() {
+  const type = ri(0,1);
+  if (type === 0) {
+    // Even / odd / neither MCQ
+    const fns = [
+      {name:'f(x)=x^4-3x^2',ans:0,why:'Even: replace $x$ with $-x$: $(-x)^4-3(-x)^2=x^4-3x^2=f(x)$.'},
+      {name:'f(x)=x^3+x',ans:1,why:'Odd: $f(-x)=(-x)^3+(-x)=-x^3-x=-(x^3+x)=-f(x)$.'},
+      {name:'f(x)=x^2+x',ans:2,why:'Neither: $f(-x)=x^2-x \\neq f(x)$ and $\\neq -f(x)$.'},
+      {name:'f(x)=x^5-2x^3',ans:1,why:'Odd: every term has odd degree.'},
+      {name:'f(x)=|x|+1',ans:0,why:'Even: $|-x|+1=|x|+1=f(x)$, symmetric about $y$-axis.'},
+    ];
+    const {name,ans,why}=pick(fns);
+    return {
+      html: `Is ${kI(name)} even, odd, or neither?`,
+      type: 'mcq',
+      choices:['Even','Odd','Neither'],
+      correctIdx: ans,
+      solutionHtml: kI(why)
+    };
+  } else {
+    // End behavior MCQ
+    const fns = [
+      {name:'f(x)=2x^3-x',neg:'-\\infty',pos:'+\\infty'},
+      {name:'f(x)=-x^4+5',neg:'-\\infty',pos:'-\\infty'},
+      {name:'f(x)=3x^2-2x+1',neg:'+\\infty',pos:'+\\infty'},
+      {name:'f(x)=-5x^3+x^2',neg:'+\\infty',pos:'-\\infty'},
+    ];
+    const {name,neg,pos}=pick(fns);
+    const correct=`As $x\\to-\\infty$, $f\\to${neg}$; as $x\\to+\\infty$, $f\\to${pos}$`;
+    const others=[
+      `As $x\\to-\\infty$, $f\\to+\\infty$; as $x\\to+\\infty$, $f\\to+\\infty$`,
+      `As $x\\to-\\infty$, $f\\to-\\infty$; as $x\\to+\\infty$, $f\\to-\\infty$`,
+      `As $x\\to-\\infty$, $f\\to+\\infty$; as $x\\to+\\infty$, $f\\to-\\infty$`,
+      `As $x\\to-\\infty$, $f\\to-\\infty$; as $x\\to+\\infty$, $f\\to+\\infty$`,
+    ].filter(c=>c!==correct);
+    const choices=[correct,...others.slice(0,3)].sort(()=>Math.random()-.5);
+    const idx=choices.indexOf(correct);
+    return {
+      html: `Describe the end behavior of ${kI(name)}:`,
+      type: 'mcq',
+      choices: choices.map(c=>c.replace(/\$/g,'')),
+      correctIdx: idx<0?0:idx,
+      solutionHtml: `End behavior: ${kI(correct)}.`
+    };
+  }
+};
+
+// ── §1.4  Function Composition ────────────────────────────────────────
+GEN['PC_1_4'] = function() {
+  // f(g(x)) with linear functions, numeric evaluation
+  const a1=ri(1,4); const b1=ri(-5,5);
+  const a2=ri(1,3); const b2=ri(-5,5);
+  const x=ri(-3,4);
+  const type=ri(0,1);
+  if(type===0){
+    // fog evaluated at x
+    const gx=a2*x+b2;
+    const ans=a1*gx+b1;
+    return {
+      html: `Let ${kI(`f(x)=${linearTex(a1,b1)}`)} and ${kI(`g(x)=${linearTex(a2,b2)}`)}. Find ${kI(`(f\\circ g)(${x})`)}:`,
+      type:'numeric', answer:ans,
+      solutionHtml: kD(`g(${x})=${a2}(${x})+${b2}=${gx}`) + kD(`f(${gx})=${a1}(${gx})+${b1}=${ans}`)
+    };
+  } else {
+    // gof evaluated at x
+    const fx=a1*x+b1;
+    const ans=a2*fx+b2;
+    return {
+      html: `Let ${kI(`f(x)=${linearTex(a1,b1)}`)} and ${kI(`g(x)=${linearTex(a2,b2)}`)}. Find ${kI(`(g\\circ f)(${x})`)}:`,
+      type:'numeric', answer:ans,
+      solutionHtml: kD(`f(${x})=${a1}(${x})+${b1}=${fx}`) + kD(`g(${fx})=${a2}(${fx})+${b2}=${ans}`)
+    };
+  }
+};
+
+// ── §1.5  Transformations ─────────────────────────────────────────────
+GEN['PC_1_5'] = function() {
+  const h=ri(-4,4); const k=ri(-4,4);
+  const reflected=ri(0,1);
+  const base=pick(['x^2','|x|','\\sqrt{x}','x^3']);
+  const inner=h===0?'x':h>0?`x-${h}`:`x+${Math.abs(h)}`;
+  const outer=k===0?'':k>0?`+${k}`:k;
+  const neg=reflected?'-':'';
+  const fStr=`${neg}${base==='\\sqrt{x}'?`\\sqrt{${inner}}`:base==='|x|'?`|${inner}|`:`(${inner})^{${base==='x^2'?2:3}}`}${outer}`;
+  const descs=[
+    reflected?'Reflect over x-axis':null,
+    h>0?`Shift right ${h}`:h<0?`Shift left ${Math.abs(h)}`:null,
+    k>0?`Shift up ${k}`:k<0?`Shift down ${Math.abs(k)}`:null,
+  ].filter(Boolean);
+  const descStr=descs.length?descs.join(', '):'No shift or reflection';
+  const allChoices=[
+    descStr,
+    (h>0?`Shift left ${h}`:h<0?`Shift right ${Math.abs(h)}`:`Shift up ${Math.abs(k)||1}`) + (reflected?'':', reflect over x-axis'),
+    `Shift right ${Math.abs(k)||2}, shift up ${Math.abs(h)||1}`,
+    `Horizontal stretch by ${Math.abs(h)||2}`,
+  ].filter((v,i,a)=>a.indexOf(v)===i);
+  const choices=allChoices.slice(0,4).sort(()=>Math.random()-.5);
+  const idx=choices.indexOf(descStr);
+  return {
+    html: `Compared to the parent function ${kI(base)}, how is ${kI(`f(x)=${fStr}`)} transformed?`,
+    type:'mcq', choices,
+    correctIdx: idx<0?0:idx,
+    solutionHtml: kI(`${descStr}.`)
+  };
+};
+
+// ── §1.7  Inverse Functions ───────────────────────────────────────────
+GEN['PC_1_7'] = function() {
+  const type=ri(0,1);
+  if(type===0){
+    // Find f-inverse of a linear function at a point
+    const a=ri(2,5); const b=ri(-8,8);
+    const x=ri(-3,4);
+    const fx=a*x+b;  // f(x)=ax+b, so f-inv(fx)=x
+    return {
+      html: `If ${kI(`f(x)=${a}x${b>=0?'+'+b:b}`)}, find ${kI(`f^{-1}(${fx})`)}:`,
+      type:'numeric', answer:x,
+      solutionHtml: kD(`f^{-1}(x)=\\frac{x${b>=0?'-'+b:'+'+Math.abs(b)}}{${a}},\\quad f^{-1}(${fx})=\\frac{${fx-b}}{${a}}=${x}`)
+    };
+  } else {
+    // Given (a,b) on f, what's on f-inverse? MCQ
+    const a=ri(-4,4); const b=ri(-4,4);
+    const correct=`(${b}, ${a})`;
+    const wrong=[`(${a}, ${b})`,`(${-a}, ${-b})`,`(${b}, ${-a})`];
+    const choices=[correct,...wrong].sort(()=>Math.random()-.5);
+    const idx=choices.indexOf(correct);
+    return {
+      html: `If the point ${kI(`(${a},${b})`)} lies on the graph of ${kI('f')}, what point must lie on ${kI('f^{-1}')}?`,
+      type:'mcq', choices,
+      correctIdx: idx<0?0:idx,
+      solutionHtml: `Inverse functions swap ${kI('x')} and ${kI('y')} coordinates: ${kI(`(${a},${b}) \\to (${b},${a})`)}.`
+    };
+  }
+};
+
+// ── §2.1  Lines & Linear Functions ───────────────────────────────────
+GEN['PC_2_1'] = function() {
+  const type=ri(0,1);
+  if(type===0){
+    // Find slope from two points
+    const x1=ri(-5,5); let x2=ri(-5,5); while(x2===x1)x2=ri(-5,5);
+    const y1=ri(-6,6); const y2=ri(-6,6);
+    const [n,d]=reduceFrac(y2-y1,x2-x1);
+    const ans=n/d;
+    return {
+      html: `Find the slope of the line through ${kI(`(${x1},${y1})`)} and ${kI(`(${x2},${y2})`)}:`,
+      type:'numeric', answer:ans,
+      solutionHtml: kD(`m=\\frac{${y2}-${y1}}{${x2}-${x1}}=\\frac{${y2-y1}}{${x2-x1}}=${fracTex(y2-y1,x2-x1)}`)
+    };
+  } else {
+    // Parallel or perpendicular?
+    const m=pick([2,3,-2,4,-3]);
+    const type2=pick(['parallel','perpendicular','neither']);
+    let m2;
+    if(type2==='parallel') m2=m;
+    else if(type2==='perpendicular') m2=-1/m;
+    else { m2=m+ri(1,3); }
+    const [n2,d2]=reduceFrac(m2*10,10);
+    const m2str=d2===10?`${n2}/10`:fracTex(n2,d2);
+    return {
+      html: `Line 1 has slope ${kI(`${m}`)}. Line 2 has slope ${kI(`${m2str}`)}. Are they parallel, perpendicular, or neither?`,
+      type:'mcq', choices:['Parallel','Perpendicular','Neither'],
+      correctIdx: type2==='parallel'?0:type2==='perpendicular'?1:2,
+      solutionHtml: type2==='parallel'
+        ? `Same slope → parallel.`
+        : type2==='perpendicular'
+        ? `Product of slopes: ${kI(`${m}\\cdot${m2str}=-1`)} → perpendicular.`
+        : `Slopes are different and their product is not ${kI('-1')} → neither.`
+    };
+  }
+};
+
+// ── §2.2  Graphing Linear Equations ──────────────────────────────────
+GEN['PC_2_2'] = function() {
+  const a=ri(-4,4); const b=ri(-8,8);
+  if(a===0){
+    return {
+      html: `What is the slope of the line ${kI(`y=${b}`)}?`,
+      type:'mcq', choices:['0','Undefined',`${b}`,'1'],
+      correctIdx:0,
+      solutionHtml:`${kI(`y=${b}`)} is a horizontal line — its slope is ${kI('0')}.`
+    };
+  }
+  // Find x-intercept of y = ax + b
+  // ax + b = 0 → x = -b/a
+  const [n,d]=reduceFrac(-b,a);
+  const ans=n/d;
+  return {
+    html: `Find the ${kI('x')}-intercept of ${kI(`y=${linearTex(a,b)}`)}:`,
+    type:'numeric', answer:ans,
+    solutionHtml: kD(`0=${a}x${b>=0?'+'+''+b:b} \\Rightarrow x=${fracTex(-b,a)}`)
+  };
+};
+
+// ── §2.3  Modeling with Linear Functions ─────────────────────────────
+GEN['PC_2_3'] = function() {
+  const rate=ri(2,10); const start=ri(5,40);
+  const t=ri(2,8);
+  const ans=start+rate*t;
+  const contexts=[
+    {q:`A gym membership costs $${start} to join and $${rate}/month. What is the total cost after ${t} months?`, unit:'dollars'},
+    {q:`A car is ${start} miles from home and travels ${rate} mph away. How far is it after ${t} hours?`, unit:'miles'},
+    {q:`A plant is ${start} cm tall and grows ${rate} cm per week. How tall is it after ${t} weeks?`, unit:'cm'},
+  ];
+  const {q}=pick(contexts);
+  return {
+    html: q,
+    type:'numeric', answer:ans,
+    solutionHtml: kD(`C(t)=${rate}t+${start},\\quad C(${t})=${rate}(${t})+${start}=${ans}`)
+  };
+};
+
+// ── §2.4  Linear Models from Data ─────────────────────────────────────
+GEN['PC_2_4'] = function() {
+  const type=ri(0,1);
+  if(type===0){
+    // Predict from regression line
+    const m=ri(1,5); const b=ri(0,20);
+    const x=ri(2,10);
+    const ans=m*x+b;
+    return {
+      html: `A regression model is ${kI(`\\hat{y}=${m}x+${b}`)}. Predict ${kI('y')} when ${kI(`x=${x}`)}:`,
+      type:'numeric', answer:ans,
+      solutionHtml: kD(`\\hat{y}=${m}(${x})+${b}=${ans}`)
+    };
+  } else {
+    // Interpret r
+    const rs=[{r:'0.97',ans:0},{r:'-0.92',ans:1},{r:'0.05',ans:2}];
+    const {r,ans}=pick(rs);
+    return {
+      html: `A data set has correlation coefficient ${kI(`r=${r}`)}. What best describes the linear relationship?`,
+      type:'mcq',
+      choices:['Strong positive linear correlation','Strong negative linear correlation','Weak or no linear correlation'],
+      correctIdx:ans,
+      solutionHtml:`${kI(`r=${r}`)} — ${ans===0?'close to +1: strong positive':ans===1?'close to -1: strong negative':'close to 0: weak or no'} linear correlation.`
+    };
+  }
+};
+
+// ── §3.1  Complex Numbers ─────────────────────────────────────────────
+GEN['PC_3_1'] = function() {
+  const type=ri(0,2);
+  if(type===0){
+    // Simplify i^n
+    const n=ri(1,20);
+    const r=n%4;
+    const vals=[null,'i','-1','-i','1'];
+    const ans=vals[r===0?4:r];
+    return {
+      html: `Simplify ${kI(`i^{${n}}`)}:`,
+      type:'mcq',
+      choices:['i','-1','-i','1'],
+      correctIdx:['i','-1','-i','1'].indexOf(ans),
+      solutionHtml:`${kI(`${n}\\div 4`)} has remainder ${r===0?0:r}. ${kI(`i^{${n}}=${ans}`)}.`
+    };
+  } else if(type===1){
+    // Add two complex numbers
+    const a=ri(-5,5); const b=ri(-5,5); const c=ri(-5,5); const d=ri(-5,5);
+    const rr=a+c; const ii=b+d;
+    return {
+      html: `Add: ${kI(`(${a}+${b}i)+(${c}+${d}i)`)}. Enter the real part:`,
+      type:'numeric', answer:rr,
+      solutionHtml: kD(`(${a}+${c})+(${b}+${d})i=${rr}+${ii}i`)
+    };
+  } else {
+    // Multiply, enter real part
+    const a=ri(-3,3); const b=ri(-3,3); const c=ri(-3,3); const d=ri(-3,3);
+    const rr=a*c-b*d; const ii=a*d+b*c;
+    return {
+      html: `Multiply ${kI(`(${a}+${b}i)(${c}+${d}i)`)}. Enter the real part of the result:`,
+      type:'numeric', answer:rr,
+      solutionHtml: kD(`${a}\\cdot${c}+${a}\\cdot${d}i+${b}i\\cdot${c}+${b}i\\cdot${d}i^2=(${a*c}+${b*d*-1})+(${a*d+b*c})i=${rr}+${ii}i`)
+    };
+  }
+};
+
+// ── §3.2a  Quadratics — Vertex & Factored Form ────────────────────────
+GEN['PC_3_2a'] = function() {
+  const type=ri(0,1);
+  if(type===0){
+    // Vertex from vertex form
+    const h=ri(-6,6); const k=ri(-8,8);
+    return {
+      html: `For ${kI(`f(x)=(x-${h})^2+${k}`)}, what is the ${kI('y')}-coordinate of the vertex?`,
+      type:'numeric', answer:k,
+      solutionHtml:`Vertex form ${kI('a(x-h)^2+k')}: vertex is ${kI(`(${h},${k})`)}. The ${kI('y')}-coordinate is ${kI(`${k}`)}.`
+    };
+  } else {
+    // Find zeros from factored form
+    const r1=ri(-6,6); let r2=ri(-6,6); while(r2===r1)r2=ri(-6,6);
+    const larger=Math.max(r1,r2);
+    return {
+      html: `Find the larger zero of ${kI(`f(x)=(x-${r1})(x-${r2})`)}:`,
+      type:'numeric', answer:larger,
+      solutionHtml:`Set each factor to zero: ${kI(`x=${r1}`)} and ${kI(`x=${r2}`)}. The larger zero is ${kI(`${larger}`)}.`
+    };
+  }
+};
+
+// ── §3.2b  Quadratics — Completing the Square ─────────────────────────
+GEN['PC_3_2b'] = function() {
+  // Complete the square for x²+ bx + c, find vertex y-coordinate
+  const b=pick([-8,-6,-4,-2,2,4,6,8]); // even so half is integer
+  const c=ri(-10,10);
+  const h=-b/2;
+  const k=c-h*h; // vertex y
+  return {
+    html: `Complete the square for ${kI(`f(x)=x^2${b>=0?'+'+b:b}x+${c}`)}. What is the ${kI('y')}-coordinate of the vertex?`,
+    type:'numeric', answer:k,
+    solutionHtml: kD(`f(x)=(x+${b/2})^2${-h*h+c>=0?'+'+(c-h*h):c-h*h}`) +
+      kI(` → \\text{vertex at }(${-b/2},${k})`)
+  };
+};
+
+// ── §3.3  Quadratic Applications & Parametric ─────────────────────────
+GEN['PC_3_3'] = function() {
+  // Max height from -16t² + v0*t
+  const v0=pick([32,48,64,80,96]);
+  const tMax=v0/32; // vertex at t = v0/32
+  const hMax=-16*tMax*tMax+v0*tMax;
+  return {
+    html: `A ball is thrown with height ${kI(`h(t)=-16t^2+${v0}t`)} (feet). What is the maximum height in feet?`,
+    type:'numeric', answer:hMax,
+    solutionHtml: kD(`t=-\\frac{${v0}}{2(-16)}=${tMax}`) +
+      kD(`h(${tMax})=-16(${tMax})^2+${v0}(${tMax})=${hMax}\\text{ ft}`)
+  };
+};
+
+// ── §3.4  Polynomial Functions ────────────────────────────────────────
+GEN['PC_3_4'] = function() {
+  const type=ri(0,1);
+  if(type===0){
+    // Identify degree MCQ
+    const polys=[
+      {p:'f(x)=3x^5-2x^3+x-7',deg:5},{p:'f(x)=x^4+6x^2-1',deg:4},
+      {p:'f(x)=-2x^3+x^2+5',deg:3},{p:'f(x)=7x^6-x',deg:6}
+    ];
+    const {p,deg}=pick(polys);
+    const choices=[deg,deg-2,deg+1,deg-1].sort(()=>Math.random()-.5);
+    const idx=choices.indexOf(deg);
+    return {
+      html:`What is the degree of ${kI(p)}?`,
+      type:'mcq',choices:choices.map(String),
+      correctIdx:idx<0?0:idx,
+      solutionHtml:`The highest power of ${kI('x')} is ${kI(`${deg}`)}, so the degree is ${deg}.`
+    };
+  } else {
+    // multiplicity behavior MCQ
+    const mults=[
+      {m:1,ans:0,why:'Multiplicity 1: the graph crosses straight through.'},
+      {m:2,ans:1,why:'Multiplicity 2 (even): the graph touches and bounces back.'},
+      {m:3,ans:0,why:'Multiplicity 3 (odd): the graph crosses with a flattening.'},
+    ];
+    const {m,ans,why}=pick(mults);
+    return {
+      html:`A zero at ${kI('x=a')} has multiplicity ${m}. What does the graph do at that zero?`,
+      type:'mcq',
+      choices:['Crosses through the x-axis','Touches the x-axis and bounces back'],
+      correctIdx:ans,
+      solutionHtml:why
+    };
+  }
+};
+
+// ── §3.5  Graphing Polynomial Functions ──────────────────────────────
+GEN['PC_3_5'] = function() {
+  // y-intercept of a polynomial in factored form
+  const r1=ri(-3,3); const r2=ri(-3,3); const r3=ri(-3,3);
+  const a=pick([1,-1,2,-2]);
+  const ans=a*(-r1)*(-r2)*(-r3);
+  return {
+    html:`Find the ${kI('y')}-intercept of ${kI(`f(x)=${a===1?'':(a===-1?'-':a)}(x-${r1})(x-${r2})(x-${r3})`)}:`,
+    type:'numeric', answer:ans,
+    solutionHtml: kD(`f(0)=${a}(0-${r1})(0-${r2})(0-${r3})=${a}(${-r1})(${-r2})(${-r3})=${ans}`)
+  };
+};
+
+// ── §3.6  Rational Functions ──────────────────────────────────────────
+GEN['PC_3_6'] = function() {
+  const type=ri(0,1);
+  if(type===0){
+    // Vertical asymptote of 1/(x-a)
+    const a=ri(-5,5);
+    return {
+      html:`What is the vertical asymptote of ${kI(`f(x)=\\dfrac{1}{x-${a}}`)}?`,
+      type:'numeric', answer:a,
+      solutionHtml:`Set denominator ${kI(`x-${a}=0`)} → ${kI(`x=${a}`)}. Vertical asymptote at ${kI(`x=${a}`)}.`
+    };
+  } else {
+    // Horizontal asymptote — degree comparison MCQ
+    const cases=[
+      {f:'\\dfrac{3x+1}{x-2}',ans:'y=3',why:'Same degree: HA = ratio of leading coefficients = 3/1 = 3.'},
+      {f:'\\dfrac{5}{x^2+1}',ans:'y=0',why:'Numerator degree < denominator degree: HA is y = 0.'},
+      {f:'\\dfrac{2x^2-1}{x+4}',ans:'None',why:'Numerator degree > denominator degree: no horizontal asymptote.'},
+    ];
+    const {f,ans,why}=pick(cases);
+    const choices=['y=0','y=1','y=3','None'].filter((v,i,a)=>a.indexOf(v)===i);
+    const idx=choices.indexOf(ans);
+    return {
+      html:`What is the horizontal asymptote of ${kI(f)}?`,
+      type:'mcq', choices,
+      correctIdx:idx<0?0:idx,
+      solutionHtml:why
+    };
+  }
+};
+
+// ── §4.1  Exponential Functions ────────────────────────────────────────
+GEN['PC_4_1'] = function() {
+  const type=ri(0,1);
+  if(type===0){
+    // Evaluate a·b^x
+    const a=pick([1,2,5,10,100]);
+    const b=pick([2,3,4,5]);
+    const x=pick([0,1,2,3]);
+    const ans=a*Math.pow(b,x);
+    return {
+      html:`Evaluate ${kI(`f(x)=${a}\\cdot ${b}^x`)} at ${kI(`x=${x}`)}:`,
+      type:'numeric', answer:ans,
+      solutionHtml: kD(`f(${x})=${a}\\cdot ${b}^{${x}}=${a}\\cdot ${Math.pow(b,x)}=${ans}`)
+    };
+  } else {
+    // Growth vs decay MCQ
+    const fns=[
+      {f:'f(x)=3^x',ans:0},{f:'f(x)=0.7^x',ans:1},
+      {f:'f(x)=(1.05)^x',ans:0},{f:'f(x)=(0.5)^x',ans:1},
+    ];
+    const {f,ans}=pick(fns);
+    return {
+      html:`Is ${kI(f)} exponential growth or decay?`,
+      type:'mcq', choices:['Growth','Decay'],
+      correctIdx:ans,
+      solutionHtml:`${ans===0?'Base > 1 → growth.':'Base between 0 and 1 → decay.'}`
+    };
+  }
+};
+
+// ── §4.2  Graphing Exponential Functions ──────────────────────────────
+GEN['PC_4_2'] = function() {
+  const k=ri(-4,4);
+  return {
+    html:`What is the horizontal asymptote of ${kI(`f(x)=3^x${k>=0?'+'+k:k}`)}?`,
+    type:'numeric', answer:k,
+    solutionHtml:`The parent ${kI('3^x')} has HA at ${kI('y=0')}. Shifting ${Math.abs(k)} ${k>=0?'up':'down'} moves the HA to ${kI(`y=${k}`)}.`
+  };
+};
+
+// ── §4.3  Logarithmic Functions ────────────────────────────────────────
+GEN['PC_4_3'] = function() {
+  const type=ri(0,1);
+  if(type===0){
+    // Evaluate log base b of b^n
+    const b=pick([2,3,5,10]);
+    const n=ri(1,5);
+    const val=Math.pow(b,n);
+    return {
+      html:`Evaluate ${kI(`\\log_{${b}} ${val}`)}:`,
+      type:'numeric', answer:n,
+      solutionHtml: kD(`\\log_{${b}} ${val}=${n}\\quad\\text{because }${b}^{${n}}=${val}`)
+    };
+  } else {
+    // Convert exp to log form MCQ
+    const b=pick([2,3,5]);
+    const n=ri(2,4);
+    const val=Math.pow(b,n);
+    const correct=`\\log_{${b}} ${val} = ${n}`;
+    const wrong=[`\\log_{${n}} ${b} = ${val}`,`\\log_{${b}} ${n} = ${val}`,`${b}^{${val}}=${n}`];
+    const choices=[correct,...wrong].sort(()=>Math.random()-.5);
+    const idx=choices.indexOf(correct);
+    return {
+      html:`Convert ${kI(`${b}^{${n}}=${val}`)} to logarithmic form:`,
+      type:'mcq', choices:choices.map(c=>kI(c)),
+      correctIdx:idx<0?0:idx,
+      solutionHtml: kD(`${b}^{${n}}=${val}\\iff \\log_{${b}} ${val}=${n}`)
+    };
+  }
+};
+
+// ── §4.5  Exponential & Logarithmic Equations ─────────────────────────
+GEN['PC_4_5'] = function() {
+  const type=ri(0,1);
+  if(type===0){
+    // Same-base: b^(x+c) = b^n → x+c = n
+    const b=pick([2,3,5]);
+    const n=ri(2,5);
+    const c=ri(-3,3);
+    const x=n-c;
+    return {
+      html:`Solve ${kI(`${b}^{x${c>=0?'+'+c:c}}=${b}^{${n}}`)} for ${kI('x')}:`,
+      type:'numeric', answer:x,
+      solutionHtml: kD(`x${c>=0?'+'+c:c}=${n}\\Rightarrow x=${x}`)
+    };
+  } else {
+    // Solve log_b(x+a)=n → x=b^n - a
+    const b=pick([2,3,5]);
+    const n=ri(1,3);
+    const a=ri(-5,5);
+    const ans=Math.pow(b,n)-a;
+    return {
+      html:`Solve ${kI(`\\log_{${b}}(x${a>=0?'+'+a:a})=${n}`)} for ${kI('x')}:`,
+      type:'numeric', answer:ans,
+      solutionHtml: kD(`x${a>=0?'+'+a:a}=${b}^{${n}}=${Math.pow(b,n)}\\Rightarrow x=${ans}`)
+    };
+  }
+};
+
+/* ─────────────────────────────────────────────
+   CARD BUILDERS
+───────────────────────────────────────────── */
+function buildNumericInput(cardId) {
+  return `
+    <div class="answer-area">
+      <div class="input-row">
+        <label class="input-label">Answer:</label>
+        <input class="ans-input" type="text" id="inp_${cardId}" placeholder="e.g. 5 or 3/4"
+               onkeydown="if(event.key==='Enter')checkNum('${cardId}')">
+      </div>
+      <div class="ans-hint">Exact value (fraction or integer). Decimals OK within 0.01.</div>
+      <button class="check-btn" onclick="checkNum('${cardId}')">Check</button>
+      <div class="feedback" id="fb_${cardId}"></div>
+    </div>`;
+}
+
+function buildMCQInput(cardId, choices, correctIdx) {
+  const opts = choices.map((c,i) =>
+    `<button class="mcq-btn" id="mcq_${cardId}_${i}" onclick="checkMCQ('${cardId}',${i},${correctIdx})">${c}</button>`
+  ).join('');
+  return `
+    <div class="answer-area">
+      <div class="mcq-opts">${opts}</div>
+      <div class="feedback" id="fb_${cardId}"></div>
+    </div>`;
+}
+
+function parseNum(s) {
+  if (!s || !s.trim()) return NaN;
+  s = s.trim().replace(/\s+/g, '');
+  const m = s.match(/^(-?\d+)\/(-?\d+)$/);
+  if (m) return parseInt(m[1]) / parseInt(m[2]);
+  return parseFloat(s);
+}
+function approxEq(a, b, tol=1e-6) { return Math.abs(a-b) < tol; }
+
+/* ─────────────────────────────────────────────
+   ANSWER CHECKING
+───────────────────────────────────────────── */
+const _probs = {}; // cardId -> prob descriptor
+
+function showFeedback(cardId, correct, solutionHtml) {
+  const fb = document.getElementById(`fb_${cardId}`);
+  fb.className = `feedback show ${correct?'correct-fb':'wrong-fb'}`;
+  fb.innerHTML = correct
+    ? `<strong>✓ Correct!</strong><span class="solution-label">Solution</span><div class="solution-body">${solutionHtml}</div>`
+    : `<strong>✗ Not quite.</strong><span class="solution-label">Solution</span><div class="solution-body">${solutionHtml}</div>`;
+}
+
+function checkNum(cardId) {
+  const inp = document.getElementById(`inp_${cardId}`);
+  if (!inp || inp.disabled) return;
+  const val = parseNum(inp.value);
+  const prob = _probs[cardId];
+  if (isNaN(val)) { inp.style.borderColor='var(--red)'; return; }
+  const correct = approxEq(val, prob.answer, 0.011);
+  inp.disabled = true;
+  inp.style.borderColor = correct ? 'var(--green)' : 'var(--red)';
+  const btn = inp.closest('.course-card').querySelector('.check-btn');
+  if (btn) btn.disabled = true;
+  showFeedback(cardId, correct, prob.solutionHtml);
+}
+
+function checkMCQ(cardId, chosen, correctIdx) {
+  const prefix = `mcq_${cardId}_`;
+  document.querySelectorAll(`[id^="${prefix}"]`).forEach((btn, i) => {
+    btn.disabled = true;
+    if (i === correctIdx) btn.classList.add(i === chosen ? 'correct' : 'reveal');
+    else if (i === chosen) btn.classList.add('wrong');
+  });
+  showFeedback(cardId, chosen === correctIdx, _probs[cardId].solutionHtml);
+}
+
+/* ─────────────────────────────────────────────
+   RENDER
+───────────────────────────────────────────── */
+const COURSES = [
+  { key: 'collegeAlgebra', cls: 'ca',    label: 'College Algebra', folder: './College%20Algebra' },
+  { key: 'preCalc',        cls: 'pc',    label: 'PreCalc',         folder: './PreCalc' },
+  { key: 'calc',           cls: 'calc',  label: 'Calculus',         folder: null },   // resolved below
+];
+
+function renderCourse(course, secObj, cardId) {
+  const gen = GEN[secObj ? secObj.id : null];
+  let interactiveHtml = '';
+
+  if (secObj && gen) {
+    const prob = gen();
+    _probs[cardId] = prob;
+    if (prob.type === 'numeric') {
+      interactiveHtml = buildNumericInput(cardId);
+    } else if (prob.type === 'mcq') {
+      interactiveHtml = buildMCQInput(cardId, prob.choices, prob.correctIdx);
+    } else {
+      interactiveHtml = buildNumericInput(cardId); // fallback shape
+    }
+  } else if (secObj && secObj.hasPractice && secObj.practiceFile) {
+    interactiveHtml = `
+      <div class="prac-fallback">Practice problems for this section:</div>
+      <a class="prac-btn" href="${course.folder}/${secObj.practiceFile}.html" target="_blank">📄 Open Practice Page</a>`;
+  } else if (!secObj) {
+    interactiveHtml = `<span class="none-msg">No active section.</span>`;
+  } else {
+    interactiveHtml = `<span class="none-msg">Problems coming soon for this section.</span>`;
+  }
+
+  const inactive = !secObj;
+  return `
+  <div class="course-card ${course.cls}${inactive?' inactive':''}">
+    <div class="course-label">${course.label}</div>
+    ${secObj ? `<span class="sec-badge">§${secObj.section} — ${secObj.title}</span>` : ''}
+    ${secObj && gen ? `<div class="prob-statement">${_probs[cardId].html}</div>` : ''}
+    ${interactiveHtml}
+  </div>`;
+}
+
+async function init() {
+  document.getElementById('dateLabel').textContent = fmtDate(todayStr());
+
+  const [stateRes, sectRes] = await Promise.all([
+    fetch(BASE + 'state.json?t=' + Date.now()),
+    fetch(BASE + 'sections.json?t=' + Date.now()),
+  ]);
+  const state    = await stateRes.json();
+  const sections = await sectRes.json();
+
+  // Build a flat lookup: sectionId -> section object
+  const secMap = {};
+  for (const arr of Object.values(sections)) {
+    if (!Array.isArray(arr)) continue;
+    for (const s of arr) secMap[s.id] = s;
+  }
+
+  let html = '';
+  COURSES.forEach((course, i) => {
+    let courseState, folder;
+    if (course.key === 'calc') {
+      // Whichever calc semester is active
+      const c2 = state.courses?.calc2;
+      const c1 = state.courses?.calc1;
+      courseState = (c2?.currentSection) ? c2 : (c1?.currentSection ? c1 : c2 || c1);
+      folder = (c2?.currentSection) ? './Calc%202' : './Calc%201';
+    } else {
+      courseState = state.courses?.[course.key];
+      folder = course.folder;
+    }
+    const currentId = courseState?.currentSection || null;
+    const secObj    = currentId ? secMap[currentId] : null;
+    const cardId    = `c${i}`;
+    html += renderCourse({...course, folder}, secObj, cardId);
+  });
+
+  document.getElementById('mainArea').innerHTML = html;
+}
+
+init().catch(err => {
+  document.getElementById('mainArea').innerHTML =
+    `<div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--muted)">Could not load data.</div>`;
+  console.error(err);
+});
+</script>
+</body>
+</html>
