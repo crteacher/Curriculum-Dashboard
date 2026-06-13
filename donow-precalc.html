@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PreCalc Do Now — Mr. Halverson</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+  <style>
+    :root {
+      --bg: #f9f7f3;
+      --card: #ffffff;
+      --accent: #7a3b8a;
+      --accent-green: #1a5c2e;
+      --accent-red: #b91c1c;
+      --text: #1a1614;
+      --muted: #7a7570;
+      --border: #e4e0d8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 2rem 1rem 3rem;
+    }
+    .page-header { text-align: center; margin-bottom: 2.5rem; }
+    .page-header .date-label {
+      font-size: .82rem; color: var(--muted);
+      letter-spacing: .1em; text-transform: uppercase; margin-bottom: .35rem;
+    }
+    .page-header h1 { font-size: 2rem; font-weight: 700; }
+    .page-header h1 span { color: var(--accent); }
+    .page-header .subtitle { font-size: .9rem; color: var(--muted); margin-top: .4rem; }
+
+    .problems-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      max-width: 980px;
+      margin: 0 auto;
+    }
+    @media (max-width: 680px) { .problems-grid { grid-template-columns: 1fr; } }
+
+    .prob-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.7rem;
+      display: flex;
+      flex-direction: column;
+      gap: .9rem;
+    }
+    .prob-num {
+      font-size: .7rem; font-weight: 700;
+      letter-spacing: .14em; text-transform: uppercase; color: var(--muted);
+    }
+    .prob-tag {
+      display: inline-block;
+      font-size: .68rem; font-weight: 700;
+      letter-spacing: .08em; text-transform: uppercase;
+      background: #f3eafa; color: #7a3b8a;
+      padding: .22rem .65rem; border-radius: 999px;
+    }
+    .prob-statement { font-size: 1rem; line-height: 1.7; }
+    .prob-statement .katex-display { margin: .6rem 0; }
+
+    .answer-area { display: flex; flex-direction: column; gap: .55rem; }
+    .input-row { display: flex; align-items: center; gap: .5rem; }
+    .input-label { font-size: .82rem; color: var(--muted); white-space: nowrap; }
+    .ans-input {
+      flex: 1; background: #f0ece6;
+      border: 1px solid var(--border); border-radius: 7px;
+      color: var(--text); font-size: 1rem;
+      padding: .48rem .75rem; outline: none;
+      transition: border-color .2s;
+    }
+    .ans-input:focus { border-color: var(--accent); }
+    .ans-input:disabled { opacity: .45; }
+    .ans-hint { font-size: .75rem; color: var(--muted); }
+
+    .mcq-opts { display: flex; flex-direction: column; gap: .45rem; }
+    .mcq-btn {
+      background: #f0ece6; border: 1px solid var(--border);
+      border-radius: 8px; color: var(--text);
+      font-size: .93rem; padding: .55rem 1rem;
+      cursor: pointer; text-align: left;
+      transition: border-color .2s, background .2s;
+    }
+    .mcq-btn:hover:not([disabled]) { border-color: var(--accent); background: rgba(122,59,138,.08); }
+    .mcq-btn[disabled] { cursor: default; }
+    .mcq-btn.correct { border-color: var(--accent-green) !important; background: rgba(52,199,123,.12) !important; color: var(--accent-green); }
+    .mcq-btn.wrong   { border-color: var(--accent-red)   !important; background: rgba(247,79,79,.1)  !important; color: var(--accent-red); opacity: .65; }
+    .mcq-btn.reveal  { border-color: var(--accent-green) !important; background: rgba(52,199,123,.08) !important; color: var(--accent-green); }
+
+    .check-btn {
+      background: var(--accent); color: #fff;
+      border: none; border-radius: 8px;
+      font-size: .93rem; font-weight: 600;
+      padding: .6rem 1.15rem; cursor: pointer;
+      align-self: flex-start;
+      transition: background .2s, opacity .2s;
+    }
+    .check-btn:hover:not([disabled]) { background: #6b2e7a; }
+    .check-btn[disabled] { opacity: .4; cursor: default; }
+
+    .feedback {
+      border-radius: 8px; padding: .7rem .95rem;
+      font-size: .88rem; line-height: 1.55; display: none;
+    }
+    .feedback.show { display: block; }
+    .feedback.correct-fb { background: rgba(52,199,123,.1);  border: 1px solid rgba(52,199,123,.28); }
+    .feedback.wrong-fb   { background: rgba(247,79,79,.08); border: 1px solid rgba(247,79,79,.22); }
+    .fb-icon { font-size: 1rem; margin-right: .25rem; }
+    .solution-label {
+      font-size: .7rem; font-weight: 700;
+      letter-spacing: .1em; text-transform: uppercase;
+      color: var(--muted); margin-top: .55rem; margin-bottom: .2rem; display: block;
+    }
+    .solution-body { line-height: 1.6; }
+    .solution-body .katex-display { margin: .4rem 0; }
+
+    .practice-fallback { display: flex; flex-direction: column; gap: .7rem; padding: .5rem 0; }
+    .practice-fallback p { font-size: .9rem; color: var(--muted); line-height: 1.5; }
+    .prac-btn {
+      display: inline-flex; align-items: center; gap: .4rem;
+      background: rgba(122,59,138,.12); border: 1px solid rgba(122,59,138,.3);
+      border-radius: 8px; color: var(--accent);
+      font-size: .9rem; font-weight: 600;
+      padding: .6rem 1rem; text-decoration: none;
+      transition: background .2s; align-self: flex-start;
+    }
+    .prac-btn:hover { background: rgba(122,59,138,.22); }
+
+    .page-footer { text-align: center; margin-top: 2.5rem; color: var(--muted); font-size: .78rem; }
+    .page-footer a { color: var(--muted); text-decoration: underline; }
+    .loading-msg { text-align: center; padding: 4rem 1rem; color: var(--muted); font-size: 1.05rem; }
+    .empty-state { text-align: center; padding: 3rem 1rem; max-width: 500px; margin: 0 auto; }
+    .empty-state .icon { font-size: 2.2rem; margin-bottom: .7rem; }
+    .empty-state h2 { font-size: 1.2rem; margin-bottom: .5rem; }
+    .empty-state p { color: var(--muted); font-size: .9rem; line-height: 1.55; }
+    .site-nav { background: #6b1a26; padding: .65rem 1.5rem; }
+    .site-nav a { color: rgba(255,255,255,.9); text-decoration: none; font-size: .85rem; font-family: Georgia, serif; }
+    .site-nav a:hover { color: #fff; }
+  </style>
+</head>
+<body>
+<nav class="site-nav"><a href="./index.html">← Portal</a></nav>
+
+<div class="page-header">
+  <div class="date-label" id="dateLabel"></div>
+  <h1>PreCalc <span id="doNowLabel">Do Now</span></h1>
+  <div class="subtitle" id="subtitle">Two problems — same topic for everyone, your own numbers.</div>
+</div>
+
+<div id="mainArea"><div class="loading-msg">Loading problems…</div></div>
+
+<div class="page-footer">
+  <a href="warmup.html">← Daily Warm-Up</a> &nbsp;·&nbsp;
+  <a href="index.html">Dashboard</a>
+</div>
+
+<script>
+/* ─────────────────────────────────────────────
+   UTILITIES
+───────────────────────────────────────────── */
+const BASE = 'https://crteacher.github.io/Curriculum-Dashboard/';
+
+function todayStr() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+function fmtDate(s) {
+  return new Date(s + 'T12:00:00').toLocaleDateString('en-US',
+    { weekday:'long', month:'long', day:'numeric', year:'numeric' });
+}
+
+function ri(a, b) { return Math.floor(Math.random() * (b - a + 1)) + a; }
+function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+function gcd(a, b) { a=Math.abs(a); b=Math.abs(b); while(b){[a,b]=[b,a%b];} return a; }
+function reduceFrac(n, d) {
+  if (d===0) return [n,d];
+  const g=gcd(Math.abs(n),Math.abs(d)); n/=g; d/=g;
+  if (d<0){n=-n;d=-d;} return [n,d];
+}
+function fracTex(n, d) {
+  [n,d]=reduceFrac(n,d);
+  if (d===1) return `${n}`;
+  return `\\dfrac{${n}}{${d}}`;
+}
+function linearTex(a, b, v='x') {
+  if (a===0 && b===0) return '0';
+  const s = a===1?v : a===-1?`-${v}` : `${a}${v}`;
+  if (b===0) return s||'0';
+  if (a===0) return `${b}`;
+  return b>0 ? `${s} + ${b}` : `${s} - ${Math.abs(b)}`;
+}
+function kD(tex) {
+  try { return katex.renderToString(tex,{displayMode:true,throwOnError:false}); }
+  catch(e){ return tex; }
+}
+function kI(tex) {
+  try { return katex.renderToString(tex,{displayMode:false,throwOnError:false}); }
+  catch(e){ return tex; }
+}
+function parseNum(s) {
+  if (!s||!s.trim()) return NaN;
+  s=s.trim().replace(/\s+/g,'');
+  const m=s.match(/^(-?\d+)\/(-?\d+)$/);
+  if(m) return parseInt(m[1])/parseInt(m[2]);
+  return parseFloat(s);
+}
+function approxEq(a,b,tol=1e-6){return Math.abs(a-b)<tol;}
+
+/* ─────────────────────────────────────────────
+   PROBLEM GENERATORS — PRECALC
+───────────────────────────────────────────── */
+const GEN = {};
+
+// ── §1.1  Introduction to Functions ──────────────────────────────────
+GEN['PC_1_1'] = function() {
+  const type = ri(0,1);
+  if (type === 0) {
+    // Evaluate f(x) = ax² + bx + c at a given input
+    const a = pick([1,2,-1,-2]);
+    const b = ri(-4,4);
+    const c = ri(-6,6);
+    const x = ri(-3,3);
+    const ans = a*x*x + b*x + c;
+    return {
+      html: `Let ${kI(`f(x)=${a===1?'':(a===-1?'-':a)}x^2 ${b>=0?'+ '+b:'- '+Math.abs(b)}x ${c>=0?'+ '+c:'- '+Math.abs(c)}`)}. Find ${kI(`f(${x})`)}:`,
+      type: 'numeric',
+      answer: ans,
+      solutionHtml: kD(`f(${x}) = ${a}(${x})^2 ${b>=0?'+':''} ${b}(${x}) + ${c} = ${a*x*x} ${b*x>=0?'+':''} ${b*x} + ${c} = ${ans}`)
+    };
+  } else {
+    // Is this relation a function? MCQ
+    const isFunc = ri(0,1);
+    let pairs, correctIdx, explanation;
+    if (isFunc) {
+      const xs=[1,2,3,4]; const ys=xs.map(()=>ri(-5,5));
+      pairs = xs.map((x,i)=>`(${x},${ys[i]})`).join(', ');
+      correctIdx=0;
+      explanation='Each input appears exactly once — this is a function.';
+    } else {
+      const x0=ri(1,4);
+      const y1=ri(-5,5); let y2=ri(-5,5); while(y2===y1)y2=ri(-5,5);
+      const other=ri(-5,5);
+      pairs=`(${x0},${y1}), (${x0+1},${other}), (${x0},${y2})`;
+      correctIdx=1;
+      explanation=`Input ${x0} maps to both ${y1} and ${y2} — each input must have exactly one output.`;
+    }
+    return {
+      html: `Is ${kI(`\\{${pairs}\\}`)} a function?`,
+      type: 'mcq',
+      choices: ['Yes — it is a function', 'No — it is not a function'],
+      correctIdx,
+      solutionHtml: explanation
+    };
+  }
+};
+
+// ── §1.1b  Library of Functions & One-to-One ─────────────────────────
+GEN['PC_1_1b'] = function() {
+  const type = ri(0,1);
+  if (type === 0) {
+    // Which function is one-to-one?
+    const correct = pick(['f(x)=x^3','f(x)=\\sqrt{x}','f(x)=x']);
+    const wrong1  = pick(['f(x)=x^2','f(x)=|x|']);
+    const wrong2  = 'f(x)=x^2-4';
+    const choices = [correct,wrong1,wrong2].sort(()=>Math.random()-.5);
+    const idx = choices.indexOf(correct);
+    return {
+      html: `Which of these functions is one-to-one (passes the Horizontal Line Test)?`,
+      type: 'mcq',
+      choices: choices.map(c=>kI(c)),
+      correctIdx: idx,
+      solutionHtml: `${kI(correct)} is one-to-one — every horizontal line crosses its graph at most once.`
+    };
+  } else {
+    // Evaluate a parent function
+    const fns = [
+      {name:'f(x)=\\sqrt{x}',fn:x=>Math.sqrt(x),inputs:[0,1,4,9,16]},
+      {name:'f(x)=|x|',fn:x=>Math.abs(x),inputs:[-3,-1,0,2,5]},
+      {name:'f(x)=x^3',fn:x=>x*x*x,inputs:[-2,-1,0,1,2]},
+    ];
+    const {name,fn,inputs}=pick(fns);
+    const x=pick(inputs);
+    const ans=fn(x);
+    return {
+      html: `Let ${kI(name)}. Find ${kI(`f(${x})`)}:`,
+      type: 'numeric',
+      answer: ans,
+      solutionHtml: kI(`f(${x}) = ${ans}`)
+    };
+  }
+};
+
+// ── §1.2a  Domain, Range & Interval Notation ─────────────────────────
+GEN['PC_1_2a'] = function() {
+  const type = ri(0,2);
+  if (type === 0) {
+    // Domain of rational: 1/(x-a)
+    const a = ri(-6,6);
+    return {
+      html: `Find the domain of ${kI(`f(x)=\\dfrac{1}{x-${a}}`)}. The excluded value is:`,
+      type: 'numeric',
+      answer: a,
+      solutionHtml: `Set denominator ${kI(`x-${a}\\neq 0`)} → ${kI(`x\\neq ${a}`)}. Domain: ${kI(`(-\\infty,${a})\\cup(${a},\\infty)`)}`
+    };
+  } else if (type === 1) {
+    // Domain of square root: sqrt(x - a)
+    const a = ri(-5,5);
+    return {
+      html: `Find the domain of ${kI(`f(x)=\\sqrt{x-${a}}`)}. The smallest value in the domain is:`,
+      type: 'numeric',
+      answer: a,
+      solutionHtml: `Need ${kI(`x-${a}\\geq 0`)} → ${kI(`x\\geq ${a}`)}. Domain: ${kI(`[${a},\\infty)`)}`
+    };
+  } else {
+    // Interval notation MCQ
+    const a=ri(-4,4); const b=ri(a+1,a+6);
+    const incL=ri(0,1); const incR=ri(0,1);
+    const lBrk=incL?'[':'('; const rBrk=incR?']':')';
+    const choices=[
+      `${lBrk}${a}, ${b}${rBrk}`,
+      `${incL?'(':'{'}${a}, ${b}${incR?')':'}'}`,
+      `${incL?'(':'['}${a}, ${b}${incR?']':'['}`,
+    ].sort(()=>Math.random()-.5);
+    const correct=`${lBrk}${a}, ${b}${rBrk}`;
+    const idx=choices.indexOf(correct);
+    const cond = `${incL?`${a}\\leq x`:`${a}< x`}${incR?`\\leq ${b}`:`< ${b}`}`;
+    return {
+      html: `Write ${kI(cond)} in interval notation:`,
+      type: 'mcq',
+      choices,
+      correctIdx: idx<0?0:idx,
+      solutionHtml: `${kI(cond)} in interval notation is ${correct}.`
+    };
+  }
+};
+
+// ── §1.2b  Piecewise Functions ───────────────────────────────────────
+GEN['PC_1_2b'] = function() {
+  // Evaluate piecewise f(x) = { ax+b if x<k, cx+d if x>=k }
+  const k  = ri(-2,3);
+  const a1 = ri(1,4); const b1 = ri(-5,5);
+  const a2 = ri(-3,-1); const b2 = ri(-5,5);
+  // Pick input: one from each piece
+  const x1 = k - ri(1,4); // strictly less than k
+  const x2 = k + ri(0,3); // >= k
+  const xAsk = ri(0,1)===0 ? x1 : x2;
+  const ans = xAsk < k ? a1*xAsk+b1 : a2*xAsk+b2;
+  return {
+    html: `Given ${kI(`f(x)=\\begin{cases}${a1}x+${b1} & x < ${k}\\\\ ${a2}x+${b2} & x \\geq ${k}\\end{cases}`)}, find ${kI(`f(${xAsk})`)}:`,
+    type: 'numeric',
+    answer: ans,
+    solutionHtml: xAsk<k
+      ? kD(`\\text{Since }${xAsk}<${k},\\text{ use first piece: }f(${xAsk})=${a1}(${xAsk})+${b1}=${ans}`)
+      : kD(`\\text{Since }${xAsk}\\geq${k},\\text{ use second piece: }f(${xAsk})=${a2}(${xAsk})+${b2}=${ans}`)
+  };
+};
+
+// ── §1.3  Graph Properties ────────────────────────────────────────────
+GEN['PC_1_3'] = function() {
+  const type = ri(0,1);
+  if (type === 0) {
+    // Even / odd / neither MCQ
+    const fns = [
+      {name:'f(x)=x^4-3x^2',ans:0,why:'Even: replace $x$ with $-x$: $(-x)^4-3(-x)^2=x^4-3x^2=f(x)$.'},
+      {name:'f(x)=x^3+x',ans:1,why:'Odd: $f(-x)=(-x)^3+(-x)=-x^3-x=-(x^3+x)=-f(x)$.'},
+      {name:'f(x)=x^2+x',ans:2,why:'Neither: $f(-x)=x^2-x \\neq f(x)$ and $\\neq -f(x)$.'},
+      {name:'f(x)=x^5-2x^3',ans:1,why:'Odd: every term has odd degree.'},
+      {name:'f(x)=|x|+1',ans:0,why:'Even: $|-x|+1=|x|+1=f(x)$, symmetric about $y$-axis.'},
+    ];
+    const {name,ans,why}=pick(fns);
+    return {
+      html: `Is ${kI(name)} even, odd, or neither?`,
+      type: 'mcq',
+      choices:['Even','Odd','Neither'],
+      correctIdx: ans,
+      solutionHtml: kI(why)
+    };
+  } else {
+    // End behavior MCQ
+    const fns = [
+      {name:'f(x)=2x^3-x',neg:'-\\infty',pos:'+\\infty'},
+      {name:'f(x)=-x^4+5',neg:'-\\infty',pos:'-\\infty'},
+      {name:'f(x)=3x^2-2x+1',neg:'+\\infty',pos:'+\\infty'},
+      {name:'f(x)=-5x^3+x^2',neg:'+\\infty',pos:'-\\infty'},
+    ];
+    const {name,neg,pos}=pick(fns);
+    const correct=`As $x\\to-\\infty$, $f\\to${neg}$; as $x\\to+\\infty$, $f\\to${pos}$`;
+    const others=[
+      `As $x\\to-\\infty$, $f\\to+\\infty$; as $x\\to+\\infty$, $f\\to+\\infty$`,
+      `As $x\\to-\\infty$, $f\\to-\\infty$; as $x\\to+\\infty$, $f\\to-\\infty$`,
+      `As $x\\to-\\infty$, $f\\to+\\infty$; as $x\\to+\\infty$, $f\\to-\\infty$`,
+      `As $x\\to-\\infty$, $f\\to-\\infty$; as $x\\to+\\infty$, $f\\to+\\infty$`,
+    ].filter(c=>c!==correct);
+    const choices=[correct,...others.slice(0,3)].sort(()=>Math.random()-.5);
+    const idx=choices.indexOf(correct);
+    return {
+      html: `Describe the end behavior of ${kI(name)}:`,
+      type: 'mcq',
+      choices: choices.map(c=>c.replace(/\$/g,'')),
+      correctIdx: idx<0?0:idx,
+      solutionHtml: `End behavior: ${kI(correct)}.`
+    };
+  }
+};
+
+// ── §1.4  Function Composition ────────────────────────────────────────
+GEN['PC_1_4'] = function() {
+  // f(g(x)) with linear functions, numeric evaluation
+  const a1=ri(1,4); const b1=ri(-5,5);
+  const a2=ri(1,3); const b2=ri(-5,5);
+  const x=ri(-3,4);
+  const type=ri(0,1);
+  if(type===0){
+    // fog evaluated at x
+    const gx=a2*x+b2;
+    const ans=a1*gx+b1;
+    return {
+      html: `Let ${kI(`f(x)=${linearTex(a1,b1)}`)} and ${kI(`g(x)=${linearTex(a2,b2)}`)}. Find ${kI(`(f\\circ g)(${x})`)}:`,
+      type:'numeric', answer:ans,
+      solutionHtml: kD(`g(${x})=${a2}(${x})+${b2}=${gx}`) + kD(`f(${gx})=${a1}(${gx})+${b1}=${ans}`)
+    };
+  } else {
+    // gof evaluated at x
+    const fx=a1*x+b1;
+    const ans=a2*fx+b2;
+    return {
+      html: `Let ${kI(`f(x)=${linearTex(a1,b1)}`)} and ${kI(`g(x)=${linearTex(a2,b2)}`)}. Find ${kI(`(g\\circ f)(${x})`)}:`,
+      type:'numeric', answer:ans,
+      solutionHtml: kD(`f(${x})=${a1}(${x})+${b1}=${fx}`) + kD(`g(${fx})=${a2}(${fx})+${b2}=${ans}`)
+    };
+  }
+};
+
+// ── §1.5  Transformations ─────────────────────────────────────────────
+GEN['PC_1_5'] = function() {
+  const h=ri(-4,4); const k=ri(-4,4);
+  const reflected=ri(0,1);
+  const base=pick(['x^2','|x|','\\sqrt{x}','x^3']);
+  const inner=h===0?'x':h>0?`x-${h}`:`x+${Math.abs(h)}`;
+  const outer=k===0?'':k>0?`+${k}`:k;
+  const neg=reflected?'-':'';
+  const fStr=`${neg}${base==='\\sqrt{x}'?`\\sqrt{${inner}}`:base==='|x|'?`|${inner}|`:`(${inner})^{${base==='x^2'?2:3}}`}${outer}`;
+  const descs=[
+    reflected?'Reflect over x-axis':null,
+    h>0?`Shift right ${h}`:h<0?`Shift left ${Math.abs(h)}`:null,
+    k>0?`Shift up ${k}`:k<0?`Shift down ${Math.abs(k)}`:null,
+  ].filter(Boolean);
+  const descStr=descs.length?descs.join(', '):'No shift or reflection';
+  const allChoices=[
+    descStr,
+    (h>0?`Shift left ${h}`:h<0?`Shift right ${Math.abs(h)}`:`Shift up ${Math.abs(k)||1}`) + (reflected?'':', reflect over x-axis'),
+    `Shift right ${Math.abs(k)||2}, shift up ${Math.abs(h)||1}`,
+    `Horizontal stretch by ${Math.abs(h)||2}`,
+  ].filter((v,i,a)=>a.indexOf(v)===i);
+  const choices=allChoices.slice(0,4).sort(()=>Math.random()-.5);
+  const idx=choices.indexOf(descStr);
+  return {
+    html: `Compared to the parent function ${kI(base)}, how is ${kI(`f(x)=${fStr}`)} transformed?`,
+    type:'mcq', choices,
+    correctIdx: idx<0?0:idx,
+    solutionHtml: kI(`${descStr}.`)
+  };
+};
+
+// ── §1.7  Inverse Functions ───────────────────────────────────────────
+GEN['PC_1_7'] = function() {
+  const type=ri(0,1);
+  if(type===0){
+    // Find f-inverse of a linear function at a point
+    const a=ri(2,5); const b=ri(-8,8);
+    const x=ri(-3,4);
+    const fx=a*x+b;  // f(x)=ax+b, so f-inv(fx)=x
+    return {
+      html: `If ${kI(`f(x)=${a}x${b>=0?'+'+b:b}`)}, find ${kI(`f^{-1}(${fx})`)}:`,
+      type:'numeric', answer:x,
+      solutionHtml: kD(`f^{-1}(x)=\\frac{x${b>=0?'-'+b:'+'+Math.abs(b)}}{${a}},\\quad f^{-1}(${fx})=\\frac{${fx-b}}{${a}}=${x}`)
+    };
+  } else {
+    // Given (a,b) on f, what's on f-inverse? MCQ
+    const a=ri(-4,4); const b=ri(-4,4);
+    const correct=`(${b}, ${a})`;
+    const wrong=[`(${a}, ${b})`,`(${-a}, ${-b})`,`(${b}, ${-a})`];
+    const choices=[correct,...wrong].sort(()=>Math.random()-.5);
+    const idx=choices.indexOf(correct);
+    return {
+      html: `If the point ${kI(`(${a},${b})`)} lies on the graph of ${kI('f')}, what point must lie on ${kI('f^{-1}')}?`,
+      type:'mcq', choices,
+      correctIdx: idx<0?0:idx,
+      solutionHtml: `Inverse functions swap ${kI('x')} and ${kI('y')} coordinates: ${kI(`(${a},${b}) \\to (${b},${a})`)}.`
+    };
+  }
+};
+
+// ── §2.1  Lines & Linear Functions ───────────────────────────────────
+GEN['PC_2_1'] = function() {
+  const type=ri(0,1);
+  if(type===0){
+    // Find slope from two points
+    const x1=ri(-5,5); let x2=ri(-5,5); while(x2===x1)x2=ri(-5,5);
+    const y1=ri(-6,6); const y2=ri(-6,6);
+    const [n,d]=reduceFrac(y2-y1,x2-x1);
+    const ans=n/d;
+    return {
+      html: `Find the slope of the line through ${kI(`(${x1},${y1})`)} and ${kI(`(${x2},${y2})`)}:`,
+      type:'numeric', answer:ans,
+      solutionHtml: kD(`m=\\frac{${y2}-${y1}}{${x2}-${x1}}=\\frac{${y2-y1}}{${x2-x1}}=${fracTex(y2-y1,x2-x1)}`)
+    };
+  } else {
+    // Parallel or perpendicular?
+    const m=pick([2,3,-2,4,-3]);
+    const type2=pick(['parallel','perpendicular','neither']);
+    let m2;
+    if(type2==='parallel') m2=m;
+    else if(type2==='perpendicular') m2=-1/m;
+    else { m2=m+ri(1,3); }
+    const [n2,d2]=reduceFrac(m2*10,10);
+    const m2str=d2===10?`${n2}/10`:fracTex(n2,d2);
+    return {
+      html: `Line 1 has slope ${kI(`${m}`)}. Line 2 has slope ${kI(`${m2str}`)}. Are they parallel, perpendicular, or neither?`,
+      type:'mcq', choices:['Parallel','Perpendicular','Neither'],
+      correctIdx: type2==='parallel'?0:type2==='perpendicular'?1:2,
+      solutionHtml: type2==='parallel'
+        ? `Same slope → parallel.`
+        : type2==='perpendicular'
+        ? `Product of slopes: ${kI(`${m}\\cdot${m2str}=-1`)} → perpendicular.`
+        : `Slopes are different and their product is not ${kI('-1')} → neither.`
+    };
+  }
+};
+
+// ── §2.2  Graphing Linear Equations ──────────────────────────────────
+GEN['PC_2_2'] = function() {
+  const a=ri(-4,4); const b=ri(-8,8);
+  if(a===0){
+    return {
+      html: `What is the slope of the line ${kI(`y=${b}`)}?`,
+      type:'mcq', choices:['0','Undefined',`${b}`,'1'],
+      correctIdx:0,
+      solutionHtml:`${kI(`y=${b}`)} is a horizontal line — its slope is ${kI('0')}.`
+    };
+  }
+  // Find x-intercept of y = ax + b
+  // ax + b = 0 → x = -b/a
+  const [n,d]=reduceFrac(-b,a);
+  const ans=n/d;
+  return {
+    html: `Find the ${kI('x')}-intercept of ${kI(`y=${linearTex(a,b)}`)}:`,
+    type:'numeric', answer:ans,
+    solutionHtml: kD(`0=${a}x${b>=0?'+'+''+b:b} \\Rightarrow x=${fracTex(-b,a)}`)
+  };
+};
+
+// ── §2.3  Modeling with Linear Functions ─────────────────────────────
+GEN['PC_2_3'] = function() {
+  const rate=ri(2,10); const start=ri(5,40);
+  const t=ri(2,8);
+  const ans=start+rate*t;
+  const contexts=[
+    {q:`A gym membership costs $${start} to join and $${rate}/month. What is the total cost after ${t} months?`, unit:'dollars'},
+    {q:`A car is ${start} miles from home and travels ${rate} mph away. How far is it after ${t} hours?`, unit:'miles'},
+    {q:`A plant is ${start} cm tall and grows ${rate} cm per week. How tall is it after ${t} weeks?`, unit:'cm'},
+  ];
+  const {q}=pick(contexts);
+  return {
+    html: q,
+    type:'numeric', answer:ans,
+    solutionHtml: kD(`C(t)=${rate}t+${start},\\quad C(${t})=${rate}(${t})+${start}=${ans}`)
+  };
+};
+
+// ── §2.4  Linear Models from Data ─────────────────────────────────────
+GEN['PC_2_4'] = function() {
+  const type=ri(0,1);
+  if(type===0){
+    // Predict from regression line
+    const m=ri(1,5); const b=ri(0,20);
+    const x=ri(2,10);
+    const ans=m*x+b;
+    return {
+      html: `A regression model is ${kI(`\\hat{y}=${m}x+${b}`)}. Predict ${kI('y')} when ${kI(`x=${x}`)}:`,
+      type:'numeric', answer:ans,
+      solutionHtml: kD(`\\hat{y}=${m}(${x})+${b}=${ans}`)
+    };
+  } else {
+    // Interpret r
+    const rs=[{r:'0.97',ans:0},{r:'-0.92',ans:1},{r:'0.05',ans:2}];
+    const {r,ans}=pick(rs);
+    return {
+      html: `A data set has correlation coefficient ${kI(`r=${r}`)}. What best describes the linear relationship?`,
+      type:'mcq',
+      choices:['Strong positive linear correlation','Strong negative linear correlation','Weak or no linear correlation'],
+      correctIdx:ans,
+      solutionHtml:`${kI(`r=${r}`)} — ${ans===0?'close to +1: strong positive':ans===1?'close to -1: strong negative':'close to 0: weak or no'} linear correlation.`
+    };
+  }
+};
+
+// ── §3.1  Complex Numbers ─────────────────────────────────────────────
+GEN['PC_3_1'] = function() {
+  const type=ri(0,2);
+  if(type===0){
+    // Simplify i^n
+    const n=ri(1,20);
+    const r=n%4;
+    const vals=[null,'i','-1','-i','1'];
+    const ans=vals[r===0?4:r];
+    return {
+      html: `Simplify ${kI(`i^{${n}}`)}:`,
+      type:'mcq',
+      choices:['i','-1','-i','1'],
+      correctIdx:['i','-1','-i','1'].indexOf(ans),
+      solutionHtml:`${kI(`${n}\\div 4`)} has remainder ${r===0?0:r}. ${kI(`i^{${n}}=${ans}`)}.`
+    };
+  } else if(type===1){
+    // Add two complex numbers
+    const a=ri(-5,5); const b=ri(-5,5); const c=ri(-5,5); const d=ri(-5,5);
+    const rr=a+c; const ii=b+d;
+    return {
+      html: `Add: ${kI(`(${a}+${b}i)+(${c}+${d}i)`)}. Enter the real part:`,
+      type:'numeric', answer:rr,
+      solutionHtml: kD(`(${a}+${c})+(${b}+${d})i=${rr}+${ii}i`)
+    };
+  } else {
+    // Multiply, enter real part
+    const a=ri(-3,3); const b=ri(-3,3); const c=ri(-3,3); const d=ri(-3,3);
+    const rr=a*c-b*d; const ii=a*d+b*c;
+    return {
+      html: `Multiply ${kI(`(${a}+${b}i)(${c}+${d}i)`)}. Enter the real part of the result:`,
+      type:'numeric', answer:rr,
+      solutionHtml: kD(`${a}\\cdot${c}+${a}\\cdot${d}i+${b}i\\cdot${c}+${b}i\\cdot${d}i^2=(${a*c}+${b*d*-1})+(${a*d+b*c})i=${rr}+${ii}i`)
+    };
+  }
+};
+
+// ── §3.2a  Quadratics — Vertex & Factored Form ────────────────────────
+GEN['PC_3_2a'] = function() {
+  const type=ri(0,1);
+  if(type===0){
+    // Vertex from vertex form
+    const h=ri(-6,6); const k=ri(-8,8);
+    return {
+      html: `For ${kI(`f(x)=(x-${h})^2+${k}`)}, what is the ${kI('y')}-coordinate of the vertex?`,
+      type:'numeric', answer:k,
+      solutionHtml:`Vertex form ${kI('a(x-h)^2+k')}: vertex is ${kI(`(${h},${k})`)}. The ${kI('y')}-coordinate is ${kI(`${k}`)}.`
+    };
+  } else {
+    // Find zeros from factored form
+    const r1=ri(-6,6); let r2=ri(-6,6); while(r2===r1)r2=ri(-6,6);
+    const larger=Math.max(r1,r2);
+    return {
+      html: `Find the larger zero of ${kI(`f(x)=(x-${r1})(x-${r2})`)}:`,
+      type:'numeric', answer:larger,
+      solutionHtml:`Set each factor to zero: ${kI(`x=${r1}`)} and ${kI(`x=${r2}`)}. The larger zero is ${kI(`${larger}`)}.`
+    };
+  }
+};
+
+// ── §3.2b  Quadratics — Completing the Square ─────────────────────────
+GEN['PC_3_2b'] = function() {
+  // Complete the square for x²+ bx + c, find vertex y-coordinate
+  const b=pick([-8,-6,-4,-2,2,4,6,8]); // even so half is integer
+  const c=ri(-10,10);
+  const h=-b/2;
+  const k=c-h*h; // vertex y
+  return {
+    html: `Complete the square for ${kI(`f(x)=x^2${b>=0?'+'+b:b}x+${c}`)}. What is the ${kI('y')}-coordinate of the vertex?`,
+    type:'numeric', answer:k,
+    solutionHtml: kD(`f(x)=(x+${b/2})^2${-h*h+c>=0?'+'+(c-h*h):c-h*h}`) +
+      kI(` → \\text{vertex at }(${-b/2},${k})`)
+  };
+};
+
+// ── §3.3  Quadratic Applications & Parametric ─────────────────────────
+GEN['PC_3_3'] = function() {
+  // Max height from -16t² + v0*t
+  const v0=pick([32,48,64,80,96]);
+  const tMax=v0/32; // vertex at t = v0/32
+  const hMax=-16*tMax*tMax+v0*tMax;
+  return {
+    html: `A ball is thrown with height ${kI(`h(t)=-16t^2+${v0}t`)} (feet). What is the maximum height in feet?`,
+    type:'numeric', answer:hMax,
+    solutionHtml: kD(`t=-\\frac{${v0}}{2(-16)}=${tMax}`) +
+      kD(`h(${tMax})=-16(${tMax})^2+${v0}(${tMax})=${hMax}\\text{ ft}`)
+  };
+};
+
+// ── §3.4  Polynomial Functions ────────────────────────────────────────
+GEN['PC_3_4'] = function() {
+  const type=ri(0,1);
+  if(type===0){
+    // Identify degree MCQ
+    const polys=[
+      {p:'f(x)=3x^5-2x^3+x-7',deg:5},{p:'f(x)=x^4+6x^2-1',deg:4},
+      {p:'f(x)=-2x^3+x^2+5',deg:3},{p:'f(x)=7x^6-x',deg:6}
+    ];
+    const {p,deg}=pick(polys);
+    const choices=[deg,deg-2,deg+1,deg-1].sort(()=>Math.random()-.5);
+    const idx=choices.indexOf(deg);
+    return {
+      html:`What is the degree of ${kI(p)}?`,
+      type:'mcq',choices:choices.map(String),
+      correctIdx:idx<0?0:idx,
+      solutionHtml:`The highest power of ${kI('x')} is ${kI(`${deg}`)}, so the degree is ${deg}.`
+    };
+  } else {
+    // multiplicity behavior MCQ
+    const mults=[
+      {m:1,ans:0,why:'Multiplicity 1: the graph crosses straight through.'},
+      {m:2,ans:1,why:'Multiplicity 2 (even): the graph touches and bounces back.'},
+      {m:3,ans:0,why:'Multiplicity 3 (odd): the graph crosses with a flattening.'},
+    ];
+    const {m,ans,why}=pick(mults);
+    return {
+      html:`A zero at ${kI('x=a')} has multiplicity ${m}. What does the graph do at that zero?`,
+      type:'mcq',
+      choices:['Crosses through the x-axis','Touches the x-axis and bounces back'],
+      correctIdx:ans,
+      solutionHtml:why
+    };
+  }
+};
+
+// ── §3.5  Graphing Polynomial Functions ──────────────────────────────
+GEN['PC_3_5'] = function() {
+  // y-intercept of a polynomial in factored form
+  const r1=ri(-3,3); const r2=ri(-3,3); const r3=ri(-3,3);
+  const a=pick([1,-1,2,-2]);
+  const ans=a*(-r1)*(-r2)*(-r3);
+  return {
+    html:`Find the ${kI('y')}-intercept of ${kI(`f(x)=${a===1?'':(a===-1?'-':a)}(x-${r1})(x-${r2})(x-${r3})`)}:`,
+    type:'numeric', answer:ans,
+    solutionHtml: kD(`f(0)=${a}(0-${r1})(0-${r2})(0-${r3})=${a}(${-r1})(${-r2})(${-r3})=${ans}`)
+  };
+};
+
+// ── §3.6  Rational Functions ──────────────────────────────────────────
+GEN['PC_3_6'] = function() {
+  const type=ri(0,1);
+  if(type===0){
+    // Vertical asymptote of 1/(x-a)
+    const a=ri(-5,5);
+    return {
+      html:`What is the vertical asymptote of ${kI(`f(x)=\\dfrac{1}{x-${a}}`)}?`,
+      type:'numeric', answer:a,
+      solutionHtml:`Set denominator ${kI(`x-${a}=0`)} → ${kI(`x=${a}`)}. Vertical asymptote at ${kI(`x=${a}`)}.`
+    };
+  } else {
+    // Horizontal asymptote — degree comparison MCQ
+    const cases=[
+      {f:'\\dfrac{3x+1}{x-2}',ans:'y=3',why:'Same degree: HA = ratio of leading coefficients = 3/1 = 3.'},
+      {f:'\\dfrac{5}{x^2+1}',ans:'y=0',why:'Numerator degree < denominator degree: HA is y = 0.'},
+      {f:'\\dfrac{2x^2-1}{x+4}',ans:'None',why:'Numerator degree > denominator degree: no horizontal asymptote.'},
+    ];
+    const {f,ans,why}=pick(cases);
+    const choices=['y=0','y=1','y=3','None'].filter((v,i,a)=>a.indexOf(v)===i);
+    const idx=choices.indexOf(ans);
+    return {
+      html:`What is the horizontal asymptote of ${kI(f)}?`,
+      type:'mcq', choices,
+      correctIdx:idx<0?0:idx,
+      solutionHtml:why
+    };
+  }
+};
+
+// ── §4.1  Exponential Functions ────────────────────────────────────────
+GEN['PC_4_1'] = function() {
+  const type=ri(0,1);
+  if(type===0){
+    // Evaluate a·b^x
+    const a=pick([1,2,5,10,100]);
+    const b=pick([2,3,4,5]);
+    const x=pick([0,1,2,3]);
+    const ans=a*Math.pow(b,x);
+    return {
+      html:`Evaluate ${kI(`f(x)=${a}\\cdot ${b}^x`)} at ${kI(`x=${x}`)}:`,
+      type:'numeric', answer:ans,
+      solutionHtml: kD(`f(${x})=${a}\\cdot ${b}^{${x}}=${a}\\cdot ${Math.pow(b,x)}=${ans}`)
+    };
+  } else {
+    // Growth vs decay MCQ
+    const fns=[
+      {f:'f(x)=3^x',ans:0},{f:'f(x)=0.7^x',ans:1},
+      {f:'f(x)=(1.05)^x',ans:0},{f:'f(x)=(0.5)^x',ans:1},
+    ];
+    const {f,ans}=pick(fns);
+    return {
+      html:`Is ${kI(f)} exponential growth or decay?`,
+      type:'mcq', choices:['Growth','Decay'],
+      correctIdx:ans,
+      solutionHtml:`${ans===0?'Base > 1 → growth.':'Base between 0 and 1 → decay.'}`
+    };
+  }
+};
+
+// ── §4.2  Graphing Exponential Functions ──────────────────────────────
+GEN['PC_4_2'] = function() {
+  const k=ri(-4,4);
+  return {
+    html:`What is the horizontal asymptote of ${kI(`f(x)=3^x${k>=0?'+'+k:k}`)}?`,
+    type:'numeric', answer:k,
+    solutionHtml:`The parent ${kI('3^x')} has HA at ${kI('y=0')}. Shifting ${Math.abs(k)} ${k>=0?'up':'down'} moves the HA to ${kI(`y=${k}`)}.`
+  };
+};
+
+// ── §4.3  Logarithmic Functions ────────────────────────────────────────
+GEN['PC_4_3'] = function() {
+  const type=ri(0,1);
+  if(type===0){
+    // Evaluate log base b of b^n
+    const b=pick([2,3,5,10]);
+    const n=ri(1,5);
+    const val=Math.pow(b,n);
+    return {
+      html:`Evaluate ${kI(`\\log_{${b}} ${val}`)}:`,
+      type:'numeric', answer:n,
+      solutionHtml: kD(`\\log_{${b}} ${val}=${n}\\quad\\text{because }${b}^{${n}}=${val}`)
+    };
+  } else {
+    // Convert exp to log form MCQ
+    const b=pick([2,3,5]);
+    const n=ri(2,4);
+    const val=Math.pow(b,n);
+    const correct=`\\log_{${b}} ${val} = ${n}`;
+    const wrong=[`\\log_{${n}} ${b} = ${val}`,`\\log_{${b}} ${n} = ${val}`,`${b}^{${val}}=${n}`];
+    const choices=[correct,...wrong].sort(()=>Math.random()-.5);
+    const idx=choices.indexOf(correct);
+    return {
+      html:`Convert ${kI(`${b}^{${n}}=${val}`)} to logarithmic form:`,
+      type:'mcq', choices:choices.map(c=>kI(c)),
+      correctIdx:idx<0?0:idx,
+      solutionHtml: kD(`${b}^{${n}}=${val}\\iff \\log_{${b}} ${val}=${n}`)
+    };
+  }
+};
+
+// ── §4.5  Exponential & Logarithmic Equations ─────────────────────────
+GEN['PC_4_5'] = function() {
+  const type=ri(0,1);
+  if(type===0){
+    // Same-base: b^(x+c) = b^n → x+c = n
+    const b=pick([2,3,5]);
+    const n=ri(2,5);
+    const c=ri(-3,3);
+    const x=n-c;
+    return {
+      html:`Solve ${kI(`${b}^{x${c>=0?'+'+c:c}}=${b}^{${n}}`)} for ${kI('x')}:`,
+      type:'numeric', answer:x,
+      solutionHtml: kD(`x${c>=0?'+'+c:c}=${n}\\Rightarrow x=${x}`)
+    };
+  } else {
+    // Solve log_b(x+a)=n → x=b^n - a
+    const b=pick([2,3,5]);
+    const n=ri(1,3);
+    const a=ri(-5,5);
+    const ans=Math.pow(b,n)-a;
+    return {
+      html:`Solve ${kI(`\\log_{${b}}(x${a>=0?'+'+a:a})=${n}`)} for ${kI('x')}:`,
+      type:'numeric', answer:ans,
+      solutionHtml: kD(`x${a>=0?'+'+a:a}=${b}^{${n}}=${Math.pow(b,n)}\\Rightarrow x=${ans}`)
+    };
+  }
+};
+
+/* ─────────────────────────────────────────────
+   CARD BUILDERS
+───────────────────────────────────────────── */
+let _solutions = [];
+
+function buildNumericCard(num, sec, prob, idx) {
+  return `
+  <div class="prob-card">
+    <div class="prob-num">Problem ${num}</div>
+    <span class="prob-tag">${sec.section} — ${sec.title}</span>
+    <div class="prob-statement">${prob.html}</div>
+    <div class="answer-area">
+      <div class="input-row">
+        <label class="input-label" for="inp${idx}">Answer:</label>
+        <input class="ans-input" type="text" id="inp${idx}" placeholder="e.g. 5 or 3/4"
+               onkeydown="if(event.key==='Enter')checkNum(${idx})">
+      </div>
+      <div class="ans-hint">Enter exact value (fraction or integer). Decimals accepted within 0.01.</div>
+      <button class="check-btn" onclick="checkNum(${idx})">Check</button>
+      <div class="feedback" id="fb${idx}"></div>
+    </div>
+  </div>`;
+}
+
+function buildMCQCard(num, sec, prob, idx) {
+  const opts = prob.choices.map((c,i) =>
+    `<button class="mcq-btn" id="mcq${idx}_${i}" onclick="checkMCQ(${idx},${i},${prob.correctIdx})">${c}</button>`
+  ).join('');
+  return `
+  <div class="prob-card">
+    <div class="prob-num">Problem ${num}</div>
+    <span class="prob-tag">${sec.section} — ${sec.title}</span>
+    <div class="prob-statement">${prob.html}</div>
+    <div class="answer-area">
+      <div class="mcq-opts">${opts}</div>
+      <div class="feedback" id="fb${idx}"></div>
+    </div>
+  </div>`;
+}
+
+function buildFallbackCard(num, sec, idx) {
+  return `
+  <div class="prob-card">
+    <div class="prob-num">Problem ${num}</div>
+    <span class="prob-tag">${sec.section} — ${sec.title}</span>
+    <div class="practice-fallback">
+      <p>Practice problems for this section:</p>
+      <a class="prac-btn" href="./PreCalc/${sec.practiceFile||sec.id+'_Practice'}.html" target="_blank">
+        📄 Open Practice Page
+      </a>
+    </div>
+  </div>`;
+}
+
+/* ─────────────────────────────────────────────
+   ANSWER CHECKING
+───────────────────────────────────────────── */
+function showFeedback(idx, correct, solutionHtml) {
+  const fb = document.getElementById(`fb${idx}`);
+  fb.className = `feedback show ${correct?'correct-fb':'wrong-fb'}`;
+  fb.innerHTML = correct
+    ? `<span class="fb-icon">✓</span><strong>Correct!</strong>
+       <span class="solution-label">Solution</span>
+       <div class="solution-body">${solutionHtml}</div>`
+    : `<span class="fb-icon">✗</span><strong>Not quite.</strong>
+       <span class="solution-label">Solution</span>
+       <div class="solution-body">${solutionHtml}</div>`;
+}
+
+function checkNum(idx) {
+  const inp = document.getElementById(`inp${idx}`);
+  if (!inp || inp.disabled) return;
+  const val = parseNum(inp.value);
+  const ans = _solutions[idx];
+  if (isNaN(val)) { inp.style.borderColor='var(--accent-red)'; return; }
+  const correct = approxEq(val, ans.answer, 0.011);
+  inp.disabled = true;
+  inp.style.borderColor = correct ? 'var(--accent-green)' : 'var(--accent-red)';
+  const btn = inp.closest('.prob-card').querySelector('.check-btn');
+  if (btn) btn.disabled = true;
+  showFeedback(idx, correct, ans.solutionHtml);
+}
+
+function checkMCQ(idx, chosen, correctIdx) {
+  const prefix = `mcq${idx}_`;
+  document.querySelectorAll(`[id^="${prefix}"]`).forEach((btn,i) => {
+    btn.disabled = true;
+    if (i === correctIdx) btn.classList.add(i === chosen ? 'correct' : 'reveal');
+    else if (i === chosen) btn.classList.add('wrong');
+  });
+  showFeedback(idx, chosen === correctIdx, _solutions[idx].solutionHtml);
+}
+
+/* ─────────────────────────────────────────────
+   INIT
+───────────────────────────────────────────── */
+async function init() {
+  // Date display
+  const today = todayStr();
+  document.getElementById('dateLabel').textContent = fmtDate(today);
+
+  // Fetch state + sections
+  const [stateRes, sectRes] = await Promise.all([
+    fetch(BASE + 'state.json?t=' + Date.now()),
+    fetch(BASE + 'sections.json?t=' + Date.now()),
+  ]);
+  const state    = await stateRes.json();
+  const sections = await sectRes.json();
+
+  // Build section lookup (preCalc array)
+  const pcSections = sections.preCalc || [];
+
+  const courseState = state.courses?.preCalc;
+  const currentId   = courseState?.currentSection || null;
+  const completedIds = courseState?.completedSections || [];
+
+  // Select today's section (current + most recent completed)
+  const todayIds = [];
+  if (currentId) todayIds.push(currentId);
+  if (completedIds.length) todayIds.push(completedIds[completedIds.length-1]);
+
+  // Get section objects
+  const secMap = {};
+  pcSections.forEach(s => secMap[s.id] = s);
+
+  const todaySecs = todayIds.map(id => secMap[id]).filter(Boolean).slice(0,2);
+
+  if (todaySecs.length === 0) {
+    document.getElementById('mainArea').innerHTML = `
+      <div class="empty-state">
+        <div class="icon">📚</div>
+        <h2>No PreCalc section active yet</h2>
+        <p>Once the school year begins and your section data is set, do-now problems will appear here automatically.</p>
+      </div>`;
+    return;
+  }
+
+  // Update header subtitle
+  const secTitles = todaySecs.map(s => `§${s.section} ${s.title}`).join(' & ');
+  document.getElementById('subtitle').textContent = `Today: ${secTitles}`;
+
+  let html = '<div class="problems-grid">';
+  _solutions = [];
+
+  todaySecs.forEach((sec, idx) => {
+    const gen = GEN[sec.id];
+    if (gen) {
+      const prob = gen();
+      _solutions[idx] = prob;
+      if (prob.type === 'numeric') html += buildNumericCard(idx+1, sec, prob, idx);
+      else if (prob.type === 'mcq') html += buildMCQCard(idx+1, sec, prob, idx);
+      else html += buildFallbackCard(idx+1, sec, idx);
+    } else {
+      _solutions[idx] = { answer:0, solutionHtml:'' };
+      html += buildFallbackCard(idx+1, sec, idx);
+    }
+  });
+
+  html += '</div>';
+  html += `<p style="text-align:center;color:var(--muted);font-size:.78rem;margin-top:1.2rem">
+    Refresh the page for new numbers (same topics). Answers lock after first submission.
+  </p>`;
+  document.getElementById('mainArea').innerHTML = html;
+}
+
+init();
+</script>
+</body>
+</html>

@@ -23,9 +23,11 @@ header h1{font-size:1.2rem;font-weight:700;flex:1;color:#fff}
 .card{background:#fff;border:1px solid #e4e0d8;border-radius:12px;padding:1.25rem 1.4rem;display:flex;flex-direction:column;gap:.75rem}
 .card.ca{border-color:#1a5c2e44}
 .card.c2{border-color:#185fa544}
+.card.pc{border-color:#7a3b8a44}
 .card-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em}
 .card.ca .card-label{color:#1a5c2e}
 .card.c2 .card-label{color:#185fa5}
+.card.pc .card-label{color:#7a3b8a}
 .section-info{font-size:.8rem;color:#7a7570}
 
 .q-box{background:#f9f7f3;border:1px solid #e4e0d8;border-radius:8px;padding:1rem 1.1rem;font-size:.975rem;line-height:1.75;min-height:3.5rem}
@@ -41,6 +43,8 @@ header h1{font-size:1.2rem;font-weight:700;flex:1;color:#fff}
 .card.ca .reveal-btn:hover{background:#e8f5ed}
 .card.c2 .reveal-btn{color:#185fa5;border-color:#185fa5}
 .card.c2 .reveal-btn:hover{background:#e8f0fa}
+.card.pc .reveal-btn{color:#7a3b8a;border-color:#7a3b8a}
+.card.pc .reveal-btn:hover{background:#f5eafa}
 .reveal-btn:disabled{opacity:.4;cursor:default}
 
 .divider{max-width:980px;margin:1.25rem auto 0;padding:0 1.5rem}
@@ -75,6 +79,13 @@ header h1{font-size:1.2rem;font-weight:700;flex:1;color:#fff}
     <button class="reveal-btn" id="c2TodayReveal" onclick="reveal('c2Today')" style="display:none">Show Answer</button>
     <div class="ans-box" id="c2TodayAns"></div>
   </div>
+  <div class="card pc">
+    <div class="card-label">PreCalc</div>
+    <div class="section-info loading" id="pcTodaySection">Loading…</div>
+    <div class="q-box" id="pcTodayQ"><span class="loading">Loading…</span></div>
+    <button class="reveal-btn" id="pcTodayReveal" onclick="reveal('pcToday')" style="display:none">Show Answer</button>
+    <div class="ans-box" id="pcTodayAns"></div>
+  </div>
 </div>
 
 <div class="divider"><hr></div>
@@ -93,6 +104,12 @@ header h1{font-size:1.2rem;font-weight:700;flex:1;color:#fff}
     <div class="section-info loading" id="c2LastSection">Loading…</div>
     <div class="q-box" id="c2LastQ"><span class="loading">Loading…</span></div>
     <div class="ans-box visible" id="c2LastAns"></div>
+  </div>
+  <div class="card pc">
+    <div class="card-label">PreCalc</div>
+    <div class="section-info loading" id="pcLastSection">Loading…</div>
+    <div class="q-box" id="pcLastQ"><span class="loading">Loading…</span></div>
+    <div class="ans-box visible" id="pcLastAns"></div>
   </div>
 </div>
 
@@ -162,29 +179,4 @@ Promise.all([
       if (showAnswerNow) {
         ansEl.classList.add('visible');
       } else if (revBtn) {
-        revBtn.style.display='inline-block';
-      }
-    } else {
-      qEl.innerHTML='<span class="none-msg">No exit ticket for this section.</span>';
-    }
-  }
-
-  const caCompleted = state.courses?.collegeAlgebra?.completedSections || [];
-  const c2Completed = state.courses?.calc2?.completedSections || [];
-
-  // Today = currentSection
-  fill(state.courses?.collegeAlgebra?.currentSection, 'caToday', false);
-  fill(state.courses?.calc2?.currentSection,          'c2Today', false);
-
-  // Last class = last in completedSections
-  fill(caCompleted[caCompleted.length-1], 'caLast', true);
-  fill(c2Completed[c2Completed.length-1], 'c2Last', true);
-
-}).catch(err => {
-  console.error(err);
-  ['caTodayQ','c2TodayQ','caLastQ','c2LastQ'].forEach(id =>
-    document.getElementById(id).innerHTML='<span class="none-msg">Could not load data.</span>');
-});
-</script>
-</body>
-</html>
+        revBtn.s

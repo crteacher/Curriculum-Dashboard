@@ -5161,5 +5161,1023 @@
         "hasExam": true
       }
     ]
-  }
+  },
+  "preCalc": [
+    {
+      "id": "PC_1_1",
+      "section": "1.1",
+      "title": "Introduction to Functions",
+      "swbat": "Students will be able to determine whether a relation is a function and evaluate functions using function notation.",
+      "exitTicket": "Given the set of ordered pairs $\\{(1,3),(2,5),(3,3),(4,7)\\}$, is this a function? Evaluate $f(3)$.",
+      "hasPractice": true,
+      "practiceFile": "PC_1_1_Functions_Practice",
+      "workedExamples": [
+        {
+          "problem": "Is the relation $\\{(1,4),(2,6),(1,8),(3,5)\\}$ a function?",
+          "answer": "No — the input $x=1$ maps to both $4$ and $8$. A function requires each input to have exactly one output.",
+          "technique": "Vertical line test for sets: check for repeated $x$-values with different $y$-values."
+        },
+        {
+          "problem": "Let $f(x)=3x^2-2x+1$. Find $f(0)$ and $f(-2)$.",
+          "answer": "$f(0)=1$; $\\quad f(-2)=3(4)-2(-2)+1=12+4+1=17$",
+          "technique": "Substitute directly — replace every $x$ with the input value, then simplify."
+        },
+        {
+          "problem": "Let $g(x)=\\dfrac{x+3}{x-5}$. Find $g(8)$ and $g(5)$.",
+          "answer": "$g(8)=\\dfrac{11}{3}$; $\\quad g(5)$ is undefined — denominator equals zero.",
+          "technique": "Always check: does the input make the denominator zero? If yes, it's not in the domain."
+        },
+        {
+          "problem": "A vending machine takes coins and gives snacks. Is this a function from input $\\to$ output?",
+          "answer": "Yes — each coin combination triggers exactly one snack output. The machine doesn't randomly give different snacks for the same coins.",
+          "technique": "Real-world functions: one input, one output. Ambiguity or randomness breaks the function rule."
+        }
+      ],
+      "reviewProblems": [
+        {
+          "problem": "Is the graph of a circle a function? Explain.",
+          "answer": "No — a vertical line crosses a circle at two points, so some $x$-values have two $y$-values."
+        },
+        {
+          "problem": "Let $h(x)=5-2x$. Find $h(3)$ and $h(-1)$.",
+          "answer": "$h(3)=-1$; $h(-1)=7$"
+        },
+        {
+          "problem": "Given $f(x)=x^2+1$, find $f(a+1)$ and simplify.",
+          "answer": "$f(a+1)=(a+1)^2+1=a^2+2a+2$"
+        }
+      ]
+    },
+    {
+      "id": "PC_1_1b",
+      "section": "1.1b",
+      "title": "Library of Functions & One-to-One",
+      "swbat": "Students will be able to identify parent functions by shape, recognize one-to-one functions, and apply the horizontal line test.",
+      "exitTicket": "Sketch $f(x)=|x|$ and $g(x)=\\sqrt{x}$. Which is one-to-one? How do you know?",
+      "hasPractice": true,
+      "practiceFile": "PC_1_1b_Library_1to1_Practice",
+      "workedExamples": [
+        {
+          "problem": "Match each function to its shape: $f(x)=x^2$, $g(x)=x^3$, $h(x)=|x|$, $k(x)=\\sqrt{x}$.",
+          "answer": "$x^2$: U-shaped parabola (symmetric, vertex at origin). $x^3$: S-curve through origin. $|x|$: V-shape. $\\sqrt{x}$: half-curve starting at origin, right side only.",
+          "technique": "Memorize the 8 parent functions — shape, domain, and key points. These are your building blocks all year."
+        },
+        {
+          "problem": "Is $f(x)=x^3$ one-to-one?",
+          "answer": "Yes — every horizontal line crosses the graph at most once. Each output has exactly one input.",
+          "technique": "Horizontal line test: if any horizontal line hits the graph more than once, the function is NOT one-to-one."
+        },
+        {
+          "problem": "Is $f(x)=x^2$ one-to-one on $(-\\infty,\\infty)$? What if we restrict to $[0,\\infty)$?",
+          "answer": "On all reals: No — $f(2)=f(-2)=4$, so the output $4$ has two inputs. On $[0,\\infty)$: Yes — each output is hit exactly once.",
+          "technique": "Restricting the domain can make a non-one-to-one function one-to-one — important for inverse functions later."
+        },
+        {
+          "problem": "Give an example of a function that is NOT one-to-one and explain why.",
+          "answer": "$f(x)=\\sin x$ is not one-to-one: $\\sin(0)=\\sin(\\pi)=0$, so the output $0$ is achieved at infinitely many inputs.",
+          "technique": "Any periodic function repeats outputs and thus fails the horizontal line test globally."
+        }
+      ],
+      "reviewProblems": [
+        {
+          "problem": "State the domain and range of $f(x)=\\sqrt{x}$.",
+          "answer": "Domain: $[0,\\infty)$; Range: $[0,\\infty)$"
+        },
+        {
+          "problem": "Is $f(x)=|x|$ one-to-one? Justify.",
+          "answer": "No — $f(2)=f(-2)=2$, so the horizontal line $y=2$ hits the graph twice."
+        },
+        {
+          "problem": "Name the parent function that looks like an S-curve through the origin.",
+          "answer": "$f(x)=x^3$ (the cubic function)"
+        }
+      ]
+    },
+    {
+      "id": "PC_1_2a",
+      "section": "1.2a",
+      "title": "Domain, Range & Interval Notation",
+      "swbat": "Students will be able to find the domain and range of functions algebraically and express answers in interval notation.",
+      "exitTicket": "Find the domain of $f(x)=\\dfrac{\\sqrt{x+4}}{x-1}$ in interval notation.",
+      "hasPractice": true,
+      "practiceFile": "PC_1_2a_Domain_Range_Practice",
+      "workedExamples": [
+        {
+          "problem": "Find the domain of $f(x)=\\dfrac{3}{x-7}$.",
+          "answer": "Set denominator $\\neq 0$: $x\\neq 7$. Domain: $(-\\infty,7)\\cup(7,\\infty)$.",
+          "technique": "Fraction rule: denominator can never equal zero. Set it $\\neq 0$, then write the remaining values."
+        },
+        {
+          "problem": "Find the domain of $g(x)=\\sqrt{2x-6}$.",
+          "answer": "Set radicand $\\geq 0$: $2x-6\\geq 0 \\Rightarrow x\\geq 3$. Domain: $[3,\\infty)$.",
+          "technique": "Square root rule: radicand must be $\\geq 0$. Solve the inequality, then write interval notation."
+        },
+        {
+          "problem": "Find the domain of $h(x)=\\dfrac{\\sqrt{x+5}}{x-2}$.",
+          "answer": "Need $x+5\\geq 0\\Rightarrow x\\geq -5$, AND $x\\neq 2$. Domain: $[-5,2)\\cup(2,\\infty)$.",
+          "technique": "Two restrictions at once — apply both, then exclude the bad point from the valid interval."
+        },
+        {
+          "problem": "Find the range of $f(x)=x^2-4$.",
+          "answer": "The minimum value of $x^2$ is $0$, so the minimum of $f$ is $0-4=-4$. Range: $[-4,\\infty)$.",
+          "technique": "For a basic parabola $ax^2+k$: range starts at the vertex $y$-value ($k$ if $a>0$, goes to $\\infty$)."
+        }
+      ],
+      "reviewProblems": [
+        {
+          "problem": "Find the domain of $f(x)=\\sqrt{5-x}$.",
+          "answer": "$(-\\infty, 5]$"
+        },
+        {
+          "problem": "Write $-3 < x \\leq 8$ in interval notation.",
+          "answer": "$(-3, 8]$"
+        },
+        {
+          "problem": "Find the domain of $f(x)=\\dfrac{x+2}{x^2-9}$.",
+          "answer": "$(-\\infty,-3)\\cup(-3,3)\\cup(3,\\infty)$"
+        }
+      ]
+    },
+    {
+      "id": "PC_1_2b",
+      "section": "1.2b",
+      "title": "Piecewise Functions",
+      "swbat": "Students will be able to evaluate piecewise functions, graph them, and determine their domain and range.",
+      "exitTicket": "For $f(x)=\\begin{cases}2x+1 & x<0\\\\ x^2 & x\\geq 0\\end{cases}$, find $f(-3)$ and $f(4)$.",
+      "hasPractice": true,
+      "practiceFile": "PC_1_2b_Piecewise_Functions_Practice",
+      "workedExamples": [
+        {
+          "problem": "Evaluate: $f(x)=\\begin{cases}3x-1 & x<2\\\\ 10 & x=2\\\\ x^2+1 & x>2\\end{cases}$. Find $f(0)$, $f(2)$, and $f(5)$.",
+          "answer": "$f(0)=3(0)-1=-1$; $\\quad f(2)=10$; $\\quad f(5)=25+1=26$.",
+          "technique": "Match the input to the correct piece first — check the inequality/condition, THEN apply that formula."
+        },
+        {
+          "problem": "Graph $f(x)=\\begin{cases}-1 & x<0\\\\x & 0\\leq x\\leq 3\\\\ 4 & x>3\\end{cases}$.",
+          "answer": "Left of 0: horizontal line at $y=-1$ (open circle at $(0,-1)$). Middle: line $y=x$ from $(0,0)$ to $(3,3)$ (closed endpoints). Right of 3: horizontal line at $y=4$ (open circle at $(3,4)$, arrow right).",
+          "technique": "Graph each piece on its restricted domain. Use open circles at strict inequalities ($<$, $>$), closed at $\\leq$, $\\geq$."
+        },
+        {
+          "problem": "Find the domain and range of the piecewise function above.",
+          "answer": "Domain: $(-\\infty,\\infty)$ — all real numbers are covered. Range: $\\{-1\\}\\cup[0,3]\\cup\\{4\\}$.",
+          "technique": "Domain: combine all intervals where pieces are defined. Range: collect all output values from each piece."
+        },
+        {
+          "problem": "Write a piecewise function for the absolute value $f(x)=|x-2|$.",
+          "answer": "$f(x)=\\begin{cases}-(x-2) & x<2\\\\ x-2 & x\\geq 2\\end{cases}$",
+          "technique": "Absolute value IS a piecewise function — the expression inside is negative left of the vertex, positive right of it."
+        }
+      ],
+      "reviewProblems": [
+        {
+          "problem": "Evaluate $g(x)=\\begin{cases}x^2 & x\\leq 1\\\\ 2x-1 & x>1\\end{cases}$ at $x=-2, 1, 3$.",
+          "answer": "$g(-2)=4$; $g(1)=1$; $g(3)=5$"
+        },
+        {
+          "problem": "Is $f(x)=\\begin{cases}2x & x<3\\\\8 & x=3\\\\x+3 & x>3\\end{cases}$ continuous at $x=3$? Explain.",
+          "answer": "No — $\\lim_{x\\to 3^-}2x=6$ and $\\lim_{x\\to 3^+}(x+3)=6$, but $f(3)=8\\neq 6$, so there's a hole."
+        },
+        {
+          "problem": "Write a piecewise rule for $f(x)=|2x-6|$.",
+          "answer": "$f(x)=\\begin{cases}-(2x-6) & x<3\\\\ 2x-6 & x\\geq 3\\end{cases}$"
+        }
+      ]
+    },
+    {
+      "id": "PC_1_3",
+      "section": "1.3",
+      "title": "Graph Properties of Functions",
+      "swbat": "Students will be able to identify intervals of increase/decrease, local maxima and minima, and end behavior from a graph.",
+      "exitTicket": "A graph rises from $(-\\infty,-2)$, falls from $(-2,1)$, then rises from $(1,\\infty)$. Identify local max and local min values.",
+      "hasPractice": false,
+      "workedExamples": [
+        {
+          "problem": "From a graph: $f$ rises to a peak at $(-2,5)$, drops to a valley at $(1,-3)$, then rises. Find intervals of increase and decrease.",
+          "answer": "Increasing: $(-\\infty,-2)\\cup(1,\\infty)$. Decreasing: $(-2,1)$. Local max: $5$ at $x=-2$. Local min: $-3$ at $x=1$.",
+          "technique": "Read left-to-right: going up = increasing, going down = decreasing. Peaks are local maxes, valleys are local mins."
+        },
+        {
+          "problem": "Describe the end behavior of $f(x)=x^3-2x$.",
+          "answer": "As $x\\to -\\infty$, $f\\to -\\infty$. As $x\\to +\\infty$, $f\\to +\\infty$. (Odd-degree, positive leading coefficient.)",
+          "technique": "End behavior is determined by the leading term. Odd degree: opposite ends. Even degree: same direction both ends."
+        },
+        {
+          "problem": "Is $f(x)=x^4-2x^2$ even, odd, or neither?",
+          "answer": "$f(-x)=(-x)^4-2(-x)^2=x^4-2x^2=f(x)$. Even — symmetric about the $y$-axis.",
+          "technique": "Even: $f(-x)=f(x)$ (y-axis symmetry). Odd: $f(-x)=-f(x)$ (origin symmetry). Test by substituting $-x$."
+        },
+        {
+          "problem": "Is $g(x)=x^3-x$ even, odd, or neither?",
+          "answer": "$g(-x)=(-x)^3-(-x)=-x^3+x=-(x^3-x)=-g(x)$. Odd — symmetric about the origin.",
+          "technique": "If $f(-x) = -f(x)$: rotate $180°$ about the origin and the graph looks the same."
+        }
+      ],
+      "reviewProblems": [
+        {
+          "problem": "What does it mean for a function to be decreasing on an interval?",
+          "answer": "As $x$ increases, $f(x)$ decreases — the graph falls from left to right on that interval."
+        },
+        {
+          "problem": "Determine if $f(x)=x^2-3$ is even, odd, or neither.",
+          "answer": "$f(-x)=x^2-3=f(x)$, so even."
+        },
+        {
+          "problem": "Describe the end behavior of $f(x)=-2x^4+x$.",
+          "answer": "Both ends go to $-\\infty$ (even degree, negative leading coefficient)."
+        }
+      ]
+    },
+    {
+      "id": "PC_1_4",
+      "section": "1.4",
+      "title": "Function Combinations & Composition",
+      "swbat": "Students will be able to add, subtract, multiply, and divide functions, and evaluate and simplify composite functions.",
+      "exitTicket": "Let $f(x)=x+1$ and $g(x)=x^2-3$. Find $(f\\circ g)(2)$ and $(g\\circ f)(2)$.",
+      "hasPractice": false,
+      "workedExamples": [
+        {
+          "problem": "Let $f(x)=2x+3$ and $g(x)=x^2-1$. Find $(f+g)(x)$ and $(f\\cdot g)(x)$.",
+          "answer": "$(f+g)(x)=x^2+2x+2$. $\\quad (f\\cdot g)(x)=(2x+3)(x^2-1)=2x^3-2x+3x^2-3$.",
+          "technique": "Arithmetic on functions: treat them like polynomials. Add/multiply the formulas, then simplify."
+        },
+        {
+          "problem": "Find $(f\\circ g)(x)$ if $f(x)=3x-1$ and $g(x)=x^2$.",
+          "answer": "$(f\\circ g)(x)=f(g(x))=f(x^2)=3x^2-1$.",
+          "technique": "Composition means substitution: $f\\circ g$ means 'plug $g(x)$ into $f$.' Work inside-out."
+        },
+        {
+          "problem": "Find $(g\\circ f)(x)$ for $f(x)=3x-1$ and $g(x)=x^2$. Is it the same as $(f\\circ g)(x)$?",
+          "answer": "$(g\\circ f)(x)=g(f(x))=(3x-1)^2=9x^2-6x+1$. Not the same — composition is NOT commutative.",
+          "technique": "Order matters in composition. $f\\circ g \\neq g\\circ f$ in general — always evaluate the inner function first."
+        },
+        {
+          "problem": "Given $h(x)=\\sqrt{2x+4}$, decompose $h$ as $f\\circ g$.",
+          "answer": "Let $g(x)=2x+4$ (inside the root) and $f(x)=\\sqrt{x}$. Then $f(g(x))=\\sqrt{2x+4}=h(x)$.",
+          "technique": "Decomposition: identify the 'inside' function $g$ and the 'outside' function $f$. The inner is what's plugged into $f$."
+        }
+      ],
+      "reviewProblems": [
+        {
+          "problem": "Let $f(x)=x-2$ and $g(x)=x^2+1$. Find $(f\\circ g)(3)$.",
+          "answer": "$(f\\circ g)(3)=f(g(3))=f(10)=8$"
+        },
+        {
+          "problem": "Find $\\left(\\dfrac{f}{g}\\right)(x)$ for $f(x)=x^2-4$ and $g(x)=x+2$. State the domain.",
+          "answer": "$\\dfrac{x^2-4}{x+2}=x-2$, $x\\neq -2$. Domain: $(-\\infty,-2)\\cup(-2,\\infty)$."
+        },
+        {
+          "problem": "Decompose $h(x)=(x^2+3)^4$ as $f(g(x))$.",
+          "answer": "$g(x)=x^2+3$, $f(x)=x^4$"
+        }
+      ]
+    },
+    {
+      "id": "PC_1_5",
+      "section": "1.5",
+      "title": "Transformations of Functions",
+      "swbat": "Students will be able to apply vertical/horizontal shifts, reflections, and stretches/compressions to parent functions.",
+      "exitTicket": "Describe the transformations in $f(x)=-2(x+3)^2+1$ compared to $y=x^2$.",
+      "hasPractice": false,
+      "workedExamples": [
+        {
+          "problem": "Describe how $g(x)=(x-4)^2+3$ is related to $f(x)=x^2$.",
+          "answer": "Shift right $4$ units (horizontal, $-4$ inside) and up $3$ units (vertical, $+3$ outside).",
+          "technique": "Inside the function → horizontal (and opposite sign). Outside → vertical (same sign)."
+        },
+        {
+          "problem": "Graph $h(x)=-\\sqrt{x}+2$ starting from $f(x)=\\sqrt{x}$.",
+          "answer": "Reflect across the $x$-axis (negate outside), then shift up $2$. Key points: $(0,2),(1,1),(4,-2+2=0)$.",
+          "technique": "Negating outside reflects over $x$-axis; negating inside reflects over $y$-axis."
+        },
+        {
+          "problem": "How does $g(x)=3|x|$ differ from $f(x)=|x|$?",
+          "answer": "Vertical stretch by factor $3$ — all $y$-values tripled. The V is narrower (steeper sides).",
+          "technique": "Multiplying outside by $a>1$ = vertical stretch (taller/narrower). $0<a<1$ = compression (shorter/wider)."
+        },
+        {
+          "problem": "Write the equation of $f(x)=x^2$ after: reflect over $x$-axis, compress vertically by $\\frac{1}{2}$, shift left $1$, shift up $4$.",
+          "answer": "$g(x)=-\\frac{1}{2}(x+1)^2+4$",
+          "technique": "Build the equation from the inside out: handle horizontal shifts first (inside), then vertical changes outside."
+        }
+      ],
+      "reviewProblems": [
+        {
+          "problem": "Describe the transformation: $f(x)=\\sqrt{x+5}-3$.",
+          "answer": "Shift left 5, shift down 3."
+        },
+        {
+          "problem": "Write the equation of $y=|x|$ shifted right 2, reflected over $x$-axis, shifted up 1.",
+          "answer": "$f(x)=-|x-2|+1$"
+        },
+        {
+          "problem": "Which transformation makes a graph wider: multiply $f(x)$ by $3$ or by $\\frac{1}{3}$?",
+          "answer": "Multiplying by $\\frac{1}{3}$ (vertical compression) makes it wider/flatter."
+        }
+      ]
+    },
+    {
+      "id": "PC_1_7",
+      "section": "1.7",
+      "title": "Inverse Functions",
+      "swbat": "Students will be able to verify that two functions are inverses, find the inverse algebraically, and understand the domain restrictions required.",
+      "exitTicket": "Find $f^{-1}(x)$ for $f(x)=2x-6$ and verify by checking $f(f^{-1}(x))=x$.",
+      "hasPractice": false,
+      "workedExamples": [
+        {
+          "problem": "Show that $f(x)=3x+1$ and $g(x)=\\dfrac{x-1}{3}$ are inverses.",
+          "answer": "$f(g(x))=3\\cdot\\dfrac{x-1}{3}+1=x-1+1=x$. $\\quad g(f(x))=\\dfrac{(3x+1)-1}{3}=\\dfrac{3x}{3}=x$. Both give $x$, so they're inverses.",
+          "technique": "Verify with composition — both $f(g(x))=x$ AND $g(f(x))=x$ must hold."
+        },
+        {
+          "problem": "Find the inverse of $f(x)=\\dfrac{2x+5}{3}$.",
+          "answer": "Replace $f(x)$ with $y$: $y=\\dfrac{2x+5}{3}$. Swap: $x=\\dfrac{2y+5}{3}$. Solve: $3x=2y+5 \\Rightarrow y=\\dfrac{3x-5}{2}$. So $f^{-1}(x)=\\dfrac{3x-5}{2}$.",
+          "technique": "Steps: write $y=f(x)$, swap $x$ and $y$, solve for $y$. The result is $f^{-1}(x)$."
+        },
+        {
+          "problem": "Find $f^{-1}(x)$ for $f(x)=x^2+1$, $x\\geq 0$. Why is the restriction needed?",
+          "answer": "$y=x^2+1 \\Rightarrow x=\\sqrt{y-1} \\Rightarrow f^{-1}(x)=\\sqrt{x-1}$, $x\\geq 1$. Without $x\\geq 0$ restriction, $f$ is not one-to-one, so an inverse doesn't exist.",
+          "technique": "Inverse only exists for one-to-one functions. Restrict domain first if needed, then find the inverse."
+        },
+        {
+          "problem": "If $(3,7)$ is on the graph of $f$, what point is on the graph of $f^{-1}$?",
+          "answer": "$(7,3)$ — inverses swap $x$ and $y$ coordinates. The graph of $f^{-1}$ is the reflection of $f$ over the line $y=x$.",
+          "technique": "Every point $(a,b)$ on $f$ corresponds to $(b,a)$ on $f^{-1}$. The two graphs are mirror images over $y=x$."
+        }
+      ],
+      "reviewProblems": [
+        {
+          "problem": "Find the inverse of $f(x)=4x-3$.",
+          "answer": "$f^{-1}(x)=\\dfrac{x+3}{4}$"
+        },
+        {
+          "problem": "Why doesn't $f(x)=x^2$ on all reals have an inverse?",
+          "answer": "Not one-to-one: $f(2)=f(-2)=4$. The inverse would need to output both $2$ and $-2$ for input $4$ — not a function."
+        },
+        {
+          "problem": "If $f^{-1}(5)=9$, what is $f(9)$?",
+          "answer": "$f(9)=5$ — inputs and outputs swap between a function and its inverse."
+        }
+      ]
+    },
+    {
+      "id": "PC_2_1",
+      "section": "2.1",
+      "title": "Lines & Linear Functions",
+      "swbat": "Students will be able to find slope, write equations of lines in slope-intercept and point-slope form, and identify parallel and perpendicular lines.",
+      "exitTicket": "Write the equation of the line through $(2,-3)$ with slope $m=\\frac{1}{2}$ in both point-slope and slope-intercept form.",
+      "hasPractice": false,
+      "workedExamples": [
+        {
+          "problem": "Find the slope of the line through $(-1,4)$ and $(3,-2)$.",
+          "answer": "$m=\\dfrac{-2-4}{3-(-1)}=\\dfrac{-6}{4}=-\\dfrac{3}{2}$",
+          "technique": "Slope = rise/run = $\\dfrac{y_2-y_1}{x_2-x_1}$. Keep the order consistent — same point first in numerator and denominator."
+        },
+        {
+          "problem": "Write the equation of a line with slope $-3$ passing through $(1,5)$.",
+          "answer": "Point-slope: $y-5=-3(x-1)$. Slope-intercept: $y=-3x+8$.",
+          "technique": "Point-slope form $y-y_1=m(x-x_1)$ is fastest. Then distribute to get slope-intercept if needed."
+        },
+        {
+          "problem": "Are $y=\\frac{2}{3}x+1$ and $y=-\\frac{3}{2}x-4$ parallel, perpendicular, or neither?",
+          "answer": "Perpendicular — slopes $\\frac{2}{3}$ and $-\\frac{3}{2}$ are negative reciprocals: $\\frac{2}{3}\\cdot(-\\frac{3}{2})=-1$.",
+          "technique": "Parallel: same slope. Perpendicular: slopes multiply to $-1$ (flip and negate)."
+        },
+        {
+          "problem": "Write the equation of the line perpendicular to $y=4x-2$ passing through $(8,1)$.",
+          "answer": "Perpendicular slope: $m=-\\frac{1}{4}$. Equation: $y-1=-\\frac{1}{4}(x-8) \\Rightarrow y=-\\frac{1}{4}x+3$.",
+          "technique": "Flip and negate the slope, then use point-slope with the given point."
+        }
+      ],
+      "reviewProblems": [
+        {
+          "problem": "Find the slope and $y$-intercept of $3x-6y=12$.",
+          "answer": "Solve for $y$: $y=\\frac{1}{2}x-2$. Slope $=\\frac{1}{2}$, $y$-int $=(0,-2)$."
+        },
+        {
+          "problem": "Write the equation of the line through $(0,5)$ and $(-3,2)$.",
+          "answer": "$m=1$; $y=x+5$"
+        },
+        {
+          "problem": "Is the line through $(1,2)$ and $(3,6)$ parallel to $y=2x-5$?",
+          "answer": "Yes — slope of both lines is $2$."
+        }
+      ]
+    },
+    {
+      "id": "PC_2_2",
+      "section": "2.2",
+      "title": "Graphing Linear Equations",
+      "swbat": "Students will be able to graph linear equations using slope-intercept form, intercepts, and horizontal/vertical lines.",
+      "exitTicket": "Graph $3x+2y=6$ by finding both intercepts. Label them.",
+      "hasPractice": false,
+      "workedExamples": [
+        {
+          "problem": "Graph $y=-\\frac{2}{3}x+4$ using slope and $y$-intercept.",
+          "answer": "Plot $y$-intercept $(0,4)$. Slope $-\\frac{2}{3}$: from $(0,4)$, go right $3$, down $2$ to $(3,2)$. Draw the line.",
+          "technique": "Start at $y$-intercept, then use slope as rise/run to find a second point. Two points determine a line."
+        },
+        {
+          "problem": "Find the $x$- and $y$-intercepts of $4x-3y=12$ and graph.",
+          "answer": "$x$-int: set $y=0$: $4x=12\\Rightarrow x=3$. Point $(3,0)$. $y$-int: set $x=0$: $-3y=12\\Rightarrow y=-4$. Point $(0,-4)$.",
+          "technique": "Intercept method: plug in $0$ for one variable at a time. Quick for standard form equations."
+        },
+        {
+          "problem": "Graph $y=3$ and $x=-2$. What types of lines are these?",
+          "answer": "$y=3$: horizontal line through $(0,3)$, slope $=0$. $x=-2$: vertical line through $(-2,0)$, undefined slope.",
+          "technique": "$y=$ constant → horizontal. $x=$ constant → vertical. Vertical lines have undefined slope."
+        },
+        {
+          "problem": "At what point do $y=2x-1$ and $y=-x+5$ intersect?",
+          "answer": "Set equal: $2x-1=-x+5\\Rightarrow 3x=6\\Rightarrow x=2$. $y=2(2)-1=3$. Intersection: $(2,3)$.",
+          "technique": "Intersection = solution to the system. Set the two equations equal and solve for $x$, then find $y$."
+        }
+      ],
+      "reviewProblems": [
+        {
+          "problem": "What is the slope of every horizontal line?",
+          "answer": "Slope $= 0$."
+        },
+        {
+          "problem": "Graph $y=\\frac{3}{4}x-2$. What is the $x$-intercept?",
+          "answer": "Set $y=0$: $x=\\frac{8}{3}\\approx 2.67$. $x$-intercept $=\\left(\\frac{8}{3},0\\right)$."
+        },
+        {
+          "problem": "Write the equation of the vertical line through $(-5, 2)$.",
+          "answer": "$x=-5$"
+        }
+      ]
+    },
+    {
+      "id": "PC_2_3",
+      "section": "2.3",
+      "title": "Modeling with Linear Functions",
+      "swbat": "Students will be able to build linear models from verbal descriptions, interpret slope and intercept in context, and make predictions.",
+      "exitTicket": "A plumber charges \\$80 per hour plus a \\$50 fee. Write a linear model for total cost $C$ as a function of hours $h$. What does the slope represent?",
+      "hasPractice": false,
+      "workedExamples": [
+        {
+          "problem": "A phone plan costs \\$30/month plus \\$0.05 per text. Write $C(t)$ for total cost given $t$ texts. Find $C(200)$.",
+          "answer": "$C(t)=0.05t+30$. $C(200)=0.05(200)+30=10+30=\\$40$.",
+          "technique": "Identify the fixed cost (y-intercept) and the rate of change (slope). Build $f(x)=mx+b$."
+        },
+        {
+          "problem": "At $t=0$ a car is $20$ miles from home. It travels at $55$ mph away from home. Write $d(t)$ for distance and find when it's $350$ miles away.",
+          "answer": "$d(t)=55t+20$. Set $=350$: $55t=330\\Rightarrow t=6$ hours.",
+          "technique": "Initial value = $y$-intercept. Rate of change = slope. To find when something happens, set $d(t)=$ target and solve."
+        },
+        {
+          "problem": "Interpret: $f(x)=1200-50x$ models the balance (\\$) in an account after $x$ weeks. What does the slope $-50$ mean?",
+          "answer": "The account loses \\$50 per week. The slope is the rate of change — negative means the balance is decreasing.",
+          "technique": "Context interpretation: slope = 'for each additional unit of $x$, $y$ changes by $m$.' Negative slope = decreasing."
+        },
+        {
+          "problem": "Two linear models: supply $S(p)=3p-10$ and demand $D(p)=50-2p$ (units vs. price). Find equilibrium price.",
+          "answer": "Set $S=D$: $3p-10=50-2p\\Rightarrow 5p=60\\Rightarrow p=12$. Equilibrium price is \\$12.",
+          "technique": "Equilibrium = intersection of supply and demand. Same algebra as solving a system of two linear equations."
+        }
+      ],
+      "reviewProblems": [
+        {
+          "problem": "A taxi charges \\$2.50 base plus \\$1.75 per mile. Write $C(m)$ and find the cost for 8 miles.",
+          "answer": "$C(m)=1.75m+2.50$; $C(8)=\\$16.50$"
+        },
+        {
+          "problem": "For $f(x)=-3x+120$, when does $f(x)=0$?",
+          "answer": "$x=40$"
+        },
+        {
+          "problem": "What does the $y$-intercept represent in a linear model?",
+          "answer": "The starting value — the value of the output when the input is $0$."
+        }
+      ]
+    },
+    {
+      "id": "PC_2_4",
+      "section": "2.4",
+      "title": "Linear Models from Data",
+      "swbat": "Students will be able to find a line of best fit, interpret the correlation coefficient, and use the model to make predictions.",
+      "exitTicket": "A scatter plot shows positive correlation. What does $r=0.97$ tell you about the linear model?",
+      "hasPractice": false,
+      "workedExamples": [
+        {
+          "problem": "Data: $(1,3),(2,5),(3,6),(4,9),(5,10)$. Estimate a line of best fit and write its equation.",
+          "answer": "Points roughly follow $y\\approx 1.8x+1.2$. (Exact regression line: $\\hat{y}=1.8x+1.2$.)",
+          "technique": "Draw a line that balances points above and below. Two points on that line give you slope and intercept."
+        },
+        {
+          "problem": "A regression model gives $r=0.95$. What does this tell you?",
+          "answer": "Strong positive linear association — as $x$ increases, $y$ tends to increase, and the data fits a line closely.",
+          "technique": "$r$ near $+1$: strong positive. $r$ near $-1$: strong negative. $r$ near $0$: weak/no linear association."
+        },
+        {
+          "problem": "Model: $\\hat{y}=2.3x+4.1$ where $x$ = hours studied and $y$ = test score. Predict score for 5 hours studied. Is it reliable to predict for $x=50$?",
+          "answer": "$\\hat{y}=2.3(5)+4.1=15.6$ — but scores can't exceed 100, and 50 hours is far outside the data range (extrapolation). Unreliable.",
+          "technique": "Interpolation (within data range) is reliable. Extrapolation (outside range) can be wildly inaccurate."
+        },
+        {
+          "problem": "A residual is $y-\\hat{y}=4$. Interpret this.",
+          "answer": "The actual value is $4$ units higher than the model predicted. A positive residual means the model underestimated.",
+          "technique": "Residual = actual − predicted. Positive: above the line. Negative: below the line. Small residuals = good fit."
+        }
+      ],
+      "reviewProblems": [
+        {
+          "problem": "What does $r=-0.88$ indicate about a data set?",
+          "answer": "Strong negative linear correlation — as $x$ increases, $y$ tends to decrease, fitting a line fairly closely."
+        },
+        {
+          "problem": "Using $\\hat{y}=3x-1$, predict $y$ when $x=7$.",
+          "answer": "$\\hat{y}=3(7)-1=20$"
+        },
+        {
+          "problem": "Explain why $r^2=0.81$ means the model explains $81\\%$ of the variation in $y$.",
+          "answer": "$r^2$ (coefficient of determination) tells the proportion of $y$'s variability accounted for by the linear model with $x$."
+        }
+      ]
+    },
+    {
+      "id": "PC_3_1",
+      "section": "3.1",
+      "title": "Complex Numbers",
+      "swbat": "Students will be able to simplify powers of $i$, perform arithmetic with complex numbers, and find complex conjugates.",
+      "exitTicket": "Simplify $(3+2i)(1-4i)$ and write in standard form $a+bi$.",
+      "hasPractice": false,
+      "workedExamples": [
+        {
+          "problem": "Simplify $i^{35}$.",
+          "answer": "$35=4\\cdot 8+3$, so $i^{35}=i^3=-i$.",
+          "technique": "Powers of $i$ cycle with period 4: $i^1=i$, $i^2=-1$, $i^3=-i$, $i^4=1$. Divide the exponent by 4, use the remainder."
+        },
+        {
+          "problem": "Simplify $(4-3i)+(2+7i)$ and $(4-3i)-(2+7i)$.",
+          "answer": "Sum: $6+4i$. Difference: $2-10i$.",
+          "technique": "Add/subtract complex numbers like terms: real parts together, imaginary parts together."
+        },
+        {
+          "problem": "Multiply $(2+3i)(1-5i)$.",
+          "answer": "$2-10i+3i-15i^2=2-7i+15=17-7i$. (Since $i^2=-1$.)",
+          "technique": "FOIL, then replace $i^2$ with $-1$. Combine real parts and imaginary parts separately."
+        },
+        {
+          "problem": "Simplify $\\dfrac{3+i}{2-i}$ by multiplying by the conjugate.",
+          "answer": "$\\dfrac{(3+i)(2+i)}{(2-i)(2+i)}=\\dfrac{6+3i+2i+i^2}{4+1}=\\dfrac{5+5i}{5}=1+i$.",
+          "technique": "Divide complex numbers: multiply numerator and denominator by the conjugate of the denominator."
+        }
+      ],
+      "reviewProblems": [
+        {
+          "problem": "Simplify $\\sqrt{-49}$.",
+          "answer": "$7i$"
+        },
+        {
+          "problem": "Find the conjugate of $5-3i$ and their product.",
+          "answer": "Conjugate: $5+3i$. Product: $(5-3i)(5+3i)=25+9=34$."
+        },
+        {
+          "problem": "Simplify $i^{100}$.",
+          "answer": "$100=4\\cdot 25$, so $i^{100}=(i^4)^{25}=1$."
+        }
+      ]
+    },
+    {
+      "id": "PC_3_2a",
+      "section": "3.2a",
+      "title": "Quadratic Functions — Vertex & Factored Forms",
+      "swbat": "Students will be able to identify the vertex, axis of symmetry, and intercepts of a quadratic from vertex and factored forms.",
+      "exitTicket": "Find the vertex, axis of symmetry, and zeros of $f(x)=2(x-3)(x+1)$.",
+      "hasPractice": false,
+      "workedExamples": [
+        {
+          "problem": "Given $f(x)=2(x-1)^2-8$, find the vertex and axis of symmetry.",
+          "answer": "Vertex: $(1,-8)$. Axis of symmetry: $x=1$. Since $a=2>0$, the parabola opens upward and the vertex is a minimum.",
+          "technique": "Vertex form $a(x-h)^2+k$: vertex is $(h,k)$, axis of symmetry is $x=h$."
+        },
+        {
+          "problem": "Find the $x$-intercepts of $f(x)=3(x-4)^2-12$.",
+          "answer": "Set $=0$: $3(x-4)^2=12\\Rightarrow (x-4)^2=4\\Rightarrow x-4=\\pm 2\\Rightarrow x=6$ or $x=2$.",
+          "technique": "To find zeros from vertex form: isolate the squared term, take $\\pm$ square root, solve."
+        },
+        {
+          "problem": "Write the equation of a parabola with zeros at $x=-2$ and $x=5$ passing through $(0,-10)$.",
+          "answer": "$f(x)=a(x+2)(x-5)$. Plug in $(0,-10)$: $-10=a(2)(-5)=-10a\\Rightarrow a=1$. So $f(x)=(x+2)(x-5)$.",
+          "technique": "Factored form $a(x-r_1)(x-r_2)$ gives you the zeros directly. Use a third point to find $a$."
+        },
+        {
+          "problem": "Find the maximum or minimum of $f(x)=-(x+2)^2+9$. On what interval is $f$ increasing?",
+          "answer": "Vertex $(-2,9)$, $a=-1<0$: maximum value is $9$ at $x=-2$. $f$ is increasing on $(-\\infty,-2)$.",
+          "technique": "Negative leading coefficient → opens down → vertex is a maximum. $f$ increases to the left of the vertex."
+        }
+      ],
+      "reviewProblems": [
+        {
+          "problem": "Identify vertex and direction for $f(x)=-3(x+4)^2+7$.",
+          "answer": "Vertex $(-4,7)$, opens downward (max at $7$)."
+        },
+        {
+          "problem": "Find zeros of $f(x)=(x-6)(x+3)$ and the $x$-coordinate of the vertex.",
+          "answer": "Zeros: $x=6,-3$. Vertex $x$-coord: $\\frac{6+(-3)}{2}=\\frac{3}{2}$."
+        },
+        {
+          "problem": "A ball is modeled by $h(t)=-(t-3)^2+16$. Find the max height and when it hits the ground.",
+          "answer": "Max height: $16$ ft at $t=3$ sec. Ground: $-(t-3)^2=-16\\Rightarrow t-3=\\pm 4\\Rightarrow t=7$ sec (positive)."
+        }
+      ]
+    },
+    {
+      "id": "PC_3_2b",
+      "section": "3.2b",
+      "title": "Quadratics — Completing the Square",
+      "swbat": "Students will be able to convert a quadratic from standard to vertex form by completing the square, and solve quadratics using the quadratic formula.",
+      "exitTicket": "Complete the square to rewrite $f(x)=x^2-6x+2$ in vertex form.",
+      "hasPractice": false,
+      "workedExamples": [
+        {
+          "problem": "Complete the square: $f(x)=x^2+8x+5$.",
+          "answer": "$f(x)=(x^2+8x+16)-16+5=(x+4)^2-11$. Vertex: $(-4,-11)$.",
+          "technique": "Take half of $b$, square it: $(b/2)^2$. Add and subtract it. Factor the perfect square trinomial."
+        },
+        {
+          "problem": "Complete the square: $f(x)=2x^2-12x+3$.",
+          "answer": "Factor out $2$: $2(x^2-6x)+3$. Half of $-6$ is $-3$, $(-3)^2=9$. Add/subtract inside: $2(x^2-6x+9)-18+3=2(x-3)^2-15$.",
+          "technique": "When $a\\neq 1$: factor $a$ out of the $x^2$ and $x$ terms first, THEN complete the square inside."
+        },
+        {
+          "problem": "Solve $2x^2-4x-3=0$ using the quadratic formula.",
+          "answer": "$x=\\dfrac{4\\pm\\sqrt{16+24}}{4}=\\dfrac{4\\pm\\sqrt{40}}{4}=\\dfrac{4\\pm 2\\sqrt{10}}{4}=\\dfrac{2\\pm\\sqrt{10}}{2}$.",
+          "technique": "Quadratic formula: $x=\\dfrac{-b\\pm\\sqrt{b^2-4ac}}{2a}$. The discriminant $b^2-4ac$ tells you how many real solutions."
+        },
+        {
+          "problem": "Discriminant of $3x^2-2x+5$?",
+          "answer": "$b^2-4ac=4-60=-56<0$. Two complex (non-real) solutions — the parabola never crosses the $x$-axis.",
+          "technique": "$\\Delta>0$: two real solutions. $\\Delta=0$: one (double) solution. $\\Delta<0$: two complex solutions."
+        }
+      ],
+      "reviewProblems": [
+        {
+          "problem": "Complete the square: $f(x)=x^2-10x+3$.",
+          "answer": "$f(x)=(x-5)^2-22$. Vertex $(5,-22)$."
+        },
+        {
+          "problem": "Use the quadratic formula to solve $x^2+x-12=0$.",
+          "answer": "$x=\\frac{-1\\pm 7}{2}$, so $x=3$ or $x=-4$."
+        },
+        {
+          "problem": "How many real solutions does $x^2+4x+10=0$ have? Why?",
+          "answer": "$\\Delta=16-40=-24<0$. Zero real solutions."
+        }
+      ]
+    },
+    {
+      "id": "PC_3_3",
+      "section": "3.3",
+      "title": "Quadratic Applications & Parametric Intro",
+      "swbat": "Students will be able to model real-world problems with quadratics, optimize using vertex, and interpret parametric equations.",
+      "exitTicket": "A ball is thrown upward with height $h(t)=-16t^2+64t+5$. Find the maximum height and the time it occurs.",
+      "hasPractice": false,
+      "workedExamples": [
+        {
+          "problem": "Revenue model: $R(x)=-2x^2+120x$ where $x$ = price. Find the price that maximizes revenue.",
+          "answer": "Vertex: $x=-\\frac{120}{2(-2)}=30$. Max revenue $R(30)=-2(900)+3600=\\$1800$ at price $\\$30$.",
+          "technique": "For $ax^2+bx+c$, vertex $x$-coordinate is $x=-\\frac{b}{2a}$. This gives the optimum in any quadratic model."
+        },
+        {
+          "problem": "A farmer encloses three sides of a rectangular pen with $120$ ft of fencing (the barn is the 4th side). Maximize area.",
+          "answer": "Let $w$ = width ($2$ sides). Length $=120-2w$. $A(w)=w(120-2w)=-2w^2+120w$. Vertex: $w=30$, $A=30\\cdot 60=1800$ sq ft.",
+          "technique": "Optimization: write area/cost/revenue as a function of one variable, then find the vertex."
+        },
+        {
+          "problem": "Parametric: $x=t+1$, $y=t^2-3$. Find the Cartesian equation.",
+          "answer": "From $x=t+1$: $t=x-1$. Substitute: $y=(x-1)^2-3=x^2-2x-2$.",
+          "technique": "Eliminate the parameter: solve one equation for $t$, substitute into the other. Result is a Cartesian relation."
+        },
+        {
+          "problem": "Parametric: $x=3\\cos\\theta$, $y=3\\sin\\theta$. What curve does this trace?",
+          "answer": "$x^2+y^2=9\\cos^2\\theta+9\\sin^2\\theta=9$. It traces a circle of radius $3$ centered at the origin.",
+          "technique": "Use $\\cos^2\\theta+\\sin^2\\theta=1$ to eliminate $\\theta$ from trig parametric equations."
+        }
+      ],
+      "reviewProblems": [
+        {
+          "problem": "Find the maximum value of $f(x)=-x^2+10x-16$.",
+          "answer": "Vertex: $x=5$. $f(5)=-25+50-16=9$."
+        },
+        {
+          "problem": "Eliminate the parameter: $x=2t$, $y=t^2+1$.",
+          "answer": "$t=x/2$, so $y=(x/2)^2+1=\\frac{x^2}{4}+1$."
+        },
+        {
+          "problem": "A projectile has height $h(t)=-16t^2+80t$. When does it land?",
+          "answer": "$-16t^2+80t=0\\Rightarrow t(80-16t)=0\\Rightarrow t=5$ sec."
+        }
+      ]
+    },
+    {
+      "id": "PC_3_4",
+      "section": "3.4",
+      "title": "Polynomial Functions",
+      "swbat": "Students will be able to identify degree, leading coefficient, end behavior, and zeros (with multiplicity) of polynomial functions.",
+      "exitTicket": "For $f(x)=2x^4-5x^3+x-7$, identify the degree, leading term, and describe end behavior.",
+      "hasPractice": false,
+      "workedExamples": [
+        {
+          "problem": "Describe the end behavior of $f(x)=-3x^5+7x^2-1$.",
+          "answer": "Degree $5$ (odd), leading coefficient $-3$ (negative). As $x\\to-\\infty$, $f\\to+\\infty$; as $x\\to+\\infty$, $f\\to-\\infty$.",
+          "technique": "End behavior depends only on degree (odd/even) and sign of leading coefficient — ignore all other terms."
+        },
+        {
+          "problem": "Find the zeros and their multiplicities: $f(x)=x^2(x-3)^3(x+1)$.",
+          "answer": "$x=0$ (multiplicity 2, touches axis, bounces), $x=3$ (multiplicity 3, crosses axis with flattening), $x=-1$ (mult. 1, crosses normally).",
+          "technique": "Multiplicity even → graph touches (bounces) at that zero. Multiplicity odd → graph crosses through."
+        },
+        {
+          "problem": "How many turning points can $f(x)=x^4-5x^2+4$ have?",
+          "answer": "At most $n-1=3$ turning points for degree $4$. (This function has exactly $3$.)",
+          "technique": "A degree-$n$ polynomial has at most $n-1$ turning points (local maxes/mins)."
+        },
+        {
+          "problem": "Use the Intermediate Value Theorem to show $f(x)=x^3-2x-5$ has a zero between $x=2$ and $x=3$.",
+          "answer": "$f(2)=8-4-5=-1<0$ and $f(3)=27-6-5=16>0$. Sign change on a continuous function → zero exists between $2$ and $3$.",
+          "technique": "IVT: if $f$ is continuous and changes sign on $[a,b]$, there's at least one zero in $(a,b)$."
+        }
+      ],
+      "reviewProblems": [
+        {
+          "problem": "What is the maximum number of zeros of $f(x)=x^5-3x^2+1$?",
+          "answer": "5 (degree = max number of zeros)."
+        },
+        {
+          "problem": "Describe end behavior of $f(x)=4x^6-x^4+2$.",
+          "answer": "Even degree, positive leading coeff: both ends go to $+\\infty$."
+        },
+        {
+          "problem": "A zero has multiplicity 2. What does the graph do there?",
+          "answer": "Touches the $x$-axis and bounces back (turns around) — doesn't cross through."
+        }
+      ]
+    },
+    {
+      "id": "PC_3_5",
+      "section": "3.5",
+      "title": "Graphing Polynomial Functions",
+      "swbat": "Students will be able to graph polynomial functions by analyzing zeros, multiplicities, end behavior, and turning points.",
+      "exitTicket": "Sketch $f(x)=-(x+2)^2(x-1)$. Label zeros, note their multiplicities, and describe end behavior.",
+      "hasPractice": false,
+      "workedExamples": [
+        {
+          "problem": "Sketch $f(x)=(x+1)(x-2)(x-4)$.",
+          "answer": "Degree 3, positive leading coeff: down-left, up-right. Zeros at $x=-1,2,4$ all multiplicity 1 (cross-through). $y$-intercept: $f(0)=(1)(-2)(-4)=8$.",
+          "technique": "Graphing checklist: end behavior → zeros and multiplicities → $y$-intercept → sketch."
+        },
+        {
+          "problem": "Sketch $g(x)=x^2(x-3)$.",
+          "answer": "Degree 3, positive leading: down-left, up-right. Zero at $x=0$ (mult 2, bounce) and $x=3$ (mult 1, cross). $y$-int: $0$.",
+          "technique": "When a zero has even multiplicity, the graph bounces. Draw it tangent to the axis there, not crossing."
+        },
+        {
+          "problem": "For $f(x)=-2(x-1)^2(x+3)$, find the $y$-intercept and describe the behavior at each zero.",
+          "answer": "$y$-int: $f(0)=-2(1)(3)=-6$. At $x=1$ (mult 2): bounce. At $x=-3$ (mult 1): cross. Leading term $-2x^3$: up-left, down-right.",
+          "technique": "Always find $f(0)$ by substituting $x=0$ — gives $y$-intercept without expanding the whole polynomial."
+        },
+        {
+          "problem": "A degree-5 polynomial with positive leading coefficient. How many real zeros could it have?",
+          "answer": "Odd degree — at least $1$ real zero. Could have $1,3,$ or $5$ real zeros (counting multiplicity, complex zeros come in conjugate pairs).",
+          "technique": "Complex zeros come in pairs (conjugate pairs), so odd-degree polynomials always have at least one real zero."
+        }
+      ],
+      "reviewProblems": [
+        {
+          "problem": "How many $x$-intercepts does $f(x)=(x-2)^2(x+1)^2$ have?",
+          "answer": "2 — at $x=2$ and $x=-1$, both with multiplicity 2 (the graph touches but doesn't cross at each)."
+        },
+        {
+          "problem": "Find the $y$-intercept of $f(x)=3(x+4)(x-1)(x-6)$.",
+          "answer": "$f(0)=3(4)(-1)(-6)=72$"
+        },
+        {
+          "problem": "Sketch end behavior of $f(x)=-x^4+3x^2$.",
+          "answer": "Even degree, negative leading: both ends go to $-\\infty$."
+        }
+      ]
+    },
+    {
+      "id": "PC_3_6",
+      "section": "3.6",
+      "title": "Rational Functions",
+      "swbat": "Students will be able to identify vertical and horizontal asymptotes, holes, and intercepts of rational functions and sketch their graphs.",
+      "exitTicket": "Find all asymptotes and holes of $f(x)=\\dfrac{x^2-4}{x^2-x-2}$.",
+      "hasPractice": false,
+      "workedExamples": [
+        {
+          "problem": "Find vertical asymptotes of $f(x)=\\dfrac{x+1}{x^2-9}$.",
+          "answer": "Factor denominator: $(x-3)(x+3)$. Zeros at $x=3$ and $x=-3$. Neither cancels with numerator. Vertical asymptotes: $x=3$ and $x=-3$.",
+          "technique": "VA: set denominator $=0$ and check if the factor cancels with numerator. Cancels → hole; doesn't cancel → VA."
+        },
+        {
+          "problem": "Find the horizontal asymptote of $f(x)=\\dfrac{3x^2-1}{x^2+4}$.",
+          "answer": "Same degree in numerator and denominator: HA is $y=\\dfrac{3}{1}=3$ (ratio of leading coefficients).",
+          "technique": "HA rules: degrees equal → HA = ratio of leading coeff. Numerator degree lower → HA is $y=0$. Num. degree higher → no HA."
+        },
+        {
+          "problem": "Find the hole in $f(x)=\\dfrac{(x-2)(x+3)}{(x-2)(x+1)}$.",
+          "answer": "Factor $(x-2)$ cancels. Hole at $x=2$: plug $2$ into simplified $\\dfrac{x+3}{x+1}=\\dfrac{5}{3}$. Hole at $\\left(2,\\dfrac{5}{3}\\right)$.",
+          "technique": "Holes occur where a common factor cancels. Find the $x$-value from the canceled factor; plug into simplified form for $y$."
+        },
+        {
+          "problem": "Sketch $f(x)=\\dfrac{2x}{x-3}$: find intercepts, asymptotes, and one point to guide the sketch.",
+          "answer": "$x$-int: $(0,0)$ (numerator $=0$). $y$-int: $(0,0)$. VA: $x=3$. HA: $y=2$. Test $x=6$: $f(6)=12/3=4$.",
+          "technique": "Sketch workflow: find intercepts → VA → HA → test a point in each region. Curve approaches (not crosses) asymptotes."
+        }
+      ],
+      "reviewProblems": [
+        {
+          "problem": "Find VA and HA for $f(x)=\\dfrac{5}{x^2-4}$.",
+          "answer": "VA: $x=2, x=-2$. HA: $y=0$ (numerator degree < denominator degree)."
+        },
+        {
+          "problem": "Find the hole of $f(x)=\\dfrac{x^2-1}{x-1}$.",
+          "answer": "Factor: $\\dfrac{(x-1)(x+1)}{x-1}=x+1$, $x\\neq 1$. Hole at $(1,2)$."
+        },
+        {
+          "problem": "Describe the end behavior of $f(x)=\\dfrac{x+4}{x-1}$ as $x\\to\\pm\\infty$.",
+          "answer": "$f(x)\\to 1$ from both sides (HA at $y=1$)."
+        }
+      ]
+    },
+    {
+      "id": "PC_4_1",
+      "section": "4.1",
+      "title": "Exponential Functions",
+      "swbat": "Students will be able to evaluate exponential functions, identify their properties, and model growth/decay situations.",
+      "exitTicket": "A population starts at $500$ and grows at $6\\%$ per year. Write an exponential model and find the population after $10$ years.",
+      "hasPractice": false,
+      "workedExamples": [
+        {
+          "problem": "Evaluate $f(x)=3\\cdot 2^x$ at $x=-1, 0, 3$.",
+          "answer": "$f(-1)=3\\cdot\\frac{1}{2}=1.5$; $f(0)=3$; $f(3)=3\\cdot 8=24$.",
+          "technique": "Exponential functions: the base is raised to the variable. Negative exponents flip to fractions."
+        },
+        {
+          "problem": "Write an exponential growth model: initial value $200$, growth rate $5\\%$ per year.",
+          "answer": "$f(t)=200(1.05)^t$. General form: $A=P(1+r)^t$ where $P$ = initial value, $r$ = rate, $t$ = time.",
+          "technique": "Growth: $A=P(1+r)^t$. Decay: $A=P(1-r)^t$. The base is $(1\\pm r)$."
+        },
+        {
+          "problem": "A car worth \\$25,000 depreciates at $15\\%$/year. What is it worth after $4$ years?",
+          "answer": "$V(4)=25000(0.85)^4=25000(0.522)\\approx \\$13{,}050$.",
+          "technique": "Decay: base is $(1-0.15)=0.85$. Each year the value is multiplied by $0.85$."
+        },
+        {
+          "problem": "Compare $f(x)=2^x$ and $g(x)=\\left(\\frac{1}{2}\\right)^x$. How are they related?",
+          "answer": "$g(x)=\\left(\\frac{1}{2}\\right)^x=2^{-x}$. So $g$ is a reflection of $f$ over the $y$-axis. $f$ grows; $g$ decays.",
+          "technique": "A base between $0$ and $1$ gives exponential decay. $b>1$ gives growth. Flipping the base reflects over the $y$-axis."
+        }
+      ],
+      "reviewProblems": [
+        {
+          "problem": "Evaluate $f(x)=5(0.6)^x$ at $x=0$ and $x=3$.",
+          "answer": "$f(0)=5$; $f(3)=5(0.216)=1.08$."
+        },
+        {
+          "problem": "Is $f(x)=4^x$ growth or decay? What about $f(x)=0.4^x$?",
+          "answer": "$4^x$: growth ($b>1$). $0.4^x$: decay ($0<b<1$)."
+        },
+        {
+          "problem": "A bacteria colony starts at $100$ and doubles every hour. Write a model and find the count after $5$ hours.",
+          "answer": "$B(t)=100\\cdot 2^t$; $B(5)=3200$."
+        }
+      ]
+    },
+    {
+      "id": "PC_4_2",
+      "section": "4.2",
+      "title": "Graphing Exponential Functions",
+      "swbat": "Students will be able to graph exponential functions, identify transformations, and determine asymptotes, domain, and range.",
+      "exitTicket": "Graph $f(x)=2^{x-3}+1$. State the horizontal asymptote, domain, and range.",
+      "hasPractice": false,
+      "workedExamples": [
+        {
+          "problem": "Graph $f(x)=2^x$ and describe key features.",
+          "answer": "Domain: $(-\\infty,\\infty)$. Range: $(0,\\infty)$. $y$-intercept: $(0,1)$. HA: $y=0$. Increasing everywhere.",
+          "technique": "Parent exponential $b^x$: always passes through $(0,1)$, approaches but never reaches $y=0$ asymptote."
+        },
+        {
+          "problem": "Describe the graph of $g(x)=3^x-4$ compared to $f(x)=3^x$.",
+          "answer": "Shift down $4$. $y$-intercept shifts to $(0,-3)$. HA shifts to $y=-4$. Range: $(-4,\\infty)$.",
+          "technique": "Vertical shifts move both the $y$-intercept AND the horizontal asymptote by the same amount."
+        },
+        {
+          "problem": "Graph $h(x)=-2^x+3$. State the HA and range.",
+          "answer": "Reflection over $x$-axis, then shift up $3$. HA: $y=3$. Range: $(-\\infty,3)$. Decreasing everywhere. $y$-int: $(0,2)$.",
+          "technique": "Negating the whole function flips it over the $x$-axis. The asymptote is now approached from below."
+        },
+        {
+          "problem": "Write the equation of the exponential function with HA $y=-2$, passing through $(0,0)$ and $(1,4)$.",
+          "answer": "Form: $y=a\\cdot b^x-2$. At $x=0$: $0=a-2\\Rightarrow a=2$. At $x=1$: $4=2b-2\\Rightarrow b=3$. Equation: $y=2\\cdot 3^x-2$.",
+          "technique": "Use key points to solve for unknowns $a$ and $b$ in $y=a\\cdot b^x+k$."
+        }
+      ],
+      "reviewProblems": [
+        {
+          "problem": "State the HA and range of $f(x)=5^x-3$.",
+          "answer": "HA: $y=-3$. Range: $(-3,\\infty)$."
+        },
+        {
+          "problem": "How does $f(x)=2^{-x}$ differ from $f(x)=2^x$?",
+          "answer": "Reflection over the $y$-axis — exponential decay instead of growth."
+        },
+        {
+          "problem": "Find the $y$-intercept of $f(x)=4\\cdot 3^x-1$.",
+          "answer": "$f(0)=4(1)-1=3$. $y$-intercept: $(0,3)$."
+        }
+      ]
+    },
+    {
+      "id": "PC_4_3",
+      "section": "4.3",
+      "title": "Logarithmic Functions",
+      "swbat": "Students will be able to convert between exponential and logarithmic form, evaluate logarithms, and identify properties of log functions.",
+      "exitTicket": "Evaluate: $\\log_3 81$ and $\\ln(e^5)$. Convert $2^6=64$ to logarithmic form.",
+      "hasPractice": false,
+      "workedExamples": [
+        {
+          "problem": "Convert $5^3=125$ to logarithmic form. Convert $\\log_4 64=3$ to exponential form.",
+          "answer": "$\\log_5 125=3$. $\\quad 4^3=64$.",
+          "technique": "$b^y=x \\iff \\log_b x=y$. Logarithm = exponent. The log asks: 'What power of the base gives this number?'"
+        },
+        {
+          "problem": "Evaluate: $\\log_2 32$, $\\log_{10} 1000$, $\\log_5 1$.",
+          "answer": "$\\log_2 32=5$ (since $2^5=32$). $\\log_{10} 1000=3$ (since $10^3=1000$). $\\log_5 1=0$ (since $5^0=1$).",
+          "technique": "Ask: 'What power of the base gives this result?' Always: $\\log_b 1=0$ and $\\log_b b=1$."
+        },
+        {
+          "problem": "Graph $f(x)=\\log_2 x$ and state domain, range, and key features.",
+          "answer": "Domain: $(0,\\infty)$. Range: $(-\\infty,\\infty)$. $x$-intercept: $(1,0)$. VA: $x=0$. Passes through $(2,1)$ and $(4,2)$. Increasing.",
+          "technique": "Log function is the inverse of exponential — swap $x$ and $y$ from $2^x$ graph."
+        },
+        {
+          "problem": "Solve: $\\log_3 x = 4$.",
+          "answer": "Convert to exponential: $x=3^4=81$.",
+          "technique": "To solve a logarithmic equation: convert to exponential form, then solve. $\\log_b x=y \\Rightarrow x=b^y$."
+        }
+      ],
+      "reviewProblems": [
+        {
+          "problem": "Convert $\\log_7 343=3$ to exponential form.",
+          "answer": "$7^3=343$"
+        },
+        {
+          "problem": "Evaluate $\\ln(e^{-2})$.",
+          "answer": "$-2$ (since $\\ln$ and $e^x$ are inverses)."
+        },
+        {
+          "problem": "Find the domain of $f(x)=\\log(x-4)$.",
+          "answer": "Need $x-4>0\\Rightarrow x>4$. Domain: $(4,\\infty)$."
+        }
+      ]
+    },
+    {
+      "id": "PC_4_5",
+      "section": "4.5",
+      "title": "Exponential & Logarithmic Equations",
+      "swbat": "Students will be able to solve exponential and logarithmic equations using properties of logs and inverse operations.",
+      "exitTicket": "Solve: $3^{2x-1}=27$ and $\\log_2(x+3)=5$.",
+      "hasPractice": false,
+      "workedExamples": [
+        {
+          "problem": "Solve $5^{x+1}=125$.",
+          "answer": "$125=5^3$, so $5^{x+1}=5^3\\Rightarrow x+1=3\\Rightarrow x=2$.",
+          "technique": "Same-base method: if $b^m=b^n$, then $m=n$. Rewrite both sides with the same base when possible."
+        },
+        {
+          "problem": "Solve $2^x=50$.",
+          "answer": "Take $\\log$ of both sides: $x\\log 2=\\log 50\\Rightarrow x=\\dfrac{\\log 50}{\\log 2}\\approx 5.64$.",
+          "technique": "When bases can't match: take $\\log$ (or $\\ln$) of both sides. Use change-of-base: $\\log_b a=\\dfrac{\\log a}{\\log b}$."
+        },
+        {
+          "problem": "Solve $\\log_5(2x+1)=3$.",
+          "answer": "Convert to exponential: $2x+1=5^3=125\\Rightarrow 2x=124\\Rightarrow x=62$. Check: $\\log_5(125)=3$ ✓",
+          "technique": "Isolate the log, convert to exponential, solve. Always check — the argument of log must be positive."
+        },
+        {
+          "problem": "Solve $\\ln(x)+\\ln(x-2)=\\ln(8)$.",
+          "answer": "$\\ln(x(x-2))=\\ln(8)\\Rightarrow x(x-2)=8\\Rightarrow x^2-2x-8=0\\Rightarrow (x-4)(x+2)=0$. $x=4$ or $x=-2$. Check: $x=-2$ gives $\\ln(-2)$ which is undefined. Only $x=4$.",
+          "technique": "Use $\\log A+\\log B=\\log(AB)$ to condense, then drop the logs. Always check for extraneous solutions!"
+        }
+      ],
+      "reviewProblems": [
+        {
+          "problem": "Solve $4^{3x}=64$.",
+          "answer": "$4^{3x}=4^3\\Rightarrow 3x=3\\Rightarrow x=1$."
+        },
+        {
+          "problem": "Solve $\\log(x)+\\log(x+3)=1$.",
+          "answer": "$x(x+3)=10\\Rightarrow x^2+3x-10=0\\Rightarrow x=2$ (reject $x=-5$, negative arg)."
+        },
+        {
+          "problem": "Solve $e^{2x}=15$. Give exact and decimal answer.",
+          "answer": "$2x=\\ln 15\\Rightarrow x=\\frac{\\ln 15}{2}\\approx 1.35$."
+        }
+      ]
+    }
+  ]
 }
