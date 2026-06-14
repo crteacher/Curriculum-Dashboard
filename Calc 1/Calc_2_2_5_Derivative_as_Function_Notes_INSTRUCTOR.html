@@ -98,6 +98,14 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
     -webkit-print-color-adjust:exact;print-color-adjust:exact}
 }
 @page{margin:.55in .65in;size:letter}
+.proof-panel{margin:.4rem 0 1.1rem;border-left:3px solid #7a9a6a;border-radius:0 6px 6px 0;background:#f5f7f3}
+.proof-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#5a7a4a;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.proof-toggle::-webkit-details-marker{display:none}
+details[open]>.proof-toggle{color:#185fa5}
+.proof-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #c8d8b8}
+.proof-body p{margin-bottom:.45rem}
+.proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
+@media print{.proof-panel{display:none}}
 </style>
 </head>
 <body>
@@ -108,6 +116,19 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 <div class="two-col">
 <div class="col"><div class="section-head">Derivative as a Function</div>
 <div class="accent-box"><p>$$f'(x)=\lim_{h\to 0}\frac{f(x+h)-f(x)}{h}$$</p><p>Same definition — but $x$ is a variable, not a fixed number. The result is a new function whose output at any $x$ equals the slope of $f$ there.</p><p><strong>Key results from the limit definition:</strong><br>$f(x)=c \Rightarrow f'(x)=0$<br>$f(x)=ax+b \Rightarrow f'(x)=a$<br>$f(x)=ax^2 \Rightarrow f'(x)=2ax$</p></div>
+<details class="proof-panel">
+<summary class="proof-toggle">▸ Geometric Argument</summary>
+<div class="proof-body">
+  <p>The key idea: we want the slope of a curve at a <em>single point</em> $x$ — but a slope normally requires two points. Here's how the limit resolves that.</p>
+  <p>Take any nearby point $x+h$ on $f$. The slope of the <em>secant line</em> through $(x,\,f(x))$ and $(x+h,\,f(x+h))$ is the <strong>average rate of change</strong>:
+  $$\frac{f(x+h)-f(x)}{h}$$</p>
+  <p>Now let $h\to 0$. The second point slides along the curve toward $x$. As it does, the secant line rotates and in the limit becomes the <strong>tangent line</strong> — the line that just grazes the curve at that point.</p>
+  <p>Capturing that limiting slope gives the derivative:
+  $$f'(x)=\lim_{h\to 0}\frac{f(x+h)-f(x)}{h}$$</p>
+  <p>This is the <em>definition</em> of the derivative, not a result derived from something else. Its justification is geometric: shrink the interval until the secant becomes the tangent, and you've captured the instantaneous rate of change.</p>
+  <p class="proof-qed">∎</p>
+</div>
+</details>
 </div>
 <div class="col"><div class="section-head">Reading $f'$ from $f$</div>
 <div class="accent-box"><p>$f'(x)>0$ on interval &rarr; $f$ is <strong>increasing</strong> there<br>$f'(x)<0$ on interval &rarr; $f$ is <strong>decreasing</strong> there<br>$f'(x)=0$ at a point &rarr; $f$ has a <strong>horizontal tangent</strong></p><p>The graph of $f'$:</p><ul>  <li>Positive where $f$ goes uphill</li>  <li>Negative where $f$ goes downhill</li>  <li>Crosses zero where $f$ has peaks/valleys</li></ul></div>
@@ -183,5 +204,6 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
     throwOnError: false
   });
 </script>
+<!-- proof-layer:done -->
 </body>
 </html>

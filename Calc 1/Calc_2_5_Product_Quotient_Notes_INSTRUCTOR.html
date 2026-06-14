@@ -98,6 +98,14 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
     -webkit-print-color-adjust:exact;print-color-adjust:exact}
 }
 @page{margin:.55in .65in;size:letter}
+.proof-panel{margin:.4rem 0 1.1rem;border-left:3px solid #7a9a6a;border-radius:0 6px 6px 0;background:#f5f7f3}
+.proof-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#5a7a4a;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.proof-toggle::-webkit-details-marker{display:none}
+details[open]>.proof-toggle{color:#185fa5}
+.proof-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #c8d8b8}
+.proof-body p{margin-bottom:.45rem}
+.proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
+@media print{.proof-panel{display:none}}
 </style>
 </head>
 <body>
@@ -108,10 +116,32 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 <div class="two-col">
 <div class="col"><div class="section-head">Product Rule</div>
 <div class="accent-box"><p>$$\frac{d}{dx}[f(x)\cdot g(x)] = f'(x)\cdot g(x)+f(x)\cdot g'(x)$$</p><p><em>"Derivative of first times second, plus first times derivative of second."</em></p><p><strong>Example:</strong><br>$\dfrac{d}{dx}[x^2\sin x]=2x\sin x+x^2\cos x$</p></div>
+<details class="proof-panel">
+<summary class="proof-toggle">▸ Show Proof</summary>
+<div class="proof-body">
+  <p>Start from the limit definition. The key trick is to add and subtract $f(x+h)g(x)$ in the numerator, which splits the limit into two recognizable pieces:</p>
+  <p>$$\frac{d}{dx}[fg]=\lim_{h\to 0}\frac{f(x+h)g(x+h)-f(x)g(x)}{h}$$</p>
+  <p>Insert $-f(x+h)g(x)+f(x+h)g(x)$ (which equals zero) into the numerator:</p>
+  <p>$$=\lim_{h\to 0}\!\left[f(x+h)\cdot\frac{g(x+h)-g(x)}{h}+g(x)\cdot\frac{f(x+h)-f(x)}{h}\right]$$</p>
+  <p>As $h\to 0$: the difference quotients become $g'(x)$ and $f'(x)$, and $f(x+h)\to f(x)$ (because a differentiable function is continuous). This gives $f(x)g'(x)+g(x)f'(x)$.</p>
+  <p class="proof-qed">∎</p>
+</div>
+</details>
 <p class="body-text"><strong>When to use it:</strong> when two expressions are multiplied and neither can be simplified into a single power of $x$ first. $(x^2+1)x^3$ can be expanded — but $(x^2+1)e^x$ cannot. Use the product rule there.</p>
 </div>
 <div class="col"><div class="section-head">Quotient Rule</div>
 <div class="accent-box"><p>$$\frac{d}{dx}\!\left[\frac{f(x)}{g(x)}\right]=\frac{f'(x)\cdot g(x)-f(x)\cdot g'(x)}{[g(x)]^2}$$</p><p><em>"Low d-high minus high d-low, over low squared."</em></p><p><strong>Example:</strong><br>$\dfrac{d}{dx}\!\left[\dfrac{x^2}{x+1}\right]=\dfrac{2x(x+1)-x^2}{(x+1)^2}=\dfrac{x^2+2x}{(x+1)^2}$</p></div>
+<details class="proof-panel">
+<summary class="proof-toggle">▸ Show Proof</summary>
+<div class="proof-body">
+  <p>The cleanest route derives the Quotient Rule directly from the Product Rule. Let $h(x)=\dfrac{f(x)}{g(x)}$, so $f(x)=h(x)\cdot g(x)$.</p>
+  <p>Differentiate both sides with the Product Rule:</p>
+  <p>$$f'(x)=h'(x)\cdot g(x)+h(x)\cdot g'(x)$$</p>
+  <p>Solve for $h'(x)$, then substitute $h(x)=\dfrac{f(x)}{g(x)}$:</p>
+  <p>$$h'(x)=\frac{f'(x)-h(x)\cdot g'(x)}{g(x)}=\frac{f'(x)-\dfrac{f(x)}{g(x)}\cdot g'(x)}{g(x)}=\frac{f'(x)\cdot g(x)-f(x)\cdot g'(x)}{[g(x)]^2}$$</p>
+  <p class="proof-qed">∎</p>
+</div>
+</details>
 <p class="body-text"><strong>Common mistake:</strong> the subtraction order in the numerator is fixed — $f'g - fg'$, <em>not</em> $fg' - f'g$. Getting this backwards flips the sign of the entire answer.</p>
 </div>
 </div>
@@ -184,5 +214,6 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
     throwOnError: false
   });
 </script>
+<!-- proof-layer:done -->
 </body>
 </html>

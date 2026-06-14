@@ -107,6 +107,14 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   .svg-caption{font-size:9pt}
 }
 @page{margin:.55in .65in;size:letter}
+.proof-panel{margin:.4rem 0 1.1rem;border-left:3px solid #7a9a6a;border-radius:0 6px 6px 0;background:#f5f7f3}
+.proof-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#5a7a4a;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.proof-toggle::-webkit-details-marker{display:none}
+details[open]>.proof-toggle{color:#185fa5}
+.proof-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #c8d8b8}
+.proof-body p{margin-bottom:.45rem}
+.proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
+@media print{.proof-panel{display:none}}
 </style>
 </head>
 <body>
@@ -117,10 +125,28 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 <div class="two-col">
 <div class="col"><div class="section-head">Average Rate of Change</div>
 <div class="accent-box"><p>The <strong>average rate of change</strong> of $f$ over $[a,b]$:</p>$$\dfrac{f(b)-f(a)}{b-a}$$<p>This is the slope of the <strong>secant line</strong> through $(a,f(a))$ and $(b,f(b))$.</p><p><strong>Units:</strong> change in output per unit change in input. For position $s(t)$, this is average velocity.</p></div>
+<details class="proof-panel">
+<summary class="proof-toggle">▸ Geometric Argument</summary>
+<div class="proof-body">
+  <p>Picture two points sitting on the graph of $f$: $(a, f(a))$ and $(b, f(b))$. The straight line connecting them is called a <strong>secant line</strong>, and slope is always "rise over run" — how much the output changes divided by how much the input changes.</p>
+  <p>The rise is the change in output, $f(b)-f(a)$. The run is the change in input, $b-a$. So the slope of that secant line is $$\text{slope} = \frac{\text{rise}}{\text{run}} = \frac{f(b)-f(a)}{b-a}$$</p>
+  <p>That ratio is exactly the average rate of change. It's an <em>average</em> because it only looks at the two endpoints — it has no idea whether $f$ wiggled up and down in between. Whatever happened along the way, the net change over the whole interval is summarized by this one slope.</p>
+  <p class="proof-qed">∎</p>
+</div>
+</details>
 <p class="body-text">Difference quotient form (used to build the derivative): $\dfrac{f(a+h)-f(a)}{h}$ where $h=b-a$. As $h\to 0$, the secant slope approaches the tangent slope.</p>
 </div>
 <div class="col"><div class="section-head">The Derivative: Preview</div>
 <div class="accent-box"><p>$f'(a)$ = slope of the <strong>tangent line</strong> at $x=a$</p><p>$$f'(a)=\lim_{h\to 0}\frac{f(a+h)-f(a)}{h}$$</p><p><strong>Derivative = instantaneous rate of change = slope.</strong></p><p>If $f'(a)>0$: $f$ is <em>increasing</em> at $a$.<br>If $f'(a)<0$: $f$ is <em>decreasing</em> at $a$.<br>If $f'(a)=0$: $f$ has a <em>horizontal tangent</em> at $a$.</p></div>
+<details class="proof-panel">
+<summary class="proof-toggle">▸ Geometric Argument</summary>
+<div class="proof-body">
+  <p>Here's where this definition comes from. Start with the secant line through $(a, f(a))$ and a nearby point $(a+h, f(a+h))$. Its slope is the difference quotient $$\frac{f(a+h)-f(a)}{h}$$ which is just the average rate of change over the short interval from $a$ to $a+h$ — a reasonable first guess at how steep $f$ is right around $x=a$.</p>
+  <p>The problem: that guess still depends on $h$, the distance to the second point. If $h$ is large, the secant line might cut across the curve and miss what's really happening at $a$. The fix is to shrink $h$ toward $0$ — slide the second point back along the curve until it's right on top of the first.</p>
+  <p>As that happens, the secant line pivots and settles into a limiting position: the <strong>tangent line</strong>, the line that just grazes the curve at $x=a$ and matches its direction there exactly. So we define $$f'(a)=\lim_{h\to 0}\frac{f(a+h)-f(a)}{h}$$ to be whatever number the secant slopes are homing in on. That limiting slope — the slope of the tangent line — is what we mean by the <em>instantaneous</em> rate of change at $a$.</p>
+  <p class="proof-qed">∎</p>
+</div>
+</details>
 <div class="svg-figure"><svg viewBox="0 0 250 155" xmlns="http://www.w3.org/2000/svg" style="width:220px;height:auto"><line x1="10" y1="140" x2="238" y2="140" stroke="#888" stroke-width="1.2"/><polygon points="238,137 244,140 238,143" fill="#888"/><line x1="15" y1="148" x2="15" y2="8" stroke="#888" stroke-width="1.2"/><polygon points="12,8 15,2 18,8" fill="#888"/><text x="241" y="144" font-size="10" fill="#555" font-family="sans-serif">x</text><text x="19" y="8" font-size="10" fill="#555" font-family="sans-serif">y</text><polyline points="15,140 50,137 85,127 120,111 155,88 190,58 225,23" stroke="#1a1a1a" stroke-width="2" fill="none"/><line x1="68" y1="140" x2="225" y2="23" stroke="#c9860a" stroke-width="1.8" stroke-dasharray="6,3"/><line x1="50" y1="140" x2="207" y2="82" stroke="#2a8c2a" stroke-width="1.8"/><circle cx="85" cy="127" r="4" fill="#185fa5"/><circle cx="225" cy="23" r="4" fill="#c9860a"/><text x="71" y="123" font-size="10" fill="#185fa5" font-family="sans-serif" font-weight="bold">P</text><text x="229" y="21" font-size="10" fill="#c9860a" font-family="sans-serif" font-weight="bold">Q</text><line x1="20" y1="18" x2="42" y2="18" stroke="#c9860a" stroke-width="1.8" stroke-dasharray="4,2"/><text x="45" y="22" font-size="9.5" fill="#c9860a" font-family="sans-serif">secant</text><line x1="20" y1="32" x2="42" y2="32" stroke="#2a8c2a" stroke-width="1.8"/><text x="45" y="36" font-size="9.5" fill="#2a8c2a" font-family="sans-serif">tangent at P</text><line x1="85" y1="137" x2="85" y2="143" stroke="#888" stroke-width="1"/><text x="82" y="153" font-size="9.5" fill="#555" font-family="sans-serif">1</text><line x1="225" y1="137" x2="225" y2="143" stroke="#888" stroke-width="1"/><text x="222" y="153" font-size="9.5" fill="#555" font-family="sans-serif">3</text></svg><div class="svg-caption">As $Q \to P$, the secant slope approaches the tangent slope $f'(1)=2$</div></div>
 </div>
 </div>
@@ -193,5 +219,6 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
     throwOnError: false
   });
 </script>
+<!-- proof-layer:done -->
 </body>
 </html>

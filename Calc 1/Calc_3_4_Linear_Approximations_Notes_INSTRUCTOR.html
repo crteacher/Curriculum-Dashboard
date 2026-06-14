@@ -98,6 +98,14 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
     -webkit-print-color-adjust:exact;print-color-adjust:exact}
 }
 @page{margin:.55in .65in;size:letter}
+.proof-panel{margin:.4rem 0 1.1rem;border-left:3px solid #7a9a6a;border-radius:0 6px 6px 0;background:#f5f7f3}
+.proof-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#5a7a4a;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.proof-toggle::-webkit-details-marker{display:none}
+details[open]>.proof-toggle{color:#185fa5}
+.proof-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #c8d8b8}
+.proof-body p{margin-bottom:.45rem}
+.proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
+@media print{.proof-panel{display:none}}
 </style>
 </head>
 <body>
@@ -108,6 +116,22 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 <div class="two-col">
 <div class="col"><div class="section-head">Linear Approximation</div>
 <div class="accent-box"><p>The <strong>linearization</strong> of $f$ at $x=a$:</p>$$L(x)=f(a)+f'(a)(x-a)$$<p>This is just the tangent line at $a$, reused as an approximation:</p>$$f(x)\approx L(x) \text{ for } x\text{ near }a$$<p><strong>Steps:</strong></p><ol style='margin-left:1.2rem;margin-top:.3rem'>  <li>Choose a nearby $a$ where $f(a)$ is easy</li>  <li>Compute $f(a)$ and $f'(a)$</li>  <li>Write $L(x)=f(a)+f'(a)(x-a)$</li>  <li>Plug in the target $x$ value</li></ol></div>
+<details class="proof-panel">
+<summary class="proof-toggle">▸ Show Proof</summary>
+<div class="proof-body">
+  <p>The key idea: the derivative $f'(a)$ is exactly the slope of the curve at $x=a$. The tangent line captures that slope — and near $a$, the curve and its tangent line are nearly indistinguishable.</p>
+  <p><strong>Step 1 — Build the tangent line.</strong> The tangent to $f$ at the point $(a,\,f(a))$ has slope $f'(a)$. Using point-slope form:
+  $$y - f(a) = f'(a)(x-a)$$
+  Solving for $y$ gives $L(x) = f(a)+f'(a)(x-a)$. That's all the formula is — the tangent line, written as a function.</p>
+  <p><strong>Step 2 — Why is $L(x) \approx f(x)$ near $a$?</strong> Recall the limit definition of the derivative:
+  $$f'(a)=\lim_{x\to a}\frac{f(x)-f(a)}{x-a}$$
+  For $x$ close (but not equal) to $a$, the ratio on the right is close to $f'(a)$, meaning:
+  $$f(x)-f(a)\approx f'(a)(x-a)$$
+  Add $f(a)$ to both sides and you get exactly $f(x)\approx L(x)$.</p>
+  <p><strong>Step 3 — Why is this a <em>good</em> approximation?</strong> The error $f(x)-L(x)$ doesn't just shrink as $x\to a$ — it shrinks faster than $|x-a|$ itself. In other words, the tangent line matches $f$ both in height and in slope at $a$. No other line through $(a,\,f(a))$ can do that. The closer you zoom in on the point of tangency, the more the curve looks exactly like its tangent line.</p>
+  <p class="proof-qed">∎</p>
+</div>
+</details>
 </div>
 <div class="col"><div class="section-head">Standard Approximations</div>
 <div class="accent-box"><p><strong>Near $x=0$ for $e^x$:</strong><br>$f'(0)=1$, $f(0)=1$: $L(x)=x+1$<br>$e^{0.2}\approx 1.2$</p><p><strong>Near $x=1$ for $\ln x$:</strong><br>$f'(1)=1$, $f(1)=0$: $L(x)=x-1$<br>$\ln(1.3)\approx 0.3$</p><p><strong>Near $x=4$ for $\sqrt{x}$:</strong><br>$f'(4)=\frac{1}{4}$, $f(4)=2$: $L(x)=2+\frac{x-4}{4}$<br>$\sqrt{4.4}\approx 2.1$</p></div>
@@ -182,5 +206,6 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
     throwOnError: false
   });
 </script>
+<!-- proof-layer:done -->
 </body>
 </html>

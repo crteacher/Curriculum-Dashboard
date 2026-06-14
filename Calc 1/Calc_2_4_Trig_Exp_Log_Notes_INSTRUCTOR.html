@@ -98,6 +98,14 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
     -webkit-print-color-adjust:exact;print-color-adjust:exact}
 }
 @page{margin:.55in .65in;size:letter}
+.proof-panel{margin:.4rem 0 1.1rem;border-left:3px solid #7a9a6a;border-radius:0 6px 6px 0;background:#f5f7f3}
+.proof-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#5a7a4a;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.proof-toggle::-webkit-details-marker{display:none}
+details[open]>.proof-toggle{color:#185fa5}
+.proof-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #c8d8b8}
+.proof-body p{margin-bottom:.45rem}
+.proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
+@media print{.proof-panel{display:none}}
 </style>
 </head>
 <body>
@@ -108,6 +116,21 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 <div class="two-col">
 <div class="col"><div class="section-head">The Four Core Formulas</div>
 <div class="accent-box"><p>$$\frac{d}{dx}[\sin x]=\cos x \qquad \frac{d}{dx}[\cos x]=-\sin x$$</p><p>$$\frac{d}{dx}[e^x]=e^x \qquad \frac{d}{dx}[\ln x]=\frac{1}{x}$$</p><p>Combine with constant multiples and sums/differences just like the Power Rule.</p><p><strong>Important:</strong> these formulas apply only when the argument is plain $x$ (not $2x$, $x^2$, etc. — that needs the Chain Rule).</p></div>
+<details class="proof-panel">
+<summary class="proof-toggle">▸ Show Proof</summary>
+<div class="proof-body">
+  <p><strong>Why $\dfrac{d}{dx}[\sin x]=\cos x$:</strong> Start from the limit definition and apply the angle addition formula $\sin(x+h)=\sin x\cos h+\cos x\sin h$:</p>
+  <p>$$\frac{d}{dx}[\sin x]=\lim_{h\to 0}\frac{\sin(x+h)-\sin x}{h}=\lim_{h\to 0}\!\left[\sin x\cdot\frac{\cos h-1}{h}+\cos x\cdot\frac{\sin h}{h}\right]$$</p>
+  <p>Two special limits — $\lim_{h\to 0}\dfrac{\sin h}{h}=1$ and $\lim_{h\to 0}\dfrac{\cos h-1}{h}=0$ — can be verified geometrically using the unit circle. Substituting gives $\sin x\cdot 0+\cos x\cdot 1=\cos x$. An identical argument with $\cos(x+h)=\cos x\cos h-\sin x\sin h$ gives $\dfrac{d}{dx}[\cos x]=-\sin x$.</p>
+  <p><strong>Why $\dfrac{d}{dx}[e^x]=e^x$:</strong> Factor $e^x$ out of the limit:</p>
+  <p>$$\frac{d}{dx}[e^x]=\lim_{h\to 0}\frac{e^{x+h}-e^x}{h}=e^x\lim_{h\to 0}\frac{e^h-1}{h}$$</p>
+  <p>The number $e\approx 2.718$ is defined precisely so that this last limit equals $1$, making $e^x$ the unique exponential whose derivative equals itself.</p>
+  <p><strong>Why $\dfrac{d}{dx}[\ln x]=\dfrac{1}{x}$:</strong> Use log properties to rewrite the difference quotient, then substitute $u=h/x$:</p>
+  <p>$$\frac{d}{dx}[\ln x]=\lim_{h\to 0}\frac{1}{h}\ln\!\left(1+\frac{h}{x}\right)=\frac{1}{x}\lim_{u\to 0}\frac{\ln(1+u)}{u}=\frac{1}{x}\cdot 1=\frac{1}{x}$$</p>
+  <p>The limit $\lim_{u\to 0}\frac{\ln(1+u)}{u}=1$ is another consequence of how $e$ is defined.</p>
+  <p class="proof-qed">∎</p>
+</div>
+</details>
 </div>
 <div class="col"><div class="section-head">Key Values to Know</div>
 <div class="accent-box"><p>$\sin(0)=0$ &ensp; $\cos(0)=1$ &ensp; $e^0=1$ &ensp; $\ln(1)=0$</p><p>$\sin\!\left(\dfrac{\pi}{2}\right)=1$ &ensp; $\cos\!\left(\dfrac{\pi}{2}\right)=0$</p><p>Use these to evaluate derivatives at $x=0$, $x=1$, $x=\pi/2$.</p></div>
@@ -183,5 +206,6 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
     throwOnError: false
   });
 </script>
+<!-- proof-layer:done -->
 </body>
 </html>

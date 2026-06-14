@@ -14,7 +14,7 @@
         {
           "problem": "Solve: $0.5(x+3)=7$",
           "answer": "$x+3=14 \\Rightarrow x=11$",
-          "technique": "Clear decimals — multiply both sides by 2 first"
+          "technique": "Clear decimals \u2014 multiply both sides by 2 first"
         },
         {
           "problem": "Solve: $3x+4=2x-4$",
@@ -29,7 +29,7 @@
         {
           "problem": "Solve: $5x-7=5x+2$",
           "answer": "$-7=2$ &mdash; FALSE &rarr; No solution",
-          "technique": "Variables cancel on both sides → check for contradiction"
+          "technique": "Variables cancel on both sides \u2192 check for contradiction"
         }
       ],
       "practiceProblems": [
@@ -82,7 +82,7 @@
         {
           "problem": "Let $f(x) = 3x + 5$. Find $f(4)$.",
           "answer": "$f(4) = 3(4) + 5 = 17$",
-          "technique": "Direct substitution — evaluate the function at a specific input"
+          "technique": "Direct substitution \u2014 evaluate the function at a specific input"
         },
         {
           "problem": "Is $(3, 8)$ a solution to $y = 2x + 2$?",
@@ -97,7 +97,7 @@
         {
           "problem": "Find x where $f(x) = 3x + 1$ and $g(x) = x + 7$ intersect.",
           "answer": "$3x + 1 = x + 7 \\Rightarrow 2x = 6 \\Rightarrow x = 3$",
-          "technique": "Set functions equal to each other — intersection = shared solution"
+          "technique": "Set functions equal to each other \u2014 intersection = shared solution"
         }
       ],
       "practiceProblems": [
@@ -155,7 +155,7 @@
         {
           "problem": "Solve $-2x + 5 > 1$ and write in interval notation.",
           "answer": "$-2x > -4 \\Rightarrow x < 2$ (flip!) $\\Rightarrow (-\\infty, 2)$",
-          "technique": "Dividing or multiplying by a negative — flip the inequality sign"
+          "technique": "Dividing or multiplying by a negative \u2014 flip the inequality sign"
         },
         {
           "problem": "Solve $4x + 1 \\geq 2x + 7$ and write in interval notation.",
@@ -3301,7 +3301,7 @@
         {
           "problem": "Evaluate $\\int 2x(x^2+1)^4\\,dx$",
           "answer": "Let $u=x^2+1$, $du=2x\\,dx$.$=\\int u^4\\,du=\\dfrac{u^5}{5}+C=\\dfrac{(x^2+1)^5}{5}+C$",
-          "technique": "Spot the inner function — set u = inner, compute du"
+          "technique": "Spot the inner function \u2014 set u = inner, compute du"
         },
         {
           "problem": "Evaluate $\\int \\cos(3x)\\,dx$",
@@ -3311,7 +3311,7 @@
         {
           "problem": "Evaluate $\\int x\\,e^{x^2}\\,dx$",
           "answer": "Let $u=x^2$, $du=2x\\,dx$.$=\\frac{1}{2}\\int e^u\\,du=\\frac{e^{x^2}}{2}+C$",
-          "technique": "x·dx hints at u = x² (since du = 2x dx)"
+          "technique": "x\u00b7dx hints at u = x\u00b2 (since du = 2x dx)"
         },
         {
           "problem": "Evaluate $\\int_0^1 2x\\sqrt{x^2+1}\\,dx$",
@@ -3386,7 +3386,7 @@
         {
           "problem": "$\\int_0^3 x\\sqrt{9-x^2}\\,dx$",
           "answer": "Let $u=9-x^2$, $du=-2x\\,dx$; limits: $u(0)=9$, $u(3)=0$.$=-\\frac{1}{2}\\int_9^0\\sqrt{u}\\,du=\\frac{1}{2}\\int_0^9 u^{1/2}\\,du=\\left[\\frac{u^{3/2}}{3}\\right]_0^9=9$",
-          "technique": "Change limits when substituting — no need to back-substitute"
+          "technique": "Change limits when substituting \u2014 no need to back-substitute"
         }
       ],
       "practiceProblems": [
@@ -3444,29 +3444,29 @@
       "swbat": "integrate powers of sine and cosine using power-reducing identities",
       "practiceFile": "C2_03_Trig_Power_Reduction_Practice",
       "hasPractice": true,
-      "doNowQ": "We know $\\sin^2 x + \\cos^2 x = 1$. How might you use this identity — or the half-angle formulas — to integrate something like $\\int \\sin^2 x\\,dx$?",
+      "doNowQ": "We know $\\sin^2 x + \\cos^2 x = 1$. How might you use this identity \u2014 or the half-angle formulas \u2014 to integrate something like $\\int \\sin^2 x\\,dx$?",
       "exitTicket": "$\\int \\tan x\\,dx$",
       "exitTicketAnswer": "$\\ln|\\sec x|+C$",
       "workedExamples": [
         {
           "problem": "$\\int \\sin^2 x\\,dx$",
           "answer": "$=\\int\\dfrac{1-\\cos 2x}{2}\\,dx=\\dfrac{x}{2}-\\dfrac{\\sin 2x}{4}+C$",
-          "technique": "Even power of sin → use the half-angle identity sin²x = (1−cos 2x)/2"
+          "technique": "Even power of sin \u2192 use the half-angle identity sin\u00b2x = (1\u2212cos 2x)/2"
         },
         {
           "problem": "$\\int \\sin^3 x\\,dx$",
           "answer": "$=\\int \\sin^2 x\\cdot\\sin x\\,dx=\\int(1-\\cos^2 x)\\sin x\\,dx$Let $u=\\cos x$: $=-\\int(1-u^2)\\,du=-u+\\dfrac{u^3}{3}+C=-\\cos x+\\dfrac{\\cos^3 x}{3}+C$",
-          "technique": "Odd power → peel one sin factor, apply sin²x = 1−cos²x, then u = cos x"
+          "technique": "Odd power \u2192 peel one sin factor, apply sin\u00b2x = 1\u2212cos\u00b2x, then u = cos x"
         },
         {
           "problem": "$\\int \\sin^2 x\\cos^3 x\\,dx$",
           "answer": "Odd power of $\\cos$: $u=\\sin x$, $du=\\cos x\\,dx$.$=\\int u^2(1-u^2)\\,du=\\dfrac{u^3}{3}-\\dfrac{u^5}{5}+C=\\dfrac{\\sin^3 x}{3}-\\dfrac{\\sin^5 x}{5}+C$",
-          "technique": "Mixed powers with odd cos → u = sin x; peel one cos for du"
+          "technique": "Mixed powers with odd cos \u2192 u = sin x; peel one cos for du"
         },
         {
           "problem": "$\\int \\sin^2 x\\cos^2 x\\,dx$",
           "answer": "Use $\\sin x\\cos x=\\frac{\\sin 2x}{2}$:$=\\int\\dfrac{\\sin^2 2x}{4}\\,dx=\\int\\dfrac{1-\\cos 4x}{8}\\,dx=\\dfrac{x}{8}-\\dfrac{\\sin 4x}{32}+C$",
-          "technique": "Both even → convert both using half-angle, use double-angle product identity"
+          "technique": "Both even \u2192 convert both using half-angle, use double-angle product identity"
         }
       ],
       "practiceProblems": [
@@ -3522,17 +3522,17 @@
         {
           "problem": "$\\int\\dfrac{dx}{4+x^2}$",
           "answer": "$a=2$: $\\dfrac{1}{2}\\arctan\\dfrac{x}{2}+C$",
-          "technique": "Match 1/(a²+x²) → arctan form; identify a directly"
+          "technique": "Match 1/(a\u00b2+x\u00b2) \u2192 arctan form; identify a directly"
         },
         {
           "problem": "$\\int\\dfrac{dx}{9+4x^2}$",
           "answer": "Let $u=2x$, $du=2\\,dx$: $=\\dfrac{1}{2}\\int\\dfrac{du}{9+u^2}=\\dfrac{1}{6}\\arctan\\dfrac{2x}{3}+C$",
-          "technique": "Coefficient on x² — factor out or substitute u = kx to normalize"
+          "technique": "Coefficient on x\u00b2 \u2014 factor out or substitute u = kx to normalize"
         },
         {
           "problem": "$\\int\\dfrac{dx}{\\sqrt{16-x^2}}$",
           "answer": "$a=4$: $\\arcsin\\dfrac{x}{4}+C$",
-          "technique": "Match 1/√(a²−x²) → arcsin form; identify a directly"
+          "technique": "Match 1/\u221a(a\u00b2\u2212x\u00b2) \u2192 arcsin form; identify a directly"
         },
         {
           "problem": "$\\int\\dfrac{dx}{x^2+6x+13}$",
@@ -3593,12 +3593,12 @@
         {
           "problem": "Find the area between $y=x^2$ and $y=x+2$.",
           "answer": "Intersections: $x^2=x+2\\Rightarrow x=-1,2$.$A=\\int_{-1}^2[(x+2)-x^2]\\,dx=\\left[\\dfrac{x^2}{2}+2x-\\dfrac{x^3}{3}\\right]_{-1}^2=\\dfrac{9}{2}$",
-          "technique": "Find intersections first; integrate (top − bottom) between them"
+          "technique": "Find intersections first; integrate (top \u2212 bottom) between them"
         },
         {
           "problem": "Area between $y=4-x^2$ and $y=0$.",
           "answer": "$A=\\int_{-2}^2(4-x^2)\\,dx=\\left[4x-\\dfrac{x^3}{3}\\right]_{-2}^2=\\dfrac{32}{3}$",
-          "technique": "One boundary is x-axis — area is just ∫f(x) dx over the interval"
+          "technique": "One boundary is x-axis \u2014 area is just \u222bf(x) dx over the interval"
         },
         {
           "problem": "Area between $y=\\sin x$ and $y=\\cos x$ on $[0,\\pi/2]$.",
@@ -3608,7 +3608,7 @@
         {
           "problem": "Find the area between $x=y^2$ and $x=2-y$.",
           "answer": "Intersections: $y^2=2-y\\Rightarrow y=-2,1$.$A=\\int_{-2}^1[(2-y)-y^2]\\,dy=\\dfrac{9}{2}$",
-          "technique": "Sideways region: integrate with respect to y using x = (right) − (left)"
+          "technique": "Sideways region: integrate with respect to y using x = (right) \u2212 (left)"
         }
       ],
       "practiceProblems": [
@@ -3661,12 +3661,12 @@
         {
           "problem": "Rotate $y=\\sqrt{x}$ on $[0,4]$ about the $x$-axis.",
           "answer": "$V=\\pi\\int_0^4 x\\,dx=\\pi\\left[\\dfrac{x^2}{2}\\right]_0^4=8\\pi$",
-          "technique": "Disk method: V = π∫[f(x)]² dx — one solid boundary only"
+          "technique": "Disk method: V = \u03c0\u222b[f(x)]\u00b2 dx \u2014 one solid boundary only"
         },
         {
           "problem": "Rotate the region between $y=x$ and $y=x^2$ about the $x$-axis.",
           "answer": "$V=\\pi\\int_0^1(x^2-x^4)\\,dx=\\pi\\left[\\dfrac{x^3}{3}-\\dfrac{x^5}{5}\\right]_0^1=\\dfrac{2\\pi}{15}$",
-          "technique": "Washer: V = π∫(R² − r²) dx — R outer radius, r inner radius"
+          "technique": "Washer: V = \u03c0\u222b(R\u00b2 \u2212 r\u00b2) dx \u2014 R outer radius, r inner radius"
         },
         {
           "problem": "Rotate $y=x^2$ on $[0,2]$ about the $y$-axis.",
@@ -3676,7 +3676,7 @@
         {
           "problem": "Base is region between $y=1-x^2$ and $x$-axis; cross sections perpendicular to $x$-axis are squares.",
           "answer": "$s=(1-x^2)$; $V=\\int_{-1}^1(1-x^2)^2\\,dx=\\dfrac{16}{15}$",
-          "technique": "Cross-section method: express cross-sectional area A(x), then V = ∫A(x) dx"
+          "technique": "Cross-section method: express cross-sectional area A(x), then V = \u222bA(x) dx"
         }
       ],
       "practiceProblems": [
@@ -3729,22 +3729,22 @@
         {
           "problem": "Rotate $y=x^2$ and $y=1$ about $y=1$ on the region they enclose.",
           "answer": "$R=1-x^2$, $r=0$; intersections at $x=\\pm1$.$V=\\pi\\int_{-1}^1(1-x^2)^2\\,dx=\\dfrac{16\\pi}{15}$",
-          "technique": "Axis is a line (not coordinate axis) — measure R and r as distances from that line"
+          "technique": "Axis is a line (not coordinate axis) \u2014 measure R and r as distances from that line"
         },
         {
           "problem": "Rotate $y=\\sqrt{x}$ on $[0,4]$ about $y=-1$.",
           "answer": "$R=\\sqrt{x}+1$; $V=\\pi\\int_0^4(\\sqrt{x}+1)^2\\,dx=\\pi\\int_0^4(x+2\\sqrt{x}+1)\\,dx=\\dfrac{136\\pi}{3}$",
-          "technique": "Axis below x-axis: each radius = f(x) − (axis value) to get a positive length"
+          "technique": "Axis below x-axis: each radius = f(x) \u2212 (axis value) to get a positive length"
         },
         {
           "problem": "Rotate $y=x^2$ and $y=x$ about $x=3$.",
           "answer": "Integrate w.r.t. $y$; $R=3-y$, $r=3-\\sqrt{y}$.$V=\\pi\\int_0^1[(3-y)^2-(3-\\sqrt{y})^2]\\,dy=\\dfrac{\\pi}{2}$",
-          "technique": "Vertical axis: integrate w.r.t. y; radius = |axis x − curve x|"
+          "technique": "Vertical axis: integrate w.r.t. y; radius = |axis x \u2212 curve x|"
         },
         {
           "problem": "Rotate region between $y=x$ and $y=x^2$ about $y=2$.",
           "answer": "$R=2-x^2$, $r=2-x$; $[0,1]$.$V=\\pi\\int_0^1[(2-x^2)^2-(2-x)^2]\\,dx=\\dfrac{\\pi}{2}$",
-          "technique": "Identify which function is farther from the axis — that's the outer radius R"
+          "technique": "Identify which function is farther from the axis \u2014 that's the outer radius R"
         }
       ],
       "practiceProblems": [
@@ -3797,7 +3797,7 @@
         {
           "problem": "Rotate $y=x^2$ on $[0,2]$ about the $y$-axis.",
           "answer": "$V=2\\pi\\int_0^2 x\\cdot x^2\\,dx=2\\pi\\int_0^2 x^3\\,dx=2\\pi\\cdot 4=8\\pi$",
-          "technique": "Shell: V = 2π∫ x·f(x) dx — shell radius is x, height is f(x)"
+          "technique": "Shell: V = 2\u03c0\u222b x\u00b7f(x) dx \u2014 shell radius is x, height is f(x)"
         },
         {
           "problem": "Rotate $y=\\sqrt{x}$ on $[0,1]$ about $y$-axis.",
@@ -3807,12 +3807,12 @@
         {
           "problem": "Rotate $y=x(2-x)$ about $x=3$ on $[0,2]$.",
           "answer": "$V=2\\pi\\int_0^2(3-x)\\cdot x(2-x)\\,dx=2\\pi\\int_0^2(6x-5x^2+x^3)\\,dx=\\dfrac{8\\pi}{3}$",
-          "technique": "Shifted axis x = a: shell radius becomes (a − x); adjust sign so radius stays positive"
+          "technique": "Shifted axis x = a: shell radius becomes (a \u2212 x); adjust sign so radius stays positive"
         },
         {
           "problem": "Rotate region between $y=x$ and $y=x^2$ about $y$-axis.",
           "answer": "$V=2\\pi\\int_0^1 x(x-x^2)\\,dx=2\\pi\\int_0^1(x^2-x^3)\\,dx=\\dfrac{\\pi}{6}$",
-          "technique": "Shell between curves: shell height = f(x) − g(x), radius still = x (or shift)"
+          "technique": "Shell between curves: shell height = f(x) \u2212 g(x), radius still = x (or shift)"
         }
       ],
       "practiceProblems": [
@@ -3914,7 +3914,7 @@
         },
         {
           "problem": "Surface area of $y=\\sqrt{r^2-x^2}$ from $-r$ to $r$.",
-          "answer": "$f'=\\dfrac{-x}{\\sqrt{r^2-x^2}}$; $\\sqrt{1+(f')^2}=\\dfrac{r}{\\sqrt{r^2-x^2}}$$S=2\\pi\\int_{-r}^r r\\,dx=4\\pi r^2$ ✓"
+          "answer": "$f'=\\dfrac{-x}{\\sqrt{r^2-x^2}}$; $\\sqrt{1+(f')^2}=\\dfrac{r}{\\sqrt{r^2-x^2}}$$S=2\\pi\\int_{-r}^r r\\,dx=4\\pi r^2$ \u2713"
         },
         {
           "problem": "Surface area of $y=x^3/3$ on $[0,1]$ about $x$-axis.",
@@ -3972,7 +3972,7 @@
           "answer": "Slice at height $x$ from bottom: $W=\\int_0^{10}20x\\,dx=1000$ J"
         },
         {
-          "problem": "Find force on a vertical 2 m × 3 m rectangle submerged with top edge at surface.",
+          "problem": "Find force on a vertical 2 m \u00d7 3 m rectangle submerged with top edge at surface.",
           "answer": "$F=\\rho g\\int_0^3 2x\\,dx=9800\\cdot 9=88200$ N"
         },
         {
@@ -4087,7 +4087,7 @@
         },
         {
           "problem": "Verify: $\\cosh^2 x-\\sinh^2 x=1$.",
-          "answer": "$\\left(\\dfrac{e^x+e^{-x}}{2}\\right)^2-\\left(\\dfrac{e^x-e^{-x}}{2}\\right)^2=\\dfrac{4}{4}=1$ ✓"
+          "answer": "$\\left(\\dfrac{e^x+e^{-x}}{2}\\right)^2-\\left(\\dfrac{e^x-e^{-x}}{2}\\right)^2=\\dfrac{4}{4}=1$ \u2713"
         }
       ],
       "practiceProblems": [
@@ -4299,7 +4299,7 @@
         },
         {
           "problem": "Approximate $\\int_0^1 x^2\\,dx$ using $S_4$.",
-          "answer": "Same nodes; $S_4=\\frac{0.25}{3}[0+4(0.0625)+2(0.25)+4(0.5625)+1]$$=\\frac{0.25}{3}\\cdot 4=0.3\\overline{3}$ — exact! ✓"
+          "answer": "Same nodes; $S_4=\\frac{0.25}{3}[0+4(0.0625)+2(0.25)+4(0.5625)+1]$$=\\frac{0.25}{3}\\cdot 4=0.3\\overline{3}$ \u2014 exact! \u2713"
         },
         {
           "problem": "How large must $n$ be for $|E_T|\\leq 0.001$ for $\\int_1^2 \\frac{1}{x}\\,dx$?",
@@ -4350,15 +4350,15 @@
       "workedExamples": [
         {
           "problem": "$\\int_1^\\infty \\dfrac{dx}{x^2}$",
-          "answer": "$=\\lim_{t\\to\\infty}\\left[-\\dfrac{1}{x}\\right]_1^t=\\lim_{t\\to\\infty}\\left(1-\\dfrac{1}{t}\\right)=1$ ✓ converges"
+          "answer": "$=\\lim_{t\\to\\infty}\\left[-\\dfrac{1}{x}\\right]_1^t=\\lim_{t\\to\\infty}\\left(1-\\dfrac{1}{t}\\right)=1$ \u2713 converges"
         },
         {
           "problem": "$\\int_1^\\infty\\dfrac{1}{x}\\,dx$",
-          "answer": "$=\\lim_{t\\to\\infty}\\ln t=\\infty$ — diverges"
+          "answer": "$=\\lim_{t\\to\\infty}\\ln t=\\infty$ \u2014 diverges"
         },
         {
           "problem": "$\\int_0^1\\dfrac{dx}{\\sqrt{x}}$",
-          "answer": "$=\\lim_{t\\to 0^+}\\int_t^1 x^{-1/2}\\,dx=\\lim_{t\\to 0^+}[2\\sqrt{x}]_t^1=2$ ✓"
+          "answer": "$=\\lim_{t\\to 0^+}\\int_t^1 x^{-1/2}\\,dx=\\lim_{t\\to 0^+}[2\\sqrt{x}]_t^1=2$ \u2713"
         },
         {
           "problem": "$\\int_{-\\infty}^\\infty\\dfrac{dx}{1+x^2}$",
@@ -4384,7 +4384,7 @@
         },
         {
           "problem": "$\\int_0^\\infty\\dfrac{dx}{x^{0.99}}$",
-          "answer": "Diverges ($p=0.99<1$ but this is $[0,\\infty)$ — split at 1)"
+          "answer": "Diverges ($p=0.99<1$ but this is $[0,\\infty)$ \u2014 split at 1)"
         },
         {
           "problem": "Does $\\int_1^\\infty\\dfrac{\\cos x}{x^2}\\,dx$ converge?",
@@ -4405,7 +4405,7 @@
       "workedExamples": [
         {
           "problem": "Show $y=Ce^{2x}$ satisfies $y'=2y$.",
-          "answer": "$y'=2Ce^{2x}=2y$ ✓"
+          "answer": "$y'=2Ce^{2x}=2y$ \u2713"
         },
         {
           "problem": "Solve $y'=3x^2$.",
@@ -4417,7 +4417,7 @@
         },
         {
           "problem": "For $y'=x-y$, determine if $y=x-1$ is a solution.",
-          "answer": "$y'=1$; $x-y=x-(x-1)=1$ ✓"
+          "answer": "$y'=1$; $x-y=x-(x-1)=1$ \u2713"
         }
       ],
       "practiceProblems": [
@@ -4458,7 +4458,7 @@
       "workedExamples": [
         {
           "problem": "Sketch the direction field. Describe the solutions.",
-          "answer": "Slopes depend only on $x$ — all points on a vertical line $x = c$ share the same slope $c$. The field fans left (negative slopes for $x&lt;0$) and right (positive for $x&gt;0$). Solutions are $y = \\frac{1}{2}x^2 + C$ (upward parabolas)."
+          "answer": "Slopes depend only on $x$ \u2014 all points on a vertical line $x = c$ share the same slope $c$. The field fans left (negative slopes for $x&lt;0$) and right (positive for $x&gt;0$). Solutions are $y = \\frac{1}{2}x^2 + C$ (upward parabolas)."
         },
         {
           "problem": "Find any equilibria. Classify as stable or unstable.",
@@ -4470,7 +4470,7 @@
         },
         {
           "problem": "Describe the slope pattern quadrant by quadrant. What are the zero-slope curves?",
-          "answer": "Zero slopes where $x=0$ or $y=0$ (the axes). QI &amp; QIII: $xy&gt;0$ → positive slopes. QII &amp; QIV: $xy&lt;0$ → negative slopes. Solutions are $y = Ce^{x^2/2}$ (grows rapidly for large $|x|$)."
+          "answer": "Zero slopes where $x=0$ or $y=0$ (the axes). QI &amp; QIII: $xy&gt;0$ \u2192 positive slopes. QII &amp; QIV: $xy&lt;0$ \u2192 negative slopes. Solutions are $y = Ce^{x^2/2}$ (grows rapidly for large $|x|$)."
         }
       ],
       "practiceProblems": [
@@ -4488,19 +4488,19 @@
         },
         {
           "problem": "A direction field shows horizontal segments along $y = 3$ and $y = -1$, with solutions above $y=3$ increasing and solutions between the two lines also increasing. Which DE is most consistent: (A) $dy/dx = (y-3)(y+1)$ or (B) $dy/dx = (3-y)(y+1)$?",
-          "answer": "Choice (B) $dy/dx=(3-y)(y+1)$. For $y&gt;3$: $(3-y)&lt;0,(y+1)&gt;0$ so $f&lt;0$ — solutions decrease (correct). Between lines: both factors positive, $f&gt;0$ — solutions increase (correct)."
+          "answer": "Choice (B) $dy/dx=(3-y)(y+1)$. For $y&gt;3$: $(3-y)&lt;0,(y+1)&gt;0$ so $f&lt;0$ \u2014 solutions decrease (correct). Between lines: both factors positive, $f&gt;0$ \u2014 solutions increase (correct)."
         },
         {
           "problem": "For $dy/dx = \\sin(y)$: identify two equilibrium values in $[0,2\\pi]$ and determine which is stable.",
-          "answer": "$\\sin(y)=0$ at $y=0$ and $y=\\pi$ in $[0,2\\pi]$. Near $y=0$: $\\sin(y)&gt;0$ for $0&lt;y&lt;\\pi$ (solutions move away) → unstable. Near $y=\\pi$: solutions approach from both sides → stable."
+          "answer": "$\\sin(y)=0$ at $y=0$ and $y=\\pi$ in $[0,2\\pi]$. Near $y=0$: $\\sin(y)&gt;0$ for $0&lt;y&lt;\\pi$ (solutions move away) \u2192 unstable. Near $y=\\pi$: solutions approach from both sides \u2192 stable."
         },
         {
           "problem": "A population model gives $dy/dx = 0.2y(1 - y/100)$ where $y$ is population. What are the equilibria? Which is stable, and what does it represent?",
-          "answer": "Equilibria: $y=0$ (unstable) and $y=100$ (stable). $y=100$ is the carrying capacity — the population the environment can sustain long-term."
+          "answer": "Equilibria: $y=0$ (unstable) and $y=100$ (stable). $y=100$ is the carrying capacity \u2014 the population the environment can sustain long-term."
         }
       ],
       "exitTicket": "A population model gives $dy/dx = 0.2y(1 - y/100)$ where $y$ is population. What are the equilibria? Which is stable, and what does it represent?",
-      "exitTicketAnswer": "Equilibria: $y=0$ (unstable) and $y=100$ (stable). $y=100$ is the carrying capacity — the population the environment can sustain long-term."
+      "exitTicketAnswer": "Equilibria: $y=0$ (unstable) and $y=100$ (stable). $y=100$ is the carrying capacity \u2014 the population the environment can sustain long-term."
     },
     {
       "id": "C2_21",
@@ -4570,15 +4570,15 @@
       "workedExamples": [
         {
           "problem": "$a_n=\\dfrac{3n^2+1}{2n^2-5}$",
-          "answer": "$\\lim=\\dfrac{3}{2}$ — converges"
+          "answer": "$\\lim=\\dfrac{3}{2}$ \u2014 converges"
         },
         {
           "problem": "$a_n=\\dfrac{n}{e^n}$",
-          "answer": "$\\lim_{x\\to\\infty}\\dfrac{x}{e^x}\\overset{L'H}{=}\\lim\\dfrac{1}{e^x}=0$ — converges to 0"
+          "answer": "$\\lim_{x\\to\\infty}\\dfrac{x}{e^x}\\overset{L'H}{=}\\lim\\dfrac{1}{e^x}=0$ \u2014 converges to 0"
         },
         {
           "problem": "$a_n=\\left(\\dfrac{2}{3}\\right)^n$",
-          "answer": "$|r|=2/3<1$, so $\\lim a_n=0$ — converges"
+          "answer": "$|r|=2/3<1$, so $\\lim a_n=0$ \u2014 converges"
         },
         {
           "problem": "Show $a_n=\\dfrac{n}{n+1}$ converges by MCT.",
@@ -4596,7 +4596,7 @@
         },
         {
           "problem": "$a_n=n\\sin(1/n)$",
-          "answer": "1 (L'Hôpital or squeeze)"
+          "answer": "1 (L'H\u00f4pital or squeeze)"
         },
         {
           "problem": "$a_n=\\ln(n+1)-\\ln n$",
@@ -4629,7 +4629,7 @@
         },
         {
           "problem": "$\\sum_{n=1}^\\infty\\dfrac{n}{n+1}$",
-          "answer": "$\\lim a_n=1\\neq0$ → diverges"
+          "answer": "$\\lim a_n=1\\neq0$ \u2192 diverges"
         },
         {
           "problem": "$\\sum_{n=1}^\\infty\\dfrac{1}{n(n+1)}$",
@@ -4675,24 +4675,24 @@
       "practiceFile": "C2_24_Divergence_Integral_Tests_Practice",
       "hasPractice": true,
       "doNowQ": "The $n$th-term test only detects divergence. To prove convergence, we need stronger tests. If the terms $a_n=f(n)$ for a decreasing positive function $f$, how does $\\int_1^\\infty f\\,dx$ relate to $\\sum a_n$?",
-      "exitTicket": "$\\sum\\dfrac{\\ln n}{n}$ — converge/diverge?",
+      "exitTicket": "$\\sum\\dfrac{\\ln n}{n}$ \u2014 converge/diverge?",
       "exitTicketAnswer": "Diverges (integral test)",
       "workedExamples": [
         {
           "problem": "Does $\\sum_{n=1}^\\infty\\dfrac{1}{n^3}$ converge?",
-          "answer": "$p=3>1$ → converges ($p$-series test). (Actual value = $\\pi^2/6$... wait, that's $p=2$. Sum $=\\zeta(3)$.)"
+          "answer": "$p=3>1$ \u2192 converges ($p$-series test). (Actual value = $\\pi^2/6$... wait, that's $p=2$. Sum $=\\zeta(3)$.)"
         },
         {
           "problem": "Test $\\sum\\dfrac{1}{n^2+1}$.",
-          "answer": "$\\int_1^\\infty\\dfrac{dx}{x^2+1}=\\arctan x\\big|_1^\\infty=\\dfrac{\\pi}{4}$ (finite) → converges"
+          "answer": "$\\int_1^\\infty\\dfrac{dx}{x^2+1}=\\arctan x\\big|_1^\\infty=\\dfrac{\\pi}{4}$ (finite) \u2192 converges"
         },
         {
           "problem": "Does $\\sum\\dfrac{1}{n}$ converge?",
-          "answer": "$\\int_1^\\infty\\frac{1}{x}\\,dx=\\ln x\\big|_1^\\infty=\\infty$ → diverges"
+          "answer": "$\\int_1^\\infty\\frac{1}{x}\\,dx=\\ln x\\big|_1^\\infty=\\infty$ \u2192 diverges"
         },
         {
           "problem": "Test $\\sum_{n=2}^\\infty\\dfrac{1}{n\\ln n}$.",
-          "answer": "$\\int_2^\\infty\\dfrac{dx}{x\\ln x}=\\ln(\\ln x)\\big|_2^\\infty=\\infty$ → diverges"
+          "answer": "$\\int_2^\\infty\\dfrac{dx}{x\\ln x}=\\ln(\\ln x)\\big|_2^\\infty=\\infty$ \u2192 diverges"
         }
       ],
       "practiceProblems": [
@@ -4705,11 +4705,11 @@
           "answer": "Diverges ($p=1/2<1$)"
         },
         {
-          "problem": "$\\sum\\dfrac{1}{n^2+4}$ — converge/diverge?",
+          "problem": "$\\sum\\dfrac{1}{n^2+4}$ \u2014 converge/diverge?",
           "answer": "Converges (integral test)"
         },
         {
-          "problem": "$\\sum\\dfrac{1}{n(\\ln n)^2}$ — converge/diverge?",
+          "problem": "$\\sum\\dfrac{1}{n(\\ln n)^2}$ \u2014 converge/diverge?",
           "answer": "Converges (integral: $-1/\\ln n$)"
         },
         {
@@ -4717,7 +4717,7 @@
           "answer": "$p>1$"
         },
         {
-          "problem": "$\\sum\\dfrac{\\ln n}{n}$ — converge/diverge?",
+          "problem": "$\\sum\\dfrac{\\ln n}{n}$ \u2014 converge/diverge?",
           "answer": "Diverges (integral test)"
         }
       ]
@@ -4730,49 +4730,49 @@
       "practiceFile": "C2_25_Comparison_Tests_Practice",
       "hasPractice": true,
       "doNowQ": "If every term of series $\\sum b_n$ is bigger than $\\sum a_n$, and $\\sum b_n$ converges, what can you conclude about $\\sum a_n$? What about the limit comparison test?",
-      "exitTicket": "$\\sum\\dfrac{\\cos^2 n}{n^2}$ — converge?",
+      "exitTicket": "$\\sum\\dfrac{\\cos^2 n}{n^2}$ \u2014 converge?",
       "exitTicketAnswer": "Yes (compare to $1/n^2$)",
       "workedExamples": [
         {
           "problem": "Test $\\sum\\dfrac{1}{n^2+n}$.",
-          "answer": "$\\dfrac{1}{n^2+n}<\\dfrac{1}{n^2}$; $\\sum\\dfrac{1}{n^2}$ converges → converges"
+          "answer": "$\\dfrac{1}{n^2+n}<\\dfrac{1}{n^2}$; $\\sum\\dfrac{1}{n^2}$ converges \u2192 converges"
         },
         {
           "problem": "Test $\\sum\\dfrac{3n+1}{n^3-2}$.",
-          "answer": "Compare to $b_n=1/n^2$: $\\lim\\dfrac{(3n+1)/(n^3-2)}{1/n^2}=3$. Since $\\sum 1/n^2$ conv. → converges."
+          "answer": "Compare to $b_n=1/n^2$: $\\lim\\dfrac{(3n+1)/(n^3-2)}{1/n^2}=3$. Since $\\sum 1/n^2$ conv. \u2192 converges."
         },
         {
           "problem": "Test $\\sum\\dfrac{1}{\\sqrt{n}-1}$ for $n\\geq2$.",
-          "answer": "Compare to $1/\\sqrt{n}$ ($p=1/2LCT: $\\lim\\dfrac{1/(\\sqrt{n}-1)}{1/\\sqrt{n}}=1$ → diverges."
+          "answer": "Compare to $1/\\sqrt{n}$ ($p=1/2LCT: $\\lim\\dfrac{1/(\\sqrt{n}-1)}{1/\\sqrt{n}}=1$ \u2192 diverges."
         },
         {
           "problem": "Test $\\sum\\dfrac{\\sin^2 n}{2^n}$.",
-          "answer": "$0\\leq\\sin^2 n\\leq1$, so $\\dfrac{\\sin^2 n}{2^n}\\leq\\dfrac{1}{2^n}$; geometric $r=1/2$ conv. → converges."
+          "answer": "$0\\leq\\sin^2 n\\leq1$, so $\\dfrac{\\sin^2 n}{2^n}\\leq\\dfrac{1}{2^n}$; geometric $r=1/2$ conv. \u2192 converges."
         }
       ],
       "practiceProblems": [
         {
-          "problem": "$\\sum\\dfrac{1}{2^n+n}$ — converge?",
+          "problem": "$\\sum\\dfrac{1}{2^n+n}$ \u2014 converge?",
           "answer": "Yes (compare to $1/2^n$)"
         },
         {
-          "problem": "$\\sum\\dfrac{n}{n^3+1}$ — converge?",
+          "problem": "$\\sum\\dfrac{n}{n^3+1}$ \u2014 converge?",
           "answer": "Yes (LCT with $1/n^2$)"
         },
         {
-          "problem": "$\\sum\\dfrac{1}{\\sqrt{n^3+1}}$ — converge?",
+          "problem": "$\\sum\\dfrac{1}{\\sqrt{n^3+1}}$ \u2014 converge?",
           "answer": "Yes (LCT with $n^{-3/2}$, $p=3/2>1$)"
         },
         {
-          "problem": "$\\sum\\dfrac{4n^2+1}{3n^4-2}$ — converge?",
+          "problem": "$\\sum\\dfrac{4n^2+1}{3n^4-2}$ \u2014 converge?",
           "answer": "Yes (LCT with $1/n^2$)"
         },
         {
-          "problem": "$\\sum\\dfrac{1}{n-\\ln n}$ — converge?",
+          "problem": "$\\sum\\dfrac{1}{n-\\ln n}$ \u2014 converge?",
           "answer": "Diverges (LCT with $1/n$)"
         },
         {
-          "problem": "$\\sum\\dfrac{\\cos^2 n}{n^2}$ — converge?",
+          "problem": "$\\sum\\dfrac{\\cos^2 n}{n^2}$ \u2014 converge?",
           "answer": "Yes (compare to $1/n^2$)"
         }
       ]
@@ -4790,11 +4790,11 @@
       "workedExamples": [
         {
           "problem": "Does $\\sum_{n=1}^\\infty\\dfrac{(-1)^{n+1}}{n}$ converge?",
-          "answer": "$b_n=1/n$ is positive, decreasing, $\\to 0$ → converges by AST. (Conditionally convergent.)"
+          "answer": "$b_n=1/n$ is positive, decreasing, $\\to 0$ \u2192 converges by AST. (Conditionally convergent.)"
         },
         {
           "problem": "Does $\\sum\\dfrac{(-1)^n n}{n+1}$ converge?",
-          "answer": "$\\lim b_n=1\\neq0$ → diverges by nth-term test"
+          "answer": "$\\lim b_n=1\\neq0$ \u2192 diverges by nth-term test"
         },
         {
           "problem": "Approximate $\\sum_{n=1}^\\infty\\dfrac{(-1)^{n+1}}{n^2}$ using 4 terms. Bound the error.",
@@ -4802,7 +4802,7 @@
         },
         {
           "problem": "Is $\\sum\\dfrac{(-1)^n}{n^2}$ absolutely convergent?",
-          "answer": "$\\sum\\dfrac{1}{n^2}$ converges ($p=2>1$) → absolutely convergent."
+          "answer": "$\\sum\\dfrac{1}{n^2}$ converges ($p=2>1$) \u2192 absolutely convergent."
         }
       ],
       "practiceProblems": [
@@ -4812,10 +4812,10 @@
         },
         {
           "problem": "Does $\\sum\\dfrac{(-1)^n n^2}{n^2+1}$ converge?",
-          "answer": "No — nth-term test: $b_n\\to1$"
+          "answer": "No \u2014 nth-term test: $b_n\\to1$"
         },
         {
-          "problem": "$\\sum\\dfrac{(-1)^n}{n!}$ — absolutely convergent?",
+          "problem": "$\\sum\\dfrac{(-1)^n}{n!}$ \u2014 absolutely convergent?",
           "answer": "Yes ($\\sum 1/n!$ converges by ratio test)"
         },
         {
@@ -4839,50 +4839,50 @@
       "swbat": "determine convergence using Ratio and Root Tests",
       "practiceFile": "C2_27_Ratio_Root_Tests_Practice",
       "hasPractice": true,
-      "doNowQ": "A geometric series converges when $|r|<1$. What if $a_n$ involves factorials or exponentials — can we find an effective $r$ by looking at the ratio of consecutive terms?",
-      "exitTicket": "$\\displaystyle\\sum\\left(1-\\dfrac{1}{n}\\right)^{n^2}$ — root test",
+      "doNowQ": "A geometric series converges when $|r|<1$. What if $a_n$ involves factorials or exponentials \u2014 can we find an effective $r$ by looking at the ratio of consecutive terms?",
+      "exitTicket": "$\\displaystyle\\sum\\left(1-\\dfrac{1}{n}\\right)^{n^2}$ \u2014 root test",
       "exitTicketAnswer": "converges ($L=1/e<1$)",
       "workedExamples": [
         {
           "problem": "Test $\\displaystyle\\sum\\dfrac{n!}{n^n}$.",
-          "answer": "$\\left|\\dfrac{a_{n+1}}{a_n}\\right|=\\dfrac{(n+1)!}{(n+1)^{n+1}}\\cdot\\dfrac{n^n}{n!}=\\left(\\dfrac{n}{n+1}\\right)^n\\to\\dfrac{1}{e}<1$ — converges absolutely."
+          "answer": "$\\left|\\dfrac{a_{n+1}}{a_n}\\right|=\\dfrac{(n+1)!}{(n+1)^{n+1}}\\cdot\\dfrac{n^n}{n!}=\\left(\\dfrac{n}{n+1}\\right)^n\\to\\dfrac{1}{e}<1$ \u2014 converges absolutely."
         },
         {
           "problem": "Test $\\displaystyle\\sum\\dfrac{2^n}{n!}$.",
-          "answer": "$\\left|\\dfrac{a_{n+1}}{a_n}\\right|=\\dfrac{2}{n+1}\\to 0<1$ — converges absolutely."
+          "answer": "$\\left|\\dfrac{a_{n+1}}{a_n}\\right|=\\dfrac{2}{n+1}\\to 0<1$ \u2014 converges absolutely."
         },
         {
           "problem": "Test $\\displaystyle\\sum_{n=1}^{\\infty}\\left(\\dfrac{2n}{3n+1}\\right)^n$.",
-          "answer": "$\\sqrt[n]{|a_n|}=\\dfrac{2n}{3n+1}\\to\\dfrac{2}{3}<1$ — converges absolutely."
+          "answer": "$\\sqrt[n]{|a_n|}=\\dfrac{2n}{3n+1}\\to\\dfrac{2}{3}<1$ \u2014 converges absolutely."
         },
         {
           "problem": "Apply ratio test to $\\displaystyle\\sum\\dfrac{1}{n^2}$.",
-          "answer": "$\\left|\\dfrac{n^2}{(n+1)^2}\\right|\\to 1$ — inconclusive. Use $p$-series instead (converges, $p=2$)."
+          "answer": "$\\left|\\dfrac{n^2}{(n+1)^2}\\right|\\to 1$ \u2014 inconclusive. Use $p$-series instead (converges, $p=2$)."
         }
       ],
       "practiceProblems": [
         {
-          "problem": "$\\displaystyle\\sum\\dfrac{n^2}{2^n}$ — ratio test",
+          "problem": "$\\displaystyle\\sum\\dfrac{n^2}{2^n}$ \u2014 ratio test",
           "answer": "converges ($L=1/2$)"
         },
         {
-          "problem": "$\\displaystyle\\sum\\dfrac{n!}{n^n}$ — ratio test",
+          "problem": "$\\displaystyle\\sum\\dfrac{n!}{n^n}$ \u2014 ratio test",
           "answer": "converges ($L=1/e<1$)"
         },
         {
-          "problem": "$\\displaystyle\\sum\\left(\\dfrac{3}{n}\\right)^n$ — root test",
+          "problem": "$\\displaystyle\\sum\\left(\\dfrac{3}{n}\\right)^n$ \u2014 root test",
           "answer": "converges ($L=0$)"
         },
         {
-          "problem": "$\\displaystyle\\sum\\dfrac{(-2)^n}{n^2}$ — ratio test",
+          "problem": "$\\displaystyle\\sum\\dfrac{(-2)^n}{n^2}$ \u2014 ratio test",
           "answer": "diverges ($L=2>1$)"
         },
         {
-          "problem": "$\\displaystyle\\sum\\dfrac{n!}{(2n)!}$ — ratio test",
+          "problem": "$\\displaystyle\\sum\\dfrac{n!}{(2n)!}$ \u2014 ratio test",
           "answer": "converges ($L=0$)"
         },
         {
-          "problem": "$\\displaystyle\\sum\\left(1-\\dfrac{1}{n}\\right)^{n^2}$ — root test",
+          "problem": "$\\displaystyle\\sum\\left(1-\\dfrac{1}{n}\\right)^{n^2}$ \u2014 root test",
           "answer": "converges ($L=1/e<1$)"
         }
       ]
@@ -4895,7 +4895,7 @@
       "practiceFile": "C2_28_Power_Series_Practice",
       "hasPractice": true,
       "doNowQ": "The geometric series $\\dfrac{1}{1-x}=\\displaystyle\\sum_{n=0}^{\\infty}x^n$ is valid only for $|x|<1$. What if we replace $x$ by $(x-a)$ and ask: for which values of $x$ does the series converge?",
-      "exitTicket": "$\\displaystyle\\sum_{n=0}^{\\infty}n^2 x^n$ — converge or diverge at $x=1$?",
+      "exitTicket": "$\\displaystyle\\sum_{n=0}^{\\infty}n^2 x^n$ \u2014 converge or diverge at $x=1$?",
       "exitTicketAnswer": "Diverges ($a_n=n^2\\to\\infty$)",
       "workedExamples": [
         {
@@ -4917,19 +4917,19 @@
       ],
       "practiceProblems": [
         {
-          "problem": "$\\displaystyle\\sum_{n=0}^{\\infty}\\dfrac{(x-2)^n}{3^n}$ — find $R$ and interval",
+          "problem": "$\\displaystyle\\sum_{n=0}^{\\infty}\\dfrac{(x-2)^n}{3^n}$ \u2014 find $R$ and interval",
           "answer": "$R=3$; interval $(-1,5)$"
         },
         {
-          "problem": "$\\displaystyle\\sum_{n=1}^{\\infty}n\\,x^n$ — find $R$",
+          "problem": "$\\displaystyle\\sum_{n=1}^{\\infty}n\\,x^n$ \u2014 find $R$",
           "answer": "$R=1$"
         },
         {
-          "problem": "$\\displaystyle\\sum_{n=0}^{\\infty}(-1)^n\\dfrac{x^{2n+1}}{2n+1}$ — what function?",
+          "problem": "$\\displaystyle\\sum_{n=0}^{\\infty}(-1)^n\\dfrac{x^{2n+1}}{2n+1}$ \u2014 what function?",
           "answer": "$\\arctan x$"
         },
         {
-          "problem": "$\\displaystyle\\sum_{n=0}^{\\infty}\\dfrac{(3x)^n}{n!}$ — find $R$",
+          "problem": "$\\displaystyle\\sum_{n=0}^{\\infty}\\dfrac{(3x)^n}{n!}$ \u2014 find $R$",
           "answer": "$R=\\infty$; equals $e^{3x}$"
         },
         {
@@ -4937,7 +4937,7 @@
           "answer": "$\\sum x^n = \\dfrac{1}{1-x}$"
         },
         {
-          "problem": "$\\displaystyle\\sum_{n=0}^{\\infty}n^2 x^n$ — converge or diverge at $x=1$?",
+          "problem": "$\\displaystyle\\sum_{n=0}^{\\infty}n^2 x^n$ \u2014 converge or diverge at $x=1$?",
           "answer": "Diverges ($a_n=n^2\\to\\infty$)"
         }
       ]
@@ -4949,7 +4949,7 @@
       "swbat": "derive and apply Taylor and Maclaurin series for standard functions",
       "practiceFile": "C2_29_Taylor_Series_Practice",
       "hasPractice": true,
-      "doNowQ": "Power series let us represent $\\frac{1}{1-x}$ as an infinite polynomial. Can we do the same for $\\sin x$, $e^x$, or any differentiable function — and if so, how do we find the coefficients?",
+      "doNowQ": "Power series let us represent $\\frac{1}{1-x}$ as an infinite polynomial. Can we do the same for $\\sin x$, $e^x$, or any differentiable function \u2014 and if so, how do we find the coefficients?",
       "exitTicket": "Find the Maclaurin series for $\\dfrac{1}{1+x^2}$ using the geometric series formula.",
       "exitTicketAnswer": "Replace $x$ with $-x^2$: $\\displaystyle\\sum_{n=0}^{\\infty}(-1)^n x^{2n}$, $R=1$",
       "workedExamples": [
@@ -4984,7 +4984,7 @@
           "answer": "$\\displaystyle\\sum_{n=0}^{\\infty}\\dfrac{(-1)^n x^n}{n!}$"
         },
         {
-          "problem": "Use the $e^x$ series to estimate $e^{0.1}$ — keep terms through $x^3$. Round to 4 decimal places.",
+          "problem": "Use the $e^x$ series to estimate $e^{0.1}$ \u2014 keep terms through $x^3$. Round to 4 decimal places.",
           "answer": "$1+0.1+\\frac{0.01}{2}+\\frac{0.001}{6}\\approx 1.1052$"
         },
         {
@@ -5002,7 +5002,7 @@
     "collegeAlgebra": [
       {
         "id": "CA_U1",
-        "name": "Unit 1 — Linear Equations & Inequalities",
+        "name": "Unit 1 \u2014 Linear Equations & Inequalities",
         "sections": [
           "CA_1_1",
           "CA_1_2",
@@ -5015,7 +5015,7 @@
       },
       {
         "id": "CA_U2",
-        "name": "Unit 2 — Lines & Slope",
+        "name": "Unit 2 \u2014 Lines & Slope",
         "sections": [
           "CA_2_1",
           "CA_2_2",
@@ -5026,7 +5026,7 @@
       },
       {
         "id": "CA_U3",
-        "name": "Unit 3 — Functions",
+        "name": "Unit 3 \u2014 Functions",
         "sections": [
           "CA_3_1",
           "CA_3_2",
@@ -5038,7 +5038,7 @@
       },
       {
         "id": "CA_U4",
-        "name": "Unit 4 — Quadratics",
+        "name": "Unit 4 \u2014 Quadratics",
         "sections": [
           "CA_4_0",
           "CA_4_1",
@@ -5051,7 +5051,7 @@
       },
       {
         "id": "CA_U5",
-        "name": "Unit 5 — Complex Numbers",
+        "name": "Unit 5 \u2014 Complex Numbers",
         "sections": [
           "CA_5_1",
           "CA_5_2"
@@ -5060,7 +5060,7 @@
       },
       {
         "id": "CA_U6",
-        "name": "Unit 6 — Radicals & Exponentials",
+        "name": "Unit 6 \u2014 Radicals & Exponentials",
         "sections": [
           "CA_6_1",
           "CA_6_2",
@@ -5071,7 +5071,7 @@
       },
       {
         "id": "CA_US1",
-        "name": "Unit S1 — Sets & Counting I",
+        "name": "Unit S1 \u2014 Sets & Counting I",
         "sections": [
           "CA_S_1",
           "CA_S_2",
@@ -5083,7 +5083,7 @@
       },
       {
         "id": "CA_US2",
-        "name": "Unit S2 — Probability & Counting II",
+        "name": "Unit S2 \u2014 Probability & Counting II",
         "sections": [
           "CA_S_6",
           "CA_S_7",
@@ -5098,7 +5098,7 @@
     "calc2": [
       {
         "id": "C2_U1",
-        "name": "Unit 1 — Integration Techniques I",
+        "name": "Unit 1 \u2014 Integration Techniques I",
         "sections": [
           "C2_01",
           "C2_02",
@@ -5110,7 +5110,7 @@
       },
       {
         "id": "C2_U2",
-        "name": "Unit 2 — Applications of Integration",
+        "name": "Unit 2 \u2014 Applications of Integration",
         "sections": [
           "C2_06",
           "C2_07",
@@ -5124,7 +5124,7 @@
       },
       {
         "id": "C2_U3",
-        "name": "Unit 3 — Advanced Integration",
+        "name": "Unit 3 \u2014 Advanced Integration",
         "sections": [
           "C2_13",
           "C2_14",
@@ -5137,7 +5137,7 @@
       },
       {
         "id": "C2_U4",
-        "name": "Unit 4 — Differential Equations",
+        "name": "Unit 4 \u2014 Differential Equations",
         "sections": [
           "C2_19",
           "C2_20",
@@ -5147,7 +5147,7 @@
       },
       {
         "id": "C2_U5",
-        "name": "Unit 5 — Sequences & Series",
+        "name": "Unit 5 \u2014 Sequences & Series",
         "sections": [
           "C2_22",
           "C2_23",
@@ -5174,29 +5174,29 @@
       "workedExamples": [
         {
           "problem": "Is the relation $\\{(1,4),(2,6),(1,8),(3,5)\\}$ a function?",
-          "answer": "No — the input $x=1$ maps to both $4$ and $8$. A function requires each input to have exactly one output.",
+          "answer": "No \u2014 the input $x=1$ maps to both $4$ and $8$. A function requires each input to have exactly one output.",
           "technique": "Vertical line test for sets: check for repeated $x$-values with different $y$-values."
         },
         {
           "problem": "Let $f(x)=3x^2-2x+1$. Find $f(0)$ and $f(-2)$.",
           "answer": "$f(0)=1$; $\\quad f(-2)=3(4)-2(-2)+1=12+4+1=17$",
-          "technique": "Substitute directly — replace every $x$ with the input value, then simplify."
+          "technique": "Substitute directly \u2014 replace every $x$ with the input value, then simplify."
         },
         {
           "problem": "Let $g(x)=\\dfrac{x+3}{x-5}$. Find $g(8)$ and $g(5)$.",
-          "answer": "$g(8)=\\dfrac{11}{3}$; $\\quad g(5)$ is undefined — denominator equals zero.",
+          "answer": "$g(8)=\\dfrac{11}{3}$; $\\quad g(5)$ is undefined \u2014 denominator equals zero.",
           "technique": "Always check: does the input make the denominator zero? If yes, it's not in the domain."
         },
         {
           "problem": "A vending machine takes coins and gives snacks. Is this a function from input $\\to$ output?",
-          "answer": "Yes — each coin combination triggers exactly one snack output. The machine doesn't randomly give different snacks for the same coins.",
+          "answer": "Yes \u2014 each coin combination triggers exactly one snack output. The machine doesn't randomly give different snacks for the same coins.",
           "technique": "Real-world functions: one input, one output. Ambiguity or randomness breaks the function rule."
         }
       ],
       "reviewProblems": [
         {
           "problem": "Is the graph of a circle a function? Explain.",
-          "answer": "No — a vertical line crosses a circle at two points, so some $x$-values have two $y$-values."
+          "answer": "No \u2014 a vertical line crosses a circle at two points, so some $x$-values have two $y$-values."
         },
         {
           "problem": "Let $h(x)=5-2x$. Find $h(3)$ and $h(-1)$.",
@@ -5220,17 +5220,17 @@
         {
           "problem": "Match each function to its shape: $f(x)=x^2$, $g(x)=x^3$, $h(x)=|x|$, $k(x)=\\sqrt{x}$.",
           "answer": "$x^2$: U-shaped parabola (symmetric, vertex at origin). $x^3$: S-curve through origin. $|x|$: V-shape. $\\sqrt{x}$: half-curve starting at origin, right side only.",
-          "technique": "Memorize the 8 parent functions — shape, domain, and key points. These are your building blocks all year."
+          "technique": "Memorize the 8 parent functions \u2014 shape, domain, and key points. These are your building blocks all year."
         },
         {
           "problem": "Is $f(x)=x^3$ one-to-one?",
-          "answer": "Yes — every horizontal line crosses the graph at most once. Each output has exactly one input.",
+          "answer": "Yes \u2014 every horizontal line crosses the graph at most once. Each output has exactly one input.",
           "technique": "Horizontal line test: if any horizontal line hits the graph more than once, the function is NOT one-to-one."
         },
         {
           "problem": "Is $f(x)=x^2$ one-to-one on $(-\\infty,\\infty)$? What if we restrict to $[0,\\infty)$?",
-          "answer": "On all reals: No — $f(2)=f(-2)=4$, so the output $4$ has two inputs. On $[0,\\infty)$: Yes — each output is hit exactly once.",
-          "technique": "Restricting the domain can make a non-one-to-one function one-to-one — important for inverse functions later."
+          "answer": "On all reals: No \u2014 $f(2)=f(-2)=4$, so the output $4$ has two inputs. On $[0,\\infty)$: Yes \u2014 each output is hit exactly once.",
+          "technique": "Restricting the domain can make a non-one-to-one function one-to-one \u2014 important for inverse functions later."
         },
         {
           "problem": "Give an example of a function that is NOT one-to-one and explain why.",
@@ -5245,7 +5245,7 @@
         },
         {
           "problem": "Is $f(x)=|x|$ one-to-one? Justify.",
-          "answer": "No — $f(2)=f(-2)=2$, so the horizontal line $y=2$ hits the graph twice."
+          "answer": "No \u2014 $f(2)=f(-2)=2$, so the horizontal line $y=2$ hits the graph twice."
         },
         {
           "problem": "Name the parent function that looks like an S-curve through the origin.",
@@ -5275,7 +5275,7 @@
         {
           "problem": "Find the domain of $h(x)=\\dfrac{\\sqrt{x+5}}{x-2}$.",
           "answer": "Need $x+5\\geq 0\\Rightarrow x\\geq -5$, AND $x\\neq 2$. Domain: $[-5,2)\\cup(2,\\infty)$.",
-          "technique": "Two restrictions at once — apply both, then exclude the bad point from the valid interval."
+          "technique": "Two restrictions at once \u2014 apply both, then exclude the bad point from the valid interval."
         },
         {
           "problem": "Find the range of $f(x)=x^2-4$.",
@@ -5310,7 +5310,7 @@
         {
           "problem": "Evaluate: $f(x)=\\begin{cases}3x-1 & x<2\\\\ 10 & x=2\\\\ x^2+1 & x>2\\end{cases}$. Find $f(0)$, $f(2)$, and $f(5)$.",
           "answer": "$f(0)=3(0)-1=-1$; $\\quad f(2)=10$; $\\quad f(5)=25+1=26$.",
-          "technique": "Match the input to the correct piece first — check the inequality/condition, THEN apply that formula."
+          "technique": "Match the input to the correct piece first \u2014 check the inequality/condition, THEN apply that formula."
         },
         {
           "problem": "Graph $f(x)=\\begin{cases}-1 & x<0\\\\x & 0\\leq x\\leq 3\\\\ 4 & x>3\\end{cases}$.",
@@ -5319,13 +5319,13 @@
         },
         {
           "problem": "Find the domain and range of the piecewise function above.",
-          "answer": "Domain: $(-\\infty,\\infty)$ — all real numbers are covered. Range: $\\{-1\\}\\cup[0,3]\\cup\\{4\\}$.",
+          "answer": "Domain: $(-\\infty,\\infty)$ \u2014 all real numbers are covered. Range: $\\{-1\\}\\cup[0,3]\\cup\\{4\\}$.",
           "technique": "Domain: combine all intervals where pieces are defined. Range: collect all output values from each piece."
         },
         {
           "problem": "Write a piecewise function for the absolute value $f(x)=|x-2|$.",
           "answer": "$f(x)=\\begin{cases}-(x-2) & x<2\\\\ x-2 & x\\geq 2\\end{cases}$",
-          "technique": "Absolute value IS a piecewise function — the expression inside is negative left of the vertex, positive right of it."
+          "technique": "Absolute value IS a piecewise function \u2014 the expression inside is negative left of the vertex, positive right of it."
         }
       ],
       "reviewProblems": [
@@ -5335,7 +5335,7 @@
         },
         {
           "problem": "Is $f(x)=\\begin{cases}2x & x<3\\\\8 & x=3\\\\x+3 & x>3\\end{cases}$ continuous at $x=3$? Explain.",
-          "answer": "No — $\\lim_{x\\to 3^-}2x=6$ and $\\lim_{x\\to 3^+}(x+3)=6$, but $f(3)=8\\neq 6$, so there's a hole."
+          "answer": "No \u2014 $\\lim_{x\\to 3^-}2x=6$ and $\\lim_{x\\to 3^+}(x+3)=6$, but $f(3)=8\\neq 6$, so there's a hole."
         },
         {
           "problem": "Write a piecewise rule for $f(x)=|2x-6|$.",
@@ -5363,19 +5363,19 @@
         },
         {
           "problem": "Is $f(x)=x^4-2x^2$ even, odd, or neither?",
-          "answer": "$f(-x)=(-x)^4-2(-x)^2=x^4-2x^2=f(x)$. Even — symmetric about the $y$-axis.",
+          "answer": "$f(-x)=(-x)^4-2(-x)^2=x^4-2x^2=f(x)$. Even \u2014 symmetric about the $y$-axis.",
           "technique": "Even: $f(-x)=f(x)$ (y-axis symmetry). Odd: $f(-x)=-f(x)$ (origin symmetry). Test by substituting $-x$."
         },
         {
           "problem": "Is $g(x)=x^3-x$ even, odd, or neither?",
-          "answer": "$g(-x)=(-x)^3-(-x)=-x^3+x=-(x^3-x)=-g(x)$. Odd — symmetric about the origin.",
-          "technique": "If $f(-x) = -f(x)$: rotate $180°$ about the origin and the graph looks the same."
+          "answer": "$g(-x)=(-x)^3-(-x)=-x^3+x=-(x^3-x)=-g(x)$. Odd \u2014 symmetric about the origin.",
+          "technique": "If $f(-x) = -f(x)$: rotate $180\u00b0$ about the origin and the graph looks the same."
         }
       ],
       "reviewProblems": [
         {
           "problem": "What does it mean for a function to be decreasing on an interval?",
-          "answer": "As $x$ increases, $f(x)$ decreases — the graph falls from left to right on that interval."
+          "answer": "As $x$ increases, $f(x)$ decreases \u2014 the graph falls from left to right on that interval."
         },
         {
           "problem": "Determine if $f(x)=x^2-3$ is even, odd, or neither.",
@@ -5408,8 +5408,8 @@
         },
         {
           "problem": "Find $(g\\circ f)(x)$ for $f(x)=3x-1$ and $g(x)=x^2$. Is it the same as $(f\\circ g)(x)$?",
-          "answer": "$(g\\circ f)(x)=g(f(x))=(3x-1)^2=9x^2-6x+1$. Not the same — composition is NOT commutative.",
-          "technique": "Order matters in composition. $f\\circ g \\neq g\\circ f$ in general — always evaluate the inner function first."
+          "answer": "$(g\\circ f)(x)=g(f(x))=(3x-1)^2=9x^2-6x+1$. Not the same \u2014 composition is NOT commutative.",
+          "technique": "Order matters in composition. $f\\circ g \\neq g\\circ f$ in general \u2014 always evaluate the inner function first."
         },
         {
           "problem": "Given $h(x)=\\sqrt{2x+4}$, decompose $h$ as $f\\circ g$.",
@@ -5444,7 +5444,7 @@
         {
           "problem": "Describe how $g(x)=(x-4)^2+3$ is related to $f(x)=x^2$.",
           "answer": "Shift right $4$ units (horizontal, $-4$ inside) and up $3$ units (vertical, $+3$ outside).",
-          "technique": "Inside the function → horizontal (and opposite sign). Outside → vertical (same sign)."
+          "technique": "Inside the function \u2192 horizontal (and opposite sign). Outside \u2192 vertical (same sign)."
         },
         {
           "problem": "Graph $h(x)=-\\sqrt{x}+2$ starting from $f(x)=\\sqrt{x}$.",
@@ -5453,7 +5453,7 @@
         },
         {
           "problem": "How does $g(x)=3|x|$ differ from $f(x)=|x|$?",
-          "answer": "Vertical stretch by factor $3$ — all $y$-values tripled. The V is narrower (steeper sides).",
+          "answer": "Vertical stretch by factor $3$ \u2014 all $y$-values tripled. The V is narrower (steeper sides).",
           "technique": "Multiplying outside by $a>1$ = vertical stretch (taller/narrower). $0<a<1$ = compression (shorter/wider)."
         },
         {
@@ -5489,7 +5489,7 @@
         {
           "problem": "Show that $f(x)=3x+1$ and $g(x)=\\dfrac{x-1}{3}$ are inverses.",
           "answer": "$f(g(x))=3\\cdot\\dfrac{x-1}{3}+1=x-1+1=x$. $\\quad g(f(x))=\\dfrac{(3x+1)-1}{3}=\\dfrac{3x}{3}=x$. Both give $x$, so they're inverses.",
-          "technique": "Verify with composition — both $f(g(x))=x$ AND $g(f(x))=x$ must hold."
+          "technique": "Verify with composition \u2014 both $f(g(x))=x$ AND $g(f(x))=x$ must hold."
         },
         {
           "problem": "Find the inverse of $f(x)=\\dfrac{2x+5}{3}$.",
@@ -5503,7 +5503,7 @@
         },
         {
           "problem": "If $(3,7)$ is on the graph of $f$, what point is on the graph of $f^{-1}$?",
-          "answer": "$(7,3)$ — inverses swap $x$ and $y$ coordinates. The graph of $f^{-1}$ is the reflection of $f$ over the line $y=x$.",
+          "answer": "$(7,3)$ \u2014 inverses swap $x$ and $y$ coordinates. The graph of $f^{-1}$ is the reflection of $f$ over the line $y=x$.",
           "technique": "Every point $(a,b)$ on $f$ corresponds to $(b,a)$ on $f^{-1}$. The two graphs are mirror images over $y=x$."
         }
       ],
@@ -5514,11 +5514,11 @@
         },
         {
           "problem": "Why doesn't $f(x)=x^2$ on all reals have an inverse?",
-          "answer": "Not one-to-one: $f(2)=f(-2)=4$. The inverse would need to output both $2$ and $-2$ for input $4$ — not a function."
+          "answer": "Not one-to-one: $f(2)=f(-2)=4$. The inverse would need to output both $2$ and $-2$ for input $4$ \u2014 not a function."
         },
         {
           "problem": "If $f^{-1}(5)=9$, what is $f(9)$?",
-          "answer": "$f(9)=5$ — inputs and outputs swap between a function and its inverse."
+          "answer": "$f(9)=5$ \u2014 inputs and outputs swap between a function and its inverse."
         }
       ],
       "practiceFile": "PC_1_7_Inverse_Functions_Practice"
@@ -5529,12 +5529,12 @@
       "title": "Lines & Linear Functions",
       "swbat": "Students will be able to find slope, write equations of lines in slope-intercept and point-slope form, and identify parallel and perpendicular lines.",
       "exitTicket": "Write the equation of the line through $(2,-3)$ with slope $m=\\frac{1}{2}$ in both point-slope and slope-intercept form.",
-      "hasPractice": false,
+      "hasPractice": true,
       "workedExamples": [
         {
           "problem": "Find the slope of the line through $(-1,4)$ and $(3,-2)$.",
           "answer": "$m=\\dfrac{-2-4}{3-(-1)}=\\dfrac{-6}{4}=-\\dfrac{3}{2}$",
-          "technique": "Slope = rise/run = $\\dfrac{y_2-y_1}{x_2-x_1}$. Keep the order consistent — same point first in numerator and denominator."
+          "technique": "Slope = rise/run = $\\dfrac{y_2-y_1}{x_2-x_1}$. Keep the order consistent \u2014 same point first in numerator and denominator."
         },
         {
           "problem": "Write the equation of a line with slope $-3$ passing through $(1,5)$.",
@@ -5543,7 +5543,7 @@
         },
         {
           "problem": "Are $y=\\frac{2}{3}x+1$ and $y=-\\frac{3}{2}x-4$ parallel, perpendicular, or neither?",
-          "answer": "Perpendicular — slopes $\\frac{2}{3}$ and $-\\frac{3}{2}$ are negative reciprocals: $\\frac{2}{3}\\cdot(-\\frac{3}{2})=-1$.",
+          "answer": "Perpendicular \u2014 slopes $\\frac{2}{3}$ and $-\\frac{3}{2}$ are negative reciprocals: $\\frac{2}{3}\\cdot(-\\frac{3}{2})=-1$.",
           "technique": "Parallel: same slope. Perpendicular: slopes multiply to $-1$ (flip and negate)."
         },
         {
@@ -5563,9 +5563,10 @@
         },
         {
           "problem": "Is the line through $(1,2)$ and $(3,6)$ parallel to $y=2x-5$?",
-          "answer": "Yes — slope of both lines is $2$."
+          "answer": "Yes \u2014 slope of both lines is $2$."
         }
-      ]
+      ],
+      "practiceFile": "PC_2_1_Lines_Practice.html"
     },
     {
       "id": "PC_2_2",
@@ -5573,7 +5574,7 @@
       "title": "Graphing Linear Equations",
       "swbat": "Students will be able to graph linear equations using slope-intercept form, intercepts, and horizontal/vertical lines.",
       "exitTicket": "Graph $3x+2y=6$ by finding both intercepts. Label them.",
-      "hasPractice": false,
+      "hasPractice": true,
       "workedExamples": [
         {
           "problem": "Graph $y=-\\frac{2}{3}x+4$ using slope and $y$-intercept.",
@@ -5588,7 +5589,7 @@
         {
           "problem": "Graph $y=3$ and $x=-2$. What types of lines are these?",
           "answer": "$y=3$: horizontal line through $(0,3)$, slope $=0$. $x=-2$: vertical line through $(-2,0)$, undefined slope.",
-          "technique": "$y=$ constant → horizontal. $x=$ constant → vertical. Vertical lines have undefined slope."
+          "technique": "$y=$ constant \u2192 horizontal. $x=$ constant \u2192 vertical. Vertical lines have undefined slope."
         },
         {
           "problem": "At what point do $y=2x-1$ and $y=-x+5$ intersect?",
@@ -5609,7 +5610,8 @@
           "problem": "Write the equation of the vertical line through $(-5, 2)$.",
           "answer": "$x=-5$"
         }
-      ]
+      ],
+      "practiceFile": "PC_2_2_Graphing_Linear_Equations_Practice.html"
     },
     {
       "id": "PC_2_3",
@@ -5617,7 +5619,7 @@
       "title": "Modeling with Linear Functions",
       "swbat": "Students will be able to build linear models from verbal descriptions, interpret slope and intercept in context, and make predictions.",
       "exitTicket": "A plumber charges \\$80 per hour plus a \\$50 fee. Write a linear model for total cost $C$ as a function of hours $h$. What does the slope represent?",
-      "hasPractice": false,
+      "hasPractice": true,
       "workedExamples": [
         {
           "problem": "A phone plan costs \\$30/month plus \\$0.05 per text. Write $C(t)$ for total cost given $t$ texts. Find $C(200)$.",
@@ -5631,7 +5633,7 @@
         },
         {
           "problem": "Interpret: $f(x)=1200-50x$ models the balance (\\$) in an account after $x$ weeks. What does the slope $-50$ mean?",
-          "answer": "The account loses \\$50 per week. The slope is the rate of change — negative means the balance is decreasing.",
+          "answer": "The account loses \\$50 per week. The slope is the rate of change \u2014 negative means the balance is decreasing.",
           "technique": "Context interpretation: slope = 'for each additional unit of $x$, $y$ changes by $m$.' Negative slope = decreasing."
         },
         {
@@ -5651,9 +5653,10 @@
         },
         {
           "problem": "What does the $y$-intercept represent in a linear model?",
-          "answer": "The starting value — the value of the output when the input is $0$."
+          "answer": "The starting value \u2014 the value of the output when the input is $0$."
         }
-      ]
+      ],
+      "practiceFile": "PC_2_3_Modeling_with_Linear_Functions_Practice.html"
     },
     {
       "id": "PC_2_4",
@@ -5661,7 +5664,7 @@
       "title": "Linear Models from Data",
       "swbat": "Students will be able to find a line of best fit, interpret the correlation coefficient, and use the model to make predictions.",
       "exitTicket": "A scatter plot shows positive correlation. What does $r=0.97$ tell you about the linear model?",
-      "hasPractice": false,
+      "hasPractice": true,
       "workedExamples": [
         {
           "problem": "Data: $(1,3),(2,5),(3,6),(4,9),(5,10)$. Estimate a line of best fit and write its equation.",
@@ -5670,24 +5673,24 @@
         },
         {
           "problem": "A regression model gives $r=0.95$. What does this tell you?",
-          "answer": "Strong positive linear association — as $x$ increases, $y$ tends to increase, and the data fits a line closely.",
+          "answer": "Strong positive linear association \u2014 as $x$ increases, $y$ tends to increase, and the data fits a line closely.",
           "technique": "$r$ near $+1$: strong positive. $r$ near $-1$: strong negative. $r$ near $0$: weak/no linear association."
         },
         {
           "problem": "Model: $\\hat{y}=2.3x+4.1$ where $x$ = hours studied and $y$ = test score. Predict score for 5 hours studied. Is it reliable to predict for $x=50$?",
-          "answer": "$\\hat{y}=2.3(5)+4.1=15.6$ — but scores can't exceed 100, and 50 hours is far outside the data range (extrapolation). Unreliable.",
+          "answer": "$\\hat{y}=2.3(5)+4.1=15.6$ \u2014 but scores can't exceed 100, and 50 hours is far outside the data range (extrapolation). Unreliable.",
           "technique": "Interpolation (within data range) is reliable. Extrapolation (outside range) can be wildly inaccurate."
         },
         {
           "problem": "A residual is $y-\\hat{y}=4$. Interpret this.",
           "answer": "The actual value is $4$ units higher than the model predicted. A positive residual means the model underestimated.",
-          "technique": "Residual = actual − predicted. Positive: above the line. Negative: below the line. Small residuals = good fit."
+          "technique": "Residual = actual \u2212 predicted. Positive: above the line. Negative: below the line. Small residuals = good fit."
         }
       ],
       "reviewProblems": [
         {
           "problem": "What does $r=-0.88$ indicate about a data set?",
-          "answer": "Strong negative linear correlation — as $x$ increases, $y$ tends to decrease, fitting a line fairly closely."
+          "answer": "Strong negative linear correlation \u2014 as $x$ increases, $y$ tends to decrease, fitting a line fairly closely."
         },
         {
           "problem": "Using $\\hat{y}=3x-1$, predict $y$ when $x=7$.",
@@ -5697,7 +5700,8 @@
           "problem": "Explain why $r^2=0.81$ means the model explains $81\\%$ of the variation in $y$.",
           "answer": "$r^2$ (coefficient of determination) tells the proportion of $y$'s variability accounted for by the linear model with $x$."
         }
-      ]
+      ],
+      "practiceFile": "PC_2_4_Linear_Models_from_Data_Practice.html"
     },
     {
       "id": "PC_3_1",
@@ -5705,7 +5709,7 @@
       "title": "Complex Numbers",
       "swbat": "Students will be able to simplify powers of $i$, perform arithmetic with complex numbers, and find complex conjugates.",
       "exitTicket": "Simplify $(3+2i)(1-4i)$ and write in standard form $a+bi$.",
-      "hasPractice": false,
+      "hasPractice": true,
       "workedExamples": [
         {
           "problem": "Simplify $i^{35}$.",
@@ -5741,15 +5745,16 @@
           "problem": "Simplify $i^{100}$.",
           "answer": "$100=4\\cdot 25$, so $i^{100}=(i^4)^{25}=1$."
         }
-      ]
+      ],
+      "practiceFile": "PC_3_1_Complex_Numbers_Practice.html"
     },
     {
       "id": "PC_3_2a",
       "section": "3.2a",
-      "title": "Quadratic Functions — Vertex & Factored Forms",
+      "title": "Quadratic Functions \u2014 Vertex & Factored Forms",
       "swbat": "Students will be able to identify the vertex, axis of symmetry, and intercepts of a quadratic from vertex and factored forms.",
       "exitTicket": "Find the vertex, axis of symmetry, and zeros of $f(x)=2(x-3)(x+1)$.",
-      "hasPractice": false,
+      "hasPractice": true,
       "workedExamples": [
         {
           "problem": "Given $f(x)=2(x-1)^2-8$, find the vertex and axis of symmetry.",
@@ -5769,7 +5774,7 @@
         {
           "problem": "Find the maximum or minimum of $f(x)=-(x+2)^2+9$. On what interval is $f$ increasing?",
           "answer": "Vertex $(-2,9)$, $a=-1<0$: maximum value is $9$ at $x=-2$. $f$ is increasing on $(-\\infty,-2)$.",
-          "technique": "Negative leading coefficient → opens down → vertex is a maximum. $f$ increases to the left of the vertex."
+          "technique": "Negative leading coefficient \u2192 opens down \u2192 vertex is a maximum. $f$ increases to the left of the vertex."
         }
       ],
       "reviewProblems": [
@@ -5785,15 +5790,16 @@
           "problem": "A ball is modeled by $h(t)=-(t-3)^2+16$. Find the max height and when it hits the ground.",
           "answer": "Max height: $16$ ft at $t=3$ sec. Ground: $-(t-3)^2=-16\\Rightarrow t-3=\\pm 4\\Rightarrow t=7$ sec (positive)."
         }
-      ]
+      ],
+      "practiceFile": "PC_3_2a_Quadratic_Forms_Practice.html"
     },
     {
       "id": "PC_3_2b",
       "section": "3.2b",
-      "title": "Quadratics — Completing the Square",
+      "title": "Quadratics \u2014 Completing the Square",
       "swbat": "Students will be able to convert a quadratic from standard to vertex form by completing the square, and solve quadratics using the quadratic formula.",
       "exitTicket": "Complete the square to rewrite $f(x)=x^2-6x+2$ in vertex form.",
-      "hasPractice": false,
+      "hasPractice": true,
       "workedExamples": [
         {
           "problem": "Complete the square: $f(x)=x^2+8x+5$.",
@@ -5812,7 +5818,7 @@
         },
         {
           "problem": "Discriminant of $3x^2-2x+5$?",
-          "answer": "$b^2-4ac=4-60=-56<0$. Two complex (non-real) solutions — the parabola never crosses the $x$-axis.",
+          "answer": "$b^2-4ac=4-60=-56<0$. Two complex (non-real) solutions \u2014 the parabola never crosses the $x$-axis.",
           "technique": "$\\Delta>0$: two real solutions. $\\Delta=0$: one (double) solution. $\\Delta<0$: two complex solutions."
         }
       ],
@@ -5829,7 +5835,8 @@
           "problem": "How many real solutions does $x^2+4x+10=0$ have? Why?",
           "answer": "$\\Delta=16-40=-24<0$. Zero real solutions."
         }
-      ]
+      ],
+      "practiceFile": "PC_3_2b_Quadratic_Solving_Practice.html"
     },
     {
       "id": "PC_3_3",
@@ -5837,7 +5844,7 @@
       "title": "Quadratic Applications & Parametric Intro",
       "swbat": "Students will be able to model real-world problems with quadratics, optimize using vertex, and interpret parametric equations.",
       "exitTicket": "A ball is thrown upward with height $h(t)=-16t^2+64t+5$. Find the maximum height and the time it occurs.",
-      "hasPractice": false,
+      "hasPractice": true,
       "workedExamples": [
         {
           "problem": "Revenue model: $R(x)=-2x^2+120x$ where $x$ = price. Find the price that maximizes revenue.",
@@ -5873,7 +5880,8 @@
           "problem": "A projectile has height $h(t)=-16t^2+80t$. When does it land?",
           "answer": "$-16t^2+80t=0\\Rightarrow t(80-16t)=0\\Rightarrow t=5$ sec."
         }
-      ]
+      ],
+      "practiceFile": "PC_3_3_Parametric_Equations_Practice.html"
     },
     {
       "id": "PC_3_4",
@@ -5881,17 +5889,17 @@
       "title": "Polynomial Functions",
       "swbat": "Students will be able to identify degree, leading coefficient, end behavior, and zeros (with multiplicity) of polynomial functions.",
       "exitTicket": "For $f(x)=2x^4-5x^3+x-7$, identify the degree, leading term, and describe end behavior.",
-      "hasPractice": false,
+      "hasPractice": true,
       "workedExamples": [
         {
           "problem": "Describe the end behavior of $f(x)=-3x^5+7x^2-1$.",
           "answer": "Degree $5$ (odd), leading coefficient $-3$ (negative). As $x\\to-\\infty$, $f\\to+\\infty$; as $x\\to+\\infty$, $f\\to-\\infty$.",
-          "technique": "End behavior depends only on degree (odd/even) and sign of leading coefficient — ignore all other terms."
+          "technique": "End behavior depends only on degree (odd/even) and sign of leading coefficient \u2014 ignore all other terms."
         },
         {
           "problem": "Find the zeros and their multiplicities: $f(x)=x^2(x-3)^3(x+1)$.",
           "answer": "$x=0$ (multiplicity 2, touches axis, bounces), $x=3$ (multiplicity 3, crosses axis with flattening), $x=-1$ (mult. 1, crosses normally).",
-          "technique": "Multiplicity even → graph touches (bounces) at that zero. Multiplicity odd → graph crosses through."
+          "technique": "Multiplicity even \u2192 graph touches (bounces) at that zero. Multiplicity odd \u2192 graph crosses through."
         },
         {
           "problem": "How many turning points can $f(x)=x^4-5x^2+4$ have?",
@@ -5900,7 +5908,7 @@
         },
         {
           "problem": "Use the Intermediate Value Theorem to show $f(x)=x^3-2x-5$ has a zero between $x=2$ and $x=3$.",
-          "answer": "$f(2)=8-4-5=-1<0$ and $f(3)=27-6-5=16>0$. Sign change on a continuous function → zero exists between $2$ and $3$.",
+          "answer": "$f(2)=8-4-5=-1<0$ and $f(3)=27-6-5=16>0$. Sign change on a continuous function \u2192 zero exists between $2$ and $3$.",
           "technique": "IVT: if $f$ is continuous and changes sign on $[a,b]$, there's at least one zero in $(a,b)$."
         }
       ],
@@ -5915,9 +5923,10 @@
         },
         {
           "problem": "A zero has multiplicity 2. What does the graph do there?",
-          "answer": "Touches the $x$-axis and bounces back (turns around) — doesn't cross through."
+          "answer": "Touches the $x$-axis and bounces back (turns around) \u2014 doesn't cross through."
         }
-      ]
+      ],
+      "practiceFile": "PC_3_4_Polynomial_Functions_Practice.html"
     },
     {
       "id": "PC_3_5",
@@ -5925,12 +5934,12 @@
       "title": "Graphing Polynomial Functions",
       "swbat": "Students will be able to graph polynomial functions by analyzing zeros, multiplicities, end behavior, and turning points.",
       "exitTicket": "Sketch $f(x)=-(x+2)^2(x-1)$. Label zeros, note their multiplicities, and describe end behavior.",
-      "hasPractice": false,
+      "hasPractice": true,
       "workedExamples": [
         {
           "problem": "Sketch $f(x)=(x+1)(x-2)(x-4)$.",
           "answer": "Degree 3, positive leading coeff: down-left, up-right. Zeros at $x=-1,2,4$ all multiplicity 1 (cross-through). $y$-intercept: $f(0)=(1)(-2)(-4)=8$.",
-          "technique": "Graphing checklist: end behavior → zeros and multiplicities → $y$-intercept → sketch."
+          "technique": "Graphing checklist: end behavior \u2192 zeros and multiplicities \u2192 $y$-intercept \u2192 sketch."
         },
         {
           "problem": "Sketch $g(x)=x^2(x-3)$.",
@@ -5940,18 +5949,18 @@
         {
           "problem": "For $f(x)=-2(x-1)^2(x+3)$, find the $y$-intercept and describe the behavior at each zero.",
           "answer": "$y$-int: $f(0)=-2(1)(3)=-6$. At $x=1$ (mult 2): bounce. At $x=-3$ (mult 1): cross. Leading term $-2x^3$: up-left, down-right.",
-          "technique": "Always find $f(0)$ by substituting $x=0$ — gives $y$-intercept without expanding the whole polynomial."
+          "technique": "Always find $f(0)$ by substituting $x=0$ \u2014 gives $y$-intercept without expanding the whole polynomial."
         },
         {
           "problem": "A degree-5 polynomial with positive leading coefficient. How many real zeros could it have?",
-          "answer": "Odd degree — at least $1$ real zero. Could have $1,3,$ or $5$ real zeros (counting multiplicity, complex zeros come in conjugate pairs).",
+          "answer": "Odd degree \u2014 at least $1$ real zero. Could have $1,3,$ or $5$ real zeros (counting multiplicity, complex zeros come in conjugate pairs).",
           "technique": "Complex zeros come in pairs (conjugate pairs), so odd-degree polynomials always have at least one real zero."
         }
       ],
       "reviewProblems": [
         {
           "problem": "How many $x$-intercepts does $f(x)=(x-2)^2(x+1)^2$ have?",
-          "answer": "2 — at $x=2$ and $x=-1$, both with multiplicity 2 (the graph touches but doesn't cross at each)."
+          "answer": "2 \u2014 at $x=2$ and $x=-1$, both with multiplicity 2 (the graph touches but doesn't cross at each)."
         },
         {
           "problem": "Find the $y$-intercept of $f(x)=3(x+4)(x-1)(x-6)$.",
@@ -5961,7 +5970,8 @@
           "problem": "Sketch end behavior of $f(x)=-x^4+3x^2$.",
           "answer": "Even degree, negative leading: both ends go to $-\\infty$."
         }
-      ]
+      ],
+      "practiceFile": "PC_3_5_Polynomial_Graphs_Practice.html"
     },
     {
       "id": "PC_3_6",
@@ -5969,17 +5979,17 @@
       "title": "Rational Functions",
       "swbat": "Students will be able to identify vertical and horizontal asymptotes, holes, and intercepts of rational functions and sketch their graphs.",
       "exitTicket": "Find all asymptotes and holes of $f(x)=\\dfrac{x^2-4}{x^2-x-2}$.",
-      "hasPractice": false,
+      "hasPractice": true,
       "workedExamples": [
         {
           "problem": "Find vertical asymptotes of $f(x)=\\dfrac{x+1}{x^2-9}$.",
           "answer": "Factor denominator: $(x-3)(x+3)$. Zeros at $x=3$ and $x=-3$. Neither cancels with numerator. Vertical asymptotes: $x=3$ and $x=-3$.",
-          "technique": "VA: set denominator $=0$ and check if the factor cancels with numerator. Cancels → hole; doesn't cancel → VA."
+          "technique": "VA: set denominator $=0$ and check if the factor cancels with numerator. Cancels \u2192 hole; doesn't cancel \u2192 VA."
         },
         {
           "problem": "Find the horizontal asymptote of $f(x)=\\dfrac{3x^2-1}{x^2+4}$.",
           "answer": "Same degree in numerator and denominator: HA is $y=\\dfrac{3}{1}=3$ (ratio of leading coefficients).",
-          "technique": "HA rules: degrees equal → HA = ratio of leading coeff. Numerator degree lower → HA is $y=0$. Num. degree higher → no HA."
+          "technique": "HA rules: degrees equal \u2192 HA = ratio of leading coeff. Numerator degree lower \u2192 HA is $y=0$. Num. degree higher \u2192 no HA."
         },
         {
           "problem": "Find the hole in $f(x)=\\dfrac{(x-2)(x+3)}{(x-2)(x+1)}$.",
@@ -5989,7 +5999,7 @@
         {
           "problem": "Sketch $f(x)=\\dfrac{2x}{x-3}$: find intercepts, asymptotes, and one point to guide the sketch.",
           "answer": "$x$-int: $(0,0)$ (numerator $=0$). $y$-int: $(0,0)$. VA: $x=3$. HA: $y=2$. Test $x=6$: $f(6)=12/3=4$.",
-          "technique": "Sketch workflow: find intercepts → VA → HA → test a point in each region. Curve approaches (not crosses) asymptotes."
+          "technique": "Sketch workflow: find intercepts \u2192 VA \u2192 HA \u2192 test a point in each region. Curve approaches (not crosses) asymptotes."
         }
       ],
       "reviewProblems": [
@@ -6005,7 +6015,8 @@
           "problem": "Describe the end behavior of $f(x)=\\dfrac{x+4}{x-1}$ as $x\\to\\pm\\infty$.",
           "answer": "$f(x)\\to 1$ from both sides (HA at $y=1$)."
         }
-      ]
+      ],
+      "practiceFile": "PC_3_6_Rational_Functions_Practice.html"
     },
     {
       "id": "PC_4_1",
@@ -6087,7 +6098,7 @@
         },
         {
           "problem": "How does $f(x)=2^{-x}$ differ from $f(x)=2^x$?",
-          "answer": "Reflection over the $y$-axis — exponential decay instead of growth."
+          "answer": "Reflection over the $y$-axis \u2014 exponential decay instead of growth."
         },
         {
           "problem": "Find the $y$-intercept of $f(x)=4\\cdot 3^x-1$.",
@@ -6116,7 +6127,7 @@
         {
           "problem": "Graph $f(x)=\\log_2 x$ and state domain, range, and key features.",
           "answer": "Domain: $(0,\\infty)$. Range: $(-\\infty,\\infty)$. $x$-intercept: $(1,0)$. VA: $x=0$. Passes through $(2,1)$ and $(4,2)$. Increasing.",
-          "technique": "Log function is the inverse of exponential — swap $x$ and $y$ from $2^x$ graph."
+          "technique": "Log function is the inverse of exponential \u2014 swap $x$ and $y$ from $2^x$ graph."
         },
         {
           "problem": "Solve: $\\log_3 x = 4$.",
@@ -6159,8 +6170,8 @@
         },
         {
           "problem": "Solve $\\log_5(2x+1)=3$.",
-          "answer": "Convert to exponential: $2x+1=5^3=125\\Rightarrow 2x=124\\Rightarrow x=62$. Check: $\\log_5(125)=3$ ✓",
-          "technique": "Isolate the log, convert to exponential, solve. Always check — the argument of log must be positive."
+          "answer": "Convert to exponential: $2x+1=5^3=125\\Rightarrow 2x=124\\Rightarrow x=62$. Check: $\\log_5(125)=3$ \u2713",
+          "technique": "Isolate the log, convert to exponential, solve. Always check \u2014 the argument of log must be positive."
         },
         {
           "problem": "Solve $\\ln(x)+\\ln(x-2)=\\ln(8)$.",

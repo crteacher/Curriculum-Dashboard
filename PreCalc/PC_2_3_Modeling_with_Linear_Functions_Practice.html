@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mean Value Theorem &mdash; Practice</title>
+<title>Modeling with Linear Functions &mdash; Practice</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
 <style>
   *{box-sizing:border-box;margin:0;padding:0}
@@ -61,31 +61,32 @@
 </head>
 <body>
 <div class="container">
-  <h1>Mean Value Theorem</h1>
-  <p class="subtitle">Calculus I &nbsp;&middot;&nbsp; &sect;3.8 &nbsp;&middot;&nbsp; Instructor: Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026</p>
+  <h1>Modeling with Linear Functions</h1>
+  <p class="subtitle">PreCalc &nbsp;&middot;&nbsp; &sect;2.3 &nbsp;&middot;&nbsp; Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026</p>
 
   <div class="section">
     <div class="section-title">Core Ideas</div>
 
-    <div class="concept">
-      <span class="concept-label">Mean Value Theorem</span>
-      If $f$ is continuous on $[a,b]$ and differentiable on $(a,b)$, then
-      $\exists\; c\in(a,b)$ such that
-      $$f'(c)=\frac{f(b)-f(a)}{b-a}$$
-      Instantaneous rate of change $=$ average rate of change at some interior point.
-    </div>
-    <div class="concept">
-      <span class="concept-label">Finding c &nbsp;|&nbsp; Rolle's Theorem</span>
-      Compute $m=\dfrac{f(b)-f(a)}{b-a}$, then solve $f'(x)=m$ and keep solutions in $(a,b)$.
-      Rolle's Theorem: special case where $f(a)=f(b)$, so $m=0$ and $f'(c)=0$.
-    </div>
+  <div class="concept">
+    <span class="concept-label">Building a linear model</span>
+    A <strong>linear model</strong> has the form $f(x) = mx + b$, where:
+    <br>&bull; $m$ = <strong>rate of change</strong> (slope) — how much the output changes per unit increase in $x$.
+    <br>&bull; $b$ = <strong>initial value</strong> (y-intercept) — the output when $x = 0$.
+    <br>Given two data points, find $m$ first, then $b = y - mx$.
+  </div>
+  <div class="concept">
+    <span class="concept-label">Intersection of two models</span>
+    Two linear models $f(x)$ and $g(x)$ <strong>intersect</strong> where $f(x) = g(x)$.
+    <br>Set the expressions equal and solve for $x$ — this is the <strong>break-even</strong> or
+    <strong>equilibrium</strong> quantity.
+  </div>
 
   </div>
 
   <div class="section">
     <div class="section-title">Practice Problems</div>
     <p style="font-family:sans-serif;font-size:13px;color:#666;margin-bottom:1rem;">
-      All answers are integers. Average rate of change and word problems: type the number. Finding c: type the x-value.
+      Enter an integer for all answers on this page.
       Press <strong>Check</strong> or hit Enter.
     </p>
     <div class="score-bar">
@@ -131,107 +132,128 @@ function addT(n, v) {
 
 // ── Problem generators (section-specific, injected below) ─────────────────────
 
-// gen1: AROC of f(x)=x^2 on [a,b] → (b^2-a^2)/(b-a) = a+b  (always integer)
-function gen1() {
-  const a = rInt(4)+1, b = a + rInt(3)+2;   // b > a, gap 2-4
-  const ans = a + b;
+function gen1(){
+  // Evaluate a linear model f(x)=mx+b at x=a — given as a word problem context
+  const m = choose([2,3,4,5,6]);
+  const b = choose([5,10,15,20,25,30]);
+  const a = choose([1,2,3,4,5,6,8,10]);
+  const ans = m * a + b;
+  const bS = b > 0 ? `+${b}` : `${b}`;
   return {
-    latex: `\\text{Find the average rate of change of }f(x)=x^2\\text{ on }[${a},${b}]`,
+    latex: `f(x)=${m}x${bS}.\\quad f(${a})=`,
     answer: [String(ans)],
-    hint: `Plug into \\frac{f(b)-f(a)}{b-a}. Notice how the numerator factors.`,
-    step: `\\frac{${b*b}-${a*a}}{${b}-${a}}=\\frac{${b*b-a*a}}{${b-a}}=${ans}`
+    hint: 'What does a linear model output for a specific value of x?',
+    step: `f(${a})=${m}(${a})${addT(b,'')}=${m*a}+${b}=${ans}`
   };
 }
 
-// gen2: AROC of f(x)=x^2+cx on [0,b] → (b^2+cb)/b = b+c  (always integer)
-function gen2() {
-  const b = rInt(4)+2, c = rInt(4)+1;
-  const ans = b + c;
+function gen2(){
+  // Identify rate of change (slope) from a model description
+  const m = choose([2,3,4,5,6,8,10]);
+  const b = choose([5,10,15,20,25,50,100]);
+  const bS = b > 0 ? `+${b}` : `${b}`;
   return {
-    latex: `\\text{Find the average rate of change of }f(x)=x^2+${c}x\\text{ on }[0,${b}]`,
+    latex: `C(x)=${m}x${bS}.\\quad\\text{Rate of change}=`,
+    answer: [String(m)],
+    hint: 'In a linear model, which coefficient describes how the output changes per unit of input?',
+    step: `\\text{In }C(x)=mx+b,\\text{ the rate of change is the slope }m=${m}`
+  };
+}
+
+function gen3(){
+  // Identify fixed cost / initial value (y-intercept) from a model
+  const m = choose([2,3,4,5,6,8,10]);
+  const b = choose([5,10,15,20,25,50,100]);
+  const bS = b > 0 ? `+${b}` : `${b}`;
+  return {
+    latex: `C(x)=${m}x${bS}.\\quad\\text{Fixed cost (initial value)}=`,
+    answer: [String(b)],
+    hint: 'In a linear model C(x) = mx + b, what does b represent when the input is zero?',
+    step: `\\text{At }x=0:\\;C(0)=${b}.\\text{ The fixed cost is }b=${b}`
+  };
+}
+
+function gen4(){
+  // Find x such that f(x) = target (integer)
+  const m = choose([2,3,4,5]);
+  const b = choose([0,5,10,15,20]);
+  const k = choose([1,2,3,4,5,6,8,10]); // the answer x=k
+  const target = m * k + b;
+  const bS = b > 0 ? `+${b}` : (b === 0 ? '' : `${b}`);
+  return {
+    latex: `C(x)=${m}x${bS}.\\quad\\text{Find }x\\text{ so that }C(x)=${target}.`,
+    answer: [String(k)],
+    hint: 'If a linear model gives a specific output, what input x produces that value?',
+    step: `${m}x${bS}=${target},\\quad ${m}x=${target-b},\\quad x=${k}`
+  };
+}
+
+function gen5(){
+  // Intersection of two linear models (break-even) — integer x answer
+  // Pick x* (intersection), y*, and slopes m1 > m2, compute intercepts
+  const xStar = choose([2,3,4,5,6,8,10]);
+  const yStar = choose([10,15,20,25,30,40,50]);
+  const m1 = choose([4,5,6,8]);
+  const m2 = choose([1,2,3]);
+  if (m1 === m2) m2 = 1; // avoid parallel
+  const b1 = yStar - m1 * xStar;
+  const b2 = yStar - m2 * xStar;
+  const b1S = b1 >= 0 ? `+${b1}` : `${b1}`;
+  const b2S = b2 >= 0 ? `+${b2}` : `${b2}`;
+  return {
+    latex: `C_1(x)=${m1}x${b1S},\\quad C_2(x)=${m2}x${b2S}.\\quad\\text{Find }x\\text{ where }C_1=C_2.`,
+    answer: [String(xStar)],
+    hint: 'What does the intersection point of two linear models represent?',
+    step: `${m1}x${b1S}=${m2}x${b2S},\\quad ${m1-m2}x=${b2-b1},\\quad x=${xStar}`
+  };
+}
+
+function gen6(){
+  // Rate of change (slope) from two data points
+  const m = choose([2,3,4,5,6]);
+  const x1 = choose([0,1,2,3]);
+  const dx = choose([1,2,3,4,5]);
+  const x2 = x1 + dx;
+  const y1 = choose([5,10,15,20,25]);
+  const y2 = y1 + m * dx;
+  return {
+    latex: `\\text{Points: }(${x1},\\,${y1})\\text{ and }(${x2},\\,${y2}).\\quad\\text{Rate of change}=`,
+    answer: [String(m)],
+    hint: 'How is the rate of change of a linear model computed from two data points?',
+    step: `m=\\dfrac{${y2}-${y1}}{${x2}-${x1}}=\\dfrac{${y2-y1}}{${dx}}=${m}`
+  };
+}
+
+function gen7(){
+  // Build model from two points, then predict at a new x (integer)
+  const m = choose([2,3,4,5]);
+  const b = choose([0,5,10,15,20]);
+  const x1 = 0, y1 = b;
+  const x2 = choose([2,4,5,10]);
+  const y2 = m * x2 + b;
+  const xNew = choose([3,6,8,12,15]).filter(v => v !== x2)[0] || 3;
+  const ans = m * xNew + b;
+  const bS = b > 0 ? `+${b}` : (b === 0 ? '' : `${b}`);
+  return {
+    latex: `\\text{Linear model through }(${x1},\\,${y1})\\text{ and }(${x2},\\,${y2}).\\quad f(${xNew})=`,
     answer: [String(ans)],
-    hint: `f(0)=0, so AROC simplifies to f(${b})/${b}. Compute f(${b}) first.`,
-    step: `\\frac{f(${b})-f(0)}{${b}-0}=\\frac{${b*b+c*b}}{${b}}=${ans}`
+    hint: 'Once you identify the slope and initial value of a linear model, what does it predict?',
+    step: `m=${m},\\;b=${b}.\\;f(x)=${m}x${bS}.\\;f(${xNew})=${m}(${xNew})${b>0?addT(b,''):''}=${ans}`
   };
 }
 
-// gen3: Find c from MVT for f(x)=x^2 on [a,b] → c=(a+b)/2  (integer when a+b even)
-// Ensure a+b even by making both odd or both even.
-function gen3() {
-  const parity = rInt(2);                           // 0=both odd, 1=both even
-  const a = 2*rInt(3) + (parity===0?1:2);           // odd in {1,3,5} or even in {2,4,6}
-  const b = a + 2*(rInt(2)+1);                      // b = a+2 or a+4, same parity
-  const aroc = a + b;
-  const c    = (a + b) / 2;
+function gen8(){
+  // Break-even: Revenue R(x)=p*x vs Cost C(x)=m*x+b → find x where R=C (integer)
+  const xStar = choose([5,10,15,20,25]);
+  const p = choose([8,10,12,15,20]);    // price per unit (revenue slope)
+  const m = choose([2,3,4,5]);          // variable cost per unit
+  if (p <= m) { p = m + 2; }            // ensure p > m
+  const b = (p - m) * xStar;           // fixed cost so that R(x*)=C(x*)
   return {
-    latex: `\\text{Find }c\\text{ guaranteed by MVT for }f(x)=x^2\\text{ on }[${a},${b}]`,
-    answer: [String(c)],
-    hint: `Compute the average rate of change first, then set f'(x) equal to it and solve.`,
-    step: `\\begin{aligned}m&=\\frac{${b*b}-${a*a}}{${b}-${a}}=${aroc}\\\\f'(x)&=2x=${aroc}\\\\c&=${c}\\end{aligned}`
-  };
-}
-
-// gen4: Find c from MVT for f(x)=x^2+2x on [0,b] → c=b/2  (integer when b even)
-function gen4() {
-  const b    = 2*(rInt(3)+1);    // b in {2,4,6}
-  const aroc = b + 2;            // (b^2+2b)/b = b+2
-  const c    = b / 2;
-  return {
-    latex: `\\text{Find }c\\text{ guaranteed by MVT for }f(x)=x^2+2x\\text{ on }[0,${b}]`,
-    answer: [String(c)],
-    hint: `f(0)=0 simplifies the AROC. Then set f'(x)=2x+2 equal to the average rate and solve.`,
-    step: `\\begin{aligned}m&=\\frac{${b*b+2*b}}{${b}}=${aroc}\\\\2x+2&=${aroc}\\\\c&=${c}\\end{aligned}`
-  };
-}
-
-// gen5: Rolle's — f(x)=x^2-2ax on [0,2a], f'(c)=0 → c=a  (integer)
-function gen5() {
-  const a = rInt(4)+1;
-  return {
-    latex: `\\text{Find }c\\text{ from Rolle's Theorem for }f(x)=x^2-${2*a}x\\text{ on }[0,${2*a}]`,
-    answer: [String(a)],
-    hint: `Verify f(0)=f(${2*a}) first. Then set f'(x)=0 and solve — that's your c.`,
-    step: `\\begin{aligned}f(0)&=0,\\;f(${2*a})=${4*a*a}-${4*a*a}=0\\;\\checkmark\\\\f'(x)&=2x-${2*a}=0\\\\c&=${a}\\end{aligned}`
-  };
-}
-
-// gen6: Rolle's — f(x)=(x-p)(x-q) on [p,q], c=(p+q)/2  (integer, q-p even)
-function gen6() {
-  const p  = rInt(4)+1;
-  const q  = p + 2*(rInt(2)+1);    // gap of 2 or 4, same parity → c integer
-  const c  = (p + q) / 2;
-  return {
-    latex: `\\text{Find }c\\text{ from Rolle's Theorem for }f(x)=(x-${p})(x-${q})\\text{ on }[${p},${q}]`,
-    answer: [String(c)],
-    hint: `f(${p})=f(${q})=0, so Rolle's applies. Expand or use the product rule to find f'(x), then set it to 0.`,
-    step: `\\begin{aligned}f(${p})&=f(${q})=0\\;\\checkmark\\\\f'(x)&=2x-${p+q}=0\\\\c&=${c}\\end{aligned}`
-  };
-}
-
-// gen7: Word problem — car travels d miles in t hours, find guaranteed speed (integer mph)
-function gen7() {
-  const spd  = (rInt(4)+1)*10;    // speed in {10,20,30,40} — will scale to realistic values
-  const hrs  = rInt(2)+2;         // time in {2,3}
-  const dist = spd * hrs;
-  return {
-    latex: `\\text{A car travels ${dist} miles in ${hrs} hours. The MVT guarantees it was going exactly how many mph at some moment?}`,
-    answer: [String(spd)],
-    hint: `The MVT guarantees the instantaneous speed equaled the average speed at some point. Compute total distance / total time.`,
-    step: `\\text{Average speed}=\\frac{${dist}}{${hrs}}=${spd}\\text{ mph}`
-  };
-}
-
-// gen8: Temperature word problem — ΔT over Δt, find guaranteed rate (integer °F/hr)
-function gen8() {
-  const rate = rInt(4)+2;         // °F per hour: {2,3,4,5}
-  const hrs  = rInt(2)+2;         // hours: {2,3}
-  const t1   = 50 + 2*rInt(8);    // starting temp, even number in {50,...,64}
-  const t2   = t1 + rate*hrs;
-  return {
-    latex: `\\text{Temperature rose from ${t1}°F to ${t2}°F over ${hrs} hours. The MVT guarantees it changed at exactly how many °F/hr at some moment?}`,
-    answer: [String(rate)],
-    hint: `Compute the average rate of temperature change over the interval. The MVT guarantees this rate occurred instantaneously.`,
-    step: `\\frac{${t2}-${t1}}{${hrs}}=\\frac{${rate*hrs}}{${hrs}}=${rate}\\text{ °F/hr}`
+    latex: `R(x)=${p}x,\\quad C(x)=${m}x+${b}.\\quad\\text{Break-even quantity }x=`,
+    answer: [String(xStar)],
+    hint: 'When does a revenue model equal the cost model?',
+    step: `${p}x=${m}x+${b},\\quad ${p-m}x=${b},\\quad x=${xStar}`
   };
 }
 
@@ -242,7 +264,11 @@ const GENERATORS = [gen1, gen2, gen3, gen4, gen5, gen6, gen7, gen8];
 let ACTIVE, correct, flags, attempted, peeked;
 
 function norm(s) {
-  return s.trim().toLowerCase().replace(/\s+/g, '').replace(/[−–]/g, '-');
+  return s.trim().toLowerCase()
+    .replace(/\s+/g, '')
+    .replace(/[−–]/g, '-')
+    .replace(/∞/g, 'inf')
+    .replace(/∪/g, 'u');
 }
 function ok(user, acc) { return acc.some(a => norm(user) === norm(a)); }
 
