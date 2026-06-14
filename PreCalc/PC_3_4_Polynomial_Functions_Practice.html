@@ -152,7 +152,7 @@ function gen1(){
   ];
   const {expr,deg} = choose(degs);
   return {
-    latex: `f(x)=${expr}.\\quad\\text{Degree}=`,
+    latex: `f(x)=${expr}.\\quad\\text{Degree}= \\underline{\\quad}`,
     answer: [String(deg)],
     hint: 'What is the degree of a polynomial function?',
     step: `\\text{Highest power of }x\\text{ is }x^{${deg}},\\text{ so degree}=${deg}`
@@ -173,7 +173,7 @@ function gen2(){
   ];
   const {expr,lc} = choose(polys);
   return {
-    latex: `f(x)=${expr}.\\quad\\text{Leading coefficient}=`,
+    latex: `f(x)=${expr}.\\quad\\text{Leading coefficient}= \\underline{\\quad}`,
     answer: [String(lc)],
     hint: 'Which coefficient in a polynomial corresponds to the highest-degree term?',
     step: `\\text{Leading term is }${lc}x^n,\\text{ so leading coefficient}=${lc}`
@@ -195,7 +195,7 @@ function gen3(){
   const {expr,zero,mult} = choose(cases);
   const zeroS = zero >= 0 ? `x=${zero}` : `x=${zero}`;
   return {
-    latex: `f(x)=${expr}.\\quad\\text{Multiplicity of zero at }${zeroS}=`,
+    latex: `f(x)=${expr}.\\quad\\text{Multiplicity of zero at }${zeroS}= \\underline{\\quad}`,
     answer: [String(mult)],
     hint: 'In factored form, what does the exponent on a factor tell you about that zero?',
     step: `\\text{Factor }(x-${zero})\\text{ appears to the power }${mult},\\text{ so multiplicity}=${mult}`
@@ -216,7 +216,7 @@ function gen4(){
   ];
   const {expr,count} = choose(cases);
   return {
-    latex: `f(x)=${expr}.\\quad\\text{Number of distinct real zeros}=`,
+    latex: `f(x)=${expr}.\\quad\\text{Number of distinct real zeros}= \\underline{\\quad}`,
     answer: [String(count)],
     hint: 'In factored form, how many different values of r appear as zeros?',
     step: `\\text{Distinct factors: count unique values of }r.\\;\\text{Answer: }${count}`
@@ -280,7 +280,7 @@ function gen7(){
   ];
   const {expr,yint} = choose(cases);
   return {
-    latex: `f(x)=${expr}.\\quad\\text{y-intercept}=`,
+    latex: `f(x)=${expr}.\\quad\\text{y-intercept}= \\underline{\\quad}`,
     answer: [`(0,${yint})`, `(0, ${yint})`],
     hint: 'What does each factor in factored form simplify to when x equals zero?',
     step: `f(0)=${expr.replace(/x/g,'(0)')}=${yint}.\\;\\text{y-intercept: }(0,${yint})`
@@ -293,7 +293,7 @@ function gen8(){
   const deg = choose(degs);
   const tp = deg - 1;
   return {
-    latex: `\\text{Degree }${deg}\\text{ polynomial.}\\quad\\text{Maximum turning points}=`,
+    latex: `\\text{Degree }${deg}\\text{ polynomial.}\\quad\\text{Maximum turning points}= \\underline{\\quad}`,
     answer: [String(tp)],
     hint: 'How is the maximum number of turning points of a polynomial related to its degree?',
     step: `\\text{Max turning points} = \\text{degree} - 1 = ${deg} - 1 = ${tp}`

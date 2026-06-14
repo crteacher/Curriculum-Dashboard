@@ -132,8 +132,14 @@ function exBlock(p,a,tech){
 function exBlocks(arr){return(arr||[]).map(e=>exBlock(e.problem,e.answer,e.technique)).join('');}
 function pracLink(course,sec){
   if(!sec.hasPractice||!sec.practiceFile)return'';
-  const folder=course==='ca'?'./College%20Algebra':'./Calc%202';
-  return`<br><a href="${folder}/${sec.practiceFile}.html" class="prac-link" target="_blank">📄 Practice Worksheet</a>`;
+  const folder=course==='ca'?'./College%20Algebra':course==='pc'?'./PreCalc':'./Calc%202';
+  return`<br><a href="${folder}/${sec.practiceFile}" class="prac-link" target="_blank">📄 Practice Worksheet</a>`;
+}
+function notesLinks(course,sec){
+  if(!sec.notesFile)return'';
+  const folder=course==='ca'?'./College%20Algebra':course==='pc'?'./PreCalc':course==='c1'?'./Calc%201':'./Calc%202';
+  const b=sec.notesFile;
+  return`<a href="${folder}/${b}_Notes_STUDENT.html" class="prac-link" target="_blank">📓 Student Notes</a> &nbsp; <a href="${folder}/${b}_Notes_INSTRUCTOR.html" class="prac-link" target="_blank">📋 Instructor Notes</a>`;
 }
 
 function buildLessonCard(course,sec,dayNum,isOpen,schedItem){
@@ -146,6 +152,7 @@ function buildLessonCard(course,sec,dayNum,isOpen,schedItem){
     body+=`<div class="inline-quiz-banner"><span class="quiz-icon">✏️</span><span class="quiz-label">${q.title}</span><span class="quiz-note">Short quiz — first 10–15 min. Individual &amp; silent. Rest of lesson follows.</span></div>`;
   }
   body+=grm('SWBAT',mEl(sec.swbat||'—'));
+  const nl=notesLinks(course,sec); if(nl)body+=grm('Notes',nl);
   body+=grm('DO NOW',`<a href="${doNow}" class="do-now-link ${course}" target="_blank">Open Do Now →</a>`);
   // I Do: first 2 worked examples — teacher-led lecture demos
   const iDo=we.slice(0,2); if(iDo.length)body+=grm('I Do',exBlocks(iDo));
