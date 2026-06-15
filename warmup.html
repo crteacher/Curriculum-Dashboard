@@ -301,9 +301,11 @@ function renderWarmup() {
   const tagClass = _courseChoice === 'ca' ? 'ca' : (_courseChoice === 'calc' ? 'calc' : _courseChoice === 'pc' ? 'pc' : 'review');
 
   const problems = sec.reviewProblems || [];
-  const prob = problems.length
+  const rawProb = problems.length
     ? problems[Math.floor(Math.random() * problems.length)]
     : null;
+  const prob = rawProb && typeof rawProb === 'object' ? rawProb.problem : rawProb;
+  const probAnswer = rawProb && typeof rawProb === 'object' ? rawProb.answer : null;
 
   const folder = _courseKey === 'collegeAlgebra' ? 'College%20Algebra' :
                  _courseKey === 'preCalc' ? 'PreCalc' :
@@ -325,7 +327,8 @@ function renderWarmup() {
     <div class="warmup-swbat">${renderMath(sec.swbat || '—')}</div>
     ${prob ? `<hr class="warmup-divider">
     <div class="warmup-swbat-label">Problem</div>
-    <div class="warmup-swbat">${renderMath(prob)}</div>` : ''}
+    <div class="warmup-swbat">${renderMath(prob)}</div>
+    ${probAnswer ? `<div class="warmup-swbat-label" style="margin-top:.75rem">Answer</div><div class="warmup-swbat" style="font-size:.88rem;color:#7a7570">${renderMath(probAnswer)}</div>` : ''}` : ''}
     ${practiceUrl ? `<a class="practice-btn" href="${practiceUrl}" target="_blank">
       Open Practice Problems →
     </a>` : ''}

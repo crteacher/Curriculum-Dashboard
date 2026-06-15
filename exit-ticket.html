@@ -179,4 +179,32 @@ Promise.all([
       if (showAnswerNow) {
         ansEl.classList.add('visible');
       } else if (revBtn) {
-        revBtn.s
+        revBtn.style.display = 'inline-block';
+      }
+    } else {
+      qEl.innerHTML = '<span class="none-msg">No exit ticket for this section.</span>';
+    }
+  }
+
+  // College Algebra
+  const caId   = state?.courses?.collegeAlgebra?.currentSection;
+  const caLast = (state?.courses?.collegeAlgebra?.completedSections||[]).slice(-1)[0] || null;
+  fill(caId,   'caToday', false);
+  fill(caLast, 'caLast',  true);
+
+  // Calculus 2
+  const c2Id   = state?.courses?.calc2?.currentSection;
+  const c2Last = (state?.courses?.calc2?.completedSections||[]).slice(-1)[0] || null;
+  fill(c2Id,   'c2Today', false);
+  fill(c2Last, 'c2Last',  true);
+
+  // PreCalc
+  const pcId   = state?.courses?.preCalc?.currentSection;
+  const pcLast = (state?.courses?.preCalc?.completedSections||[]).slice(-1)[0] || null;
+  fill(pcId,   'pcToday', false);
+  fill(pcLast, 'pcLast',  true);
+
+}).catch(err => console.error('exit-ticket boot error:', err));
+</script>
+</body>
+</html>
