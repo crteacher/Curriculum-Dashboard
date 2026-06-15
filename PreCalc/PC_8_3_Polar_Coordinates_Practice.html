@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Polar Coordinates &mdash; Practice</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.7}
+  .container{max-width:820px;margin:0 auto;padding:2rem 1.5rem 4rem}
+  h1{font-size:26px;font-weight:700;margin-bottom:4px}
+  .subtitle{font-size:14px;color:#666;margin-bottom:2rem;font-family:sans-serif}
+  .section{margin-bottom:2.5rem}
+  .section-title{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;
+    color:#777;font-family:sans-serif;margin-bottom:1rem;border-bottom:1px solid #ddd;padding-bottom:6px}
+  .concept{background:#d9e8f5;border-left:4px solid #185fa5;border-radius:0 8px 8px 0;
+    padding:.85rem 1.1rem;font-size:15px;margin-bottom:1rem}
+  .concept-label{font-family:sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;
+    letter-spacing:.07em;color:#185fa5;display:block;margin-bottom:.35rem}
+  .score-bar{display:flex;align-items:center;gap:12px;margin-bottom:1.25rem;
+    font-family:sans-serif;font-size:14px;flex-wrap:wrap}
+  .score-display{font-weight:700;font-size:18px;min-width:60px}
+  .score-label{color:#777;font-size:13px}
+  .score-note{font-size:12px;color:#999;font-style:italic}
+  .progress{flex:1;min-width:80px;height:6px;background:#e5e1d8;border-radius:3px;overflow:hidden}
+  .progress-fill{height:100%;background:#185fa5;border-radius:3px;transition:width .4s}
+  .reset-btn{font-size:12px;background:none;border:1px solid #bbb;border-radius:5px;
+    padding:4px 10px;cursor:pointer;color:#666;font-family:sans-serif;white-space:nowrap}
+  .reset-btn:hover{background:#eee}
+  .problems{display:grid;grid-template-columns:repeat(auto-fill,minmax(370px,1fr));gap:14px}
+  .card{background:#fff;border:1.5px solid #ddd;border-radius:10px;overflow:hidden;transition:border-color .25s}
+  .card.correct{border-color:#3a7a3a}.card.wrong{border-color:#b03030}.card.peeked{border-color:#b8860b}
+  .card-body{padding:14px 16px}
+  .card-meta{font-family:sans-serif;font-size:12px;color:#888;margin-bottom:4px}
+  .card-expr{font-size:17px;margin-bottom:12px;line-height:2.2;overflow-x:auto}
+  .katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}
+  .input-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .ans-input{font-family:'Courier New',monospace;font-size:14px;border:1px solid #ccc;
+    border-radius:6px;padding:7px 10px;flex:1;min-width:120px;background:#fafaf8;
+    color:#1a1a1a;outline:none}
+  .ans-input:focus{border-color:#185fa5;background:#fff}
+  .ans-input.ok{border-color:#3a7a3a;background:#f0faf0}
+  .ans-input.bad{border-color:#b03030;background:#fdf0f0}
+  .check-btn{font-family:sans-serif;font-size:13px;background:#1a1a1a;color:#fff;
+    border:none;border-radius:6px;padding:7px 14px;cursor:pointer}
+  .check-btn:hover{background:#333}.check-btn:disabled{background:#aaa;cursor:default}
+  .hint{font-family:sans-serif;font-size:12px;color:#888;margin-top:7px}
+  .feedback{font-family:sans-serif;font-size:13px;margin-top:10px;padding:8px 12px;
+    border-radius:6px;display:none;line-height:1.5}
+  .feedback.correct{display:block;background:#eaf5ea;color:#1a5a1a}
+  .feedback.wrong{display:block;background:#faeaea;color:#7a1a1a}
+  .feedback.peeked{display:block;background:#fdf8e8;color:#7a5a00}
+  .reveal-link{font-family:sans-serif;font-size:12px;color:#999;cursor:pointer;
+    text-decoration:underline;margin-top:8px;display:inline-block}
+  .reveal-link:hover{color:#555}
+  .revealed-answer{display:none;margin-top:8px;font-family:sans-serif;font-size:13px;
+    color:#444;background:#f5f3ef;border-radius:6px;padding:8px 11px;line-height:1.8;overflow-x:auto}
+  code{font-family:'Courier New',monospace;background:#f0ede7;padding:1px 5px;border-radius:3px;font-size:12px}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Polar Coordinates</h1>
+  <p class="subtitle">PreCalc &nbsp;&middot;&nbsp; &sect;8.3 &nbsp;&middot;&nbsp; Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026</p>
+
+  <div class="section">
+    <div class="section-title">Core Ideas</div>
+
+  <div class="concept">
+    <span class="concept-label">Polar coordinates $(r,\theta)$</span>
+    $r$ = distance from origin; $\theta$ = angle in standard position.
+    <br>Polar $\to$ Cartesian: $x=r\cos\theta$, &nbsp; $y=r\sin\theta$
+    <br>Cartesian $\to$ Polar: $r=\sqrt{x^2+y^2}$, &nbsp; $\theta=\arctan\!\left(\dfrac{y}{x}\right)$ (adjust for quadrant)
+  </div>
+  <div class="concept">
+    <span class="concept-label">Key facts</span>
+    The same point can be written as $(r,\theta)$ or $(-r,\theta+\pi)$.
+    <br>Also, adding any multiple of $2\pi$ to $\theta$ gives the same point.
+    <br>$r\cos\theta=x$ &nbsp; and &nbsp; $r\sin\theta=y$ are the conversion identities.
+  </div>
+
+  </div>
+
+  <div class="section">
+    <div class="section-title">Practice Problems</div>
+    <p style="font-family:sans-serif;font-size:13px;color:#666;margin-bottom:1rem;">
+      Integer answers: e.g. <code>3</code>. Square-root answers: <code>sqrt(3)</code>, <code>2sqrt(3)</code>. Angle answers: write &pi; as <code>pi</code> (e.g. <code>pi/4</code>, <code>5pi/6</code>). Negative: <code>-6</code>.
+      Press <strong>Check</strong> or hit Enter.
+    </p>
+    <div class="score-bar">
+      <span class="score-label">Score:</span>
+      <span class="score-display" id="score">0 / 8</span>
+      <span class="score-note">first attempt only</span>
+      <div class="progress"><div class="progress-fill" id="prog" style="width:0%"></div></div>
+      <button class="reset-btn" onclick="resetAll()">New set &nbsp;&#8635;</button>
+    </div>
+    <div class="problems" id="problems"></div>
+  </div>
+</div>
+
+<script>
+// ── Crypto-quality RNG ────────────────────────────────────────────────────────
+function _rf() {
+  const b = new Uint32Array(1);
+  crypto.getRandomValues(b);
+  return b[0] / 4294967296;
+}
+function rInt(n)   { return Math.floor(_rf() * n); }
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = rInt(i + 1);
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+// Pick one element at random from an array  e.g. choose([1,4,9])
+function choose(arr) { return arr[rInt(arr.length)]; }
+
+// ── Display helpers ───────────────────────────────────────────────────────────
+// Leading coefficient: 1→'', -1→'-', else the number as a string
+function fc(a) { if (a===1) return ''; if (a===-1) return '-'; return String(a); }
+// Subsequent term with sign: addT(-2,'x')→' - 2x', addT(3,'')→' + 3', addT(0,'x')→''
+function addT(n, v) {
+  if (n===0) return '';
+  const s = n>0?'+':'-', abs = Math.abs(n);
+  if (abs===1 && v) return ' ' + s + ' ' + v;
+  return ' ' + s + ' ' + abs + (v||'');
+}
+
+// ── Problem generators (section-specific, injected below) ─────────────────────
+
+function gen1(){
+  // Polar → Cartesian: find x = r·cos(θ)
+  const cases = [
+    {r:2, th:'\\dfrac{\\pi}{3}',   x:'1',          xAns:['1']},
+    {r:4, th:'\\dfrac{\\pi}{3}',   x:'2',          xAns:['2']},
+    {r:2, th:'\\dfrac{\\pi}{6}',   x:'\\sqrt{3}',  xAns:['sqrt(3)','sqrt3']},
+    {r:4, th:'\\dfrac{\\pi}{6}',   x:'2\\sqrt{3}', xAns:['2sqrt(3)','2sqrt3']},
+    {r:4, th:'\\dfrac{\\pi}{2}',   x:'0',          xAns:['0']},
+    {r:5, th:'0',                  x:'5',          xAns:['5']},
+    {r:6, th:'\\dfrac{\\pi}{3}',   x:'3',          xAns:['3']},
+    {r:6, th:'\\pi',               x:'-6',         xAns:['-6']},
+  ];
+  const {r, th, x, xAns} = choose(cases);
+  return {
+    latex: `\\text{Polar point }\\left(${r},\\,${th}\\right).\\quad x=`,
+    answer: xAns,
+    hint: 'The Cartesian x-coordinate of a polar point is x = r·cos(θ) — what is cos(θ) at this angle?',
+    step: `x=${r}\\cos\\!\\left(${th}\\right)=${x}`
+  };
+}
+
+function gen2(){
+  // Polar → Cartesian: find y = r·sin(θ)
+  const cases = [
+    {r:2, th:'\\dfrac{\\pi}{6}',   y:'1',          yAns:['1']},
+    {r:4, th:'\\dfrac{\\pi}{6}',   y:'2',          yAns:['2']},
+    {r:2, th:'\\dfrac{\\pi}{3}',   y:'\\sqrt{3}',  yAns:['sqrt(3)','sqrt3']},
+    {r:4, th:'\\dfrac{\\pi}{3}',   y:'2\\sqrt{3}', yAns:['2sqrt(3)','2sqrt3']},
+    {r:4, th:'\\dfrac{\\pi}{2}',   y:'4',          yAns:['4']},
+    {r:5, th:'0',                  y:'0',          yAns:['0']},
+    {r:6, th:'\\dfrac{\\pi}{6}',   y:'3',          yAns:['3']},
+    {r:6, th:'\\pi',               y:'0',          yAns:['0']},
+  ];
+  const {r, th, y, yAns} = choose(cases);
+  return {
+    latex: `\\text{Polar point }\\left(${r},\\,${th}\\right).\\quad y=`,
+    answer: yAns,
+    hint: 'The Cartesian y-coordinate of a polar point is y = r·sin(θ) — what is sin(θ) at this angle?',
+    step: `y=${r}\\sin\\!\\left(${th}\\right)=${y}`
+  };
+}
+
+function gen3(){
+  // Cartesian → Polar: find r = √(x²+y²) using Pythagorean triples
+  const cases = [
+    {x:3,  y:4,  r:5,          rAns:['5']},
+    {x:5,  y:12, r:13,         rAns:['13']},
+    {x:8,  y:15, r:17,         rAns:['17']},
+    {x:1,  y:1,  r:'\\sqrt{2}',rAns:['sqrt(2)','sqrt2']},
+    {x:4,  y:3,  r:5,          rAns:['5']},
+    {x:12, y:5,  r:13,         rAns:['13']},
+  ];
+  const {x, y, r, rAns} = choose(cases);
+  return {
+    latex: `\\text{Cartesian point }(${x},\\,${y}).\\quad r=`,
+    answer: rAns,
+    hint: 'The polar radius r = √(x²+y²) — what is the distance from the origin to this point?',
+    step: `r=\\sqrt{${x}^2+${y}^2}=\\sqrt{${x*x+y*y}}=${r}`
+  };
+}
+
+function gen4(){
+  // Cartesian → Polar: find θ in QI (standard angle)
+  const cases = [
+    {x:1,     y:1,     th:'\\dfrac{\\pi}{4}', ans:['pi/4']},
+    {x:'\\sqrt{3}', y:1,  th:'\\dfrac{\\pi}{6}', ans:['pi/6']},
+    {x:1, y:'\\sqrt{3}',  th:'\\dfrac{\\pi}{3}', ans:['pi/3']},
+    {x:0,     y:3,     th:'\\dfrac{\\pi}{2}', ans:['pi/2']},
+    {x:5,     y:0,     th:'0',                ans:['0']},
+  ];
+  const {x, y, th, ans} = choose(cases);
+  return {
+    latex: `\\text{Cartesian point }(${x},\\,${y}).\\quad\\theta=`,
+    answer: ans,
+    hint: 'For a point in QI, θ = arctan(y/x) — which standard angle has that tangent ratio here?',
+    step: `\\theta=\\arctan\\!\\left(\\dfrac{${y}}{${x}}\\right)=${th}`
+  };
+}
+
+function gen5(){
+  // Cartesian → Polar: find θ in QII or QIV (requires adjustment)
+  const cases = [
+    {x:'-1',          y:'1',           th:'\\dfrac{3\\pi}{4}', ans:['3pi/4'],   quad:'QII'},
+    {x:'-\\sqrt{3}',  y:'1',           th:'\\dfrac{5\\pi}{6}', ans:['5pi/6'],   quad:'QII'},
+    {x:'-1',          y:'\\sqrt{3}',   th:'\\dfrac{2\\pi}{3}', ans:['2pi/3'],   quad:'QII'},
+    {x:'1',           y:'-1',          th:'\\dfrac{7\\pi}{4}', ans:['7pi/4'],   quad:'QIV'},
+    {x:'\\sqrt{3}',   y:'-1',          th:'\\dfrac{11\\pi}{6}',ans:['11pi/6'],  quad:'QIV'},
+    {x:'-3',          y:'0',           th:'\\pi',              ans:['pi'],      quad:'neg x'},
+  ];
+  const {x, y, th, ans, quad} = choose(cases);
+  return {
+    latex: `\\text{Cartesian point }(${x},\\,${y}).\\quad\\theta\\in[0,2\\pi)=`,
+    answer: ans,
+    hint: 'arctan(y/x) only gives a QI or QIV angle — for points not in QI, which quadrant is this, and how must θ be adjusted?',
+    step: `\\text{Point in }${quad}.\\;\\theta=${th}`
+  };
+}
+
+function gen6(){
+  // Negative r: (-r, θ) is equivalent to (r, θ+π); find the positive-r form angle
+  const cases = [
+    {r:2, th:'\\dfrac{\\pi}{4}', newTh:'\\dfrac{5\\pi}{4}', ans:['5pi/4']},
+    {r:3, th:'\\dfrac{\\pi}{6}', newTh:'\\dfrac{7\\pi}{6}', ans:['7pi/6']},
+    {r:4, th:'\\dfrac{\\pi}{3}', newTh:'\\dfrac{4\\pi}{3}', ans:['4pi/3']},
+    {r:5, th:'0',                newTh:'\\pi',              ans:['pi']},
+    {r:2, th:'\\dfrac{2\\pi}{3}',newTh:'\\dfrac{5\\pi}{3}', ans:['5pi/3']},
+  ];
+  const {r, th, newTh, ans} = choose(cases);
+  return {
+    latex: `\\text{Convert }(-${r},\\,${th})\\text{ to positive }r\\text{ form: }(${r},\\,\\square).\\quad\\square=`,
+    answer: ans,
+    hint: 'A negative r means going in the opposite direction — what angle do you get by adding π to the given θ?',
+    step: `(-${r},\\,${th})\\equiv(${r},\\,${th}+\\pi)=(${r},\\,${newTh})`
+  };
+}
+
+function gen7(){
+  // r = a·cos(θ): find radius of the circle it represents (= a/2)
+  const cases = [
+    {a:4,  radius:2,  rAns:['2']},
+    {a:6,  radius:3,  rAns:['3']},
+    {a:8,  radius:4,  rAns:['4']},
+    {a:10, radius:5,  rAns:['5']},
+    {a:2,  radius:1,  rAns:['1']},
+  ];
+  const {a, radius, rAns} = choose(cases);
+  return {
+    latex: `r=${a}\\cos\\theta\\text{ represents a circle.}\\quad\\text{Radius}=`,
+    answer: rAns,
+    hint: 'r=a·cosθ describes a circle — what is the radius of this circle in terms of a?',
+    step: `r^2=${a}r\\cos\\theta\\Rightarrow x^2+y^2=${a}x\\Rightarrow(x-${a/2})^2+y^2=${radius}^2.\\;\\text{Radius}=${radius}`
+  };
+}
+
+function gen8(){
+  // r = a·sin(θ): find radius of the circle (= a/2)
+  const cases = [
+    {a:4,  radius:2,  rAns:['2']},
+    {a:6,  radius:3,  rAns:['3']},
+    {a:8,  radius:4,  rAns:['4']},
+    {a:10, radius:5,  rAns:['5']},
+    {a:2,  radius:1,  rAns:['1']},
+  ];
+  const {a, radius, rAns} = choose(cases);
+  return {
+    latex: `r=${a}\\sin\\theta\\text{ represents a circle.}\\quad\\text{Radius}=`,
+    answer: rAns,
+    hint: 'r=a·sinθ describes a circle — what is the radius of this circle in terms of a?',
+    step: `r^2=${a}r\\sin\\theta\\Rightarrow x^2+y^2=${a}y\\Rightarrow x^2+(y-${a/2})^2=${radius}^2.\\;\\text{Radius}=${radius}`
+  };
+}
+
+const GENERATORS = [gen1, gen2, gen3, gen4, gen5, gen6, gen7, gen8];
+
+
+// ── State ─────────────────────────────────────────────────────────────────────
+let ACTIVE, correct, flags, attempted, peeked;
+
+function norm(s) {
+  return s.trim().toLowerCase()
+    .replace(/\s+/g, '')
+    .replace(/[−–]/g, '-')
+    .replace(/∞/g, 'inf')
+    .replace(/∪/g, 'u');
+}
+function ok(user, acc) { return acc.some(a => norm(user) === norm(a)); }
+
+function init() {
+  ACTIVE    = shuffle(GENERATORS.map(gen => gen()));
+  correct   = 0;
+  flags     = Array(GENERATORS.length).fill(false);
+  attempted = Array(GENERATORS.length).fill(false);
+  peeked    = Array(GENERATORS.length).fill(false);
+}
+
+function buildCards() {
+  const wrap = document.getElementById('problems');
+  wrap.innerHTML = '';
+  ACTIVE.forEach((p, i) => {
+    const div = document.createElement('div');
+    div.className = 'card'; div.id = 'card-' + i;
+    div.innerHTML =
+      `<div class="card-body">
+        <div class="card-meta">Problem ${i + 1}</div>
+        <div class="card-expr" id="expr-${i}"></div>
+        <div class="input-row">
+          <input class="ans-input" id="ai-${i}" placeholder="answer" />
+          <button class="check-btn" id="chk-${i}" onclick="check(${i})">Check</button>
+        </div>
+        <div class="hint">${p.hint}</div>
+        <div class="feedback" id="fb-${i}"></div>
+        <span class="reveal-link" id="rl-${i}" onclick="reveal(${i})">Show solution</span>
+        <div class="revealed-answer" id="ra-${i}"></div>
+      </div>`;
+    wrap.appendChild(div);
+    document.getElementById('ai-' + i)
+      .addEventListener('keydown', e => { if (e.key === 'Enter') check(i); });
+    if (p.svg) {
+      document.getElementById('expr-' + i).innerHTML = p.svg;
+    } else {
+      katex.render(p.latex, document.getElementById('expr-' + i),
+        { throwOnError: false, displayMode: true });
+    }
+  });
+}
+
+function check(i) {
+  const p = ACTIVE[i], inp = document.getElementById('ai-'+i),
+        fb = document.getElementById('fb-'+i), card = document.getElementById('card-'+i),
+        good = ok(inp.value, p.answer);
+  inp.className = 'ans-input';
+  if (good) {
+    inp.className = 'ans-input ok'; fb.className = 'feedback correct';
+    fb.textContent = '✓ Correct!'; card.className = 'card correct';
+    if (!flags[i] && !attempted[i] && !peeked[i]) { flags[i]=true; correct++; updateScore(); }
+    attempted[i] = true;
+    document.getElementById('chk-'+i).disabled = true; inp.readOnly = true;
+  } else {
+    attempted[i] = true; inp.className = 'ans-input bad'; fb.className = 'feedback wrong';
+    fb.textContent = '✗ Not quite — try again or show the solution.';
+    card.className = peeked[i] ? 'card peeked' : 'card wrong';
+  }
+}
+
+function reveal(i) {
+  const p = ACTIVE[i], box = document.getElementById('ra-'+i),
+        lnk = document.getElementById('rl-'+i);
+  if (box.style.display === 'block') {
+    box.style.display = 'none'; lnk.textContent = 'Show solution';
+  } else {
+    if (!flags[i]) {
+      peeked[i] = true; document.getElementById('card-'+i).className = 'card peeked';
+      if (!attempted[i]) {
+        const fb = document.getElementById('fb-'+i);
+        fb.className = 'feedback peeked';
+        fb.textContent = '⚠ Solution revealed — no point awarded.';
+      }
+    }
+    box.innerHTML = '<strong>Solution:</strong><br>';
+    const span = document.createElement('span'); box.appendChild(span);
+    katex.render(p.step, span, { throwOnError: false, displayMode: true });
+    box.style.display = 'block'; lnk.textContent = 'Hide solution';
+  }
+}
+
+function updateScore() {
+  const n = ACTIVE.length;
+  document.getElementById('score').textContent = correct + ' / ' + n;
+  document.getElementById('prog').style.width = Math.round(correct / n * 100) + '%';
+}
+
+function resetAll() { init(); buildCards(); updateScore(); }
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script>
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left: '$$', right: '$$', display: true},
+      {left: '$',  right: '$',  display: false}
+    ]
+  });
+  init(); buildCards(); updateScore();
+</script>
+</body>
+</html>

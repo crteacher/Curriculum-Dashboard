@@ -15,33 +15,37 @@ header h1{font-size:1.15rem;font-weight:700;flex:1;color:#fff}
 .hbadge{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:.25rem .65rem;border-radius:10px}
 .hbadge.ca{background:rgba(255,255,255,.15);color:#c8f0d4;border:1px solid rgba(255,255,255,.3)}
 .hbadge.c2{background:rgba(255,255,255,.15);color:#c8d8f0;border:1px solid rgba(255,255,255,.3)}
-.et-tile{display:grid;grid-template-columns:1fr 1fr;gap:1rem;max-width:1100px;margin:1.25rem auto 0;padding:0 1.25rem}
-@media(max-width:700px){.et-tile{grid-template-columns:1fr}}
+.hbadge.pc{background:rgba(255,255,255,.15);color:#fddcaa;border:1px solid rgba(255,255,255,.3)}
+.et-tile{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;max-width:1400px;margin:1.25rem auto 0;padding:0 1.25rem}
+@media(max-width:900px){.et-tile{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.et-tile{grid-template-columns:1fr}}
 .et-card{background:#fff;border:1px solid #e4e0d8;border-radius:10px;padding:1rem 1.2rem}
-.et-card.ca{border-color:#1a5c2e44}.et-card.c2{border-color:#185fa544}
+.et-card.ca{border-color:#1a5c2e44}.et-card.c2{border-color:#185fa544}.et-card.pc{border-color:#c9860a44}
 .et-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;margin-bottom:.4rem}
-.et-card.ca .et-label{color:#1a5c2e}.et-card.c2 .et-label{color:#185fa5}
+.et-card.ca .et-label{color:#1a5c2e}.et-card.c2 .et-label{color:#185fa5}.et-card.pc .et-label{color:#c9860a}
 .et-day{font-size:.75rem;color:#7a7570;margin-bottom:.35rem}
 .et-q{font-size:.92rem;line-height:1.7}
 .et-none{color:#7a7570;font-style:italic;font-size:.85rem}
-.main-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;max-width:1100px;margin:1.25rem auto 0;padding:0 1.25rem 3rem}
-@media(max-width:800px){.main-grid{grid-template-columns:1fr}}
+.main-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.25rem;max-width:1400px;margin:1.25rem auto 0;padding:0 1.25rem 3rem}
+@media(max-width:1000px){.main-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.main-grid{grid-template-columns:1fr}}
 .col-header{font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.75rem}
-.col-header.ca{color:#1a5c2e}.col-header.c2{color:#185fa5}
+.col-header.ca{color:#1a5c2e}.col-header.c2{color:#185fa5}.col-header.pc{color:#c9860a}
 .lesson-card{background:#fff;border:1px solid #e4e0d8;border-radius:10px;margin-bottom:.7rem;overflow:hidden}
-.lesson-card.ca{border-color:#1a5c2e33}.lesson-card.c2{border-color:#185fa533}
+.lesson-card.ca{border-color:#1a5c2e33}.lesson-card.c2{border-color:#185fa533}.lesson-card.pc{border-color:#c9860a33}
 .lesson-card.review-day{border-style:dashed}.lesson-card.exam-day{border-style:dashed;opacity:.85}
 .lesson-summary{display:flex;align-items:center;gap:.7rem;padding:.85rem 1rem;cursor:pointer;list-style:none;flex-wrap:wrap}
 .lesson-summary::-webkit-details-marker{display:none}
 .lesson-summary:hover{background:rgba(0,0,0,.025)}
 .day-badge{font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;padding:.22rem .6rem;border-radius:8px;white-space:nowrap}
-.day-badge.ca{background:#e8f5ed;color:#1a5c2e}.day-badge.c2{background:#e8f0fa;color:#185fa5}
+.day-badge.ca{background:#e8f5ed;color:#1a5c2e}.day-badge.c2{background:#e8f0fa;color:#185fa5}.day-badge.pc{background:#fdf0e0;color:#c9860a}
 .day-badge.review{background:#fef9e7;color:#8b6914}.day-badge.exam{background:#fde8e8;color:#b91c1c}
 .day-badge.setup{background:#f5e6e8;color:#6b1a26;border:1px solid #d4aab0}
 .setup-link{display:inline-block;padding:.28rem .8rem;border-radius:14px;font-size:.78rem;font-weight:600;
   text-decoration:none;border:1px solid #1a5c2e33;color:#1a5c2e;background:#e8f5ed;transition:background .15s;margin:.15rem 0}
 .setup-link:hover{background:#d4f0dd}
 .setup-link.c2{border-color:#185fa533;color:#185fa5;background:#e8f0fa}.setup-link.c2:hover{background:#d4e5f7}
+.setup-link.pc{border-color:#c9860a33;color:#c9860a;background:#fdf0e0}.setup-link.pc:hover{background:#fae0b8}
 .sched-toggle{font-size:.75rem;font-weight:600;border:1px solid #e4e0d8;border-radius:16px;padding:.25rem .8rem;
   cursor:pointer;background:#fff;color:#7a7570;margin-left:auto;transition:all .15s}
 .sched-toggle:hover{border-color:#6b1a26;color:#6b1a26}
@@ -66,6 +70,7 @@ details[open] .chevron{transform:rotate(90deg)}
 .do-now-link{display:inline-block;padding:.3rem .85rem;border-radius:16px;font-size:.78rem;font-weight:600;text-decoration:none;border:1px solid;transition:all .15s}
 .do-now-link.ca{color:#1a5c2e;border-color:#1a5c2e}.do-now-link.ca:hover{background:#e8f5ed}
 .do-now-link.c2{color:#185fa5;border-color:#185fa5}.do-now-link.c2:hover{background:#e8f0fa}
+.do-now-link.pc{color:#c9860a;border-color:#c9860a}.do-now-link.pc:hover{background:#fdf0e0}
 .prac-link{color:#7a7570;font-size:.8rem;text-decoration:none;border-bottom:1px solid #7a757044}
 .prac-link:hover{color:#1a1614}
 .review-intro{font-size:.82rem;color:#7a7570;margin-bottom:.75rem;line-height:1.5}
@@ -73,6 +78,7 @@ details[open] .chevron{transform:rotate(90deg)}
 .chip{display:inline-block;padding:.3rem .75rem;border-radius:14px;font-size:.75rem;font-weight:600;text-decoration:none;border:1px solid;transition:all .15s}
 .chip.ca{color:#1a5c2e;border-color:#1a5c2e33;background:#e8f5ed}.chip.ca:hover{background:#d4f0dd}
 .chip.c2{color:#185fa5;border-color:#185fa533;background:#e8f0fa}.chip.c2:hover{background:#d4e5f7}
+.chip.pc{color:#c9860a;border-color:#c9860a33;background:#fdf0e0}.chip.pc:hover{background:#fae0b8}
 .state-msg{text-align:center;padding:3rem 1rem;color:#7a7570;font-size:.9rem;font-style:italic}
 .footer{text-align:center;font-size:.72rem;color:#7a757055;padding:1rem;font-family:monospace}
 </style>
@@ -83,6 +89,7 @@ details[open] .chevron{transform:rotate(90deg)}
   <h1>📋 Lesson Plan</h1>
   <span class="hbadge ca" id="hbCA">CA</span>
   <span class="hbadge c2" id="hbC2">C2</span>
+  <span class="hbadge pc" id="hbPC">PC</span>
 </header>
 
 <div class="et-tile">
@@ -96,11 +103,17 @@ details[open] .chevron{transform:rotate(90deg)}
     <div class="et-day" id="etC2Day">&nbsp;</div>
     <div class="et-q" id="etC2Q"><span class="et-none">Loading…</span></div>
   </div>
+  <div class="et-card pc">
+    <div class="et-label">Today's Exit Ticket — PreCalc</div>
+    <div class="et-day" id="etPCDay">&nbsp;</div>
+    <div class="et-q" id="etPCQ"><span class="et-none">Loading…</span></div>
+  </div>
 </div>
 
 <div class="main-grid">
   <div id="caCol"><div class="state-msg">Loading…</div></div>
   <div id="c2Col"><div class="state-msg">Loading…</div></div>
+  <div id="pcCol"><div class="state-msg">Loading…</div></div>
 </div>
 
 <div class="footer" id="footer">Loading…</div>
@@ -172,7 +185,7 @@ function buildLessonCard(course,sec,dayNum,isOpen,schedItem){
 
 
 function buildSetupCard(course,day,item){
-  const link=course==='ca'?'setup-link':'setup-link c2';
+  const link=course==='ca'?'setup-link':course==='pc'?'setup-link pc':'setup-link c2';
   let body=grm('Links',
     `<a href="https://www.myopenmath.com" class="${link}" target="_blank">MyOpenMath →</a> `+
     `<a href="https://www.khanacademy.org" class="${link}" target="_blank">Khan Academy →</a> `+
@@ -191,7 +204,7 @@ function buildQuizCard(course,day,item,secMap){
 }
 
 function renderSchedule(colEl,course,schedule,currentId,secMap){
-  const label=course==='ca'?'College Algebra':'Calculus 2';
+  const label=course==='ca'?'College Algebra':course==='pc'?'PreCalc':'Calculus 2';
   const nDays=schedule.length;
   let html=`<div class="col-header ${course}">${label} &middot; ${nDays}-day schedule</div>`;
   schedule.forEach(item=>{
@@ -225,7 +238,7 @@ function buildExamCard(course,dayNum,item){
 
 function renderColumn(colEl,course,currentId,unit,secMap){
   if(!unit){colEl.innerHTML='<div class="state-msg">No active unit found.</div>';return;}
-  const label=course==='ca'?'College Algebra':'Calculus 2';
+  const label=course==='ca'?'College Algebra':course==='pc'?'PreCalc':'Calculus 2';
   const n=unit.sections.length;
   const extra=unit.hasExam?' + Review + Exam':' + Review';
   let html=`<div class="col-header ${course}">${label} &middot; ${n} lesson${n!==1?'s':''}${extra}</div>`;
@@ -238,7 +251,7 @@ function renderColumn(colEl,course,currentId,unit,secMap){
   colEl.innerHTML=html;
 }
 
-function renderExitTile(caId,caMap,c2Id,c2Map){
+function renderExitTile(caId,caMap,c2Id,c2Map,pcId,pcMap){
   function fill(secId,secMap,dayId,qId){
     const sec=secMap[secId],dayEl=document.getElementById(dayId),qEl=document.getElementById(qId);
     if(sec&&sec.exitTicket){if(dayEl)dayEl.textContent='§'+sec.section+' — '+sec.title;if(qEl)qEl.innerHTML=renderMath(sec.exitTicket);}
@@ -246,6 +259,7 @@ function renderExitTile(caId,caMap,c2Id,c2Map){
   }
   fill(caId,caMap,'etCaDay','etCaQ');
   fill(c2Id,c2Map,'etC2Day','etC2Q');
+  fill(pcId,pcMap,'etPCDay','etPCQ');
 }
 
 Promise.all([
@@ -254,18 +268,22 @@ Promise.all([
 ]).then(([state,sections])=>{
   const caId=state?.courses?.collegeAlgebra?.currentSection;
   const c2Id=state?.courses?.calc2?.currentSection;
-  const caMap={},c2Map={};
+  const pcId=state?.courses?.preCalc?.currentSection;
+  const caMap={},c2Map={},pcMap={};
   (sections.collegeAlgebra||[]).forEach(s=>caMap[s.id]=s);
   (sections.calc2||[]).forEach(s=>c2Map[s.id]=s);
-  renderExitTile(caId,caMap,c2Id,c2Map);
+  (sections.preCalc||[]).forEach(s=>pcMap[s.id]=s);
+  renderExitTile(caId,caMap,c2Id,c2Map,pcId,pcMap);
   const sched=state?.schedule;
   if(sched?.active){
     // ── Schedule view (first-weeks / custom) ──────────────────
     renderSchedule(document.getElementById('caCol'),'ca',sched.collegeAlgebra||[],caId,caMap);
     renderSchedule(document.getElementById('c2Col'),'c2',sched.calc2||[],c2Id,c2Map);
-    const hbCA=document.getElementById('hbCA'),hbC2=document.getElementById('hbC2');
+    renderSchedule(document.getElementById('pcCol'),'pc',sched.preCalc||[],pcId,pcMap);
+    const hbCA=document.getElementById('hbCA'),hbC2=document.getElementById('hbC2'),hbPC=document.getElementById('hbPC');
     if(hbCA)hbCA.title='College Algebra';
     if(hbC2)hbC2.title='Calculus 2';
+    if(hbPC)hbPC.title='PreCalc';
     document.getElementById('footer').textContent=
       (sched.title||'Schedule')+' · started '+state.lastCheckin+' · to switch to unit view, set schedule.active=false in state.json';
   } else {
@@ -276,6 +294,7 @@ Promise.all([
     const c2Unit=c2Units.find(u=>u.sections.includes(c2Id))||c2Units[c2Units.length-1]||null;
     renderColumn(document.getElementById('caCol'),'ca',caId,caUnit,caMap);
     renderColumn(document.getElementById('c2Col'),'c2',c2Id,c2Unit,c2Map);
+    document.getElementById('pcCol').innerHTML='<div class="state-msg">Unit view not configured for PreCalc — add a schedule in state.json.</div>';
     const hbCA=document.getElementById('hbCA'),hbC2=document.getElementById('hbC2');
     if(caUnit&&hbCA)hbCA.title=caUnit.name;
     if(c2Unit&&hbC2)hbC2.title=c2Unit.name;

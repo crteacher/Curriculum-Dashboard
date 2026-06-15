@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Law of Sines &mdash; Practice</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.7}
+  .container{max-width:820px;margin:0 auto;padding:2rem 1.5rem 4rem}
+  h1{font-size:26px;font-weight:700;margin-bottom:4px}
+  .subtitle{font-size:14px;color:#666;margin-bottom:2rem;font-family:sans-serif}
+  .section{margin-bottom:2.5rem}
+  .section-title{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;
+    color:#777;font-family:sans-serif;margin-bottom:1rem;border-bottom:1px solid #ddd;padding-bottom:6px}
+  .concept{background:#d9e8f5;border-left:4px solid #185fa5;border-radius:0 8px 8px 0;
+    padding:.85rem 1.1rem;font-size:15px;margin-bottom:1rem}
+  .concept-label{font-family:sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;
+    letter-spacing:.07em;color:#185fa5;display:block;margin-bottom:.35rem}
+  .score-bar{display:flex;align-items:center;gap:12px;margin-bottom:1.25rem;
+    font-family:sans-serif;font-size:14px;flex-wrap:wrap}
+  .score-display{font-weight:700;font-size:18px;min-width:60px}
+  .score-label{color:#777;font-size:13px}
+  .score-note{font-size:12px;color:#999;font-style:italic}
+  .progress{flex:1;min-width:80px;height:6px;background:#e5e1d8;border-radius:3px;overflow:hidden}
+  .progress-fill{height:100%;background:#185fa5;border-radius:3px;transition:width .4s}
+  .reset-btn{font-size:12px;background:none;border:1px solid #bbb;border-radius:5px;
+    padding:4px 10px;cursor:pointer;color:#666;font-family:sans-serif;white-space:nowrap}
+  .reset-btn:hover{background:#eee}
+  .problems{display:grid;grid-template-columns:repeat(auto-fill,minmax(370px,1fr));gap:14px}
+  .card{background:#fff;border:1.5px solid #ddd;border-radius:10px;overflow:hidden;transition:border-color .25s}
+  .card.correct{border-color:#3a7a3a}.card.wrong{border-color:#b03030}.card.peeked{border-color:#b8860b}
+  .card-body{padding:14px 16px}
+  .card-meta{font-family:sans-serif;font-size:12px;color:#888;margin-bottom:4px}
+  .card-expr{font-size:17px;margin-bottom:12px;line-height:2.2;overflow-x:auto}
+  .katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}
+  .input-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .ans-input{font-family:'Courier New',monospace;font-size:14px;border:1px solid #ccc;
+    border-radius:6px;padding:7px 10px;flex:1;min-width:120px;background:#fafaf8;
+    color:#1a1a1a;outline:none}
+  .ans-input:focus{border-color:#185fa5;background:#fff}
+  .ans-input.ok{border-color:#3a7a3a;background:#f0faf0}
+  .ans-input.bad{border-color:#b03030;background:#fdf0f0}
+  .check-btn{font-family:sans-serif;font-size:13px;background:#1a1a1a;color:#fff;
+    border:none;border-radius:6px;padding:7px 14px;cursor:pointer}
+  .check-btn:hover{background:#333}.check-btn:disabled{background:#aaa;cursor:default}
+  .hint{font-family:sans-serif;font-size:12px;color:#888;margin-top:7px}
+  .feedback{font-family:sans-serif;font-size:13px;margin-top:10px;padding:8px 12px;
+    border-radius:6px;display:none;line-height:1.5}
+  .feedback.correct{display:block;background:#eaf5ea;color:#1a5a1a}
+  .feedback.wrong{display:block;background:#faeaea;color:#7a1a1a}
+  .feedback.peeked{display:block;background:#fdf8e8;color:#7a5a00}
+  .reveal-link{font-family:sans-serif;font-size:12px;color:#999;cursor:pointer;
+    text-decoration:underline;margin-top:8px;display:inline-block}
+  .reveal-link:hover{color:#555}
+  .revealed-answer{display:none;margin-top:8px;font-family:sans-serif;font-size:13px;
+    color:#444;background:#f5f3ef;border-radius:6px;padding:8px 11px;line-height:1.8;overflow-x:auto}
+  code{font-family:'Courier New',monospace;background:#f0ede7;padding:1px 5px;border-radius:3px;font-size:12px}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Law of Sines</h1>
+  <p class="subtitle">PreCalc &nbsp;&middot;&nbsp; &sect;8.1 &nbsp;&middot;&nbsp; Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026</p>
+
+  <div class="section">
+    <div class="section-title">Core Ideas</div>
+
+  <div class="concept">
+    <span class="concept-label">Law of Sines</span>
+    For any triangle with angles $A,B,C$ and opposite sides $a,b,c$:
+    <br>$\dfrac{a}{\sin A}=\dfrac{b}{\sin B}=\dfrac{c}{\sin C}$
+    <br>The largest side is always opposite the largest angle.
+  </div>
+  <div class="concept">
+    <span class="concept-label">The ambiguous case (SSA)</span>
+    Given acute angle $A$, adjacent side $b$, opposite side $a$, and height $h=b\sin A$:
+    <br>$a<h$: 0 triangles. &nbsp; $a=h$: 1 triangle. &nbsp; $h<a<b$: 2 triangles. &nbsp; $a\geq b$: 1 triangle.
+  </div>
+
+  </div>
+
+  <div class="section">
+    <div class="section-title">Practice Problems</div>
+    <p style="font-family:sans-serif;font-size:13px;color:#666;margin-bottom:1rem;">
+      Integer sides: e.g. <code>10</code>. Square-root sides: <code>3sqrt(3)</code>, <code>4sqrt(2)</code> (no spaces). Triangle count: <code>0</code>, <code>1</code>, or <code>2</code>. Angles: integer degrees.
+      Press <strong>Check</strong> or hit Enter.
+    </p>
+    <div class="score-bar">
+      <span class="score-label">Score:</span>
+      <span class="score-display" id="score">0 / 8</span>
+      <span class="score-note">first attempt only</span>
+      <div class="progress"><div class="progress-fill" id="prog" style="width:0%"></div></div>
+      <button class="reset-btn" onclick="resetAll()">New set &nbsp;&#8635;</button>
+    </div>
+    <div class="problems" id="problems"></div>
+  </div>
+</div>
+
+<script>
+// ── Crypto-quality RNG ────────────────────────────────────────────────────────
+function _rf() {
+  const b = new Uint32Array(1);
+  crypto.getRandomValues(b);
+  return b[0] / 4294967296;
+}
+function rInt(n)   { return Math.floor(_rf() * n); }
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = rInt(i + 1);
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+// Pick one element at random from an array  e.g. choose([1,4,9])
+function choose(arr) { return arr[rInt(arr.length)]; }
+
+// ── Display helpers ───────────────────────────────────────────────────────────
+// Leading coefficient: 1→'', -1→'-', else the number as a string
+function fc(a) { if (a===1) return ''; if (a===-1) return '-'; return String(a); }
+// Subsequent term with sign: addT(-2,'x')→' - 2x', addT(3,'')→' + 3', addT(0,'x')→''
+function addT(n, v) {
+  if (n===0) return '';
+  const s = n>0?'+':'-', abs = Math.abs(n);
+  if (abs===1 && v) return ' ' + s + ' ' + v;
+  return ' ' + s + ' ' + abs + (v||'');
+}
+
+// ── Problem generators (section-specific, injected below) ─────────────────────
+
+function gen1(){
+  // Find third angle C = 180 - A - B
+  const cases = [
+    {A:30, B:60,  C:90},
+    {A:45, B:45,  C:90},
+    {A:45, B:60,  C:75},
+    {A:30, B:120, C:30},
+    {A:60, B:80,  C:40},
+    {A:35, B:65,  C:80},
+    {A:50, B:70,  C:60},
+  ];
+  const {A, B, C} = choose(cases);
+  return {
+    latex: `A=${A}^\\circ,\\;B=${B}^\\circ.\\quad C=`,
+    answer: [String(C)],
+    hint: 'The three interior angles of any triangle sum to 180° — if you know two, what must the third be?',
+    step: `C=180^\\circ-${A}^\\circ-${B}^\\circ=${C}^\\circ`
+  };
+}
+
+function gen2(){
+  // Law of Sines: A=30°, B=90°, given a, find b = 2a
+  const a = choose([3, 4, 5, 6, 7, 8]);
+  const b = 2 * a;
+  return {
+    latex: `A=30^\\circ,\\;B=90^\\circ,\\;a=${a}.\\quad b=`,
+    answer: [String(b)],
+    hint: 'Law of Sines: each side is proportional to the sine of its opposite angle — what does a/sin(A) equal here?',
+    step: `\\dfrac{b}{\\sin90^\\circ}=\\dfrac{${a}}{\\sin30^\\circ}\\Rightarrow b=\\dfrac{${a}}{1/2}=${b}`
+  };
+}
+
+function gen3(){
+  // A=90°, B=30°, given a (opp 90°), find b (opp 30°) = a/2
+  const a = choose([6, 8, 10, 12, 14, 16]);
+  const b = a / 2;
+  return {
+    latex: `A=90^\\circ,\\;B=30^\\circ,\\;a=${a}.\\quad b=`,
+    answer: [String(b)],
+    hint: 'Law of Sines: each side is proportional to the sine of its opposite angle — what does a/sin(A) equal here?',
+    step: `\\dfrac{b}{\\sin30^\\circ}=\\dfrac{${a}}{\\sin90^\\circ}\\Rightarrow b=\\dfrac{${a}\\cdot1/2}{1}=${b}`
+  };
+}
+
+function gen4(){
+  // A=30°, B=120°, given a, find b = a√3
+  const a = choose([2, 3, 4, 5, 6]);
+  return {
+    latex: `A=30^\\circ,\\;B=120^\\circ,\\;a=${a}.\\quad b=`,
+    answer: [String(a)+'sqrt(3)', String(a)+'sqrt3'],
+    hint: 'Law of Sines connects all sides to their opposite sines — which common ratio does a/sin(30°) give here?',
+    step: `b=\\dfrac{${a}\\cdot\\sin120^\\circ}{\\sin30^\\circ}=\\dfrac{${a}\\cdot\\sqrt{3}/2}{1/2}=${a}\\sqrt{3}`
+  };
+}
+
+function gen5(){
+  // AAS: A=30°, B=60°, C=90°, given c, find a = c/2
+  const c = choose([6, 8, 10, 12, 14, 16]);
+  const a = c / 2;
+  return {
+    latex: `A=30^\\circ,\\;B=60^\\circ,\\;C=90^\\circ,\\;c=${c}.\\quad a=`,
+    answer: [String(a)],
+    hint: 'Once all angles are known, the Law of Sines gives any side — what ratio does c/sin(C) provide here?',
+    step: `\\dfrac{a}{\\sin30^\\circ}=\\dfrac{${c}}{\\sin90^\\circ}\\Rightarrow a=\\dfrac{${c}\\cdot1/2}{1}=${a}`
+  };
+}
+
+function gen6(){
+  // A=45°, B=45°, C=90°, given a (opp 45°), find c (opp 90°) = a√2
+  const a = choose([3, 4, 5, 6, 7]);
+  return {
+    latex: `A=45^\\circ,\\;B=45^\\circ,\\;C=90^\\circ,\\;a=${a}.\\quad c=`,
+    answer: [String(a)+'sqrt(2)', String(a)+'sqrt2'],
+    hint: 'Once all three angles are known, the Law of Sines lets you find any side — what is the ratio a/sin(45°) here?',
+    step: `\\dfrac{c}{\\sin90^\\circ}=\\dfrac{${a}}{\\sin45^\\circ}\\Rightarrow c=\\dfrac{${a}}{\\sqrt{2}/2}=${a}\\sqrt{2}`
+  };
+}
+
+function gen7(){
+  // SSA ambiguous case: A=30°, b=10, vary a; answer is "0", "1", or "2"
+  const cases = [
+    {a:4,  b:10, ans:'0', reason:'a=4<h=5'},
+    {a:5,  b:10, ans:'1', reason:'a=5=h=5'},
+    {a:7,  b:10, ans:'2', reason:'h=5<a=7<b=10'},
+    {a:12, b:10, ans:'1', reason:'a=12\\geq b=10'},
+  ];
+  const {a, b, ans, reason} = choose(cases);
+  return {
+    latex: `A=30^\\circ,\\;b=${b},\\;a=${a}.\\quad\\text{Number of triangles}=`,
+    answer: [ans],
+    hint: 'In SSA with acute angle A, the number of triangles depends on how a compares to h=b·sin(A) — what is h here?',
+    step: `h=b\\sin A=${b}\\cdot\\tfrac{1}{2}=5.\\;${reason}\\Rightarrow${ans}\\text{ triangle(s)}`
+  };
+}
+
+function gen8(){
+  // SSA ambiguous case: A=30°, b=12, vary a; answer is "0", "1", or "2"
+  const cases = [
+    {a:5,  b:12, ans:'0', reason:'a=5<h=6'},
+    {a:6,  b:12, ans:'1', reason:'a=6=h=6'},
+    {a:9,  b:12, ans:'2', reason:'h=6<a=9<b=12'},
+    {a:14, b:12, ans:'1', reason:'a=14\\geq b=12'},
+  ];
+  const {a, b, ans, reason} = choose(cases);
+  return {
+    latex: `A=30^\\circ,\\;b=${b},\\;a=${a}.\\quad\\text{Number of triangles}=`,
+    answer: [ans],
+    hint: 'In SSA with acute angle A, the number of triangles depends on how a compares to h=b·sin(A) — what is h here?',
+    step: `h=b\\sin A=${b}\\cdot\\tfrac{1}{2}=6.\\;${reason}\\Rightarrow${ans}\\text{ triangle(s)}`
+  };
+}
+
+const GENERATORS = [gen1, gen2, gen3, gen4, gen5, gen6, gen7, gen8];
+
+
+// ── State ─────────────────────────────────────────────────────────────────────
+let ACTIVE, correct, flags, attempted, peeked;
+
+function norm(s) {
+  return s.trim().toLowerCase()
+    .replace(/\s+/g, '')
+    .replace(/[−–]/g, '-')
+    .replace(/∞/g, 'inf')
+    .replace(/∪/g, 'u');
+}
+function ok(user, acc) { return acc.some(a => norm(user) === norm(a)); }
+
+function init() {
+  ACTIVE    = shuffle(GENERATORS.map(gen => gen()));
+  correct   = 0;
+  flags     = Array(GENERATORS.length).fill(false);
+  attempted = Array(GENERATORS.length).fill(false);
+  peeked    = Array(GENERATORS.length).fill(false);
+}
+
+function buildCards() {
+  const wrap = document.getElementById('problems');
+  wrap.innerHTML = '';
+  ACTIVE.forEach((p, i) => {
+    const div = document.createElement('div');
+    div.className = 'card'; div.id = 'card-' + i;
+    div.innerHTML =
+      `<div class="card-body">
+        <div class="card-meta">Problem ${i + 1}</div>
+        <div class="card-expr" id="expr-${i}"></div>
+        <div class="input-row">
+          <input class="ans-input" id="ai-${i}" placeholder="answer" />
+          <button class="check-btn" id="chk-${i}" onclick="check(${i})">Check</button>
+        </div>
+        <div class="hint">${p.hint}</div>
+        <div class="feedback" id="fb-${i}"></div>
+        <span class="reveal-link" id="rl-${i}" onclick="reveal(${i})">Show solution</span>
+        <div class="revealed-answer" id="ra-${i}"></div>
+      </div>`;
+    wrap.appendChild(div);
+    document.getElementById('ai-' + i)
+      .addEventListener('keydown', e => { if (e.key === 'Enter') check(i); });
+    if (p.svg) {
+      document.getElementById('expr-' + i).innerHTML = p.svg;
+    } else {
+      katex.render(p.latex, document.getElementById('expr-' + i),
+        { throwOnError: false, displayMode: true });
+    }
+  });
+}
+
+function check(i) {
+  const p = ACTIVE[i], inp = document.getElementById('ai-'+i),
+        fb = document.getElementById('fb-'+i), card = document.getElementById('card-'+i),
+        good = ok(inp.value, p.answer);
+  inp.className = 'ans-input';
+  if (good) {
+    inp.className = 'ans-input ok'; fb.className = 'feedback correct';
+    fb.textContent = '✓ Correct!'; card.className = 'card correct';
+    if (!flags[i] && !attempted[i] && !peeked[i]) { flags[i]=true; correct++; updateScore(); }
+    attempted[i] = true;
+    document.getElementById('chk-'+i).disabled = true; inp.readOnly = true;
+  } else {
+    attempted[i] = true; inp.className = 'ans-input bad'; fb.className = 'feedback wrong';
+    fb.textContent = '✗ Not quite — try again or show the solution.';
+    card.className = peeked[i] ? 'card peeked' : 'card wrong';
+  }
+}
+
+function reveal(i) {
+  const p = ACTIVE[i], box = document.getElementById('ra-'+i),
+        lnk = document.getElementById('rl-'+i);
+  if (box.style.display === 'block') {
+    box.style.display = 'none'; lnk.textContent = 'Show solution';
+  } else {
+    if (!flags[i]) {
+      peeked[i] = true; document.getElementById('card-'+i).className = 'card peeked';
+      if (!attempted[i]) {
+        const fb = document.getElementById('fb-'+i);
+        fb.className = 'feedback peeked';
+        fb.textContent = '⚠ Solution revealed — no point awarded.';
+      }
+    }
+    box.innerHTML = '<strong>Solution:</strong><br>';
+    const span = document.createElement('span'); box.appendChild(span);
+    katex.render(p.step, span, { throwOnError: false, displayMode: true });
+    box.style.display = 'block'; lnk.textContent = 'Hide solution';
+  }
+}
+
+function updateScore() {
+  const n = ACTIVE.length;
+  document.getElementById('score').textContent = correct + ' / ' + n;
+  document.getElementById('prog').style.width = Math.round(correct / n * 100) + '%';
+}
+
+function resetAll() { init(); buildCards(); updateScore(); }
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script>
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left: '$$', right: '$$', display: true},
+      {left: '$',  right: '$',  display: false}
+    ]
+  });
+  init(); buildCards(); updateScore();
+</script>
+</body>
+</html>

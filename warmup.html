@@ -70,6 +70,7 @@ body{font-family:Georgia,serif;background:#f9f7f3;color:#1a1614;min-height:100vh
   padding:.2rem .6rem;border-radius:999px;margin-bottom:1rem}
 .warmup-tag.ca{background:#d8efe1;color:#1a5c2e}
 .warmup-tag.calc{background:#dce8f5;color:#185fa5}
+.warmup-tag.pc{background:#fdf0e0;color:#c9860a}
 .warmup-tag.review{background:#f0ede7;color:#7a7570}
 .warmup-section{font-size:.8rem;font-family:sans-serif;color:#7a7570;margin-bottom:.25rem}
 .warmup-title{font-size:1.35rem;font-weight:700;margin-bottom:.2rem}
@@ -112,6 +113,7 @@ body{font-family:Georgia,serif;background:#f9f7f3;color:#1a1614;min-height:100vh
     <div class="course-btns">
       <button class="course-btn ca" onclick="showGrid('ca')">College Algebra</button>
       <button class="course-btn calc" onclick="showGrid('calc')">Calculus</button>
+      <button class="course-btn" style="border-color:#c9860a;color:#c9860a" onclick="showGrid('pc')">PreCalc</button>
     </div>
   </div>
 
@@ -176,6 +178,7 @@ function inSemester(d, s, e) { return d >= s && d <= e; }
 
 function resolveCourseKey(choice) {
   if (choice === 'ca') return 'collegeAlgebra';
+  if (choice === 'pc') return 'preCalc';
   if (inSemester(_today, S1_START, S1_END)) return 'calc1';
   if (inSemester(_today, S2_START, S2_END)) return 'calc2';
   const c1 = (_state.courses.calc1?.completedSections||[]).length;
@@ -210,10 +213,10 @@ function showGrid(choice) {
   );
 
   const courseName = _courseKey === 'collegeAlgebra' ? 'College Algebra' :
-                     'Calculus';
+                     _courseKey === 'preCalc' ? 'PreCalc' : 'Calculus';
   document.getElementById('gridTitle').textContent = courseName + ' — Choose a Section';
 
-  const unitList = (_units?.[_courseKey === 'collegeAlgebra' ? 'collegeAlgebra' : 'calc2']) || [];
+  const unitList = (_units?.[_courseKey === 'collegeAlgebra' ? 'collegeAlgebra' : _courseKey === 'preCalc' ? 'preCalc' : 'calc2']) || [];
   let html = '';
 
   if (!_available.length) {
@@ -295,7 +298,7 @@ function renderWarmup() {
   const sec = _currentSec;
   const schoolDay = isSchoolDay();
   const label = schoolDay ? 'Do Now' : 'Review';
-  const tagClass = _courseChoice === 'ca' ? 'ca' : (_courseChoice === 'calc' ? 'calc' : 'review');
+  const tagClass = _courseChoice === 'ca' ? 'ca' : (_courseChoice === 'calc' ? 'calc' : _courseChoice === 'pc' ? 'pc' : 'review');
 
   const problems = sec.reviewProblems || [];
   const prob = problems.length
@@ -303,6 +306,7 @@ function renderWarmup() {
     : null;
 
   const folder = _courseKey === 'collegeAlgebra' ? 'College%20Algebra' :
+                 _courseKey === 'preCalc' ? 'PreCalc' :
                  _courseKey === 'calc1' ? 'Calc%201' : 'Calc%202';
   const BASE = './';
   const practiceUrl = sec.hasPractice && sec.practiceFile
@@ -310,7 +314,7 @@ function renderWarmup() {
     : null;
 
   const courseName = _courseKey === 'collegeAlgebra' ? 'College Algebra' :
-                     'Calculus';
+                     _courseKey === 'preCalc' ? 'PreCalc' : 'Calculus';
 
   document.getElementById('warmupCard').innerHTML = `
     <span class="warmup-tag ${tagClass}">${courseName} &nbsp;&middot;&nbsp; ${label}</span>

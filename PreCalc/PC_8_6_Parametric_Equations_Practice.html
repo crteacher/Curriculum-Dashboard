@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Parametric Equations &mdash; Practice</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.7}
+  .container{max-width:820px;margin:0 auto;padding:2rem 1.5rem 4rem}
+  h1{font-size:26px;font-weight:700;margin-bottom:4px}
+  .subtitle{font-size:14px;color:#666;margin-bottom:2rem;font-family:sans-serif}
+  .section{margin-bottom:2.5rem}
+  .section-title{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;
+    color:#777;font-family:sans-serif;margin-bottom:1rem;border-bottom:1px solid #ddd;padding-bottom:6px}
+  .concept{background:#d9e8f5;border-left:4px solid #185fa5;border-radius:0 8px 8px 0;
+    padding:.85rem 1.1rem;font-size:15px;margin-bottom:1rem}
+  .concept-label{font-family:sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;
+    letter-spacing:.07em;color:#185fa5;display:block;margin-bottom:.35rem}
+  .score-bar{display:flex;align-items:center;gap:12px;margin-bottom:1.25rem;
+    font-family:sans-serif;font-size:14px;flex-wrap:wrap}
+  .score-display{font-weight:700;font-size:18px;min-width:60px}
+  .score-label{color:#777;font-size:13px}
+  .score-note{font-size:12px;color:#999;font-style:italic}
+  .progress{flex:1;min-width:80px;height:6px;background:#e5e1d8;border-radius:3px;overflow:hidden}
+  .progress-fill{height:100%;background:#185fa5;border-radius:3px;transition:width .4s}
+  .reset-btn{font-size:12px;background:none;border:1px solid #bbb;border-radius:5px;
+    padding:4px 10px;cursor:pointer;color:#666;font-family:sans-serif;white-space:nowrap}
+  .reset-btn:hover{background:#eee}
+  .problems{display:grid;grid-template-columns:repeat(auto-fill,minmax(370px,1fr));gap:14px}
+  .card{background:#fff;border:1.5px solid #ddd;border-radius:10px;overflow:hidden;transition:border-color .25s}
+  .card.correct{border-color:#3a7a3a}.card.wrong{border-color:#b03030}.card.peeked{border-color:#b8860b}
+  .card-body{padding:14px 16px}
+  .card-meta{font-family:sans-serif;font-size:12px;color:#888;margin-bottom:4px}
+  .card-expr{font-size:17px;margin-bottom:12px;line-height:2.2;overflow-x:auto}
+  .katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}
+  .input-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .ans-input{font-family:'Courier New',monospace;font-size:14px;border:1px solid #ccc;
+    border-radius:6px;padding:7px 10px;flex:1;min-width:120px;background:#fafaf8;
+    color:#1a1a1a;outline:none}
+  .ans-input:focus{border-color:#185fa5;background:#fff}
+  .ans-input.ok{border-color:#3a7a3a;background:#f0faf0}
+  .ans-input.bad{border-color:#b03030;background:#fdf0f0}
+  .check-btn{font-family:sans-serif;font-size:13px;background:#1a1a1a;color:#fff;
+    border:none;border-radius:6px;padding:7px 14px;cursor:pointer}
+  .check-btn:hover{background:#333}.check-btn:disabled{background:#aaa;cursor:default}
+  .hint{font-family:sans-serif;font-size:12px;color:#888;margin-top:7px}
+  .feedback{font-family:sans-serif;font-size:13px;margin-top:10px;padding:8px 12px;
+    border-radius:6px;display:none;line-height:1.5}
+  .feedback.correct{display:block;background:#eaf5ea;color:#1a5a1a}
+  .feedback.wrong{display:block;background:#faeaea;color:#7a1a1a}
+  .feedback.peeked{display:block;background:#fdf8e8;color:#7a5a00}
+  .reveal-link{font-family:sans-serif;font-size:12px;color:#999;cursor:pointer;
+    text-decoration:underline;margin-top:8px;display:inline-block}
+  .reveal-link:hover{color:#555}
+  .revealed-answer{display:none;margin-top:8px;font-family:sans-serif;font-size:13px;
+    color:#444;background:#f5f3ef;border-radius:6px;padding:8px 11px;line-height:1.8;overflow-x:auto}
+  code{font-family:'Courier New',monospace;background:#f0ede7;padding:1px 5px;border-radius:3px;font-size:12px}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Parametric Equations</h1>
+  <p class="subtitle">PreCalc &nbsp;&middot;&nbsp; &sect;8.6 &nbsp;&middot;&nbsp; Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026</p>
+
+  <div class="section">
+    <div class="section-title">Core Ideas</div>
+
+  <div class="concept">
+    <span class="concept-label">Parametric equations</span>
+    A curve defined by $x=f(t)$, $y=g(t)$ where $t$ is the parameter.
+    <br>To eliminate the parameter: solve one equation for $t$, substitute into the other.
+    <br>Circle: $x=r\cos t$, $y=r\sin t$ &nbsp; $\Rightarrow$ &nbsp; $x^2+y^2=r^2$, radius $r$.
+  </div>
+  <div class="concept">
+    <span class="concept-label">Key parametric curves</span>
+    Ellipse: $x=a\cos t$, $y=b\sin t$ &nbsp; $\Rightarrow$ &nbsp; $\dfrac{x^2}{a^2}+\dfrac{y^2}{b^2}=1$
+    <br>Shifted circle: $x=h+r\cos t$, $y=k+r\sin t$ &nbsp;&mdash;&nbsp; center $(h,k)$, radius $r$.
+    <br>Line: $x=x_0+at$, $y=y_0+bt$ &nbsp; $\Rightarrow$ &nbsp; slope $=b/a$.
+  </div>
+
+  </div>
+
+  <div class="section">
+    <div class="section-title">Practice Problems</div>
+    <p style="font-family:sans-serif;font-size:13px;color:#666;margin-bottom:1rem;">
+      Integer answers: e.g. <code>5</code>, <code>-3</code>. Radius or axis length: positive integer (e.g. <code>4</code>).
+      Press <strong>Check</strong> or hit Enter.
+    </p>
+    <div class="score-bar">
+      <span class="score-label">Score:</span>
+      <span class="score-display" id="score">0 / 8</span>
+      <span class="score-note">first attempt only</span>
+      <div class="progress"><div class="progress-fill" id="prog" style="width:0%"></div></div>
+      <button class="reset-btn" onclick="resetAll()">New set &nbsp;&#8635;</button>
+    </div>
+    <div class="problems" id="problems"></div>
+  </div>
+</div>
+
+<script>
+// ── Crypto-quality RNG ────────────────────────────────────────────────────────
+function _rf() {
+  const b = new Uint32Array(1);
+  crypto.getRandomValues(b);
+  return b[0] / 4294967296;
+}
+function rInt(n)   { return Math.floor(_rf() * n); }
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = rInt(i + 1);
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+// Pick one element at random from an array  e.g. choose([1,4,9])
+function choose(arr) { return arr[rInt(arr.length)]; }
+
+// ── Display helpers ───────────────────────────────────────────────────────────
+// Leading coefficient: 1→'', -1→'-', else the number as a string
+function fc(a) { if (a===1) return ''; if (a===-1) return '-'; return String(a); }
+// Subsequent term with sign: addT(-2,'x')→' - 2x', addT(3,'')→' + 3', addT(0,'x')→''
+function addT(n, v) {
+  if (n===0) return '';
+  const s = n>0?'+':'-', abs = Math.abs(n);
+  if (abs===1 && v) return ' ' + s + ' ' + v;
+  return ' ' + s + ' ' + abs + (v||'');
+}
+
+// ── Problem generators (section-specific, injected below) ─────────────────────
+
+function gen1(){
+  // Circle x=r·cos(t), y=r·sin(t): find radius
+  const r = choose([2, 3, 4, 5, 6, 7, 8, 10]);
+  return {
+    latex: `x=${r}\\cos t,\\;y=${r}\\sin t.\\quad\\text{Radius}=`,
+    answer: [String(r)],
+    hint: 'x=r·cos(t) and y=r·sin(t) trace a circle — what value of r gives x²+y²=r²?',
+    step: `x^2+y^2=${r}^2\\cos^2t+${r}^2\\sin^2t=${r}^2\\Rightarrow\\text{radius}=${r}`
+  };
+}
+
+function gen2(){
+  // Ellipse x=a·cos(t), y=b·sin(t): find a (the larger semi-axis)
+  const cases = [
+    {a:5, b:3},
+    {a:4, b:2},
+    {a:6, b:4},
+    {a:7, b:5},
+    {a:10,b:6},
+    {a:3, b:1},
+  ];
+  const {a, b} = choose(cases);
+  return {
+    latex: `x=${a}\\cos t,\\;y=${b}\\sin t.\\quad a\\text{ (semi-major axis)}=`,
+    answer: [String(a)],
+    hint: 'x=a·cos(t) and y=b·sin(t) trace an ellipse — which coefficient is the larger semi-axis length?',
+    step: `\\dfrac{x^2}{${a*a}}+\\dfrac{y^2}{${b*b}}=1,\\;a=${a}`
+  };
+}
+
+function gen3(){
+  // Evaluate: x = at + b, find x when t = k
+  const cases = [
+    {a:2, b:1,  k:3,  x:7},
+    {a:3, b:2,  k:4,  x:14},
+    {a:4, b:-1, k:2,  x:7},
+    {a:5, b:0,  k:3,  x:15},
+    {a:2, b:3,  k:5,  x:13},
+    {a:3, b:-2, k:3,  x:7},
+    {a:6, b:1,  k:2,  x:13},
+  ];
+  const {a, b, k, x} = choose(cases);
+  const bStr = b >= 0 ? '+' + b : String(b);
+  return {
+    latex: `x=${a}t${bStr}.\\quad x\\text{ when }t=${k}:\\;x=`,
+    answer: [String(x)],
+    hint: 'To find x at a specific t, replace t with that number in the x equation — what does x equal when t=' + k + '?',
+    step: `x=${a}(${k})${bStr}=${x}`
+  };
+}
+
+function gen4(){
+  // Evaluate: y = t² + c, find y when t = k
+  const cases = [
+    {c:1,  k:2, y:5},
+    {c:3,  k:3, y:12},
+    {c:-1, k:4, y:15},
+    {c:2,  k:3, y:11},
+    {c:0,  k:4, y:16},
+    {c:5,  k:2, y:9},
+    {c:-4, k:3, y:5},
+  ];
+  const {c, k, y} = choose(cases);
+  const cStr = c >= 0 ? '+' + c : String(c);
+  return {
+    latex: `y=t^2${cStr}.\\quad y\\text{ when }t=${k}:\\;y=`,
+    answer: [String(y)],
+    hint: 'To find y at a specific t, replace t with that number in the y equation — what does y equal when t=' + k + '?',
+    step: `y=${k}^2${cStr}=${k*k}${cStr}=${y}`
+  };
+}
+
+function gen5(){
+  // Shifted circle x=h+r·cos(t), y=k+r·sin(t): find radius
+  const cases = [
+    {h:2,  k:3,  r:4},
+    {h:-1, k:5,  r:3},
+    {h:3,  k:-2, r:5},
+    {h:0,  k:4,  r:6},
+    {h:1,  k:-3, r:7},
+    {h:2,  k:0,  r:2},
+  ];
+  const {h, k, r} = choose(cases);
+  const hStr = h >= 0 ? String(h) : '(' + h + ')';
+  const kStr = k >= 0 ? '+' + k : String(k);
+  return {
+    latex: `x=${hStr}+${r}\\cos t,\\;y=${k}+${r}\\sin t.\\quad\\text{Radius}=`,
+    answer: [String(r)],
+    hint: 'x=h+r·cos(t) and y=k+r·sin(t) trace a circle centered at (h,k) — what is the radius coefficient?',
+    step: `\\text{Center}=(${h},${k}),\\;\\text{radius}=${r}`
+  };
+}
+
+function gen6(){
+  // Eliminate parameter (linear): x=at+b, y=ct+d; given x find y
+  const cases = [
+    {a:2, b:1, c:3, d:-2, xGiven:5,  t:2, yResult:4},
+    {a:2, b:1, c:3, d:-2, xGiven:7,  t:3, yResult:7},
+    {a:3, b:0, c:2, d:1,  xGiven:6,  t:2, yResult:5},
+    {a:3, b:0, c:2, d:1,  xGiven:9,  t:3, yResult:7},
+    {a:1, b:2, c:4, d:-1, xGiven:5,  t:3, yResult:11},
+    {a:2, b:-2,c:3, d:1,  xGiven:4,  t:3, yResult:10},
+  ];
+  const {a, b, c, d, xGiven, t, yResult} = choose(cases);
+  const bStr = b >= 0 ? '+' + b : String(b);
+  const dStr = d >= 0 ? '+' + d : String(d);
+  return {
+    latex: `x=${a}t${bStr},\\;y=${c}t${dStr}.\\quad y\\text{ when }x=${xGiven}:\\;y=`,
+    answer: [String(yResult)],
+    hint: 'To eliminate the parameter, find t from the x equation — what does t equal when x=' + xGiven + '?',
+    step: `t=\\dfrac{${xGiven}-(${b})}{${a}}=${t},\\;y=${c}(${t})${dStr}=${yResult}`
+  };
+}
+
+function gen7(){
+  // Eliminate parameter (quadratic): x=t+a, y=t²+b; given x find y
+  const cases = [
+    {a:1, b:2, xGiven:3,  t:2, yResult:6},
+    {a:2, b:1, xGiven:5,  t:3, yResult:10},
+    {a:0, b:3, xGiven:4,  t:4, yResult:19},
+    {a:1, b:0, xGiven:4,  t:3, yResult:9},
+    {a:3, b:1, xGiven:6,  t:3, yResult:10},
+    {a:2, b:-1,xGiven:4,  t:2, yResult:3},
+  ];
+  const {a, b, xGiven, t, yResult} = choose(cases);
+  const aStr = a >= 0 ? '-' + a : '+' + Math.abs(a);
+  const bStr = b >= 0 ? '+' + b : String(b);
+  return {
+    latex: `x=t+${a},\\;y=t^2${bStr}.\\quad y\\text{ when }x=${xGiven}:\\;y=`,
+    answer: [String(yResult)],
+    hint: 'Since x=t+' + a + ', find t from x=' + xGiven + ' — what does y=t²' + (b>=0?'+':'') + b + ' equal at that t?',
+    step: `t=${xGiven}${aStr}=${t},\\;y=${t}^2${bStr}=${yResult}`
+  };
+}
+
+function gen8(){
+  // Evaluate on a circle: x=r·cos(t), y=r·sin(t); find x at special angle
+  const cases = [
+    {r:4, tStr:'0',                 xVal:4,  yVal:0,  ask:'x', ans:4},
+    {r:6, tStr:'\\dfrac{\\pi}{2}',  xVal:0,  yVal:6,  ask:'y', ans:6},
+    {r:5, tStr:'\\pi',              xVal:-5, yVal:0,  ask:'x', ans:-5},
+    {r:3, tStr:'\\dfrac{\\pi}{2}',  xVal:0,  yVal:3,  ask:'x', ans:0},
+    {r:8, tStr:'0',                 xVal:8,  yVal:0,  ask:'y', ans:0},
+    {r:4, tStr:'\\pi',              xVal:-4, yVal:0,  ask:'y', ans:0},
+  ];
+  const {r, tStr, ask, ans} = choose(cases);
+  return {
+    latex: `x=${r}\\cos t,\\;y=${r}\\sin t.\\quad ${ask}\\text{ at }t=${tStr}:\\;${ask}=`,
+    answer: [String(ans)],
+    hint: 'At this special angle, what does ' + (ask === 'x' ? 'cos' : 'sin') + '(t) equal — and therefore what is ' + ask + '?',
+    step: `${ask}=${r}\\cdot${ask === 'x' ? '\\cos' : '\\sin'}\\!\\left(${tStr}\\right)=${ans}`
+  };
+}
+
+const GENERATORS = [gen1, gen2, gen3, gen4, gen5, gen6, gen7, gen8];
+
+
+// ── State ─────────────────────────────────────────────────────────────────────
+let ACTIVE, correct, flags, attempted, peeked;
+
+function norm(s) {
+  return s.trim().toLowerCase()
+    .replace(/\s+/g, '')
+    .replace(/[−–]/g, '-')
+    .replace(/∞/g, 'inf')
+    .replace(/∪/g, 'u');
+}
+function ok(user, acc) { return acc.some(a => norm(user) === norm(a)); }
+
+function init() {
+  ACTIVE    = shuffle(GENERATORS.map(gen => gen()));
+  correct   = 0;
+  flags     = Array(GENERATORS.length).fill(false);
+  attempted = Array(GENERATORS.length).fill(false);
+  peeked    = Array(GENERATORS.length).fill(false);
+}
+
+function buildCards() {
+  const wrap = document.getElementById('problems');
+  wrap.innerHTML = '';
+  ACTIVE.forEach((p, i) => {
+    const div = document.createElement('div');
+    div.className = 'card'; div.id = 'card-' + i;
+    div.innerHTML =
+      `<div class="card-body">
+        <div class="card-meta">Problem ${i + 1}</div>
+        <div class="card-expr" id="expr-${i}"></div>
+        <div class="input-row">
+          <input class="ans-input" id="ai-${i}" placeholder="answer" />
+          <button class="check-btn" id="chk-${i}" onclick="check(${i})">Check</button>
+        </div>
+        <div class="hint">${p.hint}</div>
+        <div class="feedback" id="fb-${i}"></div>
+        <span class="reveal-link" id="rl-${i}" onclick="reveal(${i})">Show solution</span>
+        <div class="revealed-answer" id="ra-${i}"></div>
+      </div>`;
+    wrap.appendChild(div);
+    document.getElementById('ai-' + i)
+      .addEventListener('keydown', e => { if (e.key === 'Enter') check(i); });
+    if (p.svg) {
+      document.getElementById('expr-' + i).innerHTML = p.svg;
+    } else {
+      katex.render(p.latex, document.getElementById('expr-' + i),
+        { throwOnError: false, displayMode: true });
+    }
+  });
+}
+
+function check(i) {
+  const p = ACTIVE[i], inp = document.getElementById('ai-'+i),
+        fb = document.getElementById('fb-'+i), card = document.getElementById('card-'+i),
+        good = ok(inp.value, p.answer);
+  inp.className = 'ans-input';
+  if (good) {
+    inp.className = 'ans-input ok'; fb.className = 'feedback correct';
+    fb.textContent = '✓ Correct!'; card.className = 'card correct';
+    if (!flags[i] && !attempted[i] && !peeked[i]) { flags[i]=true; correct++; updateScore(); }
+    attempted[i] = true;
+    document.getElementById('chk-'+i).disabled = true; inp.readOnly = true;
+  } else {
+    attempted[i] = true; inp.className = 'ans-input bad'; fb.className = 'feedback wrong';
+    fb.textContent = '✗ Not quite — try again or show the solution.';
+    card.className = peeked[i] ? 'card peeked' : 'card wrong';
+  }
+}
+
+function reveal(i) {
+  const p = ACTIVE[i], box = document.getElementById('ra-'+i),
+        lnk = document.getElementById('rl-'+i);
+  if (box.style.display === 'block') {
+    box.style.display = 'none'; lnk.textContent = 'Show solution';
+  } else {
+    if (!flags[i]) {
+      peeked[i] = true; document.getElementById('card-'+i).className = 'card peeked';
+      if (!attempted[i]) {
+        const fb = document.getElementById('fb-'+i);
+        fb.className = 'feedback peeked';
+        fb.textContent = '⚠ Solution revealed — no point awarded.';
+      }
+    }
+    box.innerHTML = '<strong>Solution:</strong><br>';
+    const span = document.createElement('span'); box.appendChild(span);
+    katex.render(p.step, span, { throwOnError: false, displayMode: true });
+    box.style.display = 'block'; lnk.textContent = 'Hide solution';
+  }
+}
+
+function updateScore() {
+  const n = ACTIVE.length;
+  document.getElementById('score').textContent = correct + ' / ' + n;
+  document.getElementById('prog').style.width = Math.round(correct / n * 100) + '%';
+}
+
+function resetAll() { init(); buildCards(); updateScore(); }
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script>
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left: '$$', right: '$$', display: true},
+      {left: '$',  right: '$',  display: false}
+    ]
+  });
+  init(); buildCards(); updateScore();
+</script>
+</body>
+</html>
