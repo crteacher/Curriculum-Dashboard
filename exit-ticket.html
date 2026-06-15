@@ -186,21 +186,28 @@ Promise.all([
     }
   }
 
+  function lastSection(courseObj) {
+    const completed = (courseObj?.completedSections||[]);
+    const current   = courseObj?.currentSection;
+    // Exclude current section in case it was inadvertently added to completedSections
+    return completed.filter(id => id !== current).slice(-1)[0] || null;
+  }
+
   // College Algebra
   const caId   = state?.courses?.collegeAlgebra?.currentSection;
-  const caLast = (state?.courses?.collegeAlgebra?.completedSections||[]).slice(-1)[0] || null;
+  const caLast = lastSection(state?.courses?.collegeAlgebra);
   fill(caId,   'caToday', false);
   fill(caLast, 'caLast',  true);
 
   // Calculus 2
   const c2Id   = state?.courses?.calc2?.currentSection;
-  const c2Last = (state?.courses?.calc2?.completedSections||[]).slice(-1)[0] || null;
+  const c2Last = lastSection(state?.courses?.calc2);
   fill(c2Id,   'c2Today', false);
   fill(c2Last, 'c2Last',  true);
 
   // PreCalc
   const pcId   = state?.courses?.preCalc?.currentSection;
-  const pcLast = (state?.courses?.preCalc?.completedSections||[]).slice(-1)[0] || null;
+  const pcLast = lastSection(state?.courses?.preCalc);
   fill(pcId,   'pcToday', false);
   fill(pcLast, 'pcLast',  true);
 
