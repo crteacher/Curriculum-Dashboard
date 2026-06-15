@@ -69,21 +69,18 @@ header h1{font-size:1.2rem;font-weight:700;flex:1;color:#fff}
     <div class="card-label">College Algebra</div>
     <div class="section-info loading" id="caTodaySection">Loading…</div>
     <div class="q-box" id="caTodayQ"><span class="loading">Loading…</span></div>
-    <button class="reveal-btn" id="caTodayReveal" onclick="reveal('caToday')" style="display:none">Show Answer</button>
     <div class="ans-box" id="caTodayAns"></div>
   </div>
   <div class="card c2">
     <div class="card-label">Calculus</div>
     <div class="section-info loading" id="c2TodaySection">Loading…</div>
     <div class="q-box" id="c2TodayQ"><span class="loading">Loading…</span></div>
-    <button class="reveal-btn" id="c2TodayReveal" onclick="reveal('c2Today')" style="display:none">Show Answer</button>
     <div class="ans-box" id="c2TodayAns"></div>
   </div>
   <div class="card pc">
     <div class="card-label">PreCalc</div>
     <div class="section-info loading" id="pcTodaySection">Loading…</div>
     <div class="q-box" id="pcTodayQ"><span class="loading">Loading…</span></div>
-    <button class="reveal-btn" id="pcTodayReveal" onclick="reveal('pcToday')" style="display:none">Show Answer</button>
     <div class="ans-box" id="pcTodayAns"></div>
   </div>
 </div>
@@ -178,8 +175,6 @@ Promise.all([
       ansEl.innerHTML = ansHtml;
       if (showAnswerNow) {
         ansEl.classList.add('visible');
-      } else if (revBtn) {
-        revBtn.style.display = 'inline-block';
       }
     } else {
       qEl.innerHTML = '<span class="none-msg">No exit ticket for this section.</span>';
