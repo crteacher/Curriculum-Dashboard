@@ -298,41 +298,44 @@ function renderWarmup() {
   const sec = _currentSec;
   const schoolDay = isSchoolDay();
   const label = schoolDay ? 'Do Now' : 'Review';
-  const tagClass = _courseChoice === 'ca' ? 'ca' : (_courseChoice === 'calc' ? 'calc' : _courseChoice === 'pc' ? 'pc' : 'review');
+  const tagClass = _courseChoice === 'ca' ? 'ca' : _courseChoice === 'calc' ? 'calc' : _courseChoice === 'pc' ? 'pc' : 'review';
 
   const problems = sec.reviewProblems || [];
-  const rawProb = problems.length
-    ? problems[Math.floor(Math.random() * problems.length)]
-    : null;
-  const prob = rawProb && typeof rawProb === 'object' ? rawProb.problem : rawProb;
-  const probAnswer = rawProb && typeof rawProb === 'object' ? rawProb.answer : null;
+  const rawProb = problems.length ? problems[Math.floor(Math.random() * problems.length)] : null;
+  const prob       = rawProb ? (typeof rawProb === 'object' ? rawProb.problem  : rawProb) : null;
+  const probAnswer = rawProb ? (typeof rawProb === 'object' ? rawProb.answer   : null)    : null;
 
-  const folder = _courseKey === 'collegeAlgebra' ? 'College%20Algebra' :
-                 _courseKey === 'preCalc' ? 'PreCalc' :
-                 _courseKey === 'calc1' ? 'Calc%201' : 'Calc%202';
-  const BASE = './';
-  const practiceUrl = sec.hasPractice && sec.practiceFile
-    ? `${BASE}${folder}/${encodeURIComponent(sec.practiceFile.replace(/\.(html|docx|pdf)$/i,''))}.html`
+  const folder = _courseKey === 'collegeAlgebra' ? 'College%20Algebra'
+               : _courseKey === 'preCalc'        ? 'PreCalc'
+               : _courseKey === 'calc1'           ? 'Calc%201'
+               :                                   'Calc%202';
+  const practiceUrl = (sec.hasPractice && sec.practiceFile)
+    ? './' + folder + '/' + sec.practiceFile
     : null;
 
-  const courseName = _courseKey === 'collegeAlgebra' ? 'College Algebra' :
-                     _courseKey === 'preCalc' ? 'PreCalc' : 'Calculus';
+  const courseName = _courseKey === 'collegeAlgebra' ? 'College Algebra'
+                   : _courseKey === 'preCalc'        ? 'PreCalc'
+                   :                                   'Calculus';
 
-  document.getElementById('warmupCard').innerHTML = `
-    <span class="warmup-tag ${tagClass}">${courseName} &nbsp;&middot;&nbsp; ${label}</span>
-    <div class="warmup-section">Section ${sec.section}</div>
-    <div class="warmup-title">${sec.title}</div>
-    <hr class="warmup-divider">
-    <div class="warmup-swbat-label">Today you'll review</div>
-    <div class="warmup-swbat">${renderMath(sec.swbat || '—')}</div>
-    ${prob ? `<hr class="warmup-divider">
-    <div class="warmup-swbat-label">Problem</div>
-    <div class="warmup-swbat">${renderMath(prob)}</div>
-    ${probAnswer ? `<div class="warmup-swbat-label" style="margin-top:.75rem">Answer</div><div class="warmup-swbat" style="font-size:.88rem;color:#7a7570">${renderMath(probAnswer)}</div>` : ''}` : ''}
-    ${practiceUrl ? `<a class="practice-btn" href="${practiceUrl}" target="_blank">
-      Open Practice Problems →
-    </a>` : ''}
-  `;
+  let html = '';
+  html += '<span class="warmup-tag ' + tagClass + '">' + courseName + ' &nbsp;&middot;&nbsp; ' + label + '</span>';
+  html += '<div class="warmup-section">Section ' + sec.section + '</div>';
+  html += '<div class="warmup-title">' + sec.title + '</div>';
+  html += '<hr class="warmup-divider">';
+  html += '<div class="warmup-swbat-label">Today you\'ll review</div>';
+  html += '<div class="warmup-swbat">' + renderMath(sec.swbat || '—') + '</div>';
+
+  if (prob) {
+    html += '<hr class="warmup-divider">';
+    html += '<div class="warmup-swbat-label">Problem</div>';
+    html += '<div class="warmup-swbat">' + renderMath(prob) + '</div>';
+  }
+
+  if (practiceUrl) {
+    html += '<a class="practice-btn" href="' + practiceUrl + '" target="_blank">Open Practice Problems →</a>';
+  }
+
+  document.getElementById('warmupCard').innerHTML = html;
 }
 
 // ── Boot ──────────────────────────────────────────────────────────────────────

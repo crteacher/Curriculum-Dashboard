@@ -156,7 +156,7 @@ function notesLinks(course,sec){
 }
 
 function buildLessonCard(course,sec,dayNum,isOpen,schedItem){
-  const doNow=course==='ca'?'./donow-ca.html':'./warmup.html';
+  const doNow='./warmup.html';
   const we=sec.workedExamples||[],pp=sec.practiceProblems||[];
   let body='';
   // Embedded quiz — happens at start of class, lesson continues after
@@ -218,7 +218,7 @@ function renderSchedule(colEl,course,schedule,currentId,secMap){
 }
 
 function buildReviewCard(course,dayNum,item,secMap){
-  const doNow=course==='ca'?'./donow-ca.html':'./warmup.html';
+  const doNow='./warmup.html';
   const secs=item.sections||[];
   const chips=secs.map(id=>{const s=secMap[id];if(!s||!s.reviewProblems?.length)return'';
     return`<a href="./review.html?section=${id}" class="chip ${course}" target="_blank">§${s.section} ${s.title}</a>`;}).filter(Boolean).join('');
