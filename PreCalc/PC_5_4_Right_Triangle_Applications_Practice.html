@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Right Triangle Applications &mdash; Practice</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.7}
+  .container{max-width:820px;margin:0 auto;padding:2rem 1.5rem 4rem}
+  h1{font-size:26px;font-weight:700;margin-bottom:4px}
+  .subtitle{font-size:14px;color:#666;margin-bottom:2rem;font-family:sans-serif}
+  .section{margin-bottom:2.5rem}
+  .section-title{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;
+    color:#777;font-family:sans-serif;margin-bottom:1rem;border-bottom:1px solid #ddd;padding-bottom:6px}
+  .concept{background:#d9e8f5;border-left:4px solid #185fa5;border-radius:0 8px 8px 0;
+    padding:.85rem 1.1rem;font-size:15px;margin-bottom:1rem}
+  .concept-label{font-family:sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;
+    letter-spacing:.07em;color:#185fa5;display:block;margin-bottom:.35rem}
+  .score-bar{display:flex;align-items:center;gap:12px;margin-bottom:1.25rem;
+    font-family:sans-serif;font-size:14px;flex-wrap:wrap}
+  .score-display{font-weight:700;font-size:18px;min-width:60px}
+  .score-label{color:#777;font-size:13px}
+  .score-note{font-size:12px;color:#999;font-style:italic}
+  .progress{flex:1;min-width:80px;height:6px;background:#e5e1d8;border-radius:3px;overflow:hidden}
+  .progress-fill{height:100%;background:#185fa5;border-radius:3px;transition:width .4s}
+  .reset-btn{font-size:12px;background:none;border:1px solid #bbb;border-radius:5px;
+    padding:4px 10px;cursor:pointer;color:#666;font-family:sans-serif;white-space:nowrap}
+  .reset-btn:hover{background:#eee}
+  .problems{display:grid;grid-template-columns:repeat(auto-fill,minmax(370px,1fr));gap:14px}
+  .card{background:#fff;border:1.5px solid #ddd;border-radius:10px;overflow:hidden;transition:border-color .25s}
+  .card.correct{border-color:#3a7a3a}.card.wrong{border-color:#b03030}.card.peeked{border-color:#b8860b}
+  .card-body{padding:14px 16px}
+  .card-meta{font-family:sans-serif;font-size:12px;color:#888;margin-bottom:4px}
+  .card-expr{font-size:17px;margin-bottom:12px;line-height:2.2;overflow-x:auto}
+  .katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}
+  .input-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .ans-input{font-family:'Courier New',monospace;font-size:14px;border:1px solid #ccc;
+    border-radius:6px;padding:7px 10px;flex:1;min-width:120px;background:#fafaf8;
+    color:#1a1a1a;outline:none}
+  .ans-input:focus{border-color:#185fa5;background:#fff}
+  .ans-input.ok{border-color:#3a7a3a;background:#f0faf0}
+  .ans-input.bad{border-color:#b03030;background:#fdf0f0}
+  .check-btn{font-family:sans-serif;font-size:13px;background:#1a1a1a;color:#fff;
+    border:none;border-radius:6px;padding:7px 14px;cursor:pointer}
+  .check-btn:hover{background:#333}.check-btn:disabled{background:#aaa;cursor:default}
+  .hint{font-family:sans-serif;font-size:12px;color:#888;margin-top:7px}
+  .feedback{font-family:sans-serif;font-size:13px;margin-top:10px;padding:8px 12px;
+    border-radius:6px;display:none;line-height:1.5}
+  .feedback.correct{display:block;background:#eaf5ea;color:#1a5a1a}
+  .feedback.wrong{display:block;background:#faeaea;color:#7a1a1a}
+  .feedback.peeked{display:block;background:#fdf8e8;color:#7a5a00}
+  .reveal-link{font-family:sans-serif;font-size:12px;color:#999;cursor:pointer;
+    text-decoration:underline;margin-top:8px;display:inline-block}
+  .reveal-link:hover{color:#555}
+  .revealed-answer{display:none;margin-top:8px;font-family:sans-serif;font-size:13px;
+    color:#444;background:#f5f3ef;border-radius:6px;padding:8px 11px;line-height:1.8;overflow-x:auto}
+  code{font-family:'Courier New',monospace;background:#f0ede7;padding:1px 5px;border-radius:3px;font-size:12px}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Right Triangle Applications</h1>
+  <p class="subtitle">PreCalc &nbsp;&middot;&nbsp; &sect;5.4 &nbsp;&middot;&nbsp; Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026</p>
+
+  <div class="section">
+    <div class="section-title">Core Ideas</div>
+
+  <div class="concept">
+    <span class="concept-label">Angles of elevation and depression</span>
+    <strong>Angle of elevation:</strong> measured upward from horizontal to the line of sight.
+    <br><strong>Angle of depression:</strong> measured downward from horizontal to the line of sight.
+    <br>In both cases, draw the right triangle, label sides, then write the trig ratio and solve.
+  </div>
+  <div class="concept">
+    <span class="concept-label">Solving right triangles with special angles</span>
+    At $30°$: $\sin 30°=\dfrac{1}{2}$; $\cos 30°=\dfrac{\sqrt{3}}{2}$; $\tan 30°=\dfrac{\sqrt{3}}{3}$
+    <br>At $45°$: $\sin 45°=\cos 45°=\dfrac{\sqrt{2}}{2}$; $\tan 45°=1$
+    <br>At $60°$: $\sin 60°=\dfrac{\sqrt{3}}{2}$; $\cos 60°=\dfrac{1}{2}$; $\tan 60°=\sqrt{3}$
+    <br>Key: $\tan 45°=1$ means height $=$ horizontal distance for a $45°$ angle.
+  </div>
+
+  </div>
+
+  <div class="section">
+    <div class="section-title">Practice Problems</div>
+    <p style="font-family:sans-serif;font-size:13px;color:#666;margin-bottom:1rem;">
+      Enter integers for all answers (distances, heights, and angles in degrees are all whole numbers in these problems).
+      Press <strong>Check</strong> or hit Enter.
+    </p>
+    <div class="score-bar">
+      <span class="score-label">Score:</span>
+      <span class="score-display" id="score">0 / 8</span>
+      <span class="score-note">first attempt only</span>
+      <div class="progress"><div class="progress-fill" id="prog" style="width:0%"></div></div>
+      <button class="reset-btn" onclick="resetAll()">New set &nbsp;&#8635;</button>
+    </div>
+    <div class="problems" id="problems"></div>
+  </div>
+</div>
+
+<script>
+// ── Crypto-quality RNG ────────────────────────────────────────────────────────
+function _rf() {
+  const b = new Uint32Array(1);
+  crypto.getRandomValues(b);
+  return b[0] / 4294967296;
+}
+function rInt(n)   { return Math.floor(_rf() * n); }
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = rInt(i + 1);
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+// Pick one element at random from an array  e.g. choose([1,4,9])
+function choose(arr) { return arr[rInt(arr.length)]; }
+
+// ── Display helpers ───────────────────────────────────────────────────────────
+// Leading coefficient: 1→'', -1→'-', else the number as a string
+function fc(a) { if (a===1) return ''; if (a===-1) return '-'; return String(a); }
+// Subsequent term with sign: addT(-2,'x')→' - 2x', addT(3,'')→' + 3', addT(0,'x')→''
+function addT(n, v) {
+  if (n===0) return '';
+  const s = n>0?'+':'-', abs = Math.abs(n);
+  if (abs===1 && v) return ' ' + s + ' ' + v;
+  return ' ' + s + ' ' + abs + (v||'');
+}
+
+// ── Problem generators (section-specific, injected below) ─────────────────────
+
+function gen1(){
+  // Elevation 45°: height = horizontal distance → integer
+  const d = choose([20, 30, 40, 50, 60, 80, 100]);
+  return {
+    latex: `\\text{Horizontal distance }${d}\\text{ m, elevation angle }45^\\circ.\\;h=`,
+    answer: [String(d)],
+    hint: 'At a 45° elevation angle, how does the height compare to the horizontal distance?',
+    step: `h=${d}\\cdot\\tan(45^\\circ)=${d}\\cdot1=${d}\\text{ m}`
+  };
+}
+
+function gen2(){
+  // Right triangle: hyp=2k, angle=30°, find opposite = k
+  const k = choose([5, 6, 7, 8, 9, 10, 12, 15]);
+  const h = 2 * k;
+  return {
+    latex: `\\text{Right triangle: hyp}=${h},\\;\\theta=30^\\circ.\\;\\text{Opposite side}=`,
+    answer: [String(k)],
+    hint: 'SOH: sin(30°) = opposite / hypotenuse — what is the exact value of sin(30°)?',
+    step: `\\text{opp}=${h}\\cdot\\sin(30^\\circ)=${h}\\cdot\\dfrac{1}{2}=${k}`
+  };
+}
+
+function gen3(){
+  // Right triangle: hyp=2k, angle=60°, find adjacent = k (cos 60° = 1/2)
+  const k = choose([5, 6, 7, 8, 9, 10, 12, 15]);
+  const h = 2 * k;
+  return {
+    latex: `\\text{Right triangle: hyp}=${h},\\;\\theta=60^\\circ.\\;\\text{Adjacent side}=`,
+    answer: [String(k)],
+    hint: 'CAH: cos(60°) = adjacent / hypotenuse — what is the exact value of cos(60°)?',
+    step: `\\text{adj}=${h}\\cdot\\cos(60^\\circ)=${h}\\cdot\\dfrac{1}{2}=${k}`
+  };
+}
+
+function gen4(){
+  // Given opposite and 30° angle, find hyp = 2·opp
+  const o = choose([4, 5, 6, 7, 8, 9, 10, 12]);
+  const h = 2 * o;
+  return {
+    latex: `\\text{Right triangle: opp}=${o},\\;\\theta=30^\\circ.\\;\\text{Hypotenuse}=`,
+    answer: [String(h)],
+    hint: 'sin(30°) = opposite / hypotenuse — rearrange to find the hypotenuse from the opposite side.',
+    step: `\\sin(30^\\circ)=\\dfrac{\\text{opp}}{\\text{hyp}}\\Rightarrow\\text{hyp}=\\dfrac{${o}}{1/2}=${h}`
+  };
+}
+
+function gen5(){
+  // Given adjacent and 60° angle, find hyp = 2·adj (cos 60° = 1/2)
+  const a = choose([4, 5, 6, 7, 8, 9, 10, 12]);
+  const h = 2 * a;
+  return {
+    latex: `\\text{Right triangle: adj}=${a},\\;\\theta=60^\\circ.\\;\\text{Hypotenuse}=`,
+    answer: [String(h)],
+    hint: 'CAH at 60°: cos(60°) = adjacent / hypotenuse — if adj and the ratio are both known, what does that give?',
+    step: `\\cos(60^\\circ)=\\dfrac{\\text{adj}}{\\text{hyp}}\\Rightarrow\\text{hyp}=\\dfrac{${a}}{1/2}=${h}`
+  };
+}
+
+function gen6(){
+  // Depression 45°: horizontal distance = height → integer
+  const h = choose([25, 30, 35, 40, 50, 60, 75, 100]);
+  return {
+    latex: `\\text{Height }${h}\\text{ m, angle of depression }45^\\circ.\\;\\text{Horizontal distance}=`,
+    answer: [String(h)],
+    hint: 'Depression and elevation angles form equal alternate interior angles — at 45°, what is tan(45°)?',
+    step: `\\tan(45^\\circ)=\\dfrac{h}{d}=1\\Rightarrow d=h=${h}\\text{ m}`
+  };
+}
+
+function gen7(){
+  // Kite string and 30°: height = L·sin(30°) = L/2 → integer
+  const L = choose([20, 30, 40, 50, 60, 80, 100, 120]);
+  const height = L / 2;
+  return {
+    latex: `\\text{String length }${L}\\text{ m at }30^\\circ\\text{ elevation.}\\;\\text{Height above ground}=`,
+    answer: [String(height)],
+    hint: 'The string is the hypotenuse and the height is the opposite side — which trig ratio connects them at 30°?',
+    step: `h=${L}\\cdot\\sin(30^\\circ)=${L}\\cdot\\dfrac{1}{2}=${height}\\text{ m}`
+  };
+}
+
+function gen8(){
+  // Given sin or tan ratio, find the angle (30°, 45°, or 60°) → integer
+  const cases = [
+    {setup:'\\sin\\theta=\\dfrac{1}{2}',             ans:['30'], step:'\\sin(30^\\circ)=\\dfrac{1}{2}\\Rightarrow\\theta=30^\\circ'},
+    {setup:'\\cos\\theta=\\dfrac{1}{2}',             ans:['60'], step:'\\cos(60^\\circ)=\\dfrac{1}{2}\\Rightarrow\\theta=60^\\circ'},
+    {setup:'\\tan\\theta=1',                         ans:['45'], step:'\\tan(45^\\circ)=1\\Rightarrow\\theta=45^\\circ'},
+    {setup:'\\sin\\theta=\\dfrac{\\sqrt{3}}{2}',     ans:['60'], step:'\\sin(60^\\circ)=\\dfrac{\\sqrt{3}}{2}\\Rightarrow\\theta=60^\\circ'},
+    {setup:'\\cos\\theta=\\dfrac{\\sqrt{3}}{2}',     ans:['30'], step:'\\cos(30^\\circ)=\\dfrac{\\sqrt{3}}{2}\\Rightarrow\\theta=30^\\circ'},
+    {setup:'\\tan\\theta=\\sqrt{3}',                 ans:['60'], step:'\\tan(60^\\circ)=\\sqrt{3}\\Rightarrow\\theta=60^\\circ'},
+  ];
+  const {setup, ans, step} = choose(cases);
+  return {
+    latex: `${setup},\\;0°<\\theta<90°.\\quad\\theta=`,
+    answer: ans,
+    hint: 'Match this value to the known trig values for the three special angles — which angle gives that ratio?',
+    step
+  };
+}
+
+const GENERATORS = [gen1, gen2, gen3, gen4, gen5, gen6, gen7, gen8];
+
+
+// ── State ─────────────────────────────────────────────────────────────────────
+let ACTIVE, correct, flags, attempted, peeked;
+
+function norm(s) {
+  return s.trim().toLowerCase()
+    .replace(/\s+/g, '')
+    .replace(/[−–]/g, '-')
+    .replace(/∞/g, 'inf')
+    .replace(/∪/g, 'u');
+}
+function ok(user, acc) { return acc.some(a => norm(user) === norm(a)); }
+
+function init() {
+  ACTIVE    = shuffle(GENERATORS.map(gen => gen()));
+  correct   = 0;
+  flags     = Array(GENERATORS.length).fill(false);
+  attempted = Array(GENERATORS.length).fill(false);
+  peeked    = Array(GENERATORS.length).fill(false);
+}
+
+function buildCards() {
+  const wrap = document.getElementById('problems');
+  wrap.innerHTML = '';
+  ACTIVE.forEach((p, i) => {
+    const div = document.createElement('div');
+    div.className = 'card'; div.id = 'card-' + i;
+    div.innerHTML =
+      `<div class="card-body">
+        <div class="card-meta">Problem ${i + 1}</div>
+        <div class="card-expr" id="expr-${i}"></div>
+        <div class="input-row">
+          <input class="ans-input" id="ai-${i}" placeholder="answer" />
+          <button class="check-btn" id="chk-${i}" onclick="check(${i})">Check</button>
+        </div>
+        <div class="hint">${p.hint}</div>
+        <div class="feedback" id="fb-${i}"></div>
+        <span class="reveal-link" id="rl-${i}" onclick="reveal(${i})">Show solution</span>
+        <div class="revealed-answer" id="ra-${i}"></div>
+      </div>`;
+    wrap.appendChild(div);
+    document.getElementById('ai-' + i)
+      .addEventListener('keydown', e => { if (e.key === 'Enter') check(i); });
+    if (p.svg) {
+      document.getElementById('expr-' + i).innerHTML = p.svg;
+    } else {
+      katex.render(p.latex, document.getElementById('expr-' + i),
+        { throwOnError: false, displayMode: true });
+    }
+  });
+}
+
+function check(i) {
+  const p = ACTIVE[i], inp = document.getElementById('ai-'+i),
+        fb = document.getElementById('fb-'+i), card = document.getElementById('card-'+i),
+        good = ok(inp.value, p.answer);
+  inp.className = 'ans-input';
+  if (good) {
+    inp.className = 'ans-input ok'; fb.className = 'feedback correct';
+    fb.textContent = '✓ Correct!'; card.className = 'card correct';
+    if (!flags[i] && !attempted[i] && !peeked[i]) { flags[i]=true; correct++; updateScore(); }
+    attempted[i] = true;
+    document.getElementById('chk-'+i).disabled = true; inp.readOnly = true;
+  } else {
+    attempted[i] = true; inp.className = 'ans-input bad'; fb.className = 'feedback wrong';
+    fb.textContent = '✗ Not quite — try again or show the solution.';
+    card.className = peeked[i] ? 'card peeked' : 'card wrong';
+  }
+}
+
+function reveal(i) {
+  const p = ACTIVE[i], box = document.getElementById('ra-'+i),
+        lnk = document.getElementById('rl-'+i);
+  if (box.style.display === 'block') {
+    box.style.display = 'none'; lnk.textContent = 'Show solution';
+  } else {
+    if (!flags[i]) {
+      peeked[i] = true; document.getElementById('card-'+i).className = 'card peeked';
+      if (!attempted[i]) {
+        const fb = document.getElementById('fb-'+i);
+        fb.className = 'feedback peeked';
+        fb.textContent = '⚠ Solution revealed — no point awarded.';
+      }
+    }
+    box.innerHTML = '<strong>Solution:</strong><br>';
+    const span = document.createElement('span'); box.appendChild(span);
+    katex.render(p.step, span, { throwOnError: false, displayMode: true });
+    box.style.display = 'block'; lnk.textContent = 'Hide solution';
+  }
+}
+
+function updateScore() {
+  const n = ACTIVE.length;
+  document.getElementById('score').textContent = correct + ' / ' + n;
+  document.getElementById('prog').style.width = Math.round(correct / n * 100) + '%';
+}
+
+function resetAll() { init(); buildCards(); updateScore(); }
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script>
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left: '$$', right: '$$', display: true},
+      {left: '$',  right: '$',  display: false}
+    ]
+  });
+  init(); buildCards(); updateScore();
+</script>
+</body>
+</html>

@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Graphing Trigonometric Functions &mdash; Practice</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.7}
+  .container{max-width:820px;margin:0 auto;padding:2rem 1.5rem 4rem}
+  h1{font-size:26px;font-weight:700;margin-bottom:4px}
+  .subtitle{font-size:14px;color:#666;margin-bottom:2rem;font-family:sans-serif}
+  .section{margin-bottom:2.5rem}
+  .section-title{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;
+    color:#777;font-family:sans-serif;margin-bottom:1rem;border-bottom:1px solid #ddd;padding-bottom:6px}
+  .concept{background:#d9e8f5;border-left:4px solid #185fa5;border-radius:0 8px 8px 0;
+    padding:.85rem 1.1rem;font-size:15px;margin-bottom:1rem}
+  .concept-label{font-family:sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;
+    letter-spacing:.07em;color:#185fa5;display:block;margin-bottom:.35rem}
+  .score-bar{display:flex;align-items:center;gap:12px;margin-bottom:1.25rem;
+    font-family:sans-serif;font-size:14px;flex-wrap:wrap}
+  .score-display{font-weight:700;font-size:18px;min-width:60px}
+  .score-label{color:#777;font-size:13px}
+  .score-note{font-size:12px;color:#999;font-style:italic}
+  .progress{flex:1;min-width:80px;height:6px;background:#e5e1d8;border-radius:3px;overflow:hidden}
+  .progress-fill{height:100%;background:#185fa5;border-radius:3px;transition:width .4s}
+  .reset-btn{font-size:12px;background:none;border:1px solid #bbb;border-radius:5px;
+    padding:4px 10px;cursor:pointer;color:#666;font-family:sans-serif;white-space:nowrap}
+  .reset-btn:hover{background:#eee}
+  .problems{display:grid;grid-template-columns:repeat(auto-fill,minmax(370px,1fr));gap:14px}
+  .card{background:#fff;border:1.5px solid #ddd;border-radius:10px;overflow:hidden;transition:border-color .25s}
+  .card.correct{border-color:#3a7a3a}.card.wrong{border-color:#b03030}.card.peeked{border-color:#b8860b}
+  .card-body{padding:14px 16px}
+  .card-meta{font-family:sans-serif;font-size:12px;color:#888;margin-bottom:4px}
+  .card-expr{font-size:17px;margin-bottom:12px;line-height:2.2;overflow-x:auto}
+  .katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}
+  .input-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .ans-input{font-family:'Courier New',monospace;font-size:14px;border:1px solid #ccc;
+    border-radius:6px;padding:7px 10px;flex:1;min-width:120px;background:#fafaf8;
+    color:#1a1a1a;outline:none}
+  .ans-input:focus{border-color:#185fa5;background:#fff}
+  .ans-input.ok{border-color:#3a7a3a;background:#f0faf0}
+  .ans-input.bad{border-color:#b03030;background:#fdf0f0}
+  .check-btn{font-family:sans-serif;font-size:13px;background:#1a1a1a;color:#fff;
+    border:none;border-radius:6px;padding:7px 14px;cursor:pointer}
+  .check-btn:hover{background:#333}.check-btn:disabled{background:#aaa;cursor:default}
+  .hint{font-family:sans-serif;font-size:12px;color:#888;margin-top:7px}
+  .feedback{font-family:sans-serif;font-size:13px;margin-top:10px;padding:8px 12px;
+    border-radius:6px;display:none;line-height:1.5}
+  .feedback.correct{display:block;background:#eaf5ea;color:#1a5a1a}
+  .feedback.wrong{display:block;background:#faeaea;color:#7a1a1a}
+  .feedback.peeked{display:block;background:#fdf8e8;color:#7a5a00}
+  .reveal-link{font-family:sans-serif;font-size:12px;color:#999;cursor:pointer;
+    text-decoration:underline;margin-top:8px;display:inline-block}
+  .reveal-link:hover{color:#555}
+  .revealed-answer{display:none;margin-top:8px;font-family:sans-serif;font-size:13px;
+    color:#444;background:#f5f3ef;border-radius:6px;padding:8px 11px;line-height:1.8;overflow-x:auto}
+  code{font-family:'Courier New',monospace;background:#f0ede7;padding:1px 5px;border-radius:3px;font-size:12px}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Graphing Trigonometric Functions</h1>
+  <p class="subtitle">PreCalc &nbsp;&middot;&nbsp; &sect;6.0 &nbsp;&middot;&nbsp; Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026</p>
+
+  <div class="section">
+    <div class="section-title">Core Ideas</div>
+
+  <div class="concept">
+    <span class="concept-label">Parameters of $y=A\sin(B(x-C))+D$</span>
+    <strong>Amplitude:</strong> $|A|$ — half the height of the wave.
+    <br><strong>Period:</strong> $\dfrac{2\pi}{|B|}$ — length of one complete cycle.
+    <br><strong>Phase shift:</strong> $C$ — horizontal shift (right if $C>0$, left if $C<0$).
+    <br><strong>Vertical shift / Midline:</strong> $D$ — midline at $y=D$.
+    <br>Same parameters apply to $y=A\cos(B(x-C))+D$.
+  </div>
+  <div class="concept">
+    <span class="concept-label">Key facts</span>
+    Range: $[D-|A|,\;D+|A|]$.
+    <br>$y=\sin x$: passes through $(0,0)$, period $2\pi$, amp $1$.
+    <br>$y=\cos x$: passes through $(0,1)$, period $2\pi$, amp $1$.
+    <br>To find $B$ from period $T$: $B=\dfrac{2\pi}{T}$.
+  </div>
+
+  </div>
+
+  <div class="section">
+    <div class="section-title">Practice Problems</div>
+    <p style="font-family:sans-serif;font-size:13px;color:#666;margin-bottom:1rem;">
+      Integers for amplitude, midline, max/min. Period and phase shift: write &pi; as <code>pi</code> (e.g. <code>pi/2</code>, <code>2pi/3</code>). Negative phase shift: e.g. <code>-pi/4</code>.
+      Press <strong>Check</strong> or hit Enter.
+    </p>
+    <div class="score-bar">
+      <span class="score-label">Score:</span>
+      <span class="score-display" id="score">0 / 8</span>
+      <span class="score-note">first attempt only</span>
+      <div class="progress"><div class="progress-fill" id="prog" style="width:0%"></div></div>
+      <button class="reset-btn" onclick="resetAll()">New set &nbsp;&#8635;</button>
+    </div>
+    <div class="problems" id="problems"></div>
+  </div>
+</div>
+
+<script>
+// ── Crypto-quality RNG ────────────────────────────────────────────────────────
+function _rf() {
+  const b = new Uint32Array(1);
+  crypto.getRandomValues(b);
+  return b[0] / 4294967296;
+}
+function rInt(n)   { return Math.floor(_rf() * n); }
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = rInt(i + 1);
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+// Pick one element at random from an array  e.g. choose([1,4,9])
+function choose(arr) { return arr[rInt(arr.length)]; }
+
+// ── Display helpers ───────────────────────────────────────────────────────────
+// Leading coefficient: 1→'', -1→'-', else the number as a string
+function fc(a) { if (a===1) return ''; if (a===-1) return '-'; return String(a); }
+// Subsequent term with sign: addT(-2,'x')→' - 2x', addT(3,'')→' + 3', addT(0,'x')→''
+function addT(n, v) {
+  if (n===0) return '';
+  const s = n>0?'+':'-', abs = Math.abs(n);
+  if (abs===1 && v) return ' ' + s + ' ' + v;
+  return ' ' + s + ' ' + abs + (v||'');
+}
+
+// ── Problem generators (section-specific, injected below) ─────────────────────
+
+function gen1(){
+  // Amplitude: y = A·sin(Bx) + D → |A|
+  const A = choose([2, 3, 4, 5, 6, -2, -3, -4, -5]);
+  const B = choose([1, 2, 3, 4]);
+  const D = choose([-4, -3, -2, -1, 0, 1, 2, 3, 4]);
+  const aStr = A < 0 ? `${A}` : String(A);
+  const dStr = D >= 0 ? `+${D}` : String(D);
+  const fn = choose(['sin','cos']);
+  return {
+    latex: `y=${aStr}\\${fn}(${B}x)${D===0?'':dStr}.\\quad\\text{Amplitude}=`,
+    answer: [String(Math.abs(A))],
+    hint: 'Amplitude measures half the total height of the wave — how does that relate to the coefficient in front of sin or cos?',
+    step: `|A|=|${A}|=${Math.abs(A)}`
+  };
+}
+
+function gen2(){
+  // Period: y = sin(Bx) → 2π/B
+  const cases = [
+    {B:1,  period:'2\\pi',           ans:['2pi']},
+    {B:2,  period:'\\pi',            ans:['pi']},
+    {B:3,  period:'\\dfrac{2\\pi}{3}',ans:['2pi/3']},
+    {B:4,  period:'\\dfrac{\\pi}{2}', ans:['pi/2']},
+    {B:6,  period:'\\dfrac{\\pi}{3}', ans:['pi/3']},
+  ];
+  const {B, period, ans} = choose(cases);
+  const A = choose([1, 2, 3, -1, -2]);
+  const aStr = A === 1 ? '' : (A === -1 ? '-' : `${A}`);
+  const fn = choose(['sin','cos']);
+  return {
+    latex: `y=${aStr}\\${fn}(${B}x).\\quad\\text{Period}=`,
+    answer: ans,
+    hint: 'The period is the horizontal distance for one full cycle — which part of B(x) controls that length?',
+    step: `T=\\dfrac{2\\pi}{|B|}=\\dfrac{2\\pi}{${B}}=${period}`
+  };
+}
+
+function gen3(){
+  // Phase shift: y = A·sin(B(x - C)) + D → C value
+  const cases = [
+    {C:'\\dfrac{\\pi}{4}',  cAns:'pi/4',  cSign:'-', expr:'x-\\dfrac{\\pi}{4}'},
+    {C:'\\dfrac{\\pi}{3}',  cAns:'pi/3',  cSign:'-', expr:'x-\\dfrac{\\pi}{3}'},
+    {C:'\\dfrac{\\pi}{2}',  cAns:'pi/2',  cSign:'-', expr:'x-\\dfrac{\\pi}{2}'},
+    {C:'\\dfrac{\\pi}{6}',  cAns:'pi/6',  cSign:'-', expr:'x-\\dfrac{\\pi}{6}'},
+    {C:'-\\dfrac{\\pi}{4}', cAns:'-pi/4', cSign:'+', expr:'x+\\dfrac{\\pi}{4}'},
+    {C:'-\\dfrac{\\pi}{3}', cAns:'-pi/3', cSign:'+', expr:'x+\\dfrac{\\pi}{3}'},
+    {C:'-\\dfrac{\\pi}{2}', cAns:'-pi/2', cSign:'+', expr:'x+\\dfrac{\\pi}{2}'},
+  ];
+  const {C, cAns, expr} = choose(cases);
+  const A = choose([1, 2, 3]);
+  const aStr = A === 1 ? '' : String(A);
+  const fn = choose(['sin','cos']);
+  const D = choose([0, 1, 2, -1, -2]);
+  const dStr = D === 0 ? '' : (D > 0 ? `+${D}` : String(D));
+  return {
+    latex: `y=${aStr}\\${fn}(${expr})${dStr}.\\quad\\text{Phase shift}=`,
+    answer: [cAns],
+    hint: 'Phase shift is the horizontal offset of the graph — what value of x makes the argument of sin/cos equal to zero?',
+    step: `\\text{Argument}=${expr}=0\\Rightarrow x=${C}`
+  };
+}
+
+function gen4(){
+  // Vertical shift (midline): y = A·sin(Bx) + D → D
+  const A = choose([1, 2, 3, 4, 5]);
+  const B = choose([1, 2, 3]);
+  const D = choose([-5, -4, -3, -2, -1, 1, 2, 3, 4, 5]);
+  const dStr = D > 0 ? `+${D}` : String(D);
+  const fn = choose(['sin','cos']);
+  return {
+    latex: `y=${A}\\${fn}(${B}x)${dStr}.\\quad\\text{Midline: }y=`,
+    answer: [String(D)],
+    hint: 'The midline is the horizontal axis the wave oscillates around — which parameter in A·sin(Bx)+D sets that level?',
+    step: `\\text{Vertical shift }D=${D}\\Rightarrow\\text{midline }y=${D}`
+  };
+}
+
+function gen5(){
+  // Max value: y = A·sin(Bx) + D → D + |A|
+  const A = choose([2, 3, 4, 5, 6]);
+  const B = choose([1, 2, 3]);
+  const D = choose([-3, -2, -1, 0, 1, 2, 3, 4, 5]);
+  const fn = choose(['sin','cos']);
+  const dStr = D === 0 ? '' : (D > 0 ? `+${D}` : String(D));
+  const maxVal = D + A;
+  return {
+    latex: `y=${A}\\${fn}(${B}x)${dStr}.\\quad\\text{Maximum value}=`,
+    answer: [String(maxVal)],
+    hint: 'The maximum occurs when sin/cos = 1 — how does that combine with amplitude and vertical shift?',
+    step: `\\text{max}=D+|A|=${D}+${A}=${maxVal}`
+  };
+}
+
+function gen6(){
+  // Min value: y = A·sin(Bx) + D → D - |A|
+  const A = choose([2, 3, 4, 5, 6]);
+  const B = choose([1, 2, 3]);
+  const D = choose([-1, 0, 1, 2, 3, 4, 5, 6]);
+  const fn = choose(['sin','cos']);
+  const dStr = D === 0 ? '' : (D > 0 ? `+${D}` : String(D));
+  const minVal = D - A;
+  return {
+    latex: `y=${A}\\${fn}(${B}x)${dStr}.\\quad\\text{Minimum value}=`,
+    answer: [String(minVal)],
+    hint: 'The minimum occurs when sin/cos = −1 — how does that combine with amplitude and vertical shift?',
+    step: `\\text{min}=D-|A|=${D}-${A}=${minVal}`
+  };
+}
+
+function gen7(){
+  // Find B given period T → B = 2π/T (integer or fraction)
+  const cases = [
+    {T:'\\pi',              B:'2',   bAns:['2']},
+    {T:'\\dfrac{\\pi}{2}', B:'4',   bAns:['4']},
+    {T:'2\\pi',             B:'1',   bAns:['1']},
+    {T:'\\dfrac{2\\pi}{3}',B:'3',   bAns:['3']},
+    {T:'4\\pi',             B:'\\dfrac{1}{2}', bAns:['1/2']},
+    {T:'\\dfrac{\\pi}{3}', B:'6',   bAns:['6']},
+  ];
+  const {T, B, bAns} = choose(cases);
+  const fn = choose(['sin','cos']);
+  return {
+    latex: `y=A\\${fn}(Bx).\\;\\text{Period}=${T}.\\quad B=`,
+    answer: bAns,
+    hint: 'Period T and B are inversely related through 2π — if T is known, what operation gives B?',
+    step: `B=\\dfrac{2\\pi}{T}=\\dfrac{2\\pi}{${T}}=${B}`
+  };
+}
+
+function gen8(){
+  // Applied model: max height = D + A
+  const A = choose([10, 15, 20, 25, 30]);
+  const D = choose([15, 20, 25, 30, 35, 40]);
+  const maxH = D + A;
+  const desc = choose([
+    {context:'tide model', unit:'m', fn:'\\sin'},
+    {context:'Ferris wheel', unit:'m', fn:'\\cos'},
+    {context:'temperature model', unit:'°F', fn:'\\sin'},
+  ]);
+  return {
+    latex: `h(t)=${A}\\${desc.fn}(Bt)+${D}.\\quad\\text{Maximum value of }h=`,
+    answer: [String(maxH)],
+    hint: 'In an applied sinusoidal model, what is the highest output possible given amplitude and midline?',
+    step: `\\text{max}=${D}+${A}=${maxH}\\text{ ${desc.unit}}`
+  };
+}
+
+const GENERATORS = [gen1, gen2, gen3, gen4, gen5, gen6, gen7, gen8];
+
+
+// ── State ─────────────────────────────────────────────────────────────────────
+let ACTIVE, correct, flags, attempted, peeked;
+
+function norm(s) {
+  return s.trim().toLowerCase()
+    .replace(/\s+/g, '')
+    .replace(/[−–]/g, '-')
+    .replace(/∞/g, 'inf')
+    .replace(/∪/g, 'u');
+}
+function ok(user, acc) { return acc.some(a => norm(user) === norm(a)); }
+
+function init() {
+  ACTIVE    = shuffle(GENERATORS.map(gen => gen()));
+  correct   = 0;
+  flags     = Array(GENERATORS.length).fill(false);
+  attempted = Array(GENERATORS.length).fill(false);
+  peeked    = Array(GENERATORS.length).fill(false);
+}
+
+function buildCards() {
+  const wrap = document.getElementById('problems');
+  wrap.innerHTML = '';
+  ACTIVE.forEach((p, i) => {
+    const div = document.createElement('div');
+    div.className = 'card'; div.id = 'card-' + i;
+    div.innerHTML =
+      `<div class="card-body">
+        <div class="card-meta">Problem ${i + 1}</div>
+        <div class="card-expr" id="expr-${i}"></div>
+        <div class="input-row">
+          <input class="ans-input" id="ai-${i}" placeholder="answer" />
+          <button class="check-btn" id="chk-${i}" onclick="check(${i})">Check</button>
+        </div>
+        <div class="hint">${p.hint}</div>
+        <div class="feedback" id="fb-${i}"></div>
+        <span class="reveal-link" id="rl-${i}" onclick="reveal(${i})">Show solution</span>
+        <div class="revealed-answer" id="ra-${i}"></div>
+      </div>`;
+    wrap.appendChild(div);
+    document.getElementById('ai-' + i)
+      .addEventListener('keydown', e => { if (e.key === 'Enter') check(i); });
+    if (p.svg) {
+      document.getElementById('expr-' + i).innerHTML = p.svg;
+    } else {
+      katex.render(p.latex, document.getElementById('expr-' + i),
+        { throwOnError: false, displayMode: true });
+    }
+  });
+}
+
+function check(i) {
+  const p = ACTIVE[i], inp = document.getElementById('ai-'+i),
+        fb = document.getElementById('fb-'+i), card = document.getElementById('card-'+i),
+        good = ok(inp.value, p.answer);
+  inp.className = 'ans-input';
+  if (good) {
+    inp.className = 'ans-input ok'; fb.className = 'feedback correct';
+    fb.textContent = '✓ Correct!'; card.className = 'card correct';
+    if (!flags[i] && !attempted[i] && !peeked[i]) { flags[i]=true; correct++; updateScore(); }
+    attempted[i] = true;
+    document.getElementById('chk-'+i).disabled = true; inp.readOnly = true;
+  } else {
+    attempted[i] = true; inp.className = 'ans-input bad'; fb.className = 'feedback wrong';
+    fb.textContent = '✗ Not quite — try again or show the solution.';
+    card.className = peeked[i] ? 'card peeked' : 'card wrong';
+  }
+}
+
+function reveal(i) {
+  const p = ACTIVE[i], box = document.getElementById('ra-'+i),
+        lnk = document.getElementById('rl-'+i);
+  if (box.style.display === 'block') {
+    box.style.display = 'none'; lnk.textContent = 'Show solution';
+  } else {
+    if (!flags[i]) {
+      peeked[i] = true; document.getElementById('card-'+i).className = 'card peeked';
+      if (!attempted[i]) {
+        const fb = document.getElementById('fb-'+i);
+        fb.className = 'feedback peeked';
+        fb.textContent = '⚠ Solution revealed — no point awarded.';
+      }
+    }
+    box.innerHTML = '<strong>Solution:</strong><br>';
+    const span = document.createElement('span'); box.appendChild(span);
+    katex.render(p.step, span, { throwOnError: false, displayMode: true });
+    box.style.display = 'block'; lnk.textContent = 'Hide solution';
+  }
+}
+
+function updateScore() {
+  const n = ACTIVE.length;
+  document.getElementById('score').textContent = correct + ' / ' + n;
+  document.getElementById('prog').style.width = Math.round(correct / n * 100) + '%';
+}
+
+function resetAll() { init(); buildCards(); updateScore(); }
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script>
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left: '$$', right: '$$', display: true},
+      {left: '$',  right: '$',  display: false}
+    ]
+  });
+  init(); buildCards(); updateScore();
+</script>
+</body>
+</html>

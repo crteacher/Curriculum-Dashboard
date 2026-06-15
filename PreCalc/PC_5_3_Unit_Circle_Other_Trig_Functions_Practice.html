@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unit Circle: Other Trig Functions &mdash; Practice</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.7}
+  .container{max-width:820px;margin:0 auto;padding:2rem 1.5rem 4rem}
+  h1{font-size:26px;font-weight:700;margin-bottom:4px}
+  .subtitle{font-size:14px;color:#666;margin-bottom:2rem;font-family:sans-serif}
+  .section{margin-bottom:2.5rem}
+  .section-title{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;
+    color:#777;font-family:sans-serif;margin-bottom:1rem;border-bottom:1px solid #ddd;padding-bottom:6px}
+  .concept{background:#d9e8f5;border-left:4px solid #185fa5;border-radius:0 8px 8px 0;
+    padding:.85rem 1.1rem;font-size:15px;margin-bottom:1rem}
+  .concept-label{font-family:sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;
+    letter-spacing:.07em;color:#185fa5;display:block;margin-bottom:.35rem}
+  .score-bar{display:flex;align-items:center;gap:12px;margin-bottom:1.25rem;
+    font-family:sans-serif;font-size:14px;flex-wrap:wrap}
+  .score-display{font-weight:700;font-size:18px;min-width:60px}
+  .score-label{color:#777;font-size:13px}
+  .score-note{font-size:12px;color:#999;font-style:italic}
+  .progress{flex:1;min-width:80px;height:6px;background:#e5e1d8;border-radius:3px;overflow:hidden}
+  .progress-fill{height:100%;background:#185fa5;border-radius:3px;transition:width .4s}
+  .reset-btn{font-size:12px;background:none;border:1px solid #bbb;border-radius:5px;
+    padding:4px 10px;cursor:pointer;color:#666;font-family:sans-serif;white-space:nowrap}
+  .reset-btn:hover{background:#eee}
+  .problems{display:grid;grid-template-columns:repeat(auto-fill,minmax(370px,1fr));gap:14px}
+  .card{background:#fff;border:1.5px solid #ddd;border-radius:10px;overflow:hidden;transition:border-color .25s}
+  .card.correct{border-color:#3a7a3a}.card.wrong{border-color:#b03030}.card.peeked{border-color:#b8860b}
+  .card-body{padding:14px 16px}
+  .card-meta{font-family:sans-serif;font-size:12px;color:#888;margin-bottom:4px}
+  .card-expr{font-size:17px;margin-bottom:12px;line-height:2.2;overflow-x:auto}
+  .katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}
+  .input-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .ans-input{font-family:'Courier New',monospace;font-size:14px;border:1px solid #ccc;
+    border-radius:6px;padding:7px 10px;flex:1;min-width:120px;background:#fafaf8;
+    color:#1a1a1a;outline:none}
+  .ans-input:focus{border-color:#185fa5;background:#fff}
+  .ans-input.ok{border-color:#3a7a3a;background:#f0faf0}
+  .ans-input.bad{border-color:#b03030;background:#fdf0f0}
+  .check-btn{font-family:sans-serif;font-size:13px;background:#1a1a1a;color:#fff;
+    border:none;border-radius:6px;padding:7px 14px;cursor:pointer}
+  .check-btn:hover{background:#333}.check-btn:disabled{background:#aaa;cursor:default}
+  .hint{font-family:sans-serif;font-size:12px;color:#888;margin-top:7px}
+  .feedback{font-family:sans-serif;font-size:13px;margin-top:10px;padding:8px 12px;
+    border-radius:6px;display:none;line-height:1.5}
+  .feedback.correct{display:block;background:#eaf5ea;color:#1a5a1a}
+  .feedback.wrong{display:block;background:#faeaea;color:#7a1a1a}
+  .feedback.peeked{display:block;background:#fdf8e8;color:#7a5a00}
+  .reveal-link{font-family:sans-serif;font-size:12px;color:#999;cursor:pointer;
+    text-decoration:underline;margin-top:8px;display:inline-block}
+  .reveal-link:hover{color:#555}
+  .revealed-answer{display:none;margin-top:8px;font-family:sans-serif;font-size:13px;
+    color:#444;background:#f5f3ef;border-radius:6px;padding:8px 11px;line-height:1.8;overflow-x:auto}
+  code{font-family:'Courier New',monospace;background:#f0ede7;padding:1px 5px;border-radius:3px;font-size:12px}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Unit Circle: Other Trig Functions</h1>
+  <p class="subtitle">PreCalc &nbsp;&middot;&nbsp; &sect;5.3 &nbsp;&middot;&nbsp; Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026</p>
+
+  <div class="section">
+    <div class="section-title">Core Ideas</div>
+
+  <div class="concept">
+    <span class="concept-label">The other four trig functions</span>
+    $\tan\theta=\dfrac{\sin\theta}{\cos\theta}$ &nbsp; $\cot\theta=\dfrac{\cos\theta}{\sin\theta}$ &nbsp;
+    $\sec\theta=\dfrac{1}{\cos\theta}$ &nbsp; $\csc\theta=\dfrac{1}{\sin\theta}$
+    <br>Signs (ASTC): All positive in QI; Sin in QII; Tan in QIII; Cos in QIV.
+    <br>$\tan,\sec$ undefined when $\cos\theta=0$ (e.g. $\theta=\tfrac{\pi}{2},\tfrac{3\pi}{2}$).
+    <br>$\cot,\csc$ undefined when $\sin\theta=0$ (e.g. $\theta=0,\pi$).
+  </div>
+  <div class="concept">
+    <span class="concept-label">Pythagorean identities</span>
+    $\sin^2\theta+\cos^2\theta=1$
+    <br>$1+\tan^2\theta=\sec^2\theta$
+    <br>$1+\cot^2\theta=\csc^2\theta$
+  </div>
+
+  </div>
+
+  <div class="section">
+    <div class="section-title">Practice Problems</div>
+    <p style="font-family:sans-serif;font-size:13px;color:#666;margin-bottom:1rem;">
+      Integers and fractions as usual. Square roots: write √3 as <code>sqrt(3)</code> (e.g. <code>sqrt(3)/3</code>). Sign questions: <code>positive</code> or <code>negative</code>. Undefined values in radians: write π as <code>pi</code> (e.g. <code>3pi/2</code>).
+      Press <strong>Check</strong> or hit Enter.
+    </p>
+    <div class="score-bar">
+      <span class="score-label">Score:</span>
+      <span class="score-display" id="score">0 / 8</span>
+      <span class="score-note">first attempt only</span>
+      <div class="progress"><div class="progress-fill" id="prog" style="width:0%"></div></div>
+      <button class="reset-btn" onclick="resetAll()">New set &nbsp;&#8635;</button>
+    </div>
+    <div class="problems" id="problems"></div>
+  </div>
+</div>
+
+<script>
+// ── Crypto-quality RNG ────────────────────────────────────────────────────────
+function _rf() {
+  const b = new Uint32Array(1);
+  crypto.getRandomValues(b);
+  return b[0] / 4294967296;
+}
+function rInt(n)   { return Math.floor(_rf() * n); }
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = rInt(i + 1);
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+// Pick one element at random from an array  e.g. choose([1,4,9])
+function choose(arr) { return arr[rInt(arr.length)]; }
+
+// ── Display helpers ───────────────────────────────────────────────────────────
+// Leading coefficient: 1→'', -1→'-', else the number as a string
+function fc(a) { if (a===1) return ''; if (a===-1) return '-'; return String(a); }
+// Subsequent term with sign: addT(-2,'x')→' - 2x', addT(3,'')→' + 3', addT(0,'x')→''
+function addT(n, v) {
+  if (n===0) return '';
+  const s = n>0?'+':'-', abs = Math.abs(n);
+  if (abs===1 && v) return ' ' + s + ' ' + v;
+  return ' ' + s + ' ' + abs + (v||'');
+}
+
+// ── Problem generators (section-specific, injected below) ─────────────────────
+
+function gen1(){
+  // Evaluate tan at unit circle angle → integer, fraction, or sqrt
+  const cases = [
+    {aStr:'0',                 ans:['0'],                          ansD:'0'},
+    {aStr:'\\dfrac{\\pi}{4}', ans:['1'],                          ansD:'1'},
+    {aStr:'\\dfrac{\\pi}{3}', ans:['sqrt(3)','sqrt3'],            ansD:'\\sqrt{3}'},
+    {aStr:'\\dfrac{\\pi}{6}', ans:['sqrt(3)/3','1/sqrt(3)'],      ansD:'\\dfrac{\\sqrt{3}}{3}'},
+    {aStr:'\\pi',             ans:['0'],                          ansD:'0'},
+    {aStr:'\\dfrac{3\\pi}{4}',ans:['-1'],                         ansD:'-1'},
+    {aStr:'\\dfrac{2\\pi}{3}',ans:['-sqrt(3)','-sqrt3'],           ansD:'-\\sqrt{3}'},
+    {aStr:'\\dfrac{5\\pi}{6}',ans:['-sqrt(3)/3','-1/sqrt(3)'],    ansD:'-\\dfrac{\\sqrt{3}}{3}'},
+    {aStr:'\\dfrac{5\\pi}{3}',ans:['-sqrt(3)','-sqrt3'],           ansD:'-\\sqrt{3}'},
+    {aStr:'\\dfrac{7\\pi}{4}',ans:['-1'],                         ansD:'-1'},
+    {aStr:'\\dfrac{5\\pi}{4}',ans:['1'],                          ansD:'1'},
+    {aStr:'\\dfrac{7\\pi}{6}',ans:['sqrt(3)/3','1/sqrt(3)'],      ansD:'\\dfrac{\\sqrt{3}}{3}'},
+  ];
+  const {aStr, ans, ansD} = choose(cases);
+  return {
+    latex: `\\tan\\!\\left(${aStr}\\right)=`,
+    answer: ans,
+    hint: 'Tangent equals sin divided by cos — what are sin and cos at this angle?',
+    step: `\\tan\\!\\left(${aStr}\\right)=${ansD}`
+  };
+}
+
+function gen2(){
+  // Evaluate sec or csc at clean unit circle angles → integer or fraction
+  const cases = [
+    {fn:'sec', aStr:'\\dfrac{\\pi}{3}',  ans:['2'],             ansD:'2'},
+    {fn:'sec', aStr:'\\dfrac{2\\pi}{3}', ans:['-2'],            ansD:'-2'},
+    {fn:'sec', aStr:'0',                 ans:['1'],             ansD:'1'},
+    {fn:'sec', aStr:'\\pi',             ans:['-1'],             ansD:'-1'},
+    {fn:'csc', aStr:'\\dfrac{\\pi}{2}', ans:['1'],              ansD:'1'},
+    {fn:'csc', aStr:'\\dfrac{3\\pi}{2}',ans:['-1'],             ansD:'-1'},
+    {fn:'csc', aStr:'\\dfrac{\\pi}{6}', ans:['2'],              ansD:'2'},
+    {fn:'csc', aStr:'\\dfrac{5\\pi}{6}',ans:['2'],              ansD:'2'},
+    {fn:'csc', aStr:'\\dfrac{7\\pi}{6}',ans:['-2'],             ansD:'-2'},
+    {fn:'csc', aStr:'\\dfrac{11\\pi}{6}',ans:['-2'],            ansD:'-2'},
+    {fn:'sec', aStr:'\\dfrac{4\\pi}{3}',ans:['-2'],             ansD:'-2'},
+    {fn:'sec', aStr:'\\dfrac{5\\pi}{3}',ans:['2'],              ansD:'2'},
+  ];
+  const {fn, aStr, ans, ansD} = choose(cases);
+  const recip = fn==='sec' ? 'cos' : 'sin';
+  return {
+    latex: `\\${fn}\\!\\left(${aStr}\\right)=`,
+    answer: ans,
+    hint: 'Sec and csc are reciprocals of cos and sin respectively — what is the base function at this angle?',
+    step: `\\${fn}=\\dfrac{1}{\\${recip}}\\Rightarrow\\${fn}\\!\\left(${aStr}\\right)=${ansD}`
+  };
+}
+
+function gen3(){
+  // Pythagorean identity: 1+tan²θ=sec²θ; given tan, find sec (→ integer)
+  const cases = [
+    {tanStr:'1',                  tanSq:'1', secSq:'2', sec:'sqrt(2)',     secD:'\\sqrt{2}',     quad:'I'},
+    {tanStr:'\\sqrt{3}',          tanSq:'3', secSq:'4', sec:'2',           secD:'2',             quad:'I'},
+    {tanStr:'\\dfrac{1}{2}',      tanSq:'1/4',secSq:'5/4',sec:'sqrt(5)/2',secD:'\\dfrac{\\sqrt{5}}{2}',quad:'I'},
+    {tanStr:'\\dfrac{3}{4}',      tanSq:'9/16',secSq:'25/16',sec:'5/4',   secD:'\\dfrac{5}{4}', quad:'I'},
+  ];
+  const {tanStr, secSq, sec, secD, quad} = choose(cases);
+  return {
+    latex: `\\tan\\theta=${tanStr},\\;\\theta\\text{ in Q${quad}}.\\quad\\sec\\theta=`,
+    answer: [sec],
+    hint: 'Which Pythagorean identity connects tan²θ and sec²θ, and what sign does sec have in Q' + quad + '?',
+    step: `\\sec^2\\theta=1+\\tan^2\\theta=1+(${tanStr})^2=${secSq}+1\\Rightarrow\\sec\\theta=${secD}`
+  };
+}
+
+function gen4(){
+  // Given sin and cos in a quadrant, find tan = sin/cos → fraction or integer
+  const cases = [
+    {sinStr:'\\dfrac{3}{5}',  cosStr:'\\dfrac{4}{5}',  quad:'I',   ans:['3/4'],  ansD:'\\dfrac{3}{4}'},
+    {sinStr:'\\dfrac{3}{5}',  cosStr:'-\\dfrac{4}{5}', quad:'II',  ans:['-3/4'], ansD:'-\\dfrac{3}{4}'},
+    {sinStr:'-\\dfrac{3}{5}', cosStr:'-\\dfrac{4}{5}', quad:'III', ans:['3/4'],  ansD:'\\dfrac{3}{4}'},
+    {sinStr:'-\\dfrac{3}{5}', cosStr:'\\dfrac{4}{5}',  quad:'IV',  ans:['-3/4'], ansD:'-\\dfrac{3}{4}'},
+    {sinStr:'\\dfrac{5}{13}', cosStr:'\\dfrac{12}{13}',quad:'I',   ans:['5/12'], ansD:'\\dfrac{5}{12}'},
+    {sinStr:'-\\dfrac{5}{13}',cosStr:'\\dfrac{12}{13}',quad:'IV',  ans:['-5/12'],ansD:'-\\dfrac{5}{12}'},
+    {sinStr:'\\dfrac{8}{17}', cosStr:'\\dfrac{15}{17}',quad:'I',   ans:['8/15'], ansD:'\\dfrac{8}{15}'},
+    {sinStr:'-\\dfrac{8}{17}',cosStr:'-\\dfrac{15}{17}',quad:'III',ans:['8/15'], ansD:'\\dfrac{8}{15}'},
+  ];
+  const {sinStr, cosStr, quad, ans, ansD} = choose(cases);
+  return {
+    latex: `\\sin\\theta=${sinStr},\\;\\cos\\theta=${cosStr}.\\quad\\tan\\theta=`,
+    answer: ans,
+    hint: 'Tangent is defined as a ratio of which two trig functions?',
+    step: `\\tan\\theta=\\dfrac{\\sin\\theta}{\\cos\\theta}=\\dfrac{${sinStr}}{${cosStr}}=${ansD}`
+  };
+}
+
+function gen5(){
+  // Sign of tan/cot/sec/csc in quadrant → "positive" or "negative"
+  const cases = [
+    {fn:'tan', quad:'II',  sign:'negative'},
+    {fn:'tan', quad:'III', sign:'positive'},
+    {fn:'tan', quad:'IV',  sign:'negative'},
+    {fn:'cot', quad:'II',  sign:'negative'},
+    {fn:'cot', quad:'III', sign:'positive'},
+    {fn:'sec', quad:'II',  sign:'negative'},
+    {fn:'sec', quad:'III', sign:'negative'},
+    {fn:'sec', quad:'IV',  sign:'positive'},
+    {fn:'csc', quad:'II',  sign:'positive'},
+    {fn:'csc', quad:'III', sign:'negative'},
+    {fn:'csc', quad:'IV',  sign:'negative'},
+    {fn:'tan', quad:'I',   sign:'positive'},
+  ];
+  const {fn, quad, sign} = choose(cases);
+  return {
+    latex: `\\text{Sign of }\\${fn}\\theta\\text{ in Quadrant }${quad}=`,
+    answer: [sign],
+    hint: 'Use ASTC to identify which functions are positive, and recall that tan=sin/cos — what signs are sin and cos in Q' + quad + '?',
+    step: `\\text{ASTC: Q${quad} → }\\${fn}\\text{ is }${sign}`
+  };
+}
+
+function gen6(){
+  // Where is tan (or csc) undefined → "pi/2" or "pi" etc.
+  const cases = [
+    {question:'\\tan\\theta\\text{ undefined nearest to }\\theta=0',       ans:['pi/2'], ansD:'\\dfrac{\\pi}{2}', reason:'\\cos(\\pi/2)=0'},
+    {question:'\\tan\\theta\\text{ undefined nearest to }\\theta=\\pi',    ans:['pi/2','3pi/2'], ansD:'\\dfrac{3\\pi}{2}', reason:'\\cos(3\\pi/2)=0'},
+    {question:'\\csc\\theta\\text{ undefined at }\\theta=',                ans:['pi','2pi','0'], ansD:'\\pi\\text{ or }0', reason:'\\sin\\pi=0'},
+    {question:'\\sec\\theta\\text{ undefined nearest to }\\theta=\\pi/4',  ans:['pi/2'], ansD:'\\dfrac{\\pi}{2}', reason:'\\cos(\\pi/2)=0'},
+  ];
+  // Simplify to direct questions
+  const simpleCases = [
+    {latex:'\\tan\\theta\\text{ is undefined when }\\cos\\theta=0.\\;\\text{Smallest positive }\\theta=',
+     ans:['pi/2'], step:'\\cos(\\pi/2)=0\\Rightarrow\\tan\\text{ undefined at }\\pi/2'},
+    {latex:'\\csc\\theta\\text{ is undefined when }\\sin\\theta=0.\\;\\text{Smallest positive }\\theta>0\\text{ is }\\theta=',
+     ans:['pi'],   step:'\\sin(\\pi)=0\\Rightarrow\\csc\\text{ undefined at }\\pi'},
+    {latex:'\\sec\\theta\\text{ is undefined when }\\cos\\theta=0.\\;\\text{Second smallest positive }\\theta=',
+     ans:['3pi/2'], step:'\\cos(3\\pi/2)=0\\Rightarrow\\sec\\text{ undefined at }3\\pi/2'},
+    {latex:'\\cot\\theta\\text{ is undefined when }\\sin\\theta=0.\\;\\text{Smallest positive }\\theta>0=',
+     ans:['pi'],   step:'\\sin(\\pi)=0\\Rightarrow\\cot\\text{ undefined at }\\pi'},
+  ];
+  const {latex, ans, step} = choose(simpleCases);
+  return {
+    latex,
+    answer: ans,
+    hint: 'A trig function is undefined when its denominator equals zero — what is the denominator for this function?',
+    step
+  };
+}
+
+function gen7(){
+  // Evaluate cot at unit circle angle → integer or fraction
+  const cases = [
+    {aStr:'\\dfrac{\\pi}{4}', ans:['1'],                       ansD:'1'},
+    {aStr:'\\dfrac{\\pi}{3}', ans:['sqrt(3)/3','1/sqrt(3)'],   ansD:'\\dfrac{\\sqrt{3}}{3}'},
+    {aStr:'\\dfrac{\\pi}{6}', ans:['sqrt(3)','sqrt3'],          ansD:'\\sqrt{3}'},
+    {aStr:'\\dfrac{3\\pi}{4}',ans:['-1'],                       ansD:'-1'},
+    {aStr:'\\dfrac{2\\pi}{3}',ans:['-sqrt(3)/3','-1/sqrt(3)'], ansD:'-\\dfrac{\\sqrt{3}}{3}'},
+    {aStr:'\\dfrac{5\\pi}{6}',ans:['-sqrt(3)','-sqrt3'],         ansD:'-\\sqrt{3}'},
+    {aStr:'\\dfrac{5\\pi}{4}',ans:['1'],                        ansD:'1'},
+    {aStr:'\\dfrac{4\\pi}{3}',ans:['sqrt(3)/3','1/sqrt(3)'],   ansD:'\\dfrac{\\sqrt{3}}{3}'},
+    {aStr:'\\dfrac{7\\pi}{4}',ans:['-1'],                       ansD:'-1'},
+  ];
+  const {aStr, ans, ansD} = choose(cases);
+  return {
+    latex: `\\cot\\!\\left(${aStr}\\right)=`,
+    answer: ans,
+    hint: 'Cotangent is the reciprocal of tangent — what is tan at this angle?',
+    step: `\\cot=\\dfrac{\\cos}{\\sin}\\Rightarrow\\cot\\!\\left(${aStr}\\right)=${ansD}`
+  };
+}
+
+function gen8(){
+  // Pythagorean identity: given csc, find cot via 1+cot²=csc²
+  const cases = [
+    {cscStr:'2',           cscSq:'4', cotSq:'3', cot:'sqrt(3)', cotD:'\\sqrt{3}',           quad:'I'},
+    {cscStr:'-2',          cscSq:'4', cotSq:'3', cot:'-sqrt(3)',cotD:'-\\sqrt{3}',           quad:'III'},
+    {cscStr:'\\dfrac{5}{4}', cscSq:'25/16', cotSq:'9/16', cot:'3/4', cotD:'\\dfrac{3}{4}', quad:'I'},
+    {cscStr:'\\dfrac{13}{5}',cscSq:'169/25',cotSq:'144/25',cot:'12/5',cotD:'\\dfrac{12}{5}',quad:'I'},
+  ];
+  const {cscStr, cscSq, cotSq, cot, cotD, quad} = choose(cases);
+  return {
+    latex: `\\csc\\theta=${cscStr},\\;\\theta\\text{ in Q${quad}}.\\quad\\cot\\theta=`,
+    answer: [cot],
+    hint: 'Which Pythagorean identity relates cot²θ and csc²θ?',
+    step: `1+\\cot^2\\theta=\\csc^2\\theta=${cscSq}\\Rightarrow\\cot^2\\theta=${cotSq}\\Rightarrow\\cot\\theta=${cotD}`
+  };
+}
+
+const GENERATORS = [gen1, gen2, gen3, gen4, gen5, gen6, gen7, gen8];
+
+
+// ── State ─────────────────────────────────────────────────────────────────────
+let ACTIVE, correct, flags, attempted, peeked;
+
+function norm(s) {
+  return s.trim().toLowerCase()
+    .replace(/\s+/g, '')
+    .replace(/[−–]/g, '-')
+    .replace(/∞/g, 'inf')
+    .replace(/∪/g, 'u');
+}
+function ok(user, acc) { return acc.some(a => norm(user) === norm(a)); }
+
+function init() {
+  ACTIVE    = shuffle(GENERATORS.map(gen => gen()));
+  correct   = 0;
+  flags     = Array(GENERATORS.length).fill(false);
+  attempted = Array(GENERATORS.length).fill(false);
+  peeked    = Array(GENERATORS.length).fill(false);
+}
+
+function buildCards() {
+  const wrap = document.getElementById('problems');
+  wrap.innerHTML = '';
+  ACTIVE.forEach((p, i) => {
+    const div = document.createElement('div');
+    div.className = 'card'; div.id = 'card-' + i;
+    div.innerHTML =
+      `<div class="card-body">
+        <div class="card-meta">Problem ${i + 1}</div>
+        <div class="card-expr" id="expr-${i}"></div>
+        <div class="input-row">
+          <input class="ans-input" id="ai-${i}" placeholder="answer" />
+          <button class="check-btn" id="chk-${i}" onclick="check(${i})">Check</button>
+        </div>
+        <div class="hint">${p.hint}</div>
+        <div class="feedback" id="fb-${i}"></div>
+        <span class="reveal-link" id="rl-${i}" onclick="reveal(${i})">Show solution</span>
+        <div class="revealed-answer" id="ra-${i}"></div>
+      </div>`;
+    wrap.appendChild(div);
+    document.getElementById('ai-' + i)
+      .addEventListener('keydown', e => { if (e.key === 'Enter') check(i); });
+    if (p.svg) {
+      document.getElementById('expr-' + i).innerHTML = p.svg;
+    } else {
+      katex.render(p.latex, document.getElementById('expr-' + i),
+        { throwOnError: false, displayMode: true });
+    }
+  });
+}
+
+function check(i) {
+  const p = ACTIVE[i], inp = document.getElementById('ai-'+i),
+        fb = document.getElementById('fb-'+i), card = document.getElementById('card-'+i),
+        good = ok(inp.value, p.answer);
+  inp.className = 'ans-input';
+  if (good) {
+    inp.className = 'ans-input ok'; fb.className = 'feedback correct';
+    fb.textContent = '✓ Correct!'; card.className = 'card correct';
+    if (!flags[i] && !attempted[i] && !peeked[i]) { flags[i]=true; correct++; updateScore(); }
+    attempted[i] = true;
+    document.getElementById('chk-'+i).disabled = true; inp.readOnly = true;
+  } else {
+    attempted[i] = true; inp.className = 'ans-input bad'; fb.className = 'feedback wrong';
+    fb.textContent = '✗ Not quite — try again or show the solution.';
+    card.className = peeked[i] ? 'card peeked' : 'card wrong';
+  }
+}
+
+function reveal(i) {
+  const p = ACTIVE[i], box = document.getElementById('ra-'+i),
+        lnk = document.getElementById('rl-'+i);
+  if (box.style.display === 'block') {
+    box.style.display = 'none'; lnk.textContent = 'Show solution';
+  } else {
+    if (!flags[i]) {
+      peeked[i] = true; document.getElementById('card-'+i).className = 'card peeked';
+      if (!attempted[i]) {
+        const fb = document.getElementById('fb-'+i);
+        fb.className = 'feedback peeked';
+        fb.textContent = '⚠ Solution revealed — no point awarded.';
+      }
+    }
+    box.innerHTML = '<strong>Solution:</strong><br>';
+    const span = document.createElement('span'); box.appendChild(span);
+    katex.render(p.step, span, { throwOnError: false, displayMode: true });
+    box.style.display = 'block'; lnk.textContent = 'Hide solution';
+  }
+}
+
+function updateScore() {
+  const n = ACTIVE.length;
+  document.getElementById('score').textContent = correct + ' / ' + n;
+  document.getElementById('prog').style.width = Math.round(correct / n * 100) + '%';
+}
+
+function resetAll() { init(); buildCards(); updateScore(); }
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script>
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left: '$$', right: '$$', display: true},
+      {left: '$',  right: '$',  display: false}
+    ]
+  });
+  init(); buildCards(); updateScore();
+</script>
+</body>
+</html>
