@@ -56,10 +56,9 @@
   .reveal-link:hover{color:#555}
   .revealed-answer{display:none;margin-top:8px;font-family:sans-serif;font-size:13px;
     color:#444;background:#f5f3ef;border-radius:6px;padding:8px 11px;line-height:1.8;overflow-x:auto}
+  .interval-hint{font-family:sans-serif;font-size:11px;color:#185fa5;margin-top:4px;
+    padding:2px 7px;background:#eef3f9;border-radius:4px;display:inline-block}
   code{font-family:'Courier New',monospace;background:#f0ede7;padding:1px 5px;border-radius:3px;font-size:12px}
-
-
-.hint{display:none!important}
 </style>
 </head>
 <body>
@@ -94,7 +93,7 @@
   <div class="section">
     <div class="section-title">Practice Problems</div>
     <p style="font-family:sans-serif;font-size:13px;color:#666;margin-bottom:1rem;">
-      Enter the boundary value as an integer. For yes/no problems, enter <code>yes</code> or <code>no</code>.
+      Enter full interval notation: <code>(-inf,4)</code>, <code>[3,inf)</code>, <code>(2,6)</code>. For union: <code>(-inf,2]u(7,inf)</code>. For yes/no: <code>yes</code> or <code>no</code>.
       Press <strong>Check</strong> or hit Enter.
     </p>
     <div class="score-bar">
@@ -140,7 +139,7 @@ function addT(n, v) {
 
 // ── Problem generators (section-specific, injected below) ─────────────────────
 
-// gen1: AND (separate) — ax < b AND cx > d  →  enter LEFT boundary (d/c)
+// gen1: AND (separate, strict) — ax < b AND cx > d  →  full interval (kL,kR)
 function gen1() {
   const a  = rInt(3) + 2;        // a in {2,3,4}
   const kR = rInt(3) + 3;        // right boundary in {3..5}
@@ -150,29 +149,31 @@ function gen1() {
   const d  = c * kL;             // cx > d  →  x > kL
   return {
     latex:  `${a}x < ${b}\\text{ AND }${c}x > ${d}`,
-    answer: [String(kL)],
-    hint:   `Solve each inequality separately. What is the left (lower) boundary of the overlap?`,
-    step:   `x<${kR}\\text{ AND }x>${kL}\\Rightarrow(${kL},\\,${kR})\\quad\\text{left boundary: }${kL}`
+    answer: [`(${kL},${kR})`],
+    interval: true,
+    hint:   `In an AND compound inequality, is the solution the intersection or the union of the two separate intervals?`,
+    step:   `x<${kR}\\text{ AND }x>${kL}\\Rightarrow(${kL},\\,${kR})`
   };
 }
 
-// gen2: AND (separate) — enter RIGHT boundary
+// gen2: AND (separate, non-strict) — ax ≤ b AND cx ≥ d  →  full interval [kL,kR]
 function gen2() {
   const a  = rInt(3) + 2;
   const kR = rInt(3) + 3;
   const kL = rInt(kR - 1) + 1;
-  const b  = a * kR;
+  const b  = a * kR;             // ax ≤ b  →  x ≤ kR
   const c  = rInt(3) + 2;
-  const d  = c * kL;
+  const d  = c * kL;             // cx ≥ d  →  x ≥ kL
   return {
-    latex:  `${a}x < ${b}\\text{ AND }${c}x > ${d}`,
-    answer: [String(kR)],
-    hint:   `Solve each inequality separately. What is the right (upper) boundary of the overlap?`,
-    step:   `x<${kR}\\text{ AND }x>${kL}\\Rightarrow(${kL},\\,${kR})\\quad\\text{right boundary: }${kR}`
+    latex:  `${a}x \\leq ${b}\\text{ AND }${c}x \\geq ${d}`,
+    answer: [`[${kL},${kR}]`],
+    interval: true,
+    hint:   `When both inequalities are non-strict (≤ and ≥), are the boundary points included or excluded?`,
+    step:   `x\\leq${kR}\\text{ AND }x\\geq${kL}\\Rightarrow[${kL},\\,${kR}]`
   };
 }
 
-// gen3: Three-part AND — lo < ax + b < hi  →  enter right boundary
+// gen3: Three-part AND (strict) — lo < ax + b < hi  →  full interval (kL,kR)
 function gen3() {
   const a  = rInt(3) + 2;        // a in {2,3,4}
   const b  = rInt(4) + 1;        // shift in {1..4}
@@ -182,30 +183,32 @@ function gen3() {
   const hi = a * kR + b;
   return {
     latex:  `${lo} < ${a}x + ${b} < ${hi}`,
-    answer: [String(kR)],
-    hint:   `Subtract ${b} from all three parts, then divide all three by ${a}. What is the right boundary?`,
-    step:   `${lo-b}<${a}x<${hi-b}\\Rightarrow ${kL}<x<${kR}\\quad\\text{right boundary: }${kR}`
+    answer: [`(${kL},${kR})`],
+    interval: true,
+    hint:   `In a three-part inequality, what operation on all three parts releases the middle term?`,
+    step:   `${lo-b}<${a}x<${hi-b}\\Rightarrow ${kL}<x<${kR}\\Rightarrow(${kL},\\,${kR})`
   };
 }
 
-// gen4: Three-part AND with flip — lo < -ax + b < hi  →  enter left boundary
-// Solution: (b-hi)/a < x < (b-lo)/a  — flip both signs when dividing by -a
+// gen4: Three-part AND with flip — lo < -ax + b < hi  →  full interval (kL,kR)
+// Solution: kL < x < kR — flip both signs when dividing by -a
 function gen4() {
   const a  = rInt(2) + 2;        // a in {2,3}
   const kL = rInt(2) + 1;        // left boundary in {1,2}
   const kR = kL + rInt(2) + 2;  // right boundary
   const b  = a * kR + rInt(3) + 1;  // b > a*kR so lo, hi are positive
-  const lo = b - a * kR;         // lo = b - a*kR (left when divided)
+  const lo = b - a * kR;         // lo = b - a*kR
   const hi = b - a * kL;         // hi = b - a*kL
   return {
     latex:  `${lo} < -${a}x + ${b} < ${hi}`,
-    answer: [String(kL)],
-    hint:   `Subtract ${b} from all three parts. When you divide by -${a}, both inequality signs flip. What is the left boundary?`,
-    step:   `${lo-b}<-${a}x<${hi-b}\\Rightarrow ${kR}>x>${kL}\\Rightarrow ${kL}<x<${kR}\\quad\\text{left boundary: }${kL}`
+    answer: [`(${kL},${kR})`],
+    interval: true,
+    hint:   `When dividing all three parts by a negative number, what happens to both inequality signs?`,
+    step:   `${lo-b}<-${a}x<${hi-b}\\Rightarrow ${kR}>x>${kL}\\Rightarrow(${kL},\\,${kR})`
   };
 }
 
-// gen5: OR — x < kL OR x > kR  →  enter left boundary kL
+// gen5: OR (strict) — x < kL OR x > kR  →  full union (-inf,kL)u(kR,inf)
 function gen5() {
   const a  = rInt(3) + 2;
   const b  = rInt(4) + 1;
@@ -215,13 +218,14 @@ function gen5() {
   const cR = a * kR + b;         // ax + b > cR  →  x > kR
   return {
     latex:  `${a}x + ${b} < ${cL}\\text{ OR }${a}x + ${b} > ${cR}`,
-    answer: [String(kL)],
-    hint:   `Solve each inequality separately. The union has a gap in the middle. What is the left cutoff?`,
-    step:   `x<${kL}\\text{ OR }x>${kR}\\Rightarrow(-\\infty,${kL})\\cup(${kR},\\infty)\\quad\\text{left boundary: }${kL}`
+    answer: [`(-inf,${kL})u(${kR},inf)`],
+    interval: true,
+    hint:   `An OR inequality joins two separate pieces — does this solution have a gap between them?`,
+    step:   `x<${kL}\\text{ OR }x>${kR}\\Rightarrow(-\\infty,${kL})\\cup(${kR},\\infty)`
   };
 }
 
-// gen6: OR — enter right boundary kR
+// gen6: OR (non-strict) — x ≤ kL OR x ≥ kR  →  full union (-inf,kL]u[kR,inf)
 function gen6() {
   const a  = rInt(3) + 2;
   const b  = rInt(4) + 1;
@@ -231,9 +235,10 @@ function gen6() {
   const cR = a * kR + b;
   return {
     latex:  `${a}x + ${b} \\leq ${cL}\\text{ OR }${a}x + ${b} \\geq ${cR}`,
-    answer: [String(kR)],
-    hint:   `Solve each inequality separately. The union has a gap in the middle. What is the right cutoff?`,
-    step:   `x\\leq${kL}\\text{ OR }x\\geq${kR}\\Rightarrow(-\\infty,${kL}]\\cup[${kR},\\infty)\\quad\\text{right boundary: }${kR}`
+    answer: [`(-inf,${kL}]u[${kR},inf)`],
+    interval: true,
+    hint:   `When the inequalities are ≤ and ≥, are the boundary points part of the solution?`,
+    step:   `x\\leq${kL}\\text{ OR }x\\geq${kR}\\Rightarrow(-\\infty,${kL}]\\cup[${kR},\\infty)`
   };
 }
 
@@ -260,7 +265,7 @@ function gen7() {
   return {
     latex:  `\\text{Is }x=${val}\\text{ in the solution of }${lo}<${a}x+${b}<${hi}\\text{?}`,
     answer: [ans],
-    hint:   `Substitute x = ${val} into the middle expression. Is the result strictly between ${lo} and ${hi}?`,
+    hint:   `In a strict three-part inequality, what condition must the middle expression satisfy for x to be in the solution?`,
     step:   `${a}(${val})+${b}=${midVal}\\quad${lo}<${midVal}<${hi}\\text{ is }${inSol ? '\\text{TRUE}' : '\\text{FALSE}'}\\quad\\text{→ ${ans}}`
   };
 }
@@ -285,7 +290,7 @@ function gen8() {
   return {
     latex:  `\\text{Is }x=${val}\\text{ in the solution of }${a}x+${b}<${cL}\\text{ OR }${a}x+${b}>${cR}\\text{?}`,
     answer: [ans],
-    hint:   `For OR, x is in the solution if it satisfies EITHER condition. Check x = ${val} in each one.`,
+    hint:   `For an OR inequality, does a value inside the gap between the two cutoffs belong to the solution?`,
     step:   `${a}(${val})+${b}=${testExpr}:\\quad${testExpr}<${cL}\\text{ is }${testExpr<cL}\\text{; }${testExpr}>${cR}\\text{ is }${testExpr>cR}\\quad\\text{→ ${ans}}`
   };
 }
@@ -297,7 +302,13 @@ const GENERATORS = [gen1, gen2, gen3, gen4, gen5, gen6, gen7, gen8];
 let ACTIVE, correct, flags, attempted, peeked;
 
 function norm(s) {
-  return s.trim().toLowerCase().replace(/\s+/g, '').replace(/[−–]/g, '-');
+  return s.trim().toLowerCase()
+    .replace(/\s+/g, '')
+    .replace(/[−–]/g, '-')
+    .replace(/∞/g, 'inf')
+    .replace(/∪/g, 'u')
+    .replace(/infinity/g, 'inf')
+    .replace(/union/g, 'u');
 }
 function ok(user, acc) { return acc.some(a => norm(user) === norm(a)); }
 
@@ -320,10 +331,11 @@ function buildCards() {
         <div class="card-meta">Problem ${i + 1}</div>
         <div class="card-expr" id="expr-${i}"></div>
         <div class="input-row">
-          <input class="ans-input" id="ai-${i}" placeholder="answer" />
+          <input class="ans-input" id="ai-${i}" placeholder="${p.interval ? '[a,b)' : 'answer'}" />
           <button class="check-btn" id="chk-${i}" onclick="check(${i})">Check</button>
         </div>
         <div class="hint">${p.hint}</div>
+        ${p.interval ? '<div class="interval-hint">Use <code>inf</code> and <code>u</code> for union &mdash; e.g. <code>[2,inf)</code> or <code>(-inf,0)u(0,inf)</code></div>' : ''}
         <div class="feedback" id="fb-${i}"></div>
         <span class="reveal-link" id="rl-${i}" onclick="reveal(${i})">Show solution</span>
         <div class="revealed-answer" id="ra-${i}"></div>

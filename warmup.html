@@ -349,7 +349,12 @@ Promise.all([
   _sections  = sections;
   _units     = sections.units || {};
   _today     = new Date().toISOString().slice(0,10);
-  showPicker();
+  const _urlCourse = new URLSearchParams(window.location.search).get('course');
+  if (_urlCourse && ['ca','calc','pc'].includes(_urlCourse)) {
+    showGrid(_urlCourse);
+  } else {
+    showPicker();
+  }
 }).catch(() => {
   document.getElementById('viewPicker').innerHTML =
     '<div class="state-msg">Could not load data.</div>';

@@ -56,10 +56,9 @@
   .reveal-link:hover{color:#555}
   .revealed-answer{display:none;margin-top:8px;font-family:sans-serif;font-size:13px;
     color:#444;background:#f5f3ef;border-radius:6px;padding:8px 11px;line-height:1.8;overflow-x:auto}
+  .interval-hint{font-family:sans-serif;font-size:11px;color:#185fa5;margin-top:4px;
+    padding:2px 7px;background:#eef3f9;border-radius:4px;display:inline-block}
   code{font-family:'Courier New',monospace;background:#f0ede7;padding:1px 5px;border-radius:3px;font-size:12px}
-
-
-.hint{display:none!important}
 </style>
 </head>
 <body>
@@ -145,6 +144,7 @@ function gen1() {
   return {
     latex:  `${a}x + ${b} ${sym} ${c}`,
     answer: [`(-inf,${k}${rb}`],
+    interval: true,
     hint:   'Which bracket type pairs with a strict inequality at the boundary?',
     step:   `${a}x${sym}${c-b},\\quad x${sym}${k}\\quad\\to\\quad(-\\infty,${k}${rb}`
   };
@@ -161,6 +161,7 @@ function gen2() {
   return {
     latex:  `${a}x + ${b} ${sym} ${c}`,
     answer: [`${lb}${k},inf)`],
+    interval: true,
     hint:   'When x must exceed a boundary, which direction does the interval extend toward infinity?',
     step:   `${a}x${sym}${c-b},\\quad x${sym}${k}\\quad\\to\\quad${lb}${k},\\infty)`
   };
@@ -178,6 +179,7 @@ function gen3() {
   return {
     latex:  `${a}x + ${b} ${sym} ${c}x + ${d}`,
     answer: [`(-inf,${k}${rb}`],
+    interval: true,
     hint:   'After combining x-terms on one side, which boundary value results?',
     step:   `${a-c}x${sym}${d-b},\\quad x${sym}${k}\\quad\\to\\quad(-\\infty,${k}${rb}`
   };
@@ -195,6 +197,7 @@ function gen4() {
   return {
     latex:  `-${a}x + ${b} ${sym} ${c}`,
     answer: [`(-inf,${k}${rb}`],
+    interval: true,
     hint:   'What rule governs the direction of an inequality when dividing by a negative?',
     step:   `-${a}x${sym}${c-b},\\quad x${flip}${k}\\quad\\text{(sign flipped)}\\quad\\to\\quad(-\\infty,${k}${rb}`
   };
@@ -211,6 +214,7 @@ function gen5() {
   return {
     latex:  `${lo} < ${b}x + ${c} < ${hi}`,
     answer: [`(${kL},${kR})`],
+    interval: true,
     hint:   'After operating on all three parts equally, what are the two boundary values?',
     step:   `${lo-c}<${b}x<${hi-c},\\quad ${kL}<x<${kR}\\quad\\to\\quad(${kL},${kR})`
   };
@@ -227,6 +231,7 @@ function gen6() {
   return {
     latex:  `${lo} \\leq ${b}x + ${c} \\leq ${hi}`,
     answer: [`[${kL},${kR}]`],
+    interval: true,
     hint:   'When both inequality signs include equality, which bracket type appears at both ends?',
     step:   `${lo-c}\\leq${b}x\\leq${hi-c},\\quad ${kL}\\leq x\\leq${kR}\\quad\\to\\quad[${kL},${kR}]`
   };
@@ -280,7 +285,9 @@ function norm(s) {
     .replace(/\s+/g, '')
     .replace(/[−–]/g, '-')
     .replace(/∞/g, 'inf')
-    .replace(/∪/g, 'u');
+    .replace(/∪/g, 'u')
+    .replace(/infinity/g, 'inf')
+    .replace(/union/g, 'u');
 }
 function ok(user, acc) { return acc.some(a => norm(user) === norm(a)); }
 
@@ -303,10 +310,11 @@ function buildCards() {
         <div class="card-meta">Problem ${i + 1}</div>
         <div class="card-expr" id="expr-${i}"></div>
         <div class="input-row">
-          <input class="ans-input" id="ai-${i}" placeholder="answer" />
+          <input class="ans-input" id="ai-${i}" placeholder="${p.interval ? '[a,b)' : 'answer'}" />
           <button class="check-btn" id="chk-${i}" onclick="check(${i})">Check</button>
         </div>
         <div class="hint">${p.hint}</div>
+        ${p.interval ? '<div class="interval-hint">Use <code>inf</code> and <code>u</code> for union &mdash; e.g. <code>[2,inf)</code> or <code>(-inf,0)u(0,inf)</code></div>' : ''}
         <div class="feedback" id="fb-${i}"></div>
         <span class="reveal-link" id="rl-${i}" onclick="reveal(${i})">Show solution</span>
         <div class="revealed-answer" id="ra-${i}"></div>
