@@ -8,15 +8,15 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
   <style>
     :root {
-      --bg: #f9f7f3;
+      --bg: #f4f4f4;
       --card: #ffffff;
-      --text: #1a1614;
-      --muted: #7a7570;
-      --border: #e4e0d8;
-      --ca:    #1a5c2e;
-      --calc:  #185fa5;
+      --text: #111111;
+      --muted: #555555;
+      --border: #e0e0e0;
+      --ca:    #2e5339;
+      --calc:  #1e3a5c;
       --pc:    #7a3b8a;
-      --green: #1a5c2e;
+      --green: #2e5339;
       --red:   #b91c1c;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -57,8 +57,8 @@
       flex-direction: column;
       gap: 1rem;
     }
-    .course-card.ca    { border-color: #1a5c2e44; }
-    .course-card.calc { border-color: #185fa544; }
+    .course-card.ca    { border-color: #2e533944; }
+    .course-card.calc { border-color: #1e3a5c44; }
     .course-card.pc    { border-color: #7a3b8a44; }
     .course-card.inactive { opacity: .55; }
 
@@ -76,8 +76,8 @@
       letter-spacing: .07em; text-transform: uppercase;
       padding: .18rem .6rem; border-radius: 999px;
     }
-    .ca    .sec-badge { background: #e8f5ed; color: var(--ca); }
-    .calc .sec-badge { background: #e8f0fa; color: var(--calc); }
+    .ca    .sec-badge { background: #eaf0ec; color: var(--ca); }
+    .calc .sec-badge { background: #e8edf4; color: var(--calc); }
     .pc    .sec-badge { background: #f3eafa; color: var(--pc); }
 
     .prob-statement { font-size: .97rem; line-height: 1.7; }
@@ -148,7 +148,7 @@
       padding: .5rem .9rem; text-decoration: none; margin-top: .5rem;
       transition: background .2s; align-self: flex-start;
     }
-    .prac-btn:hover { background: #e4e0d8; }
+    .prac-btn:hover { background: #e0e0e0; }
 
     .none-msg { color: var(--muted); font-size: .9rem; font-style: italic; }
 

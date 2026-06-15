@@ -11,12 +11,12 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 .container{max-width:900px;margin:0 auto;padding:2rem 1.5rem 4rem}
 .page-title{font-size:28px;font-weight:700;margin-bottom:4px}
 .page-sub{font-family:sans-serif;font-size:13px;color:#666;margin-bottom:1.6rem}
-.opening-q{background:#eef3f9;border-left:4px solid #185fa5;border-radius:0 8px 8px 0;
+.opening-q{background:#eef3f9;border-left:4px solid #1e3a5c;border-radius:0 8px 8px 0;
   padding:1rem 1.2rem;font-size:15px;margin-bottom:1.5rem;font-style:italic;line-height:1.75}
 .section-head{font-family:sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;
-  letter-spacing:.08em;color:#185fa5;margin-top:1.4rem;margin-bottom:.6rem;
+  letter-spacing:.08em;color:#1e3a5c;margin-top:1.4rem;margin-bottom:.6rem;
   border-bottom:1px solid #c8d8ec;padding-bottom:4px}
-.accent-box{background:#d9e8f5;border-left:4px solid #185fa5;border-radius:0 8px 8px 0;
+.accent-box{background:#d9e8f5;border-left:4px solid #1e3a5c;border-radius:0 8px 8px 0;
   padding:.9rem 1.1rem;font-size:14px;margin-bottom:.85rem;line-height:1.95}
 .accent-box ul{margin-left:1.3rem;margin-top:.3rem}
 .accent-box li{margin-bottom:.15rem}
@@ -27,18 +27,18 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 .col{min-width:0}
 .examples-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem}
 .ex-block{border:1.5px solid #ddd;border-radius:9px;padding:1rem 1.1rem;background:#fff}
-.ex-label{font-family:sans-serif;font-size:11px;font-weight:700;color:#185fa5;
+.ex-label{font-family:sans-serif;font-size:11px;font-weight:700;color:#1e3a5c;
   text-transform:uppercase;letter-spacing:.05em;margin-bottom:.45rem}
 .ex-body{font-size:14px;line-height:1.75;margin-bottom:.5rem}
 .ex-canvas-wrap{text-align:center;margin:.4rem 0 .55rem}
 .ex-canvas-wrap canvas{border:1px solid #ddd;border-radius:5px;display:inline-block}
-.ex-answer.instructor{background:#fef9e7;border-left:3px solid #c9860a;border-radius:0 6px 6px 0;
+.ex-answer.instructor{background:#fef9e7;border-left:3px solid #7a5c1e;border-radius:0 6px 6px 0;
   padding:.6rem .9rem;font-size:13.5px;color:#5a3e00;line-height:1.85}
 .ex-answer.student{height:3.5rem;border-bottom:1.5px solid #bbb;margin-top:.4rem}
 .practice{margin-bottom:1.5rem}
 .pr-row{display:grid;grid-template-columns:1.6rem 1fr 210px;gap:.75rem;
   align-items:start;padding:.6rem 0;border-bottom:1px solid #ece8e0}
-.pr-num{font-family:sans-serif;font-weight:700;font-size:14px;color:#185fa5;padding-top:2px}
+.pr-num{font-family:sans-serif;font-weight:700;font-size:14px;color:#1e3a5c;padding-top:2px}
 .pr-prob{font-size:14px;line-height:1.75}
 .pr-ans.instructor{font-size:13px;color:#5a3e00;background:#fef9e7;border-radius:5px;
   padding:4px 9px;line-height:1.75}
@@ -46,11 +46,11 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 .st-work{width:100%;min-height:3rem;border:1px solid #ccc;border-radius:5px;
   padding:.35rem .5rem;font-family:Georgia,serif;font-size:13px;resize:vertical;
   background:#fafafa;display:block;margin-bottom:.3rem}
-.st-btn-sm{font-family:sans-serif;font-size:9px;font-weight:700;color:#185fa5;
-  background:none;border:1px solid #185fa5;border-radius:3px;
+.st-btn-sm{font-family:sans-serif;font-size:9px;font-weight:700;color:#1e3a5c;
+  background:none;border:1px solid #1e3a5c;border-radius:3px;
   padding:1px 6px;cursor:pointer;margin-bottom:.15rem;display:inline-block}
 .st-btn-sm:hover{background:#eef3f9}
-.st-ans-hidden{display:none;background:#fef9e7;border-left:3px solid #c9860a;
+.st-ans-hidden{display:none;background:#fef9e7;border-left:3px solid #7a5c1e;
   border-radius:0 5px 5px 0;padding:.4rem .7rem;font-size:13px;
   color:#5a3e00;line-height:1.85}
 .st-ans-hidden.visible{display:block}
@@ -243,7 +243,7 @@ function drawField(id, f, xMin, xMax, yMin, yMax, nx, ny) {
   var pxPerY = H/(yMax-yMin);
   var segLen = Math.min(pxPerX*dx, pxPerY*dy)*0.42;
 
-  ctx.strokeStyle = '#185fa5';
+  ctx.strokeStyle = '#1e3a5c';
   ctx.lineWidth = 1.4;
 
   for (var i = 0; i < nx; i++) {

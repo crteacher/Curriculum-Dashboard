@@ -8,7 +8,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:#f9f7f3;color:#1a1614;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh}
+body{background:#f4f4f4;color:#111111;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh}
 header{background:#6b1a26;border-bottom:1px solid rgba(255,255,255,.15);padding:1.1rem 1.5rem;display:flex;align-items:center;gap:.75rem;flex-wrap:wrap}
 .back{color:rgba(255,255,255,.85);text-decoration:none;font-size:.85rem}.back:hover{color:#fff}
 header h1{font-size:1.15rem;font-weight:700;flex:1;color:#fff}
@@ -19,68 +19,68 @@ header h1{font-size:1.15rem;font-weight:700;flex:1;color:#fff}
 .et-tile{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;max-width:1400px;margin:1.25rem auto 0;padding:0 1.25rem}
 @media(max-width:900px){.et-tile{grid-template-columns:1fr 1fr}}
 @media(max-width:600px){.et-tile{grid-template-columns:1fr}}
-.et-card{background:#fff;border:1px solid #e4e0d8;border-radius:10px;padding:1rem 1.2rem}
-.et-card.ca{border-color:#1a5c2e44}.et-card.c2{border-color:#185fa544}.et-card.pc{border-color:#c9860a44}
+.et-card{background:#fff;border:1px solid #e0e0e0;border-radius:10px;padding:1rem 1.2rem}
+.et-card.ca{border-color:#2e533944}.et-card.c2{border-color:#1e3a5c44}.et-card.pc{border-color:#7a5c1e44}
 .et-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;margin-bottom:.4rem}
-.et-card.ca .et-label{color:#1a5c2e}.et-card.c2 .et-label{color:#185fa5}.et-card.pc .et-label{color:#c9860a}
-.et-day{font-size:.75rem;color:#7a7570;margin-bottom:.35rem}
+.et-card.ca .et-label{color:#2e5339}.et-card.c2 .et-label{color:#1e3a5c}.et-card.pc .et-label{color:#7a5c1e}
+.et-day{font-size:.75rem;color:#555555;margin-bottom:.35rem}
 .et-q{font-size:.92rem;line-height:1.7}
-.et-none{color:#7a7570;font-style:italic;font-size:.85rem}
+.et-none{color:#555555;font-style:italic;font-size:.85rem}
 .main-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.25rem;max-width:1400px;margin:1.25rem auto 0;padding:0 1.25rem 3rem}
 @media(max-width:1000px){.main-grid{grid-template-columns:1fr 1fr}}
 @media(max-width:600px){.main-grid{grid-template-columns:1fr}}
 .col-header{font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.75rem}
-.col-header.ca{color:#1a5c2e}.col-header.c2{color:#185fa5}.col-header.pc{color:#c9860a}
-.lesson-card{background:#fff;border:1px solid #e4e0d8;border-radius:10px;margin-bottom:.7rem;overflow:hidden}
-.lesson-card.ca{border-color:#1a5c2e33}.lesson-card.c2{border-color:#185fa533}.lesson-card.pc{border-color:#c9860a33}
+.col-header.ca{color:#2e5339}.col-header.c2{color:#1e3a5c}.col-header.pc{color:#7a5c1e}
+.lesson-card{background:#fff;border:1px solid #e0e0e0;border-radius:10px;margin-bottom:.7rem;overflow:hidden}
+.lesson-card.ca{border-color:#2e533933}.lesson-card.c2{border-color:#1e3a5c33}.lesson-card.pc{border-color:#7a5c1e33}
 .lesson-card.review-day{border-style:dashed}.lesson-card.exam-day{border-style:dashed;opacity:.85}
 .lesson-summary{display:flex;align-items:center;gap:.7rem;padding:.85rem 1rem;cursor:pointer;list-style:none;flex-wrap:wrap}
 .lesson-summary::-webkit-details-marker{display:none}
 .lesson-summary:hover{background:rgba(0,0,0,.025)}
 .day-badge{font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;padding:.22rem .6rem;border-radius:8px;white-space:nowrap}
-.day-badge.ca{background:#e8f5ed;color:#1a5c2e}.day-badge.c2{background:#e8f0fa;color:#185fa5}.day-badge.pc{background:#fdf0e0;color:#c9860a}
+.day-badge.ca{background:#eaf0ec;color:#2e5339}.day-badge.c2{background:#e8edf4;color:#1e3a5c}.day-badge.pc{background:#f2ece0;color:#7a5c1e}
 .day-badge.review{background:#fef9e7;color:#8b6914}.day-badge.exam{background:#fde8e8;color:#b91c1c}
 .day-badge.setup{background:#f5e6e8;color:#6b1a26;border:1px solid #d4aab0}
 .setup-link{display:inline-block;padding:.28rem .8rem;border-radius:14px;font-size:.78rem;font-weight:600;
-  text-decoration:none;border:1px solid #1a5c2e33;color:#1a5c2e;background:#e8f5ed;transition:background .15s;margin:.15rem 0}
-.setup-link:hover{background:#d4f0dd}
-.setup-link.c2{border-color:#185fa533;color:#185fa5;background:#e8f0fa}.setup-link.c2:hover{background:#d4e5f7}
-.setup-link.pc{border-color:#c9860a33;color:#c9860a;background:#fdf0e0}.setup-link.pc:hover{background:#fae0b8}
-.sched-toggle{font-size:.75rem;font-weight:600;border:1px solid #e4e0d8;border-radius:16px;padding:.25rem .8rem;
-  cursor:pointer;background:#fff;color:#7a7570;margin-left:auto;transition:all .15s}
+  text-decoration:none;border:1px solid #2e533933;color:#2e5339;background:#eaf0ec;transition:background .15s;margin:.15rem 0}
+.setup-link:hover{background:#c4d4c8}
+.setup-link.c2{border-color:#1e3a5c33;color:#1e3a5c;background:#e8edf4}.setup-link.c2:hover{background:#c2ccda}
+.setup-link.pc{border-color:#7a5c1e33;color:#7a5c1e;background:#f2ece0}.setup-link.pc:hover{background:#d8caa8}
+.sched-toggle{font-size:.75rem;font-weight:600;border:1px solid #e0e0e0;border-radius:16px;padding:.25rem .8rem;
+  cursor:pointer;background:#fff;color:#555555;margin-left:auto;transition:all .15s}
 .sched-toggle:hover{border-color:#6b1a26;color:#6b1a26}
 .lesson-title{font-size:.88rem;font-weight:600;flex:1}
-.lesson-date{font-size:.72rem;color:#7a7570;white-space:nowrap}
-.chevron{color:#7a7570;font-size:1rem;transition:transform .2s;margin-left:auto}
+.lesson-date{font-size:.72rem;color:#555555;white-space:nowrap}
+.chevron{color:#555555;font-size:1rem;transition:transform .2s;margin-left:auto}
 details[open] .chevron{transform:rotate(90deg)}
-.lesson-body{border-top:1px solid #e4e0d8;padding:.85rem 1rem}
-.grm-row{display:grid;grid-template-columns:9rem 1fr;gap:.5rem 1rem;padding:.5rem 0;border-bottom:1px solid #e4e0d8}
+.lesson-body{border-top:1px solid #e0e0e0;padding:.85rem 1rem}
+.grm-row{display:grid;grid-template-columns:9rem 1fr;gap:.5rem 1rem;padding:.5rem 0;border-bottom:1px solid #e0e0e0}
 .grm-row:last-child{border-bottom:none}
-.grm-label{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#7a7570;padding-top:.15rem;white-space:nowrap}
+.grm-label{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#555555;padding-top:.15rem;white-space:nowrap}
 .grm-value{font-size:.875rem;line-height:1.7}
 .grm-value .katex-display{margin:.35rem 0}
 .inline-quiz-banner{display:flex;align-items:baseline;gap:.5rem;flex-wrap:wrap;padding:.5rem .75rem;margin-bottom:.65rem;background:#fff8e6;border:1px solid #e8d48a;border-radius:6px}
 .quiz-icon{font-size:.9rem}
 .quiz-label{font-weight:700;font-size:.83rem;color:#7a5c00}
 .quiz-note{font-size:.75rem;color:#9a7a20}
-.ex-block{margin:.2rem 0 .45rem;padding:.4rem .65rem;background:#f5f3ef;border-radius:6px;border:1px solid #e4e0d8}
+.ex-block{margin:.2rem 0 .45rem;padding:.4rem .65rem;background:#f5f3ef;border-radius:6px;border:1px solid #e0e0e0}
 .ex-technique{display:block;font-size:.72rem;font-weight:600;color:#8b6914;letter-spacing:.04em;text-transform:uppercase;margin-bottom:.18rem;opacity:.85}
 .ex-prob{display:block;font-size:.87rem}
-.ex-ans{display:block;font-size:.8rem;color:#7a7570;margin-top:.2rem}
+.ex-ans{display:block;font-size:.8rem;color:#555555;margin-top:.2rem}
 .do-now-link{display:inline-block;padding:.3rem .85rem;border-radius:16px;font-size:.78rem;font-weight:600;text-decoration:none;border:1px solid;transition:all .15s}
-.do-now-link.ca{color:#1a5c2e;border-color:#1a5c2e}.do-now-link.ca:hover{background:#e8f5ed}
-.do-now-link.c2{color:#185fa5;border-color:#185fa5}.do-now-link.c2:hover{background:#e8f0fa}
-.do-now-link.pc{color:#c9860a;border-color:#c9860a}.do-now-link.pc:hover{background:#fdf0e0}
-.prac-link{color:#7a7570;font-size:.8rem;text-decoration:none;border-bottom:1px solid #7a757044}
-.prac-link:hover{color:#1a1614}
-.review-intro{font-size:.82rem;color:#7a7570;margin-bottom:.75rem;line-height:1.5}
+.do-now-link.ca{color:#2e5339;border-color:#2e5339}.do-now-link.ca:hover{background:#eaf0ec}
+.do-now-link.c2{color:#1e3a5c;border-color:#1e3a5c}.do-now-link.c2:hover{background:#e8edf4}
+.do-now-link.pc{color:#7a5c1e;border-color:#7a5c1e}.do-now-link.pc:hover{background:#f2ece0}
+.prac-link{color:#555555;font-size:.8rem;text-decoration:none;border-bottom:1px solid #55555544}
+.prac-link:hover{color:#111111}
+.review-intro{font-size:.82rem;color:#555555;margin-bottom:.75rem;line-height:1.5}
 .chips-wrap{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.25rem}
 .chip{display:inline-block;padding:.3rem .75rem;border-radius:14px;font-size:.75rem;font-weight:600;text-decoration:none;border:1px solid;transition:all .15s}
-.chip.ca{color:#1a5c2e;border-color:#1a5c2e33;background:#e8f5ed}.chip.ca:hover{background:#d4f0dd}
-.chip.c2{color:#185fa5;border-color:#185fa533;background:#e8f0fa}.chip.c2:hover{background:#d4e5f7}
-.chip.pc{color:#c9860a;border-color:#c9860a33;background:#fdf0e0}.chip.pc:hover{background:#fae0b8}
-.state-msg{text-align:center;padding:3rem 1rem;color:#7a7570;font-size:.9rem;font-style:italic}
-.footer{text-align:center;font-size:.72rem;color:#7a757055;padding:1rem;font-family:monospace}
+.chip.ca{color:#2e5339;border-color:#2e533933;background:#eaf0ec}.chip.ca:hover{background:#c4d4c8}
+.chip.c2{color:#1e3a5c;border-color:#1e3a5c33;background:#e8edf4}.chip.c2:hover{background:#c2ccda}
+.chip.pc{color:#7a5c1e;border-color:#7a5c1e33;background:#f2ece0}.chip.pc:hover{background:#d8caa8}
+.state-msg{text-align:center;padding:3rem 1rem;color:#555555;font-size:.9rem;font-style:italic}
+.footer{text-align:center;font-size:.72rem;color:#55555555;padding:1rem;font-family:monospace}
 </style>
 </head>
 <body>
@@ -175,10 +175,10 @@ function buildLessonCard(course,sec,dayNum,isOpen,schedItem){
   const practiceSetLink=sec.reviewProblems?.length
     ?`<a href="./review.html?section=${sec.id}" class="do-now-link ${course}" target="_blank">Open Practice Set →</a> `
     :'';
-  body+=grm('You Do (Together)',practiceSetLink||'<span style="color:#7a7570;font-size:.83rem">No review set yet for this section.</span>');
+  body+=grm('You Do (Together)',practiceSetLink||'<span style="color:#555555;font-size:.83rem">No review set yet for this section.</span>');
   // You Do (Alone): homework — practice worksheet if available
   const pl=pracLink(course,sec);
-  body+=grm('You Do (Alone)',`<span style="color:#7a7570;font-size:.83rem">Assigned homework — MyOpenMath.</span>${pl?'<br>'+pl:''}`);
+  body+=grm('You Do (Alone)',`<span style="color:#555555;font-size:.83rem">Assigned homework — MyOpenMath.</span>${pl?'<br>'+pl:''}`);
   if(sec.exitTicket)body+=grm('Exit Ticket',mEl(sec.exitTicket));
   return`<details class="lesson-card ${course}"${isOpen?' open':''}><summary class="lesson-summary"><span class="day-badge ${course}">Day ${dayNum}</span><span class="lesson-title">§${sec.section} ${sec.title}</span><span class="lesson-date">Fall 2026</span><span class="chevron">›</span></summary><div class="lesson-body">${body}</div></details>`;
 }
@@ -190,7 +190,7 @@ function buildSetupCard(course,day,item){
     `<a href="https://www.myopenmath.com" class="${link}" target="_blank">MyOpenMath →</a> `+
     `<a href="https://www.khanacademy.org" class="${link}" target="_blank">Khan Academy →</a> `+
     `<a href="./index.html" class="${link}" target="_blank">This Dashboard →</a>`);
-  if(item.note)body+=grm('Note',`<span style="color:#7a7570;font-size:.85rem">${item.note}</span>`);
+  if(item.note)body+=grm('Note',`<span style="color:#555555;font-size:.85rem">${item.note}</span>`);
   return`<details class="lesson-card ${course} setup-day" open><summary class="lesson-summary"><span class="day-badge setup">Day ${day}</span><span class="lesson-title">📋 ${item.title}</span><span class="lesson-date">Fall 2026</span><span class="chevron">›</span></summary><div class="lesson-body">${body}</div></details>`;
 }
 
@@ -198,7 +198,7 @@ function buildQuizCard(course,day,item,secMap){
   const chips=(item.sections||[]).map(id=>{const s=secMap[id];if(!s)return'';
     return`<a href="./review.html?section=${id}" class="chip ${course}" target="_blank">§${s.section} ${s.title}</a>`;
   }).filter(Boolean).join('');
-  let body=grm('Format','<span style="font-size:.83rem;color:#7a7570">Short quiz — individual, silent. Equation cards and calculators permitted.</span>');
+  let body=grm('Format','<span style="font-size:.83rem;color:#555555">Short quiz — individual, silent. Equation cards and calculators permitted.</span>');
   if(chips)body+=grm('Review sections',`<div class="chips-wrap">${chips}</div>`);
   return`<details class="lesson-card ${course} exam-day"><summary class="lesson-summary"><span class="day-badge exam">Day ${day}</span><span class="lesson-title">✏️ ${item.title}</span><span class="lesson-date">Fall 2026</span><span class="chevron">›</span></summary><div class="lesson-body">${body}</div></details>`;
 }
@@ -273,39 +273,4 @@ Promise.all([
   (sections.collegeAlgebra||[]).forEach(s=>caMap[s.id]=s);
   (sections.calc2||[]).forEach(s=>c2Map[s.id]=s);
   (sections.preCalc||[]).forEach(s=>pcMap[s.id]=s);
-  renderExitTile(caId,caMap,c2Id,c2Map,pcId,pcMap);
-  const sched=state?.schedule;
-  if(sched?.active){
-    // ── Schedule view (first-weeks / custom) ──────────────────
-    renderSchedule(document.getElementById('caCol'),'ca',sched.collegeAlgebra||[],caId,caMap);
-    renderSchedule(document.getElementById('c2Col'),'c2',sched.calc2||[],c2Id,c2Map);
-    renderSchedule(document.getElementById('pcCol'),'pc',sched.preCalc||[],pcId,pcMap);
-    const hbCA=document.getElementById('hbCA'),hbC2=document.getElementById('hbC2'),hbPC=document.getElementById('hbPC');
-    if(hbCA)hbCA.title='College Algebra';
-    if(hbC2)hbC2.title='Calculus 2';
-    if(hbPC)hbPC.title='PreCalc';
-    document.getElementById('footer').textContent=
-      (sched.title||'Schedule')+' · started '+state.lastCheckin+' · to switch to unit view, set schedule.active=false in state.json';
-  } else {
-    // ── Unit view (default) ───────────────────────────────────
-    const caUnits=sections.units?.collegeAlgebra||[];
-    const c2Units=sections.units?.calc2||[];
-    const caUnit=caUnits.find(u=>u.sections.includes(caId))||caUnits[caUnits.length-1]||null;
-    const c2Unit=c2Units.find(u=>u.sections.includes(c2Id))||c2Units[c2Units.length-1]||null;
-    renderColumn(document.getElementById('caCol'),'ca',caId,caUnit,caMap);
-    renderColumn(document.getElementById('c2Col'),'c2',c2Id,c2Unit,c2Map);
-    document.getElementById('pcCol').innerHTML='<div class="state-msg">Unit view not configured for PreCalc — add a schedule in state.json.</div>';
-    const hbCA=document.getElementById('hbCA'),hbC2=document.getElementById('hbC2');
-    if(caUnit&&hbCA)hbCA.title=caUnit.name;
-    if(c2Unit&&hbC2)hbC2.title=c2Unit.name;
-    document.getElementById('footer').textContent=
-      'Data-driven from sections.json · '+[caUnit?.name,c2Unit?.name].filter(Boolean).join(' · ')+' · Fall 2026';
-  }
-}).catch(err=>{
-  document.getElementById('caCol').innerHTML='<div class="state-msg">Could not load data.</div>';
-  document.getElementById('c2Col').innerHTML='<div class="state-msg">Could not load data.</div>';
-  console.error(err);
-});
-</script>
-</body>
-</h
+  renderExitTile(caId,

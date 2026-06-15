@@ -6,12 +6,12 @@
   <title>Daily Puzzle — Dr. Halverson</title>
   <style>
         :root {
-      --bg: #f9f7f3;
+      --bg: #f4f4f4;
       --card: #ffffff;
       --accent: #6b1a26;
-      --text: #1a1614;
-      --muted: #7a7570;
-      --border: #e4e0d8;
+      --text: #111111;
+      --muted: #555555;
+      --border: #e0e0e0;
       --gold: #8b6914;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -602,16 +602,3 @@ function init() {
   // Progress counter
   const total = Math.max(totalPeriodsThisYear(), safeIdx + 1);
   const pct = Math.min(100, Math.round((safeIdx + 1) / total * 100));
-  document.getElementById('dayCounter').innerHTML = `
-    <div class="counter-inner">
-      <div class="counter-nums">${word} <strong>${safeIdx + 1}</strong> of ${total}</div>
-      <div class="progress-bar-track">
-        <div class="progress-bar-fill" style="width:${pct}%"></div>
-      </div>
-    </div>`;
-}
-
-init();
-</script>
-</body>
-</html>

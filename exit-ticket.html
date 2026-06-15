@@ -8,50 +8,50 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:#f9f7f3;color:#1a1614;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh}
+body{background:#f4f4f4;color:#111111;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh}
 header{background:#6b1a26;border-bottom:1px solid rgba(255,255,255,.15);padding:1.1rem 1.5rem;display:flex;align-items:center;gap:1rem;flex-wrap:wrap}
 .back{color:rgba(255,255,255,.85);text-decoration:none;font-size:.85rem}.back:hover{color:#fff}
 header h1{font-size:1.2rem;font-weight:700;flex:1;color:#fff}
 .date-badge{font-size:.78rem;color:rgba(255,255,255,.75);margin-left:auto}
 
-.section-label{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#7a7570;padding:.75rem 1.5rem .25rem;max-width:980px;margin:0 auto}
+.section-label{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#555555;padding:.75rem 1.5rem .25rem;max-width:980px;margin:0 auto}
 .section-label.first{margin-top:1.25rem}
 
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;max-width:980px;margin:.25rem auto 0;padding:0 1.5rem}
 @media(max-width:680px){.grid{grid-template-columns:1fr}}
 
-.card{background:#fff;border:1px solid #e4e0d8;border-radius:12px;padding:1.25rem 1.4rem;display:flex;flex-direction:column;gap:.75rem}
-.card.ca{border-color:#1a5c2e44}
-.card.c2{border-color:#185fa544}
+.card{background:#fff;border:1px solid #e0e0e0;border-radius:12px;padding:1.25rem 1.4rem;display:flex;flex-direction:column;gap:.75rem}
+.card.ca{border-color:#2e533944}
+.card.c2{border-color:#1e3a5c44}
 .card.pc{border-color:#7a3b8a44}
 .card-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em}
-.card.ca .card-label{color:#1a5c2e}
-.card.c2 .card-label{color:#185fa5}
+.card.ca .card-label{color:#2e5339}
+.card.c2 .card-label{color:#1e3a5c}
 .card.pc .card-label{color:#7a3b8a}
-.section-info{font-size:.8rem;color:#7a7570}
+.section-info{font-size:.8rem;color:#555555}
 
-.q-box{background:#f9f7f3;border:1px solid #e4e0d8;border-radius:8px;padding:1rem 1.1rem;font-size:.975rem;line-height:1.75;min-height:3.5rem}
+.q-box{background:#f4f4f4;border:1px solid #e0e0e0;border-radius:8px;padding:1rem 1.1rem;font-size:.975rem;line-height:1.75;min-height:3.5rem}
 .q-box .katex-display{margin:.4rem 0}
 
-.ans-box{background:#f5f3ef;border:1px solid #e4e0d8;border-radius:8px;padding:.85rem 1.1rem;font-size:.9rem;line-height:1.75;display:none}
+.ans-box{background:#f5f3ef;border:1px solid #e0e0e0;border-radius:8px;padding:.85rem 1.1rem;font-size:.9rem;line-height:1.75;display:none}
 .ans-box.visible{display:block}
 .ans-box .katex-display{margin:.35rem 0}
-.ans-label{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#7a7570;margin-bottom:.35rem}
+.ans-label{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#555555;margin-bottom:.35rem}
 
 .reveal-btn{align-self:flex-start;padding:.35rem .95rem;border-radius:20px;font-size:.78rem;font-weight:600;cursor:pointer;border:1px solid;transition:all .15s;background:transparent;margin-top:-.1rem}
-.card.ca .reveal-btn{color:#1a5c2e;border-color:#1a5c2e}
-.card.ca .reveal-btn:hover{background:#e8f5ed}
-.card.c2 .reveal-btn{color:#185fa5;border-color:#185fa5}
-.card.c2 .reveal-btn:hover{background:#e8f0fa}
+.card.ca .reveal-btn{color:#2e5339;border-color:#2e5339}
+.card.ca .reveal-btn:hover{background:#eaf0ec}
+.card.c2 .reveal-btn{color:#1e3a5c;border-color:#1e3a5c}
+.card.c2 .reveal-btn:hover{background:#e8edf4}
 .card.pc .reveal-btn{color:#7a3b8a;border-color:#7a3b8a}
 .card.pc .reveal-btn:hover{background:#f5eafa}
 .reveal-btn:disabled{opacity:.4;cursor:default}
 
 .divider{max-width:980px;margin:1.25rem auto 0;padding:0 1.5rem}
-.divider hr{border:none;border-top:1px solid #e4e0d8}
+.divider hr{border:none;border-top:1px solid #e0e0e0}
 
-.none-msg{font-size:.85rem;color:#7a7570;font-style:italic}
-.loading{font-size:.85rem;color:#7a7570;font-style:italic}
+.none-msg{font-size:.85rem;color:#555555;font-style:italic}
+.loading{font-size:.85rem;color:#555555;font-style:italic}
 .page-bottom{padding-bottom:3rem}
 </style>
 </head>
@@ -185,28 +185,4 @@ Promise.all([
     const completed = (courseObj?.completedSections||[]);
     const current   = courseObj?.currentSection;
     // Exclude current section in case it was inadvertently added to completedSections
-    return completed.filter(id => id !== current).slice(-1)[0] || null;
-  }
-
-  // College Algebra
-  const caId   = state?.courses?.collegeAlgebra?.currentSection;
-  const caLast = lastSection(state?.courses?.collegeAlgebra);
-  fill(caId,   'caToday', false);
-  fill(caLast, 'caLast',  true);
-
-  // Calculus 2
-  const c2Id   = state?.courses?.calc2?.currentSection;
-  const c2Last = lastSection(state?.courses?.calc2);
-  fill(c2Id,   'c2Today', false);
-  fill(c2Last, 'c2Last',  true);
-
-  // PreCalc
-  const pcId   = state?.courses?.preCalc?.currentSection;
-  const pcLast = lastSection(state?.courses?.preCalc);
-  fill(pcId,   'pcToday', false);
-  fill(pcLast, 'pcLast',  true);
-
-}).catch(err => console.error('exit-ticket boot error:', err));
-</script>
-</body>
-</html>
+    return completed.filter(id => id !== current).sli
