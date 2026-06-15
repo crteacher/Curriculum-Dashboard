@@ -185,4 +185,28 @@ Promise.all([
     const completed = (courseObj?.completedSections||[]);
     const current   = courseObj?.currentSection;
     // Exclude current section in case it was inadvertently added to completedSections
-    return completed.filter(id => id !== current).sli
+    return completed.filter(id => id !== current).slice(-1)[0] || null;
+  }
+
+  // College Algebra
+  const caId   = state?.courses?.collegeAlgebra?.currentSection;
+  const caLast = lastSection(state?.courses?.collegeAlgebra);
+  fill(caId,   'caToday', false);
+  fill(caLast, 'caLast',  true);
+
+  // Calculus 2
+  const c2Id   = state?.courses?.calc2?.currentSection;
+  const c2Last = lastSection(state?.courses?.calc2);
+  fill(c2Id,   'c2Today', false);
+  fill(c2Last, 'c2Last',  true);
+
+  // PreCalc
+  const pcId   = state?.courses?.preCalc?.currentSection;
+  const pcLast = lastSection(state?.courses?.preCalc);
+  fill(pcId,   'pcToday', false);
+  fill(pcLast, 'pcLast',  true);
+
+}).catch(err => console.error('exit-ticket boot error:', err));
+</script>
+</body>
+</html>

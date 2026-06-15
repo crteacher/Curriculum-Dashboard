@@ -273,4 +273,37 @@ Promise.all([
   (sections.collegeAlgebra||[]).forEach(s=>caMap[s.id]=s);
   (sections.calc2||[]).forEach(s=>c2Map[s.id]=s);
   (sections.preCalc||[]).forEach(s=>pcMap[s.id]=s);
-  renderExitTile(caId,
+  renderExitTile(caId,caMap,c2Id,c2Map,pcId,pcMap);
+  const sched=state?.schedule;
+  if(sched?.active){
+    renderSchedule(document.getElementById('caCol'),'ca',sched.collegeAlgebra||[],caId,caMap);
+    renderSchedule(document.getElementById('c2Col'),'c2',sched.calc2||[],c2Id,c2Map);
+    renderSchedule(document.getElementById('pcCol'),'pc',sched.preCalc||[],pcId,pcMap);
+    const hbCA=document.getElementById('hbCA'),hbC2=document.getElementById('hbC2'),hbPC=document.getElementById('hbPC');
+    if(hbCA)hbCA.title='College Algebra';
+    if(hbC2)hbC2.title='Calculus 2';
+    if(hbPC)hbPC.title='PreCalc';
+    document.getElementById('footer').textContent=
+      (sched.title||'Schedule')+' · started '+state.lastCheckin+' · to switch to unit view, set schedule.active=false in state.json';
+  } else {
+    const caUnits=sections.units?.collegeAlgebra||[];
+    const c2Units=sections.units?.calc2||[];
+    const caUnit=caUnits.find(u=>u.sections.includes(caId))||caUnits[caUnits.length-1]||null;
+    const c2Unit=c2Units.find(u=>u.sections.includes(c2Id))||c2Units[c2Units.length-1]||null;
+    renderColumn(document.getElementById('caCol'),'ca',caId,caUnit,caMap);
+    renderColumn(document.getElementById('c2Col'),'c2',c2Id,c2Unit,c2Map);
+    document.getElementById('pcCol').innerHTML='<div class="state-msg">Unit view not configured for PreCalc — add a schedule in state.json.</div>';
+    const hbCA=document.getElementById('hbCA'),hbC2=document.getElementById('hbC2');
+    if(caUnit&&hbCA)hbCA.title=caUnit.name;
+    if(c2Unit&&hbC2)hbC2.title=c2Unit.name;
+    document.getElementById('footer').textContent=
+      'Data-driven from sections.json · '+[caUnit?.name,c2Unit?.name].filter(Boolean).join(' · ')+' · Fall 2026';
+  }
+}).catch(err=>{
+  document.getElementById('caCol').innerHTML='<div class="state-msg">Could not load data.</div>';
+  document.getElementById('c2Col').innerHTML='<div class="state-msg">Could not load data.</div>';
+  console.error(err);
+});
+</script>
+</body>
+</html>
