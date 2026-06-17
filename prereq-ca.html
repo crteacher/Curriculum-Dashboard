@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Basic Algebra Refresher — Cardinal Ritter Prep</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+  <style>
+    :root {
+      --bg: #f4f4f4; --card: #ffffff; --accent: #1a7a3a;
+      --accent-green: #1a7a3a; --accent-red: #b91c1c;
+      --text: #111111; --muted: #555555; --border: #e0e0e0;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family:'Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); min-height:100vh; padding:2rem 1rem 3rem; }
+    .page-header { text-align:center; margin-bottom:2rem; }
+    .page-header .date-label { font-size:.82rem; color:var(--muted); letter-spacing:.1em; text-transform:uppercase; margin-bottom:.35rem; }
+    .page-header h1 { font-size:1.9rem; font-weight:700; }
+    .page-header h1 span { color:var(--accent); }
+    .page-header .subtitle { font-size:.9rem; color:var(--muted); margin-top:.4rem; max-width:560px; margin-left:auto; margin-right:auto; }
+    .refresh-bar { text-align:center; margin-bottom:1.6rem; }
+    .refresh-btn { background:var(--accent); color:#fff; border:none; border-radius:8px; font-size:.9rem; font-weight:600; padding:.55rem 1.2rem; cursor:pointer; }
+    .refresh-btn:hover { opacity:.9; }
+    .problems-grid { display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; max-width:980px; margin:0 auto; }
+    @media (max-width:680px) { .problems-grid { grid-template-columns:1fr; } }
+    .prob-card { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:1.7rem; display:flex; flex-direction:column; gap:.9rem; }
+    .prob-num { font-size:.7rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); }
+    .prob-tag { display:inline-block; font-size:.68rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; background:#eaf0ec; color:#1a7a3a; padding:.22rem .65rem; border-radius:999px; }
+    .prob-statement { font-size:1rem; line-height:1.7; }
+    .prob-statement .katex-display { margin:.6rem 0; }
+    .answer-area { display:flex; flex-direction:column; gap:.55rem; }
+    .input-row { display:flex; align-items:center; gap:.5rem; }
+    .input-label { font-size:.82rem; color:var(--muted); white-space:nowrap; }
+    .ans-input { flex:1; background:#f0ece6; border:1px solid var(--border); border-radius:7px; color:var(--text); font-size:1rem; padding:.48rem .75rem; outline:none; transition:border-color .2s; }
+    .ans-input:focus { border-color:var(--accent); }
+    .ans-input:disabled { opacity:.45; }
+    .ans-hint { font-size:.75rem; color:var(--muted); }
+    .mcq-opts { display:flex; flex-direction:column; gap:.45rem; }
+    .mcq-btn { background:#f0ece6; border:1px solid var(--border); border-radius:8px; color:var(--text); font-size:.93rem; padding:.55rem 1rem; cursor:pointer; text-align:left; transition:border-color .2s, background .2s; }
+    .mcq-btn:hover:not([disabled]) { border-color:var(--accent); background:rgba(26,122,58,.08); }
+    .mcq-btn[disabled] { cursor:default; }
+    .mcq-btn.correct { border-color:var(--accent-green) !important; background:rgba(26,122,58,.12) !important; color:var(--accent-green); }
+    .mcq-btn.wrong { border-color:var(--accent-red) !important; background:rgba(247,79,79,.1) !important; color:var(--accent-red); opacity:.65; }
+    .mcq-btn.reveal { border-color:var(--accent-green) !important; background:rgba(26,122,58,.08) !important; color:var(--accent-green); }
+    .check-btn { background:var(--accent); color:#fff; border:none; border-radius:8px; font-size:.93rem; font-weight:600; padding:.6rem 1.15rem; cursor:pointer; align-self:flex-start; transition:opacity .2s; }
+    .check-btn:hover:not([disabled]) { opacity:.88; }
+    .check-btn[disabled] { opacity:.4; cursor:default; }
+    .feedback { border-radius:8px; padding:.7rem .95rem; font-size:.88rem; line-height:1.55; display:none; }
+    .feedback.show { display:block; }
+    .feedback.correct-fb { background:rgba(26,122,58,.1); border:1px solid rgba(26,122,58,.28); }
+    .feedback.wrong-fb { background:rgba(247,79,79,.08); border:1px solid rgba(247,79,79,.22); }
+    .fb-icon { font-size:1rem; margin-right:.25rem; }
+    .solution-label { font-size:.7rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); margin-top:.55rem; margin-bottom:.2rem; display:block; }
+    .solution-body { line-height:1.6; }
+    .solution-body .katex-display { margin:.4rem 0; }
+    .page-footer { text-align:center; margin-top:2.5rem; color:var(--muted); font-size:.78rem; }
+    .page-footer a { color:var(--muted); text-decoration:underline; }
+    .site-nav{background:#6b1a26;padding:.65rem 1.5rem;}
+    .site-nav a{color:rgba(255,255,255,.9);text-decoration:none;font-size:.85rem;font-family:Georgia,serif;}
+    .site-nav a:hover{color:#fff;}
+  </style>
+</head>
+<body>
+
+<nav class="site-nav"><a href="./index.html">← Portal</a></nav>
+<div class="page-header">
+  <div class="date-label">Always Available</div>
+  <h1>College Algebra <span>Prerequisite Refresher</span></h1>
+  <div class="subtitle">Core Algebra 1 skills you'll need on day one: order of operations, evaluating expressions, solving linear equations, and basic fraction arithmetic.</div>
+</div>
+
+<div class="refresh-bar"><button class="refresh-btn" onclick="location.reload()">🔄 New Numbers</button></div>
+
+<div id="mainArea"><div class="problems-grid" id="problemsWrap"></div></div>
+
+<div class="page-footer"><a href="index.html">Dashboard</a></div>
+
+<script>
+/* ── Utilities ───────────────────────────────────────────── */
+function ri(a,b){ return Math.floor(Math.random()*(b-a+1))+a; }
+function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+function gcd(a,b){ a=Math.abs(a); b=Math.abs(b); while(b){ [a,b]=[b,a%b]; } return a; }
+function reduceFrac(n,d){ if(d===0) return [n,d]; const g=gcd(Math.abs(n),Math.abs(d)); n/=g; d/=g; if(d<0){n=-n;d=-d;} return [n,d]; }
+function fracTex(n,d){ [n,d]=reduceFrac(n,d); if(d===1) return `${n}`; return `\\dfrac{${n}}{${d}}`; }
+function termTex(coeff,varStr,power){ if(coeff===0) return ''; let base=''; if(power===0) base=''; else if(power===1) base=varStr; else base=`${varStr}^${power}`; const absC=Math.abs(coeff); if(base==='') return `${coeff}`; if(absC===1) return coeff>0?base:`-${base}`; return `${coeff}${base}`; }
+function linearTex(a,b,v='x'){ if(a===0&&b===0) return '0'; const aStr=termTex(a,v,1); if(b===0) return aStr||'0'; if(a===0) return `${b}`; return b>0?`${aStr} + ${b}`:`${aStr} - ${Math.abs(b)}`; }
+function kD(tex){ try{ return katex.renderToString(tex,{displayMode:true,throwOnError:false}); } catch(e){ return tex; } }
+function kI(tex){ try{ return katex.renderToString(tex,{displayMode:false,throwOnError:false}); } catch(e){ return tex; } }
+function parseNum(s){ if(!s||!s.trim()) return NaN; s=s.trim().replace(/\s+/g,''); const m=s.match(/^(-?\d+)\/(-?\d+)$/); if(m) return parseInt(m[1])/parseInt(m[2]); return parseFloat(s); }
+function approxEq(a,b,tol=1e-6){ return Math.abs(a-b)<tol; }
+
+/* ── Generators ──────────────────────────────────────────── */
+const TOPICS = [
+  {key:'orderOps', label:'Order of Operations'},
+  {key:'evalSub', label:'Evaluating Expressions'},
+  {key:'linEq', label:'Solving Linear Equations'},
+  {key:'distribute', label:'Distribute & Combine Like Terms'},
+  {key:'fracArith', label:'Fraction Arithmetic'},
+  {key:'funcEval', label:'Function Evaluation'}
+];
+const GEN = {};
+
+GEN.orderOps = function() {
+  const a = ri(2,9), b = ri(2,9), c = ri(2,9), d = ri(2,6);
+  const sign1 = pick(['+','-']), sign2 = pick(['+','-']);
+  const expr = `${a} ${sign1} ${b} \\times ${c}${sign2==='-'?` - ${d}`:` + ${d}`}`;
+  const mult = b*c;
+  const step1Val = sign1==='+' ? a+mult : a-mult;
+  const ans = sign2==='-' ? step1Val-d : step1Val+d;
+  return { html:`Evaluate using order of operations: ${kD(expr)}`, type:'numeric', answer:ans,
+    solutionHtml: kD(`${a} ${sign1} ${mult} ${sign2} ${d} = ${step1Val} ${sign2} ${d} = ${ans}`) +
+      `Multiplication happens before addition/subtraction.` };
+};
+
+GEN.evalSub = function() {
+  const a = ri(-6,6)||2, b = ri(-8,8), c = ri(-4,4);
+  const x = ri(-5,5);
+  const ans = a*x*x + b*x + c;
+  return { html:`Evaluate ${kI(`${a}x^2 ${b>=0?'+':'-'} ${Math.abs(b)}x ${c>=0?'+':'-'} ${Math.abs(c)}`)} when ${kI(`x = ${x}`)}:`,
+    type:'numeric', answer:ans,
+    solutionHtml: kD(`${a}(${x})^2 ${b>=0?'+':''} ${b}(${x}) ${c>=0?'+':''} ${c} = ${a*x*x} ${b*x>=0?'+':''}${b*x} ${c>=0?'+':''}${c} = ${ans}`) };
+};
+
+GEN.linEq = function() {
+  const a = ri(2,8), x = ri(-7,7), b = ri(-12,12);
+  const c = a*x+b;
+  const bSign = b>0?`+ ${b}`:b<0?`- ${Math.abs(b)}`:'';
+  const eq = b===0?`${a}x = ${c}`:`${a}x ${bSign} = ${c}`;
+  const step = c-b;
+  return { html:`Solve for ${kI('x')}: ${kD(eq)}`, type:'numeric', answer:x,
+    solutionHtml: kD(`${a}x = ${c} ${b>=0?'-':'+'} ${Math.abs(b)} = ${step}`) + kD(`x = ${fracTex(step,a)} = ${x}`) };
+};
+
+GEN.distribute = function() {
+  const a = ri(2,7), b = ri(-6,6), c = ri(2,6), d = ri(-6,6);
+  const combX = a*c;
+  const combConst = a*d + b;
+  return { html:`Simplify: ${kD(`${a}(${linearTex(c,d)}) ${b>=0?'+':'-'} ${Math.abs(b)}`)} Write the result as ${kI('mx + n')}. Enter ${kI('m')} and ${kI('n')}:`,
+    type:'numeric2', answers:[combX, combConst], labels:['m', 'n'],
+    solutionHtml: kD(`${a}(${linearTex(c,d)}) = ${a*c}x + ${a*d}`) + kD(`${a*c}x + ${a*d} ${b>=0?'+':'-'} ${Math.abs(b)} = ${combX}x + ${combConst}`) };
+};
+
+GEN.fracArith = function() {
+  const n1 = ri(1,8), d1 = ri(2,9);
+  const n2 = ri(1,8), d2 = ri(2,9);
+  const op = pick(['+','-','\\times']);
+  let rn, rd;
+  if (op==='\\times') { rn = n1*n2; rd = d1*d2; }
+  else { const common = d1*d2; const a1 = n1*d2; const a2 = n2*d1; rn = op==='+' ? a1+a2 : a1-a2; rd = common; }
+  const [fn, fd] = reduceFrac(rn, rd);
+  return { html:`Compute: ${kD(`\\dfrac{${n1}}{${d1}} ${op} \\dfrac{${n2}}{${d2}}`)} <span class="ans-hint">Enter as a reduced fraction (e.g. <code>3/4</code>) or integer.</span>`,
+    type:'numeric', answer: fn/fd,
+    solutionHtml: kD(`\\dfrac{${n1}}{${d1}} ${op} \\dfrac{${n2}}{${d2}} = \\dfrac{${rn}}{${rd}} = ${fd===1?fn:fracTex(fn,fd)}`) };
+};
+
+GEN.funcEval = function() {
+  const a = ri(-5,5)||2, b = ri(-8,8), x = ri(-4,4);
+  const ans = a*x+b;
+  return { html:`Let ${kI(`f(x) = ${linearTex(a,b)}`)}. Find ${kI(`f(${x})`)}:`, type:'numeric', answer:ans,
+    solutionHtml: kD(`f(${x}) = ${a}(${x}) + ${b} = ${a*x} + ${b} = ${ans}`) };
+};
+
+/* ── Card builders ───────────────────────────────────────── */
+function buildNumericCard(num, label, prob, idx) {
+  const id = `p${idx}`;
+  return `<div class="prob-card" id="card-${idx}">
+    <div class="prob-num">Problem ${num}</div>
+    <div class="prob-tag">${label}</div>
+    <div class="prob-statement">${prob.html}</div>
+    <div class="answer-area">
+      <div class="input-row"><label class="input-label" for="${id}">Answer:</label>
+        <input class="ans-input" id="${id}" type="text" autocomplete="off" placeholder="e.g. 5 or -3/2"></div>
+      <button class="check-btn" onclick="checkNumeric(${idx}, ${prob.answer})">Check Answer</button>
+      <div class="feedback" id="fb-${idx}"></div>
+      <div class="solution-body" id="sol-${idx}" style="display:none"></div>
+    </div></div>`;
+}
+function buildNumeric2Card(num, label, prob, idx) {
+  const id1=`p${idx}a`, id2=`p${idx}b`;
+  const [ans1,ans2] = prob.answers;
+  const [lbl1,lbl2] = prob.labels || ['first','second'];
+  return `<div class="prob-card" id="card-${idx}">
+    <div class="prob-num">Problem ${num}</div>
+    <div class="prob-tag">${label}</div>
+    <div class="prob-statement">${prob.html}</div>
+    <div class="answer-area">
+      <div class="input-row"><label class="input-label" for="${id1}">${lbl1}:</label>
+        <input class="ans-input" id="${id1}" type="text" autocomplete="off" placeholder="e.g. -3"></div>
+      <div class="input-row"><label class="input-label" for="${id2}">${lbl2}:</label>
+        <input class="ans-input" id="${id2}" type="text" autocomplete="off" placeholder="e.g. 5"></div>
+      <button class="check-btn" onclick="checkNumeric2(${idx}, ${ans1}, ${ans2})">Check Answer</button>
+      <div class="feedback" id="fb-${idx}"></div>
+      <div class="solution-body" id="sol-${idx}" style="display:none"></div>
+    </div></div>`;
+}
+
+/* ── Grading ─────────────────────────────────────────────── */
+function lockCard(idx) {
+  document.querySelectorAll(`#card-${idx} .ans-input`).forEach(el=>el.disabled=true);
+  document.querySelectorAll(`#card-${idx} .check-btn`).forEach(el=>el.disabled=true);
+}
+function showSolution(idx, solHtml) {
+  const sol = document.getElementById(`sol-${idx}`);
+  if (sol) { sol.innerHTML = `<span class="solution-label">Solution</span>${solHtml}`; sol.style.display='block'; }
+}
+function showFeedback(idx, correct, solutionHtml) {
+  const fb = document.getElementById(`fb-${idx}`);
+  if (!fb) return;
+  fb.className = `feedback show ${correct?'correct-fb':'wrong-fb'}`;
+  fb.innerHTML = `<span class="fb-icon">${correct?'✓':'✗'}</span> ${correct?'Correct!':'Not quite.'}`;
+  lockCard(idx);
+  showSolution(idx, solutionHtml);
+}
+const _solutions = {};
+function checkNumeric(idx, answer) {
+  const val = parseNum(document.getElementById(`p${idx}`)?.value || '');
+  if (isNaN(val)) return;
+  showFeedback(idx, approxEq(val, answer), _solutions[idx]);
+}
+function checkNumeric2(idx, ans1, ans2) {
+  const v1 = parseNum(document.getElementById(`p${idx}a`)?.value || '');
+  const v2 = parseNum(document.getElementById(`p${idx}b`)?.value || '');
+  if (isNaN(v1) || isNaN(v2)) return;
+  const correct = (approxEq(v1,ans1) && approxEq(v2,ans2)) || (approxEq(v1,ans2) && approxEq(v2,ans1));
+  showFeedback(idx, correct, _solutions[idx]);
+}
+
+/* ── Render ──────────────────────────────────────────────── */
+function render() {
+  let html = '';
+  TOPICS.forEach((t, idx) => {
+    const prob = GEN[t.key]();
+    _solutions[idx] = prob.solutionHtml;
+    if (prob.type === 'numeric2') html += buildNumeric2Card(idx+1, t.label, prob, idx);
+    else html += buildNumericCard(idx+1, t.label, prob, idx);
+  });
+  document.getElementById('problemsWrap').innerHTML = html;
+}
+render();
+</script>
+</body>
+</html>

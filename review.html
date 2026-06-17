@@ -24,6 +24,7 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;min-height:100vh
   transition:all .15s;letter-spacing:.02em}
 .course-btn.active.ca{background:#1a7a3a;color:#fff;border-color:#1a7a3a}
 .course-btn.active.c2{background:#7a1a1a;color:#fff;border-color:#7a1a1a}
+.course-btn.active.pc{background:#7a5c1e;color:#fff;border-color:#7a5c1e}
 .course-btn:not(.active):hover{border-color:#888}
 
 /* ── Container ──────────────────────────────────────────────────────── */
@@ -40,6 +41,7 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;min-height:100vh
   cursor:pointer;transition:border-color .18s,box-shadow .18s;font-family:sans-serif}
 .sec-card.ca:hover{border-color:#1a7a3a;box-shadow:0 0 0 2px rgba(26,122,58,.12)}
 .sec-card.c2:hover{border-color:#7a1a1a;box-shadow:0 0 0 2px rgba(122,26,26,.12)}
+.sec-card.pc:hover{border-color:#7a5c1e;box-shadow:0 0 0 2px rgba(122,92,30,.12)}
 .sec-card.random-card{border-style:dashed;background:#fafaf8}
 .sec-card-num{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;
   color:#aaa;margin-bottom:3px}
@@ -76,6 +78,7 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;min-height:100vh
   <span class="page-title">📚 Section Review</span>
   <div class="course-toggle">
     <button class="course-btn ca" id="btnCA" onclick="setCourse('ca')">College Algebra</button>
+    <button class="course-btn pc" id="btnPC" onclick="setCourse('pc')">PreCalc</button>
     <button class="course-btn c2" id="btnC2" onclick="setCourse('c2')">Calculus 2</button>
   </div>
 </div>
@@ -130,9 +133,14 @@ function renderMath(text) {
 }
 
 // ── Course toggle ────────────────────────────────────────────────────────────
+function courseKeyOf(course) {
+  return course === 'ca' ? 'collegeAlgebra' : course === 'pc' ? 'preCalc' : 'calc2';
+}
+
 function setCourse(course) {
   _currentCourse = course;
   document.getElementById('btnCA').className = 'course-btn ca' + (course==='ca' ? ' active' : '');
+  document.getElementById('btnPC').className = 'course-btn pc' + (course==='pc' ? ' active' : '');
   document.getElementById('btnC2').className = 'course-btn c2' + (course==='c2' ? ' active' : '');
   buildGrid();
   showGrid();
@@ -140,7 +148,7 @@ function setCourse(course) {
 
 // ── Build section grid ───────────────────────────────────────────────────────
 function buildGrid() {
-  const courseKey = _currentCourse === 'ca' ? 'collegeAlgebra' : 'calc2';
+  const courseKey = courseKeyOf(_currentCourse);
   const completedIds = _state?.courses?.[courseKey]?.completedSections || [];
   const currentId   = _state?.courses?.[courseKey]?.currentSection;
   const allIds = currentId ? [...completedIds, currentId] : completedIds;
@@ -221,7 +229,7 @@ function loadSection(id) {
 }
 
 function loadRandom() {
-  const courseKey = _currentCourse === 'ca' ? 'collegeAlgebra' : 'calc2';
+  const courseKey = courseKeyOf(_currentCourse);
   const pool = _available[courseKey] || [];
   if (!pool.length) return;
   loadSection(pool[Math.floor(Math.random() * pool.length)].id);
@@ -250,9 +258,10 @@ Promise.all([
   _sections = sections;
   _units    = sections.units || {};
 
-  const initCourse = urlSection?.startsWith('C2_') ? 'c2' : 'ca';
+  const initCourse = urlSection?.startsWith('C2_') ? 'c2' : urlSection?.startsWith('PC_') ? 'pc' : 'ca';
   _currentCourse = initCourse;
   document.getElementById('btnCA').className = 'course-btn ca' + (initCourse==='ca' ? ' active' : '');
+  document.getElementById('btnPC').className = 'course-btn pc' + (initCourse==='pc' ? ' active' : '');
   document.getElementById('btnC2').className = 'course-btn c2' + (initCourse==='c2' ? ' active' : '');
 
   buildGrid();
