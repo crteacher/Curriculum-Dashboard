@@ -31,6 +31,12 @@ header p{font-family:sans-serif;font-size:11px;color:rgba(255,255,255,.6);
 .t-badge{font-family:sans-serif;font-size:.58rem;font-weight:700;letter-spacing:.1em;
   text-transform:uppercase;padding:.16rem .52rem;border-radius:999px;
   margin-top:.4rem;align-self:flex-start}
+.tool-card-main{display:flex;flex-direction:column;gap:.3rem;text-decoration:none;color:#111111;flex:1}
+.t-sublabel{font-family:sans-serif;font-size:.6rem;font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;color:#999999;margin-top:.65rem;margin-bottom:.3rem}
+.t-sublinks{display:flex;flex-direction:column;gap:.32rem;padding-top:.55rem;border-top:1px solid #eee}
+.t-sublinks a{font-family:sans-serif;font-size:11.5px;color:#6b1a26;text-decoration:none}
+.t-sublinks a:hover{text-decoration:underline}
 
 /* ── Curriculum toggle ──────────────────────────────────────────────── */
 .curr-wrap{background:#f4f4f4}
@@ -137,29 +143,19 @@ header p{font-family:sans-serif;font-size:11px;color:rgba(255,255,255,.6);
       <span class="t-badge" style="background:#d8efe1;color:#2e5339">Weekly</span>
     </a>
 
-    <a class="tool-card" href="./review.html">
-      <span class="t-name">Section Review</span>
-      <span class="t-desc">Practice problems by section — pick a topic, get a fresh set.</span>
-      <span class="t-badge" style="background:#f0ede7;color:#555555">Practice</span>
-    </a>
-
-    <a class="tool-card" href="./prereq-ca.html">
-      <span class="t-name">CA Prereq Refresher</span>
-      <span class="t-desc">Basic algebra warm-up: order of operations, function evaluation, linear equations.</span>
-      <span class="t-badge" style="background:#eaf0ec;color:#1a7a3a">Always On</span>
-    </a>
-
-    <a class="tool-card" href="./prereq-precalc.html">
-      <span class="t-name">PreCalc Prereq Refresher</span>
-      <span class="t-desc">College Algebra highlights to brush up on before PreCalc topics.</span>
-      <span class="t-badge" style="background:#f3e8f3;color:#8b3a8b">Always On</span>
-    </a>
-
-    <a class="tool-card" href="./prereq-calc1.html">
-      <span class="t-name">Calc 1 Prereq Refresher</span>
-      <span class="t-desc">PreCalc highlights: all function types, factoring, trig/exponential/log.</span>
-      <span class="t-badge" style="background:#eaf0f7;color:#1e3a5c">Always On</span>
-    </a>
+    <div class="tool-card">
+      <a class="tool-card-main" href="./review.html">
+        <span class="t-name">Section Review</span>
+        <span class="t-desc">Practice problems by section — pick a topic, get a fresh set.</span>
+        <span class="t-badge" style="background:#f0ede7;color:#555555">Practice</span>
+      </a>
+      <div class="t-sublabel">Prereq Refreshers</div>
+      <div class="t-sublinks">
+        <a href="./prereq-ca.html">College Algebra basics</a>
+        <a href="./prereq-precalc.html">PreCalc — CA highlights</a>
+        <a href="./prereq-calc1.html">Calc 1 — PreCalc highlights</a>
+      </div>
+    </div>
 
   </div>
 </section>
