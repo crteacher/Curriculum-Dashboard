@@ -25,6 +25,7 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;min-height:100vh
 .course-btn.active.ca{background:#1a7a3a;color:#fff;border-color:#1a7a3a}
 .course-btn.active.c2{background:#7a1a1a;color:#fff;border-color:#7a1a1a}
 .course-btn.active.pc{background:#7a5c1e;color:#fff;border-color:#7a5c1e}
+.course-btn.active.calc1{background:#1e3a5c;color:#fff;border-color:#1e3a5c}
 .course-btn:not(.active):hover{border-color:#888}
 
 /* ── Container ──────────────────────────────────────────────────────── */
@@ -42,7 +43,8 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;min-height:100vh
 .sec-card.ca:hover{border-color:#1a7a3a;box-shadow:0 0 0 2px rgba(26,122,58,.12)}
 .sec-card.c2:hover{border-color:#7a1a1a;box-shadow:0 0 0 2px rgba(122,26,26,.12)}
 .sec-card.pc:hover{border-color:#7a5c1e;box-shadow:0 0 0 2px rgba(122,92,30,.12)}
-.sec-card.random-card{border-style:dashed;background:#fafaf8}
+.sec-card.calc1:hover{border-color:#1e3a5c;box-shadow:0 0 0 2px rgba(30,58,92,.12)}
+.sec-card.random-card,.sec-card.prereq-card{border-style:dashed;background:#fafaf8}
 .sec-card-num{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;
   color:#aaa;margin-bottom:3px}
 .sec-card-title{font-size:13px;font-weight:600;color:#1a1a1a;line-height:1.35;margin-bottom:4px}
@@ -79,6 +81,7 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;min-height:100vh
   <div class="course-toggle">
     <button class="course-btn ca" id="btnCA" onclick="setCourse('ca')">College Algebra</button>
     <button class="course-btn pc" id="btnPC" onclick="setCourse('pc')">PreCalc</button>
+    <button class="course-btn calc1" id="btnCalc1" onclick="setCourse('calc1')">Calculus 1</button>
     <button class="course-btn c2" id="btnC2" onclick="setCourse('c2')">Calculus 2</button>
   </div>
 </div>
@@ -134,13 +137,22 @@ function renderMath(text) {
 
 // ── Course toggle ────────────────────────────────────────────────────────────
 function courseKeyOf(course) {
-  return course === 'ca' ? 'collegeAlgebra' : course === 'pc' ? 'preCalc' : 'calc2';
+  return course === 'ca' ? 'collegeAlgebra' : course === 'pc' ? 'preCalc' : course === 'calc1' ? 'calc1' : 'calc2';
 }
+
+// Prerequisite refresher pages — always-available, live-randomized practice.
+// No entry for c2 (no prereq refresher exists for it).
+const PREREQ_LINKS = {
+  ca:    { href: './prereq-ca.html',      label: 'College Algebra basics' },
+  pc:    { href: './prereq-precalc.html', label: 'CA highlights for PreCalc' },
+  calc1: { href: './prereq-calc1.html',   label: 'PreCalc highlights for Calc 1' }
+};
 
 function setCourse(course) {
   _currentCourse = course;
   document.getElementById('btnCA').className = 'course-btn ca' + (course==='ca' ? ' active' : '');
   document.getElementById('btnPC').className = 'course-btn pc' + (course==='pc' ? ' active' : '');
+  document.getElementById('btnCalc1').className = 'course-btn calc1' + (course==='calc1' ? ' active' : '');
   document.getElementById('btnC2').className = 'course-btn c2' + (course==='c2' ? ' active' : '');
   buildGrid();
   showGrid();
@@ -164,11 +176,28 @@ function buildGrid() {
   const unitList = _units?.[courseKey] || [];
   const container = document.getElementById('unitBlocks');
   const cls = _currentCourse;
+  const prereq = PREREQ_LINKS[_currentCourse];
+
+  const prereqCard = prereq ? `
+      <div class="sec-card prereq-card ${cls}" onclick="window.location.href='${prereq.href}'">
+        <div class="sec-card-num">📐 Prerequisites</div>
+        <div class="sec-card-title">${prereq.label}</div>
+        <div class="sec-card-count">Always available — fresh numbers every time</div>
+      </div>` : '';
 
   if (!pool.length) {
+    if (!prereq) {
+      document.getElementById('gridIntro').textContent =
+        'No review problems available yet — check back after your first completed section.';
+      container.innerHTML = '';
+      return;
+    }
     document.getElementById('gridIntro').textContent =
-      'No review problems available yet — check back after your first completed section.';
-    container.innerHTML = '';
+      'No section review problems yet — but the prerequisite refresher is always ready.';
+    container.innerHTML = `<div class="unit-block">
+      <div class="unit-label">Quick Start</div>
+      <div class="section-grid">${prereqCard}</div>
+    </div>`;
     return;
   }
 
@@ -182,7 +211,7 @@ function buildGrid() {
         <div class="sec-card-num">🎲 Random</div>
         <div class="sec-card-title">Surprise me</div>
         <div class="sec-card-count">${pool.length} sections available</div>
-      </div>
+      </div>${prereqCard}
     </div>
   </div>`;
 
@@ -258,10 +287,11 @@ Promise.all([
   _sections = sections;
   _units    = sections.units || {};
 
-  const initCourse = urlSection?.startsWith('C2_') ? 'c2' : urlSection?.startsWith('PC_') ? 'pc' : 'ca';
+  const initCourse = urlSection?.startsWith('C2_') ? 'c2' : urlSection?.startsWith('PC_') ? 'pc' : urlSection?.startsWith('Calc_') ? 'calc1' : 'ca';
   _currentCourse = initCourse;
   document.getElementById('btnCA').className = 'course-btn ca' + (initCourse==='ca' ? ' active' : '');
   document.getElementById('btnPC').className = 'course-btn pc' + (initCourse==='pc' ? ' active' : '');
+  document.getElementById('btnCalc1').className = 'course-btn calc1' + (initCourse==='calc1' ? ' active' : '');
   document.getElementById('btnC2').className = 'course-btn c2' + (initCourse==='c2' ? ' active' : '');
 
   buildGrid();
