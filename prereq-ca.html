@@ -307,10 +307,21 @@ function showFeedback(idx, correct, solutionHtml) {
   showSolution(idx, solutionHtml);
 }
 const _solutions = {};
+const PRACTICE_LINKS = {
+  orderOps: './College Algebra/OrderOfOperations_Practice.html',
+  evalSub: './College Algebra/CA_3_1_Inputs_Outputs_Practice.html',
+  linEq: './College Algebra/CA_1_1_Solving_Equations_Practice.html',
+  distribute: './College Algebra/CA_4_0_Binomials_Practice.html',
+  fracArith: './College Algebra/FractionArithmetic_Practice.html',
+  funcEval: './College Algebra/CA_3_1_Inputs_Outputs_Practice.html',
+  graphEval: './College Algebra/CA_3_1_Inputs_Outputs_Practice.html',
+  absValueEq: './College Algebra/CA_1_6_Absolute_Values_Practice.html',
+  inequalitySolve: './College Algebra/CA_1_3_Interval_Notation_Inequalities_Practice.html'
+};
 const _missed = [];
 function flagMissed(idx) {
   if (_missed.some(m => m.idx === idx)) return;
-  _missed.push({ idx, label: TOPICS[idx].label });
+  _missed.push({ idx, key: TOPICS[idx].key, label: TOPICS[idx].label });
   renderMissedList();
 }
 function renderMissedList() {
@@ -318,7 +329,7 @@ function renderMissedList() {
   if (!_missed.length) { el.style.display = 'none'; return; }
   el.style.display = 'block';
   el.innerHTML = `<div class="review-list-title">📌 Topics to Review</div><div class="review-chips">` +
-    _missed.map(m => `<a class="review-chip" href="#card-${m.idx}">${m.label}</a>`).join('') + `</div>`;
+    _missed.map(m => `<a class="review-chip" href="${PRACTICE_LINKS[m.key] || '#card-'+m.idx}" target="_blank" rel="noopener">${m.label}</a>`).join('') + `</div>`;
 }
 function checkNumeric(idx, answer) {
   const val = parseNum(document.getElementById(`p${idx}`)?.value || '');

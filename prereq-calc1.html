@@ -298,10 +298,22 @@ function showFeedback(idx, correct, solutionHtml) {
   showSolution(idx, solutionHtml);
 }
 const _solutions = {};
+const PRACTICE_LINKS = {
+  polyEval: './PreCalc/PC_3_4_Polynomial_Functions_Practice.html',
+  rationalEval: './PreCalc/PC_3_6_Rational_Functions_Practice.html',
+  radicalEval: './PreCalc/PC_1_1b_Library_1to1_Practice.html',
+  expEval: './PreCalc/PC_4_1_Exponential_Functions_Practice.html',
+  logEval: './PreCalc/PC_4_3_Logarithmic_Functions_Practice.html',
+  trigEval: './PreCalc/PC_5_2_Unit_Circle_Sine_and_Cosine_Practice.html',
+  factoring: './College Algebra/CA_4_1_Solving_by_Factoring_Practice.html',
+  composition: './PreCalc/PC_1_4_Function_Combinations_and_Composition_Practice.html',
+  domainFind: './PreCalc/PC_1_2a_Domain_Range_Practice.html',
+  diffQuotient: './Calc 1/Calc_2_2_5_Derivative_as_Function_Practice.html'
+};
 const _missed = [];
 function flagMissed(idx) {
   if (_missed.some(m => m.idx === idx)) return;
-  _missed.push({ idx, label: TOPICS[idx].label });
+  _missed.push({ idx, key: TOPICS[idx].key, label: TOPICS[idx].label });
   renderMissedList();
 }
 function renderMissedList() {
@@ -309,7 +321,7 @@ function renderMissedList() {
   if (!_missed.length) { el.style.display = 'none'; return; }
   el.style.display = 'block';
   el.innerHTML = `<div class="review-list-title">📌 Topics to Review</div><div class="review-chips">` +
-    _missed.map(m => `<a class="review-chip" href="#card-${m.idx}">${m.label}</a>`).join('') + `</div>`;
+    _missed.map(m => `<a class="review-chip" href="${PRACTICE_LINKS[m.key] || '#card-'+m.idx}" target="_blank" rel="noopener">${m.label}</a>`).join('') + `</div>`;
 }
 function checkNumeric(idx, answer) {
   const val = parseNum(document.getElementById(`p${idx}`)?.value || '');

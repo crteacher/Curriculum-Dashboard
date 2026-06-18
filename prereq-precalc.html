@@ -296,10 +296,22 @@ function showFeedback(idx, correct, solutionHtml) {
   showSolution(idx, solutionHtml);
 }
 const _solutions = {};
+const PRACTICE_LINKS = {
+  funcEval: './College Algebra/CA_3_1_Inputs_Outputs_Practice.html',
+  composition: './College Algebra/CA_3_3_Functions_Practice.html',
+  factoring: './College Algebra/CA_4_0_Binomials_Practice.html',
+  quadFormula: './College Algebra/CA_4_4_Quadratic_Formula_Practice.html',
+  parallelPerp: './College Algebra/CA_2_4_Parallel_Perpendicular_Practice.html',
+  exponentRules: './College Algebra/CA_6_1_Exponent_Rules_Practice.html',
+  radicals: './College Algebra/CA_6_2_Simplifying_Roots_Practice.html',
+  powersOfI: './College Algebra/CA_5_1_Complex_Numbers_Practice.html',
+  domainRational: './PreCalc/PC_1_2a_Domain_Range_Practice.html',
+  piecewiseEval: './PreCalc/PC_1_2b_Piecewise_Functions_Practice.html'
+};
 const _missed = [];
 function flagMissed(idx) {
   if (_missed.some(m => m.idx === idx)) return;
-  _missed.push({ idx, label: TOPICS[idx].label });
+  _missed.push({ idx, key: TOPICS[idx].key, label: TOPICS[idx].label });
   renderMissedList();
 }
 function renderMissedList() {
@@ -307,7 +319,7 @@ function renderMissedList() {
   if (!_missed.length) { el.style.display = 'none'; return; }
   el.style.display = 'block';
   el.innerHTML = `<div class="review-list-title">📌 Topics to Review</div><div class="review-chips">` +
-    _missed.map(m => `<a class="review-chip" href="#card-${m.idx}">${m.label}</a>`).join('') + `</div>`;
+    _missed.map(m => `<a class="review-chip" href="${PRACTICE_LINKS[m.key] || '#card-'+m.idx}" target="_blank" rel="noopener">${m.label}</a>`).join('') + `</div>`;
 }
 function checkNumeric(idx, answer) {
   const val = parseNum(document.getElementById(`p${idx}`)?.value || '');
