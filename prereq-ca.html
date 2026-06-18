@@ -59,6 +59,12 @@
     .site-nav{background:#6b1a26;padding:.65rem 1.5rem;}
     .site-nav a{color:rgba(255,255,255,.9);text-decoration:none;font-size:.85rem;font-family:Georgia,serif;}
     .site-nav a:hover{color:#fff;}
+    html{scroll-behavior:smooth}
+    .review-list{max-width:980px;margin:0 auto 1.4rem;background:#fff;border:1.5px solid var(--accent);border-radius:12px;padding:1rem 1.3rem;}
+    .review-list-title{font-size:.78rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);margin-bottom:.6rem;}
+    .review-chips{display:flex;flex-wrap:wrap;gap:.5rem;}
+    .review-chip{font-size:.85rem;font-weight:600;color:var(--accent);background:rgba(0,0,0,.04);border:1px solid var(--border);border-radius:999px;padding:.35rem .85rem;text-decoration:none;transition:opacity .15s;}
+    .review-chip:hover{opacity:.7;}
   </style>
 </head>
 <body>
@@ -71,6 +77,8 @@
 </div>
 
 <div class="refresh-bar"><button class="refresh-btn" onclick="location.reload()">🔄 New Numbers</button></div>
+
+<div class="review-list" id="reviewList" style="display:none"></div>
 
 <div id="mainArea"><div class="problems-grid" id="problemsWrap"></div></div>
 
@@ -299,16 +307,32 @@ function showFeedback(idx, correct, solutionHtml) {
   showSolution(idx, solutionHtml);
 }
 const _solutions = {};
+const _missed = [];
+function flagMissed(idx) {
+  if (_missed.some(m => m.idx === idx)) return;
+  _missed.push({ idx, label: TOPICS[idx].label });
+  renderMissedList();
+}
+function renderMissedList() {
+  const el = document.getElementById('reviewList');
+  if (!_missed.length) { el.style.display = 'none'; return; }
+  el.style.display = 'block';
+  el.innerHTML = `<div class="review-list-title">📌 Topics to Review</div><div class="review-chips">` +
+    _missed.map(m => `<a class="review-chip" href="#card-${m.idx}">${m.label}</a>`).join('') + `</div>`;
+}
 function checkNumeric(idx, answer) {
   const val = parseNum(document.getElementById(`p${idx}`)?.value || '');
   if (isNaN(val)) return;
-  showFeedback(idx, approxEq(val, answer), _solutions[idx]);
+  const correct = approxEq(val, answer);
+  if (!correct) flagMissed(idx);
+  showFeedback(idx, correct, _solutions[idx]);
 }
 function checkNumeric2(idx, ans1, ans2) {
   const v1 = parseNum(document.getElementById(`p${idx}a`)?.value || '');
   const v2 = parseNum(document.getElementById(`p${idx}b`)?.value || '');
   if (isNaN(v1) || isNaN(v2)) return;
   const correct = (approxEq(v1,ans1) && approxEq(v2,ans2)) || (approxEq(v1,ans2) && approxEq(v2,ans1));
+  if (!correct) flagMissed(idx);
   showFeedback(idx, correct, _solutions[idx]);
 }
 function checkMCQ(idx, chosen, correct) {
@@ -318,6 +342,7 @@ function checkMCQ(idx, chosen, correct) {
     else if (i===chosen) b.className = 'mcq-btn wrong';
     else b.disabled = true;
   });
+  if (chosen !== correct) flagMissed(idx);
   const fb = document.getElementById(`fb-${idx}`);
   if (fb) {
     fb.className = `feedback show ${chosen===correct?'correct-fb':'wrong-fb'}`;
