@@ -97,7 +97,10 @@ const TOPICS = [
   {key:'linEq', label:'Solving Linear Equations'},
   {key:'distribute', label:'Distribute & Combine Like Terms'},
   {key:'fracArith', label:'Fraction Arithmetic'},
-  {key:'funcEval', label:'Function Evaluation'}
+  {key:'funcEval', label:'Function Evaluation'},
+  {key:'graphEval', label:'Evaluate a Function from a Graph'},
+  {key:'absValueEq', label:'Absolute Value Equations'},
+  {key:'inequalitySolve', label:'Solving Linear Inequalities'}
 ];
 const GEN = {};
 
@@ -161,6 +164,76 @@ GEN.funcEval = function() {
     solutionHtml: kD(`f(${x}) = ${a}(${x}) + ${b} = ${a*x} + ${b} = ${ans}`) };
 };
 
+/* Draws a simple line graph and marks the point being asked about. */
+function buildLineGraph(m, b, markX, halfX) {
+  const scale = 20, origin = 150;
+  const toSx = x => origin + x*scale;
+  const toSy = y => origin - y*scale;
+  let grid = '';
+  for (let i=-6;i<=6;i++) {
+    grid += `<line x1="${toSx(i)}" y1="10" x2="${toSx(i)}" y2="290" stroke="#eee" stroke-width="1"/>`;
+    grid += `<line x1="10" y1="${toSy(i)}" x2="290" y2="${toSy(i)}" stroke="#eee" stroke-width="1"/>`;
+  }
+  const axes = `<line x1="10" y1="${origin}" x2="290" y2="${origin}" stroke="#333" stroke-width="1.5"/>
+    <line x1="${origin}" y1="10" x2="${origin}" y2="290" stroke="#333" stroke-width="1.5"/>`;
+  const y1 = m*(-halfX)+b, y2 = m*halfX+b;
+  const lineEl = `<line x1="${toSx(-halfX)}" y1="${toSy(y1)}" x2="${toSx(halfX)}" y2="${toSy(y2)}" stroke="#1a7a3a" stroke-width="2.5"/>`;
+  const markY = m*markX+b;
+  const markEl = `<line x1="${toSx(markX)}" y1="${toSy(markY)}" x2="${toSx(markX)}" y2="${origin}" stroke="#999" stroke-dasharray="4,3"/>
+    <circle cx="${toSx(markX)}" cy="${toSy(markY)}" r="5" fill="#b91c1c"/>
+    <text x="${toSx(markX)+8}" y="${origin-6}" font-size="12" fill="#333" font-family="sans-serif">x = ${markX}</text>`;
+  return `<svg viewBox="0 0 300 300" width="260" height="260" style="background:#fff;border:1px solid #ddd;border-radius:8px;display:block;margin:.4rem auto">${grid}${axes}${lineEl}${markEl}</svg>`;
+}
+
+GEN.graphEval = function() {
+  const m = pick([-2,-1,1,2]);
+  const b = ri(-2,2);
+  const halfX = Math.abs(m)===2 ? 3 : 5;
+  const markX = ri(-halfX, halfX);
+  const ans = m*markX+b;
+  return { html:`The graph of ${kI('f(x)')} is shown below. Use the graph to evaluate ${kI(`f(${markX})`)}:
+      ${buildLineGraph(m,b,markX,halfX)}`,
+    type:'numeric', answer:ans,
+    solutionHtml: `Reading the graph at ${kI(`x = ${markX}`)}, the line passes through ${kI(`y = ${ans}`)}, so ` + kD(`f(${markX}) = ${ans}`) };
+};
+
+GEN.absValueEq = function() {
+  const a = pick([1,2,3]);
+  const x0 = ri(-5,5);
+  const d = ri(1,5);
+  const c = a*d;
+  const b = -a*x0;
+  const sol1 = x0-d, sol2 = x0+d;
+  return { html:`Solve: ${kD(`|${linearTex(a,b)}| = ${c}`)} Enter both solutions:`,
+    type:'numeric2', answers:[Math.min(sol1,sol2), Math.max(sol1,sol2)], labels:['smaller x','larger x'],
+    solutionHtml: kD(`${linearTex(a,b)} = ${c} \\ \\text{or}\\ ${linearTex(a,b)} = -${c}`) + kD(`x = ${sol2} \\ \\text{or}\\ x = ${sol1}`) };
+};
+
+GEN.inequalitySolve = function() {
+  const a = pick([-3,-2,-1,1,2,3]);
+  const b = ri(-5,5);
+  const x0 = ri(-5,5);
+  const sign0 = pick(['>','<']);
+  const c = a*x0 + b;
+  const flip = a < 0;
+  const flipSym = {'>':'<','<':'>'};
+  const finalSign = flip ? flipSym[sign0] : sign0;
+  const correctText = `x ${finalSign} ${x0}`;
+  const wrongSet = new Set([`x ${sign0} ${x0}`, `x ${finalSign} ${x0 + pick([-2,-1,1,2])}`, `x ${flipSym[finalSign]} ${x0}`]);
+  wrongSet.delete(correctText);
+  let wrongArr = [...wrongSet];
+  while (wrongArr.length < 3) {
+    const cand = `x ${pick(['>','<'])} ${x0 + ri(-3,3)}`;
+    if (cand !== correctText && !wrongArr.includes(cand)) wrongArr.push(cand);
+  }
+  wrongArr = wrongArr.slice(0,3);
+  const allTexts = [correctText, ...wrongArr].sort(() => Math.random()-.5);
+  const correctIdx = allTexts.indexOf(correctText);
+  return { html:`Solve the inequality: ${kD(`${linearTex(a,b)} ${sign0} ${c}`)}`,
+    type:'mcq', choices:allTexts.map(t => kI(t)), correctIdx,
+    solutionHtml: kD(`${a}x ${sign0} ${c-b}`) + (flip ? `<div style="margin:.3rem 0;font-size:.85rem">Dividing by a negative number flips the inequality.</div>` : '') + kD(correctText) };
+};
+
 /* ── Card builders ───────────────────────────────────────── */
 function buildNumericCard(num, label, prob, idx) {
   const id = `p${idx}`;
@@ -194,11 +267,24 @@ function buildNumeric2Card(num, label, prob, idx) {
       <div class="solution-body" id="sol-${idx}" style="display:none"></div>
     </div></div>`;
 }
+function buildMCQCard(num, label, prob, idx) {
+  const btnHtml = prob.choices.map((c,i) => `<button class="mcq-btn" id="mc-${idx}-${i}" onclick="checkMCQ(${idx}, ${i}, ${prob.correctIdx})">${c}</button>`).join('');
+  return `<div class="prob-card" id="card-${idx}">
+    <div class="prob-num">Problem ${num}</div>
+    <div class="prob-tag">${label}</div>
+    <div class="prob-statement">${prob.html}</div>
+    <div class="answer-area">
+      <div class="mcq-opts">${btnHtml}</div>
+      <div class="feedback" id="fb-${idx}"></div>
+      <div class="solution-body" id="sol-${idx}" style="display:none"></div>
+    </div></div>`;
+}
 
 /* ── Grading ─────────────────────────────────────────────── */
 function lockCard(idx) {
   document.querySelectorAll(`#card-${idx} .ans-input`).forEach(el=>el.disabled=true);
   document.querySelectorAll(`#card-${idx} .check-btn`).forEach(el=>el.disabled=true);
+  document.querySelectorAll(`#card-${idx} .mcq-btn`).forEach(el=>el.disabled=true);
 }
 function showSolution(idx, solHtml) {
   const sol = document.getElementById(`sol-${idx}`);
@@ -225,6 +311,21 @@ function checkNumeric2(idx, ans1, ans2) {
   const correct = (approxEq(v1,ans1) && approxEq(v2,ans2)) || (approxEq(v1,ans2) && approxEq(v2,ans1));
   showFeedback(idx, correct, _solutions[idx]);
 }
+function checkMCQ(idx, chosen, correct) {
+  const btns = document.querySelectorAll(`#card-${idx} .mcq-btn`);
+  btns.forEach((b,i) => {
+    if (i===correct) b.className = 'mcq-btn ' + (i===chosen?'correct':'reveal');
+    else if (i===chosen) b.className = 'mcq-btn wrong';
+    else b.disabled = true;
+  });
+  const fb = document.getElementById(`fb-${idx}`);
+  if (fb) {
+    fb.className = `feedback show ${chosen===correct?'correct-fb':'wrong-fb'}`;
+    fb.innerHTML = `<span class="fb-icon">${chosen===correct?'✓':'✗'}</span> ${chosen===correct?'Correct!':'Not quite — the correct answer is highlighted.'}`;
+  }
+  lockCard(idx);
+  showSolution(idx, _solutions[idx]);
+}
 
 /* ── Render ──────────────────────────────────────────────── */
 function render() {
@@ -233,6 +334,7 @@ function render() {
     const prob = GEN[t.key]();
     _solutions[idx] = prob.solutionHtml;
     if (prob.type === 'numeric2') html += buildNumeric2Card(idx+1, t.label, prob, idx);
+    else if (prob.type === 'mcq') html += buildMCQCard(idx+1, t.label, prob, idx);
     else html += buildNumericCard(idx+1, t.label, prob, idx);
   });
   document.getElementById('problemsWrap').innerHTML = html;

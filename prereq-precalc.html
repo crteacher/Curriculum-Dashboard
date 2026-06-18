@@ -100,7 +100,9 @@ const TOPICS = [
   {key:'parallelPerp', label:'Parallel & Perpendicular Slopes'},
   {key:'exponentRules', label:'Exponent Rules'},
   {key:'radicals', label:'Simplifying Radicals'},
-  {key:'powersOfI', label:'Powers of i'}
+  {key:'powersOfI', label:'Powers of i'},
+  {key:'domainRational', label:'Domain of Rational Functions'},
+  {key:'piecewiseEval', label:'Evaluate Piecewise Functions'}
 ];
 const GEN = {};
 
@@ -197,6 +199,28 @@ GEN.powersOfI = function() {
   const texAns = ['1','i','-1','-i'];
   return { html:`Simplify: ${kD(`i^{${n}}`)}`, type:'mcq', choices:['1','i','-1','-i'], correctIdx:rem,
     solutionHtml: `${kI(`${n} \\div 4`)} has remainder ${rem}, so ${kI(`i^{${n}} = i^${rem} = ${texAns[rem]}`)}. (Cycle: ${kI('i^1=i,\\ i^2=-1,\\ i^3=-i,\\ i^4=1')}.)` };
+};
+
+GEN.domainRational = function() {
+  let a = ri(-5,5), c = ri(-5,5);
+  while (c === a) c = ri(-5,5);
+  const b = ri(-5,5);
+  const lo = Math.min(a,c), hi = Math.max(a,c);
+  return { html:`Let ${kI(`f(x) = \\dfrac{${linearTex(1,b)}}{(${linearTex(1,-a)})(${linearTex(1,-c)})}`)}. What two values are excluded from the domain?`,
+    type:'numeric2', answers:[lo,hi], labels:['smaller excluded value','larger excluded value'],
+    solutionHtml: kD(`x ${a>=0?'-':'+'} ${Math.abs(a)} = 0 \\implies x = ${a}`) + kD(`x ${c>=0?'-':'+'} ${Math.abs(c)} = 0 \\implies x = ${c}`) };
+};
+
+GEN.piecewiseEval = function() {
+  const brk = ri(-2,2);
+  const a1 = ri(1,3), b1 = ri(-4,4), a2 = ri(1,3), b2 = ri(-4,4);
+  const useFirst = Math.random()<.5;
+  const x = useFirst ? ri(brk-3, brk-1) : ri(brk+1, brk+3);
+  const ans = useFirst ? a1*x+b1 : a2*x+b2;
+  return { html:`${kD(`f(x) = \\begin{cases} ${linearTex(a1,b1)} & x < ${brk} \\\\ ${linearTex(a2,b2)} & x \\ge ${brk} \\end{cases}`)} Find ${kI(`f(${x})`)}:`,
+    type:'numeric', answer:ans,
+    solutionHtml: `Since ${kI(`${x} ${useFirst?'<':'\\ge'} ${brk}`)}, use the ${useFirst?'first':'second'} branch: ` +
+      kD(`f(${x}) = ${useFirst?a1:a2}(${x}) ${(useFirst?b1:b2)>=0?'+':'-'} ${Math.abs(useFirst?b1:b2)} = ${ans}`) };
 };
 
 /* ── Card builders ───────────────────────────────────────── */
