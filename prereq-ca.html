@@ -108,9 +108,37 @@ const TOPICS = [
   {key:'funcEval', label:'Function Evaluation'},
   {key:'graphEval', label:'Evaluate a Function from a Graph'},
   {key:'absValueEq', label:'Absolute Value Equations'},
-  {key:'inequalitySolve', label:'Solving Linear Inequalities'}
+  {key:'inequalitySolve', label:'Solving Linear Inequalities'},
+  {key:'slopeFromPoints', label:'Slope from Two Points'},
+  {key:'systemsEq', label:'Solving Systems of Equations'}
 ];
 const GEN = {};
+
+GEN.slopeFromPoints = function() {
+  let x1=ri(-6,6), x2=ri(-6,6);
+  while (x2===x1) x2=ri(-6,6);
+  const y1=ri(-6,6), y2=ri(-6,6);
+  const dy=y2-y1, dx=x2-x1;
+  const [fn,fd] = reduceFrac(dy,dx);
+  return { html:`Find the slope of the line through ${kI(`(${x1}, ${y1})`)} and ${kI(`(${x2}, ${y2})`)}:`,
+    type:'numeric', answer: fn/fd,
+    solutionHtml: kD(`m = \\dfrac{${y2}-(${y1})}{${x2}-(${x1})} = \\dfrac{${dy}}{${dx}} = ${fd===1?fn:fracTex(fn,fd)}`) };
+};
+
+GEN.systemsEq = function() {
+  let x0, y0, a1, b1, a2, b2, det;
+  do {
+    x0 = ri(-6,6); y0 = ri(-6,6);
+    a1 = ri(-4,4)||1; b1 = ri(-4,4)||1;
+    a2 = ri(-4,4)||1; b2 = ri(-4,4)||1;
+    det = a1*b2 - a2*b1;
+  } while (det === 0);
+  const rhs1 = a1*x0 + b1*y0, rhs2 = a2*x0 + b2*y0;
+  const eq = (a,b,rhs) => `${termTex(a,'x',1)} ${b>=0?'+ '+termTex(b,'y',1):'- '+termTex(Math.abs(b),'y',1)} = ${rhs}`;
+  return { html:`Solve the system: ${kD(`\\begin{aligned}${eq(a1,b1,rhs1)} \\\\ ${eq(a2,b2,rhs2)}\\end{aligned}`)} <span class="ans-hint">Enter both values below.</span>`,
+    type:'numeric2', answers:[x0,y0], labels:['x','y'],
+    solutionHtml: kD(`\\text{Eliminate a variable, then solve: } x = ${x0}, \\; y = ${y0}`) };
+};
 
 GEN.orderOps = function() {
   const a = ri(2,9), b = ri(2,9), c = ri(2,9), d = ri(2,6);
@@ -316,7 +344,9 @@ const PRACTICE_LINKS = {
   funcEval: './College Algebra/CA_3_1_Inputs_Outputs_Practice.html',
   graphEval: './College Algebra/CA_3_1_Inputs_Outputs_Practice.html',
   absValueEq: './College Algebra/CA_1_6_Absolute_Values_Practice.html',
-  inequalitySolve: './College Algebra/CA_1_3_Interval_Notation_Inequalities_Practice.html'
+  inequalitySolve: './College Algebra/CA_1_3_Interval_Notation_Inequalities_Practice.html',
+  slopeFromPoints: './College Algebra/CA_2_1_Slope_Intercepts_Practice.html',
+  systemsEq: './College Algebra/SystemsOfEquations_Practice.html'
 };
 const _missed = [];
 function flagMissed(idx) {

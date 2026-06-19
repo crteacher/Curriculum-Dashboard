@@ -110,7 +110,10 @@ const TOPICS = [
   {key:'radicals', label:'Simplifying Radicals'},
   {key:'powersOfI', label:'Powers of i'},
   {key:'domainRational', label:'Domain of Rational Functions'},
-  {key:'piecewiseEval', label:'Evaluate Piecewise Functions'}
+  {key:'piecewiseEval', label:'Evaluate Piecewise Functions'},
+  {key:'inverseFunc', label:'Inverse Functions'},
+  {key:'transformations', label:'Function Transformations'},
+  {key:'complexMultDiv', label:'Multiplying & Dividing Complex Numbers'}
 ];
 const GEN = {};
 
@@ -207,6 +210,50 @@ GEN.powersOfI = function() {
   const texAns = ['1','i','-1','-i'];
   return { html:`Simplify: ${kD(`i^{${n}}`)}`, type:'mcq', choices:['1','i','-1','-i'], correctIdx:rem,
     solutionHtml: `${kI(`${n} \\div 4`)} has remainder ${rem}, so ${kI(`i^{${n}} = i^${rem} = ${texAns[rem]}`)}. (Cycle: ${kI('i^1=i,\\ i^2=-1,\\ i^3=-i,\\ i^4=1')}.)` };
+};
+
+GEN.inverseFunc = function() {
+  const a = ri(2,6), b = ri(-6,6), x0 = ri(-5,5);
+  const v = a*x0+b;
+  return { html:`Let ${kI(`f(x) = ${linearTex(a,b)}`)}. Find ${kI(`f^{-1}(${v})`)}:`, type:'numeric', answer:x0,
+    solutionHtml: kD(`y = ${linearTex(a,b)} \\implies x = \\dfrac{y ${b>=0?'-':'+'} ${Math.abs(b)}}{${a}}`) + kD(`f^{-1}(${v}) = ${x0}`) };
+};
+
+GEN.transformations = function() {
+  const h = pick([-4,-3,-2,-1,1,2,3,4]), k = pick([-4,-3,-2,-1,1,2,3,4]);
+  const hDir = h>0 ? 'right' : 'left', kDir = k>0 ? 'up' : 'down';
+  const correctText = `Shift ${Math.abs(h)} unit${Math.abs(h)===1?'':'s'} ${hDir} and ${Math.abs(k)} unit${Math.abs(k)===1?'':'s'} ${kDir}`;
+  const wrongs = [
+    `Shift ${Math.abs(h)} unit${Math.abs(h)===1?'':'s'} ${hDir==='right'?'left':'right'} and ${Math.abs(k)} unit${Math.abs(k)===1?'':'s'} ${kDir}`,
+    `Shift ${Math.abs(h)} unit${Math.abs(h)===1?'':'s'} ${hDir} and ${Math.abs(k)} unit${Math.abs(k)===1?'':'s'} ${kDir==='up'?'down':'up'}`,
+    `Shift ${Math.abs(k)} unit${Math.abs(k)===1?'':'s'} ${hDir} and ${Math.abs(h)} unit${Math.abs(h)===1?'':'s'} ${kDir}`
+  ];
+  const opts = [...wrongs];
+  const correctIdx = ri(0,3);
+  opts.splice(correctIdx,0,correctText);
+  const hTerm = h>=0 ? `x - ${h}` : `x + ${Math.abs(h)}`;
+  const kTerm = k>=0 ? `+ ${k}` : `- ${Math.abs(k)}`;
+  return { html:`If ${kI(`g(x) = f(${hTerm}) ${kTerm}`)}, how is the graph of ${kI('g')} obtained from the graph of ${kI('f')}?`,
+    type:'mcq', choices:opts, correctIdx,
+    solutionHtml: `Replacing ${kI('x')} with ${kI('x-h')} shifts horizontally by h (right if h&gt;0); adding k shifts vertically by k (up if k&gt;0). Here: ${correctText}.` };
+};
+
+GEN.complexMultDiv = function() {
+  const c = ri(-4,4)||1, d = ri(-4,4)||1;
+  const op = pick(['mult','div']);
+  if (op==='mult') {
+    const a = ri(-4,4)||1, b = ri(-4,4)||1;
+    const re = a*c - b*d, im = a*d + b*c;
+    return { html:`Multiply: ${kD(`(${a} ${b>=0?'+':'-'} ${Math.abs(b)}i)(${c} ${d>=0?'+':'-'} ${Math.abs(d)}i)`)} Enter the result as ${kI('p + qi')}:`,
+      type:'numeric2', answers:[re,im], labels:['real part p','imaginary part q'],
+      solutionHtml: kD(`(${a})(${c}) + (${a})(${d})i + (${b})(${c})i + (${b})(${d})i^2 = ${a*c} ${a*d+b*c>=0?'+':'-'} ${Math.abs(a*d+b*c)}i ${b*d>=0?'-':'+'} ${Math.abs(b*d)}`) + kD(`= ${re} ${im>=0?'+':'-'} ${Math.abs(im)}i`) };
+  } else {
+    const p = ri(-4,4), q = ri(-4,4);
+    const a = p*c - q*d, b = p*d + q*c;
+    return { html:`Divide: ${kD(`\\dfrac{${a} ${b>=0?'+':'-'} ${Math.abs(b)}i}{${c} ${d>=0?'+':'-'} ${Math.abs(d)}i}`)} Enter the result as ${kI('p + qi')}:`,
+      type:'numeric2', answers:[p,q], labels:['real part p','imaginary part q'],
+      solutionHtml: kD(`\\text{Multiply by the conjugate: }\\dfrac{${c} ${d>=0?'-':'+'} ${Math.abs(d)}i}{${c} ${d>=0?'-':'+'} ${Math.abs(d)}i}`) + kD(`= ${p} ${q>=0?'+':'-'} ${Math.abs(q)}i`) };
+  }
 };
 
 GEN.domainRational = function() {
@@ -306,7 +353,10 @@ const PRACTICE_LINKS = {
   radicals: './College Algebra/CA_6_2_Simplifying_Roots_Practice.html',
   powersOfI: './College Algebra/CA_5_1_Complex_Numbers_Practice.html',
   domainRational: './PreCalc/PC_1_2a_Domain_Range_Practice.html',
-  piecewiseEval: './PreCalc/PC_1_2b_Piecewise_Functions_Practice.html'
+  piecewiseEval: './PreCalc/PC_1_2b_Piecewise_Functions_Practice.html',
+  inverseFunc: './College Algebra/CA_3_5_Inverse_Functions_Practice.html',
+  transformations: './PreCalc/PC_1_5_Transformations_of_Functions_Practice.html',
+  complexMultDiv: './College Algebra/CA_5_2_Multiply_Divide_Complex_Practice.html'
 };
 const _missed = [];
 function flagMissed(idx) {
