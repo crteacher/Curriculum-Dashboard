@@ -132,6 +132,14 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   .svg-caption{font-size:9pt}
 }
 @page{margin:.55in .65in;size:letter}
+.proof-panel{margin:.4rem 0 1.1rem;border-left:3px solid #7a9a6a;border-radius:0 6px 6px 0;background:#f5f7f3}
+.proof-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#5a7a4a;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.proof-toggle::-webkit-details-marker{display:none}
+details[open]>.proof-toggle{color:#1e3a5c}
+.proof-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #c8d8b8}
+.proof-body p{margin-bottom:.45rem}
+.proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
+@media print{.proof-panel{display:none}}
 </style>
 </head>
 <body>
@@ -142,10 +150,32 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 <div class="two-col">
 <div class="col"><div class="section-head">The Formula</div>
 <div class="accent-box"><p>If $f(x)\geq g(x)$ on $[a,b]$:</p><p>$$A = \int_a^b [f(x)-g(x)]\,dx$$</p><p><em>Top minus bottom.</em></p></div>
+<details class="proof-panel">
+<summary class="proof-toggle">▸ Show Proof</summary>
+<div class="proof-body">
+<p>Picture the region as a stack of very thin vertical strips, each perpendicular to the $x$-axis. At position $x$ a strip runs from the lower curve $g(x)$ up to the upper curve $f(x)$, so its height is $f(x)-g(x)$.</p>
+<p>Give the strip a tiny width $dx$. It is almost a rectangle, so its area is height times width:</p>
+<p>$$dA=[f(x)-g(x)]\,dx.$$</p>
+<p>Adding every strip from $x=a$ to $x=b$ and letting the widths shrink to zero turns the sum into an integral:</p>
+<p>$$A=\int_a^b[f(x)-g(x)]\,dx.$$</p>
+<p>Another way to see it: $\int_a^b f\,dx$ is the area under the top curve and $\int_a^b g\,dx$ the area under the bottom curve, so their difference is exactly the area trapped between them.</p>
+<p class="proof-qed">∎</p>
+</div>
+</details>
 <p class="body-text">Always sketch: identify which curve is on top. If they cross, split the integral at the intersection point.</p>
 </div>
 <div class="col"><div class="section-head">Integrating with Respect to $y$</div>
 <div class="accent-box"><p>Sometimes it is easier to integrate horizontally:</p><p>$$A = \int_c^d [R(y)-L(y)]\,dy$$</p><p>where $R(y)$ = right curve, $L(y)$ = left curve.</p></div>
+<details class="proof-panel">
+<summary class="proof-toggle">▸ Show Proof</summary>
+<div class="proof-body">
+<p>This is the same slicing idea turned on its side. Now cut the region into thin <em>horizontal</em> strips, each of thickness $dy$.</p>
+<p>At height $y$ a strip stretches from the left boundary $L(y)$ to the right boundary $R(y)$, so its length is $R(y)-L(y)$ and its area is</p>
+<p>$$dA=[R(y)-L(y)]\,dy.$$</p>
+<p>Summing the strips from $y=c$ to $y=d$ gives $A=\int_c^d[R(y)-L(y)]\,dy$. We reach for this version when the region is easier to describe by its left and right edges than by its top and bottom.</p>
+<p class="proof-qed">∎</p>
+</div>
+</details>
 <p class="body-text">Use $dy$ when the region is better described by horizontal slices, or when the curves are given as $x = f(y)$.</p>
 </div>
 </div>
@@ -154,6 +184,31 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 <div class="ex-block">
   <div class="ex-label">Example 1 &nbsp;&mdash;&nbsp; Two parabolas</div>
   <div class="ex-body">Find the area between $y=x^2$ and $y=x+2$.</div>
+  <div class="svg-figure">
+  <svg viewBox="0 0 300 262" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif">
+    <defs><marker id="arr" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#999"/></marker></defs>
+    <!-- shaded region -->
+    <polygon points="100.4,188.9 241.1,82.8 241.1,82.8 238.7,89.8 236.4,96.6 234.1,103.2 231.7,109.7 229.4,115.9 227.0,122.0 224.7,128.0 222.3,133.7 220.0,139.3 217.6,144.7 215.3,149.9 212.9,155.0 210.6,159.8 208.3,164.5 205.9,169.0 203.6,173.4 201.2,177.5 198.9,181.5 196.5,185.3 194.2,188.9 191.8,192.4 189.5,195.6 187.1,198.7 184.8,201.7 182.5,204.4 180.1,207.0 177.8,209.4 175.4,211.6 173.1,213.6 170.7,215.5 168.4,217.1 166.0,218.6 163.7,220.0 161.3,221.1 159.0,222.1 156.7,222.9 154.3,223.5 152.0,224.0 149.6,224.2 147.3,224.3 144.9,224.2 142.6,224.0 140.2,223.5 137.9,222.9 135.5,222.1 133.2,221.1 130.9,220.0 128.5,218.6 126.2,217.1 123.8,215.5 121.5,213.6 119.1,211.6 116.8,209.4 114.4,207.0 112.1,204.4 109.7,201.7 107.4,198.7 105.1,195.6 102.7,192.4 100.4,188.9" fill="#1e3a5c" fill-opacity="0.15"/>
+    <!-- axes -->
+    <line x1="30" y1="224.3" x2="294" y2="224.3" stroke="#999" stroke-width="1" marker-end="url(#arr)"/>
+    <line x1="147.3" y1="242" x2="147.3" y2="6" stroke="#999" stroke-width="1" marker-end="url(#arr)"/>
+    <text x="292.0" y="218.3" font-size="11" font-style="italic" fill="#555">x</text>
+    <text x="152.3" y="16.0" font-size="11" font-style="italic" fill="#555">y</text>
+    <!-- curves -->
+    <polyline points="32.3,11.9 34.7,20.5 37.0,28.9 39.4,37.1 41.7,45.2 44.1,53.0 46.4,60.7 48.8,68.3 51.1,75.6 53.5,82.8 55.8,89.8 58.1,96.6 60.5,103.2 62.8,109.7 65.2,115.9 67.5,122.0 69.9,128.0 72.2,133.7 74.6,139.3 76.9,144.7 79.3,149.9 81.6,155.0 83.9,159.8 86.3,164.5 88.6,169.0 91.0,173.4 93.3,177.5 95.7,181.5 98.0,185.3 100.4,188.9 102.7,192.4 105.1,195.6 107.4,198.7 109.7,201.7 112.1,204.4 114.4,207.0 116.8,209.4 119.1,211.6 121.5,213.6 123.8,215.5 126.2,217.1 128.5,218.6 130.9,220.0 133.2,221.1 135.5,222.1 137.9,222.9 140.2,223.5 142.6,224.0 144.9,224.2 147.3,224.3 149.6,224.2 152.0,224.0 154.3,223.5 156.7,222.9 159.0,222.1 161.3,221.1 163.7,220.0 166.0,218.6 168.4,217.1 170.7,215.5 173.1,213.6 175.4,211.6 177.8,209.4 180.1,207.0 182.5,204.4 184.8,201.7 187.1,198.7 189.5,195.6 191.8,192.4 194.2,188.9 196.5,185.3 198.9,181.5 201.2,177.5 203.6,173.4 205.9,169.0 208.3,164.5 210.6,159.8 212.9,155.0 215.3,149.9 217.6,144.7 220.0,139.3 222.3,133.7 224.7,128.0 227.0,122.0 229.4,115.9 231.7,109.7 234.1,103.2 236.4,96.6 238.7,89.8 241.1,82.8 243.4,75.6 245.8,68.3 248.1,60.7 250.5,53.0 252.8,45.2 255.2,37.1 257.5,28.9 259.9,20.5 262.2,11.9" fill="none" stroke="#7a5c1e" stroke-width="2"/>
+    <line x1="30.0" y1="242.0" x2="288.0" y2="47.4" stroke="#1e3a5c" stroke-width="2"/>
+    <!-- intersection dots -->
+    <circle cx="100.4" cy="188.9" r="3" fill="#1a1a1a"/>
+    <circle cx="241.1" cy="82.8" r="3" fill="#1a1a1a"/>
+    <text x="98.4" y="203.9" font-size="10" fill="#1a1a1a" text-anchor="end">(-1, 1)</text>
+    <text x="247.1" y="85.8" font-size="10" fill="#1a1a1a">(2, 4)</text>
+    <!-- curve labels -->
+    <text x="51.1" y="58.0" font-size="11" fill="#7a5c1e">y=x²</text>
+    <text x="248.1" y="40.3" font-size="11" fill="#1e3a5c">y=x+2</text>
+  </svg>
+    <div class="svg-caption">Region between $y=x+2$ (top) and $y=x^2$ (bottom) on $[-1,2]$, meeting at $(-1,1)$ and $(2,4)$.</div>
+  </div>
   <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">Intersections: $x^2=x+2\Rightarrow x=-1,2$.<br>$A=\int_{-1}^2[(x+2)-x^2]\,dx=\left[\dfrac{x^2}{2}+2x-\dfrac{x^3}{3}\right]_{-1}^2=\dfrac{9}{2}$</div></div>
 </div>
 <div class="ex-block">
@@ -197,7 +252,7 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 <div class="pr-row">
   <div class="pr-num">5.</div>
   <div class="pr-prob">Area between $y=|x|$ and $y=x^2-2$</div>
-  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$\dfrac{14}{3}$</div></div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$\dfrac{20}{3}$</div></div>
 </div>
 <div class="pr-row">
   <div class="pr-num">6.</div>
@@ -224,5 +279,6 @@ function toggleAns(btn) {
     throwOnError: false
   });
 </script>
+<!-- proof-layer:done -->
 </body>
 </html>

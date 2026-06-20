@@ -79,6 +79,14 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   .st-ans-hidden{display:none !important}
 }
 @page{margin:.55in .65in;size:letter}
+.proof-panel{margin:.4rem 0 1.1rem;border-left:3px solid #7a9a6a;border-radius:0 6px 6px 0;background:#f5f7f3}
+.proof-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#5a7a4a;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.proof-toggle::-webkit-details-marker{display:none}
+details[open]>.proof-toggle{color:#1e3a5c}
+.proof-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #c8d8b8}
+.proof-body p{margin-bottom:.45rem}
+.proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
+@media print{.proof-panel{display:none}}
 </style>
 </head>
 <body>
@@ -96,6 +104,20 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 <p>When $a=0$ this is called a <strong>Maclaurin series</strong>.</p>
 <p>The $n$th partial sum $T_n(x)$ is the <strong>degree-$n$ Taylor polynomial</strong>.</p>
 </div>
+<details class="proof-panel">
+<summary class="proof-toggle">▸ Show Proof</summary>
+<div class="proof-body">
+  <p>Why those coefficients $\dfrac{f^{(n)}(a)}{n!}$? Suppose $f$ really does equal some power series centered at $a$:</p>
+  <p>$$f(x)=c_0+c_1(x-a)+c_2(x-a)^2+c_3(x-a)^3+\cdots$$</p>
+  <p>We just need to pin down each $c_n$, and two tools do it: plugging in $x=a$, and differentiating.</p>
+  <p>Set $x=a$: every term carrying a factor of $(x-a)$ dies, leaving $f(a)=c_0$.</p>
+  <p>Differentiate once: $f'(x)=c_1+2c_2(x-a)+3c_3(x-a)^2+\cdots$; setting $x=a$ gives $f'(a)=c_1$.</p>
+  <p>Differentiate again: $f''(x)=2c_2+(3\cdot 2)c_3(x-a)+\cdots$, so $f''(a)=2c_2$, i.e. $c_2=\dfrac{f''(a)}{2}$.</p>
+  <p>Each extra derivative pulls a factor down from the exponent, so after $n$ derivatives the constant term is $n!\,c_n$. Setting $x=a$ gives $f^{(n)}(a)=n!\,c_n$, hence</p>
+  <p>$$c_n=\frac{f^{(n)}(a)}{n!}.$$</p>
+  <p class="proof-qed">∎</p>
+</div>
+</details>
 </div>
 <div class="col">
 <div class="section-head">Key Maclaurin Series</div>
@@ -169,47 +191,4 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   <div class="pr-prob">Use the $e^x$ series to estimate $e^{0.1}$ — keep terms through $x^3$. Round to 4 decimal places.</div>
   <div class="pr-ans student">
     <textarea class="st-work"></textarea>
-    <button class="st-btn-sm" onclick="toggleAns(this)">Show answer</button>
-    <div class="st-ans-hidden">$1+0.1+\frac{0.01}{2}+\frac{0.001}{6}\approx 1.1052$</div>
-  </div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">5.</div>
-  <div class="pr-prob">Use a known series to write the first three nonzero terms of the Maclaurin series for $\sin(3x)$.</div>
-  <div class="pr-ans student">
-    <textarea class="st-work"></textarea>
-    <button class="st-btn-sm" onclick="toggleAns(this)">Show answer</button>
-    <div class="st-ans-hidden">$3x-\dfrac{9x^3}{2}+\dfrac{81x^5}{40}$</div>
-  </div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">6.</div>
-  <div class="pr-prob">Find the Maclaurin series for $\dfrac{1}{1+x^2}$ using the geometric series formula.</div>
-  <div class="pr-ans student">
-    <textarea class="st-work"></textarea>
-    <button class="st-btn-sm" onclick="toggleAns(this)">Show answer</button>
-    <div class="st-ans-hidden">Replace $x$ with $-x^2$: $\displaystyle\sum_{n=0}^{\infty}(-1)^n x^{2n}$, $R=1$</div>
-  </div>
-</div>
-</div>
-
-</div>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
-<script>
-function toggleAns(btn) {
-  if (!btn.dataset.orig) btn.dataset.orig = btn.textContent;
-  var ans = btn.nextElementSibling;
-  var showing = ans.classList.toggle('visible');
-  btn.textContent = showing ? 'Hide' : btn.dataset.orig;
-}
-  renderMathInElement(document.body, {
-    delimiters: [
-      {left: '$$', right: '$$', display: true},
-      {left: '$',  right: '$',  display: false}
-    ],
-    throwOnError: false
-  });
-</script>
-</body>
-</html>
+    <button class="st-btn-s

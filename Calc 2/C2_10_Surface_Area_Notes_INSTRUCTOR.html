@@ -132,6 +132,14 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   .svg-caption{font-size:9pt}
 }
 @page{margin:.55in .65in;size:letter}
+.proof-panel{margin:.4rem 0 1.1rem;border-left:3px solid #7a9a6a;border-radius:0 6px 6px 0;background:#f5f7f3}
+.proof-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#5a7a4a;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.proof-toggle::-webkit-details-marker{display:none}
+details[open]>.proof-toggle{color:#1e3a5c}
+.proof-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #c8d8b8}
+.proof-body p{margin-bottom:.45rem}
+.proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
+@media print{.proof-panel{display:none}}
 </style>
 </head>
 <body>
@@ -142,6 +150,19 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 <div class="two-col">
 <div class="col"><div class="section-head">Surface Area Formula</div>
 <div class="accent-box"><p>Rotating $y=f(x)$ on $[a,b]$ about the <strong>$x$-axis</strong>:</p><p>$$S = 2\pi\int_a^b f(x)\sqrt{1+[f'(x)]^2}\,dx$$</p><p>About the <strong>$y$-axis</strong>:</p><p>$$S = 2\pi\int_a^b x\sqrt{1+[f'(x)]^2}\,dx$$</p></div>
+<details class="proof-panel">
+<summary class="proof-toggle">▸ Show Proof</summary>
+<div class="proof-body">
+  <p>Picture the surface as a stack of very thin bands, each one made by spinning a tiny piece of the curve around the axis. Slice at position $x$.</p>
+  <p>A tiny piece of the curve has length equal to the arc-length element from the last section, $ds=\sqrt{1+[f'(x)]^2}\,dx$.</p>
+  <p>When that little piece is spun around the $x$-axis it traces a thin ring sitting at radius $r=f(x)$, so the ring's circumference is $2\pi f(x)$.</p>
+  <p>Unroll the band: it becomes a thin strip whose length is that circumference and whose width is the slant length $ds$. Its area is therefore $dS=2\pi f(x)\sqrt{1+[f'(x)]^2}\,dx$.</p>
+  <p>Adding up every band from $a$ to $b$ — which is exactly what integration does — gives the total surface area:</p>
+  <p>$$S=2\pi\int_a^b f(x)\sqrt{1+[f'(x)]^2}\,dx.$$</p>
+  <p>Rotating about the $y$-axis instead puts each band at radius $r=x$, which simply replaces $f(x)$ with $x$ and gives the second formula.</p>
+  <p class="proof-qed">∎</p>
+</div>
+</details>
 <p class="body-text">The $2\pi r$ factor is the circumference of the ring at each point; $\sqrt{1+(f')^2}\,dx$ is the arc length element.</p>
 </div>
 <div class="col"><div class="section-head">Key Notes</div>
@@ -223,5 +244,6 @@ function toggleAns(btn) {
     throwOnError: false
   });
 </script>
+<!-- proof-layer:done -->
 </body>
 </html>

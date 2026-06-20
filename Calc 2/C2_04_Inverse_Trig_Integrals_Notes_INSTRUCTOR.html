@@ -132,6 +132,14 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   .svg-caption{font-size:9pt}
 }
 @page{margin:.55in .65in;size:letter}
+.proof-panel{margin:.4rem 0 1.1rem;border-left:3px solid #7a9a6a;border-radius:0 6px 6px 0;background:#f5f7f3}
+.proof-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#5a7a4a;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.proof-toggle::-webkit-details-marker{display:none}
+details[open]>.proof-toggle{color:#1e3a5c}
+.proof-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #c8d8b8}
+.proof-body p{margin-bottom:.45rem}
+.proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
+@media print{.proof-panel{display:none}}
 </style>
 </head>
 <body>
@@ -142,6 +150,19 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 <div class="two-col">
 <div class="col"><div class="section-head">The Three Formulas</div>
 <div class="accent-box"><p>$\displaystyle\int\frac{du}{\sqrt{a^2-u^2}}=\arcsin\frac{u}{a}+C$</p><p>$\displaystyle\int\frac{du}{a^2+u^2}=\frac{1}{a}\arctan\frac{u}{a}+C$</p><p>$\displaystyle\int\frac{du}{u\sqrt{u^2-a^2}}=\frac{1}{a}\text{arcsec}\frac{|u|}{a}+C$</p></div>
+<details class="proof-panel">
+<summary class="proof-toggle">▸ Show Proof</summary>
+<div class="proof-body">
+<p>Every one of these comes straight from a derivative you already know &mdash; integration is just differentiation run backwards. To prove an integral formula we differentiate the right-hand side and check we get back the integrand. The one trick to watch is how the constant $a$ rescales the variable.</p>
+<p><strong>Arctan form.</strong> Since $\frac{d}{dx}\arctan x=\frac{1}{1+x^2}$, the chain rule gives</p>
+<p>$$\frac{d}{du}\left[\frac{1}{a}\arctan\frac{u}{a}\right]=\frac{1}{a}\cdot\frac{1}{1+(u/a)^2}\cdot\frac{1}{a}=\frac{1}{a^2}\cdot\frac{a^2}{a^2+u^2}=\frac{1}{a^2+u^2}.$$</p>
+<p>That is exactly the integrand, so the antiderivative is right.</p>
+<p><strong>Arcsin form.</strong> Using $\frac{d}{dx}\arcsin x=\frac{1}{\sqrt{1-x^2}}$,</p>
+<p>$$\frac{d}{du}\left[\arcsin\frac{u}{a}\right]=\frac{1}{\sqrt{1-(u/a)^2}}\cdot\frac{1}{a}=\frac{1}{a}\cdot\frac{a}{\sqrt{a^2-u^2}}=\frac{1}{\sqrt{a^2-u^2}}.$$</p>
+<p><strong>Arcsec form.</strong> The same check with $\frac{d}{dx}\operatorname{arcsec}x=\frac{1}{|x|\sqrt{x^2-1}}$ turns $\frac{1}{a}\operatorname{arcsec}\frac{|u|}{a}$ back into $\frac{1}{u\sqrt{u^2-a^2}}$. In each case the $\frac{1}{a}$ out front is precisely what the chain rule needs to cancel.</p>
+<p class="proof-qed">∎</p>
+</div>
+</details>
 </div>
 <div class="col"><div class="section-head">Using U-Sub First</div>
 <div class="accent-box"><p>Most problems require a $u$-substitution to match the standard form.</p><p>Key: identify $a^2$ and $u^2$ in the denominator/radicand.</p><p>Completing the square may be needed to expose the $a^2+u^2$ form.</p></div>
@@ -223,5 +244,6 @@ function toggleAns(btn) {
     throwOnError: false
   });
 </script>
+<!-- proof-layer:done -->
 </body>
 </html>

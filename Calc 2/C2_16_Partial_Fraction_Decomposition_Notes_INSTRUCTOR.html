@@ -132,6 +132,14 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   .svg-caption{font-size:9pt}
 }
 @page{margin:.55in .65in;size:letter}
+.proof-panel{margin:.4rem 0 1.1rem;border-left:3px solid #7a9a6a;border-radius:0 6px 6px 0;background:#f5f7f3}
+.proof-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#5a7a4a;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.proof-toggle::-webkit-details-marker{display:none}
+details[open]>.proof-toggle{color:#1e3a5c}
+.proof-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #c8d8b8}
+.proof-body p{margin-bottom:.45rem}
+.proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
+@media print{.proof-panel{display:none}}
 </style>
 </head>
 <body>
@@ -142,6 +150,19 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 <div class="two-col">
 <div class="col"><div class="section-head">The Method</div>
 <div class="accent-box"><p><strong>Distinct linear factors:</strong><br>$\dfrac{p(x)}{(x-a)(x-b)}=\dfrac{A}{x-a}+\dfrac{B}{x-b}$</p><p><strong>Repeated linear:</strong><br>$\dfrac{p(x)}{(x-a)^2}=\dfrac{A}{x-a}+\dfrac{B}{(x-a)^2}$</p><p><strong>Irreducible quadratic:</strong><br>$\dfrac{p(x)}{(x-a)(x^2+bx+c)}=\dfrac{A}{x-a}+\dfrac{Bx+C}{x^2+bx+c}$</p></div>
+<details class="proof-panel">
+<summary class="proof-toggle">▸ Show Proof</summary>
+<div class="proof-body">
+  <p>Why is splitting always possible? Take the distinct-linear case, where $p(x)$ has degree less than $2$. Suppose the split exists:</p>
+  <p>$$\frac{p(x)}{(x-a)(x-b)}=\frac{A}{x-a}+\frac{B}{x-b}.$$</p>
+  <p>Multiply both sides by $(x-a)(x-b)$ to clear denominators:</p>
+  <p>$$p(x)=A(x-b)+B(x-a).$$</p>
+  <p>This must hold for <em>every</em> $x$, so we get to plug in convenient values. Set $x=a$: the $B$ term vanishes and $p(a)=A(a-b)$, giving $A=\dfrac{p(a)}{a-b}$. Set $x=b$: $B=\dfrac{p(b)}{b-a}$.</p>
+  <p>Both constants are forced, and both exist because $a\neq b$ keeps the denominators nonzero. So the decomposition isn't a hopeful guess — the right $A$ and $B$ always exist and are unique.</p>
+  <p>The repeated-root and irreducible-quadratic forms work the same way: write the template with unknown constants on top, clear denominators, and match the coefficients of each power of $x$. The number of unknowns always equals the number of equations, so the system always solves.</p>
+  <p class="proof-qed">∎</p>
+</div>
+</details>
 </div>
 <div class="col"><div class="section-head">Steps</div>
 <div class="accent-box"><p>1. If degree of numerator $\geq$ degree of denominator, do polynomial long division first.</p><p>2. Factor the denominator completely.</p><p>3. Write the partial fraction form.</p><p>4. Multiply both sides by the denominator; equate coefficients or plug in roots.</p><p>5. Integrate each term.</p></div>
@@ -173,54 +194,4 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 <div class="section-head">Practice Problems</div>
 <div class="practice">
 <div class="pr-row">
-  <div class="pr-num">1.</div>
-  <div class="pr-prob">$\int\dfrac{1}{x^2-4}\,dx$</div>
-  <div class="pr-ans instructor">$\dfrac{1}{4}\ln\left|\dfrac{x-2}{x+2}\right|+C$</div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">2.</div>
-  <div class="pr-prob">$\int\dfrac{3x-1}{(x+1)(x-2)}\,dx$</div>
-  <div class="pr-ans instructor">$\dfrac{4}{3}\ln|x+1|+\dfrac{5}{3}\ln|x-2|+C$... (verify coefficients)</div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">3.</div>
-  <div class="pr-prob">$\int\dfrac{1}{x(x^2+4)}\,dx$</div>
-  <div class="pr-ans instructor">$\dfrac{1}{4}\ln|x|-\dfrac{1}{8}\ln(x^2+4)+C$</div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">4.</div>
-  <div class="pr-prob">$\int\dfrac{x+2}{x^2-3x+2}\,dx$</div>
-  <div class="pr-ans instructor">$4\ln|x-2|-3\ln|x-1|+C$</div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">5.</div>
-  <div class="pr-prob">$\int_0^1\dfrac{1}{(x+1)(x+2)}\,dx$</div>
-  <div class="pr-ans instructor">$\ln\dfrac{4}{3}$</div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">6.</div>
-  <div class="pr-prob">$\int\dfrac{2x^3+x^2}{x^2+1}\,dx$ (long div first)</div>
-  <div class="pr-ans instructor">$x^2-\dfrac{1}{2}\ln(x^2+1)+C$</div>
-</div>
-</div>
-
-</div>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
-<script>
-function toggleAns(btn) {
-  if (!btn.dataset.orig) btn.dataset.orig = btn.textContent;
-  var ans = btn.nextElementSibling;
-  var showing = ans.classList.toggle('visible');
-  btn.textContent = showing ? 'Hide' : btn.dataset.orig;
-}
-  renderMathInElement(document.body, {
-    delimiters: [
-      {left: '$$', right: '$$', display: true},
-      {left: '$',  right: '$',  display: false}
-    ],
-    throwOnError: false
-  });
-</script>
-</body>
-</html>
+  <div class

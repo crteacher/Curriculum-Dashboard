@@ -132,6 +132,14 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   .svg-caption{font-size:9pt}
 }
 @page{margin:.55in .65in;size:letter}
+.proof-panel{margin:.4rem 0 1.1rem;border-left:3px solid #7a9a6a;border-radius:0 6px 6px 0;background:#f5f7f3}
+.proof-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#5a7a4a;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.proof-toggle::-webkit-details-marker{display:none}
+details[open]>.proof-toggle{color:#1e3a5c}
+.proof-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #c8d8b8}
+.proof-body p{margin-bottom:.45rem}
+.proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
+@media print{.proof-panel{display:none}}
 </style>
 </head>
 <body>
@@ -142,6 +150,20 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 <div class="two-col">
 <div class="col"><div class="section-head">Arc Length Formula</div>
 <div class="accent-box"><p>For $y=f(x)$ on $[a,b]$:</p><p>$$L = \int_a^b \sqrt{1+[f'(x)]^2}\,dx$$</p><p>For $x=g(y)$ on $[c,d]$:</p><p>$$L = \int_c^d \sqrt{1+[g'(y)]^2}\,dy$$</p></div>
+<details class="proof-panel">
+<summary class="proof-toggle">▸ Show Proof</summary>
+<div class="proof-body">
+  <p>The key idea: a smooth curve, looked at closely enough, is almost straight. So approximate it with many tiny straight segments and add up their lengths.</p>
+  <p>Take one segment running from $x$ to $x+dx$. As you move along it, the curve rises by a small amount $dy$ while it runs across by $dx$.</p>
+  <p>That segment is the hypotenuse of a tiny right triangle with legs $dx$ and $dy$, so by the Pythagorean theorem its length is $ds=\sqrt{dx^2+dy^2}$.</p>
+  <p>Factor $dx^2$ out from under the root: $ds=\sqrt{1+\left(\dfrac{dy}{dx}\right)^2}\,dx=\sqrt{1+[f'(x)]^2}\,dx$, using $\dfrac{dy}{dx}=f'(x)$.</p>
+  <p>Adding the lengths of all these segments from $x=a$ to $x=b$ is an integral, giving</p>
+  <p>$$L=\int_a^b\sqrt{1+[f'(x)]^2}\,dx.$$</p>
+  <p>If the curve is given as $x=g(y)$ instead, the exact same triangle argument with the roles of $x$ and $y$ swapped gives $L=\int_c^d\sqrt{1+[g'(y)]^2}\,dy$.</p>
+  <p class="proof-qed">∎</p>
+</div>
+</details>
+
 <p class="body-text">Derived from the Pythagorean theorem applied to infinitesimal segments: $dL=\sqrt{dx^2+dy^2}$.</p>
 </div>
 <div class="col"><div class="section-head">Strategy</div>
@@ -224,5 +246,6 @@ function toggleAns(btn) {
     throwOnError: false
   });
 </script>
+<!-- proof-layer:done -->
 </body>
 </html>

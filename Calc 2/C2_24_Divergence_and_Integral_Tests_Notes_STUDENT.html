@@ -132,6 +132,14 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   .svg-caption{font-size:9pt}
 }
 @page{margin:.55in .65in;size:letter}
+.proof-panel{margin:.4rem 0 1.1rem;border-left:3px solid #7a9a6a;border-radius:0 6px 6px 0;background:#f5f7f3}
+.proof-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#5a7a4a;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.proof-toggle::-webkit-details-marker{display:none}
+details[open]>.proof-toggle{color:#1e3a5c}
+.proof-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #c8d8b8}
+.proof-body p{margin-bottom:.45rem}
+.proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
+@media print{.proof-panel{display:none}}
 </style>
 </head>
 <body>
@@ -142,6 +150,19 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 <div class="two-col">
 <div class="col"><div class="section-head">Integral Test</div>
 <div class="accent-box"><p>If $f$ is continuous, positive, decreasing on $[1,\infty)$ and $a_n=f(n)$:</p><p>$\sum_{n=1}^\infty a_n$ and $\int_1^\infty f(x)\,dx$ <strong>both converge or both diverge</strong>.</p><p><strong>$p$-series:</strong> $\sum\dfrac{1}{n^p}$ converges iff $p>1$.</p></div>
+<details class="proof-panel">
+<summary class="proof-toggle">▸ Show Proof</summary>
+<div class="proof-body">
+  <p>Why do $\sum a_n$ and $\int_1^\infty f\,dx$ live or die together when $f$ is positive and decreasing with $a_n=f(n)$? Draw the curve $y=f(x)$ and build rectangles of width $1$ against it.</p>
+  <p><strong>Rectangles under the curve.</strong> On each interval $[n,n+1]$ use a rectangle of height $f(n+1)$ — the value at the right end, which is the smallest height there because $f$ decreases. These sit below the curve, so their total area is at most the area under it:</p>
+  <p>$$a_2+a_3+a_4+\cdots\;\le\;\int_1^\infty f(x)\,dx.$$</p>
+  <p>If the integral is finite, the left-hand sum is trapped below a finite number — the series converges.</p>
+  <p><strong>Rectangles over the curve.</strong> Now use height $f(n)$ — the value at the left end, the largest height. These cover the curve, so</p>
+  <p>$$\int_1^\infty f(x)\,dx\;\le\;a_1+a_2+a_3+\cdots.$$</p>
+  <p>If the integral is infinite, the series is even bigger and diverges. The two inequalities pin the sum and the integral to the same fate. Applying this to $f(x)=1/x^p$ — whose integral converges exactly when $p>1$ — hands us the $p$-series rule for free.</p>
+  <p class="proof-qed">∎</p>
+</div>
+</details>
 </div>
 <div class="col"><div class="section-head">Using the Tests</div>
 <div class="accent-box"><p>1. Verify $f$ is positive, continuous, decreasing.</p><p>2. Evaluate $\int_1^\infty f(x)\,dx$.</p><p>3. Conclude convergence/divergence of the series (not its value).</p><p>Note: The integral value $\neq$ the series sum.</p></div>
@@ -185,42 +206,4 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 <div class="pr-row">
   <div class="pr-num">3.</div>
   <div class="pr-prob">$\sum\dfrac{1}{n^2+4}$ — converge/diverge?</div>
-  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">Converges (integral test)</div></div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">4.</div>
-  <div class="pr-prob">$\sum\dfrac{1}{n(\ln n)^2}$ — converge/diverge?</div>
-  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">Converges (integral: $-1/\ln n$)</div></div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">5.</div>
-  <div class="pr-prob">For what $p$ does $\sum n^{-p}$ converge?</div>
-  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$p>1$</div></div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">6.</div>
-  <div class="pr-prob">$\sum\dfrac{\ln n}{n}$ — converge/diverge?</div>
-  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">Diverges (integral test)</div></div>
-</div>
-</div>
-
-</div>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
-<script>
-function toggleAns(btn) {
-  if (!btn.dataset.orig) btn.dataset.orig = btn.textContent;
-  var ans = btn.nextElementSibling;
-  var showing = ans.classList.toggle('visible');
-  btn.textContent = showing ? 'Hide' : btn.dataset.orig;
-}
-  renderMathInElement(document.body, {
-    delimiters: [
-      {left: '$$', right: '$$', display: true},
-      {left: '$',  right: '$',  display: false}
-    ],
-    throwOnError: false
-  });
-</script>
-</body>
-</html>
+  <div c

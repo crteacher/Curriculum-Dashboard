@@ -132,6 +132,14 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   .svg-caption{font-size:9pt}
 }
 @page{margin:.55in .65in;size:letter}
+.proof-panel{margin:.4rem 0 1.1rem;border-left:3px solid #7a9a6a;border-radius:0 6px 6px 0;background:#f5f7f3}
+.proof-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#5a7a4a;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.proof-toggle::-webkit-details-marker{display:none}
+details[open]>.proof-toggle{color:#1e3a5c}
+.proof-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #c8d8b8}
+.proof-body p{margin-bottom:.45rem}
+.proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
+@media print{.proof-panel{display:none}}
 </style>
 </head>
 <body>
@@ -142,9 +150,31 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 <div class="two-col">
 <div class="col"><div class="section-head">Direct Comparison</div>
 <div class="accent-box"><p>Suppose $0\leq a_n\leq b_n$ for all large $n$:</p><p>• If $\sum b_n$ converges → $\sum a_n$ converges</p><p>• If $\sum a_n$ diverges → $\sum b_n$ diverges</p><p>Compare to a $p$-series or geometric series you know.</p></div>
+<details class="proof-panel">
+<summary class="proof-toggle">▸ Show Proof</summary>
+<div class="proof-body">
+  <p>Say $0\le a_n\le b_n$ for all large $n$, and $\sum b_n$ converges. Why must $\sum a_n$ converge too? Look at its partial sums $A_N=a_1+\cdots+a_N$. Because every $a_n\ge 0$, adding more terms only pushes $A_N$ upward — it's an increasing sequence.</p>
+  <p>But each $a_n$ is capped by $b_n$, so</p>
+  <p>$$A_N=\sum_{n=1}^N a_n\;\le\;\sum_{n=1}^N b_n\;\le\;\sum_{n=1}^\infty b_n,$$</p>
+  <p>a fixed finite number. So $A_N$ is increasing and bounded above — by the Monotone Convergence Theorem it must settle on a limit, and that limit is the value of $\sum a_n$.</p>
+  <p>The divergence half is the same picture flipped: if $\sum a_n$ diverges its partial sums blow up, and since $b_n\ge a_n$ the larger sum $\sum b_n$ blows up too.</p>
+  <p class="proof-qed">∎</p>
+</div>
+</details>
 </div>
 <div class="col"><div class="section-head">Limit Comparison Test</div>
 <div class="accent-box"><p>If $\lim_{n\to\infty}\dfrac{a_n}{b_n}=L$ where $0<L<\infty$:</p><p>$\sum a_n$ and $\sum b_n$ <strong>both converge or both diverge</strong>.</p><p>Choose $b_n$ with the same dominant behavior as $a_n$ (keep only highest-degree terms).</p></div>
+<details class="proof-panel">
+<summary class="proof-toggle">▸ Show Proof</summary>
+<div class="proof-body">
+  <p>Suppose $a_n,b_n>0$ and $\dfrac{a_n}{b_n}\to L$ with $0<L<\infty$. The idea: once the ratio is near $L$, $a_n$ is sandwiched between two multiples of $b_n$, and direct comparison finishes the job.</p>
+  <p>Since the ratio approaches $L$, for all large $n$ it stays between $\dfrac{L}{2}$ and $2L$. Multiplying through by $b_n$:</p>
+  <p>$$\frac{L}{2}\,b_n\;\le\;a_n\;\le\;2L\,b_n.$$</p>
+  <p>Now read both directions. If $\sum b_n$ converges, so does $\sum 2L\,b_n$, and the right inequality plus direct comparison make $\sum a_n$ converge. If $\sum b_n$ diverges, so does $\sum \tfrac{L}{2}b_n$, and the left inequality drags $\sum a_n$ down with it.</p>
+  <p>So the two series share the same fate — which is exactly why you may swap a messy $a_n$ for a simple $b_n$ that keeps only its dominant terms.</p>
+  <p class="proof-qed">∎</p>
+</div>
+</details>
 </div>
 </div>
 <div class="section-head">Worked Examples</div>
@@ -175,52 +205,4 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 <div class="pr-row">
   <div class="pr-num">1.</div>
   <div class="pr-prob">$\sum\dfrac{1}{2^n+n}$ — converge?</div>
-  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">Yes (compare to $1/2^n$)</div></div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">2.</div>
-  <div class="pr-prob">$\sum\dfrac{n}{n^3+1}$ — converge?</div>
-  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">Yes (LCT with $1/n^2$)</div></div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">3.</div>
-  <div class="pr-prob">$\sum\dfrac{1}{\sqrt{n^3+1}}$ — converge?</div>
-  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">Yes (LCT with $n^{-3/2}$, $p=3/2>1$)</div></div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">4.</div>
-  <div class="pr-prob">$\sum\dfrac{4n^2+1}{3n^4-2}$ — converge?</div>
-  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">Yes (LCT with $1/n^2$)</div></div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">5.</div>
-  <div class="pr-prob">$\sum\dfrac{1}{n-\ln n}$ — converge?</div>
-  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">Diverges (LCT with $1/n$)</div></div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">6.</div>
-  <div class="pr-prob">$\sum\dfrac{\cos^2 n}{n^2}$ — converge?</div>
-  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">Yes (compare to $1/n^2$)</div></div>
-</div>
-</div>
-
-</div>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
-<script>
-function toggleAns(btn) {
-  if (!btn.dataset.orig) btn.dataset.orig = btn.textContent;
-  var ans = btn.nextElementSibling;
-  var showing = ans.classList.toggle('visible');
-  btn.textContent = showing ? 'Hide' : btn.dataset.orig;
-}
-  renderMathInElement(document.body, {
-    delimiters: [
-      {left: '$$', right: '$$', display: true},
-      {left: '$',  right: '$',  display: false}
-    ],
-    throwOnError: false
-  });
-</script>
-</body>
-</html>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">S

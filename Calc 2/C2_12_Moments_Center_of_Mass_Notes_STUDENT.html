@@ -132,6 +132,14 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   .svg-caption{font-size:9pt}
 }
 @page{margin:.55in .65in;size:letter}
+.proof-panel{margin:.4rem 0 1.1rem;border-left:3px solid #7a9a6a;border-radius:0 6px 6px 0;background:#f5f7f3}
+.proof-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#5a7a4a;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.proof-toggle::-webkit-details-marker{display:none}
+details[open]>.proof-toggle{color:#1e3a5c}
+.proof-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #c8d8b8}
+.proof-body p{margin-bottom:.45rem}
+.proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
+@media print{.proof-panel{display:none}}
 </style>
 </head>
 <body>
@@ -148,6 +156,17 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 <p>$m = \rho\displaystyle\int_a^b f(x)\,dx$</p>
 <p>$M_y = \rho\displaystyle\int_a^b x\,f(x)\,dx$</p>
 <p>$M_x = \dfrac{\rho}{2}\displaystyle\int_a^b [f(x)]^2\,dx$</p>
+<details class="proof-panel">
+<summary class="proof-toggle">▸ Show Proof</summary>
+<div class="proof-body">
+  <p>A <em>moment</em> measures turning power: a tiny piece of mass $dm$ sitting a distance $r$ from an axis contributes $r\,dm$. The total moment is the sum of all these, and the total mass is the sum of the $dm$'s. Slice the lamina into thin vertical strips at position $x$.</p>
+  <p>The strip from $x$ to $x+dx$ is almost a rectangle of height $f(x)$ and width $dx$, so its area is $f(x)\,dx$ and its mass is $dm=\rho f(x)\,dx$. Summing gives $m=\rho\int_a^b f(x)\,dx$.</p>
+  <p>The strip's distance from the $y$-axis is simply $x$, so its moment about that axis is $x\,dm=\rho x f(x)\,dx$. Summing gives $M_y=\rho\int_a^b x f(x)\,dx$.</p>
+  <p>For $M_x$ we need each strip's distance from the $x$-axis. The strip is tall, but a uniform strip balances at its midpoint, height $f(x)/2$. So its moment about the $x$-axis is $\dfrac{f(x)}{2}\,dm=\dfrac{f(x)}{2}\cdot\rho f(x)\,dx=\dfrac{\rho}{2}[f(x)]^2\,dx$. That midpoint is where the factor of one-half comes from. Summing:</p>
+  <p>$$M_x=\frac{\rho}{2}\int_a^b [f(x)]^2\,dx.$$</p>
+  <p class="proof-qed">∎</p>
+</div>
+</details>
 </div>
 </div>
 <div class="col">
@@ -156,6 +175,17 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 <p>$\bar x = \dfrac{M_y}{m} = \dfrac{\displaystyle\int_a^b x\,f(x)\,dx}{\displaystyle\int_a^b f(x)\,dx}$</p>
 <p>$\bar y = \dfrac{M_x}{m} = \dfrac{\frac{1}{2}\displaystyle\int_a^b [f(x)]^2\,dx}{\displaystyle\int_a^b f(x)\,dx}$</p>
 <p><em>Density $\rho$ cancels for uniform laminas.</em></p>
+<details class="proof-panel">
+<summary class="proof-toggle">▸ Show Proof</summary>
+<div class="proof-body">
+  <p>The centroid is the <em>balance point</em>: support the lamina there and all the turning power cancels out. Think of the lever law — a mass $dm$ at position $x$, measured from the balance point $\bar x$, exerts a moment $(x-\bar x)\,dm$, and at balance these add to zero:</p>
+  <p>$$\int (x-\bar x)\,dm=0.$$</p>
+  <p>Split the integral: $\displaystyle\int x\,dm-\bar x\int dm=0$. The first piece is exactly the moment $M_y$, and $\int dm$ is the total mass $m$, so $M_y-\bar x\,m=0$.</p>
+  <p>Solving gives $\bar x=\dfrac{M_y}{m}$. Running the same argument about the $x$-axis gives $\bar y=\dfrac{M_x}{m}$.</p>
+  <p>For a uniform lamina every moment and the mass each carry one factor of $\rho$, so it cancels top and bottom — the centroid depends only on the shape, not the density.</p>
+  <p class="proof-qed">∎</p>
+</div>
+</details>
 </div>
 </div>
 </div>
@@ -285,5 +315,6 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
     throwOnError:false
   });
 </script>
+<!-- proof-layer:done -->
 </body>
 </html>

@@ -132,6 +132,14 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   .svg-caption{font-size:9pt}
 }
 @page{margin:.55in .65in;size:letter}
+.proof-panel{margin:.4rem 0 1.1rem;border-left:3px solid #7a9a6a;border-radius:0 6px 6px 0;background:#f5f7f3}
+.proof-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#5a7a4a;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.proof-toggle::-webkit-details-marker{display:none}
+details[open]>.proof-toggle{color:#1e3a5c}
+.proof-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #c8d8b8}
+.proof-body p{margin-bottom:.45rem}
+.proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
+@media print{.proof-panel{display:none}}
 </style>
 </head>
 <body>
@@ -145,6 +153,16 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 </div>
 <div class="col"><div class="section-head">$p$-Integral Test</div>
 <div class="accent-box"><p>$\displaystyle\int_1^\infty\frac{dx}{x^p}$ converges iff $p>1$.<br>Value when convergent: $\dfrac{1}{p-1}$</p><p>$\displaystyle\int_0^1\frac{dx}{x^p}$ converges iff $p<1$.<br>Value when convergent: $\dfrac{1}{1-p}$</p></div>
+<details class="proof-panel">
+<summary class="proof-toggle">▸ Show Proof</summary>
+<div class="proof-body">
+  <p>Both claims fall right out of integrating a power and watching the limit. Take $\displaystyle\int_1^\infty x^{-p}\,dx$ and assume $p\neq 1$:</p>
+  <p>$$\int_1^t x^{-p}\,dx=\left[\frac{x^{1-p}}{1-p}\right]_1^t=\frac{t^{1-p}-1}{1-p}.$$</p>
+  <p>Now let $t\to\infty$. Everything hinges on the sign of the exponent $1-p$. If $p>1$ then $1-p<0$, so $t^{1-p}\to 0$ and the integral converges to $\dfrac{0-1}{1-p}=\dfrac{1}{p-1}$. If $p<1$ then $1-p>0$, so $t^{1-p}\to\infty$ and it diverges. The borderline $p=1$ gives $\int_1^t x^{-1}\,dx=\ln t\to\infty$ — also divergent. So convergence happens exactly when $p>1$.</p>
+  <p>The interval $[0,1]$ is the mirror image: now the trouble is at $x=0$, where $x^{-p}$ blows up. The same antiderivative gives $\dfrac{1-t^{1-p}}{1-p}$ as $t\to 0^+$. This time $t^{1-p}\to 0$ precisely when $1-p>0$, i.e. $p<1$, leaving the finite value $\dfrac{1}{1-p}$. For $p\geq 1$ that term blows up and the integral diverges.</p>
+  <p class="proof-qed">∎</p>
+</div>
+</details>
 <p class="body-text">If a limit is $\pm\infty$ or DNE, the integral <strong>diverges</strong>.</p>
 </div>
 </div>
@@ -171,57 +189,4 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   <div class="ex-answer instructor">Split at 0: $\arctan x\big|_{-\infty}^0+\arctan x\big|_0^\infty=\dfrac{\pi}{2}+\dfrac{\pi}{2}=\pi$</div>
 </div>
 </div>
-<div class="section-head">Practice Problems</div>
-<div class="practice">
-<div class="pr-row">
-  <div class="pr-num">1.</div>
-  <div class="pr-prob">$\int_0^\infty e^{-x}\,dx$</div>
-  <div class="pr-ans instructor">$1$</div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">2.</div>
-  <div class="pr-prob">$\int_1^\infty x^{-3/2}\,dx$</div>
-  <div class="pr-ans instructor">$2$</div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">3.</div>
-  <div class="pr-prob">$\int_0^\infty xe^{-x}\,dx$</div>
-  <div class="pr-ans instructor">$1$ (IBP)</div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">4.</div>
-  <div class="pr-prob">$\int_0^1\ln x\,dx$</div>
-  <div class="pr-ans instructor">$-1$</div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">5.</div>
-  <div class="pr-prob">$\int_0^\infty\dfrac{dx}{x^{0.99}}$</div>
-  <div class="pr-ans instructor">Diverges ($p=0.99<1$ but this is $[0,\infty)$ — split at 1)</div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">6.</div>
-  <div class="pr-prob">Does $\int_1^\infty\dfrac{\cos x}{x^2}\,dx$ converge?</div>
-  <div class="pr-ans instructor">Yes (comparison with $1/x^2$)</div>
-</div>
-</div>
-
-</div>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
-<script>
-function toggleAns(btn) {
-  if (!btn.dataset.orig) btn.dataset.orig = btn.textContent;
-  var ans = btn.nextElementSibling;
-  var showing = ans.classList.toggle('visible');
-  btn.textContent = showing ? 'Hide' : btn.dataset.orig;
-}
-  renderMathInElement(document.body, {
-    delimiters: [
-      {left: '$$', right: '$$', display: true},
-      {left: '$',  right: '$',  display: false}
-    ],
-    throwOnError: false
-  });
-</script>
-</body>
-</html>
+<div cl

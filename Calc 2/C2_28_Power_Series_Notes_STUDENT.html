@@ -132,6 +132,14 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   .svg-caption{font-size:9pt}
 }
 @page{margin:.55in .65in;size:letter}
+.proof-panel{margin:.4rem 0 1.1rem;border-left:3px solid #7a9a6a;border-radius:0 6px 6px 0;background:#f5f7f3}
+.proof-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#5a7a4a;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.proof-toggle::-webkit-details-marker{display:none}
+details[open]>.proof-toggle{color:#1e3a5c}
+.proof-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #c8d8b8}
+.proof-body p{margin-bottom:.45rem}
+.proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
+@media print{.proof-panel{display:none}}
 </style>
 </head>
 <body>
@@ -142,6 +150,17 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 <div class="two-col">
 <div class="col"><div class="section-head">Power Series Basics</div>
 <div class="accent-box"><p>A <strong>power series centered at $a$</strong> is $\displaystyle\sum_{n=0}^{\infty}c_n(x-a)^n$.</p><p>Every power series has a <strong>radius of convergence $R\ge 0$</strong>:</p><ul><li>Converges absolutely for $|x-a|<R$</li><li>Diverges for $|x-a|>R$</li><li>Endpoints $x=a\pm R$: check separately</li></ul><p>Find $R$: $\dfrac{1}{R}=\lim\left|\dfrac{c_{n+1}}{c_n}\right|$</p></div>
+<details class="proof-panel">
+<summary class="proof-toggle">▸ Show Proof</summary>
+<div class="proof-body">
+  <p>Where does the formula $\dfrac{1}{R}=\lim\left|\dfrac{c_{n+1}}{c_n}\right|$ come from? Apply the ratio test to the power series $\sum c_n(x-a)^n$, treating the whole term $c_n(x-a)^n$ as the thing being summed:</p>
+  <p>$$\left|\frac{c_{n+1}(x-a)^{n+1}}{c_n(x-a)^n}\right|=\left|\frac{c_{n+1}}{c_n}\right|\,|x-a|\;\longrightarrow\;\ell\,|x-a|,$$</p>
+  <p>where $\ell=\lim\left|\dfrac{c_{n+1}}{c_n}\right|$ is the limit of the coefficient ratios. The ratio test promises absolute convergence whenever this stays below $1$:</p>
+  <p>$$\ell\,|x-a|<1\quad\Longleftrightarrow\quad |x-a|<\frac{1}{\ell}.$$</p>
+  <p>So the series converges exactly for $|x-a|$ smaller than $\dfrac{1}{\ell}$ and diverges past it — which is precisely what it means for the radius of convergence to be $R=\dfrac{1}{\ell}$, i.e. $\dfrac{1}{R}=\ell$. (If $\ell=0$ it converges for all $x$, so $R=\infty$; if $\ell=\infty$, only at $x=a$.)</p>
+  <p class="proof-qed">∎</p>
+</div>
+</details>
 </div>
 <div class="col"><div class="section-head">Operations on Power Series</div>
 <div class="accent-box"><p>Within the interval of convergence, power series behave like polynomials:</p><p><strong>Differentiation:</strong> $\dfrac{d}{dx}\displaystyle\sum c_n(x-a)^n=\sum nc_n(x-a)^{n-1}$</p><p><strong>Integration:</strong> $\displaystyle\int\sum c_n(x-a)^n\,dx=\sum\dfrac{c_n(x-a)^{n+1}}{n+1}+C$</p><p>Key: $\displaystyle\sum_{n=0}^{\infty}x^n=\dfrac{1}{1-x}$ for $|x|<1$.</p></div>
@@ -189,38 +208,4 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 </div>
 <div class="pr-row">
   <div class="pr-num">4.</div>
-  <div class="pr-prob">$\displaystyle\sum_{n=0}^{\infty}\dfrac{(3x)^n}{n!}$ — find $R$</div>
-  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$R=\infty$; equals $e^{3x}$</div></div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">5.</div>
-  <div class="pr-prob">Differentiate $\displaystyle\sum_{n=0}^{\infty}\dfrac{x^{n+1}}{n+1}$ to get a known series</div>
-  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$\sum x^n = \dfrac{1}{1-x}$</div></div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">6.</div>
-  <div class="pr-prob">$\displaystyle\sum_{n=0}^{\infty}n^2 x^n$ — converge or diverge at $x=1$?</div>
-  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">Diverges ($a_n=n^2\to\infty$)</div></div>
-</div>
-</div>
-
-</div>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
-<script>
-function toggleAns(btn) {
-  if (!btn.dataset.orig) btn.dataset.orig = btn.textContent;
-  var ans = btn.nextElementSibling;
-  var showing = ans.classList.toggle('visible');
-  btn.textContent = showing ? 'Hide' : btn.dataset.orig;
-}
-  renderMathInElement(document.body, {
-    delimiters: [
-      {left: '$$', right: '$$', display: true},
-      {left: '$',  right: '$',  display: false}
-    ],
-    throwOnError: false
-  });
-</script>
-</body>
-</html>
+  <div class="pr-prob">$\displaystyle\sum_{

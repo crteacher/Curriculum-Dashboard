@@ -132,6 +132,14 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   .svg-caption{font-size:9pt}
 }
 @page{margin:.55in .65in;size:letter}
+.proof-panel{margin:.4rem 0 1.1rem;border-left:3px solid #7a9a6a;border-radius:0 6px 6px 0;background:#f5f7f3}
+.proof-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#5a7a4a;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.proof-toggle::-webkit-details-marker{display:none}
+details[open]>.proof-toggle{color:#1e3a5c}
+.proof-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #c8d8b8}
+.proof-body p{margin-bottom:.45rem}
+.proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
+@media print{.proof-panel{display:none}}
 </style>
 </head>
 <body>
@@ -146,6 +154,16 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 </div>
 <div class="col"><div class="section-head">Monotone &amp; Bounded</div>
 <div class="accent-box"><p><strong>Increasing:</strong> $a_{n+1}>a_n$ for all $n$</p><p><strong>Bounded above:</strong> $a_n\leq M$ for all $n$</p><p><strong>Monotone Convergence Theorem:</strong> A monotone bounded sequence must converge.</p></div>
+<details class="proof-panel">
+<summary class="proof-toggle">▸ Geometric Argument</summary>
+<div class="proof-body">
+  <p>This one leans on a deep property of the real numbers, so we'll argue it by picture rather than with full rigor. Take an increasing sequence that is bounded above by $M$.</p>
+  <p>Picture the terms $a_1<a_2<a_3<\cdots$ marching rightward along the number line, but never allowed past the wall at $M$. They keep increasing, yet they are trapped in the finite stretch to the left of $M$.</p>
+  <p>A marcher that always steps right but can never cross a fixed wall has no choice but to pile up against some boundary value $L$ — the lowest ceiling that still sits at or above every term (its "least upper bound"). The steps must shrink toward zero, since any gap that refused to close would let the sequence climb past $L$, contradicting that $L$ is a ceiling.</p>
+  <p>So the terms close in on $L$, which is exactly what $\lim_{n\to\infty}a_n=L$ means. (A decreasing sequence bounded below behaves the same way, settling onto its greatest lower bound.)</p>
+  <p class="proof-qed">∎</p>
+</div>
+</details>
 </div>
 </div>
 <div class="section-head">Worked Examples</div>
@@ -186,42 +204,4 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 <div class="pr-row">
   <div class="pr-num">3.</div>
   <div class="pr-prob">$a_n=n\sin(1/n)$</div>
-  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">1 (L'Hôpital or squeeze)</div></div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">4.</div>
-  <div class="pr-prob">$a_n=\ln(n+1)-\ln n$</div>
-  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">0</div></div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">5.</div>
-  <div class="pr-prob">$a_n=\sqrt{n+1}-\sqrt{n}$</div>
-  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">0 (rationalize)</div></div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">6.</div>
-  <div class="pr-prob">$a_n=n^{1/n}$</div>
-  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">1</div></div>
-</div>
-</div>
-
-</div>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
-<script>
-function toggleAns(btn) {
-  if (!btn.dataset.orig) btn.dataset.orig = btn.textContent;
-  var ans = btn.nextElementSibling;
-  var showing = ans.classList.toggle('visible');
-  btn.textContent = showing ? 'Hide' : btn.dataset.orig;
-}
-  renderMathInElement(document.body, {
-    delimiters: [
-      {left: '$$', right: '$$', display: true},
-      {left: '$',  right: '$',  display: false}
-    ],
-    throwOnError: false
-  });
-</script>
-</body>
-</html>
+  <div class="pr-ans student-interactive"><textarea class=

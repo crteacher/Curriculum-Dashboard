@@ -132,6 +132,14 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   .svg-caption{font-size:9pt}
 }
 @page{margin:.55in .65in;size:letter}
+.proof-panel{margin:.4rem 0 1.1rem;border-left:3px solid #7a9a6a;border-radius:0 6px 6px 0;background:#f5f7f3}
+.proof-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#5a7a4a;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.proof-toggle::-webkit-details-marker{display:none}
+details[open]>.proof-toggle{color:#1e3a5c}
+.proof-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #c8d8b8}
+.proof-body p{margin-bottom:.45rem}
+.proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
+@media print{.proof-panel{display:none}}
 </style>
 </head>
 <body>
@@ -142,9 +150,33 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 <div class="two-col">
 <div class="col"><div class="section-head">Work</div>
 <div class="accent-box"><p>When force $F(x)$ varies: $W=\int_a^b F(x)\,dx$</p><p><strong>Spring (Hooke's Law):</strong> $F=kx$, so $W=\int_0^d kx\,dx=\dfrac{kd^2}{2}$</p><p>$k$ = spring constant (N/m), $d$ = displacement from natural length</p></div>
+<details class="proof-panel">
+<summary class="proof-toggle">▸ Show Proof</summary>
+<div class="proof-body">
+  <p>Start from the one fact you already know: when a <em>constant</em> force $F$ pushes an object a distance $\Delta x$, the work is $W=F\cdot\Delta x$.</p>
+  <p>When the force changes along the way, cut the trip from $a$ to $b$ into many tiny steps of width $dx$. Over one tiny step the force barely changes, so it is essentially the constant $F(x)$, and the work for that step is $dW=F(x)\,dx$.</p>
+  <p>Adding all the steps and letting them shrink turns the sum into an integral:</p>
+  <p>$$W=\int_a^b F(x)\,dx.$$</p>
+  <p>For a spring, Hooke's Law says the force needed to hold it stretched a distance $x$ is $F=kx$. Substituting and integrating from $0$ to $d$:</p>
+  <p>$$W=\int_0^d kx\,dx=k\cdot\frac{x^2}{2}\Big|_0^d=\frac{kd^2}{2}.$$</p>
+  <p class="proof-qed">∎</p>
+</div>
+</details>
 </div>
 <div class="col"><div class="section-head">Hydrostatic Force &amp; Mass</div>
 <div class="accent-box"><p><strong>Hydrostatic Force:</strong> $F=\int_a^b \rho g\, w(x)\, d(x)\,dx$<br>where $w(x)$ = width at depth $x$, $d(x)$ = depth, $\rho g\approx 9800$ N/m³</p><p><strong>Mass with density:</strong> $m=\int_a^b \rho(x)\,dx$</p></div>
+<details class="proof-panel">
+<summary class="proof-toggle">▸ Show Proof</summary>
+<div class="proof-body">
+  <p>This is the hydrostatic-force formula. The key physical fact is that water pressure grows with depth: at depth $d$ the pressure is $P=\rho g\,d$ — the weight of the column of water resting on each unit of area.</p>
+  <p>Pressure pushes on every part of a submerged surface, but because it changes with depth we slice the surface into thin horizontal strips. A strip at depth $x$ has width $w(x)$ and tiny height $dx$, so its area is $w(x)\,dx$.</p>
+  <p>Across one thin strip the depth barely changes, so the pressure there is essentially $\rho g\,d(x)$. Since force $=$ pressure $\times$ area,</p>
+  <p>$$dF=\rho g\,d(x)\,w(x)\,dx.$$</p>
+  <p>Summing every strip from $a$ to $b$ gives the total force:</p>
+  <p>$$F=\int_a^b \rho g\,w(x)\,d(x)\,dx.$$</p>
+  <p class="proof-qed">∎</p>
+</div>
+</details>
 <p class="body-text">Set up coordinates carefully: depth is measured downward from the surface.</p>
 </div>
 </div>
@@ -223,5 +255,6 @@ function toggleAns(btn) {
     throwOnError: false
   });
 </script>
+<!-- proof-layer:done -->
 </body>
 </html>

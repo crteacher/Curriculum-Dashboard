@@ -132,6 +132,14 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   .svg-caption{font-size:9pt}
 }
 @page{margin:.55in .65in;size:letter}
+.proof-panel{margin:.4rem 0 1.1rem;border-left:3px solid #7a9a6a;border-radius:0 6px 6px 0;background:#f5f7f3}
+.proof-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#5a7a4a;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.proof-toggle::-webkit-details-marker{display:none}
+details[open]>.proof-toggle{color:#1e3a5c}
+.proof-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #c8d8b8}
+.proof-body p{margin-bottom:.45rem}
+.proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
+@media print{.proof-panel{display:none}}
 </style>
 </head>
 <body>
@@ -142,9 +150,31 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 <div class="two-col">
 <div class="col"><div class="section-head">Ratio Test</div>
 <div class="accent-box"><p>Let $L=\displaystyle\lim_{n\to\infty}\left|\frac{a_{n+1}}{a_n}\right|$. Then:</p><ul><li>$L<1$: series <strong>converges absolutely</strong></li><li>$L>1$ (or $L=\infty$): series <strong>diverges</strong></li><li>$L=1$: <strong>inconclusive</strong></li></ul><p>Best for terms involving <strong>factorials</strong> ($n!$) or <strong>exponentials</strong> ($a^n$).</p></div>
+<details class="proof-panel">
+<summary class="proof-toggle">▸ Show Proof</summary>
+<div class="proof-body">
+  <p>Why does the ratio of consecutive terms decide convergence? Suppose $\left|\dfrac{a_{n+1}}{a_n}\right|\to L$ with $L<1$. Pick a number $r$ with $L<r<1$. Once $n$ is large enough the ratio stays below $r$, meaning each term is less than $r$ times the one before it:</p>
+  <p>$$|a_{n+1}|<r\,|a_n|.$$</p>
+  <p>Applying that repeatedly from some starting index $N$, the terms are bounded by a geometric sequence:</p>
+  <p>$$|a_{N+k}|<r^k\,|a_N|.$$</p>
+  <p>The series $\sum_k r^k|a_N|$ is geometric with ratio $r<1$, so it converges — and by direct comparison so does $\sum|a_n|$. That's absolute convergence.</p>
+  <p>If instead $L>1$, the terms eventually <em>grow</em>, so they can't shrink to zero and the series diverges by the $n$th-term test. When $L=1$ the terms could go either way, so the test is silent.</p>
+  <p class="proof-qed">∎</p>
+</div>
+</details>
 </div>
 <div class="col"><div class="section-head">Root Test</div>
 <div class="accent-box"><p>Let $L=\displaystyle\lim_{n\to\infty}\sqrt[n]{|a_n|}$. Then:</p><ul><li>$L<1$: <strong>absolutely converges</strong></li><li>$L>1$: <strong>diverges</strong></li><li>$L=1$: <strong>inconclusive</strong></li></ul><p>Best when $a_n$ is an $n$-th power. Both tests are equivalent; use whichever simplifies more easily.</p></div>
+<details class="proof-panel">
+<summary class="proof-toggle">▸ Show Proof</summary>
+<div class="proof-body">
+  <p>The root test runs on the same engine — a hidden geometric comparison. Suppose $\sqrt[n]{|a_n|}\to L$ with $L<1$, and pick $r$ with $L<r<1$. For all large $n$ the $n$th root stays below $r$:</p>
+  <p>$$\sqrt[n]{|a_n|}<r\quad\Longrightarrow\quad |a_n|<r^n.$$</p>
+  <p>So the terms are dominated by the geometric series $\sum r^n$ (ratio $r<1$), which converges; by comparison $\sum|a_n|$ converges absolutely. If $L>1$, then $|a_n|>1$ infinitely often, the terms don't vanish, and the series diverges. $L=1$ is again inconclusive.</p>
+  <p>Because both tests ultimately compare against a geometric series, they always agree — so reach for whichever of the root or ratio is easier to compute.</p>
+  <p class="proof-qed">∎</p>
+</div>
+</details>
 </div>
 </div>
 <div class="section-head">Worked Examples</div>
@@ -176,51 +206,4 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   <div class="pr-num">1.</div>
   <div class="pr-prob">$\displaystyle\sum\dfrac{n^2}{2^n}$ — ratio test</div>
   <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">converges ($L=1/2$)</div></div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">2.</div>
-  <div class="pr-prob">$\displaystyle\sum\dfrac{n!}{n^n}$ — ratio test</div>
-  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">converges ($L=1/e<1$)</div></div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">3.</div>
-  <div class="pr-prob">$\displaystyle\sum\left(\dfrac{3}{n}\right)^n$ — root test</div>
-  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">converges ($L=0$)</div></div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">4.</div>
-  <div class="pr-prob">$\displaystyle\sum\dfrac{(-2)^n}{n^2}$ — ratio test</div>
-  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">diverges ($L=2>1$)</div></div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">5.</div>
-  <div class="pr-prob">$\displaystyle\sum\dfrac{n!}{(2n)!}$ — ratio test</div>
-  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">converges ($L=0$)</div></div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">6.</div>
-  <div class="pr-prob">$\displaystyle\sum\left(1-\dfrac{1}{n}\right)^{n^2}$ — root test</div>
-  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">converges ($L=1/e<1$)</div></div>
-</div>
-</div>
-
-</div>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
-<script>
-function toggleAns(btn) {
-  if (!btn.dataset.orig) btn.dataset.orig = btn.textContent;
-  var ans = btn.nextElementSibling;
-  var showing = ans.classList.toggle('visible');
-  btn.textContent = showing ? 'Hide' : btn.dataset.orig;
-}
-  renderMathInElement(document.body, {
-    delimiters: [
-      {left: '$$', right: '$$', display: true},
-      {left: '$',  right: '$',  display: false}
-    ],
-    throwOnError: false
-  });
-</script>
-</body>
-</html>
+<

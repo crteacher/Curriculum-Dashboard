@@ -132,6 +132,14 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   .svg-caption{font-size:9pt}
 }
 @page{margin:.55in .65in;size:letter}
+.proof-panel{margin:.4rem 0 1.1rem;border-left:3px solid #7a9a6a;border-radius:0 6px 6px 0;background:#f5f7f3}
+.proof-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#5a7a4a;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.proof-toggle::-webkit-details-marker{display:none}
+details[open]>.proof-toggle{color:#1e3a5c}
+.proof-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #c8d8b8}
+.proof-body p{margin-bottom:.45rem}
+.proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
+@media print{.proof-panel{display:none}}
 </style>
 </head>
 <body>
@@ -142,9 +150,32 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 <div class="two-col">
 <div class="col"><div class="section-head">Definitions &amp; Identities</div>
 <div class="accent-box"><p>$\cosh x=\dfrac{e^x+e^{-x}}{2}$, $\quad\sinh x=\dfrac{e^x-e^{-x}}{2}$</p><p>$\cosh^2 x - \sinh^2 x = 1$ (compare: $\cos^2+\sin^2=1$)</p><p>$\tanh x=\dfrac{\sinh x}{\cosh x}$</p></div>
+<details class="proof-panel">
+<summary class="proof-toggle">▸ Show Proof</summary>
+<div class="proof-body">
+  <p>Both functions are built from $e^x$ and $e^{-x}$, so just square the definitions and subtract. The handy fact is that $e^x\cdot e^{-x}=1$, so the cross terms become constants.</p>
+  <p>$$\cosh^2 x=\frac{(e^x+e^{-x})^2}{4}=\frac{e^{2x}+2+e^{-2x}}{4},\qquad \sinh^2 x=\frac{(e^x-e^{-x})^2}{4}=\frac{e^{2x}-2+e^{-2x}}{4}.$$</p>
+  <p>Subtract: the $e^{2x}$ and $e^{-2x}$ pieces cancel and only the constants survive:</p>
+  <p>$$\cosh^2 x-\sinh^2 x=\frac{(e^{2x}+2+e^{-2x})-(e^{2x}-2+e^{-2x})}{4}=\frac{4}{4}=1.$$</p>
+  <p>This is exactly why the point $(\cosh t,\sinh t)$ rides the hyperbola $x^2-y^2=1$ — which is where the name "hyperbolic" comes from.</p>
+  <p class="proof-qed">∎</p>
+</div>
+</details>
 </div>
 <div class="col"><div class="section-head">Derivatives &amp; Integrals</div>
 <div class="accent-box"><p>$\dfrac{d}{dx}\sinh x=\cosh x$ &nbsp;&nbsp; $\dfrac{d}{dx}\cosh x=\sinh x$</p><p>$\dfrac{d}{dx}\tanh x=\text{sech}^2 x$</p><p>$\int\sinh x\,dx=\cosh x+C$ &nbsp;&nbsp; $\int\cosh x\,dx=\sinh x+C$</p><p>$\int\text{sech}^2 x\,dx=\tanh x+C$</p></div>
+<details class="proof-panel">
+<summary class="proof-toggle">▸ Show Proof</summary>
+<div class="proof-body">
+  <p>These come straight from the definitions and the one rule you already know: $\dfrac{d}{dx}e^x=e^x$, and $\dfrac{d}{dx}e^{-x}=-e^{-x}$ by the chain rule.</p>
+  <p>Differentiate $\sinh$:</p>
+  <p>$$\frac{d}{dx}\sinh x=\frac{d}{dx}\frac{e^x-e^{-x}}{2}=\frac{e^x-(-e^{-x})}{2}=\frac{e^x+e^{-x}}{2}=\cosh x.$$</p>
+  <p>Differentiate $\cosh$:</p>
+  <p>$$\frac{d}{dx}\cosh x=\frac{d}{dx}\frac{e^x+e^{-x}}{2}=\frac{e^x+(-e^{-x})}{2}=\frac{e^x-e^{-x}}{2}=\sinh x.$$</p>
+  <p>Notice there is no minus sign here, unlike $\dfrac{d}{dx}\cos x=-\sin x$. The integral formulas are just these read backwards: since differentiating $\cosh$ gives $\sinh$, we get $\int\sinh x\,dx=\cosh x+C$, and likewise for the others.</p>
+  <p class="proof-qed">∎</p>
+</div>
+</details>
 </div>
 </div>
 <div class="section-head">Worked Examples</div>
@@ -177,50 +208,4 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   <div class="pr-prob">$\dfrac{d}{dx}\tanh(2x)$</div>
   <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$2\text{sech}^2(2x)$</div></div>
 </div>
-<div class="pr-row">
-  <div class="pr-num">2.</div>
-  <div class="pr-prob">$\int\cosh(5x)\,dx$</div>
-  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$\dfrac{\sinh(5x)}{5}+C$</div></div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">3.</div>
-  <div class="pr-prob">$\sinh(0)$ and $\cosh(0)$</div>
-  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$0$ and $1$</div></div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">4.</div>
-  <div class="pr-prob">$\int_0^1\sinh x\,dx$</div>
-  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$\cosh 1-1$</div></div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">5.</div>
-  <div class="pr-prob">Show $\tanh^2 x+\text{sech}^2 x=1$</div>
-  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">Divide $\cosh^2-\sinh^2=1$ by $\cosh^2 x$</div></div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">6.</div>
-  <div class="pr-prob">$\dfrac{d}{dx}[x\cosh x - \sinh x]$</div>
-  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$x\sinh x$</div></div>
-</div>
-</div>
-
-</div>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
-<script>
-function toggleAns(btn) {
-  if (!btn.dataset.orig) btn.dataset.orig = btn.textContent;
-  var ans = btn.nextElementSibling;
-  var showing = ans.classList.toggle('visible');
-  btn.textContent = showing ? 'Hide' : btn.dataset.orig;
-}
-  renderMathInElement(document.body, {
-    delimiters: [
-      {left: '$$', right: '$$', display: true},
-      {left: '$',  right: '$',  display: false}
-    ],
-    throwOnError: false
-  });
-</script>
-</body>
-</html>
+<d
