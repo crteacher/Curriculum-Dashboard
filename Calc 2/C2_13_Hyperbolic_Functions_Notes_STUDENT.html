@@ -211,4 +211,48 @@ details[open]>.proof-toggle{color:#1e3a5c}
 <div class="pr-row">
   <div class="pr-num">2.</div>
   <div class="pr-prob">$\int\cosh(5x)\,dx$</div>
-  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><butt
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$\dfrac{\sinh(5x)}{5}+C$</div></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">3.</div>
+  <div class="pr-prob">$\sinh(0)$ and $\cosh(0)$</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$0$ and $1$</div></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">4.</div>
+  <div class="pr-prob">$\int_0^1\sinh x\,dx$</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$\cosh 1-1$</div></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">5.</div>
+  <div class="pr-prob">Show $\tanh^2 x+\text{sech}^2 x=1$</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">Divide $\cosh^2-\sinh^2=1$ by $\cosh^2 x$</div></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">6.</div>
+  <div class="pr-prob">$\dfrac{d}{dx}[x\cosh x - \sinh x]$</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$x\sinh x$</div></div>
+</div>
+</div>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script>
+function toggleAns(btn) {
+  if (!btn.dataset.orig) btn.dataset.orig = btn.textContent;
+  var ans = btn.nextElementSibling;
+  var showing = ans.classList.toggle('visible');
+  btn.textContent = showing ? 'Hide' : btn.dataset.orig;
+}
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left: '$$', right: '$$', display: true},
+      {left: '$',  right: '$',  display: false}
+    ],
+    throwOnError: false
+  });
+</script>
+<!-- proof-layer:done -->
+</body>
+</html>

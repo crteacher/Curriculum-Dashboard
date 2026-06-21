@@ -210,4 +210,48 @@ details[open]>.proof-toggle{color:#1e3a5c}
 <div class="pr-row">
   <div class="pr-num">2.</div>
   <div class="pr-prob">$\sum\dfrac{n}{n^3+1}$ — converge?</div>
-  <div
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">Yes (LCT with $1/n^2$)</div></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">3.</div>
+  <div class="pr-prob">$\sum\dfrac{1}{\sqrt{n^3+1}}$ — converge?</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">Yes (LCT with $n^{-3/2}$, $p=3/2>1$)</div></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">4.</div>
+  <div class="pr-prob">$\sum\dfrac{4n^2+1}{3n^4-2}$ — converge?</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">Yes (LCT with $1/n^2$)</div></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">5.</div>
+  <div class="pr-prob">$\sum\dfrac{1}{n-\ln n}$ — converge?</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">Diverges (LCT with $1/n$)</div></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">6.</div>
+  <div class="pr-prob">$\sum\dfrac{\cos^2 n}{n^2}$ — converge?</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">Yes (compare to $1/n^2$)</div></div>
+</div>
+</div>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script>
+function toggleAns(btn) {
+  if (!btn.dataset.orig) btn.dataset.orig = btn.textContent;
+  var ans = btn.nextElementSibling;
+  var showing = ans.classList.toggle('visible');
+  btn.textContent = showing ? 'Hide' : btn.dataset.orig;
+}
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left: '$$', right: '$$', display: true},
+      {left: '$',  right: '$',  display: false}
+    ],
+    throwOnError: false
+  });
+</script>
+<!-- proof-layer:done -->
+</body>
+</html>

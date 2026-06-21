@@ -193,4 +193,56 @@ details[open]>.proof-toggle{color:#1e3a5c}
 </div>
 <div class="section-head">Practice Problems</div>
 <div class="practice">
-<div c
+<div class="pr-row">
+  <div class="pr-num">1.</div>
+  <div class="pr-prob">$\sum\dfrac{1}{n^{1.5}}$</div>
+  <div class="pr-ans instructor">Converges ($p=1.5>1$)</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">2.</div>
+  <div class="pr-prob">$\sum\dfrac{1}{\sqrt{n}}$</div>
+  <div class="pr-ans instructor">Diverges ($p=1/2<1$)</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">3.</div>
+  <div class="pr-prob">$\sum\dfrac{1}{n^2+4}$ — converge/diverge?</div>
+  <div class="pr-ans instructor">Converges (integral test)</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">4.</div>
+  <div class="pr-prob">$\sum\dfrac{1}{n(\ln n)^2}$ — converge/diverge?</div>
+  <div class="pr-ans instructor">Converges (integral: $-1/\ln n$)</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">5.</div>
+  <div class="pr-prob">For what $p$ does $\sum n^{-p}$ converge?</div>
+  <div class="pr-ans instructor">$p>1$</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">6.</div>
+  <div class="pr-prob">$\sum\dfrac{\ln n}{n}$ — converge/diverge?</div>
+  <div class="pr-ans instructor">Diverges (integral test)</div>
+</div>
+</div>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script>
+function toggleAns(btn) {
+  if (!btn.dataset.orig) btn.dataset.orig = btn.textContent;
+  var ans = btn.nextElementSibling;
+  var showing = ans.classList.toggle('visible');
+  btn.textContent = showing ? 'Hide' : btn.dataset.orig;
+}
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left: '$$', right: '$$', display: true},
+      {left: '$',  right: '$',  display: false}
+    ],
+    throwOnError: false
+  });
+</script>
+<!-- proof-layer:done -->
+</body>
+</html>

@@ -191,4 +191,48 @@ details[open]>.proof-toggle{color:#1e3a5c}
   <div class="pr-prob">Use the $e^x$ series to estimate $e^{0.1}$ — keep terms through $x^3$. Round to 4 decimal places.</div>
   <div class="pr-ans student">
     <textarea class="st-work"></textarea>
-    <button class="st-btn-s
+    <button class="st-btn-sm" onclick="toggleAns(this)">Show answer</button>
+    <div class="st-ans-hidden">$1+0.1+\frac{0.01}{2}+\frac{0.001}{6}\approx 1.1052$</div>
+  </div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">5.</div>
+  <div class="pr-prob">Use a known series to write the first three nonzero terms of the Maclaurin series for $\sin(3x)$.</div>
+  <div class="pr-ans student">
+    <textarea class="st-work"></textarea>
+    <button class="st-btn-sm" onclick="toggleAns(this)">Show answer</button>
+    <div class="st-ans-hidden">$3x-\dfrac{9x^3}{2}+\dfrac{81x^5}{40}$</div>
+  </div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">6.</div>
+  <div class="pr-prob">Find the Maclaurin series for $\dfrac{1}{1+x^2}$ using the geometric series formula.</div>
+  <div class="pr-ans student">
+    <textarea class="st-work"></textarea>
+    <button class="st-btn-sm" onclick="toggleAns(this)">Show answer</button>
+    <div class="st-ans-hidden">Replace $x$ with $-x^2$: $\displaystyle\sum_{n=0}^{\infty}(-1)^n x^{2n}$, $R=1$</div>
+  </div>
+</div>
+</div>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script>
+function toggleAns(btn) {
+  if (!btn.dataset.orig) btn.dataset.orig = btn.textContent;
+  var ans = btn.nextElementSibling;
+  var showing = ans.classList.toggle('visible');
+  btn.textContent = showing ? 'Hide' : btn.dataset.orig;
+}
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left: '$$', right: '$$', display: true},
+      {left: '$',  right: '$',  display: false}
+    ],
+    throwOnError: false
+  });
+</script>
+<!-- proof-layer:done -->
+</body>
+</html>

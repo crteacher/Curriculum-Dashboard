@@ -202,4 +202,58 @@ details[open]>.proof-toggle{color:#1e3a5c}
   <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">Midpoints: $0.25,0.75,1.25,1.75$; $\Delta x=0.5$<br>$\approx0.5(e^{-0.25}+e^{-0.75}+e^{-1.25}+e^{-1.75})\approx0.5(0.7788+0.4724+0.2865+0.1738)=0.8657$</div></div>
 </div>
 </div>
-<div clas
+<div class="section-head">Practice Problems</div>
+<div class="practice">
+<div class="pr-row">
+  <div class="pr-num">1.</div>
+  <div class="pr-prob">$T_4$ for $\int_0^\pi\sin x\,dx$</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$\approx1.896$ (exact: 2)</div></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">2.</div>
+  <div class="pr-prob">$S_4$ for $\int_1^3\dfrac{1}{x}\,dx$</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$\approx 1.099$ (exact: $\ln 3$)</div></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">3.</div>
+  <div class="pr-prob">Simpson's is exact for what degree polynomial?</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">Degree $\leq 3$</div></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">4.</div>
+  <div class="pr-prob">Error bound $T_n$ for $\int_0^1 x^4\,dx$, $n=10$</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$|E_T|\leq\frac{12}{12\cdot100}=0.01$</div></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">5.</div>
+  <div class="pr-prob">$M_2$ for $\int_0^4 x^{1/2}\,dx$</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$\Delta x=2$; midpoints 1, 3: $2(1+\sqrt{3})\approx5.46$</div></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">6.</div>
+  <div class="pr-prob">Why does Simpson's use coefficients 1,4,2,4,...,4,1?</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">Fits a quadratic through each pair of subintervals.</div></div>
+</div>
+</div>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script>
+function toggleAns(btn) {
+  if (!btn.dataset.orig) btn.dataset.orig = btn.textContent;
+  var ans = btn.nextElementSibling;
+  var showing = ans.classList.toggle('visible');
+  btn.textContent = showing ? 'Hide' : btn.dataset.orig;
+}
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left: '$$', right: '$$', display: true},
+      {left: '$',  right: '$',  display: false}
+    ],
+    throwOnError: false
+  });
+</script>
+<!-- proof-layer:done -->
+</body>
+</html>

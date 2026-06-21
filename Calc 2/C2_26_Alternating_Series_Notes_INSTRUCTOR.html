@@ -193,4 +193,65 @@ details[open]>.proof-toggle{color:#1e3a5c}
   <div class="ex-label">Example 3 &nbsp;&mdash;&nbsp; Error bound</div>
   <div class="ex-body">Approximate $\sum_{n=1}^\infty\dfrac{(-1)^{n+1}}{n^2}$ using 4 terms. Bound the error.</div>
   <div class="ex-answer instructor">$S_4=1-\frac{1}{4}+\frac{1}{9}-\frac{1}{16}=\frac{115}{144}$. Error $\leq b_5=\frac{1}{25}=0.04$</div>
-</d
+</div>
+<div class="ex-block">
+  <div class="ex-label">Example 4 &nbsp;&mdash;&nbsp; Absolute convergence</div>
+  <div class="ex-body">Is $\sum\dfrac{(-1)^n}{n^2}$ absolutely convergent?</div>
+  <div class="ex-answer instructor">$\sum\dfrac{1}{n^2}$ converges ($p=2>1$) → absolutely convergent.</div>
+</div>
+</div>
+<div class="section-head">Practice Problems</div>
+<div class="practice">
+<div class="pr-row">
+  <div class="pr-num">1.</div>
+  <div class="pr-prob">Does $\sum\dfrac{(-1)^n}{\sqrt{n}}$ converge?</div>
+  <div class="pr-ans instructor">Yes (AST); conditionally convergent</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">2.</div>
+  <div class="pr-prob">Does $\sum\dfrac{(-1)^n n^2}{n^2+1}$ converge?</div>
+  <div class="pr-ans instructor">No — nth-term test: $b_n\to1$</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">3.</div>
+  <div class="pr-prob">$\sum\dfrac{(-1)^n}{n!}$ — absolutely convergent?</div>
+  <div class="pr-ans instructor">Yes ($\sum 1/n!$ converges by ratio test)</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">4.</div>
+  <div class="pr-prob">Error: use 3 terms of $\sum\dfrac{(-1)^{n+1}}{n^3}$, bound error</div>
+  <div class="pr-ans instructor">$S_3=1-1/8+1/27\approx0.912$; error $<1/64$</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">5.</div>
+  <div class="pr-prob">Classify: $\sum\dfrac{(-1)^n}{n^{1/2}}$</div>
+  <div class="pr-ans instructor">Conditionally convergent</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">6.</div>
+  <div class="pr-prob">Classify: $\sum\dfrac{(-1)^n}{2^n}$</div>
+  <div class="pr-ans instructor">Absolutely convergent</div>
+</div>
+</div>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script>
+function toggleAns(btn) {
+  if (!btn.dataset.orig) btn.dataset.orig = btn.textContent;
+  var ans = btn.nextElementSibling;
+  var showing = ans.classList.toggle('visible');
+  btn.textContent = showing ? 'Hide' : btn.dataset.orig;
+}
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left: '$$', right: '$$', display: true},
+      {left: '$',  right: '$',  display: false}
+    ],
+    throwOnError: false
+  });
+</script>
+<!-- proof-layer:done -->
+</body>
+</html>

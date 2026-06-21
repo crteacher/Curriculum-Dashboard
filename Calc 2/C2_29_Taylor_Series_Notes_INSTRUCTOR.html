@@ -154,4 +154,43 @@ details[open]>.proof-toggle{color:#1e3a5c}
 </div>
 <div class="pr-row">
   <div class="pr-num">2.</div>
-  <di
+  <div class="pr-prob">Find $T_3(x)$ for $f(x)=\ln(1+x)$ centered at $a=0$.</div>
+  <div class="pr-ans instructor">$x-\dfrac{x^2}{2}+\dfrac{x^3}{3}$</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">3.</div>
+  <div class="pr-prob">Find the Maclaurin series for $e^{-x}$.</div>
+  <div class="pr-ans instructor">$\displaystyle\sum_{n=0}^{\infty}\dfrac{(-1)^n x^n}{n!}$</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">4.</div>
+  <div class="pr-prob">Use the $e^x$ series to estimate $e^{0.1}$ — keep terms through $x^3$. Round to 4 decimal places.</div>
+  <div class="pr-ans instructor">$1+0.1+\frac{0.01}{2}+\frac{0.001}{6}\approx 1.1052$</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">5.</div>
+  <div class="pr-prob">Use a known series to write the first three nonzero terms of the Maclaurin series for $\sin(3x)$.</div>
+  <div class="pr-ans instructor">$3x-\dfrac{27x^3}{6}+\dfrac{243x^5}{120}=3x-\dfrac{9x^3}{2}+\dfrac{81x^5}{40}$</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">6.</div>
+  <div class="pr-prob">Find the Maclaurin series for $\dfrac{1}{1+x^2}$ using the geometric series formula.</div>
+  <div class="pr-ans instructor">Replace $x$ with $-x^2$: $\displaystyle\sum_{n=0}^{\infty}(-1)^n x^{2n}$, $R=1$</div>
+</div>
+</div>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script>
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left: '$$', right: '$$', display: true},
+      {left: '$',  right: '$',  display: false}
+    ],
+    throwOnError: false
+  });
+</script>
+<!-- proof-layer:done -->
+</body>
+</html>

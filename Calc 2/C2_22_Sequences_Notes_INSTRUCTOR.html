@@ -191,4 +191,56 @@ details[open]>.proof-toggle{color:#1e3a5c}
 </div>
 <div class="section-head">Practice Problems</div>
 <div class="practice">
-<div class="p
+<div class="pr-row">
+  <div class="pr-num">1.</div>
+  <div class="pr-prob">$a_n=\dfrac{n^2}{2n^2+3}$</div>
+  <div class="pr-ans instructor">$\dfrac{1}{2}$</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">2.</div>
+  <div class="pr-prob">$a_n=(-1)^n\dfrac{1}{n}$</div>
+  <div class="pr-ans instructor">Converges to 0</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">3.</div>
+  <div class="pr-prob">$a_n=n\sin(1/n)$</div>
+  <div class="pr-ans instructor">1 (L'Hôpital or squeeze)</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">4.</div>
+  <div class="pr-prob">$a_n=\ln(n+1)-\ln n$</div>
+  <div class="pr-ans instructor">0</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">5.</div>
+  <div class="pr-prob">$a_n=\sqrt{n+1}-\sqrt{n}$</div>
+  <div class="pr-ans instructor">0 (rationalize)</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">6.</div>
+  <div class="pr-prob">$a_n=n^{1/n}$</div>
+  <div class="pr-ans instructor">1</div>
+</div>
+</div>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script>
+function toggleAns(btn) {
+  if (!btn.dataset.orig) btn.dataset.orig = btn.textContent;
+  var ans = btn.nextElementSibling;
+  var showing = ans.classList.toggle('visible');
+  btn.textContent = showing ? 'Hide' : btn.dataset.orig;
+}
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left: '$$', right: '$$', display: true},
+      {left: '$',  right: '$',  display: false}
+    ],
+    throwOnError: false
+  });
+</script>
+<!-- proof-layer:done -->
+</body>
+</html>

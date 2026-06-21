@@ -267,4 +267,52 @@ details[open]>.proof-toggle{color:#1e3a5c}
     <textarea class="st-work"></textarea>
     <button class="st-btn-sm" onclick="toggleAns(this)">Show answer</button>
     <div class="st-ans-hidden">$\dfrac{{\sqrt{{x^2-9}}}}{{9x}}+C$</div>
-  </d
+  </div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">4.</div>
+  <div class="pr-prob">Evaluate $\displaystyle\int_0^5 x^2\sqrt{25-x^2}\,dx$.</div>
+  <div class="pr-ans student">
+    <textarea class="st-work"></textarea>
+    <button class="st-btn-sm" onclick="toggleAns(this)">Show answer</button>
+    <div class="st-ans-hidden">$\dfrac{{625\pi}}{{16}}$</div>
+  </div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">5.</div>
+  <div class="pr-prob">Evaluate $\displaystyle\int\dfrac{dx}{(x^2+4x+8)^{3/2}}$ (hint: complete the square first).</div>
+  <div class="pr-ans student">
+    <textarea class="st-work"></textarea>
+    <button class="st-btn-sm" onclick="toggleAns(this)">Show answer</button>
+    <div class="st-ans-hidden">Complete the square, then use $u=2\tan\theta$: $\dfrac{{x+2}}{{4\sqrt{{x^2+4x+8}}}}+C$</div>
+  </div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">6.</div>
+  <div class="pr-prob">Evaluate $\displaystyle\int\sqrt{1-x^2}\,dx$.</div>
+  <div class="pr-ans student">
+    <textarea class="st-work"></textarea>
+    <button class="st-btn-sm" onclick="toggleAns(this)">Show answer</button>
+    <div class="st-ans-hidden">$\dfrac{{x\sqrt{{1-x^2}}}}{{2}}+\dfrac{{1}}{{2}}\arcsin x+C$</div>
+  </div>
+</div>
+</div>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script>function toggleAns(btn){
+  if(!btn.dataset.orig)btn.dataset.orig=btn.textContent;
+  var ans=btn.nextElementSibling;
+  var showing=ans.classList.toggle('visible');
+  btn.textContent=showing?'Hide':btn.dataset.orig;
+}</script>
+<script>
+  renderMathInElement(document.body,{
+    delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],
+    throwOnError:false
+  });
+</script>
+<!-- proof-layer:done -->
+</body>
+</html>

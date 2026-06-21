@@ -249,4 +249,41 @@ details[open]>.proof-toggle{color:#1e3a5c}
 </div>
 <div class="pr-row">
   <div class="pr-num">2.</div>
-  <div
+  <div class="pr-prob">Evaluate $\displaystyle\int\dfrac{dx}{(1+x^2)^{3/2}}$.</div>
+  <div class="pr-ans instructor">$x=\tan\theta$: $\int\frac{{1}}{{(1+x^2)^{{3/2}}}}\,dx=\int\cos\theta\,d\theta=\sin\theta+C=\frac{{x}}{{\sqrt{{1+x^2}}}}+C$</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">3.</div>
+  <div class="pr-prob">Evaluate $\displaystyle\int\dfrac{dx}{x^2\sqrt{x^2-9}}$.</div>
+  <div class="pr-ans instructor">$x=3\sec\theta$: $\int\frac{{dx}}{{x^2\sqrt{{x^2-9}}}}\,dx=\frac{{\sqrt{{x^2-9}}}}{{9x}}+C$</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">4.</div>
+  <div class="pr-prob">Evaluate $\displaystyle\int_0^5 x^2\sqrt{25-x^2}\,dx$.</div>
+  <div class="pr-ans instructor">$x=5\sin\theta$: $\int_0^5 x^2\sqrt{{25-x^2}}\,dx=\frac{{625\pi}}{{16}}$</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">5.</div>
+  <div class="pr-prob">Evaluate $\displaystyle\int\dfrac{dx}{(x^2+4x+8)^{3/2}}$ (hint: complete the square first).</div>
+  <div class="pr-ans instructor">Complete the square: $x^2+4x+8=(x+2)^2+4$. Let $u=x+2$, $u=2\tan\theta$: $\int\frac{{du}}{{(u^2+4)^{{3/2}}}}=\frac{{u}}{{4\sqrt{{u^2+4}}}}+C=\frac{{x+2}}{{4\sqrt{{x^2+4x+8}}}}+C$</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">6.</div>
+  <div class="pr-prob">Evaluate $\displaystyle\int\sqrt{1-x^2}\,dx$.</div>
+  <div class="pr-ans instructor">$x=\sin\theta$: same form as $\int\sqrt{{1-x^2}}\,dx=\frac{{x\sqrt{{1-x^2}}}}{{2}}+\frac{{1}}{{2}}\arcsin x+C$</div>
+</div>
+</div>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+
+<script>
+  renderMathInElement(document.body,{
+    delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],
+    throwOnError:false
+  });
+</script>
+<!-- proof-layer:done -->
+</body>
+</html>
