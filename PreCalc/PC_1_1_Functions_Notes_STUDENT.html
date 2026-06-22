@@ -57,6 +57,15 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   .st-ans-hidden{display:none !important}
 }
 @page{margin:.55in .65in;size:letter}
+.mistake-panel{margin:.4rem 0 1.1rem;border-left:3px solid #b8860b;border-radius:0 6px 6px 0;background:#fdf8e8}
+.mistake-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#9a6a00;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.mistake-toggle::-webkit-details-marker{display:none}
+details[open]>.mistake-toggle{color:#1e3a5c}
+.mistake-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #e8d8a8}
+.mistake-body p{margin-bottom:.45rem}
+@media print{
+  .mistake-panel{break-inside:avoid}
+}
 </style>
 </head>
 <body>
@@ -66,9 +75,21 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 <div class="opening-q">A vending machine takes your dollar and gives you a snack — the same snack every time you press the same button. Is that relationship a function? What property makes a relation a <em>function</em>?</div>
 <div class="two-col"><div class="col"><div class="section-head">Relations and Functions</div>
 <div class="accent-box"><p><strong>Relation:</strong> a rule that associates elements of one set (domain) with elements of another set (range).</p><p><strong>Function:</strong> a relation where every input $x$ is associated with <em>exactly one</em> output $y$.</p><p><strong>Notation:</strong> $y = f(x)$ — read "$f$ of $x$". The input $x$ is the <em>independent variable</em>; $y$ is the <em>dependent variable</em>.</p></div>
+<details class="mistake-panel">
+<summary class="mistake-toggle">▸ Common Mistake</summary>
+<div class="mistake-body">
+  <p>"Exactly one output per input" restricts <em>inputs</em>, not outputs. Students often disqualify a relation because an output repeats — calling $\{(1,5),(2,5)\}$ "not a function" because $5$ shows up twice. That's perfectly fine: two different inputs are allowed to share an output. What breaks the rule is one input with two outputs, like $\{(1,2),(1,3)\}$. (Forbidding repeated <em>outputs</em> is a different, stronger property — being one-to-one.)</p>
+</div>
+</details>
 <p class="body-text">Tests: <strong>Vertical Line Test</strong> — a graph represents a function if every vertical line hits it at most once.</p>
 </div><div class="col"><div class="section-head">Evaluating Functions</div>
 <div class="accent-box"><p><strong>To evaluate $f(a)$:</strong> substitute $a$ for every $x$ in the formula.</p><p>Example: if $f(x)=x^2-3x+1$, then<br>$f(2)=4-6+1=-1$<br>$f(-x)=x^2+3x+1$<br>$f(x+h)=(x+h)^2-3(x+h)+1$</p></div>
+<details class="mistake-panel">
+<summary class="mistake-toggle">▸ Common Mistake</summary>
+<div class="mistake-body">
+  <p>$f$ is the <em>name of a rule</em>, not a quantity multiplying its input, so it does not distribute over addition: $f(x+h)\neq f(x)+h$ and $f(x+h)\neq f(x)+f(h)$. To find $f(x+h)$ you substitute the whole quantity $x+h$ for every $x$ in the formula. For $f(x)=x^2-3x+1$ that means $f(x+h)=(x+h)^2-3(x+h)+1$, then expand — you can't just tack $+h$ onto $f(x)$. This is the slip that wrecks difference-quotient problems.</p>
+</div>
+</details>
 <p class="body-text">Three representations: <strong>equation</strong>, <strong>graph</strong>, <strong>table</strong>. Use the vertical-line test on graphs; check for repeated inputs in tables.</p>
 </div></div>
 <div class="section-head">Worked Examples</div>
@@ -106,5 +127,6 @@ renderMathInElement(document.body, {
   throwOnError: false
 });
 </script>
+<!-- mistake-layer:done -->
 </body>
 </html>

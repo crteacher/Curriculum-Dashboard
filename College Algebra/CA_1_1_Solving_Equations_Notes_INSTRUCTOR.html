@@ -132,6 +132,15 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   .svg-caption{font-size:9pt}
 }
 @page{margin:.55in .65in;size:letter}
+.mistake-panel{margin:.4rem 0 1.1rem;border-left:3px solid #b8860b;border-radius:0 6px 6px 0;background:#fdf8e8}
+.mistake-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#9a6a00;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.mistake-toggle::-webkit-details-marker{display:none}
+details[open]>.mistake-toggle{color:#1e3a5c}
+.mistake-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #e8d8a8}
+.mistake-body p{margin-bottom:.45rem}
+@media print{
+  .mistake-panel{break-inside:avoid}
+}
 </style>
 </head>
 <body>
@@ -142,10 +151,22 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 <div class="two-col">
 <div class="col"><div class="section-head">The Tools</div>
 <div class="accent-box"><p><strong>Distributive Property:</strong><br>$a(b+c)=ab+ac$<br>$(a+b)(c+d)=ac+ad+bc+bd$</p><p><strong>Inverse Operations:</strong><br>Undo addition &rarr; subtract<br>Undo multiplication &rarr; divide</p><p><strong>Goal:</strong> isolate the variable by undoing operations in reverse PEMDAS order.</p></div>
+<details class="mistake-panel">
+<summary class="mistake-toggle">▸ Common Mistake</summary>
+<div class="mistake-body">
+  <p>Distribution hits <em>every</em> term inside the parentheses, and a leading minus sign is a factor of $-1$ that flips the sign of each term. The classic error is writing $-(x-3)=-x-3$; it's actually $-x+3$. The same slip appears as $2(x+5)=2x+5$, forgetting to multiply the $5$. Multiply the outside factor onto each interior term separately, signs included.</p>
+</div>
+</details>
 <p class="body-text"><strong>Strategy:</strong> distribute &rarr; combine like terms &rarr; move variable terms to one side &rarr; move constants to the other &rarr; divide.</p>
 </div>
 <div class="col"><div class="section-head">Number of Solutions</div>
 <div class="accent-box"><p><strong>Exactly one solution:</strong> variable remains &rarr; solve for $x$<br>e.g. $3x+4=2x-4 \Rightarrow x=-8$</p><p><strong>Infinitely many solutions:</strong><br>variable cancels &rarr; TRUE statement ($0=0$)<br>e.g. $3x+3=3(x+1) \Rightarrow 3=3$ &#x2713;</p><p><strong>No solution:</strong><br>variable cancels &rarr; FALSE statement ($a=b$, $a\neq b$)<br>e.g. $5x-7=5x+2 \Rightarrow -7=2$ &#x2717;</p></div>
+<details class="mistake-panel">
+<summary class="mistake-toggle">▸ Common Mistake</summary>
+<div class="mistake-body">
+  <p>When the variable cancels, the work isn't over and the answer isn't automatically "no solution." Read what's left: a <em>true</em> statement like $3=3$ means infinitely many solutions, while a <em>false</em> one like $-7=2$ means no solution. Students also reach $0=0$ and write "$x=0$" — but $0=0$ says nothing about $x$; it signals that <em>every</em> $x$ works. Match the leftover statement to the right conclusion instead of guessing from the fact that $x$ disappeared.</p>
+</div>
+</details>
 </div>
 </div>
 <div class="section-head">Worked Examples</div>
@@ -223,5 +244,6 @@ function toggleAns(btn) {
     throwOnError: false
   });
 </script>
+<!-- mistake-layer:done -->
 </body>
 </html>

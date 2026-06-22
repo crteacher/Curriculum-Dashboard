@@ -115,6 +115,18 @@ details[open]>.proof-toggle{color:#1e3a5c}
 .proof-body p{margin-bottom:.45rem}
 .proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
 @media print{.proof-panel{display:none}}
+.mistake-panel{margin:.4rem 0 1.1rem;border-left:3px solid #b8860b;border-radius:0 6px 6px 0;background:#fdf8e8}
+.mistake-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#9a6a00;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.mistake-toggle::-webkit-details-marker{display:none}
+details[open]>.mistake-toggle{color:#1e3a5c}
+.mistake-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #e8d8a8}
+.mistake-body p{margin-bottom:.45rem}
+.panel-row{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.1rem}
+.panel-row>.proof-panel,.panel-row>.mistake-panel{margin:0}
+@media print{
+  .panel-row{break-inside:avoid}
+  .mistake-panel{break-inside:avoid}
+}
 </style>
 </head>
 <body>
@@ -125,6 +137,7 @@ details[open]>.proof-toggle{color:#1e3a5c}
 <div class="two-col">
 <div class="col"><div class="section-head">One-Sided Limits</div>
 <div class="accent-box"><p><strong>Left-hand limit:</strong> &ensp;$\displaystyle\lim_{x\to a^-}f(x)=L$<br>considers only $x < a$ approaching $a$.</p><p><strong>Right-hand limit:</strong> &ensp;$\displaystyle\lim_{x\to a^+}f(x)=L$<br>considers only $x > a$ approaching $a$.</p><p><strong>Key theorem:</strong><br>$\displaystyle\lim_{x\to a}f(x)$ exists &nbsp;$\iff$&nbsp; $\displaystyle\lim_{x\to a^-}f(x) = \lim_{x\to a^+}f(x)$</p><p>If the one-sided limits exist but are unequal &rarr; <strong>DNE</strong>.</p></div>
+<div class="panel-row">
 <details class="proof-panel">
 <summary class="proof-toggle">▸ Geometric Argument</summary>
 <div class="proof-body">
@@ -135,11 +148,24 @@ details[open]>.proof-toggle{color:#1e3a5c}
   <p class="proof-qed">∎</p>
 </div>
 </details>
+<details class="mistake-panel">
+<summary class="mistake-toggle">▸ Common Mistake</summary>
+<div class="mistake-body">
+  <p>When the left- and right-hand limits both exist but disagree, the two-sided limit is $\textbf{DNE}$ — not their average, and not whichever value carries the filled dot. Students like to "split the difference" (reporting $0$ when the sides are $-1$ and $1$) or report $f(a)$ as if the function's value settled the limit. The theorem is an all-or-nothing gate: $\lim_{x\to a}f(x)$ exists only when $\lim_{x\to a^-}f(x)=\lim_{x\to a^+}f(x)$ <em>exactly</em>.</p>
+</div>
+</details>
+</div>
 
 <p class="body-text"><strong>On graphs:</strong> trace the curve from the left — where does it head as it approaches $x=a$? That's the left-hand limit. Repeat from the right. An open circle shows the curve's approach; a filled dot shows the function value.</p>
 </div>
 <div class="col"><div class="section-head">Key Example: $|x|/x$</div>
 <div class="accent-box"><p>Let $f(x) = \dfrac{|x|}{x}$. Find one-sided limits at $x=0$.</p><p>For $x < 0$: $|x| = -x$, so $\dfrac{|x|}{x} = \dfrac{-x}{x} = -1$<br>$\Rightarrow \displaystyle\lim_{x\to 0^-}f(x) = -1$</p><p>For $x > 0$: $|x| = x$, so $\dfrac{|x|}{x} = \dfrac{x}{x} = 1$<br>$\Rightarrow \displaystyle\lim_{x\to 0^+}f(x) = 1$</p><p>$-1 \neq 1 \Rightarrow \displaystyle\lim_{x\to 0}f(x) = $ <strong>DNE</strong></p></div>
+<details class="mistake-panel">
+<summary class="mistake-toggle">▸ Common Mistake</summary>
+<div class="mistake-body">
+  <p>The tempting shortcut is to cancel $\frac{|x|}{x}=1$ for every $x$ and call the limit $1$. That cancellation only holds for $x>0$. For $x<0$, $|x|=-x$, so $\frac{|x|}{x}=-1$. The absolute value silently flips the sign of the numerator depending on which side of $0$ you approach from — which is exactly why the one-sided limits disagree. Always rewrite $|x|$ as its two cases ($x$ for $x\ge 0$, $-x$ for $x<0$) <em>before</em> simplifying.</p>
+</div>
+</details>
 <p class="body-text"><strong>Floor function $\lfloor x \rfloor$:</strong> at any integer $n$, the floor jumps — $\lim_{x\to n^-}\lfloor x\rfloor = n-1$ but $\lim_{x\to n^+}\lfloor x\rfloor = n$, so the two-sided limit is DNE.</p>
 <div class="svg-figure"><svg viewBox="0 0 240 125" xmlns="http://www.w3.org/2000/svg" style="width:200px;height:auto"><line x1="10" y1="62" x2="228" y2="62" stroke="#888" stroke-width="1.2"/><polygon points="228,59 234,62 228,65" fill="#888"/><line x1="120" y1="118" x2="120" y2="10" stroke="#888" stroke-width="1.2"/><polygon points="117,10 120,4 123,10" fill="#888"/><text x="232" y="66" font-size="10" fill="#555" font-family="sans-serif">x</text><text x="124" y="10" font-size="10" fill="#555" font-family="sans-serif">y</text><line x1="117" y1="27" x2="123" y2="27" stroke="#888" stroke-width="1"/><text x="126" y="31" font-size="9.5" fill="#555" font-family="sans-serif">1</text><line x1="117" y1="97" x2="123" y2="97" stroke="#888" stroke-width="1"/><text x="126" y="101" font-size="9.5" fill="#555" font-family="sans-serif">-1</text><line x1="10" y1="97" x2="115" y2="97" stroke="#1e3a5c" stroke-width="2.2"/><line x1="125" y1="27" x2="228" y2="27" stroke="#1e3a5c" stroke-width="2.2"/><line x1="120" y1="32" x2="120" y2="92" stroke="#c0392b" stroke-width="1.5" stroke-dasharray="4,3"/><circle cx="120" cy="97" r="4.5" fill="white" stroke="#1e3a5c" stroke-width="2"/><circle cx="120" cy="27" r="4.5" fill="white" stroke="#1e3a5c" stroke-width="2"/><text x="128" y="62" font-size="9.5" fill="#c0392b" font-family="sans-serif" font-weight="bold">DNE</text></svg><div class="svg-caption">Left limit $= -1$, right limit $= 1$ &mdash; two-sided limit DNE</div></div>
 </div>
@@ -214,5 +240,6 @@ details[open]>.proof-toggle{color:#1e3a5c}
   });
 </script>
 <!-- proof-layer:done -->
+<!-- mistake-layer:done -->
 </body>
 </html>
