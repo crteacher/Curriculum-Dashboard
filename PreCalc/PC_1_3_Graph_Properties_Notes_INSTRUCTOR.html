@@ -57,6 +57,18 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   .st-ans-hidden{display:none !important}
 }
 @page{margin:.55in .65in;size:letter}
+.mistake-panel{margin:.4rem 0 1.1rem;border-left:3px solid #b8860b;border-radius:0 6px 6px 0;background:#fdf8e8}
+.mistake-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#9a6a00;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.mistake-toggle::-webkit-details-marker{display:none}
+details[open]>.mistake-toggle{color:#1e3a5c}
+.mistake-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #e8d8a8}
+.mistake-body p{margin-bottom:.45rem}
+.panel-row{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.1rem}
+.panel-row>.proof-panel,.panel-row>.mistake-panel{margin:0;min-width:0}
+@media print{
+  .panel-row{break-inside:avoid}
+  .mistake-panel{break-inside:avoid}
+}
 </style>
 </head>
 <body>
@@ -66,8 +78,22 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 <div class="opening-q">If you graph your distance from home over a day, what does it mean when the graph goes up? Down? Stays flat? How do the highest and lowest points relate to your travel?</div>
 <div class="two-col"><div class="col"><div class="section-head">Increasing, Decreasing, Constant</div>
 <div class="accent-box"><p>Reading graphs <em>left to right</em>:</p><ul><li><strong>Increasing</strong> on $(a,b)$: $a<x_1<x_2<b\Rightarrow f(x_1)<f(x_2)$</li><li><strong>Decreasing</strong> on $(a,b)$: $a<x_1<x_2<b\Rightarrow f(x_1)>f(x_2)$</li><li><strong>Constant</strong> on $(a,b)$: $f(x_1)=f(x_2)$ for all $x_1,x_2$</li></ul><p><em>Report intervals using $x$-values, using open intervals.</em></p></div>
+<details class="mistake-panel">
+<summary class="mistake-toggle">▸ Common Mistake</summary>
+<div class="mistake-body">
+  <p>Increasing and decreasing intervals are reported with $x$-values, not $y$-values. Students see the curve rise from height $2$ to height $5$ and write "increasing on $(2,5)$" — but those are outputs.</p>
+  <p>The interval names the $x$-positions over which the curve rises. Read the horizontal axis, and use open intervals at the turning points.</p>
+</div>
+</details>
 </div><div class="col"><div class="section-head">Maxima, Minima & Average Rate of Change</div>
 <div class="accent-box"><p><strong>Local max/min:</strong> highest/lowest in some open interval around the point.</p><p><strong>Absolute max/min:</strong> highest/lowest on the entire domain (may not exist).</p><p><strong>Average rate of change</strong> from $a$ to $b$:</p><p>$$\text{ARC}=\dfrac{f(b)-f(a)}{b-a}$$</p><p>This equals the slope of the <em>secant line</em> connecting $(a,f(a))$ and $(b,f(b))$.</p></div>
+<details class="mistake-panel">
+<summary class="mistake-toggle">▸ Common Mistake</summary>
+<div class="mistake-body">
+  <p>Average rate of change keeps the same order on top and bottom: $\dfrac{f(b)-f(a)}{b-a}$. Students flip one of them — writing $\dfrac{f(b)-f(a)}{a-b}$ — which reverses the sign, or they invert the whole thing to $\dfrac{b-a}{f(b)-f(a)}$.</p>
+  <p>It's a slope: change in output over change in input, with both differences taken in the same direction ($b$ then $a$).</p>
+</div>
+</details>
 </div></div>
 <div style="text-align:center;margin:1rem 0 0.5rem"><svg width="520" height="160" viewBox="0 0 520 160" xmlns="http://www.w3.org/2000/svg">
 <rect width="520" height="160" fill="#fafaf8" rx="6"/>
@@ -116,5 +142,7 @@ renderMathInElement(document.body, {
   throwOnError: false
 });
 </script>
+<!-- proof-layer:done -->
+<!-- mistake-layer:done -->
 </body>
 </html>

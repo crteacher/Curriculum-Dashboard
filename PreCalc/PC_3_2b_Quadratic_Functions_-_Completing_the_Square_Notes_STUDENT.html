@@ -66,8 +66,35 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 <div class="opening-q">The standard form $ax^2+bx+c$ hides the vertex. Is there an algebraic procedure to rewrite any quadratic in vertex form without graphing?</div>
 <div class="two-col"><div class="col"><div class="section-head">Completing the Square</div>
 <div class="accent-box"><p><strong>Key identity:</strong> $x^2+bx=\left(x+\dfrac{b}{2}\right)^2-\left(\dfrac{b}{2}\right)^2$</p><p><strong>Steps to vertex form:</strong></p><ol style='margin-left:1.1rem'><li>Factor $a$ from the $x$-terms.</li><li>Add and subtract $\left(\frac{b}{2a}\right)^2$ inside.</li><li>Write as $a(x-h)^2+k$.</li></ol></div>
+<details class="proof-panel">
+<summary class="proof-toggle">▸ Show Proof</summary>
+<div class="proof-body">
+  <p>The key idea is to recognize a perfect-square pattern. Recall that squaring a binomial gives $\left(x+\tfrac{b}{2}\right)^2 = x^2 + 2\cdot x\cdot\tfrac{b}{2} + \left(\tfrac{b}{2}\right)^2$.</p>
+  <p>The middle term simplifies, since $2\cdot\tfrac{b}{2}=b$:</p>
+  <p>$$\left(x+\tfrac{b}{2}\right)^2 = x^2 + bx + \left(\tfrac{b}{2}\right)^2.$$</p>
+  <p>So a perfect square is exactly $x^2+bx$ plus the extra constant $\left(\tfrac{b}{2}\right)^2$. To recover $x^2+bx$ on its own, just subtract that extra constant back off:</p>
+  <p>$$x^2+bx = \left(x+\tfrac{b}{2}\right)^2 - \left(\tfrac{b}{2}\right)^2.$$</p>
+  <p>That is the identity — taking half of the $x$-coefficient, squaring it, then adding and removing it is what lets you fold $x^2+bx$ into a single squared term.</p>
+  <p class="proof-qed">∎</p>
+</div>
+</details>
 </div><div class="col"><div class="section-head">Quadratic Formula and Discriminant</div>
 <div class="accent-box"><p>For $ax^2+bx+c=0$:</p><p>$$x=\dfrac{-b\pm\sqrt{b^2-4ac}}{2a}$$</p><p><strong>Discriminant</strong> $D=b^2-4ac$:<br>$D>0$: two real zeros<br>$D=0$: one real zero (double root)<br>$D<0$: two complex conjugate zeros</p></div>
+<details class="proof-panel">
+<summary class="proof-toggle">▸ Show Proof</summary>
+<div class="proof-body">
+  <p>Here's where the quadratic formula comes from: just complete the square on the general equation. Start with $ax^2+bx+c=0$ and divide through by $a$ (allowed since $a\neq 0$):</p>
+  <p>$$x^2 + \tfrac{b}{a}x + \tfrac{c}{a} = 0 \quad\Longrightarrow\quad x^2 + \tfrac{b}{a}x = -\tfrac{c}{a}.$$</p>
+  <p>Now complete the square on the left: take half of $\tfrac{b}{a}$, square it to get $\left(\tfrac{b}{2a}\right)^2$, and add it to both sides:</p>
+  <p>$$\left(x+\tfrac{b}{2a}\right)^2 = \tfrac{b^2}{4a^2} - \tfrac{c}{a} = \frac{b^2-4ac}{4a^2}.$$</p>
+  <p>Take the square root of both sides (the $\pm$ appears because both a positive and negative root work):</p>
+  <p>$$x+\tfrac{b}{2a} = \pm\frac{\sqrt{b^2-4ac}}{2a}.$$</p>
+  <p>Finally subtract $\tfrac{b}{2a}$ and combine over the common denominator $2a$:</p>
+  <p>$$x = \frac{-b\pm\sqrt{b^2-4ac}}{2a}.$$</p>
+  <p>Notice the quantity under the root is exactly the discriminant $b^2-4ac$ — that is why its sign decides whether the roots are real or complex.</p>
+  <p class="proof-qed">∎</p>
+</div>
+</details>
 </div></div>
 <div style="text-align:center;margin:1rem 0 0.5rem"><svg width="380" height="200" viewBox="0 0 380 200" xmlns="http://www.w3.org/2000/svg">
 <rect width="380" height="200" fill="#fafaf8" rx="6"/>
@@ -177,5 +204,6 @@ renderMathInElement(document.body, {
   throwOnError: false
 });
 </script>
+<!-- proof-layer:done -->
 </body>
 </html>

@@ -57,6 +57,14 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   .st-ans-hidden{display:none !important}
 }
 @page{margin:.55in .65in;size:letter}
+.proof-panel{margin:.4rem 0 1.1rem;border-left:3px solid #7a9a6a;border-radius:0 6px 6px 0;background:#f5f7f3}
+.proof-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#5a7a4a;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.proof-toggle::-webkit-details-marker{display:none}
+details[open]>.proof-toggle{color:#1e3a5c}
+.proof-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #c8d8b8}
+.proof-body p{margin-bottom:.45rem}
+.proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
+@media print{.proof-panel{display:none}}
 </style>
 </head>
 <body>
@@ -66,6 +74,18 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 <div class="opening-q">A ball is thrown at an angle — its $x$ and $y$ positions each depend on time separately. How can we write two equations in $t$ and then eliminate $t$ to get the path?</div>
 <div class="two-col"><div class="col"><div class="section-head">Quadratic Applications</div>
 <div class="accent-box"><p><strong>Projectile height:</strong> $h(t)=-16t^2+v_0 t+h_0$ (in feet)<br>or $h(t)=-4.9t^2+v_0 t+h_0$ (in meters).</p><p>Maximum height: at vertex $t=-\dfrac{v_0}{2(-16)}=\dfrac{v_0}{32}$.</p><p>Time to hit ground: set $h(t)=0$, solve via quadratic formula.</p></div>
+<details class="proof-panel">
+<summary class="proof-toggle">▸ Show Proof</summary>
+<div class="proof-body">
+  <p>Why does the maximum height happen at $t=\dfrac{v_0}{32}$? The graph of $h(t)=-16t^2+v_0t+h_0$ is a parabola opening downward (the $t^2$ coefficient is negative), so its single highest point is the vertex. We just need to locate that vertex.</p>
+  <p>Complete the square on the general quadratic $at^2+bt+c$. Factor $a$ out of the first two terms, then fold them into a perfect square:</p>
+  <p>$$at^2+bt+c = a\left(t+\tfrac{b}{2a}\right)^2 - \frac{b^2}{4a} + c.$$</p>
+  <p>Only the squared part depends on $t$, and a square is never negative — it is smallest (equal to $0$) exactly when its inside is $0$, i.e. when $t=-\dfrac{b}{2a}$. So the vertex always sits at $t=-\dfrac{b}{2a}$.</p>
+  <p>For projectile height, $a=-16$ and $b=v_0$, giving</p>
+  <p>$$t=-\frac{v_0}{2(-16)}=\frac{v_0}{32}.$$</p>
+  <p class="proof-qed">∎</p>
+</div>
+</details>
 <p class="body-text">Setup: identify $a$, $b$, $c$ from the problem context. The coefficient $a$ is always negative for projectile motion (gravity acts downward).</p>
 </div><div class="col"><div class="section-head">Parametric Equations</div>
 <div class="accent-box"><p><strong>Parametric equations</strong> express $x$ and $y$ both as functions of a third variable $t$ (the parameter):</p><p>$x=f(t)$, $y=g(t)$</p><p><strong>To eliminate the parameter:</strong> solve one equation for $t$, substitute into the other.</p><p>Example: $x=2t$, $y=t^2$ $\Rightarrow$ $t=\tfrac{x}{2}$ $\Rightarrow$ $y=\tfrac{x^2}{4}$ (parabola).</p></div>
@@ -105,5 +125,6 @@ renderMathInElement(document.body, {
   throwOnError: false
 });
 </script>
+<!-- proof-layer:done -->
 </body>
 </html>

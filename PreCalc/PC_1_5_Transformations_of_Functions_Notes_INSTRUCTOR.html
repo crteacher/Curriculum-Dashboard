@@ -57,6 +57,26 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   .st-ans-hidden{display:none !important}
 }
 @page{margin:.55in .65in;size:letter}
+.proof-panel{margin:.4rem 0 1.1rem;border-left:3px solid #7a9a6a;border-radius:0 6px 6px 0;background:#f5f7f3}
+.proof-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#5a7a4a;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.proof-toggle::-webkit-details-marker{display:none}
+details[open]>.proof-toggle{color:#1e3a5c}
+.proof-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #c8d8b8}
+.proof-body p{margin-bottom:.45rem}
+.proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
+@media print{.proof-panel{display:none}}
+.mistake-panel{margin:.4rem 0 1.1rem;border-left:3px solid #b8860b;border-radius:0 6px 6px 0;background:#fdf8e8}
+.mistake-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#9a6a00;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.mistake-toggle::-webkit-details-marker{display:none}
+details[open]>.mistake-toggle{color:#1e3a5c}
+.mistake-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #e8d8a8}
+.mistake-body p{margin-bottom:.45rem}
+.panel-row{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.1rem}
+.panel-row>.proof-panel,.panel-row>.mistake-panel{margin:0;min-width:0}
+@media print{
+  .panel-row{break-inside:avoid}
+  .mistake-panel{break-inside:avoid}
+}
 </style>
 </head>
 <body>
@@ -66,8 +86,35 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 <div class="opening-q">If you know the graph of $y=x^2$, how could you get the graph of $y=(x-3)^2+1$ without making a new table of values?</div>
 <div class="two-col"><div class="col"><div class="section-head">Shifts and Reflections</div>
 <div class="accent-box"><p>Starting from $y=f(x)$:</p><ul><li><strong>Vertical shift up $k$:</strong> $y=f(x)+k$</li><li><strong>Vertical shift down $k$:</strong> $y=f(x)-k$</li><li><strong>Horizontal shift right $h$:</strong> $y=f(x-h)$</li><li><strong>Horizontal shift left $h$:</strong> $y=f(x+h)$</li><li><strong>Reflect over $x$-axis:</strong> $y=-f(x)$</li><li><strong>Reflect over $y$-axis:</strong> $y=f(-x)$</li></ul><p><em>Inside the function $\leftrightarrow$ horizontal (and opposite). Outside $\leftrightarrow$ vertical.</em></p></div>
+<div class="panel-row">
+<details class="proof-panel">
+<summary class="proof-toggle">▸ Show Proof</summary>
+<div class="proof-body">
+  <p>The vertical rules are intuitive — adding $k$ after the function lifts every output by $k$. The tricky ones are the <em>horizontal</em> shifts, which feel backwards: why does $y=f(x-h)$ move the graph to the <em>right</em> when we subtracted?</p>
+  <p>Here's the key idea. A point sits on the new graph at input $x$ with height $f(x-h)$. To land the <em>same</em> height the original graph had at some input $u$ — namely $f(u)$ — we need</p>
+  <p>$$x-h=u\quad\Longrightarrow\quad x=u+h.$$</p>
+  <p>So whatever feature lived at $x=u$ on the old graph now appears at $x=u+h$ — shifted $h$ units to the <strong>right</strong>. Subtracting inside the function pushes the graph the opposite way it "reads," because the input now has to be $h$ larger to reach the same stage.</p>
+  <p>The same swap explains $y=f(-x)$: the height at $x$ equals the old height at $-x$, so left and right inputs trade places — a reflection across the $y$-axis. Anything done <em>inside</em> $f$ acts on the input, so it changes $x$ and runs counter to intuition; anything done <em>outside</em> acts on the output and behaves normally.</p>
+  <p class="proof-qed">∎</p>
+</div>
+</details>
+<details class="mistake-panel">
+<summary class="mistake-toggle">▸ Common Mistake</summary>
+<div class="mistake-body">
+  <p>Keep the two reflections straight: $y=-f(x)$ flips over the $x$-axis (the output is negated — vertical), while $y=f(-x)$ flips over the $y$-axis (the input is negated — horizontal). Students swap them and reflect the wrong way.</p>
+  <p>Rule of thumb: a negative <em>outside</em> $f$ acts on outputs (vertical flip); a negative <em>inside</em> acts on inputs (horizontal flip).</p>
+</div>
+</details>
+</div>
 </div><div class="col"><div class="section-head">Stretches and Combined Transformations</div>
 <div class="accent-box"><p>For $y=af(b(x-h))+k$:</p><ul><li>$|a|>1$: vertical stretch; $0<|a|<1$: vertical shrink; $a<0$: flip over $x$-axis</li><li>$|b|>1$: horizontal shrink; $0<|b|<1$: horizontal stretch; $b<0$: flip over $y$-axis</li><li>$h$: horizontal shift right; $k$: vertical shift up</li></ul><p><strong>Order for graphing:</strong> horizontal shift → stretch/shrink/flip → vertical shift.</p></div>
+<details class="mistake-panel">
+<summary class="mistake-toggle">▸ Common Mistake</summary>
+<div class="mistake-body">
+  <p>Horizontal changes run backwards and must be factored before you read them. $y=f(x-3)$ shifts <em>right</em> 3 (not left), and with a coefficient you must factor $b$ out first: $f(2x-6)=f\big(2(x-3)\big)$ shifts right $3$, not $6$.</p>
+  <p>Same reversal for scaling: $|b|>1$ <em>shrinks</em> horizontally rather than stretching. Anything inside $f$ acts on the input and behaves opposite to its sign.</p>
+</div>
+</details>
 </div></div>
 <div style="text-align:center;margin:1rem 0 0.5rem"><svg width="480" height="170" viewBox="0 0 480 170" xmlns="http://www.w3.org/2000/svg">
 <rect width="480" height="170" fill="#fafaf8" rx="6"/>
@@ -137,5 +184,7 @@ renderMathInElement(document.body, {
   throwOnError: false
 });
 </script>
+<!-- proof-layer:done -->
+<!-- mistake-layer:done -->
 </body>
 </html>

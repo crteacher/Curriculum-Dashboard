@@ -57,6 +57,26 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   .st-ans-hidden{display:none !important}
 }
 @page{margin:.55in .65in;size:letter}
+.proof-panel{margin:.4rem 0 1.1rem;border-left:3px solid #7a9a6a;border-radius:0 6px 6px 0;background:#f5f7f3}
+.proof-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#5a7a4a;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.proof-toggle::-webkit-details-marker{display:none}
+details[open]>.proof-toggle{color:#1e3a5c}
+.proof-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #c8d8b8}
+.proof-body p{margin-bottom:.45rem}
+.proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
+@media print{.proof-panel{display:none}}
+.mistake-panel{margin:.4rem 0 1.1rem;border-left:3px solid #b8860b;border-radius:0 6px 6px 0;background:#fdf8e8}
+.mistake-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#9a6a00;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.mistake-toggle::-webkit-details-marker{display:none}
+details[open]>.mistake-toggle{color:#1e3a5c}
+.mistake-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #e8d8a8}
+.mistake-body p{margin-bottom:.45rem}
+.panel-row{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.1rem}
+.panel-row>.proof-panel,.panel-row>.mistake-panel{margin:0;min-width:0}
+@media print{
+  .panel-row{break-inside:avoid}
+  .mistake-panel{break-inside:avoid}
+}
 </style>
 </head>
 <body>
@@ -66,9 +86,47 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 <div class="opening-q">A car's value drops at a constant rate of $1{,}750 per year. If it is worth $22{,}000 today, how would you model its value over time — and what does "constant rate" tell you about the shape of the graph?</div>
 <div class="two-col"><div class="col"><div class="section-head">Slope and Point-Slope Form</div>
 <div class="accent-box"><p><strong>Slope</strong> of the line through $(x_1,y_1)$ and $(x_2,y_2)$:</p><p>$$m=\dfrac{y_2-y_1}{x_2-x_1}$$</p><p>$m>0$: rising; $m<0$: falling; $m=0$: horizontal; undefined: vertical.</p><p><strong>Point-Slope Form:</strong> $y-y_1=m(x-x_1)$</p></div>
+<details class="proof-panel">
+<summary class="proof-toggle">▸ Show Proof</summary>
+<div class="proof-body">
+<p>First, why does a line have just <em>one</em> slope? Pick any two points on it and draw the little right triangle whose legs are the horizontal "run" and vertical "rise." Because a straight line keeps the same direction everywhere, any second triangle you draw on it has the same angles, so the two triangles are <strong>similar</strong>. Similar triangles have proportional sides, so $\dfrac{\text{rise}}{\text{run}}$ comes out the same no matter which two points you pick. That single ratio is the slope $m$.</p>
+<p>Now use that fact. Let $(x_1,y_1)$ be a known point on the line and let $(x,y)$ be <em>any</em> other point on it. The slope between them must equal $m$:</p>
+<p>$$\frac{y-y_1}{x-x_1}=m.$$</p>
+<p>Multiply both sides by $(x-x_1)$:</p>
+<p>$$y-y_1=m(x-x_1).$$</p>
+<p>That is point-slope form — it simply says every point on the line keeps the same slope back to $(x_1,y_1)$.</p>
+<p class="proof-qed">∎</p>
+</div>
+</details>
+<details class="mistake-panel">
+<summary class="mistake-toggle">▸ Common Mistake</summary>
+<div class="mistake-body">
+  <p>Subtracting the coordinates in a different order on top and bottom. Slope is $m=\dfrac{y_2-y_1}{x_2-x_1}$ — both differences must run <em>the same way</em>. Students write $\dfrac{y_2-y_1}{x_1-x_2}$, flipping only the denominator, which negates the slope: an uphill line comes out with a downhill sign.</p>
+  <p>Pick a "first" point and a "second" point and keep that order in both the numerator and the denominator. It doesn't matter <em>which</em> point is first — $\dfrac{y_2-y_1}{x_2-x_1}=\dfrac{y_1-y_2}{x_1-x_2}$ — only that you're consistent.</p>
+</div>
+</details>
 <p class="body-text">A line has constant rate of change equal to its slope.</p>
 </div><div class="col"><div class="section-head">Slope-Intercept & Parallel/Perpendicular</div>
 <div class="accent-box"><p><strong>Slope-Intercept Form:</strong> $y=mx+b$</p><p>$m$=slope, $b$=$y$-intercept (value when $x=0$).</p><p><strong>Parallel lines:</strong> equal slopes ($m_1=m_2$).</p><p><strong>Perpendicular lines:</strong> slopes are opposite reciprocals ($m_1\cdot m_2=-1$).</p></div>
+<details class="proof-panel">
+<summary class="proof-toggle">▸ Show Proof</summary>
+<div class="proof-body">
+<p>Slope-intercept form is just point-slope form anchored at the $y$-axis. Use the known point $(0,b)$:</p>
+<p>$$y-b=m(x-0)\quad\Longrightarrow\quad y=mx+b.$$</p>
+<p>Now the perpendicular rule. Picture a line’s direction as “go right $b$, then up $a$,” so its slope is $m_1=\dfrac{a}{b}$. To turn that arrow a quarter-turn ($90^\circ$), swap the two legs and flip one sign — the arrow becomes the direction $(-a,\,b)$.</p>
+<p>The slope of this rotated, perpendicular direction is $m_2=\dfrac{b}{-a}=-\dfrac{b}{a}$. Multiplying the two slopes:</p>
+<p>$$m_1\cdot m_2=\frac{a}{b}\cdot\left(-\frac{b}{a}\right)=-1.$$</p>
+<p>So perpendicular slopes are always negative reciprocals. (Parallel lines point the same direction, so they trivially share the same slope.)</p>
+<p class="proof-qed">∎</p>
+</div>
+</details>
+<details class="mistake-panel">
+<summary class="mistake-toggle">▸ Common Mistake</summary>
+<div class="mistake-body">
+  <p>Getting the perpendicular slope half-right. Perpendicular means the <strong>negative reciprocal</strong> — flip <em>and</em> change sign. For slope $2$, the perpendicular slope is $-\dfrac{1}{2}$, not $-2$ (only negated) and not $\dfrac{1}{2}$ (only flipped). The check is $m_1\cdot m_2=-1$: confirm $2\cdot(-\tfrac12)=-1$.</p>
+  <p>The mirror mistake is swapping the two rules — using negative reciprocals for <em>parallel</em> lines. Parallel lines have <em>equal</em> slopes ($m_1=m_2$); the negative-reciprocal rule is for perpendicular lines only.</p>
+</div>
+</details>
 </div></div>
 <div style="text-align:center;margin:1rem 0 0.5rem"><svg width="400" height="200" viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
 <rect width="400" height="200" fill="#fafaf8" rx="6"/>
@@ -137,5 +195,7 @@ renderMathInElement(document.body, {
   throwOnError: false
 });
 </script>
+<!-- proof-layer:done -->
+<!-- mistake-layer:done -->
 </body>
 </html>

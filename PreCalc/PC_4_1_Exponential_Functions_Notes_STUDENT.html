@@ -57,6 +57,14 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   .st-ans-hidden{display:none !important}
 }
 @page{margin:.55in .65in;size:letter}
+.proof-panel{margin:.4rem 0 1.1rem;border-left:3px solid #7a9a6a;border-radius:0 6px 6px 0;background:#f5f7f3}
+.proof-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#5a7a4a;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.proof-toggle::-webkit-details-marker{display:none}
+details[open]>.proof-toggle{color:#1e3a5c}
+.proof-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #c8d8b8}
+.proof-body p{margin-bottom:.45rem}
+.proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
+@media print{.proof-panel{break-inside:avoid}}
 </style>
 </head>
 <body>
@@ -68,6 +76,19 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 <div class="accent-box"><p><strong>Exponential function:</strong> $f(x)=a\cdot b^x$, $b>0$, $b\neq1$, $a>0$.</p><p>$a$ = initial value; $b$ = base (growth factor).</p><ul><li>$b>1$: <strong>growth</strong> (increasing)</li><li>$0<b<1$: <strong>decay</strong> (decreasing)</li></ul><p><strong>Key features:</strong> continuous, passes through $(0,a)$, horizontal asymptote at $y=0$, always positive.</p></div>
 </div><div class="col"><div class="section-head">Laws of Exponents & the Number $e$</div>
 <div class="accent-box"><p><strong>Laws:</strong> $b^x\cdot b^y=b^{x+y}$; $\dfrac{b^x}{b^y}=b^{x-y}$; $(b^x)^y=b^{xy}$.</p><p><strong>Natural base $e\approx2.71828$:</strong><br>$f(x)=e^x$ — the most natural exponential.</p><p><strong>Compound interest:</strong> $A=P\left(1+\dfrac{r}{n}\right)^{nt}$</p><p><strong>Continuous compounding:</strong> $A=Pe^{rt}$</p></div>
+<details class="proof-panel">
+<summary class="proof-toggle">▸ Show Proof</summary>
+<div class="proof-body">
+  <p>Here's where the compound interest formula comes from. You start with principal $P$ and an annual rate $r$, but the interest is paid out $n$ times a year. Each time it's paid, you earn $\dfrac{r}{n}$ of your current balance, so the balance gets <em>multiplied</em> by $\left(1+\dfrac{r}{n}\right)$.</p>
+  <p>Multiplying by that factor once per period, the balance after each period is:</p>
+  <p>$$P\to P\!\left(1+\tfrac{r}{n}\right)\to P\!\left(1+\tfrac{r}{n}\right)^2\to\cdots$$</p>
+  <p>Over $t$ years there are $nt$ periods in total, so applying the factor $nt$ times gives $A=P\left(1+\dfrac{r}{n}\right)^{nt}$.</p>
+  <p>Now let the compounding get infinitely frequent — let $n\to\infty$. Substitute $m=\dfrac{n}{r}$, so $nt=mrt$, and regroup:</p>
+  <p>$$\left(1+\tfrac{r}{n}\right)^{nt}=\left(1+\tfrac{1}{m}\right)^{mrt}=\left[\left(1+\tfrac{1}{m}\right)^{m}\right]^{rt}.$$</p>
+  <p>The key fact is that $\left(1+\tfrac{1}{m}\right)^{m}$ creeps toward the number $e\approx 2.71828$ as $m$ grows — that limit is exactly the definition of $e$. So the bracket becomes $e$, and $A\to Pe^{rt}$, the continuous-compounding formula.</p>
+  <p class="proof-qed">∎</p>
+</div>
+</details>
 </div></div>
 <div style="text-align:center;margin:1rem 0 0.5rem"><svg width="400" height="190" viewBox="0 0 400 190" xmlns="http://www.w3.org/2000/svg">
 <rect width="400" height="190" fill="#fafaf8" rx="6"/>
@@ -914,5 +935,6 @@ renderMathInElement(document.body, {
   throwOnError: false
 });
 </script>
+<!-- proof-layer:done -->
 </body>
 </html>

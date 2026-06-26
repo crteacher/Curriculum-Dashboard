@@ -57,6 +57,26 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   .st-ans-hidden{display:none !important}
 }
 @page{margin:.55in .65in;size:letter}
+.proof-panel{margin:.4rem 0 1.1rem;border-left:3px solid #7a9a6a;border-radius:0 6px 6px 0;background:#f5f7f3}
+.proof-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#5a7a4a;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.proof-toggle::-webkit-details-marker{display:none}
+details[open]>.proof-toggle{color:#1e3a5c}
+.proof-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #c8d8b8}
+.proof-body p{margin-bottom:.45rem}
+.proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
+@media print{.proof-panel{display:none}}
+.mistake-panel{margin:.4rem 0 1.1rem;border-left:3px solid #b8860b;border-radius:0 6px 6px 0;background:#fdf8e8}
+.mistake-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#9a6a00;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.mistake-toggle::-webkit-details-marker{display:none}
+details[open]>.mistake-toggle{color:#1e3a5c}
+.mistake-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #e8d8a8}
+.mistake-body p{margin-bottom:.45rem}
+.panel-row{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.1rem}
+.panel-row>.proof-panel,.panel-row>.mistake-panel{margin:0;min-width:0}
+@media print{
+  .panel-row{break-inside:avoid}
+  .mistake-panel{break-inside:avoid}
+}
 </style>
 </head>
 <body>
@@ -68,6 +88,17 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 <div class="accent-box"><p><strong>Steps to graph a polynomial:</strong></p><ol style='margin-left:1.1rem'><li>Find zeros and their multiplicities.</li><li>Find the $y$-intercept ($x=0$).</li><li>Determine end behavior.</li><li>Sketch: cross at odd-mult zeros, bounce at even-mult zeros.</li><li>Check sign between zeros.</li></ol></div>
 </div><div class="col"><div class="section-head">Increasing, Decreasing, Local Extrema</div>
 <div class="accent-box"><p>At local maxima/minima the graph changes direction.</p><p>A degree-$n$ polynomial has at most $n-1$ turning points.</p><p><strong>Sign chart:</strong> pick test values between zeros; the sign of $f$ at each test point tells you if the graph is above or below the $x$-axis on that interval.</p></div>
+<details class="proof-panel">
+<summary class="proof-toggle">▸ Geometric Argument</summary>
+<div class="proof-body">
+  <p>Why can a degree-$n$ polynomial have at most $n-1$ turning points? A full calculus proof uses derivatives, but here is the geometric idea using only a fact you already know: the equation $f(x)=c$ has at most $n$ solutions, because it is a degree-$n$ polynomial equation.</p>
+  <p>A turning point is a spot where the graph switches between rising and falling. So if a graph has $k$ turning points, it is made of $k+1$ alternating "arcs" — up, down, up, down, and so on.</p>
+  <p>Now slide a horizontal line $y=c$ to a height that cuts through every one of those arcs. Each arc, being either entirely rising or entirely falling across its stretch, can be crossed once, so the line meets the graph in $k+1$ separate points:</p>
+  <p>$$\underbrace{k+1}_{\text{intersections}} \;\le\; \underbrace{n}_{\text{max solutions of } f(x)=c}.$$</p>
+  <p>Rearranging $k+1\le n$ gives $k\le n-1$. So no matter how the curve wiggles, it cannot turn more than $n-1$ times.</p>
+  <p class="proof-qed">∎</p>
+</div>
+</details>
 <p class="body-text">Combine all features (zeros, $y$-int, end behavior, sign chart) to get a complete rough sketch.</p>
 </div></div>
 <div class="section-head">Worked Examples</div>
@@ -105,5 +136,6 @@ renderMathInElement(document.body, {
   throwOnError: false
 });
 </script>
+<!-- proof-layer:done -->
 </body>
 </html>

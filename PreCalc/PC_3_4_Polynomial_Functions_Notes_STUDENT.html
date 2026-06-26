@@ -57,6 +57,14 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   .st-ans-hidden{display:none !important}
 }
 @page{margin:.55in .65in;size:letter}
+.proof-panel{margin:.4rem 0 1.1rem;border-left:3px solid #7a9a6a;border-radius:0 6px 6px 0;background:#f5f7f3}
+.proof-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#5a7a4a;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.proof-toggle::-webkit-details-marker{display:none}
+details[open]>.proof-toggle{color:#1e3a5c}
+.proof-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #c8d8b8}
+.proof-body p{margin-bottom:.45rem}
+.proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
+@media print{.proof-panel{display:none}}
 </style>
 </head>
 <body>
@@ -66,8 +74,28 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 <div class="opening-q">A linear function has one "bend" (none, actually) and a quadratic has one. How many times can a degree-$n$ polynomial bend, and how does the leading term control the ends of the graph?</div>
 <div class="two-col"><div class="col"><div class="section-head">Polynomials, Degree, and Zeros</div>
 <div class="accent-box"><p><strong>Polynomial:</strong> $f(x)=a_nx^n+\cdots+a_1x+a_0$, $a_n\neq0$.</p><p><strong>Degree:</strong> largest power $n$. <strong>Leading coefficient:</strong> $a_n$.</p><p><strong>Zeros:</strong> $x=r$ is a zero if $f(r)=0$, i.e. $(x-r)$ is a factor.</p><p><strong>Multiplicity:</strong> if $(x-r)^m$ is a factor, $r$ has multiplicity $m$.</p><ul><li>Odd multiplicity: graph <em>crosses</em> $x$-axis at $r$.</li><li>Even multiplicity: graph <em>touches</em> (bounces off) $x$-axis at $r$.</li></ul></div>
+<details class="proof-panel">
+<summary class="proof-toggle">▸ Show Proof</summary>
+<div class="proof-body">
+<p>Near a zero $r$, factor the polynomial as $f(x)=(x-r)^m\,g(x)$, where $g$ holds all the other factors and $g(r)\neq 0$ — if it were zero, $r$ would have a higher multiplicity. Since $g$ is continuous and nonzero at $r$, it keeps a constant sign for every $x$ close enough to $r$. So near $r$, the sign of $f(x)$ is controlled entirely by the factor $(x-r)^m$.</p>
+<p>Watch $(x-r)$ as $x$ passes through $r$: it is negative just left of $r$ and positive just right. Raising to the power $m$ decides what happens to that sign — a negative number to an <em>even</em> power becomes positive, but to an <em>odd</em> power stays negative.</p>
+<p><strong>Even $m$:</strong> $(x-r)^m\ge 0$ on both sides, so $f$ keeps the same sign across $r$ — the graph drops to the axis and turns back (touches/bounces).</p>
+<p><strong>Odd $m$:</strong> $(x-r)^m$ flips from negative to positive, so $f$ changes sign — the graph passes straight through (crosses).</p>
+<p class="proof-qed">∎</p>
+</div>
+</details>
 </div><div class="col"><div class="section-head">End Behavior</div>
 <div class="accent-box"><p><strong>End Behavior Theorem:</strong> for large $|x|$, $f(x)\approx a_nx^n$.</p><table style='font-size:13px;border-collapse:collapse;width:100%'><tr><th style='text-align:left;padding:2px 6px'>$a_n>0$, even $n$</th><td style='padding:2px 6px'>$\uparrow\uparrow$ (both ends up)</td></tr><tr><th style='text-align:left;padding:2px 6px'>$a_n<0$, even $n$</th><td style='padding:2px 6px'>$\downarrow\downarrow$ (both ends down)</td></tr><tr><th style='text-align:left;padding:2px 6px'>$a_n>0$, odd $n$</th><td style='padding:2px 6px'>$\downarrow\uparrow$ (left down, right up)</td></tr><tr><th style='text-align:left;padding:2px 6px'>$a_n<0$, odd $n$</th><td style='padding:2px 6px'>$\uparrow\downarrow$ (left up, right down)</td></tr></table></div>
+<details class="proof-panel">
+<summary class="proof-toggle">▸ Show Proof</summary>
+<div class="proof-body">
+<p>Why does the single leading term take over when $|x|$ is large? Factor $a_nx^n$ out of every term:</p>
+<p>$$f(x)=a_nx^n\left(1+\frac{a_{n-1}}{a_n}\cdot\frac{1}{x}+\cdots+\frac{a_0}{a_n}\cdot\frac{1}{x^n}\right).$$</p>
+<p>As $|x|$ grows, each piece $\dfrac{1}{x},\dfrac{1}{x^2},\dots$ shrinks toward $0$, so everything inside the parentheses collapses to $1$. That leaves $f(x)\approx a_nx^n$ — the leading term alone sets how the graph behaves far out.</p>
+<p>From there the four cases follow: $x^n$ is positive on both ends when $n$ is even (both ends go the same way), while for odd $n$ it keeps the sign of $x$ (ends go opposite ways). The sign of $a_n$ then flips the whole picture up or down.</p>
+<p class="proof-qed">∎</p>
+</div>
+</details>
 <p class="body-text">A degree-$n$ poly has at most $n$ real zeros and at most $n-1$ turning points.</p>
 </div></div>
 <div class="section-head">Worked Examples</div>
@@ -105,5 +133,6 @@ renderMathInElement(document.body, {
   throwOnError: false
 });
 </script>
+<!-- proof-layer:done -->
 </body>
 </html>

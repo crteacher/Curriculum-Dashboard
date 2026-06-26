@@ -57,6 +57,26 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   .st-ans-hidden{display:none !important}
 }
 @page{margin:.55in .65in;size:letter}
+.proof-panel{margin:.4rem 0 1.1rem;border-left:3px solid #7a9a6a;border-radius:0 6px 6px 0;background:#f5f7f3}
+.proof-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#5a7a4a;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.proof-toggle::-webkit-details-marker{display:none}
+details[open]>.proof-toggle{color:#1e3a5c}
+.proof-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #c8d8b8}
+.proof-body p{margin-bottom:.45rem}
+.proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
+@media print{.proof-panel{display:none}}
+.mistake-panel{margin:.4rem 0 1.1rem;border-left:3px solid #b8860b;border-radius:0 6px 6px 0;background:#fdf8e8}
+.mistake-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#9a6a00;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.mistake-toggle::-webkit-details-marker{display:none}
+details[open]>.mistake-toggle{color:#1e3a5c}
+.mistake-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #e8d8a8}
+.mistake-body p{margin-bottom:.45rem}
+.panel-row{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.1rem}
+.panel-row>.proof-panel,.panel-row>.mistake-panel{margin:0;min-width:0}
+@media print{
+  .panel-row{break-inside:avoid}
+  .mistake-panel{break-inside:avoid}
+}
 </style>
 </head>
 <body>
@@ -66,8 +86,31 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 <div class="opening-q">A clock's minute hand sweeps a full circle in 60 minutes. If you measure the angle in "radians" instead of degrees, what does one full rotation equal?</div>
 <div class="two-col"><div class="col"><div class="section-head">Degrees and Radians</div>
 <div class="accent-box"><p><strong>Degree:</strong> one full rotation = $360°$.</p><p><strong>Radian:</strong> angle subtended by arc length equal to the radius.<br>One full rotation $= 2\pi$ rad.</p><p><strong>Conversion:</strong><br>Degrees $\to$ radians: multiply by $\dfrac{\pi}{180}$<br>Radians $\to$ degrees: multiply by $\dfrac{180}{\pi}$</p><p>$180°=\pi\text{ rad}$; $90°=\dfrac{\pi}{2}$; $60°=\dfrac{\pi}{3}$; $45°=\dfrac{\pi}{4}$; $30°=\dfrac{\pi}{6}$.</p></div>
+<details class="proof-panel">
+<summary class="proof-toggle">▸ Show Proof</summary>
+<div class="proof-body">
+  <p>Where do the numbers $\dfrac{\pi}{180}$ and $\dfrac{180}{\pi}$ actually come from? They follow from a single fact connecting the two ways of measuring a full circle.</p>
+  <p>A full rotation is $360°$. Going around the whole circle, the arc you trace is the entire circumference, $2\pi r$. Since a radian is the angle whose arc equals one radius $r$, a full circle holds $\dfrac{2\pi r}{r} = 2\pi$ radians. So the same turn is both $360°$ and $2\pi$ rad:</p>
+  <p>$$360° = 2\pi\text{ rad} \quad\Longrightarrow\quad 180° = \pi\text{ rad}.$$</p>
+  <p>Now just solve for one unit. Divide $180° = \pi$ rad by $180$: $\;1° = \dfrac{\pi}{180}\text{ rad}$ — so turning degrees into radians means multiplying by $\dfrac{\pi}{180}$.</p>
+  <p>Divide the same equation by $\pi$ instead: $\;1\text{ rad} = \dfrac{180}{\pi}{}°$ — so radians become degrees by multiplying by $\dfrac{180}{\pi}$.</p>
+  <p class="proof-qed">∎</p>
+</div>
+</details>
 </div><div class="col"><div class="section-head">Arc Length, Coterminal Angles</div>
 <div class="accent-box"><p><strong>Arc length:</strong> $s=r\theta$ ($\theta$ in radians).</p><p><strong>Angular speed:</strong> $\omega=\dfrac{\theta}{t}$; Linear speed: $v=r\omega$.</p><p><strong>Coterminal angles:</strong> same initial and terminal sides. Add or subtract $360°$ (or $2\pi$ rad) to find them.</p><p>E.g. $410°$ and $50°$ are coterminal; $-\dfrac{\pi}{4}$ and $\dfrac{7\pi}{4}$ are coterminal.</p></div>
+<details class="proof-panel">
+<summary class="proof-toggle">▸ Show Proof</summary>
+<div class="proof-body">
+  <p>The formula $s=r\theta$ comes straight from what a radian <em>means</em>. By definition, an angle of $1$ radian cuts off an arc exactly as long as the radius, $r$.</p>
+  <p>Arc length grows in direct proportion to the angle — double the angle, double the arc. So an angle of $\theta$ radians cuts off an arc $\theta$ times as long as the one-radian arc:</p>
+  <p>$$s = r\theta.$$</p>
+  <p>Quick check: a full turn is $\theta = 2\pi$, which gives $s = 2\pi r$ — the whole circumference, exactly as it should be.</p>
+  <p>Linear speed follows by dividing distance by time. If a point on the rim sweeps at angular speed $\omega = \dfrac{\theta}{t}$, then in time $t$ it travels the arc $s = r\theta$, so its speed along the circle is</p>
+  <p>$$v = \frac{s}{t} = \frac{r\theta}{t} = r\,\frac{\theta}{t} = r\omega.$$</p>
+  <p class="proof-qed">∎</p>
+</div>
+</details>
 </div></div>
 <div style="text-align:center;margin:1rem 0 0.5rem"><svg width="320" height="320" viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg" style="display:inline-block">
 <rect width="320" height="320" fill="#fafaf8" rx="8"/>
@@ -157,5 +200,6 @@ renderMathInElement(document.body, {
   throwOnError: false
 });
 </script>
+<!-- proof-layer:done -->
 </body>
 </html>

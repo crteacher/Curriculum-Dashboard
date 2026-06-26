@@ -57,6 +57,18 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   .st-ans-hidden{display:none !important}
 }
 @page{margin:.55in .65in;size:letter}
+.mistake-panel{margin:.4rem 0 1.1rem;border-left:3px solid #b8860b;border-radius:0 6px 6px 0;background:#fdf8e8}
+.mistake-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#9a6a00;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.mistake-toggle::-webkit-details-marker{display:none}
+details[open]>.mistake-toggle{color:#1e3a5c}
+.mistake-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #e8d8a8}
+.mistake-body p{margin-bottom:.45rem}
+.panel-row{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.1rem}
+.panel-row>.proof-panel,.panel-row>.mistake-panel{margin:0;min-width:0}
+@media print{
+  .panel-row{break-inside:avoid}
+  .mistake-panel{break-inside:avoid}
+}
 </style>
 </head>
 <body>
@@ -66,8 +78,22 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 <div class="opening-q">If $f(x)=\dfrac{1}{x-3}$, what input causes a problem? How do we communicate "all real numbers except 3" compactly?</div>
 <div class="two-col"><div class="col"><div class="section-head">Interval and Set-Builder Notation</div>
 <div class="accent-box"><p><strong>Interval notation</strong> uses brackets $[\,,\,]$ (includes endpoint) and parentheses $(\,,\,)$ (excludes endpoint).</p><p>Examples:<br>$x>1$: $(1,\infty)$<br>$x\leq 1$: $(-\infty,1]$<br>$3<x<5$: $(3,5)$<br>$x\neq 0$: $(-\infty,0)\cup(0,\infty)$</p><p><strong>Set-builder:</strong> $\{x\mid x>1\}$, $\{x\mid x\neq 0\}$, etc.</p></div>
+<details class="mistake-panel">
+<summary class="mistake-toggle">▸ Common Mistake</summary>
+<div class="mistake-body">
+  <p>Infinity never takes a bracket. Students write $(1,\infty]$ or $[-\infty,1]$, but $\infty$ and $-\infty$ aren't numbers you can reach — they're always excluded, so they always get a parenthesis.</p>
+  <p>A bracket means "includes this endpoint," and you can't include infinity. Reserve brackets for real, attainable endpoints like the $1$ in $(-\infty,1]$.</p>
+</div>
+</details>
 </div><div class="col"><div class="section-head">Finding the Domain</div>
 <div class="accent-box"><p>Most functions have domain $(-\infty,\infty)$. Restrictions come from:</p><ol style='margin-left:1.2rem'><li><strong>Denominators:</strong> exclude zeros of the denominator.</li><li><strong>Even roots:</strong> set the radicand $\geq 0$ and solve.</li><li><strong>Logarithms:</strong> argument must be $>0$ (covered later).</li></ol><p><em>Find domain before simplifying!</em></p></div>
+<details class="mistake-panel">
+<summary class="mistake-toggle">▸ Common Mistake</summary>
+<div class="mistake-body">
+  <p>Find the domain from the original function, before you simplify. Students cancel a common factor first — turning $\dfrac{x^2-1}{x-1}$ into $x+1$ — and then report the domain as all reals. But the original is undefined at $x=1$, so $x=1$ stays excluded even though the simplified form hides it (that's the hole).</p>
+  <p>Canceling erases the evidence of a restriction. Check denominators and radicands on the function <em>as given</em>, not on a tidied-up version.</p>
+</div>
+</details>
 <p class="body-text">Strategy: identify the problem type, write the restriction, solve, then express in interval notation.</p>
 </div></div>
 <div class="section-head">Worked Examples</div>
@@ -105,5 +131,7 @@ renderMathInElement(document.body, {
   throwOnError: false
 });
 </script>
+<!-- proof-layer:done -->
+<!-- mistake-layer:done -->
 </body>
 </html>

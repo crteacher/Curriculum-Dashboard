@@ -57,6 +57,14 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   .st-ans-hidden{display:none !important}
 }
 @page{margin:.55in .65in;size:letter}
+.proof-panel{margin:.4rem 0 1.1rem;border-left:3px solid #7a9a6a;border-radius:0 6px 6px 0;background:#f5f7f3}
+.proof-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#5a7a4a;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.proof-toggle::-webkit-details-marker{display:none}
+details[open]>.proof-toggle{color:#1e3a5c}
+.proof-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #c8d8b8}
+.proof-body p{margin-bottom:.45rem}
+.proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
+@media print{.proof-panel{break-inside:avoid}}
 </style>
 </head>
 <body>
@@ -68,6 +76,17 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 <div class="accent-box"><p>For a right triangle with angle $\theta$, hypotenuse $h$, opposite side $o$, adjacent side $a$:</p><p>$$\sin\theta=\dfrac{o}{h},\quad \cos\theta=\dfrac{a}{h},\quad \tan\theta=\dfrac{o}{a}$$</p><p>$$\csc\theta=\dfrac{h}{o},\quad \sec\theta=\dfrac{h}{a},\quad \cot\theta=\dfrac{a}{o}$$</p><p><strong>Mnemonic:</strong> SOH-CAH-TOA.</p></div>
 </div><div class="col"><div class="section-head">Special Triangles</div>
 <div class="accent-box"><p><strong>45-45-90:</strong> sides $1,1,\sqrt2$.<br>$\sin45°=\cos45°=\dfrac{\sqrt2}{2}$; $\tan45°=1$.</p><p><strong>30-60-90:</strong> sides $1,\sqrt3,2$.<br>$\sin30°=\dfrac{1}{2}$, $\cos30°=\dfrac{\sqrt3}{2}$, $\tan30°=\dfrac{1}{\sqrt3}$.<br>$\sin60°=\dfrac{\sqrt3}{2}$, $\cos60°=\dfrac{1}{2}$, $\tan60°=\sqrt3$.</p></div>
+<details class="proof-panel">
+<summary class="proof-toggle">▸ Show Proof</summary>
+<div class="proof-body">
+<p>These side lengths aren't facts to memorize — they fall straight out of two familiar triangles.</p>
+<p><strong>45-45-90:</strong> take a right triangle whose two legs both equal $1$. The two non-right angles must be equal, so each is $45°$. By the Pythagorean theorem the hypotenuse is $\sqrt{1^2+1^2}=\sqrt2$, giving sides $1,1,\sqrt2$. Then $\sin45°=\dfrac{1}{\sqrt2}=\dfrac{\sqrt2}{2}$ and $\tan45°=\dfrac{1}{1}=1$.</p>
+<p><strong>30-60-90:</strong> start with an equilateral triangle of side $2$ (every angle $60°$). Drop a perpendicular from the top vertex to the base. It splits the base into two pieces of length $1$ and cuts the top angle into two $30°$ angles.</p>
+<p>That leaves a right triangle with hypotenuse $2$ and short leg $1$ (opposite the $30°$). The long leg is $\sqrt{2^2-1^2}=\sqrt3$ (opposite the $60°$).</p>
+<p>Reading off the ratios: $\sin30°=\dfrac{1}{2}$, $\cos30°=\dfrac{\sqrt3}{2}$, $\tan30°=\dfrac{1}{\sqrt3}$, and swapping opposite with adjacent gives the $60°$ values.</p>
+<p class="proof-qed">∎</p>
+</div>
+</details>
 </div></div>
 <div style="text-align:center;margin:1rem 0 0.5rem"><svg width="340" height="200" viewBox="0 0 340 200" xmlns="http://www.w3.org/2000/svg">
 <rect width="340" height="200" fill="#fafaf8" rx="6"/>
@@ -115,5 +134,6 @@ renderMathInElement(document.body, {
   throwOnError: false
 });
 </script>
+<!-- proof-layer:done -->
 </body>
 </html>

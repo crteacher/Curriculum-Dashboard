@@ -57,6 +57,18 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   .st-ans-hidden{display:none !important}
 }
 @page{margin:.55in .65in;size:letter}
+.mistake-panel{margin:.4rem 0 1.1rem;border-left:3px solid #b8860b;border-radius:0 6px 6px 0;background:#fdf8e8}
+.mistake-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#9a6a00;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.mistake-toggle::-webkit-details-marker{display:none}
+details[open]>.mistake-toggle{color:#1e3a5c}
+.mistake-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #e8d8a8}
+.mistake-body p{margin-bottom:.45rem}
+.panel-row{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.1rem}
+.panel-row>.proof-panel,.panel-row>.mistake-panel{margin:0;min-width:0}
+@media print{
+  .panel-row{break-inside:avoid}
+  .mistake-panel{break-inside:avoid}
+}
 </style>
 </head>
 <body>
@@ -68,6 +80,13 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 <div class="accent-box"><p>Know these graphs, domain, range, and key points at $x=-1,0,1$:</p><ul><li><strong>Constant:</strong> $y=b$ &mdash; range $\{b\}$</li><li><strong>Linear:</strong> $y=x$ &mdash; domain/range $(-\infty,\infty)$</li><li><strong>Quadratic:</strong> $y=x^2$ &mdash; range $[0,\infty)$</li><li><strong>Cubic:</strong> $y=x^3$ &mdash; domain/range $(-\infty,\infty)$</li><li><strong>Square root:</strong> $y=\sqrt{x}$ &mdash; domain $[0,\infty)$</li><li><strong>Reciprocal:</strong> $y=1/x$ &mdash; domain $x\neq 0$</li><li><strong>Absolute value:</strong> $y=|x|$ &mdash; range $[0,\infty)$</li></ul></div>
 </div><div class="col"><div class="section-head">One-to-One Functions</div>
 <div class="accent-box"><p><strong>One-to-one (1-1):</strong> a function where different inputs always give different outputs — if $x_1\neq x_2$ then $f(x_1)\neq f(x_2)$.</p><p><strong>Horizontal Line Test:</strong> a function is 1-1 iff every horizontal line hits its graph at most once.</p><p>$y=x^3$: 1-1 &checkmark; &nbsp; $y=x^2$: not 1-1 &cross; (fails HLT)</p></div>
+<details class="mistake-panel">
+<summary class="mistake-toggle">▸ Common Mistake</summary>
+<div class="mistake-body">
+  <p>Don't mix up the two line tests. The <em>vertical</em> line test checks whether a graph is a function at all; the <em>horizontal</em> line test checks whether that function is one-to-one. Students run the vertical test, see it pass, and conclude "1-1" — but $y=x^2$ passes the vertical test and still fails the horizontal one: the line $y=4$ hits it at both $x=2$ and $x=-2$.</p>
+  <p>One-to-one is about <em>outputs</em> never repeating, so you sweep horizontal lines across the graph, not vertical ones. A repeated output means no inverse exists.</p>
+</div>
+</details>
 <p class="body-text">Only 1-1 functions have inverses. Knowing your library helps you identify which functions qualify.</p>
 </div></div>
 <div style="text-align:center;margin:1rem 0 0.5rem"><svg width="488" height="204" viewBox="0 0 488 204" xmlns="http://www.w3.org/2000/svg">
@@ -766,5 +785,7 @@ renderMathInElement(document.body, {
   throwOnError: false
 });
 </script>
+<!-- proof-layer:done -->
+<!-- mistake-layer:done -->
 </body>
 </html>

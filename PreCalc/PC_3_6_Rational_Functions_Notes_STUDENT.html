@@ -57,6 +57,26 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   .st-ans-hidden{display:none !important}
 }
 @page{margin:.55in .65in;size:letter}
+.proof-panel{margin:.4rem 0 1.1rem;border-left:3px solid #7a9a6a;border-radius:0 6px 6px 0;background:#f5f7f3}
+.proof-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#5a7a4a;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.proof-toggle::-webkit-details-marker{display:none}
+details[open]>.proof-toggle{color:#1e3a5c}
+.proof-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #c8d8b8}
+.proof-body p{margin-bottom:.45rem}
+.proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
+@media print{.proof-panel{display:none}}
+.mistake-panel{margin:.4rem 0 1.1rem;border-left:3px solid #b8860b;border-radius:0 6px 6px 0;background:#fdf8e8}
+.mistake-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#9a6a00;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.mistake-toggle::-webkit-details-marker{display:none}
+details[open]>.mistake-toggle{color:#1e3a5c}
+.mistake-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #e8d8a8}
+.mistake-body p{margin-bottom:.45rem}
+.panel-row{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.1rem}
+.panel-row>.proof-panel,.panel-row>.mistake-panel{margin:0;min-width:0}
+@media print{
+  .panel-row{break-inside:avoid}
+  .mistake-panel{break-inside:avoid}
+}
 </style>
 </head>
 <body>
@@ -68,6 +88,18 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 <div class="accent-box"><p><strong>Rational function:</strong> $f(x)=\dfrac{p(x)}{q(x)}$, polynomials $p,q$.</p><p><strong>Domain:</strong> all reals where $q(x)\neq 0$.</p><p><strong>Vertical asymptote</strong> at $x=a$ if $q(a)=0$ and $p(a)\neq 0$ (after full cancellation). The graph approaches $\pm\infty$ near $x=a$.</p><p><strong>Hole (removable discontinuity)</strong> if a common factor cancels from both $p$ and $q$.</p></div>
 </div><div class="col"><div class="section-head">Horizontal Asymptotes</div>
 <div class="accent-box"><p>Let $n=\deg(p)$, $d=\deg(q)$:</p><ul><li>$n<d$: HA at $y=0$</li><li>$n=d$: HA at $y=\dfrac{\text{LC}(p)}{\text{LC}(q)}$</li><li>$n>d$: no HA (oblique or grows without bound)</li></ul></div>
+<details class="proof-panel">
+<summary class="proof-toggle">▸ Show Proof</summary>
+<div class="proof-body">
+  <p>The key idea: when $|x|$ is huge, a polynomial is dominated by its highest-power term — the smaller powers barely matter. To compare top and bottom fairly, divide every term by $x^d$, the highest power in the denominator. Write $p(x)=a_nx^n+\cdots$ and $q(x)=b_dx^d+\cdots$, where $a_n,b_d$ are the leading coefficients.</p>
+  <p>$$f(x)=\frac{p(x)}{q(x)}=\frac{a_nx^{\,n-d}+\cdots}{b_d+(\text{terms with negative powers of }x)}.$$</p>
+  <p>As $x\to\pm\infty$, any term carrying a negative power of $x$ shrinks to $0$, so the denominator settles to $b_d$. The numerator's fate depends on the exponent $n-d$.</p>
+  <p>If $n<d$, then $n-d<0$, so $x^{\,n-d}\to 0$ and $f(x)\to \dfrac{0}{b_d}=0$ — the asymptote is $y=0$.</p>
+  <p>If $n=d$, then $x^{\,n-d}=x^0=1$, so the numerator settles to $a_n$ and $f(x)\to\dfrac{a_n}{b_d}=\dfrac{\text{LC}(p)}{\text{LC}(q)}$.</p>
+  <p>If $n>d$, then $n-d>0$, so $x^{\,n-d}\to\pm\infty$: the numerator outgrows the denominator and $f$ has no horizontal asymptote.</p>
+  <p class="proof-qed">∎</p>
+</div>
+</details>
 <p class="body-text">Graphing steps: factor, note domain, cancel (note holes), find zeros, VAs, HA, sketch with sign chart.</p>
 </div></div>
 <div class="section-head">Worked Examples</div>
@@ -105,5 +137,6 @@ renderMathInElement(document.body, {
   throwOnError: false
 });
 </script>
+<!-- proof-layer:done -->
 </body>
 </html>

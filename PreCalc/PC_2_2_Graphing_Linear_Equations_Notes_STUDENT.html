@@ -57,6 +57,26 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   .st-ans-hidden{display:none !important}
 }
 @page{margin:.55in .65in;size:letter}
+.proof-panel{margin:.4rem 0 1.1rem;border-left:3px solid #7a9a6a;border-radius:0 6px 6px 0;background:#f5f7f3}
+.proof-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#5a7a4a;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.proof-toggle::-webkit-details-marker{display:none}
+details[open]>.proof-toggle{color:#1e3a5c}
+.proof-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #c8d8b8}
+.proof-body p{margin-bottom:.45rem}
+.proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
+@media print{.proof-panel{display:none}}
+.mistake-panel{margin:.4rem 0 1.1rem;border-left:3px solid #b8860b;border-radius:0 6px 6px 0;background:#fdf8e8}
+.mistake-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#9a6a00;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.mistake-toggle::-webkit-details-marker{display:none}
+details[open]>.mistake-toggle{color:#1e3a5c}
+.mistake-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #e8d8a8}
+.mistake-body p{margin-bottom:.45rem}
+.panel-row{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.1rem}
+.panel-row>.proof-panel,.panel-row>.mistake-panel{margin:0;min-width:0}
+@media print{
+  .panel-row{break-inside:avoid}
+  .mistake-panel{break-inside:avoid}
+}
 </style>
 </head>
 <body>
@@ -66,8 +86,35 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 <div class="opening-q">A hot-air balloon starts 1 m off the ground and rises at 2 m/s. If you graph height vs. time, what does the $y$-intercept represent? What does the slope represent?</div>
 <div class="two-col"><div class="col"><div class="section-head">Graphing from Slope and Intercepts</div>
 <div class="accent-box"><p><strong>Using slope-intercept form $y=mx+b$:</strong><br>Plot the $y$-intercept $(0,b)$, then use rise/run to find a second point.</p><p><strong>Finding intercepts:</strong><br>$y$-intercept: set $x=0$, solve for $y$.<br>$x$-intercept: set $y=0$, solve for $x$.</p><p><strong>Special lines:</strong><br>$x=a$ — vertical; undefined slope.<br>$y=b$ — horizontal; slope $=0$.</p></div>
+<details class="mistake-panel">
+<summary class="mistake-toggle">▸ Common Mistake</summary>
+<div class="mistake-body">
+  <p>The classic mix-up is vertical vs. horizontal. $x=a$ is a <em>vertical</em> line with <em>undefined</em> slope; $y=b$ is a <em>horizontal</em> line with slope $0$. Students reverse these constantly — partly because "$x=$" feels like it should pair with the horizontal $x$-axis.</p>
+  <p>Anchor it to rise/run: a vertical line has zero run, so $\tfrac{\text{rise}}{0}$ is undefined; a horizontal line has zero rise, so $\tfrac{0}{\text{run}}=0$. Calling a vertical line "slope $0$" is the single most common version of this error.</p>
+</div>
+</details>
 </div><div class="col"><div class="section-head">Parallel and Perpendicular Lines</div>
 <div class="accent-box"><p><strong>Parallel:</strong> same slope, different intercept. Graphs never intersect.</p><p><strong>Perpendicular:</strong> slopes multiply to $-1$. Graphs cross at $90^\circ$.</p><p>To find a parallel/perpendicular line: identify the slope of the given line, then use point-slope form with the new point.</p></div>
+<div class="panel-row">
+<details class="proof-panel">
+<summary class="proof-toggle">▸ Show Proof</summary>
+<div class="proof-body">
+<p>Why can two parallel lines never cross? Write them in slope-intercept form. Parallel means equal slopes but different intercepts: $y=mx+b_1$ and $y=mx+b_2$ with $b_1\neq b_2$.</p>
+<p>An intersection point would have to lie on both lines at once, so its $y$-values would be equal:</p>
+<p>$$mx+b_1=mx+b_2.$$</p>
+<p>Subtract $mx$ from both sides and you are left with $b_1=b_2$ — which contradicts $b_1\neq b_2$. No $x$ can ever make it true, so there is no intersection point: the graphs never meet.</p>
+<p>(For perpendicular lines the slopes instead multiply to $-1$, which forces the graphs to cross at a right angle.)</p>
+<p class="proof-qed">∎</p>
+</div>
+</details>
+<details class="mistake-panel">
+<summary class="mistake-toggle">▸ Common Mistake</summary>
+<div class="mistake-body">
+  <p>Perpendicular slope is the <em>negative reciprocal</em> $-\tfrac{1}{m}$, not just $-m$. A line of slope $3$ is perpendicular to one of slope $-\tfrac{1}{3}$, not $-3$ — a slope of $-3$ just tilts steeply the other way, it doesn't make a right angle.</p>
+  <p>You have to do <em>two</em> things, flip and negate, and students routinely do only one. Quick check: perpendicular slopes multiply to $-1$. Here $3\cdot(-3)=-9$, so $-3$ is wrong, while $3\cdot(-\tfrac{1}{3})=-1$ confirms it.</p>
+</div>
+</details>
+</div>
 <p class="body-text">Always check your answer by verifying the new line passes through the required point.</p>
 </div></div>
 <div style="text-align:center;margin:1rem 0 0.5rem"><svg width="400" height="200" viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
@@ -137,5 +184,7 @@ renderMathInElement(document.body, {
   throwOnError: false
 });
 </script>
+<!-- proof-layer:done -->
+<!-- mistake-layer:done -->
 </body>
 </html>

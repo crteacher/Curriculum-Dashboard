@@ -57,6 +57,18 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   .st-ans-hidden{display:none !important}
 }
 @page{margin:.55in .65in;size:letter}
+.mistake-panel{margin:.4rem 0 1.1rem;border-left:3px solid #b8860b;border-radius:0 6px 6px 0;background:#fdf8e8}
+.mistake-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#9a6a00;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.mistake-toggle::-webkit-details-marker{display:none}
+details[open]>.mistake-toggle{color:#1e3a5c}
+.mistake-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #e8d8a8}
+.mistake-body p{margin-bottom:.45rem}
+.panel-row{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.1rem}
+.panel-row>.proof-panel,.panel-row>.mistake-panel{margin:0;min-width:0}
+@media print{
+  .panel-row{break-inside:avoid}
+  .mistake-panel{break-inside:avoid}
+}
 </style>
 </head>
 <body>
@@ -66,8 +78,22 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 <div class="opening-q">Cell phone plans often charge one rate for the first 500 minutes and a different rate after that. How would you write a single formula that captures this two-rate structure?</div>
 <div class="two-col"><div class="col"><div class="section-head">Defining Piecewise Functions</div>
 <div class="accent-box"><p>A <strong>piecewise function</strong> uses different formulas on different parts of its domain:</p><p>$$f(x)=\begin{cases} x^2 & x<0 \\ 2x+1 & x\geq 0 \end{cases}$$</p><p>To evaluate: determine which piece applies, then substitute.</p><p>$f(-3)=(-3)^2=9$ &nbsp; (use $x^2$ since $-3<0$)<br>$f(2)=2(2)+1=5$ &nbsp; (use $2x+1$ since $2\geq 0$)</p></div>
+<details class="mistake-panel">
+<summary class="mistake-toggle">▸ Common Mistake</summary>
+<div class="mistake-body">
+  <p>At a boundary point, the inequality signs decide which piece to use — students grab the wrong branch. For $f(x)=\begin{cases}x^2 & x<0\\ 2x+1 & x\ge0\end{cases}$, finding $f(0)$ means using $2x+1$ (because $0\ge0$), giving $1$ — not $x^2=0$.</p>
+  <p>Only one piece owns the boundary: the one whose condition includes equality ($\le$ or $\ge$). Read the conditions before you pick a formula.</p>
+</div>
+</details>
 </div><div class="col"><div class="section-head">Graphing and the Absolute Value</div>
 <div class="accent-box"><p><strong>Absolute value</strong> is a special piecewise function:</p><p>$$|x|=\begin{cases} x & x\geq 0 \\ -x & x<0 \end{cases}$$</p><p><strong>Graphing tips:</strong><br>• Use open/closed circles at boundaries to show inclusion.<br>• Check continuity at each boundary point.<br>• Identify domain and range from the graph.</p></div>
+<details class="mistake-panel">
+<summary class="mistake-toggle">▸ Common Mistake</summary>
+<div class="mistake-body">
+  <p>The $-x$ branch trips students up: they read "$-x$" as "a negative number" and think absolute value can output something negative. It can't. When $x<0$, $x$ is already negative, so $-x$ flips it positive — e.g. $x=-3$ gives $-x=3$.</p>
+  <p>The minus sign isn't making the answer negative; it's undoing the negative that's already there. $|x|$ is never negative.</p>
+</div>
+</details>
 <p class="body-text">Common types: absolute value, step functions (e.g. floor), tax-bracket models.</p>
 </div></div>
 <div class="section-head">Worked Examples</div>
@@ -105,5 +131,7 @@ renderMathInElement(document.body, {
   throwOnError: false
 });
 </script>
+<!-- proof-layer:done -->
+<!-- mistake-layer:done -->
 </body>
 </html>

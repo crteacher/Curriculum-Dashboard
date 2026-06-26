@@ -57,6 +57,26 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   .st-ans-hidden{display:none !important}
 }
 @page{margin:.55in .65in;size:letter}
+.proof-panel{margin:.4rem 0 1.1rem;border-left:3px solid #7a9a6a;border-radius:0 6px 6px 0;background:#f5f7f3}
+.proof-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#5a7a4a;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.proof-toggle::-webkit-details-marker{display:none}
+details[open]>.proof-toggle{color:#1e3a5c}
+.proof-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #c8d8b8}
+.proof-body p{margin-bottom:.45rem}
+.proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
+@media print{.proof-panel{display:none}}
+.mistake-panel{margin:.4rem 0 1.1rem;border-left:3px solid #b8860b;border-radius:0 6px 6px 0;background:#fdf8e8}
+.mistake-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#9a6a00;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.mistake-toggle::-webkit-details-marker{display:none}
+details[open]>.mistake-toggle{color:#1e3a5c}
+.mistake-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #e8d8a8}
+.mistake-body p{margin-bottom:.45rem}
+.panel-row{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.1rem}
+.panel-row>.proof-panel,.panel-row>.mistake-panel{margin:0;min-width:0}
+@media print{
+  .panel-row{break-inside:avoid}
+  .mistake-panel{break-inside:avoid}
+}
 </style>
 </head>
 <body>
@@ -66,9 +86,38 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 <div class="opening-q">If demand for a product drops by 15 units for every \$1 price increase, what kind of function models demand vs. price? What does the slope mean in context?</div>
 <div class="two-col"><div class="col"><div class="section-head">Building Linear Models</div>
 <div class="accent-box"><p>A <strong>linear function</strong> has the form $f(x)=mx+b$.</p><p>$m$ = constant rate of change (slope)<br>$b$ = initial value ($y$-intercept, value when $x=0$)</p><p><strong>Identifying linearity:</strong> if average rate of change is constant across all intervals, the function is linear.</p></div>
+<div class="panel-row">
+<details class="proof-panel">
+<summary class="proof-toggle">▸ Show Proof</summary>
+<div class="proof-body">
+<p>Here is why a constant rate of change forces the formula $f(x)=mx+b$. Suppose that between the starting input $x=0$ and any other input $x$, the average rate of change always equals the same number $m$:</p>
+<p>$$\frac{f(x)-f(0)}{x-0}=m.$$</p>
+<p>Multiply both sides by $x$:</p>
+<p>$$f(x)-f(0)=mx.$$</p>
+<p>Now solve for $f(x)$ and rename the starting value $f(0)$ as $b$:</p>
+<p>$$f(x)=mx+b.$$</p>
+<p>So “constant rate of change” and “looks like $mx+b$” say exactly the same thing — the rate $m$ becomes the slope, and the starting value $b$ becomes the $y$-intercept.</p>
+<p class="proof-qed">∎</p>
+</div>
+</details>
+<details class="mistake-panel">
+<summary class="mistake-toggle">▸ Common Mistake</summary>
+<div class="mistake-body">
+  <p>Using a positive slope for a quantity that's <em>decreasing</em>. In $f(x)=mx+b$, $m$ is the signed rate of change, so "loses \$1{,}750 per year" or "drops 15 units per \$1" makes $m$ <strong>negative</strong> ($m=-1750$, $m=-15$). Students record the size of the rate and forget the sign, so their model rises when it should fall.</p>
+  <p>Keep $m$ and $b$ straight too: $b$ is the value at $x=0$ (the starting amount), not just "the other number in the problem." Decide which quantity is the per-unit rate (that's $m$) and which is the initial value (that's $b$).</p>
+</div>
+</details>
+</div>
 <p class="body-text">Steps to build a model: identify what $x$ and $f(x)$ represent, find $m$ from context, find $b$ from an initial value.</p>
 </div><div class="col"><div class="section-head">Applications and Intersections</div>
 <div class="accent-box"><p><strong>Supply/Demand models</strong> where slope is given:<br>Demand decreasing with price: negative slope.<br>Supply increasing with price: positive slope.</p><p><strong>Finding intersection</strong> of $f(x)=mx+b$ and $g(x)=nx+c$:<br>Set equal: $mx+b=nx+c$, solve for $x$, then find $y$.</p></div>
+<details class="mistake-panel">
+<summary class="mistake-toggle">▸ Common Mistake</summary>
+<div class="mistake-body">
+  <p>Stopping at $x$ when the question asks for the intersection point. Solving $mx+b=nx+c$ gives only the $x$-coordinate where the lines meet; the point is $(x,y)$, so substitute that $x$ back into <em>either</em> function to get $y$. Reporting just $x$ is half an answer.</p>
+  <p>Don't confuse this with setting one function to zero. $f(x)=g(x)$ finds where the two graphs cross <em>each other</em>; $f(x)=0$ finds where one graph crosses the $x$-axis — different questions.</p>
+</div>
+</details>
 </div></div>
 <div class="section-head">Worked Examples</div>
 <div class="examples-grid">
@@ -105,5 +154,7 @@ renderMathInElement(document.body, {
   throwOnError: false
 });
 </script>
+<!-- proof-layer:done -->
+<!-- mistake-layer:done -->
 </body>
 </html>

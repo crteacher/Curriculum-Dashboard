@@ -57,6 +57,14 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   .st-ans-hidden{display:none !important}
 }
 @page{margin:.55in .65in;size:letter}
+.proof-panel{margin:.4rem 0 1.1rem;border-left:3px solid #7a9a6a;border-radius:0 6px 6px 0;background:#f5f7f3}
+.proof-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#5a7a4a;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.proof-toggle::-webkit-details-marker{display:none}
+details[open]>.proof-toggle{color:#1e3a5c}
+.proof-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #c8d8b8}
+.proof-body p{margin-bottom:.45rem}
+.proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
+@media print{.proof-panel{break-inside:avoid}}
 </style>
 </head>
 <body>
@@ -68,6 +76,17 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 <div class="accent-box"><p><strong>Definition:</strong> $\log_b y = x \iff b^x = y$ &nbsp;($b>0$, $b\neq1$, $y>0$).</p><p><strong>Common log:</strong> $\log x = \log_{10}x$<br><strong>Natural log:</strong> $\ln x = \log_e x$</p><p><strong>Key values:</strong> $\log_b 1=0$; $\log_b b=1$; $\log_b(b^x)=x$; $b^{\log_b x}=x$.</p><p>Graph: domain $(0,\infty)$, range $(-\infty,\infty)$, VA at $x=0$, passes through $(1,0)$.</p></div>
 </div><div class="col"><div class="section-head">Properties of Logarithms</div>
 <div class="accent-box"><ul><li><strong>Product:</strong> $\log_b(MN)=\log_b M+\log_b N$</li><li><strong>Quotient:</strong> $\log_b\!\left(\dfrac{M}{N}\right)=\log_b M-\log_b N$</li><li><strong>Power:</strong> $\log_b(M^p)=p\log_b M$</li><li><strong>Change of base:</strong> $\log_b M=\dfrac{\ln M}{\ln b}=\dfrac{\log M}{\log b}$</li></ul></div>
+<details class="proof-panel">
+<summary class="proof-toggle">▸ Show Proof</summary>
+<div class="proof-body">
+  <p>Every one of these laws is really an exponent law in disguise. The key idea: write the logs as exponents. Let $\log_b M = x$ and $\log_b N = y$, which by the definition of a logarithm means $b^x = M$ and $b^y = N$.</p>
+  <p><strong>Product.</strong> Multiply the two: $MN = b^x\,b^y = b^{x+y}$. Reading that back as a logarithm, $\log_b(MN) = x+y = \log_b M + \log_b N$.</p>
+  <p><strong>Quotient.</strong> Divide instead: $\dfrac{M}{N} = \dfrac{b^x}{b^y} = b^{x-y}$, so $\log_b\!\left(\dfrac{M}{N}\right) = x-y = \log_b M - \log_b N$.</p>
+  <p><strong>Power.</strong> Raise $M$ to the $p$: $M^p = (b^x)^p = b^{xp}$, so $\log_b(M^p) = xp = p\log_b M$.</p>
+  <p><strong>Change of base.</strong> Let $\log_b M = x$, so $b^x = M$. Take $\ln$ of both sides: $\ln(b^x) = \ln M$. By the power law we just proved, $x\ln b = \ln M$, so $x = \dfrac{\ln M}{\ln b}$. The identical steps with $\log$ in place of $\ln$ give the other form.</p>
+  <p class="proof-qed">∎</p>
+</div>
+</details>
 </div></div>
 <div style="text-align:center;margin:1rem 0 0.5rem"><svg width="380" height="190" viewBox="0 0 380 190" xmlns="http://www.w3.org/2000/svg">
 <rect width="380" height="190" fill="#fafaf8" rx="6"/>
@@ -725,5 +744,6 @@ renderMathInElement(document.body, {
   throwOnError: false
 });
 </script>
+<!-- proof-layer:done -->
 </body>
 </html>
