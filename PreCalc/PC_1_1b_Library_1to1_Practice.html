@@ -44,7 +44,7 @@
   .check-btn{font-family:sans-serif;font-size:13px;background:#1a1a1a;color:#fff;
     border:none;border-radius:6px;padding:7px 14px;cursor:pointer}
   .check-btn:hover{background:#333}.check-btn:disabled{background:#aaa;cursor:default}
-  .hint{font-family:sans-serif;font-size:12px;color:#888;margin-top:7px}
+  .hint{font-family:sans-serif;font-size:12px;color:#888;margin-top:7px;display:none}
   .feedback{font-family:sans-serif;font-size:13px;margin-top:10px;padding:8px 12px;
     border-radius:6px;display:none;line-height:1.5}
   .feedback.correct{display:block;background:#eaf5ea;color:#1a5a1a}
@@ -56,9 +56,11 @@
   .revealed-answer{display:none;margin-top:8px;font-family:sans-serif;font-size:13px;
     color:#444;background:#f5f3ef;border-radius:6px;padding:8px 11px;line-height:1.8;overflow-x:auto}
   code{font-family:'Courier New',monospace;background:#f0ede7;padding:1px 5px;border-radius:3px;font-size:12px}
-
-
-.hint{display:none!important}
+  .fn-graph{display:block;margin:.4rem auto;border:1px solid #c8d8ec;border-radius:6px;background:#fafbfe}
+  .tbl-1to1{border-collapse:collapse;margin:.5rem auto;font-family:sans-serif;font-size:14px}
+  .tbl-1to1 th{background:#e8f0f8;padding:4px 14px;border:1px solid #c8d8ec}
+  .tbl-1to1 td{padding:4px 14px;border:1px solid #c8d8ec;text-align:center}
+  .prob-q{font-family:sans-serif;font-size:13px;margin-bottom:6px;color:#1a1a1a}
 </style>
 </head>
 <body>
@@ -102,32 +104,345 @@
     <div class="problems" id="problems"></div>
   </div>
 </div>
-<script>
-function _rf(){const b=new Uint32Array(1);crypto.getRandomValues(b);return b[0]/4294967296;}
-function rInt(n){return Math.floor(_rf()*n);}
-function shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=rInt(i+1);[a[i],a[j]]=[a[j],a[i]];}return a;}
-function choose(arr){return arr[rInt(arr.length)];}
-function norm(s){return s.trim().toLowerCase().replace(/\s+/g,'').replace(/[−‐]/g,'-').replace(/∞/g,'inf').replace(/∪/g,'u');}
-function ok(user,acc){return acc.some(a=>norm(user)===norm(a));}
-function gen1(){const fns=[{latex:'f(x)=x^2',name:'squaring',step:'\\text{The squaring (quadratic) parent function}'},{latex:'f(x)=\\sqrt{x}',name:'square root',step:'\\text{The square root parent function}'},{latex:'f(x)=|x|',name:'absolute value',step:'\\text{The absolute value parent function}'},{latex:'f(x)=\\dfrac{1}{x}',name:'reciprocal',step:'\\text{The reciprocal parent function}'},{latex:'f(x)=x^3',name:'cubing',step:'\\text{The cubing (cubic) parent function}'},{latex:'f(x)=x',name:'identity',step:'\\text{The identity (linear) parent function}'},{latex:'f(x)=\\sqrt[3]{x}',name:'cube root',step:'\\text{The cube root parent function}'}];const f=choose(fns);return{latex:`\\text{Name the parent function: }${f.latex}`,answer:[f.name],hint:'What is the standard name for this basic function shape?',step:f.step};}
-function gen2(){const cases=[{latex:'f(x)=x^2',is1to1:false,step:'\\text{Horizontal line }y=1\\text{ hits }(-1,1)\\text{ and }(1,1)\\Rightarrow\\text{not 1-to-1}'},{latex:'f(x)=x^3',is1to1:true,step:'\\text{Every horizontal line hits the graph exactly once}\\Rightarrow\\text{1-to-1}'},{latex:'f(x)=|x|',is1to1:false,step:'\\text{Horizontal line }y=2\\text{ hits }(-2,2)\\text{ and }(2,2)\\Rightarrow\\text{not 1-to-1}'},{latex:'f(x)=\\sqrt{x}',is1to1:true,step:'\\text{Square root is strictly increasing}\\Rightarrow\\text{1-to-1}'},{latex:'f(x)=x',is1to1:true,step:'\\text{Identity is strictly increasing}\\Rightarrow\\text{1-to-1}'},{latex:'f(x)=\\sqrt[3]{x}',is1to1:true,step:'\\text{Cube root is strictly increasing everywhere}\\Rightarrow\\text{1-to-1}'}];const c=choose(cases);return{latex:`\\text{Is }${c.latex}\\text{ one-to-one? (yes/no)}`,answer:[c.is1to1?'yes':'no'],hint:'Which graphical test determines whether a function is one-to-one?',step:c.step};}
-function gen3(){const cases=[{latex:'f(x)=\\sqrt{x}',domain:'[0,inf)',step:'\\text{Need }x\\geq 0:\\;[0,\\infty)'},{latex:'f(x)=\\dfrac{1}{x}',domain:'(-inf,0)u(0,inf)',step:'\\text{Exclude }x=0:\\;(-\\infty,0)\\cup(0,\\infty)'},{latex:'f(x)=x^2',domain:'(-inf,inf)',step:'\\text{All real numbers: }(-\\infty,\\infty)'},{latex:'f(x)=|x|',domain:'(-inf,inf)',step:'\\text{All real numbers: }(-\\infty,\\infty)'},{latex:'f(x)=x^3',domain:'(-inf,inf)',step:'\\text{All real numbers: }(-\\infty,\\infty)'},{latex:'f(x)=\\sqrt[3]{x}',domain:'(-inf,inf)',step:'\\text{Defined for all real numbers: }(-\\infty,\\infty)'}];const c=choose(cases);return{latex:`\\text{State the domain of }${c.latex}`,answer:[c.domain],hint:'Are there any input values that cause an error for this function?',step:c.step};}
-function gen4(){const cases=[{latex:'f(x)=x^2',range:'[0,inf)',step:'\\text{Output is always }\\geq 0:\\;[0,\\infty)'},{latex:'f(x)=\\sqrt{x}',range:'[0,inf)',step:'\\text{Output is always }\\geq 0:\\;[0,\\infty)'},{latex:'f(x)=|x|',range:'[0,inf)',step:'\\text{Output is always }\\geq 0:\\;[0,\\infty)'},{latex:'f(x)=x^3',range:'(-inf,inf)',step:'\\text{All real numbers: }(-\\infty,\\infty)'},{latex:'f(x)=\\dfrac{1}{x}',range:'(-inf,0)u(0,inf)',step:'\\text{Output is never 0: }(-\\infty,0)\\cup(0,\\infty)'},{latex:'f(x)=\\sqrt[3]{x}',range:'(-inf,inf)',step:'\\text{Output spans all reals: }(-\\infty,\\infty)'}];const c=choose(cases);return{latex:`\\text{State the range of }${c.latex}`,answer:[c.range],hint:'What set of output values is actually achievable for this function?',step:c.step};}
-function gen5(){const x=choose([-2,-1,0,1,2,4,9]);const fns=[{expr:v=>`${v*v}`,latex:`f(x)=x^2`,step:v=>`f(${v})=(${v})^2=${v*v}`},{expr:v=>v>=0?`${Math.sqrt(v)}`:'undefined',latex:'f(x)=\\sqrt{x}',step:v=>v>=0?`f(${v})=\\sqrt{${v}}=${Math.sqrt(v)}`:'\\text{undefined for negative input}'},{expr:v=>`${Math.abs(v)}`,latex:'f(x)=|x|',step:v=>`f(${v})=|${v}|=${Math.abs(v)}`}];const f=choose(fns.filter(fn=>fn.expr(x)!=='undefined'));const val=f.expr(x);return{latex:`\\text{If }${f.latex},\\text{ find }f(${x}).`,answer:[val],hint:'What output does this parent function produce for the given input?',step:f.step(x)};}
-function gen6(){const cases=[{domain:'[0,\\infty)',fn:'square root',step:'\\text{Domain }[0,\\infty)\\text{ matches the square root function}'},{domain:'(-\\infty,\\infty)',fn:'squaring',step:'\\text{Domain }(-\\infty,\\infty)\\text{ matches squaring/cubic/absolute value/identity}'},{domain:'(-\\infty,0)\\cup(0,\\infty)',fn:'reciprocal',step:'\\text{The reciprocal function is the standard function with this domain}'}];const c=choose(cases);return{latex:`\\text{Which parent function has domain }${c.domain}?`,answer:[c.fn],hint:'Which parent function has a natural restriction on its input values?',step:c.step};}
-function gen7(){const cases=[{desc:'\\text{a U-shaped parabola opening upward}',passes:false,step:'\\text{A horizontal line crosses both arms}\\Rightarrow\\text{fails HLT}'},{desc:'\\text{a strictly increasing curve}',passes:true,step:'\\text{A strictly increasing graph never repeats an output}\\Rightarrow\\text{passes HLT}'},{desc:'\\text{a V-shaped absolute value graph}',passes:false,step:'\\text{Horizontal lines above the vertex cross both sides}\\Rightarrow\\text{fails HLT}'},{desc:'\\text{the graph of }f(x)=x^3',passes:true,step:'\\text{Cubic is strictly increasing}\\Rightarrow\\text{passes HLT}'}];const c=choose(cases);return{latex:`\\text{Does }${c.desc}\\text{ pass the horizontal line test? (yes/no)}`,answer:[c.passes?'yes':'no'],hint:'When does a graph pass the horizontal line test?',step:c.step};}
-function gen8(){const n=choose([1,2,3]);const all1to1=['x^3','\\sqrt{x}','x','\\dfrac{1}{x}'];const notAll=['x^2','|x|'];const picked1=shuffle(all1to1).slice(0,n);const picked0=shuffle(notAll).slice(0,2-Math.min(n,1));const combined=shuffle([...picked1,...picked0]);const count=picked1.length;return{latex:`\\text{How many of these are 1-to-1? }${combined.map(f=>`f(x)=${f}`).join(',\\;')}`,answer:[String(count)],hint:'Which of the listed functions are strictly increasing or decreasing everywhere?',step:`\\text{The 1-to-1 functions are: }${picked1.map(f=>`f(x)=${f}`).join(',\\;')}\\Rightarrow ${count}`};}
-const GENERATORS=[gen1,gen2,gen3,gen4,gen5,gen6,gen7,gen8];
-let ACTIVE,correct,flags,attempted,peeked;
-function init(){ACTIVE=shuffle(GENERATORS.map(g=>g()));correct=0;flags=Array(8).fill(false);attempted=Array(8).fill(false);peeked=Array(8).fill(false);}
-function buildCards(){const wrap=document.getElementById('problems');wrap.innerHTML='';ACTIVE.forEach((p,i)=>{const div=document.createElement('div');div.className='card';div.id='card-'+i;div.innerHTML=`<div class="card-body"><div class="card-meta">Problem ${i+1}</div><div class="card-expr" id="expr-${i}"></div><div class="input-row"><input class="ans-input" id="ai-${i}" placeholder="answer"/><button class="check-btn" id="chk-${i}" onclick="check(${i})">Check</button></div><div class="hint">${p.hint}</div><div class="feedback" id="fb-${i}"></div><span class="reveal-link" id="rl-${i}" onclick="reveal(${i})">Show solution</span><div class="revealed-answer" id="ra-${i}"></div></div>`;wrap.appendChild(div);document.getElementById('ai-'+i).addEventListener('keydown',e=>{if(e.key==='Enter')check(i);});katex.render(p.latex,document.getElementById('expr-'+i),{throwOnError:false,displayMode:true});});}
-function check(i){const p=ACTIVE[i],inp=document.getElementById('ai-'+i),fb=document.getElementById('fb-'+i),card=document.getElementById('card-'+i),good=ok(inp.value,p.answer);inp.className='ans-input';if(good){inp.className='ans-input ok';fb.className='feedback correct';fb.textContent='✓ Correct!';card.className='card correct';if(!flags[i]&&!attempted[i]&&!peeked[i]){flags[i]=true;correct++;updateScore();}attempted[i]=true;document.getElementById('chk-'+i).disabled=true;inp.readOnly=true;}else{attempted[i]=true;inp.className='ans-input bad';fb.className='feedback wrong';fb.textContent='✗ Not quite — try again or show the solution.';card.className=peeked[i]?'card peeked':'card wrong';}}
-function reveal(i){const p=ACTIVE[i],box=document.getElementById('ra-'+i),lnk=document.getElementById('rl-'+i);if(box.style.display==='block'){box.style.display='none';lnk.textContent='Show solution';}else{if(!flags[i]){peeked[i]=true;document.getElementById('card-'+i).className='card peeked';if(!attempted[i]){const fb=document.getElementById('fb-'+i);fb.className='feedback peeked';fb.textContent='⚠ Solution revealed — no point awarded.';}}box.innerHTML='<strong>Solution:</strong><br>';const span=document.createElement('span');box.appendChild(span);katex.render(p.step,span,{throwOnError:false,displayMode:true});box.style.display='block';lnk.textContent='Hide solution';}}
-function updateScore(){const n=ACTIVE.length;document.getElementById('score').textContent=correct+' / '+n;document.getElementById('prog').style.width=Math.round(correct/n*100)+'%';}
-function resetAll(){init();buildCards();updateScore();}
-</script>
 <script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/contrib/auto-render.min.js"></script>
-<script>renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});init();buildCards();updateScore();</script>
+<script>
+/* ── utilities ─────────────────────────────────────────────────────── */
+function _rf(){const b=new Uint32Array(1);crypto.getRandomValues(b);return b[0]/4294967296;}
+function rInt(n){return Math.floor(_rf()*n);}
+function shuffle(a){const r=[...a];for(let i=r.length-1;i>0;i--){const j=rInt(i+1);[r[i],r[j]]=[r[j],r[i]];}return r;}
+function choose(a){return a[rInt(a.length)];}
+function norm(s){return s.trim().toLowerCase().replace(/\s+/g,'').replace(/[−‐]/g,'-').replace(/∞/g,'inf').replace(/∪/g,'u');}
+function ok(user,acc){return acc.some(a=>norm(user)===norm(a));}
+
+/* ── SVG graph helper ───────────────────────────────────────────────── */
+function makeSVG(fn,xMin,xMax,yMin,yMax){
+  const W=200,H=190,ML=22,MR=10,MT=10,MB=22;
+  const pw=W-ML-MR, ph=H-MT-MB;
+  function sx(x){return ML+(x-xMin)/(xMax-xMin)*pw;}
+  function sy(y){return MT+ph-(y-yMin)/(yMax-yMin)*ph;}
+  /* axes */
+  const ax=sx(0), ay=sy(0);
+  let svg=`<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" class="fn-graph">`;
+  /* grid lines at integers */
+  let grid='';
+  for(let x=Math.ceil(xMin);x<=Math.floor(xMax);x++){
+    const px=sx(x).toFixed(1);
+    grid+=`<line x1="${px}" y1="${MT}" x2="${px}" y2="${MT+ph}" stroke="#e8eef5" stroke-width="1"/>`;
+    if(x!==0) grid+=`<text x="${px}" y="${(ay+12).toFixed(1)}" text-anchor="middle" font-size="8" fill="#aaa">${x}</text>`;
+  }
+  for(let y=Math.ceil(yMin);y<=Math.floor(yMax);y++){
+    const py=sy(y).toFixed(1);
+    grid+=`<line x1="${ML}" y1="${py}" x2="${ML+pw}" y2="${py}" stroke="#e8eef5" stroke-width="1"/>`;
+    if(y!==0) grid+=`<text x="${(ax-4).toFixed(1)}" y="${(parseFloat(py)+3).toFixed(1)}" text-anchor="end" font-size="8" fill="#aaa">${y}</text>`;
+  }
+  /* axes */
+  let axes=`<line x1="${ML}" y1="${ay.toFixed(1)}" x2="${(ML+pw).toFixed(1)}" y2="${ay.toFixed(1)}" stroke="#888" stroke-width="1.2"/>`;
+  axes+=`<line x1="${ax.toFixed(1)}" y1="${MT}" x2="${ax.toFixed(1)}" y2="${(MT+ph).toFixed(1)}" stroke="#888" stroke-width="1.2"/>`;
+  /* curve — split at discontinuities */
+  const N=300;
+  let segs=[],cur=[];
+  for(let i=0;i<=N;i++){
+    const x=xMin+(xMax-xMin)*i/N;
+    let y;
+    try{y=fn(x);}catch(e){y=NaN;}
+    if(!isFinite(y)||y<yMin||y>yMax){
+      if(cur.length>1) segs.push(cur);
+      cur=[];
+    } else {
+      cur.push(`${sx(x).toFixed(1)},${sy(y).toFixed(1)}`);
+    }
+  }
+  if(cur.length>1) segs.push(cur);
+  const curves=segs.map(s=>`<polyline points="${s.join(' ')}" fill="none" stroke="#1e3a5c" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>`).join('');
+  svg+=grid+axes+curves+'</svg>';
+  return svg;
+}
+
+/* ── formula-based generators (gen1–gen8) ───────────────────────────── */
+function gen1(){
+  const fns=[
+    {latex:'f(x)=x^2',name:'squaring',step:'\\text{The squaring (quadratic) parent function}'},
+    {latex:'f(x)=\\sqrt{x}',name:'square root',step:'\\text{The square root parent function}'},
+    {latex:'f(x)=|x|',name:'absolute value',step:'\\text{The absolute value parent function}'},
+    {latex:'f(x)=\\dfrac{1}{x}',name:'reciprocal',step:'\\text{The reciprocal parent function}'},
+    {latex:'f(x)=x^3',name:'cubing',step:'\\text{The cubing (cubic) parent function}'},
+    {latex:'f(x)=x',name:'identity',step:'\\text{The identity (linear) parent function}'},
+    {latex:'f(x)=\\sqrt[3]{x}',name:'cube root',step:'\\text{The cube root parent function}'}
+  ];
+  const f=choose(fns);
+  return{latex:`\\text{Name the parent function: }${f.latex}`,answer:[f.name],hint:'What is the standard name for this basic function shape?',step:f.step};
+}
+function gen2(){
+  const cases=[
+    {latex:'f(x)=x^2',is1to1:false,step:'\\text{Horizontal line }y=1\\text{ hits }(-1,1)\\text{ and }(1,1)\\Rightarrow\\text{not 1-to-1}'},
+    {latex:'f(x)=x^3',is1to1:true,step:'\\text{Every horizontal line hits the graph exactly once}\\Rightarrow\\text{1-to-1}'},
+    {latex:'f(x)=|x|',is1to1:false,step:'\\text{Horizontal line }y=2\\text{ hits }(-2,2)\\text{ and }(2,2)\\Rightarrow\\text{not 1-to-1}'},
+    {latex:'f(x)=\\sqrt{x}',is1to1:true,step:'\\text{Square root is strictly increasing}\\Rightarrow\\text{1-to-1}'},
+    {latex:'f(x)=x',is1to1:true,step:'\\text{Identity is strictly increasing}\\Rightarrow\\text{1-to-1}'},
+    {latex:'f(x)=\\sqrt[3]{x}',is1to1:true,step:'\\text{Cube root is strictly increasing everywhere}\\Rightarrow\\text{1-to-1}'},
+    {latex:'f(x)=\\dfrac{1}{x}',is1to1:true,step:'\\text{Each output 1/x is achieved by exactly one input}\\Rightarrow\\text{1-to-1}'}
+  ];
+  const c=choose(cases);
+  return{latex:`\\text{Is }${c.latex}\\text{ one-to-one? (yes/no)}`,answer:[c.is1to1?'yes':'no'],hint:'Apply the horizontal line test.',step:c.step};
+}
+function gen3(){
+  const cases=[
+    {latex:'f(x)=\\sqrt{x}',domain:'[0,inf)',step:'\\text{Need }x\\geq 0:\\;[0,\\infty)'},
+    {latex:'f(x)=\\dfrac{1}{x}',domain:'(-inf,0)u(0,inf)',step:'\\text{Exclude }x=0:\\;(-\\infty,0)\\cup(0,\\infty)'},
+    {latex:'f(x)=x^2',domain:'(-inf,inf)',step:'\\text{All real numbers: }(-\\infty,\\infty)'},
+    {latex:'f(x)=|x|',domain:'(-inf,inf)',step:'\\text{All real numbers: }(-\\infty,\\infty)'},
+    {latex:'f(x)=x^3',domain:'(-inf,inf)',step:'\\text{All real numbers: }(-\\infty,\\infty)'},
+    {latex:'f(x)=\\sqrt[3]{x}',domain:'(-inf,inf)',step:'\\text{Defined for all real numbers: }(-\\infty,\\infty)'}
+  ];
+  const c=choose(cases);
+  return{latex:`\\text{State the domain of }${c.latex}`,answer:[c.domain],hint:'Are there any inputs that cause an error?',step:c.step};
+}
+function gen4(){
+  const cases=[
+    {latex:'f(x)=x^2',range:'[0,inf)',step:'\\text{Output is always }\\geq 0:\\;[0,\\infty)'},
+    {latex:'f(x)=\\sqrt{x}',range:'[0,inf)',step:'\\text{Output is always }\\geq 0:\\;[0,\\infty)'},
+    {latex:'f(x)=|x|',range:'[0,inf)',step:'\\text{Output is always }\\geq 0:\\;[0,\\infty)'},
+    {latex:'f(x)=x^3',range:'(-inf,inf)',step:'\\text{All real numbers: }(-\\infty,\\infty)'},
+    {latex:'f(x)=\\dfrac{1}{x}',range:'(-inf,0)u(0,inf)',step:'\\text{Output is never 0: }(-\\infty,0)\\cup(0,\\infty)'},
+    {latex:'f(x)=\\sqrt[3]{x}',range:'(-inf,inf)',step:'\\text{Output spans all reals: }(-\\infty,\\infty)'}
+  ];
+  const c=choose(cases);
+  return{latex:`\\text{State the range of }${c.latex}`,answer:[c.range],hint:'What set of outputs is achievable?',step:c.step};
+}
+function gen5(){
+  const x=choose([-2,-1,1,2,4,9]);
+  const fns=[
+    {expr:v=>`${v*v}`,latex:'f(x)=x^2',step:v=>`f(${v})=(${v})^2=${v*v}`},
+    {expr:v=>v>=0?`${Math.sqrt(v)}`:'undefined',latex:'f(x)=\\sqrt{x}',step:v=>v>=0?`f(${v})=\\sqrt{${v}}=${Math.sqrt(v)}`:'\\text{undefined}'},
+    {expr:v=>`${Math.abs(v)}`,latex:'f(x)=|x|',step:v=>`f(${v})=|${v}|=${Math.abs(v)}`},
+    {expr:v=>`${v*v*v}`,latex:'f(x)=x^3',step:v=>`f(${v})=(${v})^3=${v*v*v}`}
+  ];
+  const f=choose(fns.filter(fn=>fn.expr(x)!=='undefined'&&Number.isInteger(parseFloat(fn.expr(x)))));
+  const val=f.expr(x);
+  return{latex:`\\text{If }${f.latex},\\text{ find }f(${x}).`,answer:[val],hint:'Substitute the value into the function.',step:f.step(x)};
+}
+function gen6(){
+  const cases=[
+    {domain:'[0,\\infty)',fn:'square root',step:'\\text{Domain }[0,\\infty)\\text{ matches the square root function}'},
+    {domain:'(-\\infty,\\infty)',fn:'squaring',step:'\\text{Domain }(-\\infty,\\infty)\\text{ matches squaring, cubing, absolute value, and identity}'},
+    {domain:'(-\\infty,0)\\cup(0,\\infty)',fn:'reciprocal',step:'\\text{The reciprocal function excludes }x=0'}
+  ];
+  const c=choose(cases);
+  return{latex:`\\text{Which parent function has domain }${c.domain}?`,answer:[c.fn],hint:'Which function has a natural restriction on its inputs?',step:c.step};
+}
+function gen7(){
+  const cases=[
+    {desc:'\\text{a U-shaped parabola opening upward}',passes:false,step:'\\text{A horizontal line crosses both arms}\\Rightarrow\\text{fails HLT}'},
+    {desc:'\\text{a V-shaped absolute value graph}',passes:false,step:'\\text{Horizontal lines above the vertex cross both sides}\\Rightarrow\\text{fails HLT}'},
+    {desc:'\\text{the graph of }f(x)=x^3',passes:true,step:'\\text{Cubic is strictly increasing}\\Rightarrow\\text{passes HLT}'},
+    {desc:'\\text{a strictly increasing curve through the origin}',passes:true,step:'\\text{Strictly increasing means no repeated outputs}\\Rightarrow\\text{passes HLT}'}
+  ];
+  const c=choose(cases);
+  return{latex:`\\text{Does }${c.desc}\\text{ pass the horizontal line test? (yes/no)}`,answer:[c.passes?'yes':'no'],hint:'Can a horizontal line ever cross this graph more than once?',step:c.step};
+}
+function gen8(){
+  const all1to1=['x^3','\\sqrt{x}','x','\\dfrac{1}{x}','\\sqrt[3]{x}'];
+  const notAll=['x^2','|x|'];
+  const n=choose([1,2,3]);
+  const picked1=shuffle(all1to1).slice(0,n);
+  const picked0=shuffle(notAll).slice(0,Math.min(2,3-n));
+  const combined=shuffle([...picked1,...picked0]);
+  return{
+    latex:`\\text{How many of these are 1-to-1? }${combined.map(f=>`f(x)=${f}`).join(',\\;')}`,
+    answer:[String(picked1.length)],
+    hint:'Which are strictly increasing or decreasing everywhere?',
+    step:`\\text{The 1-to-1 functions: }${picked1.map(f=>`f(x)=${f}`).join(',\\;')}\\Rightarrow ${picked1.length}`
+  };
+}
+
+/* ── graph-based generators (gen9–gen11) ────────────────────────────── */
+function gen9(){
+  /* Show SVG of a parent function — does it pass HLT? */
+  const cases=[
+    {fn:x=>x*x,xMin:-2.5,xMax:2.5,yMin:0,yMax:4,passes:false,
+     name:'squaring',stepTxt:'The parabola opens upward — any horizontal line y>0 crosses it twice. Fails HLT: not 1-to-1.'},
+    {fn:x=>x*x*x,xMin:-1.6,xMax:1.6,yMin:-3,yMax:3,passes:true,
+     name:'cubic',stepTxt:'The cubic is strictly increasing — every horizontal line crosses it exactly once. Passes HLT: 1-to-1.'},
+    {fn:x=>Math.abs(x),xMin:-3,xMax:3,yMin:0,yMax:3,passes:false,
+     name:'absolute value',stepTxt:'The V-shape means any horizontal line y>0 crosses it twice. Fails HLT: not 1-to-1.'},
+    {fn:x=>Math.sqrt(x),xMin:0,xMax:4,yMin:0,yMax:2.5,passes:true,
+     name:'square root',stepTxt:'Square root is strictly increasing on its domain. Passes HLT: 1-to-1.'},
+    {fn:x=>x,xMin:-3,xMax:3,yMin:-3,yMax:3,passes:true,
+     name:'identity',stepTxt:'A non-horizontal line passes HLT: 1-to-1.'},
+    {fn:x=>Math.cbrt(x),xMin:-3,xMax:3,yMin:-2,yMax:2,passes:true,
+     name:'cube root',stepTxt:'Cube root is strictly increasing everywhere. Passes HLT: 1-to-1.'},
+    {fn:x=>1/x,xMin:-3,xMax:3,yMin:-3,yMax:3,passes:true,
+     name:'reciprocal',stepTxt:'Each output 1/x is achieved by exactly one input. Passes HLT: 1-to-1.'}
+  ];
+  const c=choose(cases);
+  const svg=makeSVG(c.fn,c.xMin,c.xMax,c.yMin,c.yMax);
+  return{
+    html:`<p class="prob-q">Does this graph pass the horizontal line test? (yes/no)</p>${svg}`,
+    answer:[c.passes?'yes':'no'],
+    hint:'Imagine dragging a horizontal line across the graph. Does it ever hit the curve more than once?',
+    stepHtml:`<em>${c.name}:</em> ${c.stepTxt}`
+  };
+}
+function gen10(){
+  /* Table of values — is the function 1-to-1? */
+  const cases=[
+    {rows:[[-2,4],[-1,1],[0,0],[1,1],[2,4]],is1to1:false,
+     stepTxt:'Output 4 appears for x=−2 and x=2; output 1 appears for x=−1 and x=1. Not 1-to-1.'},
+    {rows:[[0,0],[1,1],[4,2],[9,3]],is1to1:true,
+     stepTxt:'Every output is unique. One-to-one (matches √x).'},
+    {rows:[[-1,-1],[0,0],[1,1],[2,8],[3,27]],is1to1:true,
+     stepTxt:'Every output is unique. One-to-one (matches x³).'},
+    {rows:[[-2,5],[-1,3],[0,3],[1,5],[2,9]],is1to1:false,
+     stepTxt:'Output 5 appears for x=−2 and x=1; output 3 appears for x=−1 and x=0. Not 1-to-1.'},
+    {rows:[[1,5],[2,3],[3,1],[4,-1],[5,-3]],is1to1:true,
+     stepTxt:'Outputs are strictly decreasing and all unique. One-to-one.'},
+    {rows:[[-3,2],[-1,0],[1,2],[3,6]],is1to1:false,
+     stepTxt:'Output 2 appears for x=−3 and x=1. Not 1-to-1.'},
+    {rows:[[0,1],[1,3],[2,9],[3,27]],is1to1:true,
+     stepTxt:'All outputs are unique (exponential growth). One-to-one.'}
+  ];
+  const c=choose(cases);
+  const rows=c.rows.map(([x,y])=>`<tr><td>${x}</td><td>${y}</td></tr>`).join('');
+  const tbl=`<table class="tbl-1to1"><thead><tr><th>x</th><th>y</th></tr></thead><tbody>${rows}</tbody></table>`;
+  return{
+    html:`<p class="prob-q">Is this function one-to-one based on the table? (yes/no)</p>${tbl}`,
+    answer:[c.is1to1?'yes':'no'],
+    hint:'Check: does any output value appear more than once?',
+    stepHtml:c.stepTxt
+  };
+}
+function gen11(){
+  /* Transformed graph — identify the parent function */
+  const cases=[
+    {fn:x=>(x-1)*(x-1)+0.5,xMin:-1.5,xMax:3,yMin:0,yMax:4,
+     parent:'squaring',alts:['quadratic','parabola'],
+     stepTxt:'The U-shape with vertex shifted to (1, 0.5) is a transformed squaring function.'},
+    {fn:x=>Math.sqrt(x+1)-0.5,xMin:-1,xMax:3.5,yMin:-0.5,yMax:2,
+     parent:'square root',alts:['sqrt'],
+     stepTxt:'This curve starts at (−1, −0.5) and curves right — a shifted square root.'},
+    {fn:x=>-(x*x),xMin:-2.5,xMax:2.5,yMin:-4,yMax:0.2,
+     parent:'squaring',alts:['quadratic','parabola'],
+     stepTxt:'A downward-opening U is a reflected squaring function.'},
+    {fn:x=>(x+1)*(x+1)*(x+1)-1,xMin:-2.5,xMax:1.2,yMin:-3,yMax:3,
+     parent:'cubing',alts:['cubic'],
+     stepTxt:'The S-shape shifted to (−1, −1) is a transformed cubing function.'},
+    {fn:x=>Math.abs(x-1)-1,xMin:-2,xMax:3.5,yMin:-1,yMax:2.5,
+     parent:'absolute value',alts:['abs value','abs'],
+     stepTxt:'The V-shape with vertex at (1, −1) is a transformed absolute value function.'},
+    {fn:x=>2*Math.cbrt(x),xMin:-3,xMax:3,yMin:-3,yMax:3,
+     parent:'cube root',alts:['cbrt'],
+     stepTxt:'The S-curve through the origin, stretched vertically, is a transformed cube root.'},
+    {fn:x=>Math.sqrt(-(x-1)),xMin:-3,xMax:1,yMin:0,yMax:2.5,
+     parent:'square root',alts:['sqrt'],
+     stepTxt:'This curve reflects the square root over the y-axis and shifts right — still a square root.'},
+    {fn:x=>x-1.5,xMin:-2,xMax:3,yMin:-3,yMax:2,
+     parent:'identity',alts:['linear','line'],
+     stepTxt:'A shifted diagonal line is a transformed identity (linear) function.'}
+  ];
+  const c=choose(cases);
+  const svg=makeSVG(c.fn,c.xMin,c.xMax,c.yMin,c.yMax);
+  return{
+    html:`<p class="prob-q">Which parent function does this graph resemble? (name it)</p>${svg}`,
+    answer:[c.parent,...c.alts],
+    hint:'Ignore shifts and reflections — focus on the overall shape.',
+    stepHtml:c.stepTxt
+  };
+}
+
+/* ── card engine ────────────────────────────────────────────────────── */
+const ALL_GENS=[gen1,gen2,gen3,gen4,gen5,gen6,gen7,gen8,gen9,gen10,gen11];
+let ACTIVE,correct,flags,attempted,peeked;
+
+function init(){
+  ACTIVE=shuffle(ALL_GENS).slice(0,8).map(g=>g());
+  correct=0;
+  flags=Array(8).fill(false);
+  attempted=Array(8).fill(false);
+  peeked=Array(8).fill(false);
+}
+
+function buildCards(){
+  const wrap=document.getElementById('problems');
+  wrap.innerHTML='';
+  ACTIVE.forEach((p,i)=>{
+    const div=document.createElement('div');
+    div.className='card';
+    div.id='card-'+i;
+    div.innerHTML=
+      '<div class="card-body">'+
+        '<div class="card-meta">Problem '+(i+1)+'</div>'+
+        '<div class="card-expr" id="expr-'+i+'"></div>'+
+        '<div class="input-row">'+
+          '<input class="ans-input" id="ai-'+i+'" placeholder="answer"/>'+
+          '<button class="check-btn" id="chk-'+i+'" onclick="check('+i+')">Check</button>'+
+        '</div>'+
+        '<div class="hint">'+p.hint+'</div>'+
+        '<div class="feedback" id="fb-'+i+'"></div>'+
+        '<span class="reveal-link" id="rl-'+i+'" onclick="reveal('+i+')">Show solution</span>'+
+        '<div class="revealed-answer" id="ra-'+i+'"></div>'+
+      '</div>';
+    wrap.appendChild(div);
+    document.getElementById('ai-'+i).addEventListener('keydown',e=>{if(e.key==='Enter')check(i);});
+    const expr=document.getElementById('expr-'+i);
+    if(p.html){
+      expr.innerHTML=p.html;
+    } else {
+      katex.render(p.latex,expr,{throwOnError:false,displayMode:true});
+    }
+  });
+}
+
+function check(i){
+  const p=ACTIVE[i],inp=document.getElementById('ai-'+i),fb=document.getElementById('fb-'+i),
+        card=document.getElementById('card-'+i),good=ok(inp.value,p.answer);
+  inp.className='ans-input';
+  if(good){
+    inp.className='ans-input ok';fb.className='feedback correct';fb.textContent='✓ Correct!';
+    card.className='card correct';
+    if(!flags[i]&&!attempted[i]&&!peeked[i]){flags[i]=true;correct++;updateScore();}
+    attempted[i]=true;document.getElementById('chk-'+i).disabled=true;inp.readOnly=true;
+  } else {
+    attempted[i]=true;inp.className='ans-input bad';fb.className='feedback wrong';
+    fb.textContent='✗ Not quite — try again or show the solution.';
+    card.className=peeked[i]?'card peeked':'card wrong';
+  }
+}
+
+function reveal(i){
+  const p=ACTIVE[i],box=document.getElementById('ra-'+i),lnk=document.getElementById('rl-'+i);
+  if(box.style.display==='block'){
+    box.style.display='none';lnk.textContent='Show solution';
+  } else {
+    if(!flags[i]){
+      peeked[i]=true;document.getElementById('card-'+i).className='card peeked';
+      if(!attempted[i]){
+        const fb=document.getElementById('fb-'+i);fb.className='feedback peeked';
+        fb.textContent='⚠ Solution revealed — no point awarded.';
+      }
+    }
+    if(p.stepHtml){
+      box.innerHTML='<strong>Solution:</strong><br>'+p.stepHtml;
+    } else {
+      box.innerHTML='<strong>Solution:</strong><br>';
+      const span=document.createElement('span');
+      box.appendChild(span);
+      katex.render(p.step,span,{throwOnError:false,displayMode:true});
+    }
+    box.style.display='block';lnk.textContent='Hide solution';
+  }
+}
+
+function updateScore(){
+  document.getElementById('score').textContent=correct+' / 8';
+  document.getElementById('prog').style.width=Math.round(correct/8*100)+'%';
+}
+function resetAll(){init();buildCards();updateScore();}
+
+window.addEventListener('load',function(){
+  renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});
+  init();buildCards();updateScore();
+});
+</script>
 </body>
 </html>
