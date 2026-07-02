@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Limits &mdash; Notes</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.css">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75;font-size:15px}
@@ -98,6 +98,18 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
     -webkit-print-color-adjust:exact;print-color-adjust:exact}
 }
 @page{margin:.55in .65in;size:letter}
+.mistake-panel{margin:.4rem 0 1.1rem;border-left:3px solid #b8860b;border-radius:0 6px 6px 0;background:#fdf8e8}
+.mistake-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#9a6a00;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.mistake-toggle::-webkit-details-marker{display:none}
+details[open]>.mistake-toggle{color:#1e3a5c}
+.mistake-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #e8d8a8}
+.mistake-body p{margin-bottom:.45rem}
+.panel-row{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.1rem}
+.panel-row>.proof-panel,.panel-row>.mistake-panel{margin:0;min-width:0}
+@media print{
+  .panel-row{break-inside:avoid}
+  .mistake-panel{break-inside:avoid}
+}
 </style>
 </head>
 <body>
@@ -108,10 +120,24 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 <div class="two-col">
 <div class="col"><div class="section-head">The Limit</div>
 <div class="accent-box"><p>We write: &nbsp; $\displaystyle\lim_{x \to a} f(x) = L$</p><p>if $f(x)$ gets arbitrarily close to $L$ as $x \to a$ from either side.</p><p><strong>Key ideas:</strong></p><ul>  <li>$x$ approaches $a$ but <em>never equals</em> $a$</li>  <li>$f(a)$ may be undefined — the limit can still exist</li>  <li>Same value from both sides &rarr; limit equals that value</li>  <li>Different values from left and right &rarr; <strong>DNE</strong></li></ul></div>
+<details class="mistake-panel">
+<summary class="mistake-toggle">▸ Common Mistake</summary>
+<div class="mistake-body">
+  <p>A limit is not the same as "plugging in." Students reflexively compute $\lim_{x\to a}f(x)$ as $f(a)$ — but that shortcut only works when $f$ is continuous at $a$. The limit measures the height $f(x)$ <em>approaches</em>; $f$ can be undefined at $a$ (as in $\frac{x^2-4}{x-2}$ at $x=2$) and the limit still exists.</p>
+  <p>The mirror-image error is just as common: seeing that $f(a)$ is undefined and immediately writing "DNE." A hole in the graph does not kill the limit — only disagreement between the two sides does.</p>
+</div>
+</details>
 <p class="body-text"><strong>Limit vs. function value:</strong> &ldquo;Where is the function <em>heading</em>?&rdquo; vs. &ldquo;What does $f$ <em>equal</em> there?&rdquo; These are independent questions.</p>
 </div>
 <div class="col"><div class="section-head">Reading Limits from Graphs</div>
 <div class="accent-box"><p><strong>Open circle $\circ$ at $(a,\, L)$:</strong><br>&nbsp;&nbsp;$f(a)$ undefined, but $\lim_{x\to a}f(x) = L$</p><p><strong>Filled circle $\bullet$ at $(a,\, M)$:</strong><br>&nbsp;&nbsp;$f(a) = M$ &nbsp;(the actual function value)</p><p>The limit depends on the height the curve <em>approaches</em>, not the filled dot.</p><p><strong>Removable discontinuity:</strong> curve approaches one height (open $\circ$), filled $\bullet$ placed elsewhere &rarr; limit = height of the open circle</p><p><strong>Jump discontinuity:</strong> curve approaches two <em>different</em> heights from left and right &rarr; limit = DNE</p></div>
+<details class="mistake-panel">
+<summary class="mistake-toggle">▸ Common Mistake</summary>
+<div class="mistake-body">
+  <p>When a graph shows an open circle at $(a,\,L)$ and a filled dot at $(a,\,M)$, the limit is $L$ — the height the curve approaches — <em>not</em> $M$, the plotted value. Students grab the solid dot because it "looks like the real point," but $\lim_{x\to a}f(x)$ ignores $f(a)$ entirely.</p>
+  <p>Keep the two questions separate: the filled dot answers "what is $f(a)$?"; the open circle answers "what is the limit?" They only coincide when the function is continuous there.</p>
+</div>
+</details>
 </div>
 </div>
 <div class="section-head">Worked Examples</div>
@@ -119,6 +145,27 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 <div class="ex-block">
   <div class="ex-label">Example 1 &nbsp;&mdash;&nbsp; Reading a graph</div>
   <div class="ex-body">A graph shows an open circle at $(3,\,5)$ and a filled dot at $(3,\,1)$. Find $\lim_{x \to 3} f(x)$.</div>
+  <div style="text-align:center;margin:.5rem 0"><svg width="250" height="170" viewBox="0 0 250 170" xmlns="http://www.w3.org/2000/svg">
+<rect width="250" height="170" fill="white" rx="4"/>
+<line x1="25" y1="133" x2="238" y2="133" stroke="#888" stroke-width="1.2"/>
+<line x1="30" y1="10" x2="30" y2="155" stroke="#888" stroke-width="1.2"/>
+<polygon points="238,133 232,130 232,136" fill="#888"/>
+<polygon points="30,10 27,16 33,16" fill="#888"/>
+<line x1="130" y1="15" x2="130" y2="150" stroke="#e0e0e0" stroke-width="1" stroke-dasharray="3,3"/>
+<line x1="15" y1="45" x2="235" y2="45" stroke="#e0e0e0" stroke-width="1" stroke-dasharray="3,3"/>
+<line x1="15" y1="115" x2="235" y2="115" stroke="#e0e0e0" stroke-width="1" stroke-dasharray="3,3"/>
+<path d="M 30,124 Q 130,-34 230,124" fill="none" stroke="#1e3a5c" stroke-width="2" stroke-linecap="round"/>
+<line x1="130" y1="130" x2="130" y2="136" stroke="#555" stroke-width="1.2"/>
+<text x="130" y="148" text-anchor="middle" font-size="11" font-family="sans-serif" fill="#555">3</text>
+<line x1="27" y1="45" x2="33" y2="45" stroke="#555" stroke-width="1.2"/>
+<text x="22" y="49" text-anchor="end" font-size="11" font-family="sans-serif" fill="#555">5</text>
+<line x1="27" y1="115" x2="33" y2="115" stroke="#555" stroke-width="1.2"/>
+<text x="22" y="119" text-anchor="end" font-size="11" font-family="sans-serif" fill="#555">1</text>
+<text x="241" y="137" font-size="11" font-family="Georgia,serif" fill="#555" font-style="italic">x</text>
+<text x="30" y="9" text-anchor="middle" font-size="11" font-family="Georgia,serif" fill="#555" font-style="italic">y</text>
+<circle cx="130" cy="45" r="4.5" fill="white" stroke="#c03030" stroke-width="2"/>
+<circle cx="130" cy="115" r="4.5" fill="#1e3a5c"/>
+</svg></div>
   <div class="ex-answer student"></div>
 </div>
 <div class="ex-block">
@@ -172,8 +219,8 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 </div>
 
 </div>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/contrib/auto-render.min.js"></script>
 <script>
   renderMathInElement(document.body, {
     delimiters: [
@@ -184,5 +231,6 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   });
 </script>
 <!-- proof-layer:done -->
+<!-- mistake-layer:done -->
 </body>
 </html>

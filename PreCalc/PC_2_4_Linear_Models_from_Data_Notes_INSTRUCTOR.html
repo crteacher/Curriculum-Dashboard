@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Linear Models from Data &mdash; Notes</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.css">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75;font-size:15px}
@@ -57,6 +57,18 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   .st-ans-hidden{display:none !important}
 }
 @page{margin:.55in .65in;size:letter}
+.mistake-panel{margin:.4rem 0 1.1rem;border-left:3px solid #b8860b;border-radius:0 6px 6px 0;background:#fdf8e8}
+.mistake-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#9a6a00;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.mistake-toggle::-webkit-details-marker{display:none}
+details[open]>.mistake-toggle{color:#1e3a5c}
+.mistake-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #e8d8a8}
+.mistake-body p{margin-bottom:.45rem}
+.panel-row{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.1rem}
+.panel-row>.proof-panel,.panel-row>.mistake-panel{margin:0;min-width:0}
+@media print{
+  .panel-row{break-inside:avoid}
+  .mistake-panel{break-inside:avoid}
+}
 </style>
 </head>
 <body>
@@ -66,8 +78,22 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 <div class="opening-q">If you measure the temperature and cricket chirp rate on 10 different nights, how would you find the best single line that summarizes the relationship?</div>
 <div class="two-col"><div class="col"><div class="section-head">Scatter Plots and Correlation</div>
 <div class="accent-box"><p>A <strong>scatter plot</strong> plots data as individual points $(x_i,y_i)$.</p><p><strong>Correlation coefficient $r$</strong>:<br>$r\approx 1$: strong positive linear trend.<br>$r\approx -1$: strong negative linear trend.<br>$r\approx 0$: little or no linear trend.</p><p><strong>$R^2$</strong> (coefficient of determination): how well the line fits. $R^2$ close to 1 = good fit.</p></div>
+<details class="mistake-panel">
+<summary class="mistake-toggle">▸ Common Mistake</summary>
+<div class="mistake-body">
+  <p>Students treat $r$ and $R^2$ as interchangeable — they're not. $r=-0.9$ and $r=0.9$ describe equally strong relationships, just in opposite directions, but $R^2=0.81$ for both, since $R^2=r^2$ throws away the sign. Reading $r=-0.9$ as "a bad fit" because it's negative confuses direction with strength.</p>
+  <p>This gets worse the other way too: a student who sees $R^2=0.81$ and reports "$r=0.81$" has lost information — there are two possible values of $r$ ($\pm0.9$) consistent with that $R^2$, and only the scatter plot's direction tells you which one is real.</p>
+</div>
+</details>
 </div><div class="col"><div class="section-head">Line of Best Fit</div>
 <div class="accent-box"><p>The <strong>line of best fit</strong> (least-squares regression line) minimizes the sum of squared residuals.</p><p>Use a graphing calculator or spreadsheet (Google Sheets: Insert → Chart → Trendline → Linear).</p><p><strong>Residual</strong> = actual $y$ − predicted $y$. Good fits have small residuals.</p><p>Use the model to <strong>interpolate</strong> (within data range) or <strong>extrapolate</strong> (outside range — use caution).</p></div>
+<details class="mistake-panel">
+<summary class="mistake-toggle">▸ Common Mistake</summary>
+<div class="mistake-body">
+  <p>Students compute residuals as predicted $y$ minus actual $y$ — backwards from the definition. The order matters because the sign tells you which way the model is wrong: a residual of <em>actual</em> $-$ <em>predicted</em> $= +3$ means the real data point sits <em>above</em> the line (the model underestimated); flip the subtraction and that same point reads as $-3$, which says the opposite.</p>
+  <p>The mix-up is easy to make because both quantities are "the difference between two numbers," but only one order matches the convention used to interpret residual plots and to define $R^2$ — so getting it backwards silently flips every conclusion you draw about over- or under-prediction.</p>
+</div>
+</details>
 </div></div>
 <div style="text-align:center;margin:1rem 0 .6rem">
 <svg viewBox="0 0 340 210" style="max-width:430px;width:100%;height:auto" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Scatter plot with a positive linear trend and its line of best fit">
@@ -105,8 +131,8 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 </div>
 
 </div>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/contrib/auto-render.min.js"></script>
 <script>
 function toggleAns(btn) {
   if (!btn.dataset.orig) btn.dataset.orig = btn.textContent;
@@ -123,5 +149,6 @@ renderMathInElement(document.body, {
 });
 </script>
 <!-- proof-layer:done -->
+<!-- mistake-layer:done -->
 </body>
 </html>

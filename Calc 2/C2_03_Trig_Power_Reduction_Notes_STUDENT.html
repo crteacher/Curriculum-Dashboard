@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>U-Sub with Trig &amp; Power Reduction &mdash; Notes</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.css">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75;font-size:15px}
@@ -98,7 +98,19 @@ details[open]>.proof-toggle{color:#1e3a5c}
 .proof-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #c8d8b8}
 .proof-body p{margin-bottom:.45rem}
 .proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
-@media print{.proof-panel{display:none}}
+@media print{.proof-panel{break-inside:avoid}}
+.mistake-panel{margin:.4rem 0 1.1rem;border-left:3px solid #b8860b;border-radius:0 6px 6px 0;background:#fdf8e8}
+.mistake-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#9a6a00;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.mistake-toggle::-webkit-details-marker{display:none}
+details[open]>.mistake-toggle{color:#1e3a5c}
+.mistake-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #e8d8a8}
+.mistake-body p{margin-bottom:.45rem}
+.panel-row{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.1rem}
+.panel-row>.proof-panel,.panel-row>.mistake-panel{margin:0;min-width:0}
+@media print{
+  .panel-row{break-inside:avoid}
+  .mistake-panel{break-inside:avoid}
+}
 
 /* ── Print styles ── */
 @media print{
@@ -150,6 +162,7 @@ details[open]>.proof-toggle{color:#1e3a5c}
 <div class="two-col">
 <div class="col"><div class="section-head">Power Reduction Identities</div>
 <div class="accent-box"><p>$\sin^2 x = \dfrac{1-\cos 2x}{2}$</p><p>$\cos^2 x = \dfrac{1+\cos 2x}{2}$</p><p>$\sin x\cos x = \dfrac{\sin 2x}{2}$</p></div>
+<div class="panel-row">
 <details class="proof-panel">
 <summary class="proof-toggle">▸ Show Proof</summary>
 <div class="proof-body">
@@ -164,10 +177,25 @@ details[open]>.proof-toggle{color:#1e3a5c}
   <p class="proof-qed">∎</p>
 </div>
 </details>
+<details class="mistake-panel">
+<summary class="mistake-toggle">▸ Common Mistake</summary>
+<div class="mistake-body">
+  <p>The power-reduction identities double the angle: $\sin^2 x=\dfrac{1-\cos 2x}{2}$, not $\dfrac{1-\cos x}{2}$. Students drop the factor of $2$ inside the cosine, which throws off the whole integral.</p>
+  <p>The signs flip too: sine-squared takes the <em>minus</em>, cosine-squared takes the <em>plus</em>. Mixing them up ($\cos^2 x=\frac{1-\cos 2x}{2}$) is a frequent slip — the inside angle is always $2x$.</p>
+</div>
+</details>
+</div>
 <p class="body-text">Use these to reduce even powers of sine/cosine to odd powers or to something directly integrable.</p>
 </div>
 <div class="col"><div class="section-head">Strategy for Trig Powers</div>
 <div class="accent-box"><p><strong>Odd power of sin or cos:</strong> peel off one factor, use Pythagorean identity, then $u$-sub.</p><p><strong>Even powers:</strong> apply power-reduction identities first, then integrate.</p><p><strong>Mix of sin/cos:</strong> if one power is odd, $u$ = the even-powered trig function.</p></div>
+<details class="mistake-panel">
+<summary class="mistake-toggle">▸ Common Mistake</summary>
+<div class="mistake-body">
+  <p>The $u$-substitution trick only works when one power is odd. On $\int\sin^2 x\cos^2 x\,dx$ (both even), students set $u=\sin x$ and hope $\cos^2 x\,dx$ turns into $du$ — but $du=\cos x\,dx$ leaves an unpaired $\cos x$ with no way to convert it.</p>
+  <p>With all-even powers there's no spare factor to absorb into $du$, so reach for the power-reduction identities first. Save $u$-sub for when an odd power gives you that leftover factor.</p>
+</div>
+</details>
 </div>
 </div>
 <div class="section-head">Worked Examples</div>
@@ -228,8 +256,8 @@ details[open]>.proof-toggle{color:#1e3a5c}
 </div>
 
 </div>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/contrib/auto-render.min.js"></script>
 <script>
 function toggleAns(btn) {
   if (!btn.dataset.orig) btn.dataset.orig = btn.textContent;
@@ -246,6 +274,7 @@ function toggleAns(btn) {
   });
 </script>
 <!-- proof-layer:done -->
+<!-- mistake-layer:done -->
 </body>
 </html>
                                                                                                                                                                                                                                                           

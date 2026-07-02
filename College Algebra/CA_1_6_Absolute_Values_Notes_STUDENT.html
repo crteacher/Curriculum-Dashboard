@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Absolute Values &mdash; Notes</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.css">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75;font-size:15px}
@@ -132,6 +132,18 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   .svg-caption{font-size:9pt}
 }
 @page{margin:.55in .65in;size:letter}
+.mistake-panel{margin:.4rem 0 1.1rem;border-left:3px solid #b8860b;border-radius:0 6px 6px 0;background:#fdf8e8}
+.mistake-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#9a6a00;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.mistake-toggle::-webkit-details-marker{display:none}
+details[open]>.mistake-toggle{color:#1e3a5c}
+.mistake-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #e8d8a8}
+.mistake-body p{margin-bottom:.45rem}
+.panel-row{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.1rem}
+.panel-row>.proof-panel,.panel-row>.mistake-panel{margin:0;min-width:0}
+@media print{
+  .panel-row{break-inside:avoid}
+  .mistake-panel{break-inside:avoid}
+}
 </style>
 </head>
 <body>
@@ -142,10 +154,24 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 <div class="two-col">
 <div class="col"><div class="section-head">Absolute Value Equations</div>
 <div class="accent-box"><p><strong>Definition:</strong> $|x|$ = distance from 0 on the number line.</p><p><strong>To solve $|\text{expr}| = k$:</strong><br>If $k > 0$: set expr $= k$ or expr $= -k$, solve both.<br>If $k = 0$: set expr $= 0$, one solution.<br>If $k < 0$: no solution (distance can't be negative).</p><p><strong>Important:</strong> isolate the absolute value first before splitting into two cases.</p></div>
+<details class="mistake-panel">
+<summary class="mistake-toggle">▸ Common Mistake</summary>
+<div class="mistake-body">
+  <p>Isolate the absolute value <em>before</em> splitting into two cases. On $2|x+1|-2=5$, students jump straight to $x+1=5$ or $x+1=-5$ — but $|x+1|$ isn't alone yet.</p>
+  <p>Solve for it first: $|x+1|=\frac72$, then split. Splitting too early uses the wrong number on the right and produces wrong solutions.</p>
+</div>
+</details>
 <p class="body-text"><strong>Strategy:</strong> isolate $|\ldots|$ &rarr; check sign of RHS &rarr; split into $+$ and $-$ cases.</p>
 </div>
 <div class="col"><div class="section-head">Absolute Value Inequalities</div>
 <div class="accent-box"><p><strong>Less than (between):</strong><br>$|\text{expr}| < k \Rightarrow -k < \text{expr} < k$<br>Solution is a single interval.</p><p><strong>Greater than (outside):</strong><br>$|\text{expr}| > k \Rightarrow \text{expr} < -k$ OR $\text{expr} > k$<br>Solution is a union of two intervals.</p><p>Remember: $\leq$ and $\geq$ follow the same pattern with closed brackets where needed.</p></div>
+<details class="mistake-panel">
+<summary class="mistake-toggle">▸ Common Mistake</summary>
+<div class="mistake-body">
+  <p>Less-than is AND (between); greater-than is OR (outside) — don't swap them. $|\text{expr}|<k$ becomes the single interval $-k<\text{expr}<k$, while $|\text{expr}|>k$ becomes two pieces: $\text{expr}<-k$ OR $\text{expr}>k$.</p>
+  <p>Writing $|\text{expr}|>k$ as $-k<\text{expr}<k$ is the classic slip — that's actually the answer to the $<$ problem. Memory hook: "less-th<em>and</em>" (AND), "great-<em>or</em>" (OR).</p>
+</div>
+</details>
 </div>
 </div>
 <div class="section-head">Worked Examples</div>
@@ -206,8 +232,8 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 </div>
 
 </div>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/contrib/auto-render.min.js"></script>
 <script>
 function toggleAns(btn) {
   if (!btn.dataset.orig) btn.dataset.orig = btn.textContent;
@@ -223,5 +249,6 @@ function toggleAns(btn) {
     throwOnError: false
   });
 </script>
+<!-- mistake-layer:done -->
 </body>
 </html>

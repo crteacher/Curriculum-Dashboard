@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Complex Numbers &mdash; Notes</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.css">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75;font-size:15px}
@@ -96,6 +96,13 @@ details[open]>.mistake-toggle{color:#1e3a5c}
 <p class="proof-qed">∎</p>
 </div>
 </details>
+<details class="mistake-panel">
+<summary class="mistake-toggle">▸ Common Mistake</summary>
+<div class="mistake-body">
+  <p>Students simplify $\sqrt{-4}\cdot\sqrt{-9}$ by combining the radicals first: $\sqrt{(-4)(-9)}=\sqrt{36}=6$. That's wrong — the rule $\sqrt{a}\cdot\sqrt{b}=\sqrt{ab}$ only holds when $a$ and $b$ are non-negative. Once you're under a negative radical you're already in imaginary territory, and the combination rule doesn't carry over.</p>
+  <p>The correct approach converts to $i$ first: $\sqrt{-4}\cdot\sqrt{-9}=(2i)(3i)=6i^2=-6$. The sign flips because $i^2=-1$ — so the true answer is $-6$, not $6$. Whenever both radicands are negative, simplify each $\sqrt{-k}$ as $i\sqrt{k}$ before multiplying.</p>
+</div>
+</details>
 </div><div class="col"><div class="section-head">Arithmetic with Complex Numbers</div>
 <div class="accent-box"><p><strong>Add/Subtract:</strong> combine real parts, combine imaginary parts.<br>$(3+2i)+(1-5i)=4-3i$</p><p><strong>Multiply:</strong> FOIL, replace $i^2=-1$.<br>$(2+3i)(1-4i)=2-8i+3i-12i^2=14-5i$</p><p><strong>Divide:</strong> multiply numerator and denominator by the conjugate of the denominator.<br>$\dfrac{2+i}{3-i}=\dfrac{(2+i)(3+i)}{10}=\dfrac{5+5i}{10}=\dfrac{1}{2}+\dfrac{1}{2}i$</p></div>
 <details class="proof-panel">
@@ -106,6 +113,13 @@ details[open]>.mistake-toggle{color:#1e3a5c}
 <p>Because $i^2=-1$, the minus sign flips to a plus and the imaginary parts cancel — the result $a^2+b^2$ is a real (and positive) number.</p>
 <p>So to compute $\dfrac{z}{a+bi}$, multiply top and bottom by $a-bi$. The denominator becomes the real number $a^2+b^2$, and dividing by a real number is easy: just split into real and imaginary parts.</p>
 <p class="proof-qed">∎</p>
+</div>
+</details>
+<details class="mistake-panel">
+<summary class="mistake-toggle">▸ Common Mistake</summary>
+<div class="mistake-body">
+  <p>To compute $\dfrac{2+i}{3-i}$, students multiply top and bottom by the conjugate of the <em>numerator</em>, $2-i$, instead of the denominator's conjugate, $3+i$. The result still looks like a legitimate complex-number computation, but it leaves an imaginary part sitting in the denominator — exactly the thing conjugate multiplication is supposed to eliminate.</p>
+  <p>The rule targets whichever expression you're dividing <em>by</em>: multiplying $a+bi$ by its own conjugate $a-bi$ gives the real number $a^2+b^2$, so it's the denominator's conjugate that clears the imaginary part below the fraction bar. Conjugating the numerator instead changes the value of the fraction.</p>
 </div>
 </details>
 </div></div>
@@ -127,8 +141,8 @@ details[open]>.mistake-toggle{color:#1e3a5c}
 </div>
 
 </div>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/contrib/auto-render.min.js"></script>
 <script>
 function toggleAns(btn) {
   if (!btn.dataset.orig) btn.dataset.orig = btn.textContent;
@@ -145,5 +159,6 @@ renderMathInElement(document.body, {
 });
 </script>
 <!-- proof-layer:done -->
+<!-- mistake-layer:done -->
 </body>
 </html>

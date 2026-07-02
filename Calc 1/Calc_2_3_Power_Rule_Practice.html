@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Power Rule &mdash; Practice</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.css">
 <style>
   *{box-sizing:border-box;margin:0;padding:0}
   body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.7}
@@ -172,7 +172,7 @@ function gen2() {
   return {
     latex: `f'(x) \\text{ for } f(x)=${a}x^{${n}}`,
     answer: [ans],
-    hint: `Constant multiple rule first, then power rule: ${a}·${n}x^{${dn}}.`,
+    hint: `Constant multiple rule, then power rule — multiply by the exponent, then reduce it by 1.`,
     step: `\\frac{d}{dx}[${a}x^{${n}}]=${a}\\cdot${n}x^{${dn}}=${coeff}x^{${dn}}`
   };
 }
@@ -210,7 +210,7 @@ function gen5() {
   return {
     latex: `f'(${c}) \\text{ for } f(x)=${fc(a)}x^3+${b}x^2`,
     answer: [String(ans)],
-    hint: `Find f'(x) = ${3*a}x² + ${2*b}x first, then substitute x = ${c}.`,
+    hint: `Differentiate term by term to get f'(x), then substitute x = ${c}.`,
     step: `f'(x)=${3*a}x^2+${2*b}x;\\quad f'(${c})=${3*a}(${c})^2+${2*b}(${c})=${ans}`
   };
 }
@@ -223,7 +223,7 @@ function gen6() {
   return {
     latex: `\\text{Find } x \\text{ where } f'(x)=0 \\text{ for } f(x)=${fc(a)}x^2+${b}x`,
     answer: [String(ans)],
-    hint: `f'(x) = ${2*a}x + ${b}. Set equal to 0 and solve.`,
+    hint: `Differentiate, then set f'(x) = 0 and solve for x.`,
     step: `f'(x)=${2*a}x+${b}=0\\Rightarrow x=${ans}`
   };
 }
@@ -235,7 +235,7 @@ function gen7() {
   return {
     latex: `\\text{Slope of tangent to } f(x)=${fc(a)}x^{${n}} \\text{ at } x=${c}`,
     answer: [String(ans)],
-    hint: `Slope = f'(${c}). Find f'(x) = ${a*n}x^{${n-1}}, then substitute x = ${c}.`,
+    hint: `The tangent's slope is f'(${c}) — differentiate, then substitute.`,
     step: `f'(x)=${a*n}x^{${n-1}};\\quad f'(${c})=${a*n}(${c})^{${n-1}}=${ans}`
   };
 }
@@ -247,7 +247,7 @@ function gen8() {
   return {
     latex: `f'(${c}) \\text{ for } f(x)=${fc(a)}x^{${n}}+${b}x+${d}`,
     answer: [String(ans)],
-    hint: `f'(x) = ${a*n}x^{${n-1}} + ${b} (constant ${d} vanishes). Substitute x = ${c}.`,
+    hint: `Differentiate (the constant ${d} drops out), then substitute x = ${c}.`,
     step: `f'(x)=${a*n}x^{${n-1}}+${b};\\quad f'(${c})=${a*n}(${c})^{${n-1}}+${b}=${ans}`
   };
 }
@@ -345,8 +345,8 @@ function updateScore() {
 function resetAll() { init(); buildCards(); updateScore(); }
 </script>
 
-<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/contrib/auto-render.min.js"></script>
 <script>
   renderMathInElement(document.body, {
     delimiters: [
