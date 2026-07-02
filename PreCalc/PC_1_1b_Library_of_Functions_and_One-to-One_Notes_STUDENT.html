@@ -69,6 +69,11 @@ details[open]>.mistake-toggle{color:#1e3a5c}
   .panel-row{break-inside:avoid}
   .mistake-panel{break-inside:avoid}
 }
+.fn-table{width:100%;border-collapse:collapse;font-size:13px;margin-top:.4rem}
+.fn-table th{font-family:sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#1e3a5c;border-bottom:2px solid #1e3a5c;padding:3px 6px;text-align:left}
+.fn-table td{padding:3px 6px;border-bottom:1px solid #c8d8ec;vertical-align:middle;line-height:1.5}
+.fn-table tr:last-child td{border-bottom:none}
+@media print{.fn-table{font-size:9pt}.fn-table th{font-size:8pt}}
 </style>
 </head>
 <body>
@@ -77,7 +82,7 @@ details[open]>.mistake-toggle{color:#1e3a5c}
 <p class="page-sub">Pre-Calculus &nbsp;&middot;&nbsp; §1.1 Pt 2 &nbsp;&middot;&nbsp; Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026 &nbsp;&middot;&nbsp; <strong>STUDENT</strong></p>
 <div class="opening-q">The square function $f(x)=x^2$ sends both $x=2$ and $x=-2$ to the output 4. Does that cause any problems? What would we need to "undo" a function?</div>
 <div class="two-col"><div class="col"><div class="section-head">Library of Basic Functions</div>
-<div class="accent-box"><p>Know these graphs, domain, range, and key points at $x=-1,0,1$:</p><ul><li><strong>Constant:</strong> $y=b$ &mdash; range $\{b\}$</li><li><strong>Linear:</strong> $y=x$ &mdash; domain/range $(-\infty,\infty)$</li><li><strong>Quadratic:</strong> $y=x^2$ &mdash; range $[0,\infty)$</li><li><strong>Cubic:</strong> $y=x^3$ &mdash; domain/range $(-\infty,\infty)$</li><li><strong>Square root:</strong> $y=\sqrt{x}$ &mdash; domain $[0,\infty)$</li><li><strong>Reciprocal:</strong> $y=1/x$ &mdash; domain $x\neq 0$</li><li><strong>Absolute value:</strong> $y=|x|$ &mdash; range $[0,\infty)$</li><li><strong>Cube root:</strong> $y=\sqrt[3]{x}$ &mdash; domain/range $(-\infty,\infty)$</li></ul></div>
+<div class="accent-box"><p style="font-size:12px;margin-bottom:.3rem">Know the shape and key values at $x=-1,0,1$ for each:</p><table class="fn-table"><thead><tr><th>Function</th><th>Formula</th><th>Domain</th><th>Range</th></tr></thead><tbody><tr><td>Constant</td><td>$y=b$</td><td>$(-\infty,\infty)$</td><td>$\{b\}$</td></tr><tr><td>Linear</td><td>$y=x$</td><td>$(-\infty,\infty)$</td><td>$(-\infty,\infty)$</td></tr><tr><td>Quadratic</td><td>$y=x^2$</td><td>$(-\infty,\infty)$</td><td>$[0,\infty)$</td></tr><tr><td>Cubic</td><td>$y=x^3$</td><td>$(-\infty,\infty)$</td><td>$(-\infty,\infty)$</td></tr><tr><td>Square root</td><td>$y=\sqrt{x}$</td><td>$[0,\infty)$</td><td>$[0,\infty)$</td></tr><tr><td>Reciprocal</td><td>$y=1/x$</td><td>$x\neq 0$</td><td>$y\neq 0$</td></tr><tr><td>Absolute value</td><td>$y=|x|$</td><td>$(-\infty,\infty)$</td><td>$[0,\infty)$</td></tr><tr><td>Cube root</td><td>$y=\sqrt[3]{x}$</td><td>$(-\infty,\infty)$</td><td>$(-\infty,\infty)$</td></tr></tbody></table></div>
 </div><div class="col"><div class="section-head">One-to-One Functions</div>
 <div class="accent-box"><p><strong>One-to-one (1-1):</strong> a function where different inputs always give different outputs — if $x_1\neq x_2$ then $f(x_1)\neq f(x_2)$.</p><p><strong>Horizontal Line Test:</strong> a function is 1-1 iff every horizontal line hits its graph at most once.</p><p>$y=x^3$: 1-1 &checkmark; &nbsp; $y=x^2$: not 1-1 &cross; (fails HLT)</p></div>
 <details class="mistake-panel">
