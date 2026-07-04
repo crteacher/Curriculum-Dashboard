@@ -236,3 +236,13 @@ function toggleAns(btn) {
   btn.textContent = showing ? 'Hide' : btn.dataset.orig;
 }
   renderMathInEleme
+renderMathInElement(document.body, {
+  delimiters: [
+    {left: '$$', right: '$$', display: true},
+    {left: '$',  right: '$',  display: false}
+  ],
+  throwOnError: false
+});
+</script>
+</body>
+</html>
