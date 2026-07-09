@@ -57,6 +57,14 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   .st-ans-hidden{display:none !important}
 }
 @page{margin:.55in .65in;size:letter}
+.proof-panel{margin:.4rem 0 1.1rem;border-left:3px solid #7a9a6a;border-radius:0 6px 6px 0;background:#f5f7f3}
+.proof-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#5a7a4a;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.proof-toggle::-webkit-details-marker{display:none}
+details[open]>.proof-toggle{color:#1e3a5c}
+.proof-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #c8d8b8}
+.proof-body p{margin-bottom:.45rem}
+.proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
+@media print{.proof-panel{break-inside:avoid}}
 </style>
 </head>
 <body>
@@ -66,6 +74,18 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 <div class="opening-q">You know two angles and a side of a triangle — but it's not a right triangle. Can you still find the missing sides? What formula generalizes the right-triangle approach?</div>
 <div class="two-col"><div class="col"><div class="section-head">The Law of Sines</div>
 <div class="accent-box"><p>For any triangle with angles $A,B,C$ and opposite sides $a,b,c$:</p><p>$$\dfrac{a}{\sin A}=\dfrac{b}{\sin B}=\dfrac{c}{\sin C}$$</p><p><strong>Use when you know:</strong> AAS or ASA (two angles + any side).</p><p>Recall: $A+B+C=180°$, so knowing two angles gives the third.</p></div>
+<details class="proof-panel">
+<summary class="proof-toggle">▸ Show Proof</summary>
+<div class="proof-body">
+<p>The trick is to compute the same height two different ways.</p>
+<p>In triangle $ABC$, drop an altitude from vertex $C$ straight down to side $c$ (the segment $AB$), splitting the triangle into two right triangles. Call the length of this altitude $h$.</p>
+<p>In the right triangle containing angle $A$, the altitude is opposite $A$ and side $b$ is the hypotenuse, so $\sin A=\dfrac{h}{b}$, which gives $h=b\sin A$.</p>
+<p>In the right triangle containing angle $B$, the same altitude is opposite $B$ and side $a$ is the hypotenuse, so $\sin B=\dfrac{h}{a}$, which gives $h=a\sin B$.</p>
+<p>Both expressions equal the same $h$, so $b\sin A=a\sin B$. Dividing both sides by $\sin A\sin B$ gives $$\dfrac{a}{\sin A}=\dfrac{b}{\sin B}.$$</p>
+<p>Dropping a second altitude — say from vertex $A$ to side $a$ — repeats the exact same argument for sides $b$ and $c$, giving $\dfrac{b}{\sin B}=\dfrac{c}{\sin C}$. Combining both results gives the full three-way equality. (If the triangle is obtuse, the altitude lands outside the triangle, but the same relationships hold once you account for $\sin(180°-\theta)=\sin\theta$.)</p>
+<p class="proof-qed">∎</p>
+</div>
+</details>
 </div><div class="col"><div class="section-head">The Ambiguous Case (SSA)</div>
 <div class="accent-box"><p>Given angle $A$, side $a$ (opposite), side $b$ (adjacent):</p><ul><li>If $a\geq b$: exactly one triangle.</li><li>If $a\lt b$ and $a\lt b\sin A$: no triangle.</li><li>If $a\lt b$ and $a=b\sin A$: exactly one (right triangle).</li><li>If $b\sin A\lt a\lt b$: <strong>two</strong> triangles.</li></ul><p>Find both solutions when two triangles exist; check $B_2=180°-B_1$ fits.</p></div>
 </div></div>
@@ -104,5 +124,6 @@ renderMathInElement(document.body, {
   throwOnError: false
 });
 </script>
+<!-- proof-layer:done -->
 </body>
 </html>

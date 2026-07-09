@@ -57,6 +57,14 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   .st-ans-hidden{display:none !important}
 }
 @page{margin:.55in .65in;size:letter}
+.proof-panel{margin:.4rem 0 1.1rem;border-left:3px solid #7a9a6a;border-radius:0 6px 6px 0;background:#f5f7f3}
+.proof-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#5a7a4a;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.proof-toggle::-webkit-details-marker{display:none}
+details[open]>.proof-toggle{color:#1e3a5c}
+.proof-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #c8d8b8}
+.proof-body p{margin-bottom:.45rem}
+.proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
+@media print{.proof-panel{break-inside:avoid}}
 </style>
 </head>
 <body>
@@ -66,6 +74,19 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 <div class="opening-q">Can you find $\cos75°$ exactly without a calculator? If $75°=45°+30°$, is $\cos75°=\cos45°+\cos30°$? (Spoiler: it's not — so what is the correct formula?)</div>
 <div class="two-col"><div class="col"><div class="section-head">Sum and Difference Formulas</div>
 <div class="accent-box"><p><strong>Sine:</strong><br>$\sin(A+B)=\sin A\cos B+\cos A\sin B$<br>$\sin(A-B)=\sin A\cos B-\cos A\sin B$</p><p><strong>Cosine:</strong><br>$\cos(A+B)=\cos A\cos B-\sin A\sin B$<br>$\cos(A-B)=\cos A\cos B+\sin A\sin B$</p><p><strong>Tangent:</strong><br>$\tan(A\pm B)=\dfrac{\tan A\pm\tan B}{1\mp\tan A\tan B}$</p></div>
+<details class="proof-panel">
+<summary class="proof-toggle">▸ Show Proof</summary>
+<div class="proof-body">
+<p>We'll prove the cosine difference formula first, then get the rest for free. Place two points on the unit circle: $P=(\cos A,\sin A)$ at angle $A$, and $Q=(\cos B,\sin B)$ at angle $B$. The angle between them, measured along the circle, is $A-B$.</p>
+<p>The straight-line distance $PQ$ depends only on that angle between them, not on where $A$ and $B$ individually sit on the circle. So we can also compute $PQ$ by imagining the whole picture rotated until $Q$ lands on $(1,0)$ and $P$ lands at angle $A-B$, i.e. $P'=(\cos(A-B),\sin(A-B))$.</p>
+<p>Setting the two expressions for $PQ^2$ equal (distance formula, both configurations):
+$$(\cos A-\cos B)^2+(\sin A-\sin B)^2=(\cos(A-B)-1)^2+\sin^2(A-B)$$</p>
+<p>Expand both sides and use $\cos^2\theta+\sin^2\theta=1$ to simplify. The left side becomes $2-2(\cos A\cos B+\sin A\sin B)$, and the right side becomes $2-2\cos(A-B)$.</p>
+<p>Setting these equal and canceling gives $$\cos(A-B)=\cos A\cos B+\sin A\sin B.$$</p>
+<p>The other four formulas follow with no new geometry. Replace $B$ with $-B$ (using $\cos(-B)=\cos B$, $\sin(-B)=-\sin B$) to get $\cos(A+B)$. Use the cofunction identity $\sin\theta=\cos(90°-\theta)$ to convert the cosine formulas into the sine formulas. And $\tan(A\pm B)=\dfrac{\sin(A\pm B)}{\cos(A\pm B)}$, with top and bottom divided by $\cos A\cos B$, gives the tangent formula.</p>
+<p class="proof-qed">∎</p>
+</div>
+</details>
 </div><div class="col"><div class="section-head">Applications</div>
 <div class="accent-box"><p><strong>Exact values:</strong> write angle as sum/difference of special angles ($30°,45°,60°,90°,\ldots$).</p><p><strong>Verify identities</strong> and <strong>simplify expressions</strong> using these formulas.</p><p>Note: $\cos$ eats negatives ($\cos(-x)=\cos x$). $\sin$ flips sign ($\sin(-x)=-\sin x$).</p></div>
 </div></div>
@@ -104,5 +125,6 @@ renderMathInElement(document.body, {
   throwOnError: false
 });
 </script>
+<!-- proof-layer:done -->
 </body>
 </html>
