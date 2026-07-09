@@ -65,6 +65,18 @@ details[open]>.proof-toggle{color:#1e3a5c}
 .proof-body p{margin-bottom:.45rem}
 .proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
 @media print{.proof-panel{break-inside:avoid}}
+.mistake-panel{margin:.4rem 0 1.1rem;border-left:3px solid #b8860b;border-radius:0 6px 6px 0;background:#fdf8e8}
+.mistake-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#9a6a00;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.mistake-toggle::-webkit-details-marker{display:none}
+details[open]>.mistake-toggle{color:#1e3a5c}
+.mistake-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #e8d8a8}
+.mistake-body p{margin-bottom:.45rem}
+.panel-row{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.1rem}
+.panel-row>.proof-panel,.panel-row>.mistake-panel{margin:0;min-width:0}
+@media print{
+  .panel-row{break-inside:avoid}
+  .mistake-panel{break-inside:avoid}
+}
 </style>
 </head>
 <body>
@@ -74,8 +86,16 @@ details[open]>.proof-toggle{color:#1e3a5c}
 <div class="opening-q">A colony of bacteria doubles every hour. If you start with 100, how many are there after $t$ hours? What kind of function models this — and why is it fundamentally different from a polynomial?</div>
 <div class="two-col"><div class="col"><div class="section-head">Exponential Functions</div>
 <div class="accent-box"><p><strong>Exponential function:</strong> $f(x)=a\cdot b^x$, $b>0$, $b\neq1$, $a>0$.</p><p>$a$ = initial value; $b$ = base (growth factor).</p><ul><li>$b>1$: <strong>growth</strong> (increasing)</li><li>$0<b<1$: <strong>decay</strong> (decreasing)</li></ul><p><strong>Key features:</strong> continuous, passes through $(0,a)$, horizontal asymptote at $y=0$, always positive.</p></div>
+<details class="mistake-panel">
+<summary class="mistake-toggle">▸ Common Mistake</summary>
+<div class="mistake-body">
+  <p>Students judge growth vs. decay by whether $b$ itself "looks big" (like $e\approx 2.7$), ignoring a negative sign sitting in the exponent. $h(x)=e^{-x}$ gets called "growth" because $e>1$ — but $e^{-x}=(e^{-1})^x=(1/e)^x$, and $1/e\approx 0.37$ is between $0$ and $1$. That makes it decay, not growth.</p>
+  <p>The rule only applies to the effective base once everything is written as (some number)$^x$ with a plain, positive exponent of $x$. Rewrite first: pull any negative sign in the exponent into the base by using $b^{-x}=(1/b)^x$, <em>then</em> compare the resulting base to $1$.</p>
+</div>
+</details>
 </div><div class="col"><div class="section-head">Laws of Exponents & the Number $e$</div>
 <div class="accent-box"><p><strong>Laws:</strong> $b^x\cdot b^y=b^{x+y}$; $\dfrac{b^x}{b^y}=b^{x-y}$; $(b^x)^y=b^{xy}$.</p><p><strong>Natural base $e\approx2.71828$:</strong><br>$f(x)=e^x$ — the most natural exponential.</p><p><strong>Compound interest:</strong> $A=P\left(1+\dfrac{r}{n}\right)^{nt}$</p><p><strong>Continuous compounding:</strong> $A=Pe^{rt}$</p></div>
+<div class="panel-row">
 <details class="proof-panel">
 <summary class="proof-toggle">▸ Show Proof</summary>
 <div class="proof-body">
@@ -89,7 +109,15 @@ details[open]>.proof-toggle{color:#1e3a5c}
   <p class="proof-qed">∎</p>
 </div>
 </details>
-</div></div>
+<details class="mistake-panel">
+<summary class="mistake-toggle">▸ Common Mistake</summary>
+<div class="mistake-body">
+  <p>Students use the continuous-compounding formula $A=Pe^{rt}$ even when a problem explicitly says interest is compounded monthly, quarterly, or some other finite number of times per year — or conversely, plug into $A=P(1+r/n)^{nt}$ but forget to divide $r$ by $n$ inside the parentheses while still multiplying the exponent by $n$.</p>
+  <p>These are two genuinely different formulas for two different situations: $A=P(1+r/n)^{nt}$ is for a <em>finite</em> number of compounding periods $n$ per year, while $A=Pe^{rt}$ is the limiting case as $n\to\infty$. Check whether the problem says "continuously" — if not, use the periodic formula with the correct $n$, and make sure that same $n$ appears in both the divisor of $r$ and the multiplier of $t$ in the exponent.</p>
+</div>
+</details>
+</div>
+</div>
 <div style="text-align:center;margin:1rem 0 0.5rem"><svg width="400" height="190" viewBox="0 0 400 190" xmlns="http://www.w3.org/2000/svg">
 <rect width="400" height="190" fill="#fafaf8" rx="6"/>
 <line x1="64.0" y1="30" x2="64.0" y2="160" stroke="#eee" stroke-width="0.8"/>
@@ -903,38 +931,4 @@ details[open]>.proof-toggle{color:#1e3a5c}
 </svg></div><div class="section-head">Worked Examples</div>
 <div class="examples-grid">
 <div class="ex-block"><div class="ex-label">Example 1 &mdash; Identify growth vs. decay</div><div class="ex-body">Which are growth? (a) $f(x)=3^x$ (b) $g(x)=(0.5)^x$ (c) $h(x)=e^{-x}$</div><div class="ex-answer instructor">(a) Growth ($b=3>1$). (b) Decay ($b=0.5<1$). (c) Decay (negative exponent: $e^{-x}=(1/e)^x$, $1/e<1$).</div></div>
-<div class="ex-block"><div class="ex-label">Example 2 &mdash; Evaluate</div><div class="ex-body">If $f(x)=2\cdot3^x$, find $f(0)$, $f(2)$, $f(-1)$.</div><div class="ex-answer instructor">$f(0)=2$; $f(2)=18$; $f(-1)=\tfrac{2}{3}$.</div></div>
-<div class="ex-block"><div class="ex-label">Example 3 &mdash; Compound interest</div><div class="ex-body">\$5{,}000 invested at 4% compounded monthly for 3 years. Find $A$.</div><div class="ex-answer instructor">$A=5000\left(1+\dfrac{0.04}{12}\right)^{36}\approx\$5{,}637$.</div></div>
-<div class="ex-block"><div class="ex-label">Example 4 &mdash; Continuous compounding</div><div class="ex-body">\$1{,}000 at 5% continuously for 10 years.</div><div class="ex-answer instructor">$A=1000e^{0.5}\approx\$1{,}649$.</div></div>
-</div>
-<div class="section-head">Practice Problems</div>
-<div class="practice">
-<div class="pr-row"><div class="pr-num">1.</div><div class="pr-prob">Evaluate $f(x)=4\cdot(0.5)^x$ at $x=0,2,4$.</div><div class="pr-ans instructor">$4, 1, 0.25$.</div></div>
-<div class="pr-row"><div class="pr-num">2.</div><div class="pr-prob">Is $f(x)=5\cdot1.08^x$ growth or decay?</div><div class="pr-ans instructor">Growth ($b=1.08>1$).</div></div>
-<div class="pr-row"><div class="pr-num">3.</div><div class="pr-prob">Simplify $\dfrac{e^{3x}}{e^x}$.</div><div class="pr-ans instructor">$e^{2x}$.</div></div>
-<div class="pr-row"><div class="pr-num">4.</div><div class="pr-prob">Find $A$: \$2000 at 3% compounded quarterly for 5 years.</div><div class="pr-ans instructor">$A=2000(1.0075)^{20}\approx\$2322$.</div></div>
-<div class="pr-row"><div class="pr-num">5.</div><div class="pr-prob">Bacteria doubles hourly. Starting from 200, write $P(t)$.</div><div class="pr-ans instructor">$P(t)=200\cdot2^t$.</div></div>
-<div class="pr-row"><div class="pr-num">6.</div><div class="pr-prob">Sketch the general shape of $f(x)=e^{-x}$ and state its HA.</div><div class="pr-ans instructor">Decreasing, passes through $(0,1)$, HA: $y=0$.</div></div>
-</div>
-
-</div>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/contrib/auto-render.min.js"></script>
-<script>
-function toggleAns(btn) {
-  if (!btn.dataset.orig) btn.dataset.orig = btn.textContent;
-  var ans = btn.nextElementSibling;
-  var showing = ans.classList.toggle('visible');
-  btn.textContent = showing ? 'Hide' : btn.dataset.orig;
-}
-renderMathInElement(document.body, {
-  delimiters: [
-    {left: '$$', right: '$$', display: true},
-    {left: '$',  right: '$',  display: false}
-  ],
-  throwOnError: false
-});
-</script>
-<!-- proof-layer:done -->
-</body>
-</html>
+<div class="ex-block"><div class="ex-label">Example 2 &mdash; Evaluate</div><div class="ex-body">If $f(x)=2\cdot3^x$, find $f(0)$, $f(2)$, $f(-1

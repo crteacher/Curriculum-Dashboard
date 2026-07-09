@@ -65,6 +65,18 @@ details[open]>.proof-toggle{color:#1e3a5c}
 .proof-body p{margin-bottom:.45rem}
 .proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
 @media print{.proof-panel{display:none}}
+.mistake-panel{margin:.4rem 0 1.1rem;border-left:3px solid #b8860b;border-radius:0 6px 6px 0;background:#fdf8e8}
+.mistake-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#9a6a00;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.mistake-toggle::-webkit-details-marker{display:none}
+details[open]>.mistake-toggle{color:#1e3a5c}
+.mistake-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #e8d8a8}
+.mistake-body p{margin-bottom:.45rem}
+.panel-row{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.1rem}
+.panel-row>.proof-panel,.panel-row>.mistake-panel{margin:0;min-width:0}
+@media print{
+  .panel-row{break-inside:avoid}
+  .mistake-panel{break-inside:avoid}
+}
 </style>
 </head>
 <body>
@@ -74,6 +86,7 @@ details[open]>.proof-toggle{color:#1e3a5c}
 <div class="opening-q">A ball is thrown at an angle — its $x$ and $y$ positions each depend on time separately. How can we write two equations in $t$ and then eliminate $t$ to get the path?</div>
 <div class="two-col"><div class="col"><div class="section-head">Quadratic Applications</div>
 <div class="accent-box"><p><strong>Projectile height:</strong> $h(t)=-16t^2+v_0 t+h_0$ (in feet)<br>or $h(t)=-4.9t^2+v_0 t+h_0$ (in meters).</p><p>Maximum height: at vertex $t=-\dfrac{v_0}{2(-16)}=\dfrac{v_0}{32}$.</p><p>Time to hit ground: set $h(t)=0$, solve via quadratic formula.</p></div>
+<div class="panel-row">
 <details class="proof-panel">
 <summary class="proof-toggle">▸ Show Proof</summary>
 <div class="proof-body">
@@ -86,9 +99,24 @@ details[open]>.proof-toggle{color:#1e3a5c}
   <p class="proof-qed">∎</p>
 </div>
 </details>
+<details class="mistake-panel">
+<summary class="mistake-toggle">▸ Common Mistake</summary>
+<div class="mistake-body">
+  <p>Students plug $a=-16$ into $t=-\dfrac{b}{2a}$ and lose track of the double negative, writing $t=-\dfrac{v_0}{2(16)}=-\dfrac{v_0}{32}$ instead of $t=\dfrac{v_0}{32}$. A negative time doesn't make physical sense, which is the tell that a sign got dropped: $-\dfrac{b}{2a}=-\dfrac{v_0}{2(-16)}$, and dividing by a negative flips the sign back to positive.</p>
+  <p>A second, equally common error: after correctly finding $t=\dfrac{v_0}{32}$, students report that value <em>as the maximum height</em>. It's not — $t$ is the time at which the max height occurs. You still have to substitute it back into $h(t)$ to get the actual height.</p>
+</div>
+</details>
+</div>
 <p class="body-text">Setup: identify $a$, $b$, $c$ from the problem context. The coefficient $a$ is always negative for projectile motion (gravity acts downward).</p>
 </div><div class="col"><div class="section-head">Parametric Equations</div>
 <div class="accent-box"><p><strong>Parametric equations</strong> express $x$ and $y$ both as functions of a third variable $t$ (the parameter):</p><p>$x=f(t)$, $y=g(t)$</p><p><strong>To eliminate the parameter:</strong> solve one equation for $t$, substitute into the other.</p><p>Example: $x=2t$, $y=t^2$ $\Rightarrow$ $t=\tfrac{x}{2}$ $\Rightarrow$ $y=\tfrac{x^2}{4}$ (parabola).</p></div>
+<details class="mistake-panel">
+<summary class="mistake-toggle">▸ Common Mistake</summary>
+<div class="mistake-body">
+  <p>Students skip solving for $t$ and just replace $t$ with $x$ directly, treating the parametric equations as if $x=t$. For $x=2t$, $y=t^2$, that gives the wrong curve $y=x^2$ instead of the correct $y=\left(\dfrac{x}{2}\right)^2=\dfrac{x^2}{4}$ — a parabola that's four times wider. You must actually isolate $t$ in one equation ($t=\tfrac{x}{2}$) before substituting; skipping that step only works when the coefficient on $t$ happens to be 1.</p>
+  <p>A related error shows up with trig parametrizations like $x=\cos t,\ y=\sin t$: students try to "solve for $t$" and substitute, when the intended move is to use the identity $\cos^2t+\sin^2t=1$ directly — substituting $x$ and $y$ in for $\cos t$ and $\sin t$ gives $x^2+y^2=1$ without ever isolating $t$.</p>
+</div>
+</details>
 </div></div>
 <div class="section-head">Worked Examples</div>
 <div class="examples-grid">
@@ -100,31 +128,4 @@ details[open]>.proof-toggle{color:#1e3a5c}
 <div class="section-head">Practice Problems</div>
 <div class="practice">
 <div class="pr-row"><div class="pr-num">1.</div><div class="pr-prob">A ball is thrown from 3 ft at 48 ft/s. Write $h(t)$ and find max height.</div><div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$h(t)=-16t^2+48t+3$; max at $t=1.5$: $h=39$ ft.</div></div></div>
-<div class="pr-row"><div class="pr-num">2.</div><div class="pr-prob">Revenue: $R(p)=-5p^2+300p$. Find price $p$ for max revenue.</div><div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$p=30$; max $R=\$4500$.</div></div></div>
-<div class="pr-row"><div class="pr-num">3.</div><div class="pr-prob">Eliminate $t$: $x=3t-1$, $y=2t+4$.</div><div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$t=\dfrac{x+1}{3}$; $y=\dfrac{2(x+1)}{3}+4=\dfrac{2x+14}{3}$.</div></div></div>
-<div class="pr-row"><div class="pr-num">4.</div><div class="pr-prob">For $x=\cos t$, $y=\sin t$, what curve is traced?</div><div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$x^2+y^2=1$, a unit circle.</div></div></div>
-<div class="pr-row"><div class="pr-num">5.</div><div class="pr-prob">A profit model: $P(x)=-2x^2+80x-400$. Find break-even points.</div><div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$-2x^2+80x-400=0\Rightarrow x^2-40x+200=0\Rightarrow x=\dfrac{40\pm\sqrt{800}}{2}=20\pm 10\sqrt{2}\approx 5.9,34.1$.</div></div></div>
-<div class="pr-row"><div class="pr-num">6.</div><div class="pr-prob">State the vertex of $h(t)=-4.9t^2+14t+1$ and interpret it.</div><div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">Vertex at $t=\dfrac{14}{9.8}\approx1.43$ s; $h\approx 11$ m — maximum height of the projectile.</div></div></div>
-</div>
-
-</div>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/contrib/auto-render.min.js"></script>
-<script>
-function toggleAns(btn) {
-  if (!btn.dataset.orig) btn.dataset.orig = btn.textContent;
-  var ans = btn.nextElementSibling;
-  var showing = ans.classList.toggle('visible');
-  btn.textContent = showing ? 'Hide' : btn.dataset.orig;
-}
-renderMathInElement(document.body, {
-  delimiters: [
-    {left: '$$', right: '$$', display: true},
-    {left: '$',  right: '$',  display: false}
-  ],
-  throwOnError: false
-});
-</script>
-<!-- proof-layer:done -->
-</body>
-</html>
+<div class="pr-row"><div class="pr-num">2.</div><div class="pr-prob">Revenue: $R(p)=-5p^2+300p$. Find price $p$ for max revenue.</div><div class="pr-

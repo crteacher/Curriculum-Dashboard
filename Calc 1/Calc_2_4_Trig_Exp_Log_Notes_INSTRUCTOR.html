@@ -105,7 +105,19 @@ details[open]>.proof-toggle{color:#1e3a5c}
 .proof-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #c8d8b8}
 .proof-body p{margin-bottom:.45rem}
 .proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
-@media print{.proof-panel{display:none}}
+@media print{.proof-panel{break-inside:avoid}}
+.mistake-panel{margin:.4rem 0 1.1rem;border-left:3px solid #b8860b;border-radius:0 6px 6px 0;background:#fdf8e8}
+.mistake-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#9a6a00;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.mistake-toggle::-webkit-details-marker{display:none}
+details[open]>.mistake-toggle{color:#1e3a5c}
+.mistake-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #e8d8a8}
+.mistake-body p{margin-bottom:.45rem}
+.panel-row{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.1rem}
+.panel-row>.proof-panel,.panel-row>.mistake-panel{margin:0;min-width:0}
+@media print{
+  .panel-row{break-inside:avoid}
+  .mistake-panel{break-inside:avoid}
+}
 </style>
 </head>
 <body>
@@ -116,6 +128,7 @@ details[open]>.proof-toggle{color:#1e3a5c}
 <div class="two-col">
 <div class="col"><div class="section-head">The Four Core Formulas</div>
 <div class="accent-box"><p>$$\frac{d}{dx}[\sin x]=\cos x \qquad \frac{d}{dx}[\cos x]=-\sin x$$</p><p>$$\frac{d}{dx}[e^x]=e^x \qquad \frac{d}{dx}[\ln x]=\frac{1}{x}$$</p><p>Combine with constant multiples and sums/differences just like the Power Rule.</p><p><strong>Important:</strong> these formulas apply only when the argument is plain $x$ (not $2x$, $x^2$, etc. — that needs the Chain Rule).</p></div>
+<div class="panel-row">
 <details class="proof-panel">
 <summary class="proof-toggle">▸ Show Proof</summary>
 <div class="proof-body">
@@ -131,6 +144,14 @@ details[open]>.proof-toggle{color:#1e3a5c}
   <p class="proof-qed">∎</p>
 </div>
 </details>
+<details class="mistake-panel">
+<summary class="mistake-toggle">▸ Common Mistake</summary>
+<div class="mistake-body">
+  <p>These four formulas only apply when the argument is plain $x$ — but students reflexively use them on $\sin(3x)$, $e^{5x}$, or $\ln(x^2)$ anyway, writing $\frac{d}{dx}[\sin(3x)]=\cos(3x)$ or $\frac{d}{dx}[e^{5x}]=e^{5x}$. The inner function gets silently dropped.</p>
+  <p>The real rule needs the Chain Rule: $\frac{d}{dx}[\sin(3x)]=\cos(3x)\cdot 3$ and $\frac{d}{dx}[e^{5x}]=e^{5x}\cdot 5$ — multiply by the derivative of the inside. The core formulas here are really the "plain $x$" special case of that more general pattern, which is why the missing factor is so easy to forget.</p>
+</div>
+</details>
+</div>
 </div>
 <div class="col"><div class="section-head">Key Values to Know</div>
 <div class="accent-box"><p>$\sin(0)=0$ &ensp; $\cos(0)=1$ &ensp; $e^0=1$ &ensp; $\ln(1)=0$</p><p>$\sin\!\left(\dfrac{\pi}{2}\right)=1$ &ensp; $\cos\!\left(\dfrac{\pi}{2}\right)=0$</p><p>Use these to evaluate derivatives at $x=0$, $x=1$, $x=\pi/2$.</p></div>
@@ -207,5 +228,6 @@ details[open]>.proof-toggle{color:#1e3a5c}
   });
 </script>
 <!-- proof-layer:done -->
+<!-- mistake-layer:done -->
 </body>
 </html>

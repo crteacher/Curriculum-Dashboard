@@ -118,6 +118,11 @@ details[open]>.mistake-toggle{color:#1e3a5c}
   .panel-row{break-inside:avoid}
   .mistake-panel{break-inside:avoid}
 }
+.fig-row{display:flex;justify-content:center;gap:1.5rem;margin:1rem 0;flex-wrap:wrap}
+.fig-svg{display:flex;flex-direction:column;align-items:center}
+.fig-cap{font-family:sans-serif;font-size:11px;color:#666;margin-top:.35rem;text-align:center}
+.fig-svg svg{max-width:100%;height:auto;border-radius:4px;box-shadow:0 1px 4px rgba(0,0,0,.12)}
+@media print{.fig-row{break-inside:avoid;gap:.5rem}.fig-svg svg{box-shadow:none}}
 </style>
 </head>
 <body>
@@ -149,93 +154,53 @@ details[open]>.mistake-toggle{color:#1e3a5c}
 <p class="body-text"><strong>Vertical asymptotes:</strong> set the denominator $=0$. For $1/x$ near $x=0$: left side $\to -\infty$, right side $\to +\infty$, so the two-sided limit is DNE. For $1/x^2$: both sides $\to +\infty$, so the limit is $+\infty$.</p>
 </div>
 </div>
-<div style="text-align:center;margin:1rem 0"><svg width="280" height="180" viewBox="0 0 280 180" xmlns="http://www.w3.org/2000/svg">
-<rect width="280" height="180" fill="white" rx="4"/>
-<line x1="15" y1="90" x2="268" y2="90" stroke="#888" stroke-width="1.2"/>
-<line x1="80" y1="8" x2="80" y2="172" stroke="#888" stroke-width="1.2"/>
-<polygon points="268,90 262,87 262,93" fill="#888"/>
-<polygon points="80,8 77,14 83,14" fill="#888"/>
-<line x1="140" y1="8" x2="140" y2="172" stroke="#c03030" stroke-width="1.5" stroke-dasharray="5,3"/>
-<text x="143" y="20" font-size="10" font-family="sans-serif" fill="#c03030" font-weight="bold">VA: x=2</text>
-<text x="215" y="80" font-size="10" font-family="sans-serif" fill="#2a7a2a" font-weight="bold">HA: y=0</text>
-<polyline points="146,10 152,50 158,63 170,74 200,82 230,85 265,86" fill="none" stroke="#1e3a5c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-<polyline points="15,94 80,98 110,106 122,117 128,130 134,170" fill="none" stroke="#1e3a5c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-<text x="272" y="95" font-size="11" font-family="Georgia,serif" fill="#555" font-style="italic">x</text>
-<text x="76" y="7" text-anchor="end" font-size="11" font-family="Georgia,serif" fill="#555" font-style="italic">y</text>
-<line x1="140" y1="87" x2="140" y2="93" stroke="#555" stroke-width="1.2"/>
-<text x="140" y="103" text-anchor="middle" font-size="10" font-family="sans-serif" fill="#555">2</text>
-<text x="245" y="63" font-size="10" font-family="Georgia,serif" fill="#1e3a5c" font-style="italic">f(x)=1/(x-2)</text>
-</svg></div>
-<div class="section-head">Worked Examples</div>
-<div class="examples-grid">
-<div class="ex-block">
-  <div class="ex-label">Example 1 &nbsp;&mdash;&nbsp; Equal degrees</div>
-  <div class="ex-body">Find $\displaystyle\lim_{x\to\infty}\dfrac{3x^2-x}{x^2+x}$.</div>
-  <div class="ex-answer instructor">Divide by $x^2$: $\dfrac{3-1/x}{1+1/x}\to\dfrac{3}{1}=3$</div>
+<div class="fig-row">
+<div class="fig-svg">
+<svg viewBox="0 0 250 185" width="250" height="185" xmlns="http://www.w3.org/2000/svg" style="display:block">
+<rect width="250" height="185" fill="white" rx="4"/>
+<line x1="30" y1="90" x2="240" y2="90" stroke="#aaa" stroke-width="1.2"/>
+<polygon points="240,90 235,87.5 235,92.5" fill="#aaa"/>
+<line x1="135" y1="165" x2="135" y2="15" stroke="#aaa" stroke-width="1.2"/>
+<polygon points="135,15 132.5,20 137.5,20" fill="#aaa"/>
+<text x="243" y="94" font-size="11" font-family="Georgia,serif" fill="#555" font-style="italic">x</text>
+<text x="132" y="12" font-size="11" font-family="Georgia,serif" fill="#555" font-style="italic" text-anchor="end">y</text>
+<line x1="161" y1="88" x2="161" y2="92" stroke="#888" stroke-width="1"/>
+<text x="161" y="103" text-anchor="middle" font-size="9" font-family="sans-serif" fill="#555">1</text>
+<line x1="109" y1="88" x2="109" y2="92" stroke="#888" stroke-width="1"/>
+<text x="109" y="103" text-anchor="middle" font-size="9" font-family="sans-serif" fill="#555">&#x2212;1</text>
+<line x1="133" y1="75" x2="137" y2="75" stroke="#888" stroke-width="1"/>
+<text x="129" y="78" text-anchor="end" font-size="9" font-family="sans-serif" fill="#555">1</text>
+<line x1="133" y1="105" x2="137" y2="105" stroke="#888" stroke-width="1"/>
+<text x="129" y="108" text-anchor="end" font-size="9" font-family="sans-serif" fill="#555">&#x2212;1</text>
+<polyline points="140,15 143,40 148,60 161,75 188,83 214,85 240,86" fill="none" stroke="#1e3a5c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="30,94 56,95 83,98 109,105 122,120 127,140 130,165" fill="none" stroke="#1e3a5c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="137" y="22" font-size="9" font-family="sans-serif" fill="#c03030" font-weight="bold">VA: x=0</text>
+<text x="38" y="83" font-size="9" font-family="sans-serif" fill="#2a7a2a" font-weight="bold">HA: y=0</text>
+<text x="190" y="70" font-size="10" font-family="Georgia,serif" fill="#1e3a5c" font-style="italic">f(x)=1/x</text>
+</svg>
+<p class="fig-cap">$f(x)=\tfrac{1}{x}$&ensp;&mdash;&ensp;as $x\to\pm\infty$, $f\to 0$&ensp;(HA $y=0$);&ensp;as $x\to 0$, $f\to\pm\infty$&ensp;(VA $x=0$)</p>
 </div>
-<div class="ex-block">
-  <div class="ex-label">Example 2 &nbsp;&mdash;&nbsp; Numerator degree lower</div>
-  <div class="ex-body">Find $\displaystyle\lim_{x\to\infty}\dfrac{x}{x^2+x}$.</div>
-  <div class="ex-answer instructor">Divide by $x^2$: $\dfrac{1/x}{1+1/x}\to\dfrac{0}{1}=0$<br>Horizontal asymptote at $y=0$.</div>
-</div>
-<div class="ex-block">
-  <div class="ex-label">Example 3 &nbsp;&mdash;&nbsp; Vertical asymptote</div>
-  <div class="ex-body">Find $\displaystyle\lim_{x\to 0^+}\dfrac{1}{x^2}$ and $\displaystyle\lim_{x\to 0}\dfrac{1}{x}$.</div>
-  <div class="ex-answer instructor">$1/x^2$: both sides $\to +\infty$, limit $= +\infty$.<br>$1/x$: left $\to -\infty$, right $\to +\infty$ &rarr; DNE.</div>
-</div>
-<div class="ex-block">
-  <div class="ex-label">Example 4 &nbsp;&mdash;&nbsp; Radical at infinity</div>
-  <div class="ex-body">Find $\displaystyle\lim_{x\to+\infty}\dfrac{\sqrt{9x^6+1}}{x^3}$.</div>
-  <div class="ex-answer instructor">Factor $x^6$ from radical ($x^3>0$ for $x>0$):<br>$\dfrac{x^3\sqrt{9+1/x^6}}{x^3}=\sqrt{9+1/x^6}\to 3$</div>
-</div>
-</div>
-<div class="section-head">Practice Problems</div>
-<div class="practice">
-<div class="pr-row">
-  <div class="pr-num">1.</div>
-  <div class="pr-prob">Find $\displaystyle\lim_{x\to\infty}\dfrac{5x^3-2}{x^3+1}$.</div>
-  <div class="pr-ans instructor">$5$</div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">2.</div>
-  <div class="pr-prob">Find $\displaystyle\lim_{x\to\infty}\dfrac{4x^2+1}{x^3-2}$.</div>
-  <div class="pr-ans instructor">$0$</div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">3.</div>
-  <div class="pr-prob">Find $\displaystyle\lim_{x\to 0^-}\dfrac{1}{x}$.</div>
-  <div class="pr-ans instructor">$-\infty$</div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">4.</div>
-  <div class="pr-prob">Find $\displaystyle\lim_{x\to\infty}\dfrac{\sqrt{16x^4+3}}{2x^2}$.</div>
-  <div class="pr-ans instructor">$2$</div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">5.</div>
-  <div class="pr-prob">Find $\displaystyle\lim_{x\to\infty}\dfrac{7x+3}{2x-1}$.</div>
-  <div class="pr-ans instructor">$\dfrac{7}{2}$</div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">6.</div>
-  <div class="pr-prob">Find $\displaystyle\lim_{x\to\infty}\dfrac{x^2-4}{3x^2+x}$.</div>
-  <div class="pr-ans instructor">$\dfrac{1}{3}$</div>
-</div>
-</div>
-
-</div>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/contrib/auto-render.min.js"></script>
-<script>
-  renderMathInElement(document.body, {
-    delimiters: [
-      {left: '$$', right: '$$', display: true},
-      {left: '$',  right: '$',  display: false}
-    ],
-    throwOnError: false
-  });
-</script>
-<!-- proof-layer:done -->
-<!-- mistake-layer:done -->
-</body>
-</html>
+<div class="fig-svg">
+<svg viewBox="0 0 250 185" width="250" height="185" xmlns="http://www.w3.org/2000/svg" style="display:block">
+<rect width="250" height="185" fill="white" rx="4"/>
+<line x1="30" y1="90" x2="240" y2="90" stroke="#aaa" stroke-width="1.2"/>
+<polygon points="240,90 235,87.5 235,92.5" fill="#aaa"/>
+<line x1="72" y1="165" x2="72" y2="15" stroke="#aaa" stroke-width="1.2"/>
+<polygon points="72,15 69.5,20 74.5,20" fill="#aaa"/>
+<text x="243" y="94" font-size="11" font-family="Georgia,serif" fill="#555" font-style="italic">x</text>
+<text x="69" y="12" font-size="11" font-family="Georgia,serif" fill="#555" font-style="italic" text-anchor="end">y</text>
+<line x1="114" y1="88" x2="114" y2="92" stroke="#888" stroke-width="1"/>
+<text x="114" y="103" text-anchor="middle" font-size="9" font-family="sans-serif" fill="#888">2</text>
+<line x1="156" y1="88" x2="156" y2="92" stroke="#888" stroke-width="1"/>
+<text x="156" y="103" text-anchor="middle" font-size="9" font-family="sans-serif" fill="#555">4</text>
+<line x1="30" y1="88" x2="30" y2="92" stroke="#888" stroke-width="1"/>
+<text x="30" y="103" text-anchor="middle" font-size="9" font-family="sans-serif" fill="#555">&#x2212;2</text>
+<line x1="70" y1="75" x2="74" y2="75" stroke="#888" stroke-width="1"/>
+<text x="68" y="78" text-anchor="end" font-size="9" font-family="sans-serif" fill="#555">1</text>
+<line x1="70" y1="105" x2="74" y2="105" stroke="#888" stroke-width="1"/>
+<text x="68" y="108" text-anchor="end" font-size="9" font-family="sans-serif" fill="#555">&#x2212;1</text>
+<line x1="114" y1="15" x2="114" y2="165" stroke="#c03030" stroke-width="1.5" stroke-dasharray="5,3"/>
+<polyline points="118,15 120,40 125,60 135,75 156,83 177,85 198,86 240,87" fill="none" stroke="#1e3a5c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<polyline points="30,94 51,95 72,98 93,105 104,120 108,140 110,165" fill="none" stroke="#1e3a5c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="116" y="22" font-size="9" font-family="sans-serif" fill="#c03030" font-weight="bold">VA: x=2</text>
+<text x="14

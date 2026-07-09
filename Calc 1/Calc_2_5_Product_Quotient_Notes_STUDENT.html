@@ -106,6 +106,18 @@ details[open]>.proof-toggle{color:#1e3a5c}
 .proof-body p{margin-bottom:.45rem}
 .proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
 @media print{.proof-panel{display:none}}
+.mistake-panel{margin:.4rem 0 1.1rem;border-left:3px solid #b8860b;border-radius:0 6px 6px 0;background:#fdf8e8}
+.mistake-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#9a6a00;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.mistake-toggle::-webkit-details-marker{display:none}
+details[open]>.mistake-toggle{color:#1e3a5c}
+.mistake-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #e8d8a8}
+.mistake-body p{margin-bottom:.45rem}
+.panel-row{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.1rem}
+.panel-row>.proof-panel,.panel-row>.mistake-panel{margin:0;min-width:0}
+@media print{
+  .panel-row{break-inside:avoid}
+  .mistake-panel{break-inside:avoid}
+}
 </style>
 </head>
 <body>
@@ -127,6 +139,13 @@ details[open]>.proof-toggle{color:#1e3a5c}
   <p class="proof-qed">∎</p>
 </div>
 </details>
+<details class="mistake-panel">
+<summary class="mistake-toggle">▸ Common Mistake</summary>
+<div class="mistake-body">
+  <p>Students often assume $(fg)'=f'g'$ — that you can differentiate each factor separately and multiply, the way $(f+g)'=f'+g'$ works for sums. Try $f=g=x$: $f'g'=1\cdot1=1$, but the actual derivative of $x^2$ is $2x$.</p>
+  <p>The reasoning that feels natural — "apply the derivative to each piece" — only holds for addition and subtraction, because differentiation is linear. Multiplication isn't, so each factor's rate of change has to be weighted by the other factor's current value, which is exactly what $f'g$ and $fg'$ capture.</p>
+</div>
+</details>
 <p class="body-text"><strong>When to use it:</strong> when two expressions are multiplied and neither can be simplified into a single power of $x$ first. $(x^2+1)x^3$ can be expanded — but $(x^2+1)e^x$ cannot. Use the product rule there.</p>
 </div>
 <div class="col"><div class="section-head">Quotient Rule</div>
@@ -142,6 +161,13 @@ details[open]>.proof-toggle{color:#1e3a5c}
   <p class="proof-qed">∎</p>
 </div>
 </details>
+<details class="mistake-panel">
+<summary class="mistake-toggle">▸ Common Mistake</summary>
+<div class="mistake-body">
+  <p>The numerator's subtraction order is the most common place to lose points: it's $f'g-fg'$, never $fg'-f'g$. The error creeps in because the mnemonic "low d-high minus high d-low" gets misread — "low d-high" means $(\text{low})(d\text{-high})$, i.e. $g\cdot f'$, not $f\cdot g'$.</p>
+  <p>Swap the order and the whole derivative comes out negated. For $f(x)=\dfrac{x^2}{x+1}$, the correct numerator is $2x(x+1)-x^2=x^2+2x$; the reversed version gives $x^2-2x(x+1)=-x^2-2x$ — exactly the negative of the right answer.</p>
+</div>
+</details>
 <p class="body-text"><strong>Common mistake:</strong> the subtraction order in the numerator is fixed — $f'g - fg'$, <em>not</em> $fg' - f'g$. Getting this backwards flips the sign of the entire answer.</p>
 </div>
 </div>
@@ -150,70 +176,4 @@ details[open]>.proof-toggle{color:#1e3a5c}
 <div class="ex-block">
   <div class="ex-label">Example 1 &nbsp;&mdash;&nbsp; Product rule — polynomial &times; trig</div>
   <div class="ex-body">Find $f'(x)$ for $f(x)=x^2\sin x$.</div>
-  <div class="ex-answer student"></div>
-</div>
-<div class="ex-block">
-  <div class="ex-label">Example 2 &nbsp;&mdash;&nbsp; Product rule — polynomial &times; exponential</div>
-  <div class="ex-body">Find $f'(x)$ for $f(x)=(3x+1)e^x$.</div>
-  <div class="ex-answer student"></div>
-</div>
-<div class="ex-block">
-  <div class="ex-label">Example 3 &nbsp;&mdash;&nbsp; Quotient rule</div>
-  <div class="ex-body">Find $f'(x)$ for $f(x)=\dfrac{x^2}{2x+1}$.</div>
-  <div class="ex-answer student"></div>
-</div>
-<div class="ex-block">
-  <div class="ex-label">Example 4 &nbsp;&mdash;&nbsp; Evaluate at a point</div>
-  <div class="ex-body">Find $f'(0)$ for $f(x)=(2x+3)e^x$.</div>
-  <div class="ex-answer student"></div>
-</div>
-</div>
-<div class="section-head">Practice Problems</div>
-<div class="practice">
-<div class="pr-row">
-  <div class="pr-num">1.</div>
-  <div class="pr-prob">Find $f'(x)$ for $f(x)=x\sin x$.</div>
-  <div class="pr-ans student"></div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">2.</div>
-  <div class="pr-prob">Find $f'(x)$ for $f(x)=(x^2+1)e^x$.</div>
-  <div class="pr-ans student"></div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">3.</div>
-  <div class="pr-prob">Find $f'(x)$ for $f(x)=\dfrac{x}{x+2}$.</div>
-  <div class="pr-ans student"></div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">4.</div>
-  <div class="pr-prob">Find $f'(0)$ for $f(x)=(x+4)e^x$.</div>
-  <div class="pr-ans student"></div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">5.</div>
-  <div class="pr-prob">Find $f'(1)$ for $f(x)=\dfrac{x^2}{x+1}$.</div>
-  <div class="pr-ans student"></div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">6.</div>
-  <div class="pr-prob">Find $f'(x)$ for $f(x)=(2x+1)\cos x$.</div>
-  <div class="pr-ans student"></div>
-</div>
-</div>
-
-</div>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/contrib/auto-render.min.js"></script>
-<script>
-  renderMathInElement(document.body, {
-    delimiters: [
-      {left: '$$', right: '$$', display: true},
-      {left: '$',  right: '$',  display: false}
-    ],
-    throwOnError: false
-  });
-</script>
-<!-- proof-layer:done -->
-</body>
-</html>
+  <div class="ex-answer student"></di

@@ -132,6 +132,26 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   .svg-caption{font-size:9pt}
 }
 @page{margin:.55in .65in;size:letter}
+.proof-panel{margin:.4rem 0 1.1rem;border-left:3px solid #7a9a6a;border-radius:0 6px 6px 0;background:#f5f7f3}
+.proof-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#5a7a4a;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.proof-toggle::-webkit-details-marker{display:none}
+details[open]>.proof-toggle{color:#1e3a5c}
+.proof-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #c8d8b8}
+.proof-body p{margin-bottom:.45rem}
+.proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
+@media print{.proof-panel{break-inside:avoid}}
+.mistake-panel{margin:.4rem 0 1.1rem;border-left:3px solid #b8860b;border-radius:0 6px 6px 0;background:#fdf8e8}
+.mistake-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#9a6a00;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.mistake-toggle::-webkit-details-marker{display:none}
+details[open]>.mistake-toggle{color:#1e3a5c}
+.mistake-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #e8d8a8}
+.mistake-body p{margin-bottom:.45rem}
+.panel-row{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.1rem}
+.panel-row>.proof-panel,.panel-row>.mistake-panel{margin:0;min-width:0}
+@media print{
+  .panel-row{break-inside:avoid}
+  .mistake-panel{break-inside:avoid}
+}
 </style>
 </head>
 <body>
@@ -142,9 +162,37 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 <div class="two-col">
 <div class="col"><div class="section-head">The Quadratic Formula</div>
 <div class="accent-box"><p>For $ax^2 + bx + c = 0$ ($a \neq 0$):</p><p>$$x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$$</p><p><strong>Steps:</strong></p><ol style='margin-left:1.2rem;margin-top:.3rem'><li>Identify $a$, $b$, $c$</li><li>Compute discriminant $D = b^2 - 4ac$</li><li>Substitute into formula</li><li>Simplify both solutions</li></ol></div>
+<div class="panel-row">
+<details class="proof-panel">
+<summary class="proof-toggle">▸ Show Proof</summary>
+<div class="proof-body">
+<p>The quadratic formula is nothing more than completing the square on $ax^2+bx+c=0$, done once and for all so we never have to repeat the process for a specific equation again.</p>
+<p>Since $a\neq0$, divide every term by $a$: $$x^2+\dfrac{b}{a}x+\dfrac{c}{a}=0 \quad\Rightarrow\quad x^2+\dfrac{b}{a}x=-\dfrac{c}{a}.$$</p>
+<p>Complete the square on the left: add $\left(\dfrac{b}{2a}\right)^2$ to both sides. $$x^2+\dfrac{b}{a}x+\left(\dfrac{b}{2a}\right)^2=\left(\dfrac{b}{2a}\right)^2-\dfrac{c}{a}.$$</p>
+<p>The left side is now a perfect square, and the right side combines over a common denominator $4a^2$: $$\left(x+\dfrac{b}{2a}\right)^2=\dfrac{b^2}{4a^2}-\dfrac{4ac}{4a^2}=\dfrac{b^2-4ac}{4a^2}.$$</p>
+<p>Take the square root of both sides (keeping both signs, since both square to the same thing): $$x+\dfrac{b}{2a}=\pm\dfrac{\sqrt{b^2-4ac}}{2a}.$$</p>
+<p>Subtract $\dfrac{b}{2a}$ to isolate $x$: $$x=-\dfrac{b}{2a}\pm\dfrac{\sqrt{b^2-4ac}}{2a}=\dfrac{-b\pm\sqrt{b^2-4ac}}{2a}.$$ This works for <em>any</em> $a$, $b$, $c$ with $a\neq0$ — which is exactly why it's called "the" formula.</p>
+<p class="proof-qed">∎</p>
+</div>
+</details>
+<details class="mistake-panel">
+<summary class="mistake-toggle">▸ Common Mistake</summary>
+<div class="mistake-body">
+  <p>Students divide only the square root term by $2a$, writing $x=-b\pm\dfrac{\sqrt{b^2-4ac}}{2a}$ instead of $x=\dfrac{-b\pm\sqrt{b^2-4ac}}{2a}$. The $-b$ term needs to be over $2a$ too — the entire numerator is one fraction, not "$-b$ plus a separate fraction."</p>
+  <p>This matters most when $2a\neq 1$: for $2x^2-7x+3=0$, the correct answer divides <em>everything</em> by $4$: $x=\dfrac{7\pm5}{4}$, giving $x=3$ or $x=\tfrac12$. Forgetting to divide $-b=7$ by $4$ would instead give the wrong values $7\pm1.25$.</p>
+</div>
+</details>
+</div>
 </div>
 <div class="col"><div class="section-head">The Discriminant $D = b^2 - 4ac$</div>
 <div class="accent-box"><p><strong>$D > 0$:</strong> two distinct real solutions</p><p><strong>$D = 0$:</strong> one real solution (double root)</p><p><strong>$D < 0$:</strong> no real solutions (two complex roots)</p><p>e.g. $2x^2 - 4x + 3$: $D = 16 - 24 = -8 < 0$ &rarr; no real roots</p><p>e.g. $x^2 - 8x + 16$: $D = 64 - 64 = 0$ &rarr; one root</p></div>
+<details class="mistake-panel">
+<summary class="mistake-toggle">▸ Common Mistake</summary>
+<div class="mistake-body">
+  <p>Students plug into $D=b^2-4ac$ before putting the equation in standard form $ax^2+bx+c=0$, so they grab the wrong numbers for $a$, $b$, $c$. For an equation like $3x^2+5=12x$, reading off "$b=12$" directly gives the wrong discriminant — the equation first has to become $3x^2-12x+5=0$, making $b=-12$.</p>
+  <p>Since $b$ gets squared, a sign error on $b$ alone happens to not matter here ($(-12)^2=12^2$) — but the sign of $c$ very much does matter in $-4ac$, and skipping the rearrangement is exactly how those sign errors creep in. Always move every term to one side and set the equation equal to $0$ before identifying $a$, $b$, and $c$.</p>
+</div>
+</details>
 </div>
 </div>
 <div class="section-head">Worked Examples</div>
@@ -156,71 +204,4 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 </div>
 <div class="ex-block">
   <div class="ex-label">Example 2 &nbsp;&mdash;&nbsp; Negative discriminant</div>
-  <div class="ex-body">Find the discriminant of $2x^2 - 4x + 3$ and interpret.</div>
-  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">$D = 16 - 24 = -8 < 0$ &rarr; <strong>no real roots</strong></div></div>
-</div>
-<div class="ex-block">
-  <div class="ex-label">Example 3 &nbsp;&mdash;&nbsp; Zero discriminant</div>
-  <div class="ex-body">Solve $x^2 - 8x + 16 = 0$.</div>
-  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">$D = 64 - 64 = 0$; &nbsp; $x = \dfrac{8}{2} = 4$ (double root)</div></div>
-</div>
-<div class="ex-block">
-  <div class="ex-label">Example 4 &nbsp;&mdash;&nbsp; Leading coefficient not 1</div>
-  <div class="ex-body">Solve $2x^2 - 7x + 3 = 0$.</div>
-  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">$D = 49 - 24 = 25$; &nbsp; $x = \dfrac{7 \pm 5}{4}$<br>$x = 3$ or $x = \dfrac{1}{2}$</div></div>
-</div>
-</div>
-<div class="section-head">Practice Problems</div>
-<div class="practice">
-<div class="pr-row">
-  <div class="pr-num">1.</div>
-  <div class="pr-prob">Solve $x^2 - 5x + 6 = 0$ using the quadratic formula.</div>
-  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$D=1>0$; $x=3$ or $x=2$</div></div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">2.</div>
-  <div class="pr-prob">Find the discriminant of $x^2 + 4x + 5$ and state the number of real roots.</div>
-  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$D=16-20=-4<0$ &rarr; no real roots</div></div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">3.</div>
-  <div class="pr-prob">Solve $x^2 - 4x + 4 = 0$.</div>
-  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$D=0$; $x=2$ (double root)</div></div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">4.</div>
-  <div class="pr-prob">Solve $3x^2 + x - 2 = 0$.</div>
-  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$D=1+24=25$; $x=\frac{-1\pm 5}{6}$; $x=\frac{2}{3}$ or $x=-1$</div></div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">5.</div>
-  <div class="pr-prob">How many real solutions does $x^2 + 6x + 9 = 0$ have?</div>
-  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">One (double root, $D=0$)</div></div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">6.</div>
-  <div class="pr-prob">Solve $x^2 + 2x - 8 = 0$ using the quadratic formula.</div>
-  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$D=4+32=36$; $x=\frac{-2\pm 6}{2}$; $x=2$ or $x=-4$</div></div>
-</div>
-</div>
-
-</div>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/contrib/auto-render.min.js"></script>
-<script>
-function toggleAns(btn) {
-  if (!btn.dataset.orig) btn.dataset.orig = btn.textContent;
-  var ans = btn.nextElementSibling;
-  var showing = ans.classList.toggle('visible');
-  btn.textContent = showing ? 'Hide' : btn.dataset.orig;
-}
-  renderMathInElement(document.body, {
-    delimiters: [
-      {left: '$$', right: '$$', display: true},
-      {left: '$',  right: '$',  display: false}
-    ],
-    throwOnError: false
-  });
-</script>
-</body>
-</html>
+  <div class="ex-body">Find the discr

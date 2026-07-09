@@ -132,6 +132,14 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   .svg-caption{font-size:9pt}
 }
 @page{margin:.55in .65in;size:letter}
+.proof-panel{margin:.4rem 0 1.1rem;border-left:3px solid #7a9a6a;border-radius:0 6px 6px 0;background:#f5f7f3}
+.proof-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#5a7a4a;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.proof-toggle::-webkit-details-marker{display:none}
+details[open]>.proof-toggle{color:#1e3a5c}
+.proof-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #c8d8b8}
+.proof-body p{margin-bottom:.45rem}
+.proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
+@media print{.proof-panel{break-inside:avoid}}
 </style>
 </head>
 <body>
@@ -142,86 +150,25 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 <div class="two-col">
 <div class="col"><div class="section-head">The Five Core Rules</div>
 <div class="accent-box"><p><strong>Product rule:</strong> $a^m \cdot a^n = a^{m+n}$</p><p><strong>Quotient rule:</strong> $\dfrac{a^m}{a^n} = a^{m-n}$</p><p><strong>Power of a power:</strong> $(a^m)^n = a^{mn}$</p><p><strong>Power of a product:</strong> $(ab)^n = a^n b^n$</p><p><strong>Power of a quotient:</strong> $\left(\dfrac{a}{b}\right)^n = \dfrac{a^n}{b^n}$</p></div>
+<details class="proof-panel">
+<summary class="proof-toggle">▸ Show Proof</summary>
+<div class="proof-body">
+<p>This answers the opening question directly. For positive whole numbers $m$ and $n$, $a^m$ just means "$a$ multiplied by itself $m$ times," and $a^n$ means "$a$ multiplied by itself $n$ times."</p>
+<p>So $a^m\cdot a^n$ is $(\underbrace{a\cdot a\cdots a}_{m\text{ factors}})\cdot(\underbrace{a\cdot a\cdots a}_{n\text{ factors}})$. Since multiplication just strings all the factors together in one long chain, this is $\underbrace{a\cdot a\cdots a}_{m+n\text{ factors}}=a^{m+n}$. You add the exponents because you're literally counting up the total number of $a$'s being multiplied.</p>
+<p>The quotient rule now falls out of the product rule instead of needing its own separate argument. Suppose $\dfrac{a^m}{a^n}=a^k$ for some exponent $k$. Multiply both sides by $a^n$: $a^n\cdot a^k=a^m$. By the product rule just proved, the left side is $a^{n+k}$, so $n+k=m$, which means $k=m-n$. That's exactly $\dfrac{a^m}{a^n}=a^{m-n}$.</p>
+<p class="proof-qed">∎</p>
+</div>
+</details>
 </div>
 <div class="col"><div class="section-head">Zero, Negative &amp; Fractional Exponents</div>
 <div class="accent-box"><p><strong>Zero exponent:</strong> $a^0 = 1$ &nbsp; ($a \neq 0$)</p><p><strong>Negative exponent:</strong> $a^{-n} = \dfrac{1}{a^n}$</p><p><strong>Fractional exponent:</strong> $a^{1/n} = \sqrt[n]{a}$ &nbsp; and &nbsp; $a^{m/n} = \left(\sqrt[n]{a}\right)^m$<br>e.g. $27^{2/3} = (\sqrt[3]{27})^2 = 3^2 = 9$</p></div>
-<p class="body-text">Final answers should have no negative exponents and no parentheses.</p>
+<details class="proof-panel">
+<summary class="proof-toggle">▸ Show Proof</summary>
+<div class="proof-body">
+<p>These aren't arbitrary conventions — they're forced on us if we want the product/quotient rules to keep working even when the exponents aren't positive whole numbers.</p>
+<p>Consider $\dfrac{a^n}{a^n}$. On one hand, any nonzero number divided by itself equals $1$. On the other hand, the quotient rule says $\dfrac{a^n}{a^n}=a^{n-n}=a^0$. Two ways of computing the same quantity must agree, so $a^0=1$.</p>
+<p>Now consider $\dfrac{a^0}{a^n}$. By the quotient rule, this equals $a^{0-n}=a^{-n}$. But we just showed $a^0=1$, so $\dfrac{a^0}{a^n}=\dfrac{1}{a^n}$. Comparing the two expressions gives $a^{-n}=\dfrac{1}{a^n}$.</p>
+<p>Fractional exponents are pinned down the same way: for the power-of-a-power rule to still hold, we need $\left(a^{1/n}\right)^n=a^{(1/n)\cdot n}=a^1=a$. The only number that becomes $a$ when raised to the $n$th power is the $n$th root of $a$, so $a^{1/n}$ must mean $\sqrt[n]{a}$.</p>
+<p class="proof-qed">∎</p>
 </div>
-</div>
-<div class="section-head">Worked Examples</div>
-<div class="examples-grid">
-<div class="ex-block">
-  <div class="ex-label">Example 1 &nbsp;&mdash;&nbsp; Product and quotient rules</div>
-  <div class="ex-body">Simplify $\dfrac{x^5 \cdot x^3}{x^4}$.</div>
-  <div class="ex-answer instructor">$x^{5+3-4} = x^4$</div>
-</div>
-<div class="ex-block">
-  <div class="ex-label">Example 2 &nbsp;&mdash;&nbsp; Power of a power</div>
-  <div class="ex-body">Simplify $(x^2)^5$.</div>
-  <div class="ex-answer instructor">$x^{2 \cdot 5} = x^{10}$</div>
-</div>
-<div class="ex-block">
-  <div class="ex-label">Example 3 &nbsp;&mdash;&nbsp; Fractional exponent</div>
-  <div class="ex-body">Evaluate $27^{2/3}$.</div>
-  <div class="ex-answer instructor">$\left(\sqrt[3]{27}\right)^2 = 3^2 = 9$</div>
-</div>
-<div class="ex-block">
-  <div class="ex-label">Example 4 &nbsp;&mdash;&nbsp; Combining rules</div>
-  <div class="ex-body">Simplify $\dfrac{a^6 b^9}{a^4 \cdot b^{-2}}$.</div>
-  <div class="ex-answer instructor">$a^{6-4} \cdot b^{9-(-2)} = a^2 b^{11}$</div>
-</div>
-</div>
-<div class="section-head">Practice Problems</div>
-<div class="practice">
-<div class="pr-row">
-  <div class="pr-num">1.</div>
-  <div class="pr-prob">Simplify $x^3 \cdot x^7$.</div>
-  <div class="pr-ans instructor">$x^{10}$</div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">2.</div>
-  <div class="pr-prob">Simplify $\dfrac{y^8}{y^3}$.</div>
-  <div class="pr-ans instructor">$y^5$</div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">3.</div>
-  <div class="pr-prob">Simplify $(x^3)^4$.</div>
-  <div class="pr-ans instructor">$x^{12}$</div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">4.</div>
-  <div class="pr-prob">Evaluate $8^{1/3}$.</div>
-  <div class="pr-ans instructor">$\sqrt[3]{8} = 2$</div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">5.</div>
-  <div class="pr-prob">Simplify $x^{-3}$.</div>
-  <div class="pr-ans instructor">$\dfrac{1}{x^3}$</div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">6.</div>
-  <div class="pr-prob">Simplify $\dfrac{x^5 y^2}{x^2 y^{-1}}$.</div>
-  <div class="pr-ans instructor">$x^3 y^3$</div>
-</div>
-</div>
-
-</div>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/contrib/auto-render.min.js"></script>
-<script>
-function toggleAns(btn) {
-  if (!btn.dataset.orig) btn.dataset.orig = btn.textContent;
-  var ans = btn.nextElementSibling;
-  var showing = ans.classList.toggle('visible');
-  btn.textContent = showing ? 'Hide' : btn.dataset.orig;
-}
-  renderMathInElement(document.body, {
-    delimiters: [
-      {left: '$$', right: '$$', display: true},
-      {left: '$',  right: '$',  display: false}
-    ],
-    throwOnError: false
-  });
-</script>
-</body>
-</html>
+</de

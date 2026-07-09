@@ -132,6 +132,14 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   .svg-caption{font-size:9pt}
 }
 @page{margin:.55in .65in;size:letter}
+.proof-panel{margin:.4rem 0 1.1rem;border-left:3px solid #7a9a6a;border-radius:0 6px 6px 0;background:#f5f7f3}
+.proof-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#5a7a4a;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.proof-toggle::-webkit-details-marker{display:none}
+details[open]>.proof-toggle{color:#1e3a5c}
+.proof-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #c8d8b8}
+.proof-body p{margin-bottom:.45rem}
+.proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
+@media print{.proof-panel{break-inside:avoid}}
 </style>
 </head>
 <body>
@@ -142,6 +150,17 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 <div class="two-col">
 <div class="col"><div class="section-head">The Exponential Model $y = a \cdot b^x$</div>
 <div class="accent-box"><p><strong>$a$</strong> = initial value (when $x = 0$)</p><p><strong>$b$</strong> = base = growth/decay factor per step</p><p>Each step, multiply by $b$:</p><ul><li>$x=0$: $y = a$</li><li>$x=1$: $y = ab$</li><li>$x=2$: $y = ab^2$</li><li>$x=n$: $y = ab^n$</li></ul><p>e.g. $y = 7 \cdot 3^x$: starts at 7, multiplies by 3 each step</p></div>
+<details class="proof-panel">
+<summary class="proof-toggle">▸ Show Proof</summary>
+<div class="proof-body">
+<p>This answers the opening question. The defining rule is: start at $a$, and at every step <em>multiply</em> by $b$ — never add a fixed amount. Watch how that single rule forces the pattern $y=ab^n$.</p>
+<p>At $x=0$ (before any steps), $y=a$. Since $b^0=1$, this matches $y=ab^0$.</p>
+<p>At $x=1$, multiply the previous value by $b$: $y=a\cdot b=ab^1$. At $x=2$, multiply again: $y=(ab)\cdot b=ab^2$.</p>
+<p>In general, if after $k$ steps the value is $ab^k$, then one more step multiplies it by $b$ again: $(ab^k)\cdot b=ab^{k+1}$ — exactly the same pattern, now with exponent $k+1$. So whatever the pattern is at step $k$, it reproduces itself at step $k+1$, which means $y=ab^n$ holds after every step $n$, forever.</p>
+<p>This is exactly what separates exponential from linear growth: a linear model adds the same fixed amount $n$ times ($y=a+nd$), while this model multiplies by the same fixed factor $n$ times ($y=a\cdot\underbrace{b\cdot b\cdots b}_{n\text{ times}}=ab^n$) — repeated multiplication is what an exponent <em>is</em>.</p>
+<p class="proof-qed">∎</p>
+</div>
+</details>
 </div>
 <div class="col"><div class="section-head">Growth vs. Decay</div>
 <div class="accent-box"><p><strong>Growth ($b > 1$):</strong> value increases each step</p><p><strong>Decay ($0 < b < 1$):</strong> value decreases each step</p><p>e.g. $b = 2$: doubles each step (growth)<br>$b = \frac{1}{2}$: halves each step (decay)</p><p><strong>Key formula:</strong> $y = a \cdot b^x$<br>where $x$ = number of steps elapsed</p><p>e.g. starts at 64 g, loses half per day, after 4 days:<br>$y = 64 \cdot \left(\frac{1}{2}\right)^4 = 64 \cdot \frac{1}{16} = 4$ g</p></div>
@@ -172,55 +191,4 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 </div>
 <div class="section-head">Practice Problems</div>
 <div class="practice">
-<div class="pr-row">
-  <div class="pr-num">1.</div>
-  <div class="pr-prob">For $y = 3 \cdot 2^x$, what is $a$ and $b$?</div>
-  <div class="pr-ans instructor">$a=3$, $b=2$</div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">2.</div>
-  <div class="pr-prob">A value starts at 10 and doubles each year. What is it after 3 years?</div>
-  <div class="pr-ans instructor">$10 \cdot 2^3 = 80$</div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">3.</div>
-  <div class="pr-prob">A value starts at 100 and is multiplied by $\frac{1}{2}$ each step. What is it after 2 steps?</div>
-  <div class="pr-ans instructor">$100 \cdot \left(\frac{1}{2}\right)^2 = 25$</div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">4.</div>
-  <div class="pr-prob">For $y = 2 \cdot 5^x$, what is the value when $x = 0$?</div>
-  <div class="pr-ans instructor">$y = 2 \cdot 1 = 2$</div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">5.</div>
-  <div class="pr-prob">A colony of 3 bacteria triples every hour. How many after 4 hours?</div>
-  <div class="pr-ans instructor">$3 \cdot 3^4 = 3^5 = 243$</div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">6.</div>
-  <div class="pr-prob">Is $y = 6 \cdot (0.8)^x$ growth or decay?</div>
-  <div class="pr-ans instructor">Decay ($b = 0.8 < 1$)</div>
-</div>
-</div>
-
-</div>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/contrib/auto-render.min.js"></script>
-<script>
-function toggleAns(btn) {
-  if (!btn.dataset.orig) btn.dataset.orig = btn.textContent;
-  var ans = btn.nextElementSibling;
-  var showing = ans.classList.toggle('visible');
-  btn.textContent = showing ? 'Hide' : btn.dataset.orig;
-}
-  renderMathInElement(document.body, {
-    delimiters: [
-      {left: '$$', right: '$$', display: true},
-      {left: '$',  right: '$',  display: false}
-    ],
-    throwOnError: false
-  });
-</script>
-</body>
-</html>
+<div class=

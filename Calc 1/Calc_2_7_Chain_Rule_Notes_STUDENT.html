@@ -106,6 +106,18 @@ details[open]>.proof-toggle{color:#1e3a5c}
 .proof-body p{margin-bottom:.45rem}
 .proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
 @media print{.proof-panel{display:none}}
+.mistake-panel{margin:.4rem 0 1.1rem;border-left:3px solid #b8860b;border-radius:0 6px 6px 0;background:#fdf8e8}
+.mistake-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#9a6a00;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.mistake-toggle::-webkit-details-marker{display:none}
+details[open]>.mistake-toggle{color:#1e3a5c}
+.mistake-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #e8d8a8}
+.mistake-body p{margin-bottom:.45rem}
+.panel-row{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.1rem}
+.panel-row>.proof-panel,.panel-row>.mistake-panel{margin:0;min-width:0}
+@media print{
+  .panel-row{break-inside:avoid}
+  .mistake-panel{break-inside:avoid}
+}
 </style>
 </head>
 <body>
@@ -116,6 +128,7 @@ details[open]>.proof-toggle{color:#1e3a5c}
 <div class="two-col">
 <div class="col"><div class="section-head">The Chain Rule</div>
 <div class="accent-box"><p>If $y=f(g(x))$, then:</p>$$\frac{dy}{dx}=f'(g(x))\cdot g'(x)$$<p><strong>In words:</strong> derivative of the outside (evaluated at the inside) times derivative of the inside.</p><p><strong>Identify layers first:</strong><br>Outer function $f$: what's the last operation?<br>Inner function $g$: what's the argument?</p></div>
+<div class="panel-row">
 <details class="proof-panel">
 <summary class="proof-toggle">▸ Geometric Argument</summary>
 <div class="proof-body">
@@ -128,6 +141,14 @@ details[open]>.proof-toggle{color:#1e3a5c}
   <p class="proof-qed">∎</p>
 </div>
 </details>
+<details class="mistake-panel">
+<summary class="mistake-toggle">▸ Common Mistake</summary>
+<div class="mistake-body">
+  <p>Students differentiate the outside and stop — forgetting to multiply by $g'(x)$. For $h(x)=\sin(x^2)$, the wrong answer is $\cos(x^2)$; the correct one is $\cos(x^2)\cdot 2x$. The outer-function derivative alone only tells you how $f$ changes with respect to its argument $u=g(x)$, not with respect to $x$. Since $u$ itself is changing at rate $g'(x)$, you need that factor to convert back to a rate with respect to $x$ — that's exactly what $\dfrac{du}{dx}$ does in $\dfrac{dy}{dx}=\dfrac{dy}{du}\cdot\dfrac{du}{dx}$.</p>
+  <p>This mistake is easiest to catch by asking "is the inside function just $x$?" If not, the chain rule factor is mandatory. It shows up constantly with $e^{g(x)}$ too: $\dfrac{d}{dx}e^{3x}=3e^{3x}$, not $e^{3x}$ — the "3" is the forgotten inner derivative.</p>
+</div>
+</details>
+</div>
 <p class="body-text"><strong>Key forms to memorize:</strong><br>$\dfrac{d}{dx}[(g)^n]=n(g)^{n-1}g'$ &ensp; $\dfrac{d}{dx}[e^g]=e^g\cdot g'$<br>$\dfrac{d}{dx}[\sin g]=\cos g\cdot g'$ &ensp; $\dfrac{d}{dx}[\ln g]=\dfrac{g'}{g}$</p>
 </div>
 <div class="col"><div class="section-head">Strategy: Identify the Layers</div>
@@ -149,61 +170,3 @@ details[open]>.proof-toggle{color:#1e3a5c}
 </div>
 <div class="ex-block">
   <div class="ex-label">Example 3 &nbsp;&mdash;&nbsp; Trig composite</div>
-  <div class="ex-body">Differentiate $h(x)=\sin(3x+1)$.</div>
-  <div class="ex-answer student"></div>
-</div>
-<div class="ex-block">
-  <div class="ex-label">Example 4 &nbsp;&mdash;&nbsp; Log composite</div>
-  <div class="ex-body">Differentiate $k(x)=\ln(x^2+5)$.</div>
-  <div class="ex-answer student"></div>
-</div>
-</div>
-<div class="section-head">Practice Problems</div>
-<div class="practice">
-<div class="pr-row">
-  <div class="pr-num">1.</div>
-  <div class="pr-prob">Differentiate $f(x)=(5x-2)^3$.</div>
-  <div class="pr-ans student"></div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">2.</div>
-  <div class="pr-prob">Differentiate $g(x)=e^{4x}$.</div>
-  <div class="pr-ans student"></div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">3.</div>
-  <div class="pr-prob">Differentiate $h(x)=\cos(x^2)$.</div>
-  <div class="pr-ans student"></div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">4.</div>
-  <div class="pr-prob">Differentiate $f(x)=\sqrt{3x+1}=(3x+1)^{1/2}$.</div>
-  <div class="pr-ans student"></div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">5.</div>
-  <div class="pr-prob">Differentiate $g(x)=\ln(\sin x)$.</div>
-  <div class="pr-ans student"></div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">6.</div>
-  <div class="pr-prob">Differentiate $f(x)=(e^x+1)^3$.</div>
-  <div class="pr-ans student"></div>
-</div>
-</div>
-
-</div>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/contrib/auto-render.min.js"></script>
-<script>
-  renderMathInElement(document.body, {
-    delimiters: [
-      {left: '$$', right: '$$', display: true},
-      {left: '$',  right: '$',  display: false}
-    ],
-    throwOnError: false
-  });
-</script>
-<!-- proof-layer:done -->
-</body>
-</html>

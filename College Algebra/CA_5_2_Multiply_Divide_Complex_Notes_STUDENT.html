@@ -132,6 +132,14 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   .svg-caption{font-size:9pt}
 }
 @page{margin:.55in .65in;size:letter}
+.proof-panel{margin:.4rem 0 1.1rem;border-left:3px solid #7a9a6a;border-radius:0 6px 6px 0;background:#f5f7f3}
+.proof-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#5a7a4a;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.proof-toggle::-webkit-details-marker{display:none}
+details[open]>.proof-toggle{color:#1e3a5c}
+.proof-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #c8d8b8}
+.proof-body p{margin-bottom:.45rem}
+.proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
+@media print{.proof-panel{break-inside:avoid}}
 </style>
 </head>
 <body>
@@ -142,9 +150,30 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 <div class="two-col">
 <div class="col"><div class="section-head">Multiplying Complex Numbers</div>
 <div class="accent-box"><p>Use FOIL, then replace $i^2 = -1$.</p><p>e.g. $(2+i)(3-2i)$:<br>F: $6$ &nbsp; O: $-4i$ &nbsp; I: $3i$ &nbsp; L: $-2i^2 = 2$<br>$= 8 - i$</p><p><strong>Conjugate pair &rarr; real result:</strong><br>$(a+bi)(a-bi) = a^2 + b^2$<br>e.g. $(4+3i)(4-3i) = 16+9 = 25$</p><p><strong>Squaring:</strong><br>$(a+bi)^2 = a^2 + 2abi + b^2 i^2 = (a^2-b^2) + 2abi$<br>e.g. $(2+i)^2 = 3+4i$</p></div>
+<details class="proof-panel">
+<summary class="proof-toggle">▸ Show Proof</summary>
+<div class="proof-body">
+<p>This answers the opening question: what do you multiply $a+bi$ by to guarantee a real (no-$i$) result?</p>
+<p>FOIL out $(a+bi)(a-bi)$: $$a\cdot a+a\cdot(-bi)+bi\cdot a+bi\cdot(-bi)=a^2-abi+abi-b^2i^2.$$</p>
+<p>The middle two terms, $-abi$ and $+abi$, are opposites and cancel exactly — that's the whole reason this particular pairing was chosen. What's left is $a^2-b^2i^2$.</p>
+<p>Substitute $i^2=-1$: $$a^2-b^2(-1)=a^2+b^2.$$</p>
+<p>Since $a$ and $b$ are real numbers, $a^2$ and $b^2$ are real and nonnegative, so $a^2+b^2$ is always a real number — never involving $i$. So multiplying $a+bi$ by its conjugate $a-bi$ always produces a real number, for any real $a$ and $b$.</p>
+<p class="proof-qed">∎</p>
+</div>
+</details>
 </div>
 <div class="col"><div class="section-head">Conjugates and Division</div>
 <div class="accent-box"><p><strong>Complex conjugate of $a+bi$:</strong> $a-bi$</p><p><strong>To divide $\dfrac{a+bi}{c+di}$:</strong><br>Multiply numerator and denominator by the conjugate of the denominator $c-di$.</p><p>e.g. $\dfrac{7+i}{2+i}$:<br>$= \dfrac{(7+i)(2-i)}{(2+i)(2-i)} = \dfrac{14-7i+2i-i^2}{4+1} = \dfrac{15-5i}{5} = 3-i$</p></div>
+<details class="proof-panel">
+<summary class="proof-toggle">▸ Show Proof</summary>
+<div class="proof-body">
+<p>Dividing by a complex number is only awkward because the denominator has an $i$ in it. The conjugate trick exists specifically to remove that $i$, using the identity from the box on the left.</p>
+<p>Multiplying the fraction by $\dfrac{c-di}{c-di}$ (which equals $1$, so the value doesn't change) gives $$\dfrac{a+bi}{c+di}\cdot\dfrac{c-di}{c-di}=\dfrac{(a+bi)(c-di)}{(c+di)(c-di)}.$$</p>
+<p>The denominator is now a conjugate pair, $(c+di)(c-di)$, which by the proof above equals $c^2+d^2$ — a real number (and positive, as long as $c$ and $d$ aren't both $0$).</p>
+<p>So the whole expression becomes $\dfrac{(a+bi)(c-di)}{c^2+d^2}$: a complex numerator over a purely real denominator, which can be split into a real part and an imaginary part, exactly the standard form $x+yi$ we want.</p>
+<p class="proof-qed">∎</p>
+</div>
+</details>
 </div>
 </div>
 <div class="section-head">Worked Examples</div>
@@ -175,52 +204,4 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 <div class="pr-row">
   <div class="pr-num">1.</div>
   <div class="pr-prob">Multiply $(1+3i)(2-i)$.</div>
-  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">F:$2$, O:$-i$, I:$6i$, L:$-3i^2=3$ &rarr; $5+5i$</div></div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">2.</div>
-  <div class="pr-prob">Multiply $(3+2i)(3-2i)$.</div>
-  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$9+4=13$</div></div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">3.</div>
-  <div class="pr-prob">Compute $\dfrac{4+2i}{1+i}$.</div>
-  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$\dfrac{(4+2i)(1-i)}{2}=\dfrac{6-2i}{2}=3-i$</div></div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">4.</div>
-  <div class="pr-prob">Compute $(1+2i)^2$.</div>
-  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$1+4i+4i^2=1+4i-4=-3+4i$</div></div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">5.</div>
-  <div class="pr-prob">Compute $\dfrac{5}{2-i}$.</div>
-  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$\dfrac{5(2+i)}{5}=2+i$</div></div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">6.</div>
-  <div class="pr-prob">Multiply $(5-i)(5+i)$.</div>
-  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$25+1=26$</div></div>
-</div>
-</div>
-
-</div>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/contrib/auto-render.min.js"></script>
-<script>
-function toggleAns(btn) {
-  if (!btn.dataset.orig) btn.dataset.orig = btn.textContent;
-  var ans = btn.nextElementSibling;
-  var showing = ans.classList.toggle('visible');
-  btn.textContent = showing ? 'Hide' : btn.dataset.orig;
-}
-  renderMathInElement(document.body, {
-    delimiters: [
-      {left: '$$', right: '$$', display: true},
-      {left: '$',  right: '$',  display: false}
-    ],
-    throwOnError: false
-  });
-</script>
-</body>
-</html>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" on

@@ -132,6 +132,26 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   .svg-caption{font-size:9pt}
 }
 @page{margin:.55in .65in;size:letter}
+.mistake-panel{margin:.4rem 0 1.1rem;border-left:3px solid #b8860b;border-radius:0 6px 6px 0;background:#fdf8e8}
+.mistake-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#9a6a00;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.mistake-toggle::-webkit-details-marker{display:none}
+details[open]>.mistake-toggle{color:#1e3a5c}
+.mistake-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #e8d8a8}
+.mistake-body p{margin-bottom:.45rem}
+.panel-row{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.1rem}
+.panel-row>.proof-panel,.panel-row>.mistake-panel{margin:0;min-width:0}
+@media print{
+  .panel-row{break-inside:avoid}
+  .mistake-panel{break-inside:avoid}
+}
+.proof-panel{margin:.4rem 0 1.1rem;border-left:3px solid #7a9a6a;border-radius:0 6px 6px 0;background:#f5f7f3}
+.proof-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#5a7a4a;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.proof-toggle::-webkit-details-marker{display:none}
+details[open]>.proof-toggle{color:#1e3a5c}
+.proof-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #c8d8b8}
+.proof-body p{margin-bottom:.45rem}
+.proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
+@media print{.proof-panel{break-inside:avoid}}
 </style>
 </head>
 <body>
@@ -142,85 +162,37 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 <div class="two-col">
 <div class="col"><div class="section-head">Zero Product Property &amp; Method</div>
 <div class="accent-box"><p><strong>Zero Product Property:</strong><br>If $A \cdot B = 0$, then $A = 0$ or $B = 0$.</p><p><strong>Method:</strong></p><ol style='margin-left:1.2rem;margin-top:.3rem'><li>Move everything to one side: $\ldots = 0$</li><li>Factor the left side completely</li><li>Set each factor equal to zero</li><li>Solve each small equation</li></ol></div>
+<details class="proof-panel">
+<summary class="proof-toggle">▸ Show Proof</summary>
+<div class="proof-body">
+<p>Suppose $A\cdot B=0$. There are only two possibilities: either $A=0$, or $A\neq0$.</p>
+<p>If $A=0$, we're already done — one of the factors is zero, as claimed.</p>
+<p>If $A\neq0$, then $A$ has a multiplicative inverse $\dfrac{1}{A}$ (every nonzero real number does). Multiply both sides of $A\cdot B=0$ by $\dfrac{1}{A}$: $$\dfrac{1}{A}\cdot A\cdot B=\dfrac{1}{A}\cdot0\ \Longrightarrow\ B=0.$$</p>
+<p>So in either case, $A=0$ or $B=0$ — there's no way around it.</p>
+<p>This is also the answer to the opening question: the whole argument depends on multiplying by $\dfrac{1}{A}$ and having $0$ survive that multiplication unchanged ($\frac{1}{A}\cdot0=0$). If the product equaled some nonzero number $k$ instead, multiplying by $\dfrac{1}{A}$ would give $B=\dfrac{k}{A}$ — a specific value depending on $A$, not a clean statement that $B$ equals some fixed number. Zero is the only number with this special "absorbing" property, which is exactly why the property only works when one side is zero.</p>
+<p class="proof-qed">∎</p>
+</div>
+</details>
+<details class="mistake-panel">
+<summary class="mistake-toggle">▸ Common Mistake</summary>
+<div class="mistake-body">
+  <p>Students apply the Zero Product Property when the equation isn't actually equal to zero. For $(x-3)(x-4)=2$, it's tempting to set each factor equal to $2$ — writing $x-3=2$ or $x-4=2$ — but that's not valid. $A\cdot B=0$ forces $A=0$ or $B=0$ because zero is the only number with no nonzero factor pair; there's no equivalent shortcut for $A\cdot B=2$, since lots of factor pairs multiply to 2.</p>
+  <p>If the equation isn't already set to zero, you have to expand, move everything to one side, and re-factor before the Zero Product Property applies. For $(x-3)(x-4)=2$: expand to $x^2-7x+12=2$, subtract to get $x^2-7x+10=0$, then factor that: $(x-5)(x-2)=0$, giving $x=5$ or $x=2$ — different numbers than what the naive shortcut would produce.</p>
+</div>
+</details>
 </div>
 <div class="col"><div class="section-head">Factoring Patterns</div>
 <div class="accent-box"><p><strong>Trinomial</strong> $x^2 + bx + c$:<br>Find two numbers that multiply to $c$ and add to $b$.<br>e.g. $x^2 - 7x + 12 = (x-3)(x-4)$</p><p><strong>GCF first:</strong> factor out any common factor.<br>e.g. $x^2 - 5x = x(x-5)$</p><p><strong>Difference of squares:</strong><br>$x^2 - a^2 = (x+a)(x-a)$<br>e.g. $x^2 - 16 = (x+4)(x-4)$</p></div>
+<details class="mistake-panel">
+<summary class="mistake-toggle">▸ Common Mistake</summary>
+<div class="mistake-body">
+  <p>Students swap the two conditions and hunt for numbers that <em>add</em> to $c$ and <em>multiply</em> to $b$ instead of the correct multiply-to-$c$, add-to-$b$. For $x^2-7x+12$, that mix-up means looking for two numbers multiplying to $-7$ and adding to $12$ — an entirely different (and usually fruitless) search from the correct one: two numbers multiplying to $12$ and adding to $-7$, namely $-3$ and $-4$.</p>
+  <p>A second common slip is sign bookkeeping once the right two numbers are found: writing $(x+3)(x+4)$ instead of $(x-3)(x-4)$, forgetting that both numbers need their actual signs carried into the factored form. Always verify by mentally FOILing your answer back out — the middle and last terms should reproduce $bx$ and $c$ exactly.</p>
+</div>
+</details>
 </div>
 </div>
 <div class="section-head">Worked Examples</div>
 <div class="examples-grid">
 <div class="ex-block">
-  <div class="ex-label">Example 1 &nbsp;&mdash;&nbsp; Factor trinomial</div>
-  <div class="ex-body">Solve $x^2 - 7x + 12 = 0$.</div>
-  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">$(x-3)(x-4)=0 \Rightarrow x=3$ or $x=4$</div></div>
-</div>
-<div class="ex-block">
-  <div class="ex-label">Example 2 &nbsp;&mdash;&nbsp; Factor with negative constant</div>
-  <div class="ex-body">Solve $x^2 + x - 6 = 0$.</div>
-  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">$(x+3)(x-2)=0 \Rightarrow x=-3$ or $x=2$</div></div>
-</div>
-<div class="ex-block">
-  <div class="ex-label">Example 3 &nbsp;&mdash;&nbsp; Difference of squares</div>
-  <div class="ex-body">Solve $x^2 - 16 = 0$.</div>
-  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">$(x+4)(x-4)=0 \Rightarrow x=\pm 4$</div></div>
-</div>
-<div class="ex-block">
-  <div class="ex-label">Example 4 &nbsp;&mdash;&nbsp; Factor out GCF</div>
-  <div class="ex-body">Solve $x^2 - 5x = 0$.</div>
-  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">$x(x-5)=0 \Rightarrow x=0$ or $x=5$</div></div>
-</div>
-</div>
-<div class="section-head">Practice Problems</div>
-<div class="practice">
-<div class="pr-row">
-  <div class="pr-num">1.</div>
-  <div class="pr-prob">Solve $x^2 + 5x + 6 = 0$.</div>
-  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$(x+2)(x+3)=0 \Rightarrow x=-2$ or $x=-3$</div></div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">2.</div>
-  <div class="pr-prob">Solve $x^2 - x - 12 = 0$.</div>
-  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$(x-4)(x+3)=0 \Rightarrow x=4$ or $x=-3$</div></div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">3.</div>
-  <div class="pr-prob">Solve $x^2 - 9 = 0$.</div>
-  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$(x+3)(x-3)=0 \Rightarrow x=\pm 3$</div></div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">4.</div>
-  <div class="pr-prob">Solve $x^2 + 4x = 0$.</div>
-  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$x(x+4)=0 \Rightarrow x=0$ or $x=-4$</div></div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">5.</div>
-  <div class="pr-prob">Solve $x^2 - 2x - 8 = 0$.</div>
-  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$(x-4)(x+2)=0 \Rightarrow x=4$ or $x=-2$</div></div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">6.</div>
-  <div class="pr-prob">Solve $x^2 - 6x + 9 = 0$.</div>
-  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$(x-3)^2=0 \Rightarrow x=3$ (double root)</div></div>
-</div>
-</div>
-
-</div>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/contrib/auto-render.min.js"></script>
-<script>
-function toggleAns(btn) {
-  if (!btn.dataset.orig) btn.dataset.orig = btn.textContent;
-  var ans = btn.nextElementSibling;
-  var showing = ans.classList.toggle('visible');
-  btn.textContent = showing ? 'Hide' : btn.dataset.orig;
-}
-  renderMathInElement(document.body, {
-    delimiters: [
-      {left: '$$', right: '$$', display: true},
-      {left: '$',  right: '$',  display: false}
-    ],
-    throwOnError: false
-  });
-</script>
-</body>
-</html>
+  <div class="ex-label">Example 1 &nbsp;&m

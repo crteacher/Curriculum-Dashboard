@@ -106,6 +106,18 @@ details[open]>.proof-toggle{color:#1e3a5c}
 .proof-body p{margin-bottom:.45rem}
 .proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
 @media print{.proof-panel{break-inside:avoid}}
+.mistake-panel{margin:.4rem 0 1.1rem;border-left:3px solid #b8860b;border-radius:0 6px 6px 0;background:#fdf8e8}
+.mistake-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#9a6a00;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.mistake-toggle::-webkit-details-marker{display:none}
+details[open]>.mistake-toggle{color:#1e3a5c}
+.mistake-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #e8d8a8}
+.mistake-body p{margin-bottom:.45rem}
+.panel-row{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.1rem}
+.panel-row>.proof-panel,.panel-row>.mistake-panel{margin:0;min-width:0}
+@media print{
+  .panel-row{break-inside:avoid}
+  .mistake-panel{break-inside:avoid}
+}
 </style>
 </head>
 <body>
@@ -116,10 +128,23 @@ details[open]>.proof-toggle{color:#1e3a5c}
 <div class="two-col">
 <div class="col"><div class="section-head">Strategy: Read the Structure</div>
 <div class="accent-box"><p>Before differentiating, ask: <em>what is the outermost operation?</em></p><ul>  <li><strong>Product</strong> at top level &rarr; Product Rule first</li>  <li><strong>Quotient</strong> at top level &rarr; Quotient Rule first</li>  <li><strong>Composite</strong> (one function inside another) &rarr; Chain Rule first</li></ul><p>Then apply chain rule to any composite factors inside.</p><p>Work <strong>outermost to innermost</strong>, one layer at a time.</p></div>
+<details class="mistake-panel">
+<summary class="mistake-toggle">▸ Common Mistake</summary>
+<div class="mistake-body">
+  <p>The most common error here isn't misreading the structure — it's abandoning Product Rule once it's identified. Students see $f(x)=x^2e^x$, correctly call it a product, then differentiate each factor separately and multiply the results: $f'(x)=2x\cdot e^x$. That's not the product rule; that's just "derivative of each piece times each other," and it's wrong. The correct rule keeps <em>both</em> terms: $f'(x)=(x^2)'e^x+x^2(e^x)'=2xe^x+x^2e^x$.</p>
+  <p>This mistake is easy to catch with a sanity check: if you only wrote down one term after applying Product or Quotient Rule, you dropped half the rule. Product Rule always produces two additive terms; Quotient Rule always produces a single fraction with a subtraction in the numerator — never a lone product of derivatives.</p>
+</div>
+</details>
 </div>
 <div class="col"><div class="section-head">Key Values for Evaluation</div>
 <div class="accent-box"><p>Evaluating at $x=0$ or $x=1$ simplifies most mixed-rule expressions:</p><p>$e^0=1$ &ensp; $\ln 1=0$ &ensp; $\sin 0=0$ &ensp; $\cos 0=1$</p><p><strong>Example:</strong> for $f(x)=x^2 e^x$,<br>$f'(x)=2xe^x+x^2e^x$, so $f'(0)=0+0=0$.</p></div>
-<p class="body-text"><strong>Product Rule reminder:</strong> $(fg)'=f'g+fg'$<br><strong>Quotient Rule reminder:</strong> $\left(\dfrac{f}{g}\right)'=\dfrac{f'g-fg'}{g^2}$<br>Don't forget to apply chain rule to composite pieces inside these.</p>
+<details class="mistake-panel">
+<summary class="mistake-toggle">▸ Common Mistake</summary>
+<div class="mistake-body">
+  <p>When asked to evaluate a derivative at a point, students sometimes plug the number into the <em>original</em> function instead of the derivative — computing $f(0)$ when the question asks for $f'(0)$. For $f(x)=x^2e^x$, $f(0)=0$ too in this particular example, which can mask the error; but for most functions $f(a)\neq f'(a)$, and skipping the differentiation step entirely gives a meaningless answer.</p>
+  <p>Always differentiate first, simplify symbolically if it helps, and only then substitute the number. Writing $f'(x)=\dots$ explicitly before plugging in $x=0$ makes it obvious which function you're evaluating.</p>
+</div>
+</details>
 </div>
 </div>
 <div class="section-head">Worked Examples</div>
@@ -136,61 +161,4 @@ details[open]>.proof-toggle{color:#1e3a5c}
 </div>
 <div class="ex-block">
   <div class="ex-label">Example 3 &nbsp;&mdash;&nbsp; Evaluate at a point</div>
-  <div class="ex-body">Let $f(x)=x\,e^x$. Find $f'(0)$.</div>
-  <div class="ex-answer instructor">$f'(x)=e^x+xe^x=e^x(1+x)$<br>$f'(0)=e^0(1+0)=1$</div>
-</div>
-<div class="ex-block">
-  <div class="ex-label">Example 4 &nbsp;&mdash;&nbsp; Chain inside product</div>
-  <div class="ex-body">Differentiate $h(x)=\sqrt{x}\cdot\ln(x^2)$.</div>
-  <div class="ex-answer instructor">Product: $\dfrac{1}{2\sqrt{x}}\ln(x^2)+\sqrt{x}\cdot\dfrac{2x}{x^2}$<br>$=\dfrac{\ln(x^2)}{2\sqrt{x}}+\dfrac{2}{\sqrt{x}}$</div>
-</div>
-</div>
-<div class="section-head">Practice Problems</div>
-<div class="practice">
-<div class="pr-row">
-  <div class="pr-num">1.</div>
-  <div class="pr-prob">Differentiate $f(x)=x^3\cos x$.</div>
-  <div class="pr-ans instructor">$3x^2\cos x - x^3\sin x$</div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">2.</div>
-  <div class="pr-prob">Differentiate $g(x)=\dfrac{\sin x}{x}$.</div>
-  <div class="pr-ans instructor">$\dfrac{\cos x\cdot x - \sin x}{x^2}=\dfrac{x\cos x-\sin x}{x^2}$</div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">3.</div>
-  <div class="pr-prob">Let $f(x)=e^x\sin x$. Find $f'(0)$.</div>
-  <div class="pr-ans instructor">$f'(x)=e^x\sin x+e^x\cos x$; $f'(0)=0+1=1$</div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">4.</div>
-  <div class="pr-prob">Differentiate $h(x)=\ln(x)\cdot e^x$.</div>
-  <div class="pr-ans instructor">$\dfrac{e^x}{x}+e^x\ln x$</div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">5.</div>
-  <div class="pr-prob">Differentiate $f(x)=(x^2+1)e^{3x}$.</div>
-  <div class="pr-ans instructor">$2x\,e^{3x}+3(x^2+1)e^{3x}$</div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">6.</div>
-  <div class="pr-prob">Let $g(x)=\dfrac{x^2}{e^x}$. Find $g'(1)$.</div>
-  <div class="pr-ans instructor">$g'(x)=\dfrac{2xe^x-x^2e^x}{e^{2x}}=\dfrac{2x-x^2}{e^x}$; $g'(1)=\dfrac{1}{e}$</div>
-</div>
-</div>
-
-</div>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/contrib/auto-render.min.js"></script>
-<script>
-  renderMathInElement(document.body, {
-    delimiters: [
-      {left: '$$', right: '$$', display: true},
-      {left: '$',  right: '$',  display: false}
-    ],
-    throwOnError: false
-  });
-</script>
-<!-- proof-layer:done -->
-</body>
-</html>
+  <div

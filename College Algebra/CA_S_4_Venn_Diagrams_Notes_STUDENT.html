@@ -132,6 +132,14 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   .svg-caption{font-size:9pt}
 }
 @page{margin:.55in .65in;size:letter}
+.proof-panel{margin:.4rem 0 1.1rem;border-left:3px solid #7a9a6a;border-radius:0 6px 6px 0;background:#f5f7f3}
+.proof-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#5a7a4a;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.proof-toggle::-webkit-details-marker{display:none}
+details[open]>.proof-toggle{color:#1e3a5c}
+.proof-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #c8d8b8}
+.proof-body p{margin-bottom:.45rem}
+.proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
+@media print{.proof-panel{break-inside:avoid}}
 </style>
 </head>
 <body>
@@ -143,11 +151,32 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 <div class="two-col">
 <div class="col"><div class="section-head">Reading a Venn Diagram</div>
 <div class="accent-box"><p><strong>Four regions in a two-set Venn diagram:</strong></p><ul><li><strong>Only $A$</strong>: in $A$ but not $B$</li><li><strong>$A \cap B$</strong>: in both $A$ and $B$</li><li><strong>Only $B$</strong>: in $B$ but not $A$</li><li><strong>Neither</strong>: in $U$ but outside $A \cup B$</li></ul><p><strong>Cardinality formulas:</strong><br>$|A| = $ (only $A$) $+ |A \cap B|$<br>$|A \cup B| = |A| + |B| - |A \cap B|$<br>$|U| = |A \cup B| + $ neither</p></div>
+<details class="proof-panel">
+<summary class="proof-toggle">▸ Show Proof</summary>
+<div class="proof-body">
+<p>This formula corrects for double-counting, and the four-region breakdown above is exactly what makes that visible.</p>
+<p>From the regions: $|A|=(\text{only }A)+|A\cap B|$ and $|B|=(\text{only }B)+|A\cap B|$. Adding these two equations: $$|A|+|B|=(\text{only }A)+(\text{only }B)+2|A\cap B|.$$</p>
+<p>But $A\cup B$ is made up of exactly three regions — only $A$, only $B$, and $A\cap B$ — each counted once: $$|A\cup B|=(\text{only }A)+(\text{only }B)+|A\cap B|.$$</p>
+<p>Comparing the two equations, the right side of the first is the right side of the second plus one extra copy of $|A\cap B|$. So $$|A|+|B|=|A\cup B|+|A\cap B|.$$</p>
+<p>Solving for $|A\cup B|$: $$|A\cup B|=|A|+|B|-|A\cap B|.$$ In words: adding $|A|$ and $|B|$ counts the overlap region twice, so subtracting $|A\cap B|$ once brings it back down to being counted exactly once, matching the true total.</p>
+<p class="proof-qed">∎</p>
+</div>
+</details>
 <div class="svg-figure"><svg width="220" height="135" viewBox="0 0 220 135" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:6px auto"><defs><clipPath id="caaunionb"><circle cx="81" cy="64" r="45"/></clipPath><clipPath id="cbaunionb"><circle cx="138" cy="64" r="45"/></clipPath></defs><rect x="4" y="4" width="212" height="127" fill="#f0f4f8" stroke="#bbb" stroke-width="1.2" rx="3"/><circle cx="81" cy="64" r="45" fill="#7ab3e0" stroke="#1e3a5c" stroke-width="2"/><circle cx="138" cy="64" r="45" fill="#7ab3e0" stroke="#1e3a5c" stroke-width="2"/><text x="14" y="18" font-size="11" fill="#888" font-family="sans-serif">U</text><text x="44" y="33" font-size="13" font-weight="bold" fill="#1e3a5c" font-family="sans-serif">A</text><text x="165" y="33" font-size="13" font-weight="bold" fill="#1e3a5c" font-family="sans-serif">B</text></svg><div class="svg-caption">$A \cup B$ shaded</div></div>
 <div class="svg-figure"><svg width="220" height="135" viewBox="0 0 220 135" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:6px auto"><defs><clipPath id="caab"><circle cx="81" cy="64" r="45"/></clipPath><clipPath id="cbab"><circle cx="138" cy="64" r="45"/></clipPath></defs><rect x="4" y="4" width="212" height="127" fill="#f0f4f8" stroke="#bbb" stroke-width="1.2" rx="3"/><circle cx="81" cy="64" r="45" fill="#f0f4f8" stroke="#1e3a5c" stroke-width="2"/><circle cx="138" cy="64" r="45" fill="#f0f4f8" stroke="#1e3a5c" stroke-width="2"/><circle cx="81" cy="64" r="45" fill="#7ab3e0" clip-path="url(#cbab)" stroke="none"/><text x="14" y="18" font-size="11" fill="#888" font-family="sans-serif">U</text><text x="44" y="33" font-size="13" font-weight="bold" fill="#1e3a5c" font-family="sans-serif">A</text><text x="165" y="33" font-size="13" font-weight="bold" fill="#1e3a5c" font-family="sans-serif">B</text></svg><div class="svg-caption">$A \cap B$ shaded</div></div>
 </div>
 <div class="col"><div class="section-head">De Morgan's Laws</div>
 <div class="accent-box"><p><strong>$(A \cup B)' = A' \cap B'$</strong><br>Not in $A$ or $B$ &rarr; not in $A$ AND not in $B$<br>(shaded region = <em>neither</em>)</p><p><strong>$(A \cap B)' = A' \cup B'$</strong><br>Not in both &rarr; not in $A$ OR not in $B$<br>(shaded region = everything except the center)</p><p>These laws let you distribute complements over union/intersection &mdash; and flip the operation.</p></div>
+<details class="proof-panel">
+<summary class="proof-toggle">▸ Show Proof</summary>
+<div class="proof-body">
+<p>To prove two sets are equal, show that an arbitrary element $x$ belongs to one exactly when it belongs to the other.</p>
+<p><strong>$(A\cup B)'=A'\cap B'$:</strong> saying $x\in(A\cup B)'$ means $x\notin A\cup B$, i.e. it is <em>not</em> true that ($x\in A$ or $x\in B$). By the everyday logic of "not (this or that)" — think "not (raining or snowing)" means "not raining <em>and</em> not snowing" — this is the same as saying $x\notin A$ <em>and</em> $x\notin B$.</p>
+<p>That's exactly $x\in A'$ and $x\in B'$, i.e. $x\in A'\cap B'$. Every step above was reversible ("if and only if"), so $x\in(A\cup B)'$ precisely when $x\in A'\cap B'$ — meaning the two sets contain exactly the same elements: $(A\cup B)'=A'\cap B'$.</p>
+<p><strong>$(A\cap B)'=A'\cup B'$:</strong> the same idea with "and"/"or" swapped. $x\in(A\cap B)'$ means <em>not</em> ($x\in A$ and $x\in B$), which — think "not (raining and cold)" means "not raining <em>or</em> not cold" — is the same as $x\notin A$ or $x\notin B$, i.e. $x\in A'$ or $x\in B'$, i.e. $x\in A'\cup B'$. So $(A\cap B)'=A'\cup B'$.</p>
+<p class="proof-qed">∎</p>
+</div>
+</details>
 <div class="svg-figure"><svg width="220" height="135" viewBox="0 0 220 135" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:6px auto"><defs><clipPath id="caneither"><circle cx="81" cy="64" r="45"/></clipPath><clipPath id="cbneither"><circle cx="138" cy="64" r="45"/></clipPath></defs><rect x="4" y="4" width="212" height="127" fill="#7ab3e0" stroke="#bbb" stroke-width="1.2" rx="3"/><circle cx="81" cy="64" r="45" fill="#f0f4f8" stroke="#1e3a5c" stroke-width="2"/><circle cx="138" cy="64" r="45" fill="#f0f4f8" stroke="#1e3a5c" stroke-width="2"/><text x="14" y="18" font-size="11" fill="#888" font-family="sans-serif">U</text><text x="44" y="33" font-size="13" font-weight="bold" fill="#1e3a5c" font-family="sans-serif">A</text><text x="165" y="33" font-size="13" font-weight="bold" fill="#1e3a5c" font-family="sans-serif">B</text></svg><div class="svg-caption">$(A \cup B)' = A' \cap B'$ shaded</div></div>
 <div class="svg-figure"><svg width="220" height="135" viewBox="0 0 220 135" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:6px auto"><defs><clipPath id="canotab"><circle cx="81" cy="64" r="45"/></clipPath><clipPath id="cbnotab"><circle cx="138" cy="64" r="45"/></clipPath></defs><rect x="4" y="4" width="212" height="127" fill="#7ab3e0" stroke="#bbb" stroke-width="1.2" rx="3"/><circle cx="81" cy="64" r="45" fill="#f0f4f8" clip-path="url(#cbnotab)" stroke="none"/><circle cx="81" cy="64" r="45" fill="none" stroke="#1e3a5c" stroke-width="2"/><circle cx="138" cy="64" r="45" fill="none" stroke="#1e3a5c" stroke-width="2"/><text x="14" y="18" font-size="11" fill="#888" font-family="sans-serif">U</text><text x="44" y="33" font-size="13" font-weight="bold" fill="#1e3a5c" font-family="sans-serif">A</text><text x="165" y="33" font-size="13" font-weight="bold" fill="#1e3a5c" font-family="sans-serif">B</text></svg><div class="svg-caption">$(A \cap B)' = A' \cup B'$ shaded</div></div>
 </div>
@@ -172,60 +201,4 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 <div class="ex-block">
   <div class="ex-label">Example 4 &nbsp;&mdash;&nbsp; Only-A cardinality</div>
   <div class="ex-body">Using the diagram from Example 1, find $|A \setminus B|$ (only $A$).</div>
-  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">$|A \setminus B| = |A| - |A \cap B| = 8 - 3 = 5$</div></div>
-</div>
-</div>
-<div class="section-head">Practice Problems</div>
-<div class="practice">
-<div class="pr-row">
-  <div class="pr-num">1.</div>
-  <div class="pr-prob">Only $A = 4$, $A \cap B = 6$, only $B = 2$, neither $= 3$. Find $|A \cup B|$.</div>
-  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$4 + 6 + 2 = 12$</div></div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">2.</div>
-  <div class="pr-prob">Using the same diagram, find $|U|$.</div>
-  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$12 + 3 = 15$</div></div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">3.</div>
-  <div class="pr-prob">State $(A \cap B)'$ using De Morgan's Law.</div>
-  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$(A \cap B)' = A' \cup B'$</div></div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">4.</div>
-  <div class="pr-prob">$|U|=20$, $|A|=12$. Find $|A'|$.</div>
-  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$20 - 12 = 8$</div></div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">5.</div>
-  <div class="pr-prob">Only $A = 7$, $A \cap B = 3$. Find $|A|$.</div>
-  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$7 + 3 = 10$</div></div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">6.</div>
-  <div class="pr-prob">$|A \cup B| = 18$, $|A|=10$, $|B|=11$. Find $|A \cap B|$.</div>
-  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$10 + 11 - |A \cap B| = 18 \Rightarrow |A \cap B| = 3$</div></div>
-</div>
-</div>
-
-</div>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/contrib/auto-render.min.js"></script>
-<script>
-function toggleAns(btn) {
-  if (!btn.dataset.orig) btn.dataset.orig = btn.textContent;
-  var ans = btn.nextElementSibling;
-  var showing = ans.classList.toggle('visible');
-  btn.textContent = showing ? 'Hide' : btn.dataset.orig;
-}
-  renderMathInElement(document.body, {
-    delimiters: [
-      {left: '$$', right: '$$', display: true},
-      {left: '$',  right: '$',  display: false}
-    ],
-    throwOnError: false
-  });
-</script>
-</body>
-</html>
+  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">$|A \setminus B| = 

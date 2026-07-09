@@ -132,6 +132,14 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   .svg-caption{font-size:9pt}
 }
 @page{margin:.55in .65in;size:letter}
+.proof-panel{margin:.4rem 0 1.1rem;border-left:3px solid #7a9a6a;border-radius:0 6px 6px 0;background:#f5f7f3}
+.proof-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#5a7a4a;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.proof-toggle::-webkit-details-marker{display:none}
+details[open]>.proof-toggle{color:#1e3a5c}
+.proof-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #c8d8b8}
+.proof-body p{margin-bottom:.45rem}
+.proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
+@media print{.proof-panel{break-inside:avoid}}
 </style>
 </head>
 <body>
@@ -142,6 +150,17 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 <div class="two-col">
 <div class="col"><div class="section-head">Defining i</div>
 <div class="accent-box"><p><strong>Imaginary unit:</strong> $i = \sqrt{-1}$, &nbsp; $i^2 = -1$</p><p><strong>Powers of $i$ cycle with period 4:</strong><br>$i^1 = i$ &nbsp; $i^2 = -1$ &nbsp; $i^3 = -i$ &nbsp; $i^4 = 1$</p><p><strong>Simplify $\sqrt{-k}$:</strong><br>$\sqrt{-k} = \sqrt{k} \cdot i$ &nbsp; (for $k > 0$)<br>e.g. $\sqrt{-25} = 5i$</p><p><strong>Standard form:</strong> $a + bi$<br>$a$ = real part &nbsp;&nbsp; $b$ = imaginary part</p></div>
+<details class="proof-panel">
+<summary class="proof-toggle">▸ Show Proof</summary>
+<div class="proof-body">
+<p>Only $i^2=-1$ is a definition. Everything else in the cycle follows just by multiplying by $i$ one power at a time.</p>
+<p>$i^3=i^2\cdot i=(-1)\cdot i=-i$.</p>
+<p>$i^4=i^2\cdot i^2=(-1)\cdot(-1)=1$.</p>
+<p>$i^5=i^4\cdot i=1\cdot i=i$ — the same value as $i^1$.</p>
+<p>Since $i^5=i^1$, multiplying by $i$ four more times just repeats the same four outputs: $i^6=i^2=-1$, $i^7=i^3=-i$, $i^8=i^4=1$, and so on forever. That's exactly what it means for the powers of $i$ to "cycle with period 4."</p>
+<p class="proof-qed">∎</p>
+</div>
+</details>
 </div>
 <div class="col"><div class="section-head">Operations &amp; Quadratic Connections</div>
 <div class="accent-box"><p><strong>Adding/subtracting:</strong> combine real parts and imaginary parts separately.<br>$(4+3i)+(-1+2i) = 3+5i$<br>$(5-2i)-(3+4i) = 2-6i$</p><p><strong>Quadratic with negative discriminant:</strong><br>When $D = b^2 - 4ac < 0$, the roots are complex.<br>e.g. $x^2+2x+10=0$:<br>$x = \dfrac{-2\pm\sqrt{-36}}{2} = \dfrac{-2\pm 6i}{2} = -1 \pm 3i$</p></div>
@@ -180,47 +199,4 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 <div class="pr-row">
   <div class="pr-num">2.</div>
   <div class="pr-prob">Simplify $\sqrt{-12}$.</div>
-  <div class="pr-ans instructor">$\sqrt{12} \cdot i = 2\sqrt{3}\,i$</div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">3.</div>
-  <div class="pr-prob">Add $(2+5i)+(3-2i)$.</div>
-  <div class="pr-ans instructor">$5+3i$</div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">4.</div>
-  <div class="pr-prob">Subtract $(6+i)-(4-3i)$.</div>
-  <div class="pr-ans instructor">$2+4i$</div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">5.</div>
-  <div class="pr-prob">Solve $x^2+9=0$.</div>
-  <div class="pr-ans instructor">$D=-36<0$; $x=\pm 3i$</div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">6.</div>
-  <div class="pr-prob">What is the real part and imaginary part of $-4+7i$?</div>
-  <div class="pr-ans instructor">Real part: $-4$; imaginary part: $7$</div>
-</div>
-</div>
-
-</div>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/contrib/auto-render.min.js"></script>
-<script>
-function toggleAns(btn) {
-  if (!btn.dataset.orig) btn.dataset.orig = btn.textContent;
-  var ans = btn.nextElementSibling;
-  var showing = ans.classList.toggle('visible');
-  btn.textContent = showing ? 'Hide' : btn.dataset.orig;
-}
-  renderMathInElement(document.body, {
-    delimiters: [
-      {left: '$$', right: '$$', display: true},
-      {left: '$',  right: '$',  display: false}
-    ],
-    throwOnError: false
-  });
-</script>
-</body>
-</html>
+  <div class="pr-ans instructor">$\sqrt{12} \cdot i = 2\sq

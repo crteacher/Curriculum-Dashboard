@@ -140,6 +140,18 @@ details[open]>.proof-toggle{color:#1e3a5c}
 .proof-body p{margin-bottom:.45rem}
 .proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
 @media print{.proof-panel{display:none}}
+.mistake-panel{margin:.4rem 0 1.1rem;border-left:3px solid #b8860b;border-radius:0 6px 6px 0;background:#fdf8e8}
+.mistake-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#9a6a00;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.mistake-toggle::-webkit-details-marker{display:none}
+details[open]>.mistake-toggle{color:#1e3a5c}
+.mistake-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #e8d8a8}
+.mistake-body p{margin-bottom:.45rem}
+.panel-row{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.1rem}
+.panel-row>.proof-panel,.panel-row>.mistake-panel{margin:0;min-width:0}
+@media print{
+  .panel-row{break-inside:avoid}
+  .mistake-panel{break-inside:avoid}
+}
 </style>
 </head>
 <body>
@@ -150,6 +162,7 @@ details[open]>.proof-toggle{color:#1e3a5c}
 <div class="two-col">
 <div class="col"><div class="section-head">The Method</div>
 <div class="accent-box"><p><strong>Distinct linear factors:</strong><br>$\dfrac{p(x)}{(x-a)(x-b)}=\dfrac{A}{x-a}+\dfrac{B}{x-b}$</p><p><strong>Repeated linear:</strong><br>$\dfrac{p(x)}{(x-a)^2}=\dfrac{A}{x-a}+\dfrac{B}{(x-a)^2}$</p><p><strong>Irreducible quadratic:</strong><br>$\dfrac{p(x)}{(x-a)(x^2+bx+c)}=\dfrac{A}{x-a}+\dfrac{Bx+C}{x^2+bx+c}$</p></div>
+<div class="panel-row">
 <details class="proof-panel">
 <summary class="proof-toggle">▸ Show Proof</summary>
 <div class="proof-body">
@@ -163,9 +176,24 @@ details[open]>.proof-toggle{color:#1e3a5c}
   <p class="proof-qed">∎</p>
 </div>
 </details>
+<details class="mistake-panel">
+<summary class="mistake-toggle">▸ Common Mistake</summary>
+<div class="mistake-body">
+  <p>For a repeated factor like $(x-a)^2$, students set up only $\dfrac{A}{(x-a)^2}$ and skip the lower-power term entirely, instead of the correct $\dfrac{A}{x-a}+\dfrac{B}{(x-a)^2}$. The template needs one unknown constant for <em>every</em> power from 1 up to the multiplicity — a factor of $(x-a)^3$ needs three terms: $\dfrac{A}{x-a}+\dfrac{B}{(x-a)^2}+\dfrac{C}{(x-a)^3}$, not just the highest power alone.</p>
+  <p>The same applies to the irreducible-quadratic case: the numerator over $x^2+bx+c$ must be a full linear expression $Bx+C$ (two unknowns), never just a constant $B$. Leaving out a term shrinks the number of unknowns below the number of equations you'll generate when clearing denominators, so the system becomes unsolvable or forces a wrong answer.</p>
+</div>
+</details>
+</div>
 </div>
 <div class="col"><div class="section-head">Steps</div>
 <div class="accent-box"><p>1. If degree of numerator $\geq$ degree of denominator, do polynomial long division first.</p><p>2. Factor the denominator completely.</p><p>3. Write the partial fraction form.</p><p>4. Multiply both sides by the denominator; equate coefficients or plug in roots.</p><p>5. Integrate each term.</p></div>
+<details class="mistake-panel">
+<summary class="mistake-toggle">▸ Common Mistake</summary>
+<div class="mistake-body">
+  <p>Students skip Step 1 and attempt partial fractions directly on an improper fraction — where the numerator's degree is $\geq$ the denominator's degree. For $\dfrac{x^3}{x^2-1}$, setting up $\dfrac{A}{x-1}+\dfrac{B}{x+1}$ without dividing first can't work: that template only produces proper fractions (numerator degree less than denominator degree), so it's structurally incapable of representing $x^3$ over a quadratic.</p>
+  <p>Always compare degrees first. If numerator degree $\geq$ denominator degree, do polynomial long division to get a polynomial plus a proper remainder fraction, <em>then</em> decompose the remainder. Skipping this step doesn't just make the algebra messier — it produces an inconsistent system with no valid solution.</p>
+</div>
+</details>
 </div>
 </div>
 <div class="section-head">Worked Examples</div>
@@ -178,71 +206,4 @@ details[open]>.proof-toggle{color:#1e3a5c}
 <div class="ex-block">
   <div class="ex-label">Example 2 &nbsp;&mdash;&nbsp; Repeated root</div>
   <div class="ex-body">$\int\dfrac{x}{(x-1)^2}\,dx$</div>
-  <div class="ex-answer instructor">$=\dfrac{A}{x-1}+\dfrac{B}{(x-1)^2}$; $A=1$, $B=1$.<br>$=\ln|x-1|-\dfrac{1}{x-1}+C$</div>
-</div>
-<div class="ex-block">
-  <div class="ex-label">Example 3 &nbsp;&mdash;&nbsp; Irreducible quadratic</div>
-  <div class="ex-body">$\int\dfrac{x^2+x+1}{x(x^2+1)}\,dx$</div>
-  <div class="ex-answer instructor">$=\dfrac{A}{x}+\dfrac{Bx+C}{x^2+1}$; $A=1$, $B=0$, $C=1$.<br>$=\ln|x|+\arctan x+C$</div>
-</div>
-<div class="ex-block">
-  <div class="ex-label">Example 4 &nbsp;&mdash;&nbsp; Long division first</div>
-  <div class="ex-body">$\int\dfrac{x^3}{x^2-1}\,dx$</div>
-  <div class="ex-answer instructor">Long div: $x+\dfrac{x}{x^2-1}=x+\dfrac{1/2}{x-1}+\dfrac{1/2}{x+1}$<br>$=\dfrac{x^2}{2}+\dfrac{1}{2}\ln|x^2-1|+C$</div>
-</div>
-</div>
-<div class="section-head">Practice Problems</div>
-<div class="practice">
-<div class="pr-row">
-  <div class="pr-num">1.</div>
-  <div class="pr-prob">$\int\dfrac{1}{x^2-4}\,dx$</div>
-  <div class="pr-ans instructor">$\dfrac{1}{4}\ln\left|\dfrac{x-2}{x+2}\right|+C$</div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">2.</div>
-  <div class="pr-prob">$\int\dfrac{3x-1}{(x+1)(x-2)}\,dx$</div>
-  <div class="pr-ans instructor">$\dfrac{4}{3}\ln|x+1|+\dfrac{5}{3}\ln|x-2|+C$</div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">3.</div>
-  <div class="pr-prob">$\int\dfrac{1}{x(x^2+4)}\,dx$</div>
-  <div class="pr-ans instructor">$\dfrac{1}{4}\ln|x|-\dfrac{1}{8}\ln(x^2+4)+C$</div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">4.</div>
-  <div class="pr-prob">$\int\dfrac{x+2}{x^2-3x+2}\,dx$</div>
-  <div class="pr-ans instructor">$4\ln|x-2|-3\ln|x-1|+C$</div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">5.</div>
-  <div class="pr-prob">$\int_0^1\dfrac{1}{(x+1)(x+2)}\,dx$</div>
-  <div class="pr-ans instructor">$\ln\dfrac{4}{3}$</div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">6.</div>
-  <div class="pr-prob">$\int\dfrac{2x^3+x^2}{x^2+1}\,dx$ (long div first)</div>
-  <div class="pr-ans instructor">$x^2+x-\ln(x^2+1)-\arctan x+C$</div>
-</div>
-</div>
-
-</div>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/contrib/auto-render.min.js"></script>
-<script>
-function toggleAns(btn) {
-  if (!btn.dataset.orig) btn.dataset.orig = btn.textContent;
-  var ans = btn.nextElementSibling;
-  var showing = ans.classList.toggle('visible');
-  btn.textContent = showing ? 'Hide' : btn.dataset.orig;
-}
-  renderMathInElement(document.body, {
-    delimiters: [
-      {left: '$$', right: '$$', display: true},
-      {left: '$',  right: '$',  display: false}
-    ],
-    throwOnError: false
-  });
-</script>
-<!-- proof-layer:done -->
-</body>
-</html>
+  <div class="ex-answer instruc

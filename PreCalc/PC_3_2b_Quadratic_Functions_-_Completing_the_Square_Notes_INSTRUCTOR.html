@@ -98,6 +98,13 @@ details[open]>.mistake-toggle{color:#1e3a5c}
   <p class="proof-qed">∎</p>
 </div>
 </details>
+<details class="mistake-panel">
+<summary class="mistake-toggle">▸ Common Mistake</summary>
+<div class="mistake-body">
+  <p>When $a\neq 1$, students often add $\left(\frac{b}{2}\right)^2$ instead of $\left(\frac{b}{2a}\right)^2$ inside the parentheses — or they compute the right constant but forget to multiply it by $a$ before moving it back outside.</p>
+  <p>In Example 2, $2(x^2+6x+9-9)+5$, the $-9$ sitting inside the parentheses is still being multiplied by the factored-out $2$; pulling it out means writing $-18$, not $-9$. Forgetting that factor is the single most common arithmetic slip in this process — it shifts the vertex's $y$-coordinate by exactly $a$ times the missed amount.</p>
+</div>
+</details>
 </div><div class="col"><div class="section-head">Quadratic Formula and Discriminant</div>
 <div class="accent-box"><p>For $ax^2+bx+c=0$:</p><p>$$x=\dfrac{-b\pm\sqrt{b^2-4ac}}{2a}$$</p><p><strong>Discriminant</strong> $D=b^2-4ac$:<br>$D>0$: two real zeros<br>$D=0$: one real zero (double root)<br>$D<0$: two complex conjugate zeros</p></div>
 <details class="proof-panel">
@@ -113,6 +120,13 @@ details[open]>.mistake-toggle{color:#1e3a5c}
   <p>$$x = \frac{-b\pm\sqrt{b^2-4ac}}{2a}.$$</p>
   <p>Notice the quantity under the root is exactly the discriminant $b^2-4ac$ — that is why its sign decides whether the roots are real or complex.</p>
   <p class="proof-qed">∎</p>
+</div>
+</details>
+<details class="mistake-panel">
+<summary class="mistake-toggle">▸ Common Mistake</summary>
+<div class="mistake-body">
+  <p>A frequent error is dividing only the square root by $2a$ instead of the entire numerator — writing $x=-b\pm\dfrac{\sqrt{b^2-4ac}}{2a}$ as if $-b$ weren't part of the fraction. The $2a$ applies to everything on top, $-b\pm\sqrt{b^2-4ac}$, because the formula comes from isolating $x$ after $x+\frac{b}{2a}=\pm\frac{\sqrt{b^2-4ac}}{2a}$ — that leftover $\frac{b}{2a}$ has to be combined over the same denominator, not left outside it.</p>
+  <p>The other half of this mistake is squaring $b$ carelessly: $b^2$ means squaring the whole coefficient including its sign, so for $b=-5$, $b^2=25$, not $-25$.</p>
 </div>
 </details>
 </div></div>
@@ -200,30 +214,4 @@ details[open]>.mistake-toggle{color:#1e3a5c}
 <div class="practice">
 <div class="pr-row"><div class="pr-num">1.</div><div class="pr-prob">Write $x^2+8x+3$ in vertex form.</div><div class="pr-ans instructor">$(x+4)^2-13$.</div></div>
 <div class="pr-row"><div class="pr-num">2.</div><div class="pr-prob">Use the quadratic formula to solve $x^2+4x+5=0$.</div><div class="pr-ans instructor">$D=16-20=-4<0$; $x=\dfrac{-4\pm 2i}{2}=-2\pm i$.</div></div>
-<div class="pr-row"><div class="pr-num">3.</div><div class="pr-prob">How many real solutions does $2x^2-4x+2=0$ have?</div><div class="pr-ans instructor">$D=16-16=0$; one real solution (double root).</div></div>
-<div class="pr-row"><div class="pr-num">4.</div><div class="pr-prob">Solve $x^2-5x+6=0$ by factoring.</div><div class="pr-ans instructor">$(x-2)(x-3)=0\Rightarrow x=2,3$.</div></div>
-<div class="pr-row"><div class="pr-num">5.</div><div class="pr-prob">Find the vertex of $f(x)=x^2+4x-1$ by completing the square.</div><div class="pr-ans instructor">$(x+2)^2-5$; vertex $(-2,-5)$.</div></div>
-<div class="pr-row"><div class="pr-num">6.</div><div class="pr-prob">A quadratic has roots $x=3\pm 2i$. State the discriminant.</div><div class="pr-ans instructor">$D<0$ (complex roots come from $D=-16$).</div></div>
-</div>
-
-</div>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/contrib/auto-render.min.js"></script>
-<script>
-function toggleAns(btn) {
-  if (!btn.dataset.orig) btn.dataset.orig = btn.textContent;
-  var ans = btn.nextElementSibling;
-  var showing = ans.classList.toggle('visible');
-  btn.textContent = showing ? 'Hide' : btn.dataset.orig;
-}
-renderMathInElement(document.body, {
-  delimiters: [
-    {left: '$$', right: '$$', display: true},
-    {left: '$',  right: '$',  display: false}
-  ],
-  throwOnError: false
-});
-</script>
-<!-- proof-layer:done -->
-</body>
-</html>
+<div class="pr
