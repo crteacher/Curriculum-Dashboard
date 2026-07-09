@@ -144,6 +144,15 @@ details[open]>.mistake-toggle{color:#1e3a5c}
   .panel-row{break-inside:avoid}
   .mistake-panel{break-inside:avoid}
 }
+
+.proof-panel{margin:.4rem 0 1.1rem;border-left:3px solid #7a9a6a;border-radius:0 6px 6px 0;background:#f5f7f3}
+.proof-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#5a7a4a;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.proof-toggle::-webkit-details-marker{display:none}
+details[open]>.proof-toggle{color:#1e3a5c}
+.proof-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #c8d8b8}
+.proof-body p{margin-bottom:.45rem}
+.proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
+@media print{.proof-panel{break-inside:avoid}}
 </style>
 </head>
 <body>
@@ -154,6 +163,15 @@ details[open]>.mistake-toggle{color:#1e3a5c}
 <div class="two-col">
 <div class="col"><div class="section-head">Absolute Value Equations</div>
 <div class="accent-box"><p><strong>Definition:</strong> $|x|$ = distance from 0 on the number line.</p><p><strong>To solve $|\text{expr}| = k$:</strong><br>If $k > 0$: set expr $= k$ or expr $= -k$, solve both.<br>If $k = 0$: set expr $= 0$, one solution.<br>If $k < 0$: no solution (distance can't be negative).</p><p><strong>Important:</strong> isolate the absolute value first before splitting into two cases.</p></div>
+<details class="proof-panel">
+<summary class="proof-toggle">▸ Show Proof</summary>
+<div class="proof-body">
+  <p>The key is the <em>geometric meaning</em> of absolute value: $|x|$ is the distance from $x$ to 0 on the number line. Distance is always non-negative, which is why $k &lt; 0$ gives no solutions.</p>
+  <p>When $|\text{expr}| = k$ with $k &gt; 0$: we need "expr" to be <em>exactly</em> $k$ units from 0. On the number line there are exactly two such positions — one to the right ($\text{expr} = k$) and one to the left ($\text{expr} = -k$). Those two cases are the only possibilities.</p>
+  <p>When $k = 0$: only one position is 0 units from 0, namely 0 itself, so there is exactly one solution. This is already covered by "$\text{expr} = k$" with $k = 0$.</p>
+  <p class="proof-qed">∎</p>
+</div>
+</details>
 <details class="mistake-panel">
 <summary class="mistake-toggle">▸ Common Mistake</summary>
 <div class="mistake-body">
@@ -165,6 +183,16 @@ details[open]>.mistake-toggle{color:#1e3a5c}
 </div>
 <div class="col"><div class="section-head">Absolute Value Inequalities</div>
 <div class="accent-box"><p><strong>Less than (between):</strong><br>$|\text{expr}| < k \Rightarrow -k < \text{expr} < k$<br>Solution is a single interval.</p><p><strong>Greater than (outside):</strong><br>$|\text{expr}| > k \Rightarrow \text{expr} < -k$ OR $\text{expr} > k$<br>Solution is a union of two intervals.</p><p>Remember: $\leq$ and $\geq$ follow the same pattern with closed brackets where needed.</p></div>
+<details class="proof-panel">
+<summary class="proof-toggle">▸ Show Proof</summary>
+<div class="proof-body">
+  <p>Both rules come from the distance interpretation. If $|x|$ is the distance from $x$ to 0, then:</p>
+  <p><strong>Less-than case:</strong> $|x| &lt; k$ means "x is <em>closer than</em> $k$ units to 0." All such points lie in a band of radius $k$ around 0: $-k &lt; x &lt; k$. That is the single interval $(-k, k)$.</p>
+  <p><strong>Greater-than case:</strong> $|x| &gt; k$ means "x is <em>farther than</em> $k$ units from 0." These are the points beyond the band — either to the right ($x &gt; k$) or to the left ($x &lt; -k$). That gives the union of two rays.</p>
+  <p>A sketch of the number line — with the band $(-k, k)$ marked — makes both rules immediate.</p>
+  <p class="proof-qed">∎</p>
+</div>
+</details>
 <details class="mistake-panel">
 <summary class="mistake-toggle">▸ Common Mistake</summary>
 <div class="mistake-body">
@@ -250,5 +278,6 @@ function toggleAns(btn) {
   });
 </script>
 <!-- mistake-layer:done -->
+<!-- proof-layer:done -->
 </body>
 </html>

@@ -132,6 +132,15 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   .svg-caption{font-size:9pt}
 }
 @page{margin:.55in .65in;size:letter}
+
+.proof-panel{margin:.4rem 0 1.1rem;border-left:3px solid #7a9a6a;border-radius:0 6px 6px 0;background:#f5f7f3}
+.proof-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#5a7a4a;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.proof-toggle::-webkit-details-marker{display:none}
+details[open]>.proof-toggle{color:#1e3a5c}
+.proof-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #c8d8b8}
+.proof-body p{margin-bottom:.45rem}
+.proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
+@media print{.proof-panel{break-inside:avoid}}
 </style>
 </head>
 <body>
@@ -142,9 +151,30 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 <div class="two-col">
 <div class="col"><div class="section-head">The Five Core Rules</div>
 <div class="accent-box"><p><strong>Product rule:</strong> $a^m \cdot a^n = a^{m+n}$</p><p><strong>Quotient rule:</strong> $\dfrac{a^m}{a^n} = a^{m-n}$</p><p><strong>Power of a power:</strong> $(a^m)^n = a^{mn}$</p><p><strong>Power of a product:</strong> $(ab)^n = a^n b^n$</p><p><strong>Power of a quotient:</strong> $\left(\dfrac{a}{b}\right)^n = \dfrac{a^n}{b^n}$</p></div>
+<details class="proof-panel">
+<summary class="proof-toggle">▸ Show Proof</summary>
+<div class="proof-body">
+  <p>The product rule answers the opening question: why does $a^m \cdot a^n = a^{m+n}$?</p>
+  <p>Write out what each power means: $a^m$ is $a$ multiplied by itself $m$ times, and $a^n$ is $a$ multiplied $n$ times. Putting them together gives $m+n$ copies of $a$:</p>
+  <p>$$a^m \cdot a^n = \underbrace{(a \cdot a \cdots a)}_{m\text{ copies}} \cdot \underbrace{(a \cdot a \cdots a)}_{n\text{ copies}} = \underbrace{a \cdot a \cdots a}_{m+n\text{ copies}} = a^{m+n}$$</p>
+  <p>Example: $2^3 \cdot 2^4 = (2\cdot2\cdot2)(2\cdot2\cdot2\cdot2) = 2^7 = 128$.</p>
+  <p>The other four rules follow the same idea: the power-of-power rule stacks repeated multiplication, and the product/quotient rules for powers distribute the exponent across factors.</p>
+  <p class="proof-qed">∎</p>
+</div>
+</details>
 </div>
 <div class="col"><div class="section-head">Zero, Negative &amp; Fractional Exponents</div>
 <div class="accent-box"><p><strong>Zero exponent:</strong> $a^0 = 1$ &nbsp; ($a \neq 0$)</p><p><strong>Negative exponent:</strong> $a^{-n} = \dfrac{1}{a^n}$</p><p><strong>Fractional exponent:</strong> $a^{1/n} = \sqrt[n]{a}$ &nbsp; and &nbsp; $a^{m/n} = \left(\sqrt[n]{a}\right)^m$<br>e.g. $27^{2/3} = (\sqrt[3]{27})^2 = 3^2 = 9$</p></div>
+<details class="proof-panel">
+<summary class="proof-toggle">▸ Show Proof</summary>
+<div class="proof-body">
+  <p>Each extended rule is forced by demanding consistency with the product rule $a^m \cdot a^n = a^{m+n}$.</p>
+  <p><strong>Zero exponent:</strong> $a^m \cdot a^0 = a^{m+0} = a^m$. Dividing both sides by $a^m$ gives $a^0 = 1$ (for $a\neq 0$).</p>
+  <p><strong>Negative exponent:</strong> $a^n \cdot a^{-n} = a^{n+(-n)} = a^0 = 1$. So $a^{-n}$ is the reciprocal of $a^n$: $a^{-n} = \dfrac{1}{a^n}$.</p>
+  <p><strong>Fractional exponent:</strong> $(a^{1/n})^n = a^{(1/n)\cdot n} = a^1 = a$ by the power-of-power rule. So $a^{1/n}$ is the number whose $n$th power is $a$ &mdash; that is exactly $\sqrt[n]{a}$ by definition. Then $a^{m/n} = (a^{1/n})^m = (\sqrt[n]{a})^m$.</p>
+  <p class="proof-qed">∎</p>
+</div>
+</details>
 <p class="body-text">Final answers should have no negative exponents and no parentheses.</p>
 </div>
 </div>
@@ -223,5 +253,6 @@ function toggleAns(btn) {
     throwOnError: false
   });
 </script>
+<!-- proof-layer:done -->
 </body>
 </html>

@@ -132,6 +132,15 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   .svg-caption{font-size:9pt}
 }
 @page{margin:.55in .65in;size:letter}
+
+.proof-panel{margin:.4rem 0 1.1rem;border-left:3px solid #7a9a6a;border-radius:0 6px 6px 0;background:#f5f7f3}
+.proof-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#5a7a4a;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.proof-toggle::-webkit-details-marker{display:none}
+details[open]>.proof-toggle{color:#1e3a5c}
+.proof-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #c8d8b8}
+.proof-body p{margin-bottom:.45rem}
+.proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
+@media print{.proof-panel{break-inside:avoid}}
 </style>
 </head>
 <body>
@@ -142,10 +151,35 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 <div class="two-col">
 <div class="col"><div class="section-head">FOIL &mdash; General Binomials</div>
 <div class="accent-box"><p><strong>$(a+b)(c+d) = ac + ad + bc + bd$</strong></p><p><strong>F</strong>irst &nbsp;&middot;&nbsp; <strong>O</strong>uter &nbsp;&middot;&nbsp; <strong>I</strong>nner &nbsp;&middot;&nbsp; <strong>L</strong>ast</p><p>e.g. $(x+2)(x+7)$:<br>F: $x \cdot x = x^2$<br>O: $x \cdot 7 = 7x$<br>I: $2 \cdot x = 2x$<br>L: $2 \cdot 7 = 14$<br>$= x^2 + 9x + 14$</p></div>
+<details class="proof-panel">
+<summary class="proof-toggle">▸ Show Proof</summary>
+<div class="proof-body">
+  <p>FOIL is just the distributive property applied twice. Start with $(a+b)(c+d)$.</p>
+  <p><strong>Step 1:</strong> Treat $(a+b)$ as a single chunk and distribute over $(c+d)$:</p>
+  <p>$$(a+b)(c+d) = (a+b)\cdot c + (a+b)\cdot d$$</p>
+  <p><strong>Step 2:</strong> Distribute each piece again:</p>
+  <p>$$= ac + bc + ad + bd$$</p>
+  <p>Reordering: $ac + ad + bc + bd$ &mdash; the four FOIL products. No new rule needed; it's the distributive property used twice.</p>
+  <p class="proof-qed">∎</p>
+</div>
+</details>
 <p class="body-text">Combine like terms (the outer and inner products) to get the final trinomial.</p>
 </div>
 <div class="col"><div class="section-head">Special Patterns</div>
 <div class="accent-box"><p><strong>Difference of squares:</strong><br>$(a+b)(a-b) = a^2 - b^2$<br>e.g. $(x+6)(x-6) = x^2 - 36$</p><p><strong>Perfect square trinomial:</strong><br>$(a+b)^2 = a^2 + 2ab + b^2$<br>$(a-b)^2 = a^2 - 2ab + b^2$<br>e.g. $(x+5)^2 = x^2 + 10x + 25$</p><p><strong>Tip:</strong> recognizing these patterns saves time and prevents sign errors.</p></div>
+<details class="proof-panel">
+<summary class="proof-toggle">▸ Show Proof</summary>
+<div class="proof-body">
+  <p>Both patterns follow directly from FOIL.</p>
+  <p><strong>Difference of squares:</strong> Apply FOIL to $(a+b)(a-b)$:</p>
+  <p>$$a^2 - ab + ab - b^2 = a^2 - b^2$$</p>
+  <p>The outer and inner products ($-ab$ and $+ab$) cancel exactly &mdash; that's why there's no middle term.</p>
+  <p><strong>Perfect square:</strong> $(a+b)^2 = (a+b)(a+b)$. Apply FOIL:</p>
+  <p>$$a^2 + ab + ab + b^2 = a^2 + 2ab + b^2$$</p>
+  <p>The two middle terms are identical and combine to $2ab$.</p>
+  <p class="proof-qed">∎</p>
+</div>
+</details>
 </div>
 </div>
 <div class="section-head">Worked Examples</div>
@@ -223,5 +257,6 @@ function toggleAns(btn) {
     throwOnError: false
   });
 </script>
+<!-- proof-layer:done -->
 </body>
 </html>

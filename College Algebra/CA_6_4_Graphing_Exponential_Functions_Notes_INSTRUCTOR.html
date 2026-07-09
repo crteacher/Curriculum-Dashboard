@@ -132,6 +132,15 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   .svg-caption{font-size:9pt}
 }
 @page{margin:.55in .65in;size:letter}
+
+.proof-panel{margin:.4rem 0 1.1rem;border-left:3px solid #7a9a6a;border-radius:0 6px 6px 0;background:#f5f7f3}
+.proof-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#5a7a4a;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.proof-toggle::-webkit-details-marker{display:none}
+details[open]>.proof-toggle{color:#1e3a5c}
+.proof-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #c8d8b8}
+.proof-body p{margin-bottom:.45rem}
+.proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
+@media print{.proof-panel{break-inside:avoid}}
 </style>
 </head>
 <body>
@@ -142,6 +151,16 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 <div class="two-col">
 <div class="col"><div class="section-head">Key Features of $y = a \cdot b^x$</div>
 <div class="accent-box"><p><strong>y-intercept:</strong> $(0, a)$ &mdash; always</p><p><strong>Multiply-by-$b$ pattern:</strong> each unit increase in $x$ multiplies $y$ by $b$</p><p><strong>Horizontal asymptote:</strong> $y = 0$ (curve approaches but never touches)</p><p><strong>Domain:</strong> $(-\infty, \infty)$</p><p><strong>Range:</strong> $(0, \infty)$ when $a > 0$</p></div>
+<details class="proof-panel">
+<summary class="proof-toggle">▸ Show Proof</summary>
+<div class="proof-body">
+  <p><strong>y-intercept is $(0, a)$:</strong> Plug $x = 0$ into $y = a \cdot b^x$:</p>
+  <p>$$y = a \cdot b^0 = a \cdot 1 = a$$</p>
+  <p>Since $b^0 = 1$ for any valid base ($b \neq 0$), the initial value $a$ is always the $y$-intercept &mdash; no matter what the base is.</p>
+  <p><strong>Horizontal asymptote is $y = 0$:</strong> For $a > 0$ and $b > 1$, the function grows without bound as $x \to +\infty$. But as $x \to -\infty$, $b^x = 1/b^{|x|} \to 0$ because we're dividing by larger and larger numbers. The function approaches $0$ but never equals $0$, because $b^x > 0$ for all real $x$ &mdash; no finite power of a positive number is zero. Hence $y = 0$ is a horizontal asymptote, never reached.</p>
+  <p class="proof-qed">∎</p>
+</div>
+</details>
 <p class="body-text">To build a table: start at $(0, a)$, then multiply by $b$ for each step right.</p>
 </div>
 <div class="col"><div class="section-head">Growth vs. Decay Shape</div>
@@ -223,5 +242,6 @@ function toggleAns(btn) {
     throwOnError: false
   });
 </script>
+<!-- proof-layer:done -->
 </body>
 </html>

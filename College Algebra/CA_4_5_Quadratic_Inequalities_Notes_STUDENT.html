@@ -132,6 +132,27 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   .svg-caption{font-size:9pt}
 }
 @page{margin:.55in .65in;size:letter}
+.mistake-panel{margin:.4rem 0 1.1rem;border-left:3px solid #b8860b;border-radius:0 6px 6px 0;background:#fdf8e8}
+.mistake-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#9a6a00;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.mistake-toggle::-webkit-details-marker{display:none}
+details[open]>.mistake-toggle{color:#1e3a5c}
+.mistake-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #e8d8a8}
+.mistake-body p{margin-bottom:.45rem}
+.panel-row{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.1rem}
+.panel-row>.proof-panel,.panel-row>.mistake-panel{margin:0;min-width:0}
+@media print{
+  .panel-row{break-inside:avoid}
+  .mistake-panel{break-inside:avoid}
+}
+
+.proof-panel{margin:.4rem 0 1.1rem;border-left:3px solid #7a9a6a;border-radius:0 6px 6px 0;background:#f5f7f3}
+.proof-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#5a7a4a;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.proof-toggle::-webkit-details-marker{display:none}
+details[open]>.proof-toggle{color:#1e3a5c}
+.proof-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #c8d8b8}
+.proof-body p{margin-bottom:.45rem}
+.proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
+@media print{.proof-panel{break-inside:avoid}}
 </style>
 </head>
 <body>
@@ -142,9 +163,35 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 <div class="two-col">
 <div class="col"><div class="section-head">The Sign Chart Method</div>
 <div class="accent-box"><p><strong>5 steps:</strong></p><ol style='margin-left:1.2rem;margin-top:.3rem'><li>Move everything to one side: $f(x) \lessgtr 0$</li><li>Find the roots by factoring or quadratic formula</li><li>Plot roots on a number line &mdash; these are the boundary points</li><li>Test a value from each region</li><li>Select regions where $f(x)$ has the correct sign</li></ol><p><strong>Note:</strong> use $( )$ for strict inequalities ($<$, $>$) and $[ ]$ for $\leq$, $\geq$.</p></div>
+<details class="mistake-panel">
+<summary class="mistake-toggle">▸ Common Mistake</summary>
+<div class="mistake-body">
+  <p>Students often skip "test a value from each region" once they have the roots, assuming the sign just alternates $+,-,+,-,\dots$ as you cross each boundary point — left to right, flip every time. That pattern holds for distinct roots, but it breaks down for a repeated root.</p>
+  <p>For $x^2-6x+9<0$, i.e. $(x-3)^2<0$: the sign chart has only one boundary at $x=3$, but $(x-3)^2$ is $\geq0$ on <strong>both</strong> sides — it never goes negative, so there's no solution at all. Always test a point in each region rather than trusting an alternating pattern.</p>
+</div>
+</details>
 </div>
 <div class="col"><div class="section-head">Quick Patterns (Opens Up)</div>
 <div class="accent-box"><p>For $ax^2 + bx + c$ with $a > 0$ and roots $r_1 < r_2$:</p><p><strong>$f(x) < 0$:</strong> between the roots &rarr; $(r_1, r_2)$</p><p><strong>$f(x) > 0$:</strong> outside the roots &rarr; $(-\infty, r_1) \cup (r_2, \infty)$</p><p>e.g. $x^2 - 6x + 8 < 0$: roots $x=2, x=4$<br>Parabola opens up &rarr; negative between roots &rarr; $(2, 4)$</p></div>
+<details class="proof-panel">
+<summary class="proof-toggle">▸ Show Proof</summary>
+<div class="proof-body">
+  <p>Write the quadratic in factored form: $f(x) = a(x-r_1)(x-r_2)$ with $a > 0$ and $r_1 < r_2$.</p>
+  <p>The sign of $f(x)$ depends on the signs of the two factors $(x-r_1)$ and $(x-r_2)$:</p>
+  <p><strong>Outside left</strong> ($x < r_1$): both $(x-r_1) < 0$ and $(x-r_2) < 0$. Product of two negatives is positive. $f(x) > 0$. &#x2713;</p>
+  <p><strong>Between</strong> ($r_1 < x < r_2$): $(x-r_1) > 0$ but $(x-r_2) < 0$. Product of opposite signs is negative. $f(x) < 0$. &#x2713;</p>
+  <p><strong>Outside right</strong> ($x > r_2$): both factors positive. $f(x) > 0$. &#x2713;</p>
+  <p>For $a < 0$, multiply through by $-1$: all signs flip, so the pattern reverses.</p>
+  <p class="proof-qed">∎</p>
+</div>
+</details>
+<details class="mistake-panel">
+<summary class="mistake-toggle">▸ Common Mistake</summary>
+<div class="mistake-body">
+  <p>For something like $x^2-9\geq0$, students often take a "square root" shortcut straight to $x\geq3$, the same instinct that works for equations like $x^2=9$. But an inequality has a whole outside region, not just one branch.</p>
+  <p>Here $x^2-9\geq0$ factors as roots $x=\pm3$, and since the pattern is "outside the roots" for $f(x)>0$ with $a>0$, the actual solution is $(-\infty,-3]\cup[3,\infty)$ — both branches, not just the positive one. Whenever you see $x^2 > k$ (or $\geq$), remember it opens outward in <strong>both</strong> directions.</p>
+</div>
+</details>
 <p class="body-text">For $a < 0$ (opens down), reverse the pattern.</p>
 </div>
 </div>
@@ -223,5 +270,7 @@ function toggleAns(btn) {
     throwOnError: false
   });
 </script>
+<!-- mistake-layer:done -->
+<!-- proof-layer:done -->
 </body>
 </html>

@@ -132,6 +132,15 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   .svg-caption{font-size:9pt}
 }
 @page{margin:.55in .65in;size:letter}
+
+.proof-panel{margin:.4rem 0 1.1rem;border-left:3px solid #7a9a6a;border-radius:0 6px 6px 0;background:#f5f7f3}
+.proof-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#5a7a4a;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.proof-toggle::-webkit-details-marker{display:none}
+details[open]>.proof-toggle{color:#1e3a5c}
+.proof-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #c8d8b8}
+.proof-body p{margin-bottom:.45rem}
+.proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
+@media print{.proof-panel{break-inside:avoid}}
 </style>
 </head>
 <body>
@@ -146,6 +155,16 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 </div>
 <div class="col"><div class="section-head">Solving Inequalities</div>
 <div class="accent-box"><p><strong>Solve like an equation, with one rule:</strong><br>Multiplying or dividing by a <em>negative</em> number flips the inequality sign.</p><p>e.g. $-2x &lt; 6 \Rightarrow x &gt; -3$</p><p><strong>Double inequality (between):</strong><br>Apply operations to all three parts simultaneously.<br>e.g. $1 &lt; 2x - 3 &lt; 9$:<br>$4 &lt; 2x &lt; 12 \Rightarrow 2 &lt; x &lt; 6$<br>Interval: $(2, 6)$</p></div>
+<details class="proof-panel">
+<summary class="proof-toggle">▸ Show Proof</summary>
+<div class="proof-body">
+  <p>Think about what $a &lt; b$ really means: $a$ is to the <em>left</em> of $b$ on the number line, so $b - a &gt; 0$ (positive).</p>
+  <p>Now multiply both sides by $-1$. We get $-a$ and $-b$. To decide their order, compute their difference: $(-b) - (-a) = a - b = -(b - a)$. Since $b - a &gt; 0$, this equals a <em>negative</em> number, so $-b &lt; -a$, i.e., $-a &gt; -b$. <strong>The direction flipped.</strong></p>
+  <p>Multiplying by any negative $c &lt; 0$ is the same as multiplying by positive $|c|$ (preserves order) then by $-1$ (flips it) — so the net effect is always a flip. Division by a negative works the same way since dividing by $c$ equals multiplying by $1/c$, which is also negative.</p>
+  <p class="proof-qed">∎</p>
+</div>
+</details>
+
 </div>
 </div>
 <div class="section-head">Worked Examples</div>
@@ -223,5 +242,6 @@ function toggleAns(btn) {
     throwOnError: false
   });
 </script>
+<!-- proof-layer:done -->
 </body>
 </html>
