@@ -86,16 +86,8 @@ details[open]>.mistake-toggle{color:#1e3a5c}
 <div class="opening-q">Given $f(x)=(x+2)^2(x-3)$, can you sketch its graph without a calculator? What features do you need to find first?</div>
 <div class="two-col"><div class="col"><div class="section-head">Graphing Strategy</div>
 <div class="accent-box"><p><strong>Steps to graph a polynomial:</strong></p><ol style='margin-left:1.1rem'><li>Find zeros and their multiplicities.</li><li>Find the $y$-intercept ($x=0$).</li><li>Determine end behavior.</li><li>Sketch: cross at odd-mult zeros, bounce at even-mult zeros.</li><li>Check sign between zeros.</li></ol></div>
-<details class="mistake-panel">
-<summary class="mistake-toggle">▸ Common Mistake</summary>
-<div class="mistake-body">
-  <p>When evaluating the $y$-intercept of a factored polynomial, students mishandle negative numbers raised to even powers — for $g(x)=-2(x+2)(x-2)^2$, computing $g(0)=-2(2)(-4)^2$ requires squaring $-4$ first to get $+16$, then multiplying: $-2(2)(16)=-64$. It's easy to instead compute $(-4)^2$ as $-16$ (treating the negative sign as if it survives squaring), which flips the sign of the whole answer.</p>
-  <p>Always square first, before attaching any other sign: $(-4)^2=16$, full stop, regardless of what's multiplying it. A negative number squared is positive — there is no version of this rule that depends on context.</p>
-</div>
-</details>
 </div><div class="col"><div class="section-head">Increasing, Decreasing, Local Extrema</div>
 <div class="accent-box"><p>At local maxima/minima the graph changes direction.</p><p>A degree-$n$ polynomial has at most $n-1$ turning points.</p><p><strong>Sign chart:</strong> pick test values between zeros; the sign of $f$ at each test point tells you if the graph is above or below the $x$-axis on that interval.</p></div>
-<div class="panel-row">
 <details class="proof-panel">
 <summary class="proof-toggle">▸ Geometric Argument</summary>
 <div class="proof-body">
@@ -107,14 +99,6 @@ details[open]>.mistake-toggle{color:#1e3a5c}
   <p class="proof-qed">∎</p>
 </div>
 </details>
-<details class="mistake-panel">
-<summary class="mistake-toggle">▸ Common Mistake</summary>
-<div class="mistake-body">
-  <p>Students read "at most $n-1$ turning points" as "exactly $n-1$ turning points" and expect every degree-$n$ polynomial to wiggle the maximum amount. It's an upper bound, not a guarantee: $f(x)=x^3$ has degree 3 (so at most 2 turning points allowed) but actually has <em>zero</em> — it's monotonically increasing everywhere, just with a flattening inflection point at the origin, which is not the same thing as a turn.</p>
-  <p>That distinction matters: an inflection point is where concavity changes, while a turning point is where the graph switches from rising to falling (or vice versa). A polynomial can have inflection points without turning points at that location. Don't assume the bound is achieved — always verify the actual shape with a sign chart or test values.</p>
-</div>
-</details>
-</div>
 <p class="body-text">Combine all features (zeros, $y$-int, end behavior, sign chart) to get a complete rough sketch.</p>
 </div></div>
 <div class="section-head">Worked Examples</div>
@@ -127,4 +111,31 @@ details[open]>.mistake-toggle{color:#1e3a5c}
 <div class="section-head">Practice Problems</div>
 <div class="practice">
 <div class="pr-row"><div class="pr-num">1.</div><div class="pr-prob">Find zeros and multiplicities: $f(x)=(x-1)^3(x+2)$.</div><div class="pr-ans instructor">$x=1$ (mult 3, crosses), $x=-2$ (mult 1, crosses).</div></div>
-<di
+<div class="pr-row"><div class="pr-num">2.</div><div class="pr-prob">Find the $y$-intercept of $f(x)=(x+1)^2(x-2)$.</div><div class="pr-ans instructor">$f(0)=(1)(-2)=-2$.</div></div>
+<div class="pr-row"><div class="pr-num">3.</div><div class="pr-prob">Describe end behavior of $f(x)=-x^4+3x^2$.</div><div class="pr-ans instructor">$a_n=-1<0$, even degree: both ends go to $-\infty$.</div></div>
+<div class="pr-row"><div class="pr-num">4.</div><div class="pr-prob">Sketch $f(x)=x(x-2)(x+1)$. Identify crossing points.</div><div class="pr-ans instructor">Zeros at $x=-1, 0, 2$, all odd mult — all crossings.</div></div>
+<div class="pr-row"><div class="pr-num">5.</div><div class="pr-prob">How many local extrema can $f(x)=(x^2-1)^2$ have?</div><div class="pr-ans instructor">Degree 4: at most 3 turning points. (It has 3: a local max and two local min.)</div></div>
+<div class="pr-row"><div class="pr-num">6.</div><div class="pr-prob">Write a degree-4 poly with zeros $0$ (mult 2) and $3$ (mult 2).</div><div class="pr-ans instructor">$f(x)=x^2(x-3)^2$.</div></div>
+</div>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/contrib/auto-render.min.js"></script>
+<script>
+function toggleAns(btn) {
+  if (!btn.dataset.orig) btn.dataset.orig = btn.textContent;
+  var ans = btn.nextElementSibling;
+  var showing = ans.classList.toggle('visible');
+  btn.textContent = showing ? 'Hide' : btn.dataset.orig;
+}
+renderMathInElement(document.body, {
+  delimiters: [
+    {left: '$$', right: '$$', display: true},
+    {left: '$',  right: '$',  display: false}
+  ],
+  throwOnError: false
+});
+</script>
+<!-- proof-layer:done -->
+</body>
+</html>

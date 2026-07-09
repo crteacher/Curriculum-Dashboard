@@ -132,18 +132,6 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   .svg-caption{font-size:9pt}
 }
 @page{margin:.55in .65in;size:letter}
-.mistake-panel{margin:.4rem 0 1.1rem;border-left:3px solid #b8860b;border-radius:0 6px 6px 0;background:#fdf8e8}
-.mistake-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#9a6a00;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
-.mistake-toggle::-webkit-details-marker{display:none}
-details[open]>.mistake-toggle{color:#1e3a5c}
-.mistake-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #e8d8a8}
-.mistake-body p{margin-bottom:.45rem}
-.panel-row{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.1rem}
-.panel-row>.proof-panel,.panel-row>.mistake-panel{margin:0;min-width:0}
-@media print{
-  .panel-row{break-inside:avoid}
-  .mistake-panel{break-inside:avoid}
-}
 </style>
 </head>
 <body>
@@ -154,23 +142,9 @@ details[open]>.mistake-toggle{color:#1e3a5c}
 <div class="two-col">
 <div class="col"><div class="section-head">Positive &amp; Negative</div>
 <div class="accent-box"><p><strong>Positive:</strong> $f(x) > 0$ &mdash; graph is <em>above</em> the x-axis.</p><p><strong>Negative:</strong> $f(x) < 0$ &mdash; graph is <em>below</em> the x-axis.</p><p>Describe using the x-interval where the condition holds.</p><p>e.g. $f(x) = 3x - 9$:<br>$f(x) > 0$ when $3x - 9 > 0 \Rightarrow x > 3$<br>Positive on $(3, \infty)$</p><p>The sign changes at x-intercepts.</p></div>
-<details class="mistake-panel">
-<summary class="mistake-toggle">▸ Common Mistake</summary>
-<div class="mistake-body">
-  <p>Students often answer with a $y$-based description — "positive when $y>0$" — instead of naming the $x$-interval where that happens. But $f(x)>0$ is a statement about which <em>inputs</em> produce positive outputs, so the answer has to be an interval on the $x$-axis, like $(3,\infty)$, not a restatement of the inequality itself.</p>
-  <p>The habit comes from treating the sign condition as the answer rather than as the equation to solve for $x$ — remember to actually solve $3x-9>0$ down to $x>3$ before writing the interval.</p>
-</div>
-</details>
 </div>
 <div class="col"><div class="section-head">Increasing &amp; Decreasing</div>
 <div class="accent-box"><p><strong>Increasing:</strong> as x increases, y increases &mdash; graph rises left to right.</p><p><strong>Decreasing:</strong> as x increases, y decreases &mdash; graph falls left to right.</p><p>For a line $y = mx + b$:<br>$m > 0$ &rarr; increasing on $(-\infty, \infty)$<br>$m < 0$ &rarr; decreasing on $(-\infty, \infty)$</p><p>e.g. $g(x) = -4x + 8$: slope $= -4 < 0$<br>Decreasing on $(-\infty, \infty)$</p></div>
-<details class="mistake-panel">
-<summary class="mistake-toggle">▸ Common Mistake</summary>
-<div class="mistake-body">
-  <p>It's easy to conflate "positive" with "increasing" — they sound like the same kind of good news about a graph, but they answer different questions. Positive/negative describes where the outputs sit relative to zero; increasing/decreasing describes which direction the graph is moving.</p>
-  <p>A line like $g(x)=-4x+8$ is decreasing everywhere (slope $-4<0$) yet still positive for $x<2$ — it's falling the whole time, just from a positive starting height. Always check slope for increasing/decreasing and check the sign of $f(x)$ separately; one doesn't imply the other.</p>
-</div>
-</details>
 </div>
 </div>
 <div class="section-head">Worked Examples</div>
@@ -206,4 +180,47 @@ details[open]>.mistake-toggle{color:#1e3a5c}
 <div class="pr-row">
   <div class="pr-num">2.</div>
   <div class="pr-prob">Find where $f(x) = -x + 3$ is negative.</div>
-  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-an
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$f < 0$ when $x > 3 \Rightarrow (3, \infty)$</div></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">3.</div>
+  <div class="pr-prob">Is $f(x) = 5x - 1$ increasing or decreasing?</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">Increasing on $(-\infty, \infty)$ (slope $= 5 > 0$)</div></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">4.</div>
+  <div class="pr-prob">Where does $f(x) = -3x + 6$ change sign?</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$-3x+6=0 \Rightarrow x=2$</div></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">5.</div>
+  <div class="pr-prob">Is $f(x) = 4x - 12$ positive or negative at $x = 2$?</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$f(2)=-4<0$ &rarr; negative</div></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">6.</div>
+  <div class="pr-prob">Find where $f(x) = x - 5$ is negative.</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$x < 5 \Rightarrow (-\infty, 5)$</div></div>
+</div>
+</div>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/contrib/auto-render.min.js"></script>
+<script>
+function toggleAns(btn) {
+  if (!btn.dataset.orig) btn.dataset.orig = btn.textContent;
+  var ans = btn.nextElementSibling;
+  var showing = ans.classList.toggle('visible');
+  btn.textContent = showing ? 'Hide' : btn.dataset.orig;
+}
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left: '$$', right: '$$', display: true},
+      {left: '$',  right: '$',  display: false}
+    ],
+    throwOnError: false
+  });
+</script>
+</body>
+</html>

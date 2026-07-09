@@ -115,18 +115,6 @@ details[open]>.proof-toggle{color:#1e3a5c}
 .proof-body p{margin-bottom:.45rem}
 .proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
 @media print{.proof-panel{break-inside:avoid}}
-.mistake-panel{margin:.4rem 0 1.1rem;border-left:3px solid #b8860b;border-radius:0 6px 6px 0;background:#fdf8e8}
-.mistake-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#9a6a00;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
-.mistake-toggle::-webkit-details-marker{display:none}
-details[open]>.mistake-toggle{color:#1e3a5c}
-.mistake-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #e8d8a8}
-.mistake-body p{margin-bottom:.45rem}
-.panel-row{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.1rem}
-.panel-row>.proof-panel,.panel-row>.mistake-panel{margin:0;min-width:0}
-@media print{
-  .panel-row{break-inside:avoid}
-  .mistake-panel{break-inside:avoid}
-}
 </style>
 </head>
 <body>
@@ -137,27 +125,82 @@ details[open]>.mistake-toggle{color:#1e3a5c}
 <div class="two-col">
 <div class="col"><div class="section-head">Critical Numbers</div>
 <div class="accent-box"><p>$c$ is a <strong>critical number</strong> of $f$ if $c$ is in the domain and:</p><ul>  <li>$f'(c)=0$, &ensp;OR</li>  <li>$f'(c)$ does not exist</li></ul><p>Absolute extrema can <em>only</em> occur at critical numbers or at the <em>endpoints</em> of a closed interval.</p></div>
-<details class="mistake-panel">
-<summary class="mistake-toggle">▸ Common Mistake</summary>
-<div class="mistake-body">
-  <p>Students only look for where $f'(c)=0$ and stop there, forgetting the "OR $f'(c)$ does not exist" half of the definition. That misses critical numbers at sharp corners or cusps — places where the function is defined but not differentiable.</p>
-  <p>Classic example: $f(x)=x^{2/3}$ has $f'(x)=\tfrac{2}{3}x^{-1/3}$, which is <em>never</em> zero. Solve $f'(x)=0$ and you'll conclude (wrongly) that there are no critical numbers at all. But $f'(0)$ is undefined (division by zero), and $x=0$ is in the domain — so $x=0$ is a critical number, and in fact the location of a sharp minimum. Always check both conditions, not just the first.</p>
-</div>
-</details>
 <p class="body-text">A critical number is a <em>candidate</em> for an extremum — not every critical number gives one. We need more tests (first or second derivative test) to classify.</p>
 </div>
 <div class="col"><div class="section-head">Extreme Value Theorem & Closed Interval Method</div>
 <div class="accent-box"><p><strong>EVT:</strong> If $f$ is continuous on $[a,b]$, then $f$ attains both an absolute max and an absolute min on $[a,b]$.</p><p><strong>Closed Interval Method:</strong></p><ol style='margin-left:1.2rem;margin-top:.3rem'>  <li>Find all critical numbers of $f$ in $(a,b)$</li>  <li>Evaluate $f$ at each critical number <em>and</em> at $a$, $b$</li>  <li>Largest value = absolute max; smallest = absolute min</li></ol></div>
-<details class="mistake-panel">
-<summary class="mistake-toggle">▸ Common Mistake</summary>
-<div class="mistake-body">
-  <p>Students find the critical numbers, evaluate $f$ there, and stop — forgetting to also evaluate $f$ at the two endpoints $a$ and $b$. The absolute max or min very often lives at an endpoint, not at a critical number, especially when the function is monotonic between critical points.</p>
-  <p>The Closed Interval Method is a fixed checklist for a reason: compute $f$ at <em>every</em> critical number in $(a,b)$ <em>and</em> at both endpoints, then compare all of those values together. Skipping the endpoints silently throws away two of the candidates before the comparison even starts. (And remember EVT itself requires a <em>closed</em>, bounded interval and continuity — on an open interval like $(0,\pi/2)$ for $\tan x$, there may be no absolute max at all.)</p>
-</div>
-</details>
 </div>
 </div>
 <div class="svg-figure"><svg viewBox="0 0 260 155" xmlns="http://www.w3.org/2000/svg" style="width:240px;height:auto"><line x1="10" y1="77" x2="250" y2="77" stroke="#888" stroke-width="1.2"/><polygon points="250,74 256,77 250,80" fill="#888"/><line x1="130" y1="148" x2="130" y2="8" stroke="#888" stroke-width="1.2"/><polygon points="127,8 130,2 133,8" fill="#888"/><text x="253" y="81" font-size="10" fill="#555" font-family="sans-serif">x</text><text x="134" y="9" font-size="10" fill="#555" font-family="sans-serif">y</text><polyline points="30,121 55,52 80,33 105,47 130,77 155,107 180,121 205,102 230,33" stroke="#1e3a5c" stroke-width="2" fill="none"/><line x1="45" y1="33" x2="115" y2="33" stroke="#7a5c1e" stroke-width="1.5" stroke-dasharray="5,3"/><line x1="145" y1="121" x2="215" y2="121" stroke="#7a5c1e" stroke-width="1.5" stroke-dasharray="5,3"/><circle cx="80" cy="33" r="4" fill="#7a5c1e"/><circle cx="180" cy="121" r="4" fill="#7a5c1e"/><text x="54" y="28" font-size="9.5" fill="#7a5c1e" font-family="sans-serif">local max</text><text x="152" y="137" font-size="9.5" fill="#7a5c1e" font-family="sans-serif">local min</text><line x1="80" y1="74" x2="80" y2="80" stroke="#888" stroke-width="1"/><text x="74" y="91" font-size="9.5" fill="#555" font-family="sans-serif">-1</text><line x1="180" y1="74" x2="180" y2="80" stroke="#888" stroke-width="1"/><text x="178" y="91" font-size="9.5" fill="#555" font-family="sans-serif">1</text><line x1="127" y1="33" x2="133" y2="33" stroke="#888" stroke-width="1"/><text x="107" y="37" font-size="9.5" fill="#555" font-family="sans-serif">2</text><line x1="127" y1="121" x2="133" y2="121" stroke="#888" stroke-width="1"/><text x="104" y="125" font-size="9.5" fill="#555" font-family="sans-serif">-2</text></svg><div class="svg-caption">$f(x)=x^3-3x$: $f'=0$ at $x=\pm 1$, giving local max and local min</div></div>
 <div class="section-head">Worked Examples</div>
 <div class="examples-grid">
-<div 
+<div class="ex-block">
+  <div class="ex-label">Example 1 &nbsp;&mdash;&nbsp; Finding critical numbers</div>
+  <div class="ex-body">Find the critical numbers of $f(x)=x^3-3x^2$.</div>
+  <div class="ex-answer student"></div>
+</div>
+<div class="ex-block">
+  <div class="ex-label">Example 2 &nbsp;&mdash;&nbsp; Absolute extrema on closed interval</div>
+  <div class="ex-body">Find the absolute max and min of $f(x)=x^3-3x^2$ on $[-1,3]$.</div>
+  <div class="ex-answer student"></div>
+</div>
+<div class="ex-block">
+  <div class="ex-label">Example 3 &nbsp;&mdash;&nbsp; Critical number with fractional exponent</div>
+  <div class="ex-body">Find critical numbers of $f(x)=x^{2/3}$.</div>
+  <div class="ex-answer student"></div>
+</div>
+<div class="ex-block">
+  <div class="ex-label">Example 4 &nbsp;&mdash;&nbsp; Closed interval — trig</div>
+  <div class="ex-body">Find abs extrema of $f(x)=\sin x$ on $[0,\pi]$.</div>
+  <div class="ex-answer student"></div>
+</div>
+</div>
+<div class="section-head">Practice Problems</div>
+<div class="practice">
+<div class="pr-row">
+  <div class="pr-num">1.</div>
+  <div class="pr-prob">Find the critical numbers of $f(x)=x^2-6x+1$.</div>
+  <div class="pr-ans student"></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">2.</div>
+  <div class="pr-prob">Find the critical numbers of $g(x)=x^3-12x$.</div>
+  <div class="pr-ans student"></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">3.</div>
+  <div class="pr-prob">Find abs extrema of $f(x)=x^2-4x+1$ on $[0,3]$.</div>
+  <div class="pr-ans student"></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">4.</div>
+  <div class="pr-prob">Find abs extrema of $f(x)=x^3-3x$ on $[-2,2]$.</div>
+  <div class="pr-ans student"></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">5.</div>
+  <div class="pr-prob">Find abs extrema of $f(x)=x^3-12x$ on $[0,4]$.</div>
+  <div class="pr-ans student"></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">6.</div>
+  <div class="pr-prob">Does $f(x)=\tan x$ on $(0,\pi/2)$ have an absolute maximum? Why?</div>
+  <div class="pr-ans student"></div>
+</div>
+</div>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/contrib/auto-render.min.js"></script>
+<script>
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left: '$$', right: '$$', display: true},
+      {left: '$',  right: '$',  display: false}
+    ],
+    throwOnError: false
+  });
+</script>
+<!-- proof-layer:done -->
+</body>
+</html>

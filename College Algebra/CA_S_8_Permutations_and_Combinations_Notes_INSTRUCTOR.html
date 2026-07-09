@@ -132,14 +132,6 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   .svg-caption{font-size:9pt}
 }
 @page{margin:.55in .65in;size:letter}
-.proof-panel{margin:.4rem 0 1.1rem;border-left:3px solid #7a9a6a;border-radius:0 6px 6px 0;background:#f5f7f3}
-.proof-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#5a7a4a;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
-.proof-toggle::-webkit-details-marker{display:none}
-details[open]>.proof-toggle{color:#1e3a5c}
-.proof-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #c8d8b8}
-.proof-body p{margin-bottom:.45rem}
-.proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
-@media print{.proof-panel{break-inside:avoid}}
 </style>
 </head>
 <body>
@@ -150,29 +142,9 @@ details[open]>.proof-toggle{color:#1e3a5c}
 <div class="two-col">
 <div class="col"><div class="section-head">Permutations &mdash; Order Matters</div>
 <div class="accent-box"><p>$$P(n, r) = \frac{n!}{(n-r)!} = n(n-1)\cdots(n-r+1)$$</p><p>The number of ways to choose $r$ objects from $n$, where order matters.</p><p>e.g. President, VP, Treasurer from 10 people:<br>$P(10,3) = 10 \times 9 \times 8 = 720$</p><p>e.g. Arrange 5 books on a shelf:<br>$P(5,5) = 5! = 120$</p></div>
-<details class="proof-panel">
-<summary class="proof-toggle">▸ Show Proof</summary>
-<div class="proof-body">
-<p>The product form $n(n-1)\cdots(n-r+1)$ was justified earlier from the multiplication principle. Here's why that's the same thing as $\dfrac{n!}{(n-r)!}$.</p>
-<p>Write $n!$ out in full: $n!=n\times(n-1)\times\cdots\times(n-r+1)\times(n-r)\times(n-r-1)\times\cdots\times2\times1$.</p>
-<p>The first $r$ factors are exactly $n(n-1)\cdots(n-r+1)$. Everything left over — from $(n-r)$ down to $1$ — is exactly $(n-r)!$ by definition.</p>
-<p>So $n!=\big[n(n-1)\cdots(n-r+1)\big]\times(n-r)!$. Dividing both sides by $(n-r)!$: $$\frac{n!}{(n-r)!}=n(n-1)\cdots(n-r+1).$$ The fraction just cancels off the unwanted tail of the factorial, leaving only the first $r$ factors — the two forms of the formula describe the exact same count.</p>
-<p class="proof-qed">∎</p>
-</div>
-</details>
 </div>
 <div class="col"><div class="section-head">Combinations &mdash; Order Does Not Matter</div>
 <div class="accent-box"><p>$$C(n, r) = \frac{n!}{r! \cdot (n-r)!} = \frac{P(n,r)}{r!}$$</p><p>The number of ways to choose $r$ objects from $n$, where order does NOT matter.</p><p>e.g. Choose a 3-person committee from 10:<br>$C(10,3) = 720 / 6 = 120$</p><p><strong>Symmetry rule:</strong> $C(n,r) = C(n, n-r)$<br>e.g. $C(10,7) = C(10,3) = 120$</p></div>
-<details class="proof-panel">
-<summary class="proof-toggle">▸ Show Proof</summary>
-<div class="proof-body">
-<p>This answers the opening question — exactly how "order doesn't matter" turns $P(n,r)$ into $C(n,r)$.</p>
-<p>Take any one specific unordered group of $r$ objects. That same group can be arranged into $r!$ different orders (every arrangement of $r$ distinct objects, by the factorial fact proved earlier). So each unordered group corresponds to exactly $r!$ different ordered selections.</p>
-<p>$P(n,r)$ counts every ordered selection, which means it counts each unordered group $r!$ times over — once per internal ordering. Dividing by $r!$ removes exactly that overcounting: $$C(n,r)=\frac{P(n,r)}{r!}=\frac{n!}{r!(n-r)!}.$$</p>
-<p><strong>Symmetry rule:</strong> choosing which $r$ objects go <em>into</em> a group is the exact same decision as choosing which $n-r$ objects get left <em>out</em> — every choice of "which $r$ are in" pins down one unique "which $n-r$ are out," and vice versa. Since the two counting problems are really the same problem asked two ways, they must have the same answer: $C(n,r)=C(n,n-r)$.</p>
-<p class="proof-qed">∎</p>
-</div>
-</details>
 </div>
 </div>
 <div class="section-head">Worked Examples</div>
@@ -183,4 +155,72 @@ details[open]>.proof-toggle{color:#1e3a5c}
   <div class="ex-answer instructor">$P(7,3) = 7 \times 6 \times 5 = 210$</div>
 </div>
 <div class="ex-block">
-  <div class="ex-label">Example 2 &nbsp
+  <div class="ex-label">Example 2 &nbsp;&mdash;&nbsp; Compute C(n, r)</div>
+  <div class="ex-body">How many ways can a 4-person committee be chosen from 9 people?</div>
+  <div class="ex-answer instructor">$C(9,4) = \dfrac{9 \times 8 \times 7 \times 6}{4!} = \dfrac{3024}{24} = 126$</div>
+</div>
+<div class="ex-block">
+  <div class="ex-label">Example 3 &nbsp;&mdash;&nbsp; Permutation or combination?</div>
+  <div class="ex-body">A team of 5 is selected from 12 players. Does order matter? Which formula?</div>
+  <div class="ex-answer instructor">Order does NOT matter (a team is a team).<br>Use $C(12,5) = 792$</div>
+</div>
+<div class="ex-block">
+  <div class="ex-label">Example 4 &nbsp;&mdash;&nbsp; Symmetry rule</div>
+  <div class="ex-body">Compute $C(15,13)$ using the symmetry rule.</div>
+  <div class="ex-answer instructor">$C(15,13) = C(15,2) = \dfrac{15 \times 14}{2} = 105$</div>
+</div>
+</div>
+<div class="section-head">Practice Problems</div>
+<div class="practice">
+<div class="pr-row">
+  <div class="pr-num">1.</div>
+  <div class="pr-prob">Compute $P(6,2)$.</div>
+  <div class="pr-ans instructor">$6 \times 5 = 30$</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">2.</div>
+  <div class="pr-prob">Compute $C(6,2)$.</div>
+  <div class="pr-ans instructor">$\dfrac{6 \times 5}{2} = 15$</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">3.</div>
+  <div class="pr-prob">Choosing a President and VP from 8 people &mdash; permutation or combination?</div>
+  <div class="pr-ans instructor">Permutation (order matters &mdash; different roles)</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">4.</div>
+  <div class="pr-prob">Choosing a 2-person team from 8 people &mdash; permutation or combination?</div>
+  <div class="pr-ans instructor">Combination (order doesn't matter)</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">5.</div>
+  <div class="pr-prob">Compute $C(8,6)$ using the symmetry rule.</div>
+  <div class="pr-ans instructor">$C(8,2) = \dfrac{8 \times 7}{2} = 28$</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">6.</div>
+  <div class="pr-prob">Compute $P(5,3)$.</div>
+  <div class="pr-ans instructor">$5 \times 4 \times 3 = 60$</div>
+</div>
+</div>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/contrib/auto-render.min.js"></script>
+<script>
+function toggleAns(btn) {
+  if (!btn.dataset.orig) btn.dataset.orig = btn.textContent;
+  var ans = btn.nextElementSibling;
+  var showing = ans.classList.toggle('visible');
+  btn.textContent = showing ? 'Hide' : btn.dataset.orig;
+}
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left: '$$', right: '$$', display: true},
+      {left: '$',  right: '$',  display: false}
+    ],
+    throwOnError: false
+  });
+</script>
+</body>
+</html>

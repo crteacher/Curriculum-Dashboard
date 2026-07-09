@@ -132,14 +132,6 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   .svg-caption{font-size:9pt}
 }
 @page{margin:.55in .65in;size:letter}
-.proof-panel{margin:.4rem 0 1.1rem;border-left:3px solid #7a9a6a;border-radius:0 6px 6px 0;background:#f5f7f3}
-.proof-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#5a7a4a;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
-.proof-toggle::-webkit-details-marker{display:none}
-details[open]>.proof-toggle{color:#1e3a5c}
-.proof-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #c8d8b8}
-.proof-body p{margin-bottom:.45rem}
-.proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
-@media print{.proof-panel{break-inside:avoid}}
 </style>
 </head>
 <body>
@@ -153,17 +145,6 @@ details[open]>.proof-toggle{color:#1e3a5c}
 </div>
 <div class="col"><div class="section-head">Quick Patterns (Opens Up)</div>
 <div class="accent-box"><p>For $ax^2 + bx + c$ with $a > 0$ and roots $r_1 < r_2$:</p><p><strong>$f(x) < 0$:</strong> between the roots &rarr; $(r_1, r_2)$</p><p><strong>$f(x) > 0$:</strong> outside the roots &rarr; $(-\infty, r_1) \cup (r_2, \infty)$</p><p>e.g. $x^2 - 6x + 8 < 0$: roots $x=2, x=4$<br>Parabola opens up &rarr; negative between roots &rarr; $(2, 4)$</p></div>
-<details class="proof-panel">
-<summary class="proof-toggle">▸ Show Proof</summary>
-<div class="proof-body">
-<p>Since $r_1$ and $r_2$ are the roots of $f$, the factored form is $f(x)=a(x-r_1)(x-r_2)$. Because $a>0$, the sign of $f(x)$ is exactly the sign of the product $(x-r_1)(x-r_2)$ — multiplying by a positive number never flips a sign.</p>
-<p><strong>Between the roots</strong> ($r_1<x<r_2$): $x-r_1>0$ (since $x$ is bigger than $r_1$) but $x-r_2<0$ (since $x$ is smaller than $r_2$). A positive number times a negative number is negative, so $f(x)<0$.</p>
-<p><strong>To the left of both roots</strong> ($x<r_1$): both $x-r_1<0$ and $x-r_2<0$. A negative times a negative is positive, so $f(x)>0$.</p>
-<p><strong>To the right of both roots</strong> ($x>r_2$): both $x-r_1>0$ and $x-r_2>0$, so the product is positive and $f(x)>0$.</p>
-<p>Every real $x$ falls into exactly one of these three regions, so this covers every case: $f(x)$ is negative exactly between the roots and positive everywhere outside them.</p>
-<p class="proof-qed">∎</p>
-</div>
-</details>
 <p class="body-text">For $a < 0$ (opens down), reverse the pattern.</p>
 </div>
 </div>
@@ -205,4 +186,42 @@ details[open]>.proof-toggle{color:#1e3a5c}
 <div class="pr-row">
   <div class="pr-num">3.</div>
   <div class="pr-prob">Solve $x^2 - 5x + 4 \leq 0$.</div>
-  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidde
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">Roots $x=1,4$; $[1,4]$</div></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">4.</div>
+  <div class="pr-prob">Solve $x^2 + 3x - 10 < 0$.</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">Roots $x=-5,2$; $(-5,2)$</div></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">5.</div>
+  <div class="pr-prob">Solve $x^2 - 9 \geq 0$.</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">Roots $x=\pm 3$; outside $\Rightarrow (-\infty,-3]\cup[3,\infty)$</div></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">6.</div>
+  <div class="pr-prob">Solve $x^2 - 7x + 6 < 0$.</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">Roots $x=1,6$; $( 1,6)$</div></div>
+</div>
+</div>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/contrib/auto-render.min.js"></script>
+<script>
+function toggleAns(btn) {
+  if (!btn.dataset.orig) btn.dataset.orig = btn.textContent;
+  var ans = btn.nextElementSibling;
+  var showing = ans.classList.toggle('visible');
+  btn.textContent = showing ? 'Hide' : btn.dataset.orig;
+}
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left: '$$', right: '$$', display: true},
+      {left: '$',  right: '$',  display: false}
+    ],
+    throwOnError: false
+  });
+</script>
+</body>
+</html>

@@ -140,18 +140,6 @@ details[open]>.proof-toggle{color:#1e3a5c}
 .proof-body p{margin-bottom:.45rem}
 .proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
 @media print{.proof-panel{display:none}}
-.mistake-panel{margin:.4rem 0 1.1rem;border-left:3px solid #b8860b;border-radius:0 6px 6px 0;background:#fdf8e8}
-.mistake-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#9a6a00;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
-.mistake-toggle::-webkit-details-marker{display:none}
-details[open]>.mistake-toggle{color:#1e3a5c}
-.mistake-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #e8d8a8}
-.mistake-body p{margin-bottom:.45rem}
-.panel-row{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.1rem}
-.panel-row>.proof-panel,.panel-row>.mistake-panel{margin:0;min-width:0}
-@media print{
-  .panel-row{break-inside:avoid}
-  .mistake-panel{break-inside:avoid}
-}
 </style>
 </head>
 <body>
@@ -212,7 +200,6 @@ details[open]>.mistake-toggle{color:#1e3a5c}
 </div>
 </div>
 
-<div class="panel-row">
 <details class="proof-panel">
 <summary class="proof-toggle">▸ Show Proof</summary>
 <div class="proof-body">
@@ -227,14 +214,6 @@ details[open]>.mistake-toggle{color:#1e3a5c}
   <p class="proof-qed">∎</p>
 </div>
 </details>
-<details class="mistake-panel">
-<summary class="mistake-toggle">▸ Common Mistake</summary>
-<div class="mistake-body">
-  <p>Two errors dominate here. First, picking the wrong case: students see any square root of a sum or difference of squares and grab $\sin\theta$ out of habit, even when the radical is $\sqrt{a^2+x^2}$ (Case 2, needs $\tan\theta$) or $\sqrt{x^2-a^2}$ (Case 3, needs $\sec\theta$). Match the sign pattern under the root to the case — plus needs tangent, $x^2$ minus $a^2$ needs secant, $a^2$ minus $x^2$ needs sine — before picking up a pencil.</p>
-  <p>Second, and just as common: forgetting to convert the final answer back from $\theta$ to $x$. After integrating you have an antiderivative in terms of $\theta$ (like $\arcsin\theta$ or $\sin\theta\cos\theta$), but the original problem was in terms of $x$ — leaving $\theta$ in the answer is incomplete. Use the reference triangle (opposite/adjacent/hypotenuse built from your substitution) to rewrite every trig function of $\theta$ back in terms of $x$.</p>
-</div>
-</details>
-</div>
 <div class="body-text">Draw a right triangle for your substitution to convert answers back to $x$ without memorizing inverse formulas.</div>
 
 <div class="section-head">Worked Examples</div>
@@ -287,4 +266,53 @@ details[open]>.mistake-toggle{color:#1e3a5c}
   <div class="pr-ans student">
     <textarea class="st-work"></textarea>
     <button class="st-btn-sm" onclick="toggleAns(this)">Show answer</button>
-    <div class="st-ans-hidden">$\
+    <div class="st-ans-hidden">$\dfrac{{\sqrt{{x^2-9}}}}{{9x}}+C$</div>
+  </div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">4.</div>
+  <div class="pr-prob">Evaluate $\displaystyle\int_0^5 x^2\sqrt{25-x^2}\,dx$.</div>
+  <div class="pr-ans student">
+    <textarea class="st-work"></textarea>
+    <button class="st-btn-sm" onclick="toggleAns(this)">Show answer</button>
+    <div class="st-ans-hidden">$\dfrac{{625\pi}}{{16}}$</div>
+  </div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">5.</div>
+  <div class="pr-prob">Evaluate $\displaystyle\int\dfrac{dx}{(x^2+4x+8)^{3/2}}$ (hint: complete the square first).</div>
+  <div class="pr-ans student">
+    <textarea class="st-work"></textarea>
+    <button class="st-btn-sm" onclick="toggleAns(this)">Show answer</button>
+    <div class="st-ans-hidden">Complete the square, then use $u=2\tan\theta$: $\dfrac{{x+2}}{{4\sqrt{{x^2+4x+8}}}}+C$</div>
+  </div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">6.</div>
+  <div class="pr-prob">Evaluate $\displaystyle\int\sqrt{1-x^2}\,dx$.</div>
+  <div class="pr-ans student">
+    <textarea class="st-work"></textarea>
+    <button class="st-btn-sm" onclick="toggleAns(this)">Show answer</button>
+    <div class="st-ans-hidden">$\dfrac{{x\sqrt{{1-x^2}}}}{{2}}+\dfrac{{1}}{{2}}\arcsin x+C$</div>
+  </div>
+</div>
+</div>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/contrib/auto-render.min.js"></script>
+<script>function toggleAns(btn){
+  if(!btn.dataset.orig)btn.dataset.orig=btn.textContent;
+  var ans=btn.nextElementSibling;
+  var showing=ans.classList.toggle('visible');
+  btn.textContent=showing?'Hide':btn.dataset.orig;
+}</script>
+<script>
+  renderMathInElement(document.body,{
+    delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],
+    throwOnError:false
+  });
+</script>
+<!-- proof-layer:done -->
+</body>
+</html>

@@ -140,18 +140,6 @@ details[open]>.proof-toggle{color:#1e3a5c}
 .proof-body p{margin-bottom:.45rem}
 .proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
 @media print{.proof-panel{display:none}}
-.mistake-panel{margin:.4rem 0 1.1rem;border-left:3px solid #b8860b;border-radius:0 6px 6px 0;background:#fdf8e8}
-.mistake-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#9a6a00;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
-.mistake-toggle::-webkit-details-marker{display:none}
-details[open]>.mistake-toggle{color:#1e3a5c}
-.mistake-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #e8d8a8}
-.mistake-body p{margin-bottom:.45rem}
-.panel-row{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.1rem}
-.panel-row>.proof-panel,.panel-row>.mistake-panel{margin:0;min-width:0}
-@media print{
-  .panel-row{break-inside:avoid}
-  .mistake-panel{break-inside:avoid}
-}
 </style>
 </head>
 <body>
@@ -174,13 +162,6 @@ details[open]>.mistake-toggle{color:#1e3a5c}
   <p class="proof-qed">∎</p>
 </div>
 </details>
-<details class="mistake-panel">
-<summary class="mistake-toggle">▸ Common Mistake</summary>
-<div class="mistake-body">
-  <p>Students try to run Simpson's Rule with an odd $n$ — say $n=5$ — and just tack on a leftover endpoint, or force the $1,4,2,4,\dots,4,1$ pattern onto an odd number of nodes. It doesn't work: Simpson's Rule pairs strips into parabola-fitted twos, so an odd $n$ leaves one strip unpaired with nowhere to go. The rule for Simpson's requires $n$ even, full stop — if a problem gives you an odd $n$ for Simpson's, either the problem intends $n+1$ subintervals or you need to switch rules.</p>
-  <p>A related slip: mixing up which interior nodes get weight $4$ versus weight $2$. The pattern always alternates starting and ending with $4$ next to the endpoints — $f(x_0)+4f(x_1)+2f(x_2)+4f(x_3)+\cdots+4f(x_{n-1})+f(x_n)$ — so miscounting the index parity (treating $x_2$ as a $4$ instead of a $2$) silently corrupts the whole sum.</p>
-</div>
-</details>
 </div>
 <div class="col"><div class="section-head">Error Bounds</div>
 <div class="accent-box"><p>$|E_T|\leq\dfrac{K_2(b-a)^3}{12n^2}$ &nbsp; $|E_M|\leq\dfrac{K_2(b-a)^3}{24n^2}$</p><p>$|E_S|\leq\dfrac{K_4(b-a)^5}{180n^4}$</p><p>where $K_2=\max|f''|$, $K_4=\max|f^{(4)}|$ on $[a,b]$</p></div>
@@ -193,13 +174,6 @@ details[open]>.mistake-toggle{color:#1e3a5c}
   <p>$$n\cdot K_2 h^3=n\cdot K_2\left(\frac{b-a}{n}\right)^3=\frac{K_2(b-a)^3}{n^2}.$$</p>
   <p>That's exactly the $\dfrac{1}{n^2}$ shape of the Trapezoid and Midpoint bounds. Simpson's Rule cancels not just the tilt of the error but its curvature too, leaving an error per strip proportional to $h^5$; summing $n$ of those gives $\dfrac{1}{n^4}$. This is why doubling $n$ shrinks Simpson's error by a factor of about $16$, while Trapezoid's drops only by $4$.</p>
   <p class="proof-qed">∎</p>
-</div>
-</details>
-<details class="mistake-panel">
-<summary class="mistake-toggle">▸ Common Mistake</summary>
-<div class="mistake-body">
-  <p>Students plug $K_2 = \max|f(x)|$ — a bound on the function itself — into the error formula instead of $K_2=\max|f''(x)|$, a bound on its <em>second derivative</em>. The letter $K$ looks like it's just "the biggest the function gets," so it's tempting to skip differentiating. But the error bound measures how much the curve <em>bends</em> away from a straight line (Trapezoid/Midpoint) or a parabola (Simpson's), and bending is exactly what a derivative measures — a function can be huge in size but nearly straight (small $f''$), or small in size but sharply curved (large $f''$).</p>
-  <p>Same trap applies to Simpson's: $K_4=\max|f^{(4)}(x)|$ is a bound on the <em>fourth</em> derivative, not the function or its first derivative. Always differentiate the correct number of times before maximizing.</p>
 </div>
 </details>
 <p class="body-text">Simpson's Rule is exact for polynomials of degree $\leq 3$ and converges much faster than Trapezoid.</p>
@@ -233,4 +207,53 @@ details[open]>.mistake-toggle{color:#1e3a5c}
 <div class="pr-row">
   <div class="pr-num">1.</div>
   <div class="pr-prob">$T_4$ for $\int_0^\pi\sin x\,dx$</div>
-  <div class="pr-ans student-interactive"><textarea class=
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$\approx1.896$ (exact: 2)</div></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">2.</div>
+  <div class="pr-prob">$S_4$ for $\int_1^3\dfrac{1}{x}\,dx$</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$\approx 1.099$ (exact: $\ln 3$)</div></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">3.</div>
+  <div class="pr-prob">Simpson's is exact for what degree polynomial?</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">Degree $\leq 3$</div></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">4.</div>
+  <div class="pr-prob">Error bound $T_n$ for $\int_0^1 x^4\,dx$, $n=10$</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$|E_T|\leq\frac{12}{12\cdot100}=0.01$</div></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">5.</div>
+  <div class="pr-prob">$M_2$ for $\int_0^4 x^{1/2}\,dx$</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$\Delta x=2$; midpoints 1, 3: $2(1+\sqrt{3})\approx5.46$</div></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">6.</div>
+  <div class="pr-prob">Why does Simpson's use coefficients 1,4,2,4,...,4,1?</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">Fits a quadratic through each pair of subintervals.</div></div>
+</div>
+</div>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/contrib/auto-render.min.js"></script>
+<script>
+function toggleAns(btn) {
+  if (!btn.dataset.orig) btn.dataset.orig = btn.textContent;
+  var ans = btn.nextElementSibling;
+  var showing = ans.classList.toggle('visible');
+  btn.textContent = showing ? 'Hide' : btn.dataset.orig;
+}
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left: '$$', right: '$$', display: true},
+      {left: '$',  right: '$',  display: false}
+    ],
+    throwOnError: false
+  });
+</script>
+<!-- proof-layer:done -->
+</body>
+</html>

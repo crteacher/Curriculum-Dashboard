@@ -139,19 +139,7 @@ details[open]>.proof-toggle{color:#1e3a5c}
 .proof-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #c8d8b8}
 .proof-body p{margin-bottom:.45rem}
 .proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
-@media print{.proof-panel{break-inside:avoid}}
-.mistake-panel{margin:.4rem 0 1.1rem;border-left:3px solid #b8860b;border-radius:0 6px 6px 0;background:#fdf8e8}
-.mistake-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#9a6a00;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
-.mistake-toggle::-webkit-details-marker{display:none}
-details[open]>.mistake-toggle{color:#1e3a5c}
-.mistake-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #e8d8a8}
-.mistake-body p{margin-bottom:.45rem}
-.panel-row{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.1rem}
-.panel-row>.proof-panel,.panel-row>.mistake-panel{margin:0;min-width:0}
-@media print{
-  .panel-row{break-inside:avoid}
-  .mistake-panel{break-inside:avoid}
-}
+@media print{.proof-panel{display:none}}
 </style>
 </head>
 <body>
@@ -179,13 +167,6 @@ details[open]>.mistake-toggle{color:#1e3a5c}
   <p class="proof-qed">∎</p>
 </div>
 </details>
-<details class="mistake-panel">
-<summary class="mistake-toggle">▸ Common Mistake</summary>
-<div class="mistake-body">
-  <p>Students set up $M_x$ the same way they set up $M_y$: $\rho\int_a^b f(x)\,dx$, or forget the one-half and just square: $\rho\int_a^b[f(x)]^2\,dx$. Both drop a piece of the real formula $M_x=\frac{\rho}{2}\int_a^b[f(x)]^2\,dx$.</p>
-  <p>The $\frac12$ and the square aren't decoration — they come from where a vertical strip's mass is actually centered. A strip has height $f(x)$, but its <em>own</em> center of mass sits at half that height, $f(x)/2$, not at $f(x)$ or at $0$. So its moment about the $x$-axis is $\frac{f(x)}{2}\cdot\rho f(x)\,dx$, which is where both the $\frac12$ and the extra factor of $f(x)$ come from.</p>
-</div>
-</details>
 </div>
 </div>
 <div class="col">
@@ -205,13 +186,6 @@ details[open]>.mistake-toggle{color:#1e3a5c}
   <p class="proof-qed">∎</p>
 </div>
 </details>
-<details class="mistake-panel">
-<summary class="mistake-toggle">▸ Common Mistake</summary>
-<div class="mistake-body">
-  <p>Students assume the centroid sits <em>on</em> the curve, so they compute $\bar x=M_y/m$ and then find $\bar y$ by plugging back in: $\bar y=f(\bar x)$. For a region under a curved $f$, that's wrong — the balance point of a 2D region is almost never a point on the boundary curve itself.</p>
-  <p>$\bar y$ has its own formula, $\bar y=M_x/m=\frac{\frac12\int_a^b[f(x)]^2\,dx}{\int_a^b f(x)\,dx}$, built from averaging the strip heights (weighted by mass), not from evaluating $f$ at $\bar x$. For $y=x^2$ on $[0,2]$, for instance, the true centroid is $(3/2,\,6/5)$ — and $f(3/2)=9/4\ne 6/5$.</p>
-</div>
-</details>
 </div>
 </div>
 </div>
@@ -224,13 +198,6 @@ details[open]>.mistake-toggle{color:#1e3a5c}
 <p>$\bar x = \dfrac{1}{A}\displaystyle\int_a^b x[f(x)-g(x)]\,dx$</p>
 <p>$\bar y = \dfrac{1}{2A}\displaystyle\int_a^b[f(x)^2 - g(x)^2]\,dx$</p>
 </div>
-<details class="mistake-panel">
-<summary class="mistake-toggle">▸ Common Mistake</summary>
-<div class="mistake-body">
-  <p>Students reuse the single-curve pattern and square the <em>difference</em> instead of subtracting the squares: $\bar y=\dfrac{1}{2A}\int_a^b[f(x)-g(x)]^2\,dx$. That's not the same expression — $(f-g)^2\ne f^2-g^2$ unless $g\equiv 0$.</p>
-  <p>The formula comes from subtracting one region's $M_x$ from the other's: the strip's moment is $\frac12\rho\big([f(x)]^2-[g(x)]^2\big)\,dx$, because each curve's contribution gets squared on its own before the two are subtracted, not the other way around. When $g(x)=0$ the two versions coincide, which is exactly why the mistake is easy to miss until $g$ is nonzero.</p>
-</div>
-</details>
 </div>
 <div class="col">
 <div class="section-head">Example Region: $y = x^2$ on $[0,2]$</div>
@@ -320,6 +287,5 @@ details[open]>.mistake-toggle{color:#1e3a5c}
   });
 </script>
 <!-- proof-layer:done -->
-<!-- mistake-layer:done -->
 </body>
 </html>

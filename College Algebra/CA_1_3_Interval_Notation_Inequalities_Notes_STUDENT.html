@@ -132,14 +132,6 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   .svg-caption{font-size:9pt}
 }
 @page{margin:.55in .65in;size:letter}
-.proof-panel{margin:.4rem 0 1.1rem;border-left:3px solid #7a9a6a;border-radius:0 6px 6px 0;background:#f5f7f3}
-.proof-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#5a7a4a;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
-.proof-toggle::-webkit-details-marker{display:none}
-details[open]>.proof-toggle{color:#1e3a5c}
-.proof-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #c8d8b8}
-.proof-body p{margin-bottom:.45rem}
-.proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
-@media print{.proof-panel{break-inside:avoid}}
 </style>
 </head>
 <body>
@@ -154,16 +146,6 @@ details[open]>.proof-toggle{color:#1e3a5c}
 </div>
 <div class="col"><div class="section-head">Solving Inequalities</div>
 <div class="accent-box"><p><strong>Solve like an equation, with one rule:</strong><br>Multiplying or dividing by a <em>negative</em> number flips the inequality sign.</p><p>e.g. $-2x &lt; 6 \Rightarrow x &gt; -3$</p><p><strong>Double inequality (between):</strong><br>Apply operations to all three parts simultaneously.<br>e.g. $1 &lt; 2x - 3 &lt; 9$:<br>$4 &lt; 2x &lt; 12 \Rightarrow 2 &lt; x &lt; 6$<br>Interval: $(2, 6)$</p></div>
-<details class="proof-panel">
-<summary class="proof-toggle">▸ Show Proof</summary>
-<div class="proof-body">
-<p>We want to show: if $a<b$ and $c<0$, then $ac>bc$ — multiplying both sides by a negative number reverses the inequality.</p>
-<p>Start from $a<b$. Subtracting $b$ from both sides gives $a-b<0$ (the difference is negative, since $a$ is the smaller number).</p>
-<p>We're told $c<0$ too. So $c$ and $(a-b)$ are both negative numbers, and the product of two negatives is positive: $$c(a-b)>0.$$</p>
-<p>Distribute: $ca-cb>0$, which rearranges to $$ac>bc.$$ That's exactly the flipped inequality — the direction reversed because we multiplied a negative gap by a negative number, turning it positive.</p>
-<p class="proof-qed">∎</p>
-</div>
-</details>
 </div>
 </div>
 <div class="section-head">Worked Examples</div>
@@ -211,4 +193,35 @@ details[open]>.proof-toggle{color:#1e3a5c}
   <div class="pr-prob">Write $-1 \leq x < 4$ in interval notation.</div>
   <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$[-1, 4)$</div></div>
 </div>
-<div c
+<div class="pr-row">
+  <div class="pr-num">5.</div>
+  <div class="pr-prob">Solve $5x + 3 > 3x - 1$ and write in interval notation.</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$2x > -4 \Rightarrow x > -2 \Rightarrow (-2, \infty)$</div></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">6.</div>
+  <div class="pr-prob">Solve $-1 < 3x + 2 \leq 11$ and write in interval notation.</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$-3 < 3x \leq 9 \Rightarrow -1 < x \leq 3 \Rightarrow (-1, 3]$</div></div>
+</div>
+</div>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/contrib/auto-render.min.js"></script>
+<script>
+function toggleAns(btn) {
+  if (!btn.dataset.orig) btn.dataset.orig = btn.textContent;
+  var ans = btn.nextElementSibling;
+  var showing = ans.classList.toggle('visible');
+  btn.textContent = showing ? 'Hide' : btn.dataset.orig;
+}
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left: '$$', right: '$$', display: true},
+      {left: '$',  right: '$',  display: false}
+    ],
+    throwOnError: false
+  });
+</script>
+</body>
+</html>

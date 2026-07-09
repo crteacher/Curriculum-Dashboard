@@ -132,26 +132,6 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   .svg-caption{font-size:9pt}
 }
 @page{margin:.55in .65in;size:letter}
-.proof-panel{margin:.4rem 0 1.1rem;border-left:3px solid #7a9a6a;border-radius:0 6px 6px 0;background:#f5f7f3}
-.proof-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#5a7a4a;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
-.proof-toggle::-webkit-details-marker{display:none}
-details[open]>.proof-toggle{color:#1e3a5c}
-.proof-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #c8d8b8}
-.proof-body p{margin-bottom:.45rem}
-.proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
-@media print{.proof-panel{break-inside:avoid}}
-.mistake-panel{margin:.4rem 0 1.1rem;border-left:3px solid #b8860b;border-radius:0 6px 6px 0;background:#fdf8e8}
-.mistake-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#9a6a00;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
-.mistake-toggle::-webkit-details-marker{display:none}
-details[open]>.mistake-toggle{color:#1e3a5c}
-.mistake-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #e8d8a8}
-.mistake-body p{margin-bottom:.45rem}
-.panel-row{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.1rem}
-.panel-row>.proof-panel,.panel-row>.mistake-panel{margin:0;min-width:0}
-@media print{
-  .panel-row{break-inside:avoid}
-  .mistake-panel{break-inside:avoid}
-}
 </style>
 </head>
 <body>
@@ -162,36 +142,9 @@ details[open]>.mistake-toggle{color:#1e3a5c}
 <div class="two-col">
 <div class="col"><div class="section-head">Standard Form $f(x)=ax^2+bx+c$</div>
 <div class="accent-box"><p>$a>0$ &rarr; opens <strong>up</strong> (vertex is a minimum)<br>$a<0$ &rarr; opens <strong>down</strong> (vertex is a maximum)</p><p><strong>Axis of symmetry:</strong> $x=-\dfrac{b}{2a}$</p><p><strong>Vertex:</strong><br>&ensp; $x$-coordinate: $h=-\dfrac{b}{2a}$<br>&ensp; $y$-coordinate: $k=f(h)$</p><p><strong>$y$-intercept:</strong> always at $(0,c)$</p><p><em>Example:</em> $f(x)=x^2+4x+1$:<br>$h=-4/2=-2$, $k=4-8+1=-3$<br>Vertex: $(-2,-3)$ &ensp; Axis: $x=-2$</p></div>
-<div class="panel-row">
-<details class="proof-panel">
-<summary class="proof-toggle">▸ Show Proof</summary>
-<div class="proof-body">
-<p>The vertex formula comes from rewriting $f(x)=ax^2+bx+c$ so the squared term is isolated — a technique called completing the square.</p>
-<p>Factor $a$ out of the first two terms: $f(x)=a\left(x^2+\dfrac{b}{a}x\right)+c$.</p>
-<p>Inside the parentheses, add and subtract $\left(\dfrac{b}{2a}\right)^2$ to build a perfect square without changing the value: $$f(x)=a\left(x^2+\dfrac{b}{a}x+\dfrac{b^2}{4a^2}-\dfrac{b^2}{4a^2}\right)+c=a\left(x+\dfrac{b}{2a}\right)^2-\dfrac{b^2}{4a}+c.$$</p>
-<p>This is now $f(x)=a(x-h)^2+k$ with $h=-\dfrac{b}{2a}$ and $k=c-\dfrac{b^2}{4a}$.</p>
-<p>Since $\left(x+\dfrac{b}{2a}\right)^2\geq0$ always, and equals $0$ exactly when $x=-\dfrac{b}{2a}$, the term $a\left(x+\frac{b}{2a}\right)^2$ is as small as possible (if $a>0$) or as large as possible (if $a<0$) precisely at $x=h$. That's why $h=-\dfrac{b}{2a}$ locates the vertex, and $k=f(h)$ follows just by plugging $h$ back in.</p>
-<p class="proof-qed">∎</p>
-</div>
-</details>
-<details class="mistake-panel">
-<summary class="mistake-toggle">▸ Common Mistake</summary>
-<div class="mistake-body">
-  <p>Students drop the negative sign and compute $h=\dfrac{b}{2a}$ instead of $h=-\dfrac{b}{2a}$. For $f(x)=x^2+4x+1$ that gives $h=2$ instead of the correct $h=-2$ — the vertex lands on the wrong side of the $y$-axis entirely.</p>
-  <p>The minus sign isn't optional decoration; it falls out of completing the square, where the boxed term is $\left(x+\dfrac{b}{2a}\right)^2$, meaning $x-h$ with $h=-\dfrac{b}{2a}$. A quick sanity check: if $b$ and $a$ have the same sign, the vertex's $x$-coordinate should be negative (for $a>0$) — plug in and see the formula confirms this only when the minus sign is kept.</p>
-</div>
-</details>
-</div>
 </div>
 <div class="col"><div class="section-head">Vertex Form $f(x)=a(x-h)^2+k$</div>
 <div class="accent-box"><p>Vertex $(h,k)$ is read directly from the equation.</p><p>$f(x)=2(x-3)^2+1$ &rarr; vertex $(3,1)$, opens up</p><p>$f(x)=-(x+2)^2-4$: since $x+2=x-(-2)$, vertex $(-2,-4)$, opens down</p><p><strong>Finding the $y$-intercept from vertex form:</strong><br>Set $x=0$: $f(0)=ah^2+k$</p><p><em>Example:</em> $f(x)=(x-3)^2-1$:<br>$f(0)=9-1=8$ &rarr; $y$-intercept $(0,8)$</p></div>
-<details class="mistake-panel">
-<summary class="mistake-toggle">▸ Common Mistake</summary>
-<div class="mistake-body">
-  <p>Students read the sign inside the parentheses straight off instead of matching it to the $(x-h)$ pattern. For $f(x)=-(x+2)^2-4$, they see "$+2$" and report the vertex as $(2,-4)$ — but vertex form is built as $x-h$, so $x+2$ really means $x-(-2)$, giving $h=-2$, not $2$.</p>
-  <p>The rule of thumb: whatever sign is written inside the parentheses next to $x$, the vertex's $x$-coordinate is the <em>opposite</em> sign. Only when the form is literally $(x-h)^2$ with a minus sign already in place can you read $h$ off directly without flipping anything.</p>
-</div>
-</details>
 </div>
 </div>
 <div class="section-head">Worked Examples</div>
@@ -204,4 +157,70 @@ details[open]>.mistake-toggle{color:#1e3a5c}
 <div class="ex-block">
   <div class="ex-label">Example 2 &nbsp;&mdash;&nbsp; Vertex from vertex form</div>
   <div class="ex-body">State vertex and direction for $g(x)=-2(x+1)^2+5$.</div>
-  <div class="ex-ans
+  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">$h=-1$, $k=5$, $a=-2<0$ &rarr; opens down<br>Vertex: $(-1,5)$ &mdash; maximum</div></div>
+</div>
+<div class="ex-block">
+  <div class="ex-label">Example 3 &nbsp;&mdash;&nbsp; $y$-intercept</div>
+  <div class="ex-body">Find the $y$-intercept of $f(x)=x^2+2x-8$.</div>
+  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">Set $x=0$: $f(0)=-8$<br>$y$-intercept: $(0,-8)$</div></div>
+</div>
+<div class="ex-block">
+  <div class="ex-label">Example 4 &nbsp;&mdash;&nbsp; Axis of symmetry</div>
+  <div class="ex-body">Find the axis of symmetry of $f(x)=2x^2+8x+3$.</div>
+  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">$x=-\dfrac{8}{4}=-2$ &ensp; Axis: $x=-2$</div></div>
+</div>
+</div>
+<div class="section-head">Practice Problems</div>
+<div class="practice">
+<div class="pr-row">
+  <div class="pr-num">1.</div>
+  <div class="pr-prob">$f(x)=x^2+6x+4$. Find the $x$-coordinate of the vertex.</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$h=-3$</div></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">2.</div>
+  <div class="pr-prob">$f(x)=-(x-2)^2+7$. State the vertex and direction.</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$(2,7)$, opens down</div></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">3.</div>
+  <div class="pr-prob">$f(x)=x^2-4x+1$. Find the vertex.</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$h=2$, $k=-3$ &rarr; $(2,-3)$</div></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">4.</div>
+  <div class="pr-prob">$f(x)=3x^2-12x+5$. Find the axis of symmetry.</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$x=-(-12)/(6)=2$</div></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">5.</div>
+  <div class="pr-prob">$f(x)=x^2-2x-8$. Find the $y$-intercept.</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$(0,-8)$</div></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">6.</div>
+  <div class="pr-prob">$f(x)=-x^2+4x+1$. Does the parabola open up or down? Find the vertex.</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">Opens down; $h=2$, $k=5$ &rarr; vertex $(2,5)$</div></div>
+</div>
+</div>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/contrib/auto-render.min.js"></script>
+<script>
+function toggleAns(btn) {
+  if (!btn.dataset.orig) btn.dataset.orig = btn.textContent;
+  var ans = btn.nextElementSibling;
+  var showing = ans.classList.toggle('visible');
+  btn.textContent = showing ? 'Hide' : btn.dataset.orig;
+}
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left: '$$', right: '$$', display: true},
+      {left: '$',  right: '$',  display: false}
+    ],
+    throwOnError: false
+  });
+</script>
+</body>
+</html>

@@ -86,16 +86,8 @@ details[open]>.mistake-toggle{color:#1e3a5c}
 <div class="opening-q">The function $f(x)=\dfrac{1}{x}$ has an interesting graph — what happens as $x$ gets close to 0? As $x$ grows very large? Can any rational function just ignore these behaviors?</div>
 <div class="two-col"><div class="col"><div class="section-head">Domain and Vertical Asymptotes</div>
 <div class="accent-box"><p><strong>Rational function:</strong> $f(x)=\dfrac{p(x)}{q(x)}$, polynomials $p,q$.</p><p><strong>Domain:</strong> all reals where $q(x)\neq 0$.</p><p><strong>Vertical asymptote</strong> at $x=a$ if $q(a)=0$ and $p(a)\neq 0$ (after full cancellation). The graph approaches $\pm\infty$ near $x=a$.</p><p><strong>Hole (removable discontinuity)</strong> if a common factor cancels from both $p$ and $q$.</p></div>
-<details class="mistake-panel">
-<summary class="mistake-toggle">▸ Common Mistake</summary>
-<div class="mistake-body">
-  <p>Students call $x=a$ a vertical asymptote the moment they see $q(a)=0$, without first checking whether $(x-a)$ also divides $p(x)$. If it does, that factor cancels and $x=a$ is a <em>hole</em>, not an asymptote — the graph has a single missing point there, not a break to $\pm\infty$.</p>
-  <p>Classic example: $h(x)=\dfrac{x^2-4}{x-2}$. The denominator vanishes at $x=2$, but so does the numerator — $h(x)=\dfrac{(x-2)(x+2)}{x-2}=x+2$ for $x\neq 2$. There's no vertical asymptote at $x=2$, just a hole at $(2,4)$. Always factor and cancel <em>before</em> declaring vertical asymptotes.</p>
-</div>
-</details>
 </div><div class="col"><div class="section-head">Horizontal Asymptotes</div>
 <div class="accent-box"><p>Let $n=\deg(p)$, $d=\deg(q)$:</p><ul><li>$n<d$: HA at $y=0$</li><li>$n=d$: HA at $y=\dfrac{\text{LC}(p)}{\text{LC}(q)}$</li><li>$n>d$: no HA (oblique or grows without bound)</li></ul></div>
-<div class="panel-row">
 <details class="proof-panel">
 <summary class="proof-toggle">▸ Show Proof</summary>
 <div class="proof-body">
@@ -108,14 +100,6 @@ details[open]>.mistake-toggle{color:#1e3a5c}
   <p class="proof-qed">∎</p>
 </div>
 </details>
-<details class="mistake-panel">
-<summary class="mistake-toggle">▸ Common Mistake</summary>
-<div class="mistake-body">
-  <p>Students memorize "HA $=$ ratio of leading coefficients" and apply that ratio no matter how the degrees compare — including when $n>d$, where there simply is no horizontal asymptote. The rule $y=\text{LC}(p)/\text{LC}(q)$ only applies in the $n=d$ case; it's not a universal formula.</p>
-  <p>Check the degrees <em>first</em>. If $\deg(p) > \deg(q)$, the function grows without bound (or has an oblique asymptote) and there is no horizontal asymptote at all — writing down a ratio of leading coefficients there is meaningless.</p>
-</div>
-</details>
-</div>
 <p class="body-text">Graphing steps: factor, note domain, cancel (note holes), find zeros, VAs, HA, sketch with sign chart.</p>
 </div></div>
 <div class="section-head">Worked Examples</div>
@@ -129,4 +113,30 @@ details[open]>.mistake-toggle{color:#1e3a5c}
 <div class="practice">
 <div class="pr-row"><div class="pr-num">1.</div><div class="pr-prob">Find domain of $g(x)=\dfrac{1}{x^2-4}$.</div><div class="pr-ans instructor">$x\neq\pm2$; domain all reals except $\pm2$.</div></div>
 <div class="pr-row"><div class="pr-num">2.</div><div class="pr-prob">Find VAs of $h(x)=\dfrac{x^2}{x^2+1}$.</div><div class="pr-ans instructor">$x^2+1=0$ has no real solutions — no VAs.</div></div>
-<div class="pr-row"><div class="pr-num">3.</di
+<div class="pr-row"><div class="pr-num">3.</div><div class="pr-prob">Find HA of $f(x)=\dfrac{3x^4-x^2}{x^3-x^2+1}$.</div><div class="pr-ans instructor">$\deg(p)=4>\deg(q)=3$: no HA.</div></div>
+<div class="pr-row"><div class="pr-num">4.</div><div class="pr-prob">Identify hole: $f(x)=\dfrac{x^2-9}{x-3}$.</div><div class="pr-ans instructor">$(x-3)(x+3)/(x-3)=x+3$; hole at $x=3$, $y=6$.</div></div>
+<div class="pr-row"><div class="pr-num">5.</div><div class="pr-prob">Find all asymptotes of $f(x)=\dfrac{2x+1}{x-3}$.</div><div class="pr-ans instructor">VA: $x=3$; HA: $y=2$.</div></div>
+<div class="pr-row"><div class="pr-num">6.</div><div class="pr-prob">What are the zeros of $f(x)=\dfrac{x^2-1}{x+3}$?</div><div class="pr-ans instructor">Zeros where numerator $=0$: $x=\pm1$ (both in domain since $-3\neq\pm1$).</div></div>
+</div>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/contrib/auto-render.min.js"></script>
+<script>
+function toggleAns(btn) {
+  if (!btn.dataset.orig) btn.dataset.orig = btn.textContent;
+  var ans = btn.nextElementSibling;
+  var showing = ans.classList.toggle('visible');
+  btn.textContent = showing ? 'Hide' : btn.dataset.orig;
+}
+renderMathInElement(document.body, {
+  delimiters: [
+    {left: '$$', right: '$$', display: true},
+    {left: '$',  right: '$',  display: false}
+  ],
+  throwOnError: false
+});
+</script>
+<!-- proof-layer:done -->
+</body>
+</html>

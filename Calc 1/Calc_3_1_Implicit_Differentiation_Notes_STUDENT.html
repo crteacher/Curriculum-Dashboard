@@ -106,18 +106,6 @@ details[open]>.proof-toggle{color:#1e3a5c}
 .proof-body p{margin-bottom:.45rem}
 .proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
 @media print{.proof-panel{break-inside:avoid}}
-.mistake-panel{margin:.4rem 0 1.1rem;border-left:3px solid #b8860b;border-radius:0 6px 6px 0;background:#fdf8e8}
-.mistake-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#9a6a00;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
-.mistake-toggle::-webkit-details-marker{display:none}
-details[open]>.mistake-toggle{color:#1e3a5c}
-.mistake-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #e8d8a8}
-.mistake-body p{margin-bottom:.45rem}
-.panel-row{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.1rem}
-.panel-row>.proof-panel,.panel-row>.mistake-panel{margin:0;min-width:0}
-@media print{
-  .panel-row{break-inside:avoid}
-  .mistake-panel{break-inside:avoid}
-}
 </style>
 </head>
 <body>
@@ -128,18 +116,81 @@ details[open]>.mistake-toggle{color:#1e3a5c}
 <div class="two-col">
 <div class="col"><div class="section-head">Implicit Differentiation</div>
 <div class="accent-box"><p><strong>Procedure:</strong></p><ol style='margin-left:1.2rem;margin-top:.3rem'>  <li>Differentiate both sides w.r.t. $x$</li>  <li>Every $y$-term picks up a $\dfrac{dy}{dx}$ factor (chain rule)</li>  <li>Collect all $\dfrac{dy}{dx}$ terms on one side</li>  <li>Factor out and solve for $\dfrac{dy}{dx}$</li></ol><p><strong>Example:</strong> $x^2+y^2=r^2$<br>$2x+2y\dfrac{dy}{dx}=0 \Rightarrow \dfrac{dy}{dx}=-\dfrac{x}{y}$</p></div>
-<details class="mistake-panel">
-<summary class="mistake-toggle">▸ Common Mistake</summary>
-<div class="mistake-body">
-  <p>Students differentiate $y$-terms as if $y$ were just another constant with respect to $x$, writing $\dfrac{d}{dx}[y^2]=2y$ instead of $2y\dfrac{dy}{dx}$. But $y$ is secretly a function of $x$ here — that's the whole point of "implicit" — so every time you differentiate something involving $y$, the chain rule demands a $\dfrac{dy}{dx}$ factor, exactly the way $\dfrac{d}{dx}[u^2]=2u\cdot u'$ works for any function $u$.</p>
-  <p>A quick check: if your derivative has zero occurrences of $\dfrac{dy}{dx}$ anywhere, you almost certainly forgot to differentiate a $y$-term at all. Every implicit differentiation problem with $y$ in the original equation should produce at least one $\dfrac{dy}{dx}$ in the result.</p>
-</div>
-</details>
 </div>
 <div class="col"><div class="section-head">Product Rule on Mixed Terms</div>
 <div class="accent-box"><p>When $x$ and $y$ are multiplied, use the Product Rule:</p><p>$\dfrac{d}{dx}[xy]=y+x\dfrac{dy}{dx}$</p><p>$\dfrac{d}{dx}[x^2y]=2xy+x^2\dfrac{dy}{dx}$</p><p><strong>Finding slope at a point:</strong><br>Solve for $\dfrac{dy}{dx}$ as a formula in $x$ and $y$, then substitute the coordinates of the point.</p></div>
-<details class="mistake-panel">
-<summary class="mistake-toggle">▸ Common Mistake</summary>
-<div class="mistake-body">
-  <p>On mixed terms like $xy$, students apply the chain rule to the $y$ but forget the product rule needs <em>two</em> terms — writing $\dfrac{d}{dx}[xy]=x\dfrac{dy}{dx}$ alone (only differentiating the $y$ factor) instead of the full $y+x\dfrac{dy}{dx}$ (differentiate $x$ times $y$, plus $x$ times the derivative of $y$). The $x$ factor still needs its own product-rule term even though it's the "easy" one.</p>
-  <p>The same slip happens with $x^2y$: the correct derivative is $2xy+x^2\dfrac{dy}{dx}$ — one term from differentiating $x^2$ (treating $y$ as along for the ride) and one term from differentiating $y$ (which needs the $\dfrac{dy}{dx}$ chain factor). Dropping either term is a product-rule error, not an implicit-differentiation error, so the fix is the same: always write both pieces before simplifying.</
+<p class="body-text">The answer $dy/dx$ will usually contain both $x$ and $y$ — that's expected. Always substitute the full point $(x_0,y_0)$ to get a numerical slope.</p>
+</div>
+</div>
+<div class="section-head">Worked Examples</div>
+<div class="examples-grid">
+<div class="ex-block">
+  <div class="ex-label">Example 1 &nbsp;&mdash;&nbsp; Circle</div>
+  <div class="ex-body">Find $\dfrac{dy}{dx}$ for $x^2+y^2=25$.</div>
+  <div class="ex-answer student"></div>
+</div>
+<div class="ex-block">
+  <div class="ex-label">Example 2 &nbsp;&mdash;&nbsp; Slope at a point</div>
+  <div class="ex-body">For $x^2+y^2=25$, find the slope at $(3,4)$.</div>
+  <div class="ex-answer student"></div>
+</div>
+<div class="ex-block">
+  <div class="ex-label">Example 3 &nbsp;&mdash;&nbsp; Mixed $xy$ term</div>
+  <div class="ex-body">Find $\dfrac{dy}{dx}$ for $x^2y+y^3=8$.</div>
+  <div class="ex-answer student"></div>
+</div>
+<div class="ex-block">
+  <div class="ex-label">Example 4 &nbsp;&mdash;&nbsp; Ellipse</div>
+  <div class="ex-body">Find $\dfrac{dy}{dx}$ for $4x^2+9y^2=36$.</div>
+  <div class="ex-answer student"></div>
+</div>
+</div>
+<div class="section-head">Practice Problems</div>
+<div class="practice">
+<div class="pr-row">
+  <div class="pr-num">1.</div>
+  <div class="pr-prob">Find $\dfrac{dy}{dx}$ for $3x^2+y^2=12$.</div>
+  <div class="pr-ans student"></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">2.</div>
+  <div class="pr-prob">For $x^2+y^2=25$, find the slope at $(0,5)$.</div>
+  <div class="pr-ans student"></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">3.</div>
+  <div class="pr-prob">Find $\dfrac{dy}{dx}$ for $xy=6$.</div>
+  <div class="pr-ans student"></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">4.</div>
+  <div class="pr-prob">Find $\dfrac{dy}{dx}$ for $x^3+y^3=1$.</div>
+  <div class="pr-ans student"></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">5.</div>
+  <div class="pr-prob">For $4x^2+9y^2=36$, find the slope at $(3,0)$.</div>
+  <div class="pr-ans student"></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">6.</div>
+  <div class="pr-prob">Find $\dfrac{dy}{dx}$ for $x^2y-xy^2=3$.</div>
+  <div class="pr-ans student"></div>
+</div>
+</div>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/contrib/auto-render.min.js"></script>
+<script>
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left: '$$', right: '$$', display: true},
+      {left: '$',  right: '$',  display: false}
+    ],
+    throwOnError: false
+  });
+</script>
+<!-- proof-layer:done -->
+</body>
+</html>

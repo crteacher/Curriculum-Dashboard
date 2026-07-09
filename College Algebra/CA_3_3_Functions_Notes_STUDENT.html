@@ -132,18 +132,6 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   .svg-caption{font-size:9pt}
 }
 @page{margin:.55in .65in;size:letter}
-.mistake-panel{margin:.4rem 0 1.1rem;border-left:3px solid #b8860b;border-radius:0 6px 6px 0;background:#fdf8e8}
-.mistake-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#9a6a00;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
-.mistake-toggle::-webkit-details-marker{display:none}
-details[open]>.mistake-toggle{color:#1e3a5c}
-.mistake-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #e8d8a8}
-.mistake-body p{margin-bottom:.45rem}
-.panel-row{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.1rem}
-.panel-row>.proof-panel,.panel-row>.mistake-panel{margin:0;min-width:0}
-@media print{
-  .panel-row{break-inside:avoid}
-  .mistake-panel{break-inside:avoid}
-}
 </style>
 </head>
 <body>
@@ -154,23 +142,9 @@ details[open]>.mistake-toggle{color:#1e3a5c}
 <div class="two-col">
 <div class="col"><div class="section-head">The Function Rule</div>
 <div class="accent-box"><p>A <strong>function</strong>: each input ($x$) maps to <strong>exactly one</strong> output ($y$).</p><p><strong>Testing ordered pairs or a table:</strong> check whether any $x$-value appears more than once with a <em>different</em> $y$-value.</p><ul>  <li>$(1,3),(2,5),(3,5)$ &rarr; <strong>function</strong> (same $y$ from different $x$ is fine)</li>  <li>$(1,3),(1,7),(2,4)$ &rarr; <strong>not a function</strong> ($x=1$ has two outputs)</li></ul></div>
-<details class="mistake-panel">
-<summary class="mistake-toggle">▸ Common Mistake</summary>
-<div class="mistake-body">
-  <p>Students see a repeated $y$-value and call the relation "not a function" — for $(1,3),(2,5),(3,5)$, they flag it because $5$ shows up twice. But the function rule only restricts what an $x$ is allowed to do, not what a $y$ is allowed to do.</p>
-  <p>Two different inputs are completely allowed to produce the same output — that's exactly what "many-to-one" means, and it's still a function. The only thing that breaks the rule is one input producing two different outputs, like $x=1$ mapping to both $3$ and $7$. Check the $x$-column for repeats, never the $y$-column.</p>
-</div>
-</details>
 </div>
 <div class="col"><div class="section-head">The Vertical Line Test</div>
 <div class="accent-box"><p>From a <strong>graph</strong>: if any vertical line hits the graph more than once &rarr; <strong>not a function</strong> (one $x$, two $y$-values).</p><p>If every vertical line hits at most once &rarr; <strong>function</strong>.</p><ul>  <li>$y=2x+1$ &#x2713; &ensp; $y=x^2$ &#x2713;</li>  <li>$x=y^2$ &#x2717; &ensp; circle &#x2717;</li></ul><p>Note: $x=a$ (vertical line) is <strong>not</strong> a function. $y=b$ (horizontal line) <strong>is</strong> a function.</p></div>
-<details class="mistake-panel">
-<summary class="mistake-toggle">▸ Common Mistake</summary>
-<div class="mistake-body">
-  <p>Students run a <em>horizontal</em> line test instead of a vertical one — for $y=x^2$, they notice a horizontal line like $y=4$ crosses the graph twice (at $x=\pm2$) and conclude it's "not a function." That confuses the function test with the one-to-one test, which is a different question (used later for deciding whether an inverse exists).</p>
-  <p>The vertical line test asks "does one input give two outputs?" — so you draw <em>vertical</em> lines ($x=c$) and check how many times each crosses the graph. A horizontal line crossing twice just means two different $x$-values share a $y$-value, which is perfectly fine for a function. $y=x^2$ passes the vertical line test everywhere, so it is a function.</p>
-</div>
-</details>
 </div>
 </div>
 <div class="section-head">Worked Examples</div>
@@ -206,4 +180,47 @@ details[open]>.mistake-toggle{color:#1e3a5c}
 <div class="pr-row">
   <div class="pr-num">2.</div>
   <div class="pr-prob">$\{(1,3),(2,6),(1,9),(3,12)\}$ &mdash; function?</div>
-  <div class="
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">No &mdash; $x=1$ maps to 3 and 9</div></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">3.</div>
+  <div class="pr-prob">$x$: 1,2,3,4 &ensp; $y$: 4,4,4,4 &mdash; function?</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">Yes &mdash; each $x$ has exactly one $y$ (all equal 4)</div></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">4.</div>
+  <div class="pr-prob">Is $y=x^2+1$ a function?</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">Yes &mdash; one output per input</div></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">5.</div>
+  <div class="pr-prob">Is $x^2+y^2=9$ a function?</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">No &mdash; fails vertical line test (e.g. $x=0$ gives $y=\pm 3$)</div></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">6.</div>
+  <div class="pr-prob">Is $y=5$ a function?</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">Yes &mdash; every $x$ maps to exactly one output (5)</div></div>
+</div>
+</div>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/contrib/auto-render.min.js"></script>
+<script>
+function toggleAns(btn) {
+  if (!btn.dataset.orig) btn.dataset.orig = btn.textContent;
+  var ans = btn.nextElementSibling;
+  var showing = ans.classList.toggle('visible');
+  btn.textContent = showing ? 'Hide' : btn.dataset.orig;
+}
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left: '$$', right: '$$', display: true},
+      {left: '$',  right: '$',  display: false}
+    ],
+    throwOnError: false
+  });
+</script>
+</body>
+</html>
