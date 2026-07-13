@@ -140,6 +140,18 @@ details[open]>.proof-toggle{color:#1e3a5c}
 .proof-body p{margin-bottom:.45rem}
 .proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
 @media print{.proof-panel{break-inside:avoid}}
+.mistake-panel{margin:.4rem 0 1.1rem;border-left:3px solid #b8860b;border-radius:0 6px 6px 0;background:#fdf8e8}
+.mistake-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#9a6a00;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.mistake-toggle::-webkit-details-marker{display:none}
+details[open]>.mistake-toggle{color:#1e3a5c}
+.mistake-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #e8d8a8}
+.mistake-body p{margin-bottom:.45rem}
+.panel-row{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.1rem}
+.panel-row>.proof-panel,.panel-row>.mistake-panel{margin:0;min-width:0}
+@media print{
+  .panel-row{break-inside:avoid}
+  .mistake-panel{break-inside:avoid}
+}
 </style>
 </head>
 <body>
@@ -150,6 +162,7 @@ details[open]>.proof-toggle{color:#1e3a5c}
 <div class="two-col">
 <div class="col"><div class="section-head">Integration Rules</div>
 <div class="accent-box"><p><strong>Power Rule</strong> $(n\neq -1)$:</p><p>$$\int x^n\,dx=\frac{x^{n+1}}{n+1}+C$$</p><p><strong>Constant Rule:</strong> $\displaystyle\int k\,dx=kx+C$</p><p><strong>Constant Multiple:</strong> $\displaystyle\int c\,f(x)\,dx=c\int f(x)\,dx$</p><p><strong>Sum / Difference:</strong></p><p>$\displaystyle\int[f(x)\pm g(x)]\,dx=\int f\,dx\pm\int g\,dx$</p></div>
+<div class="panel-row">
 <details class="proof-panel">
 <summary class="proof-toggle">▸ Show Proof</summary>
 <div class="proof-body">
@@ -163,10 +176,25 @@ details[open]>.proof-toggle{color:#1e3a5c}
   <p class="proof-qed">∎</p>
 </div>
 </details>
+<details class="mistake-panel">
+<summary class="mistake-toggle">▸ Common Mistake</summary>
+<div class="mistake-body">
+  <p>Students often write $\displaystyle\int x^n\,dx = \frac{x^n}{n}+C$ instead of $\displaystyle\frac{x^{n+1}}{n+1}+C$ — dividing by the <em>original</em> exponent $n$ rather than the <em>new</em> one after raising the power. For example, $\int x^3\,dx$ becomes $\frac{x^4}{4}+C$, not $\frac{x^3}{3}+C$. The slip comes from over-focusing on the exponent that was already there and forgetting the exponent changes first — only then does the new exponent become the divisor.</p>
+  <p>Also common: dropping the $+C$. Since $\int x^n\,dx$ asks for an entire <em>family</em> of antiderivatives, not just the one you'd get by reversing the derivative in your head, omitting $C$ loses that generality — and it typically costs a point on a test even when every other step is right.</p>
+</div>
+</details>
+</div>
 <p class="body-text">$+C$ is the <strong>constant of integration</strong> — every antiderivative family has infinitely many members differing by a constant. For definite integrals, $C$ cancels and can be dropped.</p>
 </div>
 <div class="col"><div class="section-head">Common Antiderivatives</div>
 <div class="accent-box"><ul>  <li>$\displaystyle\int e^x\,dx = e^x+C$</li>  <li>$\displaystyle\int \frac{1}{x}\,dx = \ln|x|+C$</li>  <li>$\displaystyle\int \sin x\,dx = -\cos x+C$</li>  <li>$\displaystyle\int \cos x\,dx = \sin x+C$</li></ul><p style='margin-top:.5rem'><strong>Area below the $x$-axis is negative.</strong><br>For a definite integral, any region where $f(x)&lt;0$ subtracts from the total. Signed area $\neq$ total area.</p></div>
+<details class="mistake-panel">
+<summary class="mistake-toggle">▸ Common Mistake</summary>
+<div class="mistake-body">
+  <p>Students treat $\int_a^b f(x)\,dx$ as if it always returns a positive quantity — "the area under the curve" — and get thrown off (or "fix" their answer) when the result comes out negative. If $f(x)<0$ somewhere on $[a,b]$, the definite integral is <em>signed</em> area: regions below the $x$-axis subtract from the total instead of adding to it.</p>
+  <p>For instance, $\int_{-2}^{0}x^3\,dx = \left[\frac{x^4}{4}\right]_{-2}^0 = 0-4=-4$, and $-4$ is the correct final answer — not $4$. To get the <em>total</em> (unsigned) area between the curve and the axis, you'd need to split the interval at the roots of $f$ and integrate $|f|$ piece by piece; the plain definite integral won't do that for you automatically.</p>
+</div>
+</details>
 </div>
 </div>
 <div class="section-head">Worked Examples</div>
@@ -245,5 +273,6 @@ function toggleAns(btn) {
   });
 </script>
 <!-- proof-layer:done -->
+<!-- mistake-layer:done -->
 </body>
 </html>

@@ -141,6 +141,18 @@ details[open]>.proof-toggle{color:#1e3a5c}
 .proof-body p{margin-bottom:.45rem}
 .proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
 @media print{.proof-panel{break-inside:avoid}}
+.mistake-panel{margin:.4rem 0 1.1rem;border-left:3px solid #b8860b;border-radius:0 6px 6px 0;background:#fdf8e8}
+.mistake-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#9a6a00;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.mistake-toggle::-webkit-details-marker{display:none}
+details[open]>.mistake-toggle{color:#1e3a5c}
+.mistake-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #e8d8a8}
+.mistake-body p{margin-bottom:.45rem}
+.panel-row{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.1rem}
+.panel-row>.proof-panel,.panel-row>.mistake-panel{margin:0;min-width:0}
+@media print{
+  .panel-row{break-inside:avoid}
+  .mistake-panel{break-inside:avoid}
+}
 </style>
 </head>
 <body>
@@ -151,6 +163,7 @@ details[open]>.proof-toggle{color:#1e3a5c}
 <div class="two-col">
 <div class="col"><div class="section-head">Roots as Fractional Exponents</div>
 <div class="accent-box"><p><strong>Key equivalence:</strong><br>$\sqrt[n]{a} = a^{1/n}$</p><p>$\sqrt{a} = a^{1/2}$ &nbsp; (square root)<br>$\sqrt[3]{a} = a^{1/3}$ &nbsp; (cube root)</p><p><strong>General rule:</strong> $\sqrt[n]{a^m} = a^{m/n}$</p><p><strong>Product rule for radicals:</strong><br>$\sqrt{ab} = \sqrt{a} \cdot \sqrt{b}$<br>Use this to separate perfect squares.</p></div>
+<div class="panel-row">
 <details class="proof-panel">
 <summary class="proof-toggle">▸ Show Proof</summary>
 <div class="proof-body">
@@ -161,10 +174,25 @@ details[open]>.proof-toggle{color:#1e3a5c}
   <p class="proof-qed">∎</p>
 </div>
 </details>
+<details class="mistake-panel">
+<summary class="mistake-toggle">▸ Common Mistake</summary>
+<div class="mistake-body">
+  <p>Students frequently extend the product rule for radicals to sums, writing $\sqrt{a+b}=\sqrt{a}+\sqrt{b}$. It's false in general: $\sqrt{9+16}=\sqrt{25}=5$, but $\sqrt9+\sqrt{16}=3+4=7$. The valid rule only distributes over multiplication and division ($\sqrt{ab}=\sqrt a\cdot\sqrt b$), never over addition or subtraction — $(a+b)^{1/2}\neq a^{1/2}+b^{1/2}$, because fractional exponents don't distribute across sums the way whole-number exponents distribute across products.</p>
+  <p>If you're unsure whether a step is legal, rewrite it with fractional exponents and ask whether you're really using the exponent rule $(xy)^n=x^ny^n$ — if there's a $+$ instead of a $\times$ inside the parentheses, the shortcut doesn't apply.</p>
+</div>
+</details>
+</div>
 <p class="body-text">A factor comes out of a square root when its exponent is at least 2 (or when it contains a perfect square as a factor).</p>
 </div>
 <div class="col"><div class="section-head">Simplifying &mdash; Factor Out Perfect Powers</div>
 <div class="accent-box"><p><strong>Steps:</strong></p><ol style='margin-left:1.2rem;margin-top:.3rem'><li>Factor the radicand into (perfect square) &times; (leftover)</li><li>Apply $\sqrt{a^2 \cdot b} = a\sqrt{b}$</li><li>Repeat for variables</li></ol><p>e.g. $\sqrt{12x^2} = \sqrt{4x^2 \cdot 3} = 2x\sqrt{3}$</p><p>e.g. $\sqrt{8x^3} = \sqrt{4x^2 \cdot 2x} = 2x\sqrt{2x}$</p><p>e.g. $\sqrt[3]{27x^6} = \sqrt[3]{27} \cdot x^{6/3} = 3x^2$</p></div>
+<details class="mistake-panel">
+<summary class="mistake-toggle">▸ Common Mistake</summary>
+<div class="mistake-body">
+  <p>For higher-index roots like $\sqrt[3]{27x^6}$, students often divide the exponent by $2$ out of habit — the reflex built from simplifying square roots — and write $x^{6/2}=x^3$ instead of $x^{6/3}=x^2$. The divisor has to match the <em>index</em> of the root, not default to $2$: $\sqrt[n]{x^m}=x^{m/n}$.</p>
+  <p>Before simplifying, check which root you're taking. Square roots divide exponents by $2$, cube roots by $3$, and so on — mixing them up doesn't just give an imprecise answer, it gives a different function altogether.</p>
+</div>
+</details>
 </div>
 </div>
 <div class="section-head">Worked Examples</div>
@@ -243,5 +271,6 @@ function toggleAns(btn) {
   });
 </script>
 <!-- proof-layer:done -->
+<!-- mistake-layer:done -->
 </body>
 </html>

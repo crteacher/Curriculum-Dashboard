@@ -57,6 +57,18 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   .st-ans-hidden{display:none !important}
 }
 @page{margin:.55in .65in;size:letter}
+.mistake-panel{margin:.4rem 0 1.1rem;border-left:3px solid #b8860b;border-radius:0 6px 6px 0;background:#fdf8e8}
+.mistake-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#9a6a00;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.mistake-toggle::-webkit-details-marker{display:none}
+details[open]>.mistake-toggle{color:#1e3a5c}
+.mistake-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #e8d8a8}
+.mistake-body p{margin-bottom:.45rem}
+.panel-row{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.1rem}
+.panel-row>.proof-panel,.panel-row>.mistake-panel{margin:0;min-width:0}
+@media print{
+  .panel-row{break-inside:avoid}
+  .mistake-panel{break-inside:avoid}
+}
 </style>
 </head>
 <body>
@@ -66,8 +78,22 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 <div class="opening-q">If you know the graph of $y=\sin x$, how do you use transformations to graph any $y=A\sin(Bx+C)+D$? What is the fastest approach?</div>
 <div class="two-col"><div class="col"><div class="section-head">Graphing Strategy</div>
 <div class="accent-box"><p><strong>Step-by-step:</strong></p><ol style='margin-left:1.1rem'><li>Factor to the form $A\sin(B(x-C))+D$.</li><li>Identify amp, period, phase shift, midline.</li><li>Plot midline; mark one full period starting at $x=C$.</li><li>Plot 5 key points; sketch the wave.</li></ol><p>For cosine: same process but starts at a max (or min if $A<0$).</p></div>
+<details class="mistake-panel">
+<summary class="mistake-toggle">▸ Common Mistake</summary>
+<div class="mistake-body">
+  <p>Given something like $y=\sin(3x+\pi)$, students often read the phase shift straight off the $+\pi$ inside the parentheses — forgetting that the form $A\sin(B(x-C))+D$ requires factoring $B$ out <em>first</em>. Written correctly, $\sin(3x+\pi) = \sin\!\big(3(x+\tfrac{\pi}{3})\big)$, so the actual shift is $\pi/3$ left, not $\pi$.</p>
+  <p>The fix is mechanical: factor the coefficient of $x$ out of the whole argument before identifying $C$. Skip that step and you'll get the right period but the wrong shift every time the coefficient of $x$ isn't $1$.</p>
+</div>
+</details>
 </div><div class="col"><div class="section-head">Reading Graphs</div>
 <div class="accent-box"><p>Given a graph, extract:</p><ul><li><strong>Midline</strong> = $\dfrac{\text{max}+\text{min}}{2}$</li><li><strong>Amplitude</strong> = $\dfrac{\text{max}-\text{min}}{2}$</li><li><strong>Period</strong> = distance between two consecutive identical points.</li></ul><p>Then decide sin or cos based on whether it starts at 0 (sin) or a max/min (cos).</p></div>
+<details class="mistake-panel">
+<summary class="mistake-toggle">▸ Common Mistake</summary>
+<div class="mistake-body">
+  <p>Students frequently compute amplitude as $\text{max}-\text{min}$ instead of $\dfrac{\text{max}-\text{min}}{2}$ — reporting the full vertical <em>span</em> of the wave rather than the distance from the midline to the peak. For a graph with max $8$ and min $2$, the amplitude is $3$, not $6$.</p>
+  <p>"Max minus min" does describe something real about the graph — its total height — it's just not the amplitude. Amplitude is measured from the <em>center</em> of the wave, so that span has to be cut in half.</p>
+</div>
+</details>
 </div></div>
 <div style="text-align:center;margin:1rem 0 0.5rem"><svg width="520" height="180" viewBox="0 0 520 180" xmlns="http://www.w3.org/2000/svg">
 <rect width="520" height="180" fill="#fafaf8" rx="6"/>
@@ -522,5 +548,6 @@ renderMathInElement(document.body, {
   throwOnError: false
 });
 </script>
+<!-- mistake-layer:done -->
 </body>
 </html>

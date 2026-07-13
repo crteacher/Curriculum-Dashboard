@@ -140,6 +140,18 @@ details[open]>.proof-toggle{color:#1e3a5c}
 .proof-body p{margin-bottom:.45rem}
 .proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
 @media print{.proof-panel{display:none}}
+.mistake-panel{margin:.4rem 0 1.1rem;border-left:3px solid #b8860b;border-radius:0 6px 6px 0;background:#fdf8e8}
+.mistake-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#9a6a00;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.mistake-toggle::-webkit-details-marker{display:none}
+details[open]>.mistake-toggle{color:#1e3a5c}
+.mistake-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #e8d8a8}
+.mistake-body p{margin-bottom:.45rem}
+.panel-row{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.1rem}
+.panel-row>.proof-panel,.panel-row>.mistake-panel{margin:0;min-width:0}
+@media print{
+  .panel-row{break-inside:avoid}
+  .mistake-panel{break-inside:avoid}
+}
 </style>
 </head>
 <body>
@@ -150,6 +162,7 @@ details[open]>.proof-toggle{color:#1e3a5c}
 <div class="two-col">
 <div class="col"><div class="section-head">Integral Test</div>
 <div class="accent-box"><p>If $f$ is continuous, positive, decreasing on $[1,\infty)$ and $a_n=f(n)$:</p><p>$\sum_{n=1}^\infty a_n$ and $\int_1^\infty f(x)\,dx$ <strong>both converge or both diverge</strong>.</p><p><strong>$p$-series:</strong> $\sum\dfrac{1}{n^p}$ converges iff $p>1$.</p></div>
+<div class="panel-row">
 <details class="proof-panel">
 <summary class="proof-toggle">▸ Show Proof</summary>
 <div class="proof-body">
@@ -163,9 +176,24 @@ details[open]>.proof-toggle{color:#1e3a5c}
   <p class="proof-qed">∎</p>
 </div>
 </details>
+<details class="mistake-panel">
+<summary class="mistake-toggle">▸ Common Mistake</summary>
+<div class="mistake-body">
+  <p>When applying the $p$-series rule $\sum 1/n^p$, students often round $p=1$ into the "converges" bucket because it feels like the boundary case should be included, writing something like "converges for $p\geq 1$." It doesn't: $p=1$ is the harmonic series $\sum 1/n$, and it diverges (the corresponding integral $\int_1^\infty dx/x = \ln x\big|_1^\infty=\infty$ is infinite). The rule is strictly $p>1$ for convergence — the boundary belongs to the divergent side, not the convergent one.</p>
+  <p>This mistake usually comes from pattern-matching to other tests where boundary cases are ambiguous, rather than actually checking what the integral test says at $p=1$: run the improper integral yourself instead of guessing which side $p=1$ lands on.</p>
+</div>
+</details>
+</div>
 </div>
 <div class="col"><div class="section-head">Using the Tests</div>
 <div class="accent-box"><p>1. Verify $f$ is positive, continuous, decreasing.</p><p>2. Evaluate $\int_1^\infty f(x)\,dx$.</p><p>3. Conclude convergence/divergence of the series (not its value).</p><p>Note: The integral value $\neq$ the series sum.</p></div>
+<details class="mistake-panel">
+<summary class="mistake-toggle">▸ Common Mistake</summary>
+<div class="mistake-body">
+  <p>After running the integral test and confirming convergence, students sometimes report the value of the integral as if it were the sum of the series — e.g., concluding $\sum_{n=1}^\infty 1/n^2$ "equals" $\int_1^\infty dx/x^2 = 1$. It doesn't: the integral test only tells you <em>whether</em> the series converges, never <em>what it converges to</em>. The actual sum $\sum 1/n^2 = \pi^2/6\approx1.645$ isn't even close to the integral's value of $1$.</p>
+  <p>The two quantities aren't supposed to match — the rectangles used to build the integral's bounds sit strictly above or below the curve, so the integral traces a rough boundary, not a running total of the series.</p>
+</div>
+</details>
 </div>
 </div>
 <div class="section-head">Worked Examples</div>
@@ -244,5 +272,6 @@ function toggleAns(btn) {
   });
 </script>
 <!-- proof-layer:done -->
+<!-- mistake-layer:done -->
 </body>
 </html>
