@@ -234,7 +234,7 @@ function gen7(){
   const x1 = 0, y1 = b;
   const x2 = choose([2,4,5,10]);
   const y2 = m * x2 + b;
-  const xNew = choose([3,6,8,12,15]).filter(v => v !== x2)[0] || 3;
+  const xNew = choose([3,6,8,12,15].filter(v => v !== x2));
   const ans = m * xNew + b;
   const bS = b > 0 ? `+${b}` : (b === 0 ? '' : `${b}`);
   return {
@@ -248,8 +248,8 @@ function gen7(){
 function gen8(){
   // Break-even: Revenue R(x)=p*x vs Cost C(x)=m*x+b → find x where R=C (integer)
   const xStar = choose([5,10,15,20,25]);
-  const p = choose([8,10,12,15,20]);    // price per unit (revenue slope)
-  const m = choose([2,3,4,5]);          // variable cost per unit
+  let p = choose([8,10,12,15,20]);      // price per unit (revenue slope)
+  let m = choose([2,3,4,5]);            // variable cost per unit
   if (p <= m) { p = m + 2; }            // ensure p > m
   const b = (p - m) * xStar;           // fixed cost so that R(x*)=C(x*)
   return {

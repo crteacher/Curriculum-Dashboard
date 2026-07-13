@@ -113,11 +113,11 @@
 // gen1: Evaluate sinh or cosh at ln(n), rand n∈{2,3,4}
 function gen1(){
   const data=[
-    {n:2,f:'sinh',ans:'3/4',step:'\\\\sinh(\\\\ln 2)=\\\\frac{2-1/2}{2}=\\\\frac{3}{4}'},
-    {n:3,f:'cosh',ans:'5/3',step:'\\\\cosh(\\\\ln 3)=\\\\frac{3+1/3}{2}=\\\\frac{10/3}{2}=\\\\frac{5}{3}'},
-    {n:2,f:'cosh',ans:'5/4',step:'\\\\cosh(\\\\ln 2)=\\\\frac{2+1/2}{2}=\\\\frac{5}{4}'},
-    {n:3,f:'sinh',ans:'4/3',step:'\\\\sinh(\\\\ln 3)=\\\\frac{3-1/3}{2}=\\\\frac{8/3}{2}=\\\\frac{4}{3}'},
-    {n:4,f:'cosh',ans:'17/8',step:'\\\\cosh(\\\\ln 4)=\\\\frac{4+1/4}{2}=\\\\frac{17/4}{2}=\\\\frac{17}{8}'}
+    {n:2,f:'sinh',ans:'3/4',step:'\\sinh(\\ln 2)=\\frac{2-1/2}{2}=\\frac{3}{4}'},
+    {n:3,f:'cosh',ans:'5/3',step:'\\cosh(\\ln 3)=\\frac{3+1/3}{2}=\\frac{10/3}{2}=\\frac{5}{3}'},
+    {n:2,f:'cosh',ans:'5/4',step:'\\cosh(\\ln 2)=\\frac{2+1/2}{2}=\\frac{5}{4}'},
+    {n:3,f:'sinh',ans:'4/3',step:'\\sinh(\\ln 3)=\\frac{3-1/3}{2}=\\frac{8/3}{2}=\\frac{4}{3}'},
+    {n:4,f:'cosh',ans:'17/8',step:'\\cosh(\\ln 4)=\\frac{4+1/4}{2}=\\frac{17/4}{2}=\\frac{17}{8}'}
   ];
   const d=choose(data);
   return {
@@ -131,10 +131,10 @@ function gen1(){
 // gen2: Derivative using chain rule, rand function
 function gen2(){
   const data=[
-    {f:'sinh(3x)',df:'3cosh(3x)',latex:'\\\\sinh(3x)',dlat:'3\\\\cosh(3x)'},
-    {f:'cosh(x^2)',df:'2x*sinh(x^2)',latex:'\\\\cosh(x^2)',dlat:'2x\\\\sinh(x^2)'},
-    {f:'tanh(5x)',df:'5sech^2(5x)',latex:'\\\\tanh(5x)',dlat:'5\\\\,\\\\text{sech}^2(5x)'},
-    {f:'sinh(e^x)',df:'e^x*cosh(e^x)',latex:'\\\\sinh(e^x)',dlat:'e^x\\\\cosh(e^x)'}
+    {f:'sinh(3x)',df:'3cosh(3x)',latex:'\\sinh(3x)',dlat:'3\\cosh(3x)'},
+    {f:'cosh(x^2)',df:'2x*sinh(x^2)',latex:'\\cosh(x^2)',dlat:'2x\\sinh(x^2)'},
+    {f:'tanh(5x)',df:'5sech^2(5x)',latex:'\\tanh(5x)',dlat:'5\\,\\text{sech}^2(5x)'},
+    {f:'sinh(e^x)',df:'e^x*cosh(e^x)',latex:'\\sinh(e^x)',dlat:'e^x\\cosh(e^x)'}
   ];
   const d=choose(data);
   return {
@@ -159,9 +159,9 @@ function gen3(){
 // gen4: Definite integral of sinh or cosh
 function gen4(){
   const data=[
-    {f:'\\\\cosh x',F:'\\\\sinh x',a:0,b:1,ans:'sinh(1)',step:'[\\\\sinh x]_0^1=\\\\sinh(1)-0=\\\\sinh(1)'},
-    {f:'\\\\sinh x',F:'\\\\cosh x',a:0,b:1,ans:'cosh(1)-1',step:'[\\\\cosh x]_0^1=\\\\cosh(1)-1'},
-    {f:'\\\\cosh(2x)',F:'\\\\frac{1}{2}\\\\sinh(2x)',a:0,b:1,ans:'sinh(2)/2',step:'\\\\left[\\\\frac{\\\\sinh(2x)}{2}\\\\right]_0^1=\\\\frac{\\\\sinh 2}{2}'}
+    {f:'\\cosh x',F:'\\sinh x',a:0,b:1,ans:'sinh(1)',step:'[\\sinh x]_0^1=\\sinh(1)-0=\\sinh(1)'},
+    {f:'\\sinh x',F:'\\cosh x',a:0,b:1,ans:'cosh(1)-1',step:'[\\cosh x]_0^1=\\cosh(1)-1'},
+    {f:'\\cosh(2x)',F:'\\frac{1}{2}\\sinh(2x)',a:0,b:1,ans:'sinh(2)/2',step:'\\left[\\frac{\\sinh(2x)}{2}\\right]_0^1=\\frac{\\sinh 2}{2}'}
   ];
   const d=choose(data);
   return {
@@ -175,9 +175,9 @@ function gen4(){
 // gen5: Arc length of y=cosh(x) on [a,b], rand (a,b)
 function gen5(){
   const data=[
-    {a:'-1',b:'1',ans:'2sinh(1)',step:'L=\\\\int_{-1}^{1}\\\\cosh x\\,dx=[\\\\sinh x]_{-1}^1=\\\\sinh(1)-\\\\sinh(-1)=2\\\\sinh(1)'},
-    {a:'0',b:'1',ans:'sinh(1)',step:'L=\\\\int_0^1\\\\cosh x\\,dx=[\\\\sinh x]_0^1=\\\\sinh(1)'},
-    {a:'0',b:'2',ans:'sinh(2)',step:'L=\\\\int_0^2\\\\cosh x\\,dx=[\\\\sinh x]_0^2=\\\\sinh(2)'}
+    {a:'-1',b:'1',ans:'2sinh(1)',step:'L=\\int_{-1}^{1}\\cosh x\\,dx=[\\sinh x]_{-1}^1=\\sinh(1)-\\sinh(-1)=2\\sinh(1)'},
+    {a:'0',b:'1',ans:'sinh(1)',step:'L=\\int_0^1\\cosh x\\,dx=[\\sinh x]_0^1=\\sinh(1)'},
+    {a:'0',b:'2',ans:'sinh(2)',step:'L=\\int_0^2\\cosh x\\,dx=[\\sinh x]_0^2=\\sinh(2)'}
   ];
   const d=choose(data);
   return {
@@ -191,14 +191,14 @@ function gen5(){
 // gen6: Chain rule with product, e.g. d/dx[x*sinh(x)]
 function gen6(){
   const data=[
-    {f:'x\\\\sinh x',df:'\\\\sinh x+x\\\\cosh x',hint:'Apply the product rule, then the hyperbolic derivative rule.'},
-    {f:'x^2\\\\cosh x',df:'2x\\\\cosh x+x^2\\\\sinh x',hint:'Apply the product rule, then the hyperbolic derivative rule.'},
-    {f:'e^x\\\\sinh x',df:'e^x\\\\sinh x+e^x\\\\cosh x=e^x(\\\\sinh x+\\\\cosh x)',hint:'Both factors need differentiation — which rule applies to a product of two functions?'}
+    {f:'x\\sinh x',df:'\\sinh x+x\\cosh x',hint:'Apply the product rule, then the hyperbolic derivative rule.'},
+    {f:'x^2\\cosh x',df:'2x\\cosh x+x^2\\sinh x',hint:'Apply the product rule, then the hyperbolic derivative rule.'},
+    {f:'e^x\\sinh x',df:'e^x\\sinh x+e^x\\cosh x=e^x(\\sinh x+\\cosh x)',hint:'Both factors need differentiation — which rule applies to a product of two functions?'}
   ];
   const d=choose(data);
   return {
     latex:`\\text{Find }\\dfrac{d}{dx}\\left[${d.f}\\right].`,
-    answer:[d.df.replace(/\\\\/g,'')],
+    answer:[d.df.replace(/\\/g,'')],
     hint:d.hint,
     step:`\\frac{d}{dx}\\left[${d.f}\\right]=${d.df}`
   };
@@ -207,9 +207,9 @@ function gen6(){
 // gen7: sinh(0)=0, cosh(0)=1 quick facts + tanh(0)=0
 function gen7(){
   const data=[
-    {q:'\\\\sinh(0)',ans:'0',step:'\\\\sinh(0)=\\\\frac{e^0-e^0}{2}=0'},
-    {q:'\\\\cosh(0)',ans:'1',step:'\\\\cosh(0)=\\\\frac{1+1}{2}=1'},
-    {q:'\\\\tanh(0)',ans:'0',step:'\\\\tanh(0)=\\\\frac{\\\\sinh 0}{\\\\cosh 0}=\\\\frac{0}{1}=0'}
+    {q:'\\sinh(0)',ans:'0',step:'\\sinh(0)=\\frac{e^0-e^0}{2}=0'},
+    {q:'\\cosh(0)',ans:'1',step:'\\cosh(0)=\\frac{1+1}{2}=1'},
+    {q:'\\tanh(0)',ans:'0',step:'\\tanh(0)=\\frac{\\sinh 0}{\\cosh 0}=\\frac{0}{1}=0'}
   ];
   const d=choose(data);
   return {
@@ -223,13 +223,13 @@ function gen7(){
 // gen8: Verify d/dx[cosh x] = sinh x from definition
 function gen8(){
   const data=[
-    {f:'\\\\cosh x',df:'\\\\sinh x',step:'\\\\frac{d}{dx}\\\\cosh x=\\\\frac{e^x-e^{-x}}{2}=\\\\sinh x'},
-    {f:'\\\\sinh x',df:'\\\\cosh x',step:'\\\\frac{d}{dx}\\\\sinh x=\\\\frac{e^x+e^{-x}}{2}=\\\\cosh x'}
+    {f:'\\cosh x',df:'\\sinh x',step:'\\frac{d}{dx}\\cosh x=\\frac{e^x-e^{-x}}{2}=\\sinh x'},
+    {f:'\\sinh x',df:'\\cosh x',step:'\\frac{d}{dx}\\sinh x=\\frac{e^x+e^{-x}}{2}=\\cosh x'}
   ];
   const d=choose(data);
   return {
-    latex:`\\text{Use the exponential definition to show }\\dfrac{d}{dx}\\left[${d.f}\\right]=${d.df}.\\\\\\text{What is the derivative? Enter it.}`,
-    answer:[d.df.replace(/\\\\/g,'').replace('{','').replace('}','')],
+    latex:`\\text{Use the exponential definition to show }\\dfrac{d}{dx}\\left[${d.f}\\right]=${d.df}.\\quad\\text{What is the derivative? Enter it.}`,
+    answer:[d.df.replace(/\\/g,'').replace('{','').replace('}','')],
     hint:'Differentiate the exponential definition term-by-term — the result should match another hyperbolic function.',
     step:d.step
   };

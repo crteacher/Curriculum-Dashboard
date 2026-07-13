@@ -229,22 +229,20 @@ function gen7() {
   };
 }
 
-// gen8: evaluate to check if a value is in the range — f(x)=ax+b, is y=k achievable?
+// gen8: is y = k in the range of f(x) = x² + b ?  (range is [b, ∞))
 function gen8() {
-  const a = rInt(3) + 2, b = rInt(4) + 1;
-  const x = rInt(4) + 1;
-  const trueK = a * x + b;
-  const isIn  = rInt(2) === 0;
-  const k     = isIn ? trueK : trueK + 1;
-  const ans   = isIn ? 'yes' : 'no';
-  const bStr  = `+ ${b}`;
+  const b    = rInt(5) + 1;                      // min of range: 1–5
+  const isIn = rInt(2) === 0;
+  // in-range: k ≥ b+1; out-of-range: k ≤ b-1
+  const k    = isIn ? b + rInt(4) + 1 : b - rInt(3) - 1;
+  const ans  = isIn ? 'yes' : 'no';
   return {
-    latex:  `\\text{Is }y=${k}\\text{ in the range of }f(x)=${a}x+${b}\\text{?}`,
+    latex:  `\\text{Is }y=${k}\\text{ in the range of }f(x)=x^2+${b}\\text{?}`,
     answer: [ans],
-    hint:   `Set the formula equal to ${k} and try to solve for x. Does a real solution exist?`,
+    hint:   `The minimum output of x\u00b2 + ${b} is ${b} (when x = 0). Is ${k} \u2265 ${b}?`,
     step:   isIn
-      ? `${a}x+${b}=${k}\\Rightarrow x=${x}\\quad\\text{→ yes}`
-      : `${a}x+${b}=${k}\\Rightarrow x=\\frac{${k-b}}{${a}}\\text{ — not an issue, but testing parity → no}`
+      ? `\\text{Range: }[${b},\\infty).\\quad ${k}\\geq ${b}\\quad\\text{\u2192 yes}`
+      : `\\text{Range: }[${b},\\infty).\\quad ${k}<${b}\\quad\\text{\u2192 no}`
   };
 }
 
