@@ -141,6 +141,18 @@ details[open]>.proof-toggle{color:#1e3a5c}
 .proof-body p{margin-bottom:.45rem}
 .proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
 @media print{.proof-panel{break-inside:avoid}}
+.mistake-panel{margin:.4rem 0 1.1rem;border-left:3px solid #b8860b;border-radius:0 6px 6px 0;background:#fdf8e8}
+.mistake-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#9a6a00;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.mistake-toggle::-webkit-details-marker{display:none}
+details[open]>.mistake-toggle{color:#1e3a5c}
+.mistake-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #e8d8a8}
+.mistake-body p{margin-bottom:.45rem}
+.panel-row{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.1rem}
+.panel-row>.proof-panel,.panel-row>.mistake-panel{margin:0;min-width:0}
+@media print{
+  .panel-row{break-inside:avoid}
+  .mistake-panel{break-inside:avoid}
+}
 </style>
 </head>
 <body>
@@ -162,6 +174,13 @@ details[open]>.proof-toggle{color:#1e3a5c}
   <p class="proof-qed">∎</p>
 </div>
 </details>
+<details class="mistake-panel">
+<summary class="mistake-toggle">▸ Common Mistake</summary>
+<div class="mistake-body">
+  <p>The most common error with these rules is swapping <em>add</em> and <em>multiply</em>: students see $(x^2)^3$ and write $x^{2+3}=x^5$ instead of $x^{2\cdot 3}=x^6$, or they see $x^2\cdot x^3$ and multiply the exponents to get $x^6$ instead of adding to get $x^5$.</p>
+  <p>When you're <strong>multiplying two powers of the same base</strong>, the exponents add ($a^m\cdot a^n=a^{m+n}$) because you're combining two separate stacks of factors into one longer stack. When you're <strong>raising a power to a power</strong>, the exponents multiply ($(a^m)^n=a^{mn}$) because you're repeating an already-repeated multiplication. Before you touch the exponents, say out loud which operation is sitting between the two powers &mdash; "times" or "to the power of" &mdash; and let that decide add vs. multiply.</p>
+</div>
+</details>
 </div>
 <div class="col"><div class="section-head">Zero, Negative &amp; Fractional Exponents</div>
 <div class="accent-box"><p><strong>Zero exponent:</strong> $a^0 = 1$ &nbsp; ($a \neq 0$)</p><p><strong>Negative exponent:</strong> $a^{-n} = \dfrac{1}{a^n}$</p><p><strong>Fractional exponent:</strong> $a^{1/n} = \sqrt[n]{a}$ &nbsp; and &nbsp; $a^{m/n} = \left(\sqrt[n]{a}\right)^m$<br>e.g. $27^{2/3} = (\sqrt[3]{27})^2 = 3^2 = 9$</p></div>
@@ -173,6 +192,13 @@ details[open]>.proof-toggle{color:#1e3a5c}
   <p><strong>Negative exponent:</strong> $a^n \cdot a^{-n} = a^{n+(-n)} = a^0 = 1$. So $a^{-n}$ is the reciprocal of $a^n$: $a^{-n} = \dfrac{1}{a^n}$.</p>
   <p><strong>Fractional exponent:</strong> $(a^{1/n})^n = a^{(1/n)\cdot n} = a^1 = a$ by the power-of-power rule. So $a^{1/n}$ is the number whose $n$th power is $a$ &mdash; that is exactly $\sqrt[n]{a}$ by definition. Then $a^{m/n} = (a^{1/n})^m = (\sqrt[n]{a})^m$.</p>
   <p class="proof-qed">∎</p>
+</div>
+</details>
+<details class="mistake-panel">
+<summary class="mistake-toggle">▸ Common Mistake</summary>
+<div class="mistake-body">
+  <p>Students often distribute the negative sign onto the base instead of flipping to a reciprocal, writing $a^{-n} = -a^n$ instead of the correct $a^{-n}=\dfrac{1}{a^n}$. For example, $2^{-3}$ gets simplified to "$-8$" instead of $\dfrac{1}{8}$.</p>
+  <p>The negative sign in the exponent is not a sign on the value &mdash; it's an instruction to take the reciprocal. Nothing about $a^{-n}$ is negative when $a>0$: $2^{-3}=\dfrac{1}{2^3}=\dfrac{1}{8}$, a positive number less than 1. Do the reciprocal step first, then evaluate; don't let the minus sign leak onto the final answer.</p>
 </div>
 </details>
 <p class="body-text">Final answers should have no negative exponents and no parentheses.</p>
@@ -254,5 +280,6 @@ function toggleAns(btn) {
   });
 </script>
 <!-- proof-layer:done -->
+<!-- mistake-layer:done -->
 </body>
 </html>
