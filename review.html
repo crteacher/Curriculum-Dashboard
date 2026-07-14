@@ -148,6 +148,13 @@ const PREREQ_LINKS = {
   calc1: { href: './prereq-calc1.html',   label: 'PreCalc highlights for Calc 1' }
 };
 
+// Day 1 Skills Check diagnostic pages — prerequisite self-assessment with feedback.
+const DAY1_LINKS = {
+  ca:    { href: './College Algebra/CA_Day1_Skills_Check.html',   label: 'Day 1 Skills Check' },
+  pc:    { href: './PreCalc/PreCalc_Day1_Skills_Check.html',      label: 'Day 1 Skills Check' },
+  calc1: { href: './Calc 1/Calc1_Day1_Skills_Check.html',         label: 'Day 1 Skills Check' }
+};
+
 function setCourse(course) {
   _currentCourse = course;
   document.getElementById('btnCA').className = 'course-btn ca' + (course==='ca' ? ' active' : '');
@@ -177,6 +184,7 @@ function buildGrid() {
   const container = document.getElementById('unitBlocks');
   const cls = _currentCourse;
   const prereq = PREREQ_LINKS[_currentCourse];
+  const day1   = DAY1_LINKS[_currentCourse];
 
   const prereqCard = prereq ? `
       <div class="sec-card prereq-card ${cls}" onclick="window.location.href='${prereq.href}'">
@@ -185,18 +193,25 @@ function buildGrid() {
         <div class="sec-card-count">Always available — fresh numbers every time</div>
       </div>` : '';
 
+  const day1Card = day1 ? `
+      <div class="sec-card prereq-card ${cls}" onclick="window.location.href='${day1.href}'">
+        <div class="sec-card-num">📋 Diagnostic</div>
+        <div class="sec-card-title">${day1.label}</div>
+        <div class="sec-card-count">18 questions — strengths &amp; review links</div>
+      </div>` : '';
+
   if (!pool.length) {
-    if (!prereq) {
+    if (!prereq && !day1) {
       document.getElementById('gridIntro').textContent =
         'No review problems available yet — check back after your first completed section.';
       container.innerHTML = '';
       return;
     }
     document.getElementById('gridIntro').textContent =
-      'No section review problems yet — but the prerequisite refresher is always ready.';
+      'No section review problems yet — but these are always ready.';
     container.innerHTML = `<div class="unit-block">
       <div class="unit-label">Quick Start</div>
-      <div class="section-grid">${prereqCard}</div>
+      <div class="section-grid">${prereqCard}${day1Card}</div>
     </div>`;
     return;
   }
@@ -211,7 +226,7 @@ function buildGrid() {
         <div class="sec-card-num">🎲 Random</div>
         <div class="sec-card-title">Surprise me</div>
         <div class="sec-card-count">${pool.length} sections available</div>
-      </div>${prereqCard}
+      </div>${prereqCard}${day1Card}
     </div>
   </div>`;
 

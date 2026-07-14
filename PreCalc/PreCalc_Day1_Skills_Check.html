@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>College Algebra — Day One Skills Check</title>
+<title>PreCalc — Day One Skills Check</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.css">
 <style>
   *{box-sizing:border-box;margin:0;padding:0}
@@ -11,23 +11,23 @@
   .container{max-width:860px;margin:0 auto;padding:2rem 1.5rem 4rem}
   h1{font-size:26px;font-weight:700;margin-bottom:4px}
   .subtitle{font-size:14px;color:#666;margin-bottom:1.25rem;font-family:sans-serif}
-  .intro{background:#d9e8f5;border-left:4px solid #1e3a5c;border-radius:0 8px 8px 0;
+  .intro{background:#fdf3d9;border-left:4px solid #7a5c1e;border-radius:0 8px 8px 0;
     padding:.95rem 1.2rem;font-size:15px;margin-bottom:2rem;font-family:sans-serif;color:#1a1a1a}
-  .intro strong{color:#1e3a5c}
+  .intro strong{color:#7a5c1e}
   .overall-bar{display:flex;align-items:center;gap:12px;margin-bottom:2rem;
     font-family:sans-serif;font-size:14px;flex-wrap:wrap;background:#fff;border:1.5px solid #ddd;
     border-radius:10px;padding:14px 18px}
   .overall-label{color:#777;font-size:13px}
-  .overall-display{font-weight:700;font-size:20px;min-width:80px;color:#1e3a5c}
+  .overall-display{font-weight:700;font-size:20px;min-width:80px;color:#7a5c1e}
   .overall-progress{flex:1;min-width:120px;height:8px;background:#e5e1d8;border-radius:4px;overflow:hidden}
-  .overall-fill{height:100%;background:#1e3a5c;border-radius:4px;transition:width .4s}
+  .overall-fill{height:100%;background:#7a5c1e;border-radius:4px;transition:width .4s}
   .overall-note{font-size:12px;color:#999;font-style:italic;width:100%}
   .section{margin-bottom:2.75rem}
   .section-head{display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:8px;
     border-bottom:1px solid #ddd;padding-bottom:6px;margin-bottom:1rem}
   .section-title{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;
     color:#777;font-family:sans-serif}
-  .section-score{font-family:sans-serif;font-size:13px;color:#1e3a5c;font-weight:700}
+  .section-score{font-family:sans-serif;font-size:13px;color:#7a5c1e;font-weight:700}
   .problems{display:grid;grid-template-columns:repeat(auto-fill,minmax(380px,1fr));gap:14px}
   .card{background:#fff;border:1.5px solid #ddd;border-radius:10px;overflow:hidden;transition:border-color .25s}
   .card.correct{border-color:#3a7a3a}.card.wrong{border-color:#b03030}.card.peeked{border-color:#b8860b}
@@ -39,7 +39,7 @@
   .ans-input{font-family:'Courier New',monospace;font-size:14px;border:1px solid #ccc;
     border-radius:6px;padding:7px 10px;flex:1;min-width:120px;background:#fafaf8;
     color:#1a1a1a;outline:none}
-  .ans-input:focus{border-color:#1e3a5c;background:#fff}
+  .ans-input:focus{border-color:#7a5c1e;background:#fff}
   .ans-input.ok{border-color:#3a7a3a;background:#f0faf0}
   .ans-input.bad{border-color:#b03030;background:#fdf0f0}
   .check-btn{font-family:sans-serif;font-size:13px;background:#1a1a1a;color:#fff;
@@ -55,19 +55,18 @@
   .reveal-link:hover{color:#555}
   .revealed-answer{display:none;margin-top:8px;font-family:sans-serif;font-size:13px;
     color:#444;background:#f5f3ef;border-radius:6px;padding:8px 11px;line-height:1.8;overflow-x:auto}
-  /* Results panel */
   .results-btn-wrap{text-align:center;margin-top:2.5rem}
-  .results-btn{font-family:sans-serif;font-size:15px;background:#1e3a5c;color:#fff;
+  .results-btn{font-family:sans-serif;font-size:15px;background:#7a5c1e;color:#fff;
     border:none;border-radius:8px;padding:11px 30px;cursor:pointer;transition:background .2s}
-  .results-btn:hover{background:#2a5080}
-  #results-panel{display:none;margin-top:2rem;background:#fff;border:2px solid #1e3a5c;
+  .results-btn:hover{background:#9a7a2e}
+  #results-panel{display:none;margin-top:2rem;background:#fff;border:2px solid #7a5c1e;
     border-radius:12px;padding:1.5rem;font-family:sans-serif}
-  #results-panel h2{font-size:18px;font-weight:700;margin-bottom:1.25rem;color:#1e3a5c}
+  #results-panel h2{font-size:18px;font-weight:700;margin-bottom:1.25rem;color:#7a5c1e}
   .res-overall{display:flex;align-items:center;gap:12px;margin-bottom:1.25rem;
-    padding:12px 16px;background:#f0f4fa;border-radius:8px}
-  .res-score{font-size:22px;font-weight:700;color:#1e3a5c;min-width:72px}
-  .res-bar-wrap{flex:1;height:10px;background:#dde;border-radius:5px;overflow:hidden}
-  .res-bar-fill{height:100%;background:#1e3a5c;border-radius:5px;transition:width .5s}
+    padding:12px 16px;background:#fdf7ea;border-radius:8px}
+  .res-score{font-size:22px;font-weight:700;color:#7a5c1e;min-width:72px}
+  .res-bar-wrap{flex:1;height:10px;background:#ddd;border-radius:5px;overflow:hidden}
+  .res-bar-fill{height:100%;background:#7a5c1e;border-radius:5px;transition:width .5s}
   .res-pct{font-size:13px;color:#888;min-width:36px;text-align:right}
   .res-cat{margin-bottom:8px;padding:10px 14px;border-radius:8px;border-left:4px solid #ccc}
   .res-cat.strong{background:#eaf5ea;border-color:#3a7a3a}
@@ -78,30 +77,29 @@
   .res-cat.strong .res-cat-name,.res-cat.strong .res-cat-score{color:#1a5a1a}
   .res-cat.weak .res-cat-name,.res-cat.weak .res-cat-score{color:#7a1a1a}
   .res-links{margin-top:6px;font-size:13px;color:#555}
-  .res-links a{color:#1e3a5c;font-weight:600;text-decoration:none}
+  .res-links a{color:#7a5c1e;font-weight:600;text-decoration:none}
   .res-links a:hover{text-decoration:underline}
 </style>
 </head>
 <body>
 <div class="container">
   <h1>Day One Skills Check</h1>
-  <p class="subtitle">College Algebra &nbsp;&middot;&nbsp; Diagnostic &mdash; not graded for credit
+  <p class="subtitle">PreCalculus &nbsp;&middot;&nbsp; Diagnostic &mdash; not graded for credit
     &nbsp;&middot;&nbsp; Instructor: Christopher Halverson</p>
 
   <div class="intro">
-    This is a quick, ungraded check of the <strong>foundational skills</strong> College Algebra builds on &mdash;
-    things like order of operations, fractions, exponents, solving equations, factoring, and graphing basics.
-    It won&rsquo;t affect your grade. Just do your best with no notes or calculator &mdash; the results help me see
-    which topics we should briefly review early in the semester. Enter each answer and press
-    <strong>Check</strong> or hit Enter. You can reveal the worked solution at any time, but doing so
-    before answering won&rsquo;t count toward your score.
+    This is a quick, ungraded check of the <strong>College Algebra skills</strong> PreCalc builds directly on &mdash;
+    solving equations, factoring, exponents, function notation, and linear graphing.
+    No grade, no pressure. Do your best without notes or a calculator.
+    Enter each answer and press <strong>Check</strong> or hit Enter.
+    You can reveal the worked solution at any time, but doing so before answering won&rsquo;t count toward your score.
   </div>
 
   <div class="overall-bar">
     <span class="overall-label">Overall:</span>
     <span class="overall-display" id="overall-score">0 / 18</span>
     <div class="overall-progress"><div class="overall-fill" id="overall-fill" style="width:0%"></div></div>
-    <span class="overall-note">Scored on first attempt only &mdash; this is just to help me plan, not a test of you.</span>
+    <span class="overall-note">Scored on first attempt only &mdash; helps me see where to focus review time.</span>
   </div>
 
   <div id="sections"></div>
@@ -117,75 +115,82 @@
 
 <script>
 const CATS = [
-  { name: "Order of Operations & Integers",
-    links: [{label:"Order of Operations Practice", href:"OrderOfOperations_Practice.html"}],
-    items: [
-    { latex: "8 - 3 \\cdot 2 + 4", answer: ["6"],
-      step: "8-(3\\cdot2)+4 = 8-6+4 = 6" },
-    { latex: "(-3)^2 - 4(-2)", answer: ["17"],
-      step: "(-3)^2-4(-2) = 9-(-8) = 9+8 = 17" },
-    { latex: "-12 \\div (-3) + 5", answer: ["9"],
-      step: "-12\\div(-3)+5 = 4+5 = 9" }
-  ]},
-  { name: "Fractions & Percents",
-    links: [{label:"Fraction Arithmetic Practice", href:"FractionArithmetic_Practice.html"}],
-    items: [
-    { latex: "\\dfrac{2}{5} + \\dfrac{3}{10}", answer: ["7/10", "0.7", ".7"],
-      step: "\\frac{2}{5}+\\frac{3}{10} = \\frac{4}{10}+\\frac{3}{10} = \\frac{7}{10} = 0.7" },
-    { latex: "\\dfrac{3}{4} \\div \\dfrac{1}{2}", answer: ["3/2", "1.5"],
-      step: "\\frac{3}{4}\\div\\frac{1}{2} = \\frac{3}{4}\\cdot\\frac{2}{1} = \\frac{6}{4} = \\frac{3}{2}" },
-    { latex: "30\\% \\text{ of } 90", answer: ["27"],
-      step: "30\\% = 0.30,\\quad 0.30 \\times 90 = 27" }
-  ]},
-  { name: "Exponents & Simplifying Expressions",
-    links: [{label:"Exponent Rules Practice", href:"CA_6_1_Exponent_Rules_Practice.html"}],
-    items: [
-    { latex: "2^3 \\cdot 2^2", answer: ["32"],
-      step: "2^3\\cdot2^2 = 2^{3+2} = 2^5 = 32" },
-    { latex: "(x^3)^2", answer: ["x^6", "x6"],
-      step: "(x^3)^2 = x^{3\\cdot2} = x^6" },
-    { latex: "3x + 5 - x + 2", answer: ["2x+7", "7+2x"],
-      step: "(3x-x)+(5+2) = 2x+7" }
-  ]},
-  { name: "Solving Equations & Inequalities",
+  { name: "Solving Equations",
     links: [
-      {label:"Solving Equations Practice", href:"CA_1_1_Solving_Equations_Practice.html"},
-      {label:"Inequalities Practice", href:"CA_1_3_Interval_Notation_Inequalities_Practice.html"}
+      {label:"CA Solving Equations", href:"../College Algebra/CA_1_1_Solving_Equations_Practice.html"},
+      {label:"CA Quadratic Formula", href:"../College Algebra/CA_4_4_Quadratic_Formula_Practice.html"}
     ],
     items: [
-    { latex: "2x + 7 = 19", answer: ["6", "x=6"],
-      step: "2x+7=19 \\;\\Rightarrow\\; 2x=12 \\;\\Rightarrow\\; x=6" },
-    { latex: "3(x - 4) = 15", answer: ["9", "x=9"],
-      step: "3(x-4)=15 \\;\\Rightarrow\\; x-4=5 \\;\\Rightarrow\\; x=9" },
-    { latex: "2x - 5 < 9", answer: ["x<7", "x < 7"],
-      step: "2x-5<9 \\;\\Rightarrow\\; 2x<14 \\;\\Rightarrow\\; x<7" }
+    { latex: "5x - 3 = 2x + 9", answer: ["4","x=4"],
+      step: "5x-3=2x+9 \\;\\Rightarrow\\; 3x=12 \\;\\Rightarrow\\; x=4" },
+    { latex: "x^2 - 5x + 6 = 0", answer: ["2,3","x=2,3","x=2orx=3","2and3","{2,3}","2or3"],
+      step: "(x-2)(x-3)=0 \\;\\Rightarrow\\; x=2 \\text{ or } x=3" },
+    { latex: "2(x+4) - 3 = x + 9", answer: ["4","x=4"],
+      step: "2x+8-3=x+9 \\;\\Rightarrow\\; 2x+5=x+9 \\;\\Rightarrow\\; x=4" }
   ]},
-  { name: "Factoring & Evaluating Functions",
+  { name: "Exponents & Radicals",
     links: [
-      {label:"Binomials Practice", href:"CA_4_0_Binomials_Practice.html"},
-      {label:"Factoring Practice", href:"CA_4_1_Solving_by_Factoring_Practice.html"},
-      {label:"Inputs & Outputs Practice", href:"CA_3_1_Inputs_Outputs_Practice.html"}
+      {label:"CA Exponent Rules", href:"../College Algebra/CA_6_1_Exponent_Rules_Practice.html"},
+      {label:"CA Simplifying Roots", href:"../College Algebra/CA_6_2_Simplifying_Roots_Practice.html"}
     ],
     items: [
-    { latex: "x^2 - 16", answer: ["(x-4)(x+4)", "(x+4)(x-4)"],
-      step: "x^2-16 = x^2-4^2 = (x-4)(x+4)" },
-    { latex: "x^2 + 7x + 12", answer: ["(x+3)(x+4)", "(x+4)(x+3)"],
-      step: "3\\cdot4=12,\\;\\; 3+4=7 \\;\\Rightarrow\\; (x+3)(x+4)" },
-    { latex: "f(x)=3x-2 \\text{; find } f(5)", answer: ["13", "f(5)=13"],
-      step: "f(5) = 3(5)-2 = 15-2 = 13" }
+    { latex: "x^{3/2} \\cdot x^{1/2}", answer: ["x^2","x2"],
+      step: "x^{3/2}\\cdot x^{1/2} = x^{3/2+1/2} = x^2" },
+    { latex: "\\sqrt{75}", answer: ["5sqrt(3)","5sqrt3","5*sqrt(3)"],
+      step: "\\sqrt{75} = \\sqrt{25\\cdot3} = 5\\sqrt{3}" },
+    { latex: "\\dfrac{(2x^2)^3}{4x}", answer: ["2x^5","2x5"],
+      step: "\\dfrac{8x^6}{4x} = 2x^5" }
   ]},
-  { name: "Graphing Basics",
+  { name: "Factoring Polynomials",
     links: [
-      {label:"Slope & Intercepts Practice", href:"CA_2_1_Slope_Intercepts_Practice.html"},
-      {label:"Slope-Intercept & Point-Slope Practice", href:"CA_2_2_Slope_Intercept_Point_Slope_Practice.html"}
+      {label:"CA Binomials Practice", href:"../College Algebra/CA_4_0_Binomials_Practice.html"},
+      {label:"CA Factoring Practice", href:"../College Algebra/CA_4_1_Solving_by_Factoring_Practice.html"}
     ],
     items: [
-    { latex: "\\text{Slope through } (1,2) \\text{ and } (4,11)", answer: ["3", "m=3"],
-      step: "m = \\dfrac{11-2}{4-1} = \\dfrac{9}{3} = 3" },
-    { latex: "\\text{$y$-intercept of } y = -2x + 7", answer: ["7", "(0,7)"],
-      step: "y=-2x+7 \\;\\Rightarrow\\; b=7 \\;\\Rightarrow\\; \\text{intercept } (0,7)" },
-    { latex: "\\text{Slope of the line } 3x - y = 6", answer: ["3", "m=3"],
-      step: "3x-y=6 \\;\\Rightarrow\\; y=3x-6 \\;\\Rightarrow\\; m=3" }
+    { latex: "x^2 + 5x + 6", answer: ["(x+2)(x+3)","(x+3)(x+2)"],
+      step: "2\\cdot3=6,\\;2+3=5 \\;\\Rightarrow\\; (x+2)(x+3)" },
+    { latex: "x^2 - 9", answer: ["(x-3)(x+3)","(x+3)(x-3)"],
+      step: "x^2-9 = x^2-3^2 = (x-3)(x+3)" },
+    { latex: "2x^2 - 7x - 15", answer: ["(2x+3)(x-5)","(x-5)(2x+3)"],
+      step: "\\text{Need }ac=-30,\\; b=-7:\\; -10+3=-7 \\;\\Rightarrow\\; (2x+3)(x-5)" }
+  ]},
+  { name: "Function Notation & Evaluation",
+    links: [
+      {label:"CA Inputs & Outputs Practice", href:"../College Algebra/CA_3_1_Inputs_Outputs_Practice.html"}
+    ],
+    items: [
+    { latex: "f(x)=3x^2-1;\\text{ find }f(2)", answer: ["11","f(2)=11"],
+      step: "f(2) = 3(4)-1 = 12-1 = 11" },
+    { latex: "g(x)=\\sqrt{x+4};\\text{ find }g(5)", answer: ["3","g(5)=3"],
+      step: "g(5) = \\sqrt{5+4} = \\sqrt{9} = 3" },
+    { latex: "f(x)=2x-1;\\text{ find }f(a+1)", answer: ["2a+1"],
+      step: "f(a+1) = 2(a+1)-1 = 2a+2-1 = 2a+1" }
+  ]},
+  { name: "Linear Functions & Slope",
+    links: [
+      {label:"CA Slope & Intercepts Practice", href:"../College Algebra/CA_2_1_Slope_Intercepts_Practice.html"},
+      {label:"CA Slope-Intercept / Point-Slope", href:"../College Algebra/CA_2_2_Slope_Intercept_Point_Slope_Practice.html"}
+    ],
+    items: [
+    { latex: "\\text{Slope through }(-1,3)\\text{ and }(3,-5)", answer: ["-2","m=-2"],
+      step: "m = \\dfrac{-5-3}{3-(-1)} = \\dfrac{-8}{4} = -2" },
+    { latex: "\\text{Equation: slope }3,\\text{ through }(0,-4)", answer: ["y=3x-4"],
+      step: "y = mx+b = 3x+(-4) = 3x-4" },
+    { latex: "\\text{$x$-intercept of }y=-2x+6", answer: ["3","(3,0)","x=3"],
+      step: "0=-2x+6 \\;\\Rightarrow\\; 2x=6 \\;\\Rightarrow\\; x=3" }
+  ]},
+  { name: "Inequalities & Absolute Value",
+    links: [
+      {label:"CA Inequalities Practice", href:"../College Algebra/CA_1_3_Interval_Notation_Inequalities_Practice.html"},
+      {label:"CA Absolute Values Practice", href:"../College Algebra/CA_1_6_Absolute_Values_Practice.html"}
+    ],
+    items: [
+    { latex: "4x + 1 < 13", answer: ["x<3"],
+      step: "4x+1<13 \\;\\Rightarrow\\; 4x<12 \\;\\Rightarrow\\; x<3" },
+    { latex: "|x - 3| = 7", answer: ["10,-4","-4,10","x=10,-4","x=10orx=-4"],
+      step: "x-3=7 \\;\\Rightarrow\\; x=10 \\quad\\text{or}\\quad x-3=-7 \\;\\Rightarrow\\; x=-4" },
+    { latex: "-2x \\leq 8", answer: ["x>=-4","x>=-4","x=-4"],
+      step: "-2x\\leq8 \\;\\Rightarrow\\; x\\geq-4 \\text{ (flip inequality when dividing by negative)}" }
   ]}
 ];
 
@@ -194,7 +199,7 @@ const TOTAL = CATS.reduce((n,c)=>n+c.items.length, 0);
 const catState = [];
 
 function norm(s){
-  return s.trim().toLowerCase().replace(/\s+/g,'').replace(/[^\x00-\x7F]/g,'').replace(/[^a-z0-9+\-*/^().,=<>]/g,'').replace(/[−–]/g,'-');
+  return s.trim().toLowerCase().replace(/\s+/g,'').replace(/[−–]/g,'-').replace(/or/g,',').replace(/and/g,',');
 }
 function ok(user, acc){ return acc.some(a => norm(user) === norm(a)); }
 
@@ -255,9 +260,7 @@ function check(ci, i){
     fb.textContent = '✓ Correct!';
     card.className = 'card correct';
     if(!st.flags[i] && !st.attempted[i] && !st.peeked[i]){
-      st.flags[i] = true;
-      st.correct++;
-      totalCorrect++;
+      st.flags[i] = true; st.correct++; totalCorrect++;
       updateScores(ci);
     }
     st.attempted[i] = true;
@@ -277,8 +280,7 @@ function reveal(ci, i){
   const box = document.getElementById(`ra-${ci}-${i}`);
   const lnk = document.getElementById(`rl-${ci}-${i}`);
   if(box.style.display === 'block'){
-    box.style.display = 'none';
-    lnk.textContent = 'Show solution';
+    box.style.display = 'none'; lnk.textContent = 'Show solution';
   } else {
     if(!st.flags[i]){
       st.peeked[i] = true;
@@ -293,8 +295,7 @@ function reveal(ci, i){
     const span = document.createElement('span');
     box.appendChild(span);
     katex.render(p.step, span, {throwOnError:false, displayMode:true});
-    box.style.display = 'block';
-    lnk.textContent = 'Hide solution';
+    box.style.display = 'block'; lnk.textContent = 'Hide solution';
   }
 }
 
@@ -309,14 +310,12 @@ function showResults(){
   const panel = document.getElementById('results-panel');
   panel.style.display = 'block';
   panel.scrollIntoView({behavior:'smooth', block:'start'});
-
   const pct = Math.round(totalCorrect/TOTAL*100);
   let html = `<div class="res-overall">
     <span class="res-score">${totalCorrect} / ${TOTAL}</span>
     <div class="res-bar-wrap"><div class="res-bar-fill" style="width:${pct}%"></div></div>
     <span class="res-pct">${pct}%</span>
   </div>`;
-
   CATS.forEach((cat, ci) => {
     const st = catState[ci];
     const strong = cat.items.length === 0 || st.correct / cat.items.length >= 2/3;
@@ -335,7 +334,6 @@ function showResults(){
       </div>${linkHtml}
     </div>`;
   });
-
   document.getElementById('results-content').innerHTML = html;
 }
 </script>
