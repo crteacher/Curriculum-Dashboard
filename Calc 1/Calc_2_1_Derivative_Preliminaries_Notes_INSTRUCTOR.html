@@ -123,6 +123,7 @@ details[open]>.mistake-toggle{color:#1e3a5c}
 .mistake-body p{margin-bottom:.45rem}
 .panel-row{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.1rem}
 .panel-row>.proof-panel,.panel-row>.mistake-panel{margin:0;min-width:0}
+.panel-row:has(.proof-panel):has(.mistake-panel){grid-template-columns:1fr}
 @media print{
   .panel-row{break-inside:avoid}
   .mistake-panel{break-inside:avoid}
