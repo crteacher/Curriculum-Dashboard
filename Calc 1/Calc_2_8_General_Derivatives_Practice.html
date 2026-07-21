@@ -155,7 +155,7 @@ function gen2() {
     latex: `f'(0) \\text{ for } f(x)=(${fc(a)}x+${b})e^{${c}x}`,
     answer: [String(ans)],
     hint: `Identify the two factors and apply product rule. One factor needs chain rule — which one? Then substitute x=0. What does e⁰ equal?`,
-    step: `f'(x)=e^{${c}x}(${fc(a)}x+${a+b*c});\\quad f'(0)=1\\cdot${ans}=${ans}`
+    step: `f'(x)=e^{${c}x}(${fc(a*c)}x+${a+b*c});\\quad f'(0)=1\\cdot${ans}=${ans}`
   };
 }
 
@@ -205,7 +205,7 @@ function gen6() {
     latex: `f'(0) \\text{ for } f(x)=(${fc(a)}x+${b})\\ln(${c}x+1)`,
     answer: [String(ans)],
     hint: `Set up product rule. At x=0, what does ln(1) equal? How does that simplify the first term?`,
-    step: `f'(x)=${a}\\ln(${c}x+1)+\\frac{${b}\\cdot${c}}{${c}x+1};\\quad f'(0)=0+${ans}=${ans}`
+    step: `f'(x)=${a}\\ln(${c}x+1)+\\frac{(${fc(a)}x+${b})\\cdot${c}}{${c}x+1};\\quad f'(0)=0+${ans}=${ans}`
   };
 }
 

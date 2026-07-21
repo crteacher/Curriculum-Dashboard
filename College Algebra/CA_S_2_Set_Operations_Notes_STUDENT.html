@@ -132,6 +132,19 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   .svg-caption{font-size:9pt}
 }
 @page{margin:.55in .65in;size:letter}
+.mistake-panel{margin:.4rem 0 1.1rem;border-left:3px solid #b8860b;border-radius:0 6px 6px 0;background:#fdf8e8}
+.mistake-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#9a6a00;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.mistake-toggle::-webkit-details-marker{display:none}
+details[open]>.mistake-toggle{color:#1e3a5c}
+.mistake-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #e8d8a8}
+.mistake-body p{margin-bottom:.45rem}
+.panel-row{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.1rem}
+.panel-row>.proof-panel,.panel-row>.mistake-panel{margin:0;min-width:0}
+@media print{
+  .panel-row{break-inside:avoid}
+  .mistake-panel{break-inside:avoid}
+  details.mistake-panel:not([open]){display:none}
+}
 </style>
 </head>
 <body>
@@ -142,9 +155,23 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 <div class="two-col">
 <div class="col"><div class="section-head">Union and Intersection</div>
 <div class="accent-box"><p><strong>Union $A \cup B$:</strong> elements in $A$ OR $B$ (or both)<br>e.g. $\{a,b,c,d\} \cup \{c,d,e,f\} = \{a,b,c,d,e,f\}$</p><p><strong>Intersection $A \cap B$:</strong> elements in both $A$ AND $B$<br>e.g. $\{a,b,c,d\} \cap \{c,d,e,f\} = \{c,d\}$</p><p>If $A \cap B = \emptyset$, the sets are <em>disjoint</em>.</p></div>
+<details class="mistake-panel">
+<summary class="mistake-toggle">▸ Common Mistake</summary>
+<div class="mistake-body">
+  <p>Students mix up which symbol means "or" and which means "and." A common error is reading $A \cup B$ as "elements in both" and $A \cap B$ as "elements in either" — exactly backwards. Given $\{a,b,c,d\}$ and $\{c,d,e,f\}$, this shows up as writing $A\cup B=\{c,d\}$ (that's actually $A\cap B$) or $A\cap B=\{a,b,c,d,e,f\}$ (that's actually $A\cup B$).</p>
+  <p>One way to keep them straight: $\cup$ looks like a cup that can hold everything you pour in — it collects elements from both sets, so the result is usually bigger. $\cap$ is the narrower shape — it only keeps what overlaps, so the result is usually smaller (never bigger than either original set).</p>
+</div>
+</details>
 </div>
 <div class="col"><div class="section-head">Complement and Set Subtraction</div>
 <div class="accent-box"><p><strong>Complement $A'$ (or $A^c$):</strong> all elements of the universal set $U$ that are NOT in $A$.<br>e.g. $U=\{1,2,3,4,5,6,7,8\}$, $A=\{2,4,6,8\}$<br>$A' = \{1,3,5,7\}$</p><p><strong>Set subtraction (relative complement) $A \setminus B$:</strong> elements in $A$ but not in $B$.<br>e.g. $A = \{1,2,3,4\}$, $B = \{3,4,5\}$<br>$A \setminus B = \{1,2\}$</p></div>
+<details class="mistake-panel">
+<summary class="mistake-toggle">▸ Common Mistake</summary>
+<div class="mistake-body">
+  <p>Students treat $A \setminus B$ as if the order doesn't matter, computing $B\setminus A$ instead (or mixing the two) — as if set subtraction worked like addition. It doesn't: $A\setminus B$ means "start with $A$, remove anything that's also in $B$," and $B\setminus A$ means the reverse. For $A=\{1,2,3,4\}$, $B=\{3,4,5\}$: $A\setminus B=\{1,2\}$ (what's left of $A$), but $B\setminus A=\{5\}$ (what's left of $B$) — different sets entirely.</p>
+  <p>The fix is to read $A \setminus B$ literally as "$A$ minus $B$," the same left-to-right order as ordinary subtraction: $5-3\neq3-5$, and $A\setminus B\neq B\setminus A$ for the same reason.</p>
+</div>
+</details>
 </div>
 </div>
 <div class="section-head">Worked Examples</div>
@@ -223,5 +250,6 @@ function toggleAns(btn) {
   });
 </script>
 <!-- proof-layer:done -->
+<!-- mistake-layer:done -->
 </body>
 </html>

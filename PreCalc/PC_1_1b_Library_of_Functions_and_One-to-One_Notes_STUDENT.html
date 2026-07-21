@@ -68,6 +68,7 @@ details[open]>.mistake-toggle{color:#1e3a5c}
 @media print{
   .panel-row{break-inside:avoid}
   .mistake-panel{break-inside:avoid}
+  details.mistake-panel:not([open]){display:none}
 }
 .fn-table{width:100%;border-collapse:collapse;font-size:13px;margin-top:.4rem}
 .fn-table th{font-family:sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#1e3a5c;border-bottom:2px solid #1e3a5c;padding:3px 6px;text-align:left}

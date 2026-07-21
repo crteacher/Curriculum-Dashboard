@@ -71,7 +71,7 @@ details[open]>.proof-toggle{color:#1e3a5c}
 <div class="container">
 <h1 class="page-title">Polynomial Functions</h1>
 <p class="page-sub">Pre-Calculus &nbsp;&middot;&nbsp; §3.4 &nbsp;&middot;&nbsp; Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026 &nbsp;&middot;&nbsp; <strong>STUDENT</strong></p>
-<div class="opening-q">A linear function has one "bend" (none, actually) and a quadratic has one. How many times can a degree-$n$ polynomial bend, and how does the leading term control the ends of the graph?</div>
+<div class="opening-q">A linear function has no "bends" and a quadratic has one. How many times can a degree-$n$ polynomial bend, and how does the leading term control the ends of the graph?</div>
 <div class="two-col"><div class="col"><div class="section-head">Polynomials, Degree, and Zeros</div>
 <div class="accent-box"><p><strong>Polynomial:</strong> $f(x)=a_nx^n+\cdots+a_1x+a_0$, $a_n\neq0$.</p><p><strong>Degree:</strong> largest power $n$. <strong>Leading coefficient:</strong> $a_n$.</p><p><strong>Zeros:</strong> $x=r$ is a zero if $f(r)=0$, i.e. $(x-r)$ is a factor.</p><p><strong>Multiplicity:</strong> if $(x-r)^m$ is a factor, $r$ has multiplicity $m$.</p><ul><li>Odd multiplicity: graph <em>crosses</em> $x$-axis at $r$.</li><li>Even multiplicity: graph <em>touches</em> (bounces off) $x$-axis at $r$.</li></ul></div>
 <details class="proof-panel">
@@ -84,6 +84,24 @@ details[open]>.proof-toggle{color:#1e3a5c}
 <p class="proof-qed">∎</p>
 </div>
 </details>
+<div style="text-align:center;margin:1rem 0 0.5rem"><svg width="380" height="190" viewBox="0 0 380 190" xmlns="http://www.w3.org/2000/svg">
+<rect width="380" height="190" fill="#fafaf8" rx="6"/>
+<line x1="20" y1="110" x2="170" y2="110" stroke="#999" stroke-width="1.2"/>
+<line x1="210" y1="110" x2="360" y2="110" stroke="#999" stroke-width="1.2"/>
+<line x1="95" y1="30" x2="95" y2="110" stroke="#7a5c1e" stroke-width="1" stroke-dasharray="4,3"/>
+<line x1="285" y1="30" x2="285" y2="110" stroke="#7a5c1e" stroke-width="1" stroke-dasharray="4,3"/>
+<circle cx="95" cy="110" r="3.5" fill="#7a5c1e"/>
+<circle cx="285" cy="110" r="3.5" fill="#7a5c1e"/>
+<path d="M 30,150 C 55,130 80,115 95,110 C 110,105 135,90 160,60" stroke="#1e3a5c" stroke-width="2.5" fill="none"/>
+<path d="M 220,60 C 245,90 270,110 285,110 C 300,110 325,90 350,60" stroke="#1e3a5c" stroke-width="2.5" fill="none"/>
+<text x="95" y="125" font-size="11" font-family="sans-serif" fill="#7a5c1e" text-anchor="middle">x=r</text>
+<text x="285" y="125" font-size="11" font-family="sans-serif" fill="#7a5c1e" text-anchor="middle">x=r</text>
+<text x="95" y="165" font-size="12" font-weight="700" font-family="sans-serif" fill="#1e3a5c" text-anchor="middle">Odd multiplicity</text>
+<text x="95" y="180" font-size="10.5" font-family="sans-serif" fill="#666" text-anchor="middle">graph crosses the axis</text>
+<text x="285" y="165" font-size="12" font-weight="700" font-family="sans-serif" fill="#1e3a5c" text-anchor="middle">Even multiplicity</text>
+<text x="285" y="180" font-size="10.5" font-family="sans-serif" fill="#666" text-anchor="middle">graph bounces off the axis</text>
+</svg></div>
+<p class="svg-caption" style="text-align:center;font-size:11.5px;color:#666;font-family:sans-serif;margin-top:-0.3rem;margin-bottom:0.6rem">At a zero $x=r$: odd multiplicity means the sign of $f$ flips (crosses); even multiplicity means the sign stays the same (bounces).</p>
 </div><div class="col"><div class="section-head">End Behavior</div>
 <div class="accent-box"><p><strong>End Behavior Theorem:</strong> for large $|x|$, $f(x)\approx a_nx^n$.</p><table style='font-size:13px;border-collapse:collapse;width:100%'><tr><th style='text-align:left;padding:2px 6px'>$a_n>0$, even $n$</th><td style='padding:2px 6px'>$\uparrow\uparrow$ (both ends up)</td></tr><tr><th style='text-align:left;padding:2px 6px'>$a_n<0$, even $n$</th><td style='padding:2px 6px'>$\downarrow\downarrow$ (both ends down)</td></tr><tr><th style='text-align:left;padding:2px 6px'>$a_n>0$, odd $n$</th><td style='padding:2px 6px'>$\downarrow\uparrow$ (left down, right up)</td></tr><tr><th style='text-align:left;padding:2px 6px'>$a_n<0$, odd $n$</th><td style='padding:2px 6px'>$\uparrow\downarrow$ (left up, right down)</td></tr></table></div>
 <details class="proof-panel">
@@ -97,6 +115,26 @@ details[open]>.proof-toggle{color:#1e3a5c}
 </div>
 </details>
 <p class="body-text">A degree-$n$ poly has at most $n$ real zeros and at most $n-1$ turning points.</p>
+<div style="text-align:center;margin:1rem 0 0.5rem"><svg width="380" height="190" viewBox="0 0 380 190" xmlns="http://www.w3.org/2000/svg">
+<rect width="380" height="190" fill="#fafaf8" rx="6"/>
+<line x1="20" y1="95" x2="85" y2="95" stroke="#ccc" stroke-width="1"/>
+<line x1="113" y1="95" x2="178" y2="95" stroke="#ccc" stroke-width="1"/>
+<line x1="206" y1="95" x2="271" y2="95" stroke="#ccc" stroke-width="1"/>
+<line x1="299" y1="95" x2="364" y2="95" stroke="#ccc" stroke-width="1"/>
+<path d="M 20,50 C 40,140 65,140 85,50" stroke="#1e3a5c" stroke-width="2.5" fill="none"/>
+<path d="M 113,140 C 133,50 158,50 178,140" stroke="#1e3a5c" stroke-width="2.5" fill="none"/>
+<path d="M 206,140 C 226,105 251,85 271,50" stroke="#1e3a5c" stroke-width="2.5" fill="none"/>
+<path d="M 299,50 C 319,85 344,105 364,140" stroke="#1e3a5c" stroke-width="2.5" fill="none"/>
+<text x="52" y="165" font-size="13" font-weight="700" font-family="sans-serif" fill="#1e3a5c" text-anchor="middle">&#8593;&#8593;</text>
+<text x="52" y="180" font-size="10" font-family="sans-serif" fill="#666" text-anchor="middle">a&gt;0, even n</text>
+<text x="145" y="165" font-size="13" font-weight="700" font-family="sans-serif" fill="#1e3a5c" text-anchor="middle">&#8595;&#8595;</text>
+<text x="145" y="180" font-size="10" font-family="sans-serif" fill="#666" text-anchor="middle">a&lt;0, even n</text>
+<text x="238" y="165" font-size="13" font-weight="700" font-family="sans-serif" fill="#1e3a5c" text-anchor="middle">&#8595;&#8593;</text>
+<text x="238" y="180" font-size="10" font-family="sans-serif" fill="#666" text-anchor="middle">a&gt;0, odd n</text>
+<text x="331" y="165" font-size="13" font-weight="700" font-family="sans-serif" fill="#1e3a5c" text-anchor="middle">&#8593;&#8595;</text>
+<text x="331" y="180" font-size="10" font-family="sans-serif" fill="#666" text-anchor="middle">a&lt;0, odd n</text>
+</svg></div>
+<p class="svg-caption" style="text-align:center;font-size:11.5px;color:#666;font-family:sans-serif;margin-top:-0.3rem;margin-bottom:0.6rem">Same four cases as the table above, drawn schematically: parity of $n$ sets whether the ends match or oppose; sign of $a_n$ sets whether they point up or down.</p>
 </div></div>
 <div class="section-head">Worked Examples</div>
 <div class="examples-grid">

@@ -65,6 +65,19 @@ details[open]>.proof-toggle{color:#1e3a5c}
 .proof-body p{margin-bottom:.45rem}
 .proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
 @media print{.proof-panel{break-inside:avoid}}
+.mistake-panel{margin:.4rem 0 1.1rem;border-left:3px solid #b8860b;border-radius:0 6px 6px 0;background:#fdf8e8}
+.mistake-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#9a6a00;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.mistake-toggle::-webkit-details-marker{display:none}
+details[open]>.mistake-toggle{color:#1e3a5c}
+.mistake-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #e8d8a8}
+.mistake-body p{margin-bottom:.45rem}
+.panel-row{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.1rem}
+.panel-row>.proof-panel,.panel-row>.mistake-panel{margin:0;min-width:0}
+@media print{
+  .panel-row{break-inside:avoid}
+  .mistake-panel{break-inside:avoid}
+  details.mistake-panel:not([open]){display:none}
+}
 </style>
 </head>
 <body>
@@ -85,6 +98,13 @@ details[open]>.proof-toggle{color:#1e3a5c}
 <p class="proof-qed">∎</p>
 </div>
 </details>
+<details class="mistake-panel">
+<summary class="mistake-toggle">▸ Common Mistake</summary>
+<div class="mistake-body">
+  <p>Students write $\sin(2\theta)=2\sin\theta$, treating the 2 as if it distributes across sine the way it would across a linear function. It doesn't — sine isn't linear, so $f(2\theta)\neq 2f(\theta)$ in general. The correct identity, $\sin(2\theta)=2\sin\theta\cos\theta$, comes from the angle-sum formula, not from "pulling the 2 out front."</p>
+  <p>A quick gut-check catches this every time: try $\theta=90°$. Then $\sin(2\cdot90°)=\sin180°=0$, but $2\sin90°=2\neq0$. The correct formula gives $2\sin90°\cos90°=2(1)(0)=0$ — matches. If a shortcut fails a plug-in check like this, it's not a real identity.</p>
+</div>
+</details>
 </div><div class="col"><div class="section-head">Half Angle Formulas</div>
 <div class="accent-box"><p>Solve $\cos(2\theta)=2\cos^2\theta-1$ for $\cos\theta$:</p><p>$\cos\dfrac{\theta}{2}=\pm\sqrt{\dfrac{1+\cos\theta}{2}}$</p><p>$\sin\dfrac{\theta}{2}=\pm\sqrt{\dfrac{1-\cos\theta}{2}}$</p><p>$\tan\dfrac{\theta}{2}=\dfrac{\sin\theta}{1+\cos\theta}=\dfrac{1-\cos\theta}{\sin\theta}$</p><p>Sign chosen by the quadrant of $\theta/2$.</p></div>
 <details class="proof-panel">
@@ -96,6 +116,13 @@ details[open]>.proof-toggle{color:#1e3a5c}
 <p>The same trick starting from $\cos(2\theta)=1-2\sin^2\theta$ gives $\sin^2(\theta/2)=\dfrac{1-\cos\theta}{2}$, so $$\sin\dfrac{\theta}{2}=\pm\sqrt{\dfrac{1-\cos\theta}{2}}.$$</p>
 <p>Dividing the sine version by the cosine version gives $\tan(\theta/2)$ as a ratio of square roots. Multiplying top and bottom by matching factors (using $\sin\theta=2\sin(\theta/2)\cos(\theta/2)$ and $\sin^2\theta=1-\cos^2\theta$) clears the square roots, leaving the sign-free forms $\tan\dfrac{\theta}{2}=\dfrac{\sin\theta}{1+\cos\theta}=\dfrac{1-\cos\theta}{\sin\theta}$.</p>
 <p class="proof-qed">∎</p>
+</div>
+</details>
+<details class="mistake-panel">
+<summary class="mistake-toggle">▸ Common Mistake</summary>
+<div class="mistake-body">
+  <p>Students pick the $\pm$ sign in the half-angle formulas by looking at the quadrant of $\theta$ instead of the quadrant of $\theta/2$. Those are not the same angle, so they don't live in the same quadrant. For example, if $\theta=200°$ (QIII, where cosine is negative), it's tempting to force $\cos(\theta/2)$ negative too — but $\theta/2=100°$ lands in QII, where cosine really is negative, so that happens to work. Try $\theta=280°$ instead (QIV): $\theta/2=140°$ is in QII, where sine is positive but cosine is negative — matching neither quadrant of $\theta$ (QIV) directly by habit.</p>
+  <p>The fix is always the same: find $\theta/2$ first, locate *that* angle's quadrant, then read the sign off the quadrant rules ($\cos>0$ in QI/QIV, etc.). Skipping that step and reasoning from $\theta$'s quadrant is the single most common way this formula goes wrong.</p>
 </div>
 </details>
 </div></div>
@@ -135,5 +162,6 @@ renderMathInElement(document.body, {
 });
 </script>
 <!-- proof-layer:done -->
+<!-- mistake-layer:done -->
 </body>
 </html>

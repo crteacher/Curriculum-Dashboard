@@ -76,6 +76,7 @@ details[open]>.mistake-toggle{color:#1e3a5c}
 @media print{
   .panel-row{break-inside:avoid}
   .mistake-panel{break-inside:avoid}
+  details.mistake-panel:not([open]){display:none}
 }
 </style>
 </head>
@@ -104,7 +105,7 @@ details[open]>.mistake-toggle{color:#1e3a5c}
 <div class="section-head">Worked Examples</div>
 <div class="examples-grid">
 <div class="ex-block"><div class="ex-label">Example 1 &mdash; Full graph sketch</div><div class="ex-body">Sketch $f(x)=(2x+1)(x-3)^2$. Label zeros, $y$-int, end behavior.</div><div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">Zeros: $x=-\tfrac{1}{2}$ (mult 1, crosses), $x=3$ (mult 2, bounces). $y$-int: $f(0)=(1)(9)=9$. End: $a_n=2>0$, degree 3 → $\downarrow\uparrow$.</div></div></div>
-<div class="ex-block"><div class="ex-label">Example 2 &mdash; Sketch with bounce</div><div class="ex-body">Sketch $g(x)=-2(x+2)(x-2)^2$.</div><div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">Zeros: $x=-2$ (crosses), $x=2$ (bounces). $y$-int: $-2(2)(-4)^2 = -2(2)(4)=-16$... actually $g(0)=-2(2)(4)=-16$. End: $a_n=-2<0$, degree 3 → $\uparrow\downarrow$.</div></div></div>
+<div class="ex-block"><div class="ex-label">Example 2 &mdash; Sketch with bounce</div><div class="ex-body">Sketch $g(x)=-2(x+2)(x-2)^2$.</div><div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">Zeros: $x=-2$ (crosses), $x=2$ (bounces). $y$-int: $g(0)=-2(2)(-2)^2=-2(2)(4)=-16$. End: $a_n=-2<0$, degree 3 → $\uparrow\downarrow$.</div></div></div>
 <div class="ex-block"><div class="ex-label">Example 3 &mdash; Find the polynomial from a graph</div><div class="ex-body">A graph crosses $x=-1$ (once) and bounces off $x=2$ (once), with $a_n>0$, degree 3. Write a possible equation.</div><div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">$f(x)=a(x+1)(x-2)^2$, $a>0$. Use a $y$-intercept to find $a$ if given.</div></div></div>
 <div class="ex-block"><div class="ex-label">Example 4 &mdash; Reading increasing/decreasing</div><div class="ex-body">For $f(x)=x^4+2x^3+x^2$, factor and identify all zeros and multiplicities.</div><div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">$f(x)=x^2(x+1)^2$. Zeros $x=0$ (mult 2) and $x=-1$ (mult 2) — both bounce.</div></div></div>
 </div>
