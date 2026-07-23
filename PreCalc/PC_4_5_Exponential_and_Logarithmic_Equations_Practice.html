@@ -141,31 +141,31 @@ function gen1(){
   const b = choose([2, 3, 5]);
   const cases = {
     2: [
-      {lhs:'2x+1', rhs:'x+5',  x:4},
-      {lhs:'3x-1', rhs:'x+5',  x:3},
-      {lhs:'2x',   rhs:'x+4',  x:4},
-      {lhs:'4x-2', rhs:'2x+4', x:3},
-      {lhs:'3x+1', rhs:'x+7',  x:3},
+      {lhs:'2x+1', rhs:'x+5',  x:4, step:'2x+1=x+5\\Rightarrow x=4'},
+      {lhs:'3x-1', rhs:'x+5',  x:3, step:'3x-1=x+5\\Rightarrow 2x=6\\Rightarrow x=3'},
+      {lhs:'2x',   rhs:'x+4',  x:4, step:'2x=x+4\\Rightarrow x=4'},
+      {lhs:'4x-2', rhs:'2x+4', x:3, step:'4x-2=2x+4\\Rightarrow 2x=6\\Rightarrow x=3'},
+      {lhs:'3x+1', rhs:'x+7',  x:3, step:'3x+1=x+7\\Rightarrow 2x=6\\Rightarrow x=3'},
     ],
     3: [
-      {lhs:'2x-1', rhs:'x+3',  x:4},
-      {lhs:'3x',   rhs:'x+6',  x:3},
-      {lhs:'2x+2', rhs:'x+6',  x:4},
-      {lhs:'4x-3', rhs:'x+3',  x:2},
-      {lhs:'3x-2', rhs:'2x+1', x:3},
+      {lhs:'2x-1', rhs:'x+3',  x:4, step:'2x-1=x+3\\Rightarrow x=4'},
+      {lhs:'3x',   rhs:'x+6',  x:3, step:'3x=x+6\\Rightarrow 2x=6\\Rightarrow x=3'},
+      {lhs:'2x+2', rhs:'x+6',  x:4, step:'2x+2=x+6\\Rightarrow x=4'},
+      {lhs:'4x-3', rhs:'x+3',  x:2, step:'4x-3=x+3\\Rightarrow 3x=6\\Rightarrow x=2'},
+      {lhs:'3x-2', rhs:'2x+1', x:3, step:'3x-2=2x+1\\Rightarrow x=3'},
     ],
     5: [
-      {lhs:'2x+1', rhs:'x+4',  x:3},
-      {lhs:'3x-1', rhs:'x+5',  x:3},
-      {lhs:'2x',   rhs:'x+3',  x:3},
+      {lhs:'2x+1', rhs:'x+4',  x:3, step:'2x+1=x+4\\Rightarrow x=3'},
+      {lhs:'3x-1', rhs:'x+5',  x:3, step:'3x-1=x+5\\Rightarrow 2x=6\\Rightarrow x=3'},
+      {lhs:'2x',   rhs:'x+3',  x:3, step:'2x=x+3\\Rightarrow x=3'},
     ],
   };
-  const {lhs, rhs, x} = choose(cases[b]);
+  const {lhs, rhs, x, step} = choose(cases[b]);
   return {
     latex: `${b}^{${lhs}}=${b}^{${rhs}}.\\quad x=`,
     answer: [String(x)],
     hint: 'When two exponentials with the same base are equal, what must be true of their exponents?',
-    step: `${lhs}=${rhs}\\Rightarrow ${lhs.includes('2x')?'2':'3'}x-${rhs.split('+')[1]||rhs.split('-')[1]||''}\\ldots\\Rightarrow x=${x}`
+    step: `${step}`
   };
 }
 
@@ -212,20 +212,20 @@ function gen3(){
 }
 
 function gen4(){
-  // log(x)+log(x-k)=1 → x^2-kx-10=0 → reject extraneous; hardcoded
+  // log(x)+log(x-k)=m → x(x-k)=10^m → x^2-kx-10^m=0; all 4 cases verified to factor cleanly
   const cases = [
-    {k:3,  goodX:5,  step:'x(x-3)=10\\Rightarrow x^2-3x-10=0\\Rightarrow(x-5)(x+2)=0'},
-    {k:6,  goodX:8,  step:'x(x-6)=10\\Rightarrow x^2-6x-10=0\\Rightarrow\\text{use QF: }x=8\\text{ or }x=-2 '},
-    {k:2,  goodX:5,  step:'x(x-2)=10\\Rightarrow x^2-2x-10=0\\Rightarrow x=5\\text{ or }x=-3 '},
-    {k:5,  goodX:5,  step:'x(x+5)=50\\Rightarrow x^2+5x-50=0\\Rightarrow(x-5)(x+10)=0'},
+    {k:3,  m:1, goodX:5},
+    {k:9,  m:1, goodX:10},
+    {k:15, m:2, goodX:20},
+    {k:21, m:2, goodX:25},
   ];
-  // Use only k=3 case reliably: log(x)+log(x-3)=1
-  const {k, goodX, step} = cases[0];
+  const {k, m, goodX} = choose(cases);
+  const rhs10 = Math.pow(10, m);
   return {
-    latex: `\\log(x)+\\log(x-${k})=1.\\quad x=`,
+    latex: `\\log(x)+\\log(x-${k})=${m}.\\quad x=`,
     answer: [String(goodX)],
     hint: 'When combining logs leads to a quadratic, why might one solution be rejected?',
-    step: `${step},\\;x=${goodX}\\text{ (reject negative, log undefined)}`
+    step: `x(x-${k})=10^{${m}}\\Rightarrow x^2-${k}x-${rhs10}=0\\Rightarrow x=${goodX}\\text{ (reject negative, log undefined)}`
   };
 }
 
