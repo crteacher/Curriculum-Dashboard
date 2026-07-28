@@ -187,14 +187,14 @@ function buildGrid() {
   const day1   = DAY1_LINKS[_currentCourse];
 
   const prereqCard = prereq ? `
-      <div class="sec-card prereq-card ${cls}" onclick="window.location.href='${prereq.href}'">
+      <div class="sec-card prereq-card ${cls}" onclick="window.open('${prereq.href}','_blank')">
         <div class="sec-card-num">📐 Prerequisites</div>
         <div class="sec-card-title">${prereq.label}</div>
         <div class="sec-card-count">Always available — fresh numbers every time</div>
       </div>` : '';
 
   const day1Card = day1 ? `
-      <div class="sec-card prereq-card ${cls}" onclick="window.location.href='${day1.href}'">
+      <div class="sec-card prereq-card ${cls}" onclick="window.open('${day1.href}','_blank')">
         <div class="sec-card-num">📋 Diagnostic</div>
         <div class="sec-card-title">${day1.label}</div>
         <div class="sec-card-count">18 questions — strengths &amp; review links</div>
