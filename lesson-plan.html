@@ -148,6 +148,11 @@ function pracLink(course,sec){
   const folder=course==='ca'?'./College%20Algebra':course==='pc'?'./PreCalc':'./Calc%201';
   return`<br><a href="${folder}/${sec.practiceFile}" class="prac-link" target="_blank">📄 Practice Worksheet</a>`;
 }
+function worksheetLink(course,sec){
+  if(!sec.hasPractice||!sec.practiceFile)return'';
+  const folder=course==='ca'?'./College%20Algebra':course==='pc'?'./PreCalc':'./Calc%201';
+  return`<a href="${folder}/${sec.practiceFile}" class="do-now-link ${course}" target="_blank">Open Practice Worksheet →</a>`;
+}
 function notesLinks(course,sec){
   if(!sec.notesFile)return'';
   const folder=course==='ca'?'./College%20Algebra':course==='pc'?'./PreCalc':'./Calc%201';
@@ -174,7 +179,7 @@ function buildLessonCard(course,sec,dayNum,isOpen,schedItem){
   // You Do (Together): open the practice set for this section
   const practiceSetLink=sec.reviewProblems?.length
     ?`<a href="./review.html?section=${sec.id}" class="do-now-link ${course}" target="_blank">Open Practice Set →</a> `
-    :'';
+    :worksheetLink(course,sec);
   body+=grm('You Do (Together)',practiceSetLink||'<span style="color:#555555;font-size:.83rem">No review set yet for this section.</span>');
   // You Do (Alone): homework — practice worksheet if available
   const pl=pracLink(course,sec);
