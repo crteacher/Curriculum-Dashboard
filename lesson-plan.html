@@ -88,7 +88,7 @@ details[open] .chevron{transform:rotate(90deg)}
   <a href="./index.html" class="back">← Portal</a>
   <h1>📋 Lesson Plan</h1>
   <span class="hbadge ca" id="hbCA">CA</span>
-  <span class="hbadge c2" id="hbC2">C2</span>
+  <span class="hbadge c2" id="hbC2">C1</span>
   <span class="hbadge pc" id="hbPC">PC</span>
 </header>
 
@@ -99,7 +99,7 @@ details[open] .chevron{transform:rotate(90deg)}
     <div class="et-q" id="etCaQ"><span class="et-none">Loading…</span></div>
   </div>
   <div class="et-card c2">
-    <div class="et-label">Today's Exit Ticket — Calculus 2</div>
+    <div class="et-label">Today's Exit Ticket — Calculus 1</div>
     <div class="et-day" id="etC2Day">&nbsp;</div>
     <div class="et-q" id="etC2Q"><span class="et-none">Loading…</span></div>
   </div>
@@ -145,12 +145,12 @@ function exBlock(p,a,tech){
 function exBlocks(arr){return(arr||[]).map(e=>exBlock(e.problem,e.answer,e.technique)).join('');}
 function pracLink(course,sec){
   if(!sec.hasPractice||!sec.practiceFile)return'';
-  const folder=course==='ca'?'./College%20Algebra':course==='pc'?'./PreCalc':'./Calc%202';
+  const folder=course==='ca'?'./College%20Algebra':course==='pc'?'./PreCalc':'./Calc%201';
   return`<br><a href="${folder}/${sec.practiceFile}" class="prac-link" target="_blank">📄 Practice Worksheet</a>`;
 }
 function notesLinks(course,sec){
   if(!sec.notesFile)return'';
-  const folder=course==='ca'?'./College%20Algebra':course==='pc'?'./PreCalc':course==='c1'?'./Calc%201':'./Calc%202';
+  const folder=course==='ca'?'./College%20Algebra':course==='pc'?'./PreCalc':'./Calc%201';
   const b=sec.notesFile;
   return`<a href="${folder}/${b}_Notes_STUDENT.html" class="prac-link" target="_blank">📓 Student Notes</a> &nbsp; <a href="${folder}/${b}_Notes_INSTRUCTOR.html" class="prac-link" target="_blank">📋 Instructor Notes</a>`;
 }
@@ -204,7 +204,7 @@ function buildQuizCard(course,day,item,secMap){
 }
 
 function renderSchedule(colEl,course,schedule,currentId,secMap){
-  const label=course==='ca'?'College Algebra':course==='pc'?'PreCalc':'Calculus 2';
+  const label=course==='ca'?'College Algebra':course==='pc'?'PreCalc':'Calculus 1';
   const nDays=schedule.length;
   let html=`<div class="col-header ${course}">${label} &middot; ${nDays}-day schedule</div>`;
   schedule.forEach(item=>{
@@ -238,7 +238,7 @@ function buildExamCard(course,dayNum,item){
 
 function renderColumn(colEl,course,currentId,unit,secMap){
   if(!unit){colEl.innerHTML='<div class="state-msg">No active unit found.</div>';return;}
-  const label=course==='ca'?'College Algebra':course==='pc'?'PreCalc':'Calculus 2';
+  const label=course==='ca'?'College Algebra':course==='pc'?'PreCalc':'Calculus 1';
   const n=unit.sections.length;
   const extra=unit.hasExam?' + Review + Exam':' + Review';
   let html=`<div class="col-header ${course}">${label} &middot; ${n} lesson${n!==1?'s':''}${extra}</div>`;
@@ -267,21 +267,21 @@ Promise.all([
   fetch('./sections.json').then(r=>r.json())
 ]).then(([state,sections])=>{
   const caId=state?.courses?.collegeAlgebra?.currentSection;
-  const c2Id=state?.courses?.calc2?.currentSection;
+  const c2Id=state?.courses?.calc1?.currentSection;
   const pcId=state?.courses?.preCalc?.currentSection;
   const caMap={},c2Map={},pcMap={};
   (sections.collegeAlgebra||[]).forEach(s=>caMap[s.id]=s);
-  (sections.calc2||[]).forEach(s=>c2Map[s.id]=s);
+  (sections.calc1||[]).forEach(s=>c2Map[s.id]=s);
   (sections.preCalc||[]).forEach(s=>pcMap[s.id]=s);
   renderExitTile(caId,caMap,c2Id,c2Map,pcId,pcMap);
   const sched=state?.schedule;
   if(sched?.active){
     renderSchedule(document.getElementById('caCol'),'ca',sched.collegeAlgebra||[],caId,caMap);
-    renderSchedule(document.getElementById('c2Col'),'c2',sched.calc2||[],c2Id,c2Map);
+    renderSchedule(document.getElementById('c2Col'),'c2',sched.calc1||[],c2Id,c2Map);
     renderSchedule(document.getElementById('pcCol'),'pc',sched.preCalc||[],pcId,pcMap);
     const hbCA=document.getElementById('hbCA'),hbC2=document.getElementById('hbC2'),hbPC=document.getElementById('hbPC');
     if(hbCA)hbCA.title='College Algebra';
-    if(hbC2)hbC2.title='Calculus 2';
+    if(hbC2)hbC2.title='Calculus 1';
     if(hbPC)hbPC.title='PreCalc';
     document.getElementById('footer').textContent=
       (sched.title||'Schedule')+' · started '+state.lastCheckin+' · to switch to unit view, set schedule.active=false in state.json';
