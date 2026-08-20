@@ -187,16 +187,31 @@ function gen2(){
   return{latex:`\\text{Is }${c.latex}\\text{ one-to-one? (yes/no)}`,answer:[c.is1to1?'yes':'no'],hint:'Apply the horizontal line test.',step:c.step};
 }
 function gen3(){
+  /* Canonical parent-function graph — name it */
   const cases=[
-    {latex:'f(x)=\\sqrt{x}',domain:'[0,inf)',step:'\\text{Need }x\\geq 0:\\;[0,\\infty)'},
-    {latex:'f(x)=\\dfrac{1}{x}',domain:'(-inf,0)u(0,inf)',step:'\\text{Exclude }x=0:\\;(-\\infty,0)\\cup(0,\\infty)'},
-    {latex:'f(x)=x^2',domain:'(-inf,inf)',step:'\\text{All real numbers: }(-\\infty,\\infty)'},
-    {latex:'f(x)=|x|',domain:'(-inf,inf)',step:'\\text{All real numbers: }(-\\infty,\\infty)'},
-    {latex:'f(x)=x^3',domain:'(-inf,inf)',step:'\\text{All real numbers: }(-\\infty,\\infty)'},
-    {latex:'f(x)=\\sqrt[3]{x}',domain:'(-inf,inf)',step:'\\text{Defined for all real numbers: }(-\\infty,\\infty)'}
+    {fn:x=>x*x,xMin:-2.5,xMax:2.5,yMin:0,yMax:4,
+     name:'squaring',alts:['quadratic','parabola','x^2']},
+    {fn:x=>x*x*x,xMin:-1.6,xMax:1.6,yMin:-3,yMax:3,
+     name:'cubing',alts:['cubic','x^3']},
+    {fn:x=>Math.abs(x),xMin:-3,xMax:3,yMin:0,yMax:3,
+     name:'absolute value',alts:['abs value','abs','|x|']},
+    {fn:x=>Math.sqrt(x),xMin:0,xMax:4,yMin:0,yMax:2.5,
+     name:'square root',alts:['sqrt']},
+    {fn:x=>x,xMin:-3,xMax:3,yMin:-3,yMax:3,
+     name:'identity',alts:['linear','line']},
+    {fn:x=>Math.cbrt(x),xMin:-3,xMax:3,yMin:-2,yMax:2,
+     name:'cube root',alts:['cbrt']},
+    {fn:x=>1/x,xMin:-3,xMax:3,yMin:-3,yMax:3,
+     name:'reciprocal',alts:['1/x']}
   ];
   const c=choose(cases);
-  return{latex:`\\text{State the domain of }${c.latex}`,answer:[c.domain],hint:'Are there any inputs that cause an error?',step:c.step};
+  const svg=makeSVG(c.fn,c.xMin,c.xMax,c.yMin,c.yMax);
+  return{
+    html:`<p class="prob-q">Name this parent function.</p>${svg}`,
+    answer:[c.name,...c.alts],
+    hint:'What is this shape called, and what basic function produces it?',
+    stepHtml:`This is the graph of the <em>${c.name}</em> parent function.`
+  };
 }
 function gen4(){
   const cases=[
