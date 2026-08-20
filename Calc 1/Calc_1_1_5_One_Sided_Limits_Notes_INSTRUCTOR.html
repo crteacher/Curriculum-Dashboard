@@ -167,8 +167,8 @@ details[open]>.mistake-toggle{color:#1e3a5c}
   <p>The tempting shortcut is to cancel $\frac{|x|}{x}=1$ for every $x$ and call the limit $1$. That cancellation only holds for $x>0$. For $x<0$, $|x|=-x$, so $\frac{|x|}{x}=-1$. The absolute value silently flips the sign of the numerator depending on which side of $0$ you approach from — which is exactly why the one-sided limits disagree. Always rewrite $|x|$ as its two cases ($x$ for $x\ge 0$, $-x$ for $x<0$) <em>before</em> simplifying.</p>
 </div>
 </details>
-<p class="body-text"><strong>Floor function $\lfloor x \rfloor$:</strong> at any integer $n$, the floor jumps — $\lim_{x\to n^-}\lfloor x\rfloor = n-1$ but $\lim_{x\to n^+}\lfloor x\rfloor = n$, so the two-sided limit is DNE.</p>
 <div class="svg-figure"><svg viewBox="0 0 240 125" xmlns="http://www.w3.org/2000/svg" style="width:200px;height:auto"><line x1="10" y1="62" x2="228" y2="62" stroke="#888" stroke-width="1.2"/><polygon points="228,59 234,62 228,65" fill="#888"/><line x1="120" y1="118" x2="120" y2="10" stroke="#888" stroke-width="1.2"/><polygon points="117,10 120,4 123,10" fill="#888"/><text x="232" y="66" font-size="10" fill="#555" font-family="sans-serif">x</text><text x="124" y="10" font-size="10" fill="#555" font-family="sans-serif">y</text><line x1="117" y1="27" x2="123" y2="27" stroke="#888" stroke-width="1"/><text x="126" y="31" font-size="9.5" fill="#555" font-family="sans-serif">1</text><line x1="117" y1="97" x2="123" y2="97" stroke="#888" stroke-width="1"/><text x="126" y="101" font-size="9.5" fill="#555" font-family="sans-serif">-1</text><line x1="10" y1="97" x2="115" y2="97" stroke="#1e3a5c" stroke-width="2.2"/><line x1="125" y1="27" x2="228" y2="27" stroke="#1e3a5c" stroke-width="2.2"/><line x1="120" y1="32" x2="120" y2="92" stroke="#c0392b" stroke-width="1.5" stroke-dasharray="4,3"/><circle cx="120" cy="97" r="4.5" fill="white" stroke="#1e3a5c" stroke-width="2"/><circle cx="120" cy="27" r="4.5" fill="white" stroke="#1e3a5c" stroke-width="2"/><text x="128" y="62" font-size="9.5" fill="#c0392b" font-family="sans-serif" font-weight="bold">DNE</text></svg><div class="svg-caption">Left limit $= -1$, right limit $= 1$ &mdash; two-sided limit DNE</div></div>
+<p class="body-text"><strong>Floor function $\lfloor x \rfloor$:</strong> at any integer $n$, the floor jumps — $\lim_{x\to n^-}\lfloor x\rfloor = n-1$ but $\lim_{x\to n^+}\lfloor x\rfloor = n$, so the two-sided limit is DNE.</p>
 </div>
 </div>
 <div class="section-head">Worked Examples</div>
@@ -192,6 +192,33 @@ details[open]>.mistake-toggle{color:#1e3a5c}
   <div class="ex-label">Example 4 &nbsp;&mdash;&nbsp; Floor function</div>
   <div class="ex-body">Find $\displaystyle\lim_{x\to 3^-}\lfloor x\rfloor$ and $\displaystyle\lim_{x\to 3^+}\lfloor x\rfloor$.</div>
   <div class="ex-answer instructor">For $2\leq x < 3$: $\lfloor x\rfloor = 2$ &rarr; left limit $= 2$<br>For $3\leq x < 4$: $\lfloor x\rfloor = 3$ &rarr; right limit $= 3$<br>$2\neq 3 \Rightarrow$ two-sided limit <strong>DNE</strong>.</div>
+</div>
+<div class="ex-block">
+  <div class="ex-label">Example 5 &nbsp;&mdash;&nbsp; Reading one-sided limits from a graph</div>
+  <div class="ex-body">A graph shows two open circles at $x=2$: one at height $5$ (left branch) and one at height $1$ (right branch), with no filled dot. Find $\lim_{x\to 2^-}f(x)$, $\lim_{x\to 2^+}f(x)$, and state whether $\lim_{x\to 2}f(x)$ exists.</div>
+  <div style="text-align:center;margin:.5rem 0"><svg width="250" height="170" viewBox="0 0 250 170" xmlns="http://www.w3.org/2000/svg">
+<rect width="250" height="170" fill="white" rx="4"/>
+<line x1="25" y1="133" x2="238" y2="133" stroke="#888" stroke-width="1.2"/>
+<line x1="30" y1="10" x2="30" y2="155" stroke="#888" stroke-width="1.2"/>
+<polygon points="238,133 232,130 232,136" fill="#888"/>
+<polygon points="30,10 27,16 33,16" fill="#888"/>
+<line x1="130" y1="15" x2="130" y2="150" stroke="#e0e0e0" stroke-width="1" stroke-dasharray="3,3"/>
+<line x1="15" y1="45" x2="235" y2="45" stroke="#e0e0e0" stroke-width="1" stroke-dasharray="3,3"/>
+<line x1="15" y1="115" x2="235" y2="115" stroke="#e0e0e0" stroke-width="1" stroke-dasharray="3,3"/>
+<path d="M 35,128 Q 85,25 128,46" fill="none" stroke="#1e3a5c" stroke-width="2" stroke-linecap="round"/>
+<path d="M 132,114 Q 175,150 230,130" fill="none" stroke="#1e3a5c" stroke-width="2" stroke-linecap="round"/>
+<line x1="130" y1="130" x2="130" y2="136" stroke="#555" stroke-width="1.2"/>
+<text x="130" y="148" text-anchor="middle" font-size="11" font-family="sans-serif" fill="#555">2</text>
+<line x1="27" y1="45" x2="33" y2="45" stroke="#555" stroke-width="1.2"/>
+<text x="22" y="49" text-anchor="end" font-size="11" font-family="sans-serif" fill="#555">5</text>
+<line x1="27" y1="115" x2="33" y2="115" stroke="#555" stroke-width="1.2"/>
+<text x="22" y="119" text-anchor="end" font-size="11" font-family="sans-serif" fill="#555">1</text>
+<text x="241" y="137" font-size="11" font-family="Georgia,serif" fill="#555" font-style="italic">x</text>
+<text x="30" y="9" text-anchor="middle" font-size="11" font-family="Georgia,serif" fill="#555" font-style="italic">y</text>
+<circle cx="130" cy="45" r="4.5" fill="white" stroke="#c03030" stroke-width="2"/>
+<circle cx="130" cy="115" r="4.5" fill="white" stroke="#c03030" stroke-width="2"/>
+</svg></div>
+  <div class="ex-answer instructor">Trace from the left: the curve heads toward the open circle at $y=5$, so $\lim_{x\to 2^-}f(x)=5$.<br>Trace from the right: the curve heads toward the open circle at $y=1$, so $\lim_{x\to 2^+}f(x)=1$.<br>$5\neq1 \Rightarrow \lim_{x\to 2}f(x)=$ <strong>DNE</strong>.</div>
 </div>
 </div>
 <div class="section-head">Practice Problems</div>
@@ -225,6 +252,11 @@ details[open]>.mistake-toggle{color:#1e3a5c}
   <div class="pr-num">6.</div>
   <div class="pr-prob">Find $\displaystyle\lim_{x\to 3}\lfloor x\rfloor$.</div>
   <div class="pr-ans instructor">DNE — left limit $=2$, right limit $=3$.</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">7.</div>
+  <div class="pr-prob">A graph shows an open circle at $(0,\,-2)$ approached from the left and an open circle at $(0,\,3)$ approached from the right, with no filled dot. Find $\lim_{x\to 0^-}f(x)$ and $\lim_{x\to 0^+}f(x)$.</div>
+  <div class="pr-ans instructor">Left limit $=-2$; right limit $=3$.</div>
 </div>
 </div>
 

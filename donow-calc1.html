@@ -342,6 +342,27 @@ GEN['Calc_1_1'] = function() {
   };
 };
 
+// ── §1.1.5  One-Sided Limits — graphical (jump discontinuity) ────────────────
+GEN['Calc_1_1_5'] = function() {
+  const a = ri(-4, 4);
+  const agree = Math.random() < 0.35;
+  const L1 = ri(-6, 8);
+  let L2 = L1;
+  if (!agree) { do { L2 = ri(-6, 8); } while (L2 === L1); }
+  return {
+    html: `A graph has a jump at ${kI(`x = ${a}`)}: an open circle at ${kI(`(${a}, ${L1})`)} is approached from the left, and an open circle at ${kI(`(${a}, ${L2})`)} is approached from the right.
+           <br><br>Find ${kI(`\\displaystyle\\lim_{x \\to ${a}^-}f(x)`)} and ${kI(`\\displaystyle\\lim_{x \\to ${a}^+}f(x)`)}.`,
+    type: 'numeric2',
+    answers: [L1, L2],
+    labels: ['left-hand limit', 'right-hand limit'],
+    solutionHtml:
+      kD(`\\lim_{x \\to ${a}^-}f(x) = ${L1} \\qquad \\lim_{x \\to ${a}^+}f(x) = ${L2}`) +
+      (agree
+        ? `<p>The one-sided limits agree, so ${kI(`\\lim_{x\\to ${a}}f(x)`)} exists and equals ${kI(String(L1))}.</p>`
+        : `<p>${kI(`${L1} \\neq ${L2}`)}, so ${kI(`\\lim_{x\\to ${a}}f(x)`)} does not exist (DNE).</p>`)
+  };
+};
+
 // ── §1.2  Limit of a polynomial (direct substitution) ────────────────────────
 GEN['Calc_1_2'] = function() {
   const a = ri(-4, 4) || 1;
@@ -729,8 +750,7 @@ function checkNumeric2(idx, ans1, ans2) {
   const v1 = parseNum(document.getElementById(`p${idx}a`)?.value || '');
   const v2 = parseNum(document.getElementById(`p${idx}b`)?.value || '');
   if (isNaN(v1) || isNaN(v2)) return;
-  const correct = (approxEq(v1, ans1) && approxEq(v2, ans2)) ||
-                  (approxEq(v1, ans2) && approxEq(v2, ans1));
+  const correct = approxEq(v1, ans1) && approxEq(v2, ans2);
   showFeedback(idx, correct, _solutions[idx]);
 }
 function checkMCQ(idx, chosen, correct) {

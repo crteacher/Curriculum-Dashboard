@@ -263,7 +263,7 @@ function gen5() {
     svg,
     answer: [type],
     hint: `Look at where the height of each rectangle is measured within its subinterval — the left edge, right edge, or center?`,
-    step: `\\text{Heights sampled at the ${desc} of each subinterval \\u2192 ${type} Riemann sum.}`
+    step: `\\text{Heights sampled at the ${desc} of each subinterval}\\Rightarrow\\text{${type} Riemann sum.}`
   };
 }
 
@@ -311,7 +311,7 @@ function gen6() {
     svg,
     answer: [ans],
     hint: `f is increasing. Do ${type} rectangle tops sit above the curve or below it on each subinterval?`,
-    step: `\\text{f increasing + ${type} sum \\u2192 rectangles ${relation} the curve \\u2192 ${ans}.}`
+    step: `\\text{f increasing + ${type} sum}\\Rightarrow\\text{rectangles ${relation} the curve}\\Rightarrow\\text{${ans}.}`
   };
 }
 
@@ -341,7 +341,7 @@ function gen8() {
     latex: `\\text{f is ${dir} on }[a,b].\\text{ Is the ${type} Riemann sum an over- or underestimate?}`,
     answer: [ans],
     hint: `Sketch a quick ${dir} curve. For a ${type} sum, are the rectangle tops above or below the curve?`,
-    step: `\\text{${dir[0].toUpperCase() + dir.slice(1)} f + ${type} sum \\u2192 ${ans}.}`
+    step: `\\text{${dir[0].toUpperCase() + dir.slice(1)} f + ${type} sum}\\Rightarrow\\text{${ans}.}`
   };
 }
 

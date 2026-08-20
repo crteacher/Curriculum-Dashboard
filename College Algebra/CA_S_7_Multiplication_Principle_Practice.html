@@ -179,9 +179,9 @@ function gen3() {
 function gen4() {
   const n = rInt(2)+1;   // n = 1 or 2
   const val = Math.pow(6, n);
-  const diceWord = n === 1 ? 'die is rolled' : 'dice are rolled';
+  const diceDesc = n === 1 ? 'A fair 6-sided die is rolled' : `${n} fair 6-sided dice are rolled`;
   return {
-    latex:  `\\text{A fair }${n===1?'':n+'\\text{-'}\\text{sided }${diceWord}.}\\quad\\text{How many outcomes are in the sample space?}`,
+    latex:  `\\text{${diceDesc}.}\\quad\\text{How many outcomes are in the sample space?}`,
     answer: [String(val)],
     hint:   'How many outcomes does each die contribute to the sample space?',
     step:   `6^{${n}}=${val}`

@@ -132,7 +132,7 @@ details[open]>.mistake-toggle{color:#1e3a5c}
 <p class="body-text"><strong>Limit vs. function value:</strong> &ldquo;Where is the function <em>heading</em>?&rdquo; vs. &ldquo;What does $f$ <em>equal</em> there?&rdquo; These are independent questions.</p>
 </div>
 <div class="col"><div class="section-head">Reading Limits from Graphs</div>
-<div class="accent-box"><p><strong>Open circle $\circ$ at $(a,\, L)$:</strong><br>&nbsp;&nbsp;$f(a)$ undefined, but $\lim_{x\to a}f(x) = L$</p><p><strong>Filled circle $\bullet$ at $(a,\, M)$:</strong><br>&nbsp;&nbsp;$f(a) = M$ &nbsp;(the actual function value)</p><p>The limit depends on the height the curve <em>approaches</em>, not the filled dot.</p><p><strong>Removable discontinuity:</strong> curve approaches one height (open $\circ$), filled $\bullet$ placed elsewhere &rarr; limit = height of the open circle</p><p><strong>Jump discontinuity:</strong> curve approaches two <em>different</em> heights from left and right &rarr; limit = DNE</p></div>
+<div class="accent-box"><p><strong>Open circle $\circ$ at $(a,\, L)$:</strong><br>&nbsp;&nbsp;$f(a)$ undefined, but $\lim_{x\to a}f(x) = L$</p><p><strong>Filled circle $\bullet$ at $(a,\, M)$:</strong><br>&nbsp;&nbsp;$f(a) = M$ &nbsp;(the actual function value)</p><p>The limit depends on the height the curve <em>approaches</em>, not the filled dot.</p><p><strong>Removable discontinuity:</strong> curve approaches one height (open $\circ$), filled $\bullet$ placed elsewhere &rarr; limit = height of the open circle</p><p><strong>Jump discontinuity:</strong> curve approaches two <em>different</em> heights from left and right &rarr; limit = DNE</p><p>For the limit to <strong>exist</strong>, the curve must approach the same height from the left and from the right — compare Examples 1 and 2 below.</p></div>
 <details class="mistake-panel">
 <summary class="mistake-toggle">▸ Common Mistake</summary>
 <div class="mistake-body">
@@ -171,17 +171,44 @@ details[open]>.mistake-toggle{color:#1e3a5c}
   <div class="ex-answer instructor">The curve approaches the open circle at $y = 5$.<br>$\lim_{x \to 3}f(x) = 5$ &nbsp; <span style='font-size:12px;color:#888'>($f(3)=1$ does not affect the limit)</span></div>
 </div>
 <div class="ex-block">
-  <div class="ex-label">Example 2 &nbsp;&mdash;&nbsp; Direct substitution</div>
+  <div class="ex-label">Example 2 &nbsp;&mdash;&nbsp; Reading a graph &mdash; jump discontinuity</div>
+  <div class="ex-body">A graph shows two open circles at $x=2$: one at height $5$ (left branch) and one at height $1$ (right branch). No point is filled. Find $\lim_{x \to 2} f(x)$.</div>
+  <div style="text-align:center;margin:.5rem 0"><svg width="250" height="170" viewBox="0 0 250 170" xmlns="http://www.w3.org/2000/svg">
+<rect width="250" height="170" fill="white" rx="4"/>
+<line x1="25" y1="133" x2="238" y2="133" stroke="#888" stroke-width="1.2"/>
+<line x1="30" y1="10" x2="30" y2="155" stroke="#888" stroke-width="1.2"/>
+<polygon points="238,133 232,130 232,136" fill="#888"/>
+<polygon points="30,10 27,16 33,16" fill="#888"/>
+<line x1="130" y1="15" x2="130" y2="150" stroke="#e0e0e0" stroke-width="1" stroke-dasharray="3,3"/>
+<line x1="15" y1="45" x2="235" y2="45" stroke="#e0e0e0" stroke-width="1" stroke-dasharray="3,3"/>
+<line x1="15" y1="115" x2="235" y2="115" stroke="#e0e0e0" stroke-width="1" stroke-dasharray="3,3"/>
+<path d="M 35,128 Q 85,25 128,46" fill="none" stroke="#1e3a5c" stroke-width="2" stroke-linecap="round"/>
+<path d="M 132,114 Q 175,150 230,130" fill="none" stroke="#1e3a5c" stroke-width="2" stroke-linecap="round"/>
+<line x1="130" y1="130" x2="130" y2="136" stroke="#555" stroke-width="1.2"/>
+<text x="130" y="148" text-anchor="middle" font-size="11" font-family="sans-serif" fill="#555">2</text>
+<line x1="27" y1="45" x2="33" y2="45" stroke="#555" stroke-width="1.2"/>
+<text x="22" y="49" text-anchor="end" font-size="11" font-family="sans-serif" fill="#555">5</text>
+<line x1="27" y1="115" x2="33" y2="115" stroke="#555" stroke-width="1.2"/>
+<text x="22" y="119" text-anchor="end" font-size="11" font-family="sans-serif" fill="#555">1</text>
+<text x="241" y="137" font-size="11" font-family="Georgia,serif" fill="#555" font-style="italic">x</text>
+<text x="30" y="9" text-anchor="middle" font-size="11" font-family="Georgia,serif" fill="#555" font-style="italic">y</text>
+<circle cx="130" cy="45" r="4.5" fill="white" stroke="#c03030" stroke-width="2"/>
+<circle cx="130" cy="115" r="4.5" fill="white" stroke="#c03030" stroke-width="2"/>
+</svg></div>
+  <div class="ex-answer instructor">Left branch approaches $5$; right branch approaches $1$.<br>$5 \neq 1 \Rightarrow \lim_{x \to 2}f(x) = $ DNE &nbsp; <span style='font-size:12px;color:#888'>(same rule as Example 1 — just the two sides disagree here)</span></div>
+</div>
+<div class="ex-block">
+  <div class="ex-label">Example 3 &nbsp;&mdash;&nbsp; Direct substitution</div>
   <div class="ex-body">Find $\lim_{x \to 3}(2x + 1)$.</div>
   <div class="ex-answer instructor">Polynomial &rarr; substitute directly:<br>$2(3)+1 = 7$</div>
 </div>
 <div class="ex-block">
-  <div class="ex-label">Example 3 &nbsp;&mdash;&nbsp; Factor and cancel</div>
+  <div class="ex-label">Example 4 &nbsp;&mdash;&nbsp; Factor and cancel</div>
   <div class="ex-body">Find $\displaystyle\lim_{x \to 2}\dfrac{x^2 - 4}{x - 2}$.</div>
   <div class="ex-answer instructor">$x=2$ gives $\tfrac{0}{0}$ &mdash; factor:<br>$\dfrac{(x-2)(x+2)}{x-2} = x+2 \to 2+2 = 4$</div>
 </div>
 <div class="ex-block">
-  <div class="ex-label">Example 4 &nbsp;&mdash;&nbsp; Limit DNE &mdash; piecewise</div>
+  <div class="ex-label">Example 5 &nbsp;&mdash;&nbsp; Limit DNE &mdash; piecewise</div>
   <div class="ex-body">$f(x) = \begin{cases} x+1 & x < 3 \\ x+3 & x \geq 3 \end{cases}$ &nbsp; Find $\lim_{x \to 3}f(x)$.</div>
   <div class="ex-answer instructor">Left side: $3+1=4$ &nbsp;&nbsp; Right side: $3+3=6$<br>$4 \neq 6 \Rightarrow \lim_{x \to 3}f(x) = $ DNE</div>
 </div>
@@ -195,26 +222,31 @@ details[open]>.mistake-toggle{color:#1e3a5c}
 </div>
 <div class="pr-row">
   <div class="pr-num">2.</div>
+  <div class="pr-prob">A graph shows an open circle at $(1,\,2)$ approached from the left and an open circle at $(1,\,-1)$ approached from the right, with no filled dot. Does $\lim_{x \to 1}f(x)$ exist?</div>
+  <div class="pr-ans instructor">No &mdash; left approaches $2$, right approaches $-1$; $2 \neq -1 \Rightarrow$ DNE</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">3.</div>
   <div class="pr-prob">$f(x) = \begin{cases} 2x & x < 3 \\ x+4 & x \geq 3 \end{cases}$ &nbsp; Find $\lim_{x \to 3}f(x)$.</div>
   <div class="pr-ans instructor">Left: $6$, Right: $7$ &rarr; DNE</div>
 </div>
 <div class="pr-row">
-  <div class="pr-num">3.</div>
+  <div class="pr-num">4.</div>
   <div class="pr-prob">Find $\lim_{x \to 4}(2x - 3)$.</div>
   <div class="pr-ans instructor">$2(4)-3 = 5$</div>
 </div>
 <div class="pr-row">
-  <div class="pr-num">4.</div>
+  <div class="pr-num">5.</div>
   <div class="pr-prob">Find $\lim_{x \to 3}(x^2 - 2x)$.</div>
   <div class="pr-ans instructor">$9 - 6 = 3$</div>
 </div>
 <div class="pr-row">
-  <div class="pr-num">5.</div>
+  <div class="pr-num">6.</div>
   <div class="pr-prob">Find $\displaystyle\lim_{x \to 2}\dfrac{x^2-4}{x-2}$.</div>
   <div class="pr-ans instructor">$\dfrac{(x-2)(x+2)}{x-2}=x+2 \to 4$</div>
 </div>
 <div class="pr-row">
-  <div class="pr-num">6.</div>
+  <div class="pr-num">7.</div>
   <div class="pr-prob">Find $\displaystyle\lim_{x \to 3}\dfrac{x^2-9}{x-3}$.</div>
   <div class="pr-ans instructor">$\dfrac{(x-3)(x+3)}{x-3}=x+3 \to 6$</div>
 </div>

@@ -188,7 +188,7 @@ details[open]>.mistake-toggle{color:#1e3a5c}
 </div>
 </div>
 <div class="col"><div class="section-head">Using the Tests</div>
-<div class="accent-box"><p>1. Verify $f$ is positive, continuous, decreasing.</p><p>2. Evaluate $\int_1^\infty f(x)\,dx$.</p><p>3. Conclude convergence/divergence of the series (not its value).</p><p>Note: The integral value $\neq$ the series sum.</p></div>
+<div class="accent-box"><p><strong>Divergence Test (check first):</strong> If $\lim_{n\to\infty}a_n\neq0$ (or the limit doesn't exist), $\sum a_n$ diverges immediately — no need for the integral test.</p><p>If $\lim a_n=0$, the series might converge or diverge, so proceed:</p><p>1. Verify $f$ is positive, continuous, decreasing.</p><p>2. Evaluate $\int_1^\infty f(x)\,dx$.</p><p>3. Conclude convergence/divergence of the series (not its value).</p><p>Note: The integral value $\neq$ the series sum.</p></div>
 <details class="mistake-panel">
 <summary class="mistake-toggle">▸ Common Mistake</summary>
 <div class="mistake-body">
@@ -203,7 +203,7 @@ details[open]>.mistake-toggle{color:#1e3a5c}
 <div class="ex-block">
   <div class="ex-label">Example 1 &nbsp;&mdash;&nbsp; $p$-series</div>
   <div class="ex-body">Does $\sum_{n=1}^\infty\dfrac{1}{n^3}$ converge?</div>
-  <div class="ex-answer instructor">$p=3>1$ → converges ($p$-series test). (Actual value = $\pi^2/6$... wait, that's $p=2$. Sum $=\zeta(3)$.)</div>
+  <div class="ex-answer instructor">$p=3>1$ → converges ($p$-series test). (The series has no simple closed form; its value is $\zeta(3)$, Apéry's constant.)</div>
 </div>
 <div class="ex-block">
   <div class="ex-label">Example 2 &nbsp;&mdash;&nbsp; Integral test</div>

@@ -22,10 +22,12 @@ header h1{font-size:1.2rem;font-weight:700;flex:1;color:#fff}
 
 .card{background:#fff;border:1px solid #e0e0e0;border-radius:12px;padding:1.25rem 1.4rem;display:flex;flex-direction:column;gap:.75rem}
 .card.ca{border-color:#2e533944}
+.card.c1{border-color:#6b1a2644}
 .card.c2{border-color:#1e3a5c44}
 .card.pc{border-color:#7a3b8a44}
 .card-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em}
 .card.ca .card-label{color:#2e5339}
+.card.c1 .card-label{color:#6b1a26}
 .card.c2 .card-label{color:#1e3a5c}
 .card.pc .card-label{color:#7a3b8a}
 .section-info{font-size:.8rem;color:#555555}
@@ -41,6 +43,8 @@ header h1{font-size:1.2rem;font-weight:700;flex:1;color:#fff}
 .reveal-btn{align-self:flex-start;padding:.35rem .95rem;border-radius:20px;font-size:.78rem;font-weight:600;cursor:pointer;border:1px solid;transition:all .15s;background:transparent;margin-top:-.1rem}
 .card.ca .reveal-btn{color:#2e5339;border-color:#2e5339}
 .card.ca .reveal-btn:hover{background:#eaf0ec}
+.card.c1 .reveal-btn{color:#6b1a26;border-color:#6b1a26}
+.card.c1 .reveal-btn:hover{background:#f5e9ea}
 .card.c2 .reveal-btn{color:#1e3a5c;border-color:#1e3a5c}
 .card.c2 .reveal-btn:hover{background:#e8edf4}
 .card.pc .reveal-btn{color:#7a3b8a;border-color:#7a3b8a}
@@ -71,8 +75,14 @@ header h1{font-size:1.2rem;font-weight:700;flex:1;color:#fff}
     <div class="q-box" id="caTodayQ"><span class="loading">Loading…</span></div>
     <div class="ans-box" id="caTodayAns"></div>
   </div>
+  <div class="card c1">
+    <div class="card-label">Calc 1</div>
+    <div class="section-info loading" id="c1TodaySection">Loading…</div>
+    <div class="q-box" id="c1TodayQ"><span class="loading">Loading…</span></div>
+    <div class="ans-box" id="c1TodayAns"></div>
+  </div>
   <div class="card c2">
-    <div class="card-label">Calculus</div>
+    <div class="card-label">Calc 2</div>
     <div class="section-info loading" id="c2TodaySection">Loading…</div>
     <div class="q-box" id="c2TodayQ"><span class="loading">Loading…</span></div>
     <div class="ans-box" id="c2TodayAns"></div>
@@ -96,8 +106,14 @@ header h1{font-size:1.2rem;font-weight:700;flex:1;color:#fff}
     <div class="q-box" id="caLastQ"><span class="loading">Loading…</span></div>
     <div class="ans-box visible" id="caLastAns"></div>
   </div>
+  <div class="card c1">
+    <div class="card-label">Calc 1</div>
+    <div class="section-info loading" id="c1LastSection">Loading…</div>
+    <div class="q-box" id="c1LastQ"><span class="loading">Loading…</span></div>
+    <div class="ans-box visible" id="c1LastAns"></div>
+  </div>
   <div class="card c2">
-    <div class="card-label">Calculus</div>
+    <div class="card-label">Calc 2</div>
     <div class="section-info loading" id="c2LastSection">Loading…</div>
     <div class="q-box" id="c2LastQ"><span class="loading">Loading…</span></div>
     <div class="ans-box visible" id="c2LastAns"></div>
@@ -137,6 +153,48 @@ function reveal(id) {
   btn.textContent='Answer shown'; btn.disabled=true;
 }
 
+// --- Randomized exit ticket generators (mirrors the do-now GEN pattern) ---
+function ri(a, b) { return Math.floor(Math.random() * (b - a + 1)) + a; }
+
+const EXIT_GEN = {};
+
+// Calc_1_1 — Limits: factor-and-cancel, based on notes Example 4
+EXIT_GEN['Calc_1_1'] = function() {
+  const a = ri(2, 9);
+  return {
+    q: `Find $\\displaystyle\\lim_{x \\to ${a}}\\dfrac{x^2 - ${a * a}}{x - ${a}}$.`,
+    a: `Factor: $\\dfrac{(x-${a})(x+${a})}{x-${a}} = x+${a}$ for $x \\neq ${a}$, so the limit is $${a}+${a}=${2 * a}$.`
+  };
+};
+
+// Calc_1_1_5 — One-Sided Limits: graph-reading jump discontinuity
+EXIT_GEN['Calc_1_1_5'] = function() {
+  const a = ri(-4, 4);
+  const agree = Math.random() < 0.35;
+  const L1 = ri(-6, 8);
+  let L2 = L1;
+  if (!agree) { do { L2 = ri(-6, 8); } while (L2 === L1); }
+  return {
+    q: `A graph has a jump at $x=${a}$: an open circle at $(${a}, ${L1})$ is approached from the left, and an open circle at $(${a}, ${L2})$ is approached from the right. Find the left-hand limit, the right-hand limit, and state whether the two-sided limit exists.`,
+    a: agree
+      ? `Left limit $=${L1}$, right limit $=${L2}$ — they agree, so $\\lim_{x\\to ${a}}f(x) = ${L1}$.`
+      : `Left limit $=${L1}$, right limit $=${L2}$ — they disagree, so $\\lim_{x\\to ${a}}f(x)$ is DNE.`
+  };
+};
+
+// PC_1_1 — Functions: ordered-pair set, evaluate f at a random point, based on notes Example/Practice 1
+EXIT_GEN['PC_1_1'] = function() {
+  const xs = [1, 2, 3, 4];
+  const ys = xs.map(() => ri(-6, 9));
+  const pairs = xs.map((x, i) => `(${x},${ys[i]})`).join(',');
+  const idx = ri(0, 3);
+  const evalX = xs[idx], evalY = ys[idx];
+  return {
+    q: `Given the set of ordered pairs $\\{${pairs}\\}$, is this a function? Evaluate $f(${evalX})$.`,
+    a: `Yes — every input (${xs.join(', ')}) is distinct, so each has exactly one output; it's a function. $f(${evalX}) = ${evalY}$.`
+  };
+};
+
 document.getElementById('dateBadge').textContent =
   new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
 
@@ -167,11 +225,16 @@ Promise.all([
     secEl.textContent='§'+sec.section+' — '+sec.title;
     secEl.classList.remove('loading');
 
-    if (sec.exitTicket) {
-      qEl.innerHTML = renderMath(sec.exitTicket);
+    // Prefer a randomized generator (same pattern as the do-nows) when one exists for this section.
+    const gen = EXIT_GEN[secId] ? EXIT_GEN[secId]() : null;
+    const qText = gen ? gen.q : sec.exitTicket;
+    const aText = gen ? gen.a : sec.exitTicketAnswer;
+
+    if (qText) {
+      qEl.innerHTML = renderMath(qText);
       const ansHtml = '<div class="ans-label">Answer</div>' +
-        (sec.exitTicketAnswer ? renderMath(sec.exitTicketAnswer)
-                              : '<span class="none-msg">No answer key.</span>');
+        (aText ? renderMath(aText)
+              : '<span class="none-msg">No answer key.</span>');
       ansEl.innerHTML = ansHtml;
       if (showAnswerNow) {
         ansEl.classList.add('visible');
@@ -193,6 +256,12 @@ Promise.all([
   const caLast = lastSection(state?.courses?.collegeAlgebra);
   fill(caId,   'caToday', false);
   fill(caLast, 'caLast',  true);
+
+  // Calculus 1
+  const c1Id   = state?.courses?.calc1?.currentSection;
+  const c1Last = lastSection(state?.courses?.calc1);
+  fill(c1Id,   'c1Today', false);
+  fill(c1Last, 'c1Last',  true);
 
   // Calculus 2
   const c2Id   = state?.courses?.calc2?.currentSection;

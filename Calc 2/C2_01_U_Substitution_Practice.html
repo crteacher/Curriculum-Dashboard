@@ -65,15 +65,15 @@
 <body>
 <div class="container">
   <h1>U-Substitution</h1>
-  <p class="subtitle">Calculus 2 &nbsp;&middot;&nbsp; &sect;1 &nbsp;&middot;&nbsp; Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026</p>
+  <p class="subtitle">Calc 2 &nbsp;&middot;&nbsp; &sect;1 &nbsp;&middot;&nbsp; Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026</p>
 
   <div class="section">
     <div class="section-title">Core Ideas</div>
     <div class="concept">
       <span class="concept-label">Reversing the Chain Rule</span>
-      The Chain Rule says $\dfrac{d}{dx}f(g(x))=f'(g(x))\cdot g'(x)$.
-      Reading it backward: $\displaystyle\int f'(g(x))\,g'(x)\,dx = f(g(x))+C$.
-      Set $u=g(x)$ and $du=g'(x)\,dx$ to convert the integral to $\int f'(u)\,du$.
+      The Chain Rule says $\dfrac{d}{dx}F(g(x))=F'(g(x))\cdot g'(x)=f(g(x))\cdot g'(x)$ (using $F'=f$).
+      Reading it backward: $\displaystyle\int f(g(x))\,g'(x)\,dx = F(g(x))+C$.
+      Set $u=g(x)$ and $du=g'(x)\,dx$ to convert the integral to $\int f(u)\,du$.
     </div>
     <div class="concept">
       <span class="concept-label">Choosing u</span>
@@ -205,7 +205,7 @@ function gen6() {
     latex: `\\int_{-${a}}^{${a}} x\\,(x^2+${b})^{${n}}\\,dx`,
     answer: ['0'],
     hint: 'What does the symmetry of an odd function over a symmetric interval tell you about the integral?',
-    step: `x(x^2+${b})^{${n}}\\text{ is odd, so }\\int_{-a}^{a}(\\text{odd})\\,dx=0`
+    step: `x(x^2+${b})^{${n}}\\text{ is odd, so }\\int_{-${a}}^{${a}}(\\text{odd})\\,dx=0`
   };
 }
 
@@ -218,7 +218,7 @@ function gen7() {
   return {
     latex: `\\int_1^{${upper}} \\frac{\\ln x}{x}\\,dx`,
     answer: [ans],
-    hint: 'Recognizing that the derivative of ln(x) appears in the integrand, which function should be u?',
+    hint: 'Which function in this integrand has its own derivative sitting right next to it as a factor?',
     step: `u=\\ln x,\\;du=\\frac{dx}{x}\\;\\Rightarrow\\;\\int_0^{${a}} u\\,du=\\left[\\frac{u^2}{2}\\right]_0^{${a}}=\\frac{${top}}{2}=${ans}`
   };
 }

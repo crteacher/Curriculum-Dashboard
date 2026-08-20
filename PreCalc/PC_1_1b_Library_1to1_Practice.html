@@ -224,12 +224,12 @@ function gen5(){
 }
 function gen6(){
   const cases=[
-    {domain:'[0,\\infty)',fn:'square root',step:'\\text{Domain }[0,\\infty)\\text{ matches the square root function}'},
-    {domain:'(-\\infty,\\infty)',fn:'squaring',step:'\\text{Domain }(-\\infty,\\infty)\\text{ matches squaring, cubing, absolute value, and identity}'},
-    {domain:'(-\\infty,0)\\cup(0,\\infty)',fn:'reciprocal',step:'\\text{The reciprocal function excludes }x=0'}
+    {domain:'[0,\\infty)',fn:['square root'],step:'\\text{Domain }[0,\\infty)\\text{ matches the square root function}'},
+    {domain:'(-\\infty,\\infty)',fn:['squaring','cubing','absolute value','identity','cube root'],step:'\\text{Domain }(-\\infty,\\infty)\\text{ matches squaring, cubing, absolute value, identity, and cube root}'},
+    {domain:'(-\\infty,0)\\cup(0,\\infty)',fn:['reciprocal'],step:'\\text{The reciprocal function excludes }x=0'}
   ];
   const c=choose(cases);
-  return{latex:`\\text{Which parent function has domain }${c.domain}?`,answer:[c.fn],hint:'Which function has a natural restriction on its inputs?',step:c.step};
+  return{latex:`\\text{Which parent function has domain }${c.domain}?`,answer:c.fn,hint:'Which function has a natural restriction on its inputs?',step:c.step};
 }
 function gen7(){
   const cases=[
@@ -251,7 +251,7 @@ function gen8(){
   return{
     latex:`\\text{How many of these are 1-to-1? }${combined.map(f=>`f(x)=${f}`).join(',\\;')}`,
     answer:[String(picked1.length)],
-    hint:'Which are strictly increasing or decreasing everywhere?',
+    hint:'For each function, is it strictly increasing or strictly decreasing across its whole domain — or does it behave differently on separate intervals (like $1/x$)?',
     step:`\\text{The 1-to-1 functions: }${picked1.map(f=>`f(x)=${f}`).join(',\\;')}\\Rightarrow ${picked1.length}`
   };
 }
