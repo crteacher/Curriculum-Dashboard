@@ -88,19 +88,68 @@
   </div>
 </div>
 <script>
+/* ── graph rendering ─────────────────────────────────────────────────── */
+function buildGraph(xMin,xMax,yMin,yMax,draw){
+  const W=240,H=170,ML=26,MR=10,MT=10,MB=24;
+  const pw=W-ML-MR, ph=H-MT-MB;
+  const sx=x=>ML+(x-xMin)/(xMax-xMin)*pw;
+  const sy=y=>MT+ph-(y-yMin)/(yMax-yMin)*ph;
+  const ax=sx(0), ay=sy(0);
+  let grid='';
+  for(let x=Math.ceil(xMin);x<=Math.floor(xMax);x++){
+    const px=sx(x).toFixed(1);
+    grid+=`<line x1="${px}" y1="${MT}" x2="${px}" y2="${MT+ph}" stroke="#e8eef5" stroke-width="1"/>`;
+    if(x!==0) grid+=`<text x="${px}" y="${(ay+12).toFixed(1)}" text-anchor="middle" font-size="8" fill="#aaa">${x}</text>`;
+  }
+  for(let y=Math.ceil(yMin);y<=Math.floor(yMax);y++){
+    const py=sy(y).toFixed(1);
+    grid+=`<line x1="${ML}" y1="${py}" x2="${ML+pw}" y2="${py}" stroke="#e8eef5" stroke-width="1"/>`;
+    if(y!==0) grid+=`<text x="${(ax-4).toFixed(1)}" y="${(+py+3).toFixed(1)}" text-anchor="end" font-size="8" fill="#aaa">${y}</text>`;
+  }
+  const axes=`<line x1="${ML}" y1="${ay.toFixed(1)}" x2="${ML+pw}" y2="${ay.toFixed(1)}" stroke="#999" stroke-width="1.2"/><line x1="${ax.toFixed(1)}" y1="${MT}" x2="${ax.toFixed(1)}" y2="${MT+ph}" stroke="#999" stroke-width="1.2"/>`;
+  let extra='';
+  draw({
+    line:(x1,y1,x2,y2)=>{extra+=`<line x1="${sx(x1).toFixed(1)}" y1="${sy(y1).toFixed(1)}" x2="${sx(x2).toFixed(1)}" y2="${sy(y2).toFixed(1)}" stroke="#1e3a5c" stroke-width="2.2" stroke-linecap="round"/>`;},
+    curve:(pts)=>{const s=pts.map(([x,y])=>`${sx(x).toFixed(1)},${sy(y).toFixed(1)}`).join(' ');extra+=`<polyline points="${s}" fill="none" stroke="#1e3a5c" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>`;},
+    open:(x,y)=>{extra+=`<circle cx="${sx(x).toFixed(1)}" cy="${sy(y).toFixed(1)}" r="4" fill="#fff" stroke="#1e3a5c" stroke-width="2"/>`;},
+    filled:(x,y)=>{extra+=`<circle cx="${sx(x).toFixed(1)}" cy="${sy(y).toFixed(1)}" r="4" fill="#1e3a5c"/>`;}
+  });
+  return `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" class="fn-graph">${grid}${axes}${extra}</svg>`;
+}
+const GRAPHS={
+  A: buildGraph(-1.5,3.5,-3,5,g=>{
+    g.line(-1.2,0.8,1,4); g.open(1,4);
+    g.line(1,-2,3,0.6); g.open(1,-2);
+  }),
+  B: buildGraph(2,6,-1,7,g=>{
+    const left=[]; for(let x=2;x<=3.9;x+=0.2) left.push([x,6-0.5*(x-4)*(x-4)]);
+    const right=[]; for(let x=4.1;x<=6;x+=0.2) right.push([x,6-0.5*(x-4)*(x-4)]);
+    g.curve(left); g.curve(right);
+    g.open(4,6); g.filled(4,1);
+  }),
+  C: buildGraph(-4.2,0.8,-3,4.5,g=>{
+    g.line(-4,-2.5,-2,-1); g.open(-2,-1);
+    g.line(-2,3,0,1); g.open(-2,3);
+  }),
+  D: buildGraph(3.5,6.5,0,6,g=>{
+    g.line(4,4,5,4); g.filled(4,4); g.open(5,4);
+    g.line(5,5,6,5); g.filled(5,5); g.open(6,5);
+  })
+};
+
 const BANK=[
-  {"prompt": "A graph shows a jump at $x=1$: an open circle at $(1, 4)$ is approached from the left, and an open circle at $(1, -2)$ is approached from the right. Find $\\displaystyle\\lim_{x \\to 1^-}f(x)$.", "answer": ["4"], "hint": "Trace the curve from the left toward x = 1 — what height does it approach?", "step": "\\text{Approaching from the left, the curve heads toward the open circle at height }4."},
-  {"prompt": "Same graph: open circle at $(1, 4)$ from the left, open circle at $(1, -2)$ from the right. Find $\\displaystyle\\lim_{x \\to 1^+}f(x)$.", "answer": ["-2", "−2"], "hint": "Trace the curve from the right toward x = 1.", "step": "\\text{Approaching from the right, the curve heads toward the open circle at height }-2."},
-  {"prompt": "Same graph as above. Does $\\displaystyle\\lim_{x \\to 1}f(x)$ exist? Enter its value, or DNE.", "answer": ["dne", "DNE"], "hint": "Compare the left-hand and right-hand limits.", "step": "4 \\neq -2 \\;\\Rightarrow\\; \\lim_{x\\to1}f(x)\\text{ is DNE}"},
-  {"prompt": "A graph has an open circle at $(4, 6)$ approached from both sides, with a filled dot plotted separately at $(4, 1)$. Find $\\displaystyle\\lim_{x \\to 4^-}f(x)$.", "answer": ["6"], "hint": "The limit follows the open circle, not the filled dot.", "step": "\\text{Both branches approach the open circle at height }6."},
-  {"prompt": "Same graph: open circle at $(4,6)$, filled dot at $(4,1)$. Find $\\displaystyle\\lim_{x \\to 4^+}f(x)$.", "answer": ["6"], "hint": "Same open circle, approached from the right.", "step": "\\text{The right branch also approaches }6."},
-  {"prompt": "Same graph. Does $\\displaystyle\\lim_{x \\to 4}f(x)$ exist? Enter its value, or DNE. (The filled dot at $(4,1)$ does not affect the limit.)", "answer": ["6"], "hint": "Left and right limits agree — the filled dot is a distraction.", "step": "\\lim_{x\\to4^-}f(x)=6=\\lim_{x\\to4^+}f(x)\\;\\Rightarrow\\;\\lim_{x\\to4}f(x)=6"},
-  {"prompt": "A graph shows a jump at $x=-2$: an open circle at $(-2, -1)$ approached from the left, and an open circle at $(-2, 3)$ approached from the right. Find $\\displaystyle\\lim_{x \\to -2^-}f(x)$.", "answer": ["-1", "−1"], "hint": "Trace from the left toward x = -2.", "step": "\\text{From the left, the curve approaches height }-1."},
-  {"prompt": "Same graph: open circle at $(-2,-1)$ from the left, open circle at $(-2, 3)$ from the right. Find $\\displaystyle\\lim_{x \\to -2^+}f(x)$.", "answer": ["3"], "hint": "Trace from the right toward x = -2.", "step": "\\text{From the right, the curve approaches height }3."},
-  {"prompt": "Same graph as above. Does $\\displaystyle\\lim_{x \\to -2}f(x)$ exist? Enter its value, or DNE.", "answer": ["dne", "DNE"], "hint": "Compare the two one-sided limits.", "step": "-1 \\neq 3 \\;\\Rightarrow\\; \\lim_{x\\to-2}f(x)\\text{ is DNE}"},
-  {"prompt": "A staircase graph is constant at height $4$ for $4 \\le x < 5$, then jumps to height $5$ for $5 \\le x < 6$. Find $\\displaystyle\\lim_{x \\to 5^-}f(x)$.", "answer": ["4"], "hint": "What height does the graph sit at just before x = 5?", "step": "\\text{For }4\\le x<5,\\;f(x)=4"},
-  {"prompt": "Same staircase graph. Find $\\displaystyle\\lim_{x \\to 5^+}f(x)$.", "answer": ["5"], "hint": "What height does the graph jump to right after x = 5?", "step": "\\text{For }5\\le x<6,\\;f(x)=5"},
-  {"prompt": "Same staircase graph. Does $\\displaystyle\\lim_{x \\to 5}f(x)$ exist? Enter its value, or DNE.", "answer": ["dne", "DNE"], "hint": "Compare the step heights on each side of x = 5.", "step": "4 \\neq 5 \\;\\Rightarrow\\; \\lim_{x\\to5}f(x)\\text{ is DNE}"}
+  {"graph": "A", "prompt": "Find $\\displaystyle\\lim_{x \\to 1^-}f(x)$.", "answer": ["4"], "hint": "Trace the curve from the left toward x = 1 — what height does it approach?", "step": "\\text{Approaching from the left, the curve heads toward the open circle at height }4."},
+  {"graph": "A", "prompt": "Find $\\displaystyle\\lim_{x \\to 1^+}f(x)$.", "answer": ["-2", "−2"], "hint": "Trace the curve from the right toward x = 1.", "step": "\\text{Approaching from the right, the curve heads toward the open circle at height }-2."},
+  {"graph": "A", "prompt": "Does $\\displaystyle\\lim_{x \\to 1}f(x)$ exist? Enter its value, or DNE.", "answer": ["dne", "DNE"], "hint": "Compare the left-hand and right-hand limits.", "step": "4 \\neq -2 \\;\\Rightarrow\\; \\lim_{x\\to1}f(x)\\text{ is DNE}"},
+  {"graph": "B", "prompt": "Find $\\displaystyle\\lim_{x \\to 4^-}f(x)$.", "answer": ["6"], "hint": "The limit follows the open circle, not the filled dot.", "step": "\\text{Both branches approach the open circle at height }6."},
+  {"graph": "B", "prompt": "Find $\\displaystyle\\lim_{x \\to 4^+}f(x)$.", "answer": ["6"], "hint": "Same open circle, approached from the right.", "step": "\\text{The right branch also approaches }6."},
+  {"graph": "B", "prompt": "Does $\\displaystyle\\lim_{x \\to 4}f(x)$ exist? Enter its value, or DNE.", "answer": ["6"], "hint": "Left and right limits agree — the filled dot is a distraction.", "step": "\\lim_{x\\to4^-}f(x)=6=\\lim_{x\\to4^+}f(x)\\;\\Rightarrow\\;\\lim_{x\\to4}f(x)=6"},
+  {"graph": "C", "prompt": "Find $\\displaystyle\\lim_{x \\to -2^-}f(x)$.", "answer": ["-1", "−1"], "hint": "Trace from the left toward x = -2.", "step": "\\text{From the left, the curve approaches height }-1."},
+  {"graph": "C", "prompt": "Find $\\displaystyle\\lim_{x \\to -2^+}f(x)$.", "answer": ["3"], "hint": "Trace from the right toward x = -2.", "step": "\\text{From the right, the curve approaches height }3."},
+  {"graph": "C", "prompt": "Does $\\displaystyle\\lim_{x \\to -2}f(x)$ exist? Enter its value, or DNE.", "answer": ["dne", "DNE"], "hint": "Compare the two one-sided limits.", "step": "-1 \\neq 3 \\;\\Rightarrow\\; \\lim_{x\\to-2}f(x)\\text{ is DNE}"},
+  {"graph": "D", "prompt": "Find $\\displaystyle\\lim_{x \\to 5^-}f(x)$.", "answer": ["4"], "hint": "What height does the graph sit at just before x = 5?", "step": "\\text{For }4\\le x<5,\\;f(x)=4"},
+  {"graph": "D", "prompt": "Find $\\displaystyle\\lim_{x \\to 5^+}f(x)$.", "answer": ["5"], "hint": "What height does the graph jump to right after x = 5?", "step": "\\text{For }5\\le x<6,\\;f(x)=5"},
+  {"graph": "D", "prompt": "Does $\\displaystyle\\lim_{x \\to 5}f(x)$ exist? Enter its value, or DNE.", "answer": ["dne", "DNE"], "hint": "Compare the step heights on each side of x = 5.", "step": "4 \\neq 5 \\;\\Rightarrow\\; \\lim_{x\\to5}f(x)\\text{ is DNE}"}
 ];
 let ACTIVE,correct,flags,attempted,peeked;
 function norm(s){return s.trim().toLowerCase().replace(/\s+/g,'').replace(/[−–]/g,'-').replace(/infinity|∞/gi,'inf');}
@@ -124,7 +173,7 @@ function buildCards(){
     div.innerHTML=`<div class="card-body"><div class="card-meta">Problem ${i+1}</div><div class="card-expr" id="expr-${i}"></div><div class="input-row"><input class="ans-input" id="ai-${i}" placeholder="answer"/><button class="check-btn" id="chk-${i}" onclick="check(${i})">Check</button></div><div class="hint">${p.hint}</div><div class="feedback" id="fb-${i}"></div><span class="reveal-link" id="rl-${i}" onclick="reveal(${i})">Show solution</span><div class="revealed-answer" id="ra-${i}"></div></div>`;
     wrap.appendChild(div);
     document.getElementById('ai-'+i).addEventListener('keydown',e=>{if(e.key==='Enter')check(i);});
-    document.getElementById('expr-'+i).innerHTML=renderMath(p.prompt);
+    document.getElementById('expr-'+i).innerHTML=`<div style="text-align:center;margin-bottom:8px">${GRAPHS[p.graph]}</div>`+renderMath(p.prompt);
   });
 }
 function check(i){const p=ACTIVE[i],inp=document.getElementById('ai-'+i),fb=document.getElementById('fb-'+i),card=document.getElementById('card-'+i),good=ok(inp.value,p.answer);inp.className='ans-input';if(good){inp.className='ans-input ok';fb.className='feedback correct';fb.textContent='✓ Correct!';card.className='card correct';if(!flags[i]&&!attempted[i]&&!peeked[i]){flags[i]=true;correct++;updateScore();}attempted[i]=true;document.getElementById('chk-'+i).disabled=true;inp.readOnly=true;}else{attempted[i]=true;inp.className='ans-input bad';fb.className='feedback wrong';fb.textContent='✗ Not quite — try again or show the solution.';card.className=peeked[i]?'card peeked':'card wrong';}}
