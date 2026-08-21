@@ -154,6 +154,16 @@ details[open]>.proof-toggle{color:#1e3a5c}
   <div class="ex-body">Classify the discontinuity of $f(x)=\dfrac{x^2-4}{x-2}$ at $x=2$.</div>
   <div class="ex-answer instructor">$f(2)$ undefined, but $\lim_{x\to 2}f(x)=4$ exists.<br>The hole can be filled with a single point &rarr; <strong>removable discontinuity</strong>.</div>
 </div>
+<div class="ex-block">
+  <div class="ex-label">Example 5 &nbsp;&mdash;&nbsp; Classifying a jump discontinuity</div>
+  <div class="ex-body">Classify the discontinuity of $f(x)=\begin{cases}x+1 & x<2\\ x^2 & x\geq 2\end{cases}$ at $x=2$.</div>
+  <div class="ex-answer instructor">$\lim_{x\to 2^-}f(x)=2+1=3$, &ensp; $\lim_{x\to 2^+}f(x)=2^2=4$.<br>One-sided limits exist but disagree ($3\neq 4$) &rarr; <strong>jump discontinuity</strong>.</div>
+</div>
+<div class="ex-block">
+  <div class="ex-label">Example 6 &nbsp;&mdash;&nbsp; Classifying an infinite discontinuity</div>
+  <div class="ex-body">Classify the discontinuity of $f(x)=\dfrac{x+1}{x-3}$ at $x=3$.</div>
+  <div class="ex-answer instructor">$f(3)$ undefined; the numerator $x+1\neq 0$ at $x=3$, so the factor $(x-3)$ does not cancel.<br>As $x\to 3$, $f(x)\to\pm\infty$ &rarr; <strong>infinite discontinuity</strong> (vertical asymptote at $x=3$).</div>
+</div>
 </div>
 <div class="section-head">Practice Problems</div>
 <div class="practice">
@@ -186,6 +196,16 @@ details[open]>.proof-toggle{color:#1e3a5c}
   <div class="pr-num">6.</div>
   <div class="pr-prob">Does $\cos x = x$ have a solution on $(0,2)$?</div>
   <div class="pr-ans instructor">Let $g=\cos x-x$: $g(0)=1>0$, $g(2)\approx -1.58<0$ &rarr; yes, IVT.</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">7.</div>
+  <div class="pr-prob">Classify the discontinuity of $f(x)=\begin{cases}2x & x<1\\ x+3 & x\geq 1\end{cases}$ at $x=1$.</div>
+  <div class="pr-ans instructor">Left limit $=2$, right limit $=4$ &rarr; jump discontinuity.</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">8.</div>
+  <div class="pr-prob">Classify the discontinuity of $f(x)=\dfrac{2}{x+5}$ at $x=-5$.</div>
+  <div class="pr-ans instructor">Numerator $\neq 0$ at $x=-5$ &rarr; infinite discontinuity (vertical asymptote at $x=-5$).</div>
 </div>
 </div>
 
