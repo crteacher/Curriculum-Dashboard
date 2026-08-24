@@ -18,6 +18,9 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 .opening-q{background:#eef3f9;border-left:4px solid #1e3a5c;
   border-radius:0 8px 8px 0;padding:1rem 1.2rem;font-size:15px;
   margin-bottom:1.5rem;font-style:italic;line-height:1.75}
+.hook-question{margin:0}
+.hook-graph{text-align:center;margin:.7rem 0 .3rem;font-style:normal}
+.hook-graph svg{max-width:100%;height:auto}
 
 /* ── Section heading ── */
 .section-head{font-family:sans-serif;font-size:11px;font-weight:700;
@@ -96,6 +99,7 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   .opening-q{
     background:#eef3f9 !important;
     -webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .hook-graph{margin:.4rem 0 .2rem}
 }
 @page{margin:.55in .65in;size:letter}
 .mistake-panel{margin:.4rem 0 1.1rem;border-left:3px solid #b8860b;border-radius:0 6px 6px 0;background:#fdf8e8}
@@ -118,7 +122,7 @@ details[open]>.mistake-toggle{color:#1e3a5c}
 <div class="container">
 <h1 class="page-title">Limits</h1>
 <p class="page-sub">Calculus I &nbsp;&middot;&nbsp; &sect;1.1 &nbsp;&middot;&nbsp; Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026 &nbsp;&middot;&nbsp; <strong>STUDENT</strong></p>
-<div class="opening-q">What value does $f(x)$ approach as $x$ gets close to 2 — even if $f(2)$ is undefined? A <strong>limit</strong> describes the value a function <em>approaches</em>, not necessarily the value it takes at that point. Limits are the foundation on which all of calculus is built.</div>
+<div class="opening-q"><p class="hook-question">What value does $f(x)$ approach as $x$ gets close to 2 — even if $f(2)$ is undefined?</p><div class="hook-graph"><svg width="240" height="150" viewBox="0 0 240 150" xmlns="http://www.w3.org/2000/svg"><line x1="30" y1="10" x2="30" y2="130" stroke="#999" stroke-width="1.2"/><line x1="30" y1="130" x2="220" y2="130" stroke="#999" stroke-width="1.2"/><line x1="120" y1="10" x2="120" y2="130" stroke="#c9a86a" stroke-width="1" stroke-dasharray="3,2"/><text x="120" y="144" text-anchor="middle" font-size="11" fill="#666" font-family="sans-serif">x = 2</text><path d="M 40,110 Q 78,42 118,50" stroke="#1e3a5c" stroke-width="2.4" fill="none"/><path d="M 122,50 Q 160,58 205,22" stroke="#1e3a5c" stroke-width="2.4" fill="none"/><circle cx="120" cy="50" r="5" fill="#eef3f9" stroke="#1e3a5c" stroke-width="2"/></svg></div></div>
 <div class="two-col">
 <div class="col"><div class="section-head">The Limit</div>
 <div class="accent-box"><p>We write: &nbsp; $\displaystyle\lim_{x \to a} f(x) = L$</p><p>if $f(x)$ gets arbitrarily close to $L$ as $x \to a$ from either side.</p><p><strong>Key ideas:</strong></p><ul>  <li>$x$ approaches $a$ but <em>never equals</em> $a$</li>  <li>$f(a)$ may be undefined — the limit can still exist</li>  <li>Same value from both sides &rarr; limit equals that value</li>  <li>Different values from left and right &rarr; <strong>DNE</strong></li></ul></div>
@@ -132,7 +136,7 @@ details[open]>.mistake-toggle{color:#1e3a5c}
 <p class="body-text"><strong>Limit vs. function value:</strong> &ldquo;Where is the function <em>heading</em>?&rdquo; vs. &ldquo;What does $f$ <em>equal</em> there?&rdquo; These are independent questions.</p>
 </div>
 <div class="col"><div class="section-head">Reading Limits from Graphs</div>
-<div class="accent-box"><p><strong>Open circle $\circ$ at $(a,\, L)$:</strong><br>&nbsp;&nbsp;$f(a)$ undefined, but $\lim_{x\to a}f(x) = L$</p><p><strong>Filled circle $\bullet$ at $(a,\, M)$:</strong><br>&nbsp;&nbsp;$f(a) = M$ &nbsp;(the actual function value)</p><p>The limit depends on the height the curve <em>approaches</em>, not the filled dot.</p><p><strong>Removable discontinuity:</strong> curve approaches one height (open $\circ$), filled $\bullet$ placed elsewhere &rarr; limit = height of the open circle</p><p><strong>Jump discontinuity:</strong> curve approaches two <em>different</em> heights from left and right &rarr; limit = DNE</p><p>For the limit to <strong>exist</strong>, the curve must approach the same height from the left and from the right — compare Examples 1 and 2 below.</p></div>
+<div class="accent-box"><p>Symbolically, that's $\lim_{x\to a}f(x)=L$ &mdash; here's how to spot the same idea directly on a graph.</p><p><strong>Open circle $\circ$ at $(a,\, L)$:</strong><br>&nbsp;&nbsp;$f(a)$ undefined, but $\lim_{x\to a}f(x) = L$</p><p><strong>Filled circle $\bullet$ at $(a,\, M)$:</strong><br>&nbsp;&nbsp;$f(a) = M$ &nbsp;(the actual function value)</p><p>The limit depends on the height the curve <em>approaches</em>, not the filled dot.</p><p><strong>Removable discontinuity:</strong> curve approaches one height (open $\circ$), filled $\bullet$ placed elsewhere &rarr; limit = height of the open circle</p><p><strong>Jump discontinuity:</strong> curve approaches two <em>different</em> heights from left and right &rarr; limit = DNE</p><p>For the limit to <strong>exist</strong>, the curve must approach the same height from the left and from the right — compare Examples 1 and 2 below.</p></div>
 <details class="mistake-panel">
 <summary class="mistake-toggle">▸ Common Mistake</summary>
 <div class="mistake-body">

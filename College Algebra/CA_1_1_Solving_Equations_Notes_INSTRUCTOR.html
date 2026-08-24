@@ -18,6 +18,15 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 .opening-q{background:#eef3f9;border-left:4px solid #1e3a5c;
   border-radius:0 8px 8px 0;padding:1rem 1.2rem;font-size:15px;
   margin-bottom:1.5rem;font-style:italic;line-height:1.75}
+.hook-question{margin:0}
+.hook-graph{text-align:center;margin:.7rem 0 .3rem;font-style:normal}
+.hook-graph svg{max-width:100%;height:auto}
+.hook-reveal{margin-top:.5rem;font-style:normal}
+.hook-reveal-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;
+  color:#1e3a5c;text-transform:uppercase;letter-spacing:.07em;list-style:none;user-select:none;display:block}
+.hook-reveal-toggle::-webkit-details-marker{display:none}
+.hook-reveal-body{margin-top:.5rem;font-size:14px;line-height:1.75;padding-top:.5rem;
+  border-top:1px solid #c8d8ec}
 
 /* ── Section heading ── */
 .section-head{font-family:sans-serif;font-size:11px;font-weight:700;
@@ -98,6 +107,8 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   .container{padding:0;max-width:none}
   .page-sub{margin-bottom:.8rem}
   .opening-q{padding:.5rem .8rem;margin-bottom:.8rem;font-size:10pt;line-height:1.5;break-inside:avoid}
+  .hook-graph{margin:.4rem 0 .2rem}
+  details.hook-reveal:not([open]){display:none}
   .section-head{margin-top:.7rem;margin-bottom:.35rem}
   .spacer{height:.3rem}
   .accent-box{padding:.5rem .75rem;margin-bottom:.5rem;font-size:10pt;line-height:1.55;
@@ -157,7 +168,7 @@ details[open]>.proof-toggle{color:#1e3a5c}
 <div class="container">
 <h1 class="page-title">Solving Equations with One Unknown</h1>
 <p class="page-sub">College Algebra &nbsp;&middot;&nbsp; &sect;1.1 &nbsp;&middot;&nbsp; Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026 &nbsp;&middot;&nbsp; <strong>INSTRUCTOR</strong></p>
-<div class="opening-q">Solving an equation means finding the value that makes both sides balance. Every operation you perform must be done to both sides to keep the balance. What property of equality justifies that idea?</div>
+<div class="opening-q"><p class="hook-question">Solving an equation means finding the value that makes both sides balance. What property of equality justifies that idea?</p><div class="hook-graph"><svg width="220" height="120" viewBox="0 0 220 120" xmlns="http://www.w3.org/2000/svg"><line x1="110" y1="20" x2="110" y2="55" stroke="#1e3a5c" stroke-width="3"/><line x1="40" y1="55" x2="180" y2="55" stroke="#1e3a5c" stroke-width="3"/><line x1="40" y1="55" x2="40" y2="80" stroke="#1e3a5c" stroke-width="1.5"/><line x1="180" y1="55" x2="180" y2="80" stroke="#1e3a5c" stroke-width="1.5"/><path d="M 15,80 L 65,80 L 55,95 L 25,95 Z" fill="#d9e8f5" stroke="#1e3a5c" stroke-width="1.5"/><path d="M 155,80 L 205,80 L 195,95 L 165,95 Z" fill="#d9e8f5" stroke="#1e3a5c" stroke-width="1.5"/><polygon points="100,100 120,100 110,108" fill="#1e3a5c"/><text x="40" y="90" text-anchor="middle" font-size="13" fill="#1a1a1a" font-family="Georgia,serif">3x+2</text><text x="180" y="90" text-anchor="middle" font-size="13" fill="#1a1a1a" font-family="Georgia,serif">11</text></svg></div><details class="hook-reveal"><summary class="hook-reveal-toggle">&#9656; Think about it, then reveal</summary><div class="hook-reveal-body">Subtract 2 from both pans, then divide both by 3 &mdash; the scale stays level the whole time. That's the <strong>addition and multiplication properties of equality</strong>: whatever you do to one side, you must do to the other. Let's make that balancing act official &mdash; these are the properties that let you legally rebalance an equation.</div></details></div>
 <div class="two-col">
 <div class="col"><div class="section-head">The Tools</div>
 <div class="accent-box"><p><strong>Distributive Property:</strong><br>$a(b+c)=ab+ac$<br>$(a+b)(c+d)=ac+ad+bc+bd$</p><p><strong>Inverse Operations:</strong><br>Undo addition &rarr; subtract<br>Undo multiplication &rarr; divide</p><p><strong>Goal:</strong> isolate the variable by undoing operations in reverse PEMDAS order.</p></div>
@@ -170,7 +181,7 @@ details[open]>.proof-toggle{color:#1e3a5c}
 <p class="body-text"><strong>Strategy:</strong> distribute &rarr; combine like terms &rarr; move variable terms to one side &rarr; move constants to the other &rarr; divide.</p>
 </div>
 <div class="col"><div class="section-head">Number of Solutions</div>
-<div class="accent-box"><p><strong>Exactly one solution:</strong> variable remains &rarr; solve for $x$<br>e.g. $3x+4=2x-4 \Rightarrow x=-8$</p><p><strong>Infinitely many solutions:</strong><br>variable cancels &rarr; TRUE statement ($0=0$)<br>e.g. $3x+3=3(x+1) \Rightarrow 3=3$ &#x2713;</p><p><strong>No solution:</strong><br>variable cancels &rarr; FALSE statement ($a=b$, $a\neq b$)<br>e.g. $5x-7=5x+2 \Rightarrow -7=2$ &#x2717;</p></div>
+<div class="accent-box"><p>Those same tools don't always land on exactly one answer &mdash; sometimes they reveal none, or infinitely many.</p><p><strong>Exactly one solution:</strong> variable remains &rarr; solve for $x$<br>e.g. $3x+4=2x-4 \Rightarrow x=-8$</p><p><strong>Infinitely many solutions:</strong><br>variable cancels &rarr; TRUE statement ($0=0$)<br>e.g. $3x+3=3(x+1) \Rightarrow 3=3$ &#x2713;</p><p><strong>No solution:</strong><br>variable cancels &rarr; FALSE statement ($a=b$, $a\neq b$)<br>e.g. $5x-7=5x+2 \Rightarrow -7=2$ &#x2717;</p></div>
 <details class="mistake-panel">
 <summary class="mistake-toggle">▸ Common Mistake</summary>
 <div class="mistake-body">
