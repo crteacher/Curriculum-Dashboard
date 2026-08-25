@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Limit Rules & Algebraic Techniques &mdash; Notes</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75;font-size:15px}
@@ -18,6 +18,15 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 .opening-q{background:#eef3f9;border-left:4px solid #1e3a5c;
   border-radius:0 8px 8px 0;padding:1rem 1.2rem;font-size:15px;
   margin-bottom:1.5rem;font-style:italic;line-height:1.75}
+.hook-question{margin:0}
+.hook-graph{text-align:center;margin:.7rem 0 .3rem;font-style:normal}
+.hook-graph svg{max-width:100%;height:auto}
+.hook-reveal{margin-top:.5rem;font-style:normal}
+.hook-reveal-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;
+  color:#1e3a5c;text-transform:uppercase;letter-spacing:.07em;list-style:none;user-select:none;display:block}
+.hook-reveal-toggle::-webkit-details-marker{display:none}
+.hook-reveal-body{margin-top:.5rem;font-size:14px;line-height:1.75;padding-top:.5rem;
+  border-top:1px solid #c8d8ec}
 
 /* ── Section heading ── */
 .section-head{font-family:sans-serif;font-size:11px;font-weight:700;
@@ -64,6 +73,31 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   border-radius:5px;padding:4px 9px;line-height:1.75}
 .pr-ans.student{border-bottom:1.5px solid #bbb;min-height:2.2rem}
 
+/* ── Student interactive ── */
+.st-work{width:100%;min-height:3rem;border:1px solid #ccc;border-radius:5px;
+  padding:.35rem .5rem;font-family:Georgia,serif;font-size:13px;resize:vertical;
+  background:#fafafa;display:block;margin-bottom:.3rem}
+.st-work-sm{width:100%;min-height:1.5rem;border:1px solid #ccc;border-radius:4px;
+  padding:.2rem .4rem;font-family:Georgia,serif;font-size:12px;resize:vertical;
+  background:#fafafa;display:block;margin-bottom:.2rem}
+.st-btn{font-family:sans-serif;font-size:10px;font-weight:700;color:#1e3a5c;
+  background:none;border:1.5px solid #1e3a5c;border-radius:4px;
+  padding:2px 9px;cursor:pointer;margin-bottom:.2rem;display:inline-block}
+.st-btn-sm{font-family:sans-serif;font-size:9px;font-weight:700;color:#1e3a5c;
+  background:none;border:1px solid #1e3a5c;border-radius:3px;
+  padding:1px 6px;cursor:pointer;margin-bottom:.15rem;display:inline-block}
+.st-btn:hover,.st-btn-sm:hover{background:#eef3f9}
+.st-ans-hidden{display:none;background:#fef9e7;border-left:3px solid #7a5c1e;
+  border-radius:0 5px 5px 0;padding:.4rem .7rem;font-size:13px;
+  color:#5a3e00;line-height:1.85}
+.st-ans-hidden.visible{display:block}
+
+/* ── SVG figures ── */
+.svg-figure{text-align:center;margin:.4rem 0 .6rem}
+.svg-figure svg{max-width:100%;height:auto}
+.svg-caption{font-family:sans-serif;font-size:11px;color:#555;
+  margin-top:.2rem;font-style:italic}
+
 /* ── KaTeX overflow ── */
 .katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}
 
@@ -93,33 +127,22 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   .pr-ans.instructor{font-size:9.5pt;padding:2px 7px;line-height:1.55;
     background:#fef9e7 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
   .pr-ans.student{min-height:1.6rem}
+  .st-work{background:none;border:none;border-bottom:1.5px solid #bbb;
+    border-radius:0;min-height:2.6rem;resize:none}
+  .st-work-sm{background:none;border:none;border-bottom:1.5px solid #bbb;
+    border-radius:0;min-height:1.3rem;resize:none}
+  .st-btn,.st-btn-sm{display:none}
+  .st-ans-hidden{display:none !important}
   .opening-q{
     background:#eef3f9 !important;
     -webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .hook-graph{margin:.4rem 0 .2rem}
+  details.hook-reveal:not([open]){display:none}
+  .svg-figure{margin:.25rem 0 .4rem}
+  .svg-figure svg{max-width:100%;height:auto}
+  .svg-caption{font-size:9pt}
 }
 @page{margin:.55in .65in;size:letter}
-.proof-panel{margin:.4rem 0 1.1rem;border-left:3px solid #7a9a6a;border-radius:0 6px 6px 0;background:#f5f7f3}
-.proof-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#5a7a4a;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
-.proof-toggle::-webkit-details-marker{display:none}
-details[open]>.proof-toggle{color:#1e3a5c}
-.proof-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #c8d8b8}
-.proof-body p{margin-bottom:.45rem}
-.proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
-@media print{.proof-panel{break-inside:avoid}}
-.mistake-panel{margin:.4rem 0 1.1rem;border-left:3px solid #b8860b;border-radius:0 6px 6px 0;background:#fdf8e8}
-.mistake-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#9a6a00;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
-.mistake-toggle::-webkit-details-marker{display:none}
-details[open]>.mistake-toggle{color:#1e3a5c}
-.mistake-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #e8d8a8}
-.mistake-body p{margin-bottom:.45rem}
-.panel-row{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.1rem}
-.panel-row>.proof-panel,.panel-row>.mistake-panel{margin:0;min-width:0}
-.panel-row:has(.proof-panel):has(.mistake-panel){grid-template-columns:1fr}
-@media print{
-  .panel-row{break-inside:avoid}
-  .mistake-panel{break-inside:avoid}
-  details.mistake-panel:not([open]){display:none}
-}
 </style>
 </head>
 <body>
@@ -182,22 +205,22 @@ details[open]>.mistake-toggle{color:#1e3a5c}
 <div class="ex-block">
   <div class="ex-label">Example 1 &nbsp;&mdash;&nbsp; Direct substitution</div>
   <div class="ex-body">Find $\lim_{x\to 3}(2x^2-4x+1)$.</div>
-  <div class="ex-answer student"></div>
+  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">Polynomial — substitute directly:<br>$2(3)^2-4(3)+1=18-12+1=7$</div></div>
 </div>
 <div class="ex-block">
   <div class="ex-label">Example 2 &nbsp;&mdash;&nbsp; Factor and cancel</div>
   <div class="ex-body">Find $\displaystyle\lim_{x\to 1}\dfrac{x^2-1}{x-1}$.</div>
-  <div class="ex-answer student"></div>
+  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">$\dfrac{(x-1)(x+1)}{x-1}=x+1\xrightarrow{x\to 1}2$</div></div>
 </div>
 <div class="ex-block">
   <div class="ex-label">Example 3 &nbsp;&mdash;&nbsp; Rationalize</div>
   <div class="ex-body">Find $\displaystyle\lim_{x\to 4}\dfrac{\sqrt{x}-2}{x-4}$.</div>
-  <div class="ex-answer student"></div>
+  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">Multiply by $\dfrac{\sqrt{x}+2}{\sqrt{x}+2}$:<br>$\dfrac{x-4}{(x-4)(\sqrt{x}+2)}=\dfrac{1}{\sqrt{x}+2}\to\dfrac{1}{4}$</div></div>
 </div>
 <div class="ex-block">
   <div class="ex-label">Example 4 &nbsp;&mdash;&nbsp; Difference quotient</div>
   <div class="ex-body">Find $\displaystyle\lim_{h\to 0}\dfrac{(5+h)^2-25}{h}$.</div>
-  <div class="ex-answer student"></div>
+  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">Expand: $\dfrac{25+10h+h^2-25}{h}=\dfrac{10h+h^2}{h}=10+h\to 10$</div></div>
 </div>
 </div>
 <div class="section-head">Practice Problems</div>
@@ -205,39 +228,45 @@ details[open]>.mistake-toggle{color:#1e3a5c}
 <div class="pr-row">
   <div class="pr-num">1.</div>
   <div class="pr-prob">Find $\lim_{x\to 3}(2x^2-4x+1)$.</div>
-  <div class="pr-ans student"></div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$7$</div></div>
 </div>
 <div class="pr-row">
   <div class="pr-num">2.</div>
   <div class="pr-prob">Find $\displaystyle\lim_{x\to 1}\dfrac{x^2-1}{x-1}$.</div>
-  <div class="pr-ans student"></div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$2$</div></div>
 </div>
 <div class="pr-row">
   <div class="pr-num">3.</div>
   <div class="pr-prob">Find $\displaystyle\lim_{x\to -2}\dfrac{x^2+5x+6}{x+2}$.</div>
-  <div class="pr-ans student"></div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$\dfrac{(x+2)(x+3)}{x+2}=x+3\to 1$</div></div>
 </div>
 <div class="pr-row">
   <div class="pr-num">4.</div>
   <div class="pr-prob">Find $\displaystyle\lim_{x\to 4}\dfrac{\sqrt{x}-2}{x-4}$.</div>
-  <div class="pr-ans student"></div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$\dfrac{1}{4}$</div></div>
 </div>
 <div class="pr-row">
   <div class="pr-num">5.</div>
   <div class="pr-prob">Find $\displaystyle\lim_{h\to 0}\dfrac{(3+h)^3-27}{h}$.</div>
-  <div class="pr-ans student"></div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$27$</div></div>
 </div>
 <div class="pr-row">
   <div class="pr-num">6.</div>
   <div class="pr-prob">Find $\displaystyle\lim_{x\to 2}\dfrac{x^3-8}{x-2}$.</div>
-  <div class="pr-ans student"></div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$(x-2)(x^2+2x+4)/(x-2)=x^2+2x+4\to 12$</div></div>
 </div>
 </div>
 
 </div>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/contrib/auto-render.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
 <script>
+function toggleAns(btn) {
+  if (!btn.dataset.orig) btn.dataset.orig = btn.textContent;
+  var ans = btn.nextElementSibling;
+  var showing = ans.classList.toggle('visible');
+  btn.textContent = showing ? 'Hide' : btn.dataset.orig;
+}
   renderMathInElement(document.body, {
     delimiters: [
       {left: '$$', right: '$$', display: true},
@@ -246,7 +275,5 @@ details[open]>.mistake-toggle{color:#1e3a5c}
     throwOnError: false
   });
 </script>
-<!-- proof-layer:done -->
-<!-- mistake-layer:done -->
 </body>
 </html>

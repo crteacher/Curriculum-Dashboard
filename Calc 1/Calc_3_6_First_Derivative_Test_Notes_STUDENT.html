@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>First Derivative Test &mdash; Notes</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75;font-size:15px}
@@ -18,6 +18,15 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 .opening-q{background:#eef3f9;border-left:4px solid #1e3a5c;
   border-radius:0 8px 8px 0;padding:1rem 1.2rem;font-size:15px;
   margin-bottom:1.5rem;font-style:italic;line-height:1.75}
+.hook-question{margin:0}
+.hook-graph{text-align:center;margin:.7rem 0 .3rem;font-style:normal}
+.hook-graph svg{max-width:100%;height:auto}
+.hook-reveal{margin-top:.5rem;font-style:normal}
+.hook-reveal-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;
+  color:#1e3a5c;text-transform:uppercase;letter-spacing:.07em;list-style:none;user-select:none;display:block}
+.hook-reveal-toggle::-webkit-details-marker{display:none}
+.hook-reveal-body{margin-top:.5rem;font-size:14px;line-height:1.75;padding-top:.5rem;
+  border-top:1px solid #c8d8ec}
 
 /* ── Section heading ── */
 .section-head{font-family:sans-serif;font-size:11px;font-weight:700;
@@ -64,6 +73,25 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   border-radius:5px;padding:4px 9px;line-height:1.75}
 .pr-ans.student{border-bottom:1.5px solid #bbb;min-height:2.2rem}
 
+/* ── Student interactive ── */
+.st-work{width:100%;min-height:3rem;border:1px solid #ccc;border-radius:5px;
+  padding:.35rem .5rem;font-family:Georgia,serif;font-size:13px;resize:vertical;
+  background:#fafafa;display:block;margin-bottom:.3rem}
+.st-work-sm{width:100%;min-height:1.5rem;border:1px solid #ccc;border-radius:4px;
+  padding:.2rem .4rem;font-family:Georgia,serif;font-size:12px;resize:vertical;
+  background:#fafafa;display:block;margin-bottom:.2rem}
+.st-btn{font-family:sans-serif;font-size:10px;font-weight:700;color:#1e3a5c;
+  background:none;border:1.5px solid #1e3a5c;border-radius:4px;
+  padding:2px 9px;cursor:pointer;margin-bottom:.2rem;display:inline-block}
+.st-btn-sm{font-family:sans-serif;font-size:9px;font-weight:700;color:#1e3a5c;
+  background:none;border:1px solid #1e3a5c;border-radius:3px;
+  padding:1px 6px;cursor:pointer;margin-bottom:.15rem;display:inline-block}
+.st-btn:hover,.st-btn-sm:hover{background:#eef3f9}
+.st-ans-hidden{display:none;background:#fef9e7;border-left:3px solid #7a5c1e;
+  border-radius:0 5px 5px 0;padding:.4rem .7rem;font-size:13px;
+  color:#5a3e00;line-height:1.85}
+.st-ans-hidden.visible{display:block}
+
 /* ── SVG figures ── */
 .svg-figure{text-align:center;margin:.4rem 0 .6rem}
 .svg-figure svg{max-width:100%;height:auto}
@@ -99,22 +127,22 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   .pr-ans.instructor{font-size:9.5pt;padding:2px 7px;line-height:1.55;
     background:#fef9e7 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
   .pr-ans.student{min-height:1.6rem}
+  .st-work{background:none;border:none;border-bottom:1.5px solid #bbb;
+    border-radius:0;min-height:2.6rem;resize:none}
+  .st-work-sm{background:none;border:none;border-bottom:1.5px solid #bbb;
+    border-radius:0;min-height:1.3rem;resize:none}
+  .st-btn,.st-btn-sm{display:none}
+  .st-ans-hidden{display:none !important}
   .opening-q{
     background:#eef3f9 !important;
     -webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .hook-graph{margin:.4rem 0 .2rem}
+  details.hook-reveal:not([open]){display:none}
   .svg-figure{margin:.25rem 0 .4rem}
   .svg-figure svg{max-width:100%;height:auto}
   .svg-caption{font-size:9pt}
 }
 @page{margin:.55in .65in;size:letter}
-.proof-panel{margin:.4rem 0 1.1rem;border-left:3px solid #7a9a6a;border-radius:0 6px 6px 0;background:#f5f7f3}
-.proof-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#5a7a4a;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
-.proof-toggle::-webkit-details-marker{display:none}
-details[open]>.proof-toggle{color:#1e3a5c}
-.proof-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #c8d8b8}
-.proof-body p{margin-bottom:.45rem}
-.proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
-@media print{.proof-panel{break-inside:avoid}}
 </style>
 </head>
 <body>
@@ -137,22 +165,22 @@ details[open]>.proof-toggle{color:#1e3a5c}
 <div class="ex-block">
   <div class="ex-label">Example 1 &nbsp;&mdash;&nbsp; Sign chart</div>
   <div class="ex-body">Find intervals where $f(x)=x^3-3x^2$ is increasing or decreasing.</div>
-  <div class="ex-answer student"></div>
+  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">$f'(x)=3x^2-6x=3x(x-2)$<br>Critical: $x=0$, $x=2$<br>$(-\infty,0)$: $f'>0$ &rarr; increasing<br>$(0,2)$: $f'<0$ &rarr; decreasing<br>$(2,\infty)$: $f'>0$ &rarr; increasing</div></div>
 </div>
 <div class="ex-block">
   <div class="ex-label">Example 2 &nbsp;&mdash;&nbsp; Classify critical numbers</div>
   <div class="ex-body">Classify the critical numbers of $f(x)=x^3-3x^2$.</div>
-  <div class="ex-answer student"></div>
+  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">$x=0$: $f'$ changes $+\to-$ &rarr; <strong>local max</strong><br>$x=2$: $f'$ changes $-\to+$ &rarr; <strong>local min</strong></div></div>
 </div>
 <div class="ex-block">
   <div class="ex-label">Example 3 &nbsp;&mdash;&nbsp; No sign change</div>
   <div class="ex-body">Classify $x=0$ as a critical number of $f(x)=x^3$.</div>
-  <div class="ex-answer student"></div>
+  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">$f'(x)=3x^2 \geq 0$ everywhere<br>No sign change at $x=0$ &rarr; <strong>neither</strong> max nor min</div></div>
 </div>
 <div class="ex-block">
   <div class="ex-label">Example 4 &nbsp;&mdash;&nbsp; Full analysis</div>
   <div class="ex-body">Find local extrema of $f(x)=2x^3+3x^2-12x$.</div>
-  <div class="ex-answer student"></div>
+  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">$f'(x)=6x^2+6x-12=6(x+2)(x-1)=0$<br>Critical: $x=-2$, $x=1$<br>$x=-2$: $+\to-$ &rarr; local max $f(-2)=20$<br>$x=1$: $-\to+$ &rarr; local min $f(1)=-7$</div></div>
 </div>
 </div>
 <div class="section-head">Practice Problems</div>
@@ -160,39 +188,45 @@ details[open]>.proof-toggle{color:#1e3a5c}
 <div class="pr-row">
   <div class="pr-num">1.</div>
   <div class="pr-prob">Find where $f(x)=x^2-4x$ is increasing and decreasing.</div>
-  <div class="pr-ans student"></div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$f'=2x-4=0$ at $x=2$. Dec on $(-\infty,2)$; inc on $(2,\infty)$</div></div>
 </div>
 <div class="pr-row">
   <div class="pr-num">2.</div>
   <div class="pr-prob">Classify $x=2$ for $f(x)=x^2-4x$.</div>
-  <div class="pr-ans student"></div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$f'$ changes $-\to+$ &rarr; local min</div></div>
 </div>
 <div class="pr-row">
   <div class="pr-num">3.</div>
   <div class="pr-prob">Find where $f(x)=x^3-12x+1$ is increasing.</div>
-  <div class="pr-ans student"></div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$f'=3x^2-12=0$ at $x=\pm 2$. Inc on $(-\infty,-2)$ and $(2,\infty)$</div></div>
 </div>
 <div class="pr-row">
   <div class="pr-num">4.</div>
   <div class="pr-prob">Find the local max and min of $f(x)=x^3-12x+1$.</div>
-  <div class="pr-ans student"></div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">Local max at $x=-2$: $f(-2)=17$; local min at $x=2$: $f(2)=-15$</div></div>
 </div>
 <div class="pr-row">
   <div class="pr-num">5.</div>
   <div class="pr-prob">For $f(x)=x^4$, classify $x=0$.</div>
-  <div class="pr-ans student"></div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$f'=4x^3$; at $x=0$: $f'$ changes $-\to+$ &rarr; <strong>local min</strong> at $(0,0)$.</div></div>
 </div>
 <div class="pr-row">
   <div class="pr-num">6.</div>
   <div class="pr-prob">Where is $f(x)=\sin x$ increasing on $[0,2\pi]$?</div>
-  <div class="pr-ans student"></div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$f'=\cos x>0$ on $(0,\pi/2)$ and $(3\pi/2,2\pi)$</div></div>
 </div>
 </div>
 
 </div>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/contrib/auto-render.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
 <script>
+function toggleAns(btn) {
+  if (!btn.dataset.orig) btn.dataset.orig = btn.textContent;
+  var ans = btn.nextElementSibling;
+  var showing = ans.classList.toggle('visible');
+  btn.textContent = showing ? 'Hide' : btn.dataset.orig;
+}
   renderMathInElement(document.body, {
     delimiters: [
       {left: '$$', right: '$$', display: true},
@@ -201,6 +235,5 @@ details[open]>.proof-toggle{color:#1e3a5c}
     throwOnError: false
   });
 </script>
-<!-- proof-layer:done -->
 </body>
 </html>

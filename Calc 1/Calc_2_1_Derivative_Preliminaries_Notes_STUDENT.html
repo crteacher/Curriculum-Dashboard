@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Derivative Preliminaries &mdash; Notes</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75;font-size:15px}
@@ -18,6 +18,15 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 .opening-q{background:#eef3f9;border-left:4px solid #1e3a5c;
   border-radius:0 8px 8px 0;padding:1rem 1.2rem;font-size:15px;
   margin-bottom:1.5rem;font-style:italic;line-height:1.75}
+.hook-question{margin:0}
+.hook-graph{text-align:center;margin:.7rem 0 .3rem;font-style:normal}
+.hook-graph svg{max-width:100%;height:auto}
+.hook-reveal{margin-top:.5rem;font-style:normal}
+.hook-reveal-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;
+  color:#1e3a5c;text-transform:uppercase;letter-spacing:.07em;list-style:none;user-select:none;display:block}
+.hook-reveal-toggle::-webkit-details-marker{display:none}
+.hook-reveal-body{margin-top:.5rem;font-size:14px;line-height:1.75;padding-top:.5rem;
+  border-top:1px solid #c8d8ec}
 
 /* ── Section heading ── */
 .section-head{font-family:sans-serif;font-size:11px;font-weight:700;
@@ -64,6 +73,25 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   border-radius:5px;padding:4px 9px;line-height:1.75}
 .pr-ans.student{border-bottom:1.5px solid #bbb;min-height:2.2rem}
 
+/* ── Student interactive ── */
+.st-work{width:100%;min-height:3rem;border:1px solid #ccc;border-radius:5px;
+  padding:.35rem .5rem;font-family:Georgia,serif;font-size:13px;resize:vertical;
+  background:#fafafa;display:block;margin-bottom:.3rem}
+.st-work-sm{width:100%;min-height:1.5rem;border:1px solid #ccc;border-radius:4px;
+  padding:.2rem .4rem;font-family:Georgia,serif;font-size:12px;resize:vertical;
+  background:#fafafa;display:block;margin-bottom:.2rem}
+.st-btn{font-family:sans-serif;font-size:10px;font-weight:700;color:#1e3a5c;
+  background:none;border:1.5px solid #1e3a5c;border-radius:4px;
+  padding:2px 9px;cursor:pointer;margin-bottom:.2rem;display:inline-block}
+.st-btn-sm{font-family:sans-serif;font-size:9px;font-weight:700;color:#1e3a5c;
+  background:none;border:1px solid #1e3a5c;border-radius:3px;
+  padding:1px 6px;cursor:pointer;margin-bottom:.15rem;display:inline-block}
+.st-btn:hover,.st-btn-sm:hover{background:#eef3f9}
+.st-ans-hidden{display:none;background:#fef9e7;border-left:3px solid #7a5c1e;
+  border-radius:0 5px 5px 0;padding:.4rem .7rem;font-size:13px;
+  color:#5a3e00;line-height:1.85}
+.st-ans-hidden.visible{display:block}
+
 /* ── SVG figures ── */
 .svg-figure{text-align:center;margin:.4rem 0 .6rem}
 .svg-figure svg{max-width:100%;height:auto}
@@ -99,22 +127,22 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   .pr-ans.instructor{font-size:9.5pt;padding:2px 7px;line-height:1.55;
     background:#fef9e7 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
   .pr-ans.student{min-height:1.6rem}
+  .st-work{background:none;border:none;border-bottom:1.5px solid #bbb;
+    border-radius:0;min-height:2.6rem;resize:none}
+  .st-work-sm{background:none;border:none;border-bottom:1.5px solid #bbb;
+    border-radius:0;min-height:1.3rem;resize:none}
+  .st-btn,.st-btn-sm{display:none}
+  .st-ans-hidden{display:none !important}
   .opening-q{
     background:#eef3f9 !important;
     -webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .hook-graph{margin:.4rem 0 .2rem}
+  details.hook-reveal:not([open]){display:none}
   .svg-figure{margin:.25rem 0 .4rem}
   .svg-figure svg{max-width:100%;height:auto}
   .svg-caption{font-size:9pt}
 }
 @page{margin:.55in .65in;size:letter}
-.proof-panel{margin:.4rem 0 1.1rem;border-left:3px solid #7a9a6a;border-radius:0 6px 6px 0;background:#f5f7f3}
-.proof-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#5a7a4a;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
-.proof-toggle::-webkit-details-marker{display:none}
-details[open]>.proof-toggle{color:#1e3a5c}
-.proof-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #c8d8b8}
-.proof-body p{margin-bottom:.45rem}
-.proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
-@media print{.proof-panel{display:none}}
 </style>
 </head>
 <body>
@@ -134,6 +162,13 @@ details[open]>.proof-toggle{color:#1e3a5c}
   <p class="proof-qed">∎</p>
 </div>
 </details>
+<details class="mistake-panel">
+<summary class="mistake-toggle">▸ Common Mistake</summary>
+<div class="mistake-body">
+  <p>Average rate of change is the secant slope over the <em>whole</em> interval — not the slope at $a$ or at $b$. It's an average: the curve can rise and fall in between and still have, say, ARC $=0$ on $[a,b]$ when the endpoints are equal.</p>
+  <p>Don't report it as "the rate at $a$." That's the instantaneous rate — the derivative $f'(a)$ — which generally differs from the average.</p>
+</div>
+</details>
 <p class="body-text">Difference quotient form (used to build the derivative): $\dfrac{f(a+h)-f(a)}{h}$ where $h=b-a$. As $h\to 0$, the secant slope approaches the tangent slope.</p>
 </div>
 <div class="col"><div class="section-head">The Derivative: Preview</div>
@@ -147,6 +182,13 @@ details[open]>.proof-toggle{color:#1e3a5c}
   <p class="proof-qed">∎</p>
 </div>
 </details>
+<details class="mistake-panel">
+<summary class="mistake-toggle">▸ Common Mistake</summary>
+<div class="mistake-body">
+  <p>You can't evaluate $\lim_{h\to0}\frac{f(a+h)-f(a)}{h}$ by setting $h=0$ — that gives $\frac00$. Expand $f(a+h)$, simplify the numerator, and cancel the $h$ in the denominator <em>first</em>, then let $h\to0$.</p>
+  <p>Watch the algebra while expanding: $(a+h)^2=a^2+2ah+h^2$, not $a^2+h^2$. Dropping the $2ah$ cross term is the usual slip that wrecks the limit.</p>
+</div>
+</details>
 <div class="svg-figure"><svg viewBox="0 0 250 155" xmlns="http://www.w3.org/2000/svg" style="width:220px;height:auto"><line x1="10" y1="140" x2="238" y2="140" stroke="#888" stroke-width="1.2"/><polygon points="238,137 244,140 238,143" fill="#888"/><line x1="15" y1="148" x2="15" y2="8" stroke="#888" stroke-width="1.2"/><polygon points="12,8 15,2 18,8" fill="#888"/><text x="241" y="144" font-size="10" fill="#555" font-family="sans-serif">x</text><text x="19" y="8" font-size="10" fill="#555" font-family="sans-serif">y</text><polyline points="15,140 50,137 85,127 120,111 155,88 190,58 225,23" stroke="#1a1a1a" stroke-width="2" fill="none"/><line x1="68" y1="140" x2="225" y2="23" stroke="#7a5c1e" stroke-width="1.8" stroke-dasharray="6,3"/><line x1="50" y1="140" x2="207" y2="82" stroke="#2a8c2a" stroke-width="1.8"/><circle cx="85" cy="127" r="4" fill="#1e3a5c"/><circle cx="225" cy="23" r="4" fill="#7a5c1e"/><text x="71" y="123" font-size="10" fill="#1e3a5c" font-family="sans-serif" font-weight="bold">P</text><text x="229" y="21" font-size="10" fill="#7a5c1e" font-family="sans-serif" font-weight="bold">Q</text><line x1="20" y1="18" x2="42" y2="18" stroke="#7a5c1e" stroke-width="1.8" stroke-dasharray="4,2"/><text x="45" y="22" font-size="9.5" fill="#7a5c1e" font-family="sans-serif">secant</text><line x1="20" y1="32" x2="42" y2="32" stroke="#2a8c2a" stroke-width="1.8"/><text x="45" y="36" font-size="9.5" fill="#2a8c2a" font-family="sans-serif">tangent at P</text><line x1="85" y1="137" x2="85" y2="143" stroke="#888" stroke-width="1"/><text x="82" y="153" font-size="9.5" fill="#555" font-family="sans-serif">1</text><line x1="225" y1="137" x2="225" y2="143" stroke="#888" stroke-width="1"/><text x="222" y="153" font-size="9.5" fill="#555" font-family="sans-serif">3</text></svg><div class="svg-caption">As $Q \to P$, the secant slope approaches the tangent slope $f'(1)=2$</div></div>
 </div>
 </div>
@@ -155,22 +197,22 @@ details[open]>.proof-toggle{color:#1e3a5c}
 <div class="ex-block">
   <div class="ex-label">Example 1 &nbsp;&mdash;&nbsp; Average rate of change</div>
   <div class="ex-body">Find the average rate of change of $f(x)=x^2$ on $[1,3]$.</div>
-  <div class="ex-answer student"></div>
+  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">$\dfrac{f(3)-f(1)}{3-1}=\dfrac{9-1}{2}=\dfrac{8}{2}=4$</div></div>
 </div>
 <div class="ex-block">
   <div class="ex-label">Example 2 &nbsp;&mdash;&nbsp; Secant slope with $h$</div>
   <div class="ex-body">Find the slope of the secant line for $f(x)=x^2$ from $x=2$ to $x=2+h$.</div>
-  <div class="ex-answer student"></div>
+  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">$\dfrac{(2+h)^2-4}{h}=\dfrac{4+4h+h^2-4}{h}=\dfrac{4h+h^2}{h}=4+h$</div></div>
 </div>
 <div class="ex-block">
   <div class="ex-label">Example 3 &nbsp;&mdash;&nbsp; Limit of secant slope</div>
   <div class="ex-body">Using the result above, find $f'(2)$ for $f(x)=x^2$.</div>
-  <div class="ex-answer student"></div>
+  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">$f'(2)=\displaystyle\lim_{h\to 0}(4+h)=4$<br>Tangent slope at $x=2$ is $4$.</div></div>
 </div>
 <div class="ex-block">
   <div class="ex-label">Example 4 &nbsp;&mdash;&nbsp; Average velocity</div>
   <div class="ex-body">Position $s(t)=t^2+2t$ (meters). Find average velocity on $[1,3]$.</div>
-  <div class="ex-answer student"></div>
+  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">$\dfrac{s(3)-s(1)}{3-1}=\dfrac{15-3}{2}=\dfrac{12}{2}=6$ m/s</div></div>
 </div>
 </div>
 <div class="section-head">Practice Problems</div>
@@ -178,39 +220,45 @@ details[open]>.proof-toggle{color:#1e3a5c}
 <div class="pr-row">
   <div class="pr-num">1.</div>
   <div class="pr-prob">Find the average rate of change of $f(x)=x^2+1$ on $[0,2]$.</div>
-  <div class="pr-ans student"></div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$\dfrac{5-1}{2}=2$</div></div>
 </div>
 <div class="pr-row">
   <div class="pr-num">2.</div>
   <div class="pr-prob">Find the slope of the secant line for $f(x)=3x^2$ from $x=1$ to $x=1+h$.</div>
-  <div class="pr-ans student"></div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$\dfrac{3(1+h)^2-3}{h}=\dfrac{6h+3h^2}{h}=6+3h$</div></div>
 </div>
 <div class="pr-row">
   <div class="pr-num">3.</div>
   <div class="pr-prob">Using the result above, find $f'(1)$ for $f(x)=3x^2$.</div>
-  <div class="pr-ans student"></div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$\lim_{h\to 0}(6+3h)=6$</div></div>
 </div>
 <div class="pr-row">
   <div class="pr-num">4.</div>
   <div class="pr-prob">Position $s(t)=2t^2$. Find average velocity on $[2,5]$.</div>
-  <div class="pr-ans student"></div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$\dfrac{50-8}{3}=14$ units/s</div></div>
 </div>
 <div class="pr-row">
   <div class="pr-num">5.</div>
   <div class="pr-prob">Find the average rate of change of $f(x)=\dfrac{1}{x}$ on $[1,2]$.</div>
-  <div class="pr-ans student"></div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$\dfrac{1/2-1}{1}=-\dfrac{1}{2}$</div></div>
 </div>
 <div class="pr-row">
   <div class="pr-num">6.</div>
   <div class="pr-prob">For $f(x)=x^2$, as $h\to 0$, the secant slope $4+h$ approaches what value?</div>
-  <div class="pr-ans student"></div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$4$ — this is $f'(2)$</div></div>
 </div>
 </div>
 
 </div>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/contrib/auto-render.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
 <script>
+function toggleAns(btn) {
+  if (!btn.dataset.orig) btn.dataset.orig = btn.textContent;
+  var ans = btn.nextElementSibling;
+  var showing = ans.classList.toggle('visible');
+  btn.textContent = showing ? 'Hide' : btn.dataset.orig;
+}
   renderMathInElement(document.body, {
     delimiters: [
       {left: '$$', right: '$$', display: true},
@@ -219,6 +267,5 @@ details[open]>.proof-toggle{color:#1e3a5c}
     throwOnError: false
   });
 </script>
-<!-- proof-layer:done -->
 </body>
 </html>
