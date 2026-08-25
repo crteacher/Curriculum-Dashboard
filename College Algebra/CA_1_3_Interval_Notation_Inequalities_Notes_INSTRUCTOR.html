@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Interval Notation and Inequalities &mdash; Notes</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75;font-size:15px}
@@ -18,6 +18,15 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 .opening-q{background:#eef3f9;border-left:4px solid #1e3a5c;
   border-radius:0 8px 8px 0;padding:1rem 1.2rem;font-size:15px;
   margin-bottom:1.5rem;font-style:italic;line-height:1.75}
+.hook-question{margin:0}
+.hook-graph{text-align:center;margin:.7rem 0 .3rem;font-style:normal}
+.hook-graph svg{max-width:100%;height:auto}
+.hook-reveal{margin-top:.5rem;font-style:normal}
+.hook-reveal-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;
+  color:#1e3a5c;text-transform:uppercase;letter-spacing:.07em;list-style:none;user-select:none;display:block}
+.hook-reveal-toggle::-webkit-details-marker{display:none}
+.hook-reveal-body{margin-top:.5rem;font-size:14px;line-height:1.75;padding-top:.5rem;
+  border-top:1px solid #c8d8ec}
 
 /* ── Section heading ── */
 .section-head{font-family:sans-serif;font-size:11px;font-weight:700;
@@ -127,27 +136,20 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   .opening-q{
     background:#eef3f9 !important;
     -webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .hook-graph{margin:.4rem 0 .2rem}
+  details.hook-reveal:not([open]){display:none}
   .svg-figure{margin:.25rem 0 .4rem}
   .svg-figure svg{max-width:100%;height:auto}
   .svg-caption{font-size:9pt}
 }
 @page{margin:.55in .65in;size:letter}
-
-.proof-panel{margin:.4rem 0 1.1rem;border-left:3px solid #7a9a6a;border-radius:0 6px 6px 0;background:#f5f7f3}
-.proof-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#5a7a4a;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
-.proof-toggle::-webkit-details-marker{display:none}
-details[open]>.proof-toggle{color:#1e3a5c}
-.proof-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #c8d8b8}
-.proof-body p{margin-bottom:.45rem}
-.proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
-@media print{.proof-panel{break-inside:avoid}}
 </style>
 </head>
 <body>
 <div class="container">
 <h1 class="page-title">Interval Notation and Inequalities</h1>
 <p class="page-sub">College Algebra &nbsp;&middot;&nbsp; &sect;1.3 &nbsp;&middot;&nbsp; Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026 &nbsp;&middot;&nbsp; <strong>INSTRUCTOR</strong></p>
-<div class="opening-q">A store requires a purchase of more than $20 for free shipping. What set of dollar amounts qualifies? How would you write that set using mathematical notation?</div>
+<div class="opening-q"><p class="hook-question">A store requires a purchase of more than $20 for free shipping. Here's that condition on a number line: an open circle at $20$, with everything to the right shaded in. What set of dollar amounts qualifies, and how would you write that set using mathematical notation?</p><div class="hook-graph"><svg width="240" height="90" viewBox="0 0 240 90" xmlns="http://www.w3.org/2000/svg"><line x1="15" y1="45" x2="225" y2="45" stroke="#999" stroke-width="1.5"/><polygon points="225,45 218,41 218,49" fill="#999"/><line x1="120" y1="38" x2="120" y2="52" stroke="#555" stroke-width="1.2"/><text x="120" y="70" text-anchor="middle" font-size="12" fill="#555" font-family="sans-serif">20</text><circle cx="120" cy="45" r="5" fill="#eef3f9" stroke="#1e3a5c" stroke-width="2"/><line x1="120" y1="45" x2="218" y2="45" stroke="#1e3a5c" stroke-width="3.5"/></svg></div><details class="hook-reveal"><summary class="hook-reveal-toggle">&#9656; Think about it, then reveal</summary><div class="hook-reveal-body">The open circle means $20$ itself doesn't count &mdash; the purchase has to be strictly <em>more than</em> $20. In inequality notation that's $x>20$; in interval notation it's $(20,\infty)$, with the parenthesis doing the same job as the open circle: marking a boundary that's approached but never included. Every inequality in this section has a number-line picture like this one behind it &mdash; open circle/parenthesis for &ldquo;strictly&rdquo;, filled circle/bracket for &ldquo;or equal to&rdquo;.</div></details></div>
 <div class="two-col">
 <div class="col"><div class="section-head">Interval Notation</div>
 <div class="accent-box"><p><strong>Parenthesis ( ) &rarr; open (excludes endpoint)</strong><br>Bracket [ ] &rarr; closed (includes endpoint)</p><p>Examples:<br>$x > 3$ &rarr; $(3, \infty)$<br>$x \geq 3$ &rarr; $[3, \infty)$<br>$x < 5$ &rarr; $(-\infty, 5)$<br>$2 < x \leq 7$ &rarr; $(2, 7]$</p><p><strong>Note:</strong> $\infty$ always gets a parenthesis &mdash; infinity is never reached.</p></div>
@@ -225,8 +227,8 @@ details[open]>.proof-toggle{color:#1e3a5c}
 </div>
 
 </div>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/contrib/auto-render.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
 <script>
 function toggleAns(btn) {
   if (!btn.dataset.orig) btn.dataset.orig = btn.textContent;
@@ -242,6 +244,5 @@ function toggleAns(btn) {
     throwOnError: false
   });
 </script>
-<!-- proof-layer:done -->
 </body>
 </html>

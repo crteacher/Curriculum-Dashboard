@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Compound Inequalities &mdash; Notes</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75;font-size:15px}
@@ -18,6 +18,15 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 .opening-q{background:#eef3f9;border-left:4px solid #1e3a5c;
   border-radius:0 8px 8px 0;padding:1rem 1.2rem;font-size:15px;
   margin-bottom:1.5rem;font-style:italic;line-height:1.75}
+.hook-question{margin:0}
+.hook-graph{text-align:center;margin:.7rem 0 .3rem;font-style:normal}
+.hook-graph svg{max-width:100%;height:auto}
+.hook-reveal{margin-top:.5rem;font-style:normal}
+.hook-reveal-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;
+  color:#1e3a5c;text-transform:uppercase;letter-spacing:.07em;list-style:none;user-select:none;display:block}
+.hook-reveal-toggle::-webkit-details-marker{display:none}
+.hook-reveal-body{margin-top:.5rem;font-size:14px;line-height:1.75;padding-top:.5rem;
+  border-top:1px solid #c8d8ec}
 
 /* ── Section heading ── */
 .section-head{font-family:sans-serif;font-size:11px;font-weight:700;
@@ -127,41 +136,20 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   .opening-q{
     background:#eef3f9 !important;
     -webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .hook-graph{margin:.4rem 0 .2rem}
+  details.hook-reveal:not([open]){display:none}
   .svg-figure{margin:.25rem 0 .4rem}
   .svg-figure svg{max-width:100%;height:auto}
   .svg-caption{font-size:9pt}
 }
 @page{margin:.55in .65in;size:letter}
-.mistake-panel{margin:.4rem 0 1.1rem;border-left:3px solid #b8860b;border-radius:0 6px 6px 0;background:#fdf8e8}
-.mistake-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#9a6a00;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
-.mistake-toggle::-webkit-details-marker{display:none}
-details[open]>.mistake-toggle{color:#1e3a5c}
-.mistake-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #e8d8a8}
-.mistake-body p{margin-bottom:.45rem}
-.panel-row{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.1rem}
-.panel-row>.proof-panel,.panel-row>.mistake-panel{margin:0;min-width:0}
-.panel-row:has(.proof-panel):has(.mistake-panel){grid-template-columns:1fr}
-@media print{
-  .panel-row{break-inside:avoid}
-  .mistake-panel{break-inside:avoid}
-  details.mistake-panel:not([open]){display:none}
-}
-
-.proof-panel{margin:.4rem 0 1.1rem;border-left:3px solid #7a9a6a;border-radius:0 6px 6px 0;background:#f5f7f3}
-.proof-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#5a7a4a;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
-.proof-toggle::-webkit-details-marker{display:none}
-details[open]>.proof-toggle{color:#1e3a5c}
-.proof-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #c8d8b8}
-.proof-body p{margin-bottom:.45rem}
-.proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
-@media print{.proof-panel{break-inside:avoid}}
 </style>
 </head>
 <body>
 <div class="container">
 <h1 class="page-title">Compound Inequalities</h1>
 <p class="page-sub">College Algebra &nbsp;&middot;&nbsp; &sect;1.4 &nbsp;&middot;&nbsp; Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026 &nbsp;&middot;&nbsp; <strong>INSTRUCTOR</strong></p>
-<div class="opening-q">AND means both conditions hold simultaneously &mdash; that is an intersection. OR means at least one condition holds &mdash; that is a union. How do those two words change the shape of the solution set on a number line?</div>
+<div class="opening-q"><p class="hook-question">Here are two conditions on separate number lines: $x>-1$ shaded in navy, $x<4$ shaded in gold. AND means both conditions hold simultaneously &mdash; that is an intersection. OR means at least one condition holds &mdash; that is a union. If you stacked these two shaded regions on top of each other, what would the AND version look like, and what would the OR version look like?</p><div class="hook-graph"><svg width="240" height="110" viewBox="0 0 240 110" xmlns="http://www.w3.org/2000/svg"><text x="15" y="18" font-size="10" fill="#666" font-family="sans-serif">x &gt; -1</text><line x1="15" y1="30" x2="225" y2="30" stroke="#999" stroke-width="1.5"/><circle cx="70" cy="30" r="4.5" fill="#eef3f9" stroke="#1e3a5c" stroke-width="2"/><line x1="70" y1="30" x2="218" y2="30" stroke="#1e3a5c" stroke-width="3"/><text x="15" y="63" font-size="10" fill="#666" font-family="sans-serif">x &lt; 4</text><line x1="15" y1="75" x2="225" y2="75" stroke="#999" stroke-width="1.5"/><circle cx="170" cy="75" r="4.5" fill="#eef3f9" stroke="#7a5c1e" stroke-width="2"/><line x1="20" y1="75" x2="170" y2="75" stroke="#7a5c1e" stroke-width="3"/><line x1="70" y1="95" x2="70" y2="102" stroke="#999" stroke-width="1"/><line x1="170" y1="95" x2="170" y2="102" stroke="#999" stroke-width="1"/></svg></div><details class="hook-reveal"><summary class="hook-reveal-toggle">&#9656; Think about it, then reveal</summary><div class="hook-reveal-body">For AND, only the stretch where <em>both</em> colors cover the line survives &mdash; here, that's the overlap between $-1$ and $4$, giving $-1<x<4$, a single bounded interval. For OR, anywhere <em>either</em> color reaches counts, so the two shaded rays combine into everything except the empty gap outside both of them &mdash; since these two rays already overlap, the union here is the whole number line. AND always shrinks the solution set down to a narrower overlap; OR always grows it by combining everything either piece covers.</div></details></div>
 <div class="two-col">
 <div class="col"><div class="section-head">AND &mdash; Intersection</div>
 <div class="accent-box"><p><strong>AND compound inequality:</strong><br>Both conditions must be satisfied at once.<br>The solution is the <em>overlap</em> of both solution sets.</p><p>e.g. $2x < 10$ AND $x - 1 > 0$:<br>$x < 5$ AND $x > 1 \Rightarrow (1, 5)$</p><p><strong>Shortcut (between form):</strong><br>$a < \text{expr} < b$ &rarr; solve all three parts at once.<br>e.g. $1 < 2x - 3 < 9 \Rightarrow (2, 6)$</p></div>
@@ -244,8 +232,8 @@ details[open]>.proof-toggle{color:#1e3a5c}
 </div>
 
 </div>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/contrib/auto-render.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
 <script>
 function toggleAns(btn) {
   if (!btn.dataset.orig) btn.dataset.orig = btn.textContent;
@@ -261,7 +249,5 @@ function toggleAns(btn) {
     throwOnError: false
   });
 </script>
-<!-- mistake-layer:done -->
-<!-- proof-layer:done -->
 </body>
 </html>

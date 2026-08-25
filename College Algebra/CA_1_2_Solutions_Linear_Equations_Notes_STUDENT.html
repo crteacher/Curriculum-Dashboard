@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Solutions to Linear Equations &mdash; Notes</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75;font-size:15px}
@@ -18,6 +18,15 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 .opening-q{background:#eef3f9;border-left:4px solid #1e3a5c;
   border-radius:0 8px 8px 0;padding:1rem 1.2rem;font-size:15px;
   margin-bottom:1.5rem;font-style:italic;line-height:1.75}
+.hook-question{margin:0}
+.hook-graph{text-align:center;margin:.7rem 0 .3rem;font-style:normal}
+.hook-graph svg{max-width:100%;height:auto}
+.hook-reveal{margin-top:.5rem;font-style:normal}
+.hook-reveal-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;
+  color:#1e3a5c;text-transform:uppercase;letter-spacing:.07em;list-style:none;user-select:none;display:block}
+.hook-reveal-toggle::-webkit-details-marker{display:none}
+.hook-reveal-body{margin-top:.5rem;font-size:14px;line-height:1.75;padding-top:.5rem;
+  border-top:1px solid #c8d8ec}
 
 /* ── Section heading ── */
 .section-head{font-family:sans-serif;font-size:11px;font-weight:700;
@@ -127,27 +136,20 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   .opening-q{
     background:#eef3f9 !important;
     -webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .hook-graph{margin:.4rem 0 .2rem}
+  details.hook-reveal:not([open]){display:none}
   .svg-figure{margin:.25rem 0 .4rem}
   .svg-figure svg{max-width:100%;height:auto}
   .svg-caption{font-size:9pt}
 }
 @page{margin:.55in .65in;size:letter}
-
-.proof-panel{margin:.4rem 0 1.1rem;border-left:3px solid #7a9a6a;border-radius:0 6px 6px 0;background:#f5f7f3}
-.proof-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#5a7a4a;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
-.proof-toggle::-webkit-details-marker{display:none}
-details[open]>.proof-toggle{color:#1e3a5c}
-.proof-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #c8d8b8}
-.proof-body p{margin-bottom:.45rem}
-.proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
-@media print{.proof-panel{break-inside:avoid}}
 </style>
 </head>
 <body>
 <div class="container">
 <h1 class="page-title">Solutions to Linear Equations</h1>
 <p class="page-sub">College Algebra &nbsp;&middot;&nbsp; &sect;1.2 &nbsp;&middot;&nbsp; Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026 &nbsp;&middot;&nbsp; <strong>STUDENT</strong></p>
-<div class="opening-q">An ordered pair (x, y) is a solution to an equation if substituting those values makes the equation true. If (3, 11) lies on the graph of f(x) = ax + 2, what must a equal?</div>
+<div class="opening-q"><p class="hook-question">An ordered pair (x, y) is a solution to an equation if substituting those values makes the equation true. The point $(3, 11)$ is marked here on the graph of $f(x) = ax + 2$. If you only had the equation &mdash; not the picture &mdash; how could you pin down what $a$ has to be?</p><div class="hook-graph"><svg width="240" height="150" viewBox="0 0 240 150" xmlns="http://www.w3.org/2000/svg"><line x1="30" y1="10" x2="30" y2="130" stroke="#999" stroke-width="1.2"/><line x1="30" y1="130" x2="220" y2="130" stroke="#999" stroke-width="1.2"/><line x1="35" y1="118" x2="200" y2="20" stroke="#1e3a5c" stroke-width="2.4"/><circle cx="30" cy="108" r="4" fill="#1e3a5c"/><text x="16" y="112" text-anchor="end" font-size="11" fill="#666" font-family="sans-serif">2</text><circle cx="140" cy="52" r="5" fill="#eef3f9" stroke="#c9860a" stroke-width="2"/><text x="148" y="48" font-size="12" fill="#7a5c1e" font-family="Georgia,serif">(3, 11)</text></svg></div><details class="hook-reveal"><summary class="hook-reveal-toggle">&#9656; Think about it, then reveal</summary><div class="hook-reveal-body">You don't need the graph at all &mdash; substitute the point directly into the equation: $11 = a(3) + 2 \Rightarrow 3a = 9 \Rightarrow a = 3$. Checking whether a point is a solution, or solving for an unknown coefficient, both come down to the same move: plug in what you know and solve for what you don't. That's the substitution habit this whole section builds on.</div></details></div>
 <div class="two-col">
 <div class="col"><div class="section-head">Function Evaluation</div>
 <div class="accent-box"><p><strong>Evaluating f(x):</strong><br>Substitute the input value for every x.<br>e.g. $f(x) = 4x + 3$, find $f(2)$:<br>$f(2) = 4(2) + 3 = 11$</p><p><strong>Solving for x (input from output):</strong><br>Set f(x) equal to the given output and solve the equation &mdash; the reverse of evaluating.<br>e.g. same $f(x) = 4x + 3$, find x when $f(x) = 11$:<br>$4x + 3 = 11 \Rightarrow x = 2$</p><p><strong>Checking a solution (x, y):</strong><br>Substitute x into f(x). If the output equals y, then the ordered pair is a solution.</p></div>
@@ -225,8 +227,8 @@ details[open]>.proof-toggle{color:#1e3a5c}
 </div>
 
 </div>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/contrib/auto-render.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
 <script>
 function toggleAns(btn) {
   if (!btn.dataset.orig) btn.dataset.orig = btn.textContent;
@@ -242,6 +244,5 @@ function toggleAns(btn) {
     throwOnError: false
   });
 </script>
-<!-- proof-layer:done -->
 </body>
 </html>
