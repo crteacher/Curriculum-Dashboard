@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Domain &amp; Range &mdash; Practice</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.css">
+<title>Domain and Interval Notation &mdash; Practice</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
 <style>
   *{box-sizing:border-box;margin:0;padding:0}
   body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.7}
@@ -12,16 +12,21 @@
   h1{font-size:26px;font-weight:700;margin-bottom:4px}
   .subtitle{font-size:14px;color:#666;margin-bottom:2rem;font-family:sans-serif}
   .section{margin-bottom:2.5rem}
-  .section-title{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#777;font-family:sans-serif;margin-bottom:1rem;border-bottom:1px solid #ddd;padding-bottom:6px}
-  .concept{background:#d9e8f5;border-left:4px solid #1e3a5c;border-radius:0 8px 8px 0;padding:.85rem 1.1rem;font-size:15px;margin-bottom:1rem}
-  .concept-label{font-family:sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#1e3a5c;display:block;margin-bottom:.35rem}
-  .score-bar{display:flex;align-items:center;gap:12px;margin-bottom:1.25rem;font-family:sans-serif;font-size:14px;flex-wrap:wrap}
+  .section-title{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;
+    color:#777;font-family:sans-serif;margin-bottom:1rem;border-bottom:1px solid #ddd;padding-bottom:6px}
+  .concept{background:#d9e8f5;border-left:4px solid #185fa5;border-radius:0 8px 8px 0;
+    padding:.85rem 1.1rem;font-size:15px;margin-bottom:1rem}
+  .concept-label{font-family:sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;
+    letter-spacing:.07em;color:#185fa5;display:block;margin-bottom:.35rem}
+  .score-bar{display:flex;align-items:center;gap:12px;margin-bottom:1.25rem;
+    font-family:sans-serif;font-size:14px;flex-wrap:wrap}
   .score-display{font-weight:700;font-size:18px;min-width:60px}
   .score-label{color:#777;font-size:13px}
   .score-note{font-size:12px;color:#999;font-style:italic}
   .progress{flex:1;min-width:80px;height:6px;background:#e5e1d8;border-radius:3px;overflow:hidden}
-  .progress-fill{height:100%;background:#1e3a5c;border-radius:3px;transition:width .4s}
-  .reset-btn{font-size:12px;background:none;border:1px solid #bbb;border-radius:5px;padding:4px 10px;cursor:pointer;color:#666;font-family:sans-serif;white-space:nowrap}
+  .progress-fill{height:100%;background:#185fa5;border-radius:3px;transition:width .4s}
+  .reset-btn{font-size:12px;background:none;border:1px solid #bbb;border-radius:5px;
+    padding:4px 10px;cursor:pointer;color:#666;font-family:sans-serif;white-space:nowrap}
   .reset-btn:hover{background:#eee}
   .problems{display:grid;grid-template-columns:repeat(auto-fill,minmax(370px,1fr));gap:14px}
   .card{background:#fff;border:1.5px solid #ddd;border-radius:10px;overflow:hidden;transition:border-color .25s}
@@ -31,91 +36,441 @@
   .card-expr{font-size:17px;margin-bottom:12px;line-height:2.2;overflow-x:auto}
   .katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}
   .input-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-  .ans-input{font-family:'Courier New',monospace;font-size:14px;border:1px solid #ccc;border-radius:6px;padding:7px 10px;flex:1;min-width:120px;background:#fafaf8;color:#1a1a1a;outline:none}
-  .ans-input:focus{border-color:#1e3a5c;background:#fff}
+  .ans-input{font-family:'Courier New',monospace;font-size:14px;border:1px solid #ccc;
+    border-radius:6px;padding:7px 10px;flex:1;min-width:120px;background:#fafaf8;
+    color:#1a1a1a;outline:none}
+  .ans-input:focus{border-color:#185fa5;background:#fff}
   .ans-input.ok{border-color:#3a7a3a;background:#f0faf0}
   .ans-input.bad{border-color:#b03030;background:#fdf0f0}
-  .check-btn{font-family:sans-serif;font-size:13px;background:#1a1a1a;color:#fff;border:none;border-radius:6px;padding:7px 14px;cursor:pointer}
+  .check-btn{font-family:sans-serif;font-size:13px;background:#1a1a1a;color:#fff;
+    border:none;border-radius:6px;padding:7px 14px;cursor:pointer}
   .check-btn:hover{background:#333}.check-btn:disabled{background:#aaa;cursor:default}
   .hint{font-family:sans-serif;font-size:12px;color:#888;margin-top:7px}
-  .feedback{font-family:sans-serif;font-size:13px;margin-top:10px;padding:8px 12px;border-radius:6px;display:none;line-height:1.5}
+  .feedback{font-family:sans-serif;font-size:13px;margin-top:10px;padding:8px 12px;
+    border-radius:6px;display:none;line-height:1.5}
   .feedback.correct{display:block;background:#eaf5ea;color:#1a5a1a}
   .feedback.wrong{display:block;background:#faeaea;color:#7a1a1a}
   .feedback.peeked{display:block;background:#fdf8e8;color:#7a5a00}
-  .reveal-link{font-family:sans-serif;font-size:12px;color:#999;cursor:pointer;text-decoration:underline;margin-top:8px;display:inline-block}
+  .reveal-link{font-family:sans-serif;font-size:12px;color:#999;cursor:pointer;
+    text-decoration:underline;margin-top:8px;display:inline-block}
   .reveal-link:hover{color:#555}
-  .revealed-answer{display:none;margin-top:8px;font-family:sans-serif;font-size:13px;color:#444;background:#f5f3ef;border-radius:6px;padding:8px 11px;line-height:1.8;overflow-x:auto}
+  .revealed-answer{display:none;margin-top:8px;font-family:sans-serif;font-size:13px;
+    color:#444;background:#f5f3ef;border-radius:6px;padding:8px 11px;line-height:1.8;overflow-x:auto}
   code{font-family:'Courier New',monospace;background:#f0ede7;padding:1px 5px;border-radius:3px;font-size:12px}
-
-
-.hint{display:none!important}
 </style>
 </head>
 <body>
 <div class="container">
-  <h1>Domain &amp; Range — Part 1</h1>
-  <p class="subtitle">PreCalc &nbsp;&middot;&nbsp; &sect;1.2a &nbsp;&middot;&nbsp; Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026</p>
+  <h1>Domain and Interval Notation</h1>
+  <p class="subtitle">PreCalc &nbsp;&middot;&nbsp; &sect;1.2 Pt&thinsp;1 &nbsp;&middot;&nbsp; Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026</p>
+
   <div class="section">
     <div class="section-title">Core Ideas</div>
-    <div class="concept">
-      <span class="concept-label">Finding Domain Algebraically</span>
-      Exclude values that cause: (1) division by zero — set denominator $\neq 0$;
-      (2) even root of a negative — set radicand $\geq 0$.
-      Write the remaining values in interval notation.
-    </div>
-    <div class="concept">
-      <span class="concept-label">Interval Notation</span>
-      Use $[$ or $]$ for included endpoints, $($ or $)$ for excluded endpoints or $\pm\infty$.
-      Union $\cup$ joins disjoint pieces: $(-\infty,2)\cup(2,\infty)$ means all reals except $2$.
-    </div>
-    <div class="concept">
-      <span class="concept-label">Range from a Formula</span>
-      For $f(x)=\sqrt{x-a}+k$: range is $[k,\infty)$.
-      For $f(x)=\frac{1}{x-a}+k$: range is $(-\infty,k)\cup(k,\infty)$.
-      For quadratics $f(x)=a(x-h)^2+k$: range is $[k,\infty)$ if $a>0$, $(-\infty,k]$ if $a<0$.
-    </div>
+
+  <div class="concept">
+    <span class="concept-label">Interval notation</span>
+    $[a,b]$ includes both endpoints &nbsp;|&nbsp; $(a,b)$ excludes both &nbsp;|&nbsp; $[a,b)$ includes $a$ only.
+    <br>Unbounded: $x > 3 \Rightarrow (3,\infty)$. &nbsp; Union: type <code>(-inf,2)u(2,inf)</code>.
   </div>
+  <div class="concept">
+    <span class="concept-label">Finding the domain</span>
+    <strong>Denominator:</strong> exclude values where denominator $= 0$.
+    <br><strong>Even root $\sqrt{\phantom{x}}$:</strong> set radicand $\geq 0$ and solve.
+    <br><strong>$\dfrac{1}{\sqrt{\phantom{x}}}$:</strong> set radicand $> 0$ (can't divide by zero).
+  </div>
+  <div class="concept">
+    <span class="concept-label">Domain and range from a graph</span>
+    <strong>Domain:</strong> the $x$-values the graph covers, read left to right.
+    <br><strong>Range:</strong> the $y$-values the graph covers, read bottom to top.
+  </div>
+
+  </div>
+
   <div class="section">
     <div class="section-title">Practice Problems</div>
     <p style="font-family:sans-serif;font-size:13px;color:#666;margin-bottom:1rem;">
-      Use interval notation: <code>[2,inf)</code>, <code>(-inf,3)u(3,inf)</code>. Press <strong>Check</strong> or Enter.
+      Write domains in interval notation, e.g. <code>[3,inf)</code> or <code>(-inf,2)u(2,inf)</code>.
+      Press <strong>Check</strong> or hit Enter.
     </p>
     <div class="score-bar">
       <span class="score-label">Score:</span>
       <span class="score-display" id="score">0 / 8</span>
       <span class="score-note">first attempt only</span>
       <div class="progress"><div class="progress-fill" id="prog" style="width:0%"></div></div>
-      <button class="reset-btn" onclick="resetAll()">New set &#8635;</button>
+      <button class="reset-btn" onclick="resetAll()">New set &nbsp;&#8635;</button>
     </div>
     <div class="problems" id="problems"></div>
   </div>
 </div>
+
 <script>
-function _rf(){const b=new Uint32Array(1);crypto.getRandomValues(b);return b[0]/4294967296;}
-function rInt(n){return Math.floor(_rf()*n);}
-function shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=rInt(i+1);[a[i],a[j]]=[a[j],a[i]];}return a;}
-function choose(arr){return arr[rInt(arr.length)];}
-function norm(s){return s.trim().toLowerCase().replace(/\s+/g,'').replace(/[--]/g,'-').replace(/inf/g,'inf').replace(/u/g,'u');}
-function ok(user,acc){return acc.some(a=>norm(user)===norm(a));}
-function gen1(){const c=choose([1,2,3,4,5,6,9]);return{latex:`\\text{Domain of }f(x)=\\sqrt{x-${c}}`,answer:[`[${c},inf)`],hint:'What condition must the expression under a square root satisfy?',step:`x-${c}\\geq 0\\Rightarrow x\\geq ${c},\\;[${c},\\infty)`};}
-function gen2(){const c=choose([-3,-2,-1,1,2,3,4,5]);const neg=c<0;const ans=`(-inf,${c})u(${c},inf)`;return{latex:`\\text{Domain of }f(x)=\\dfrac{1}{x${neg?'+'+Math.abs(c):'-'+c}}`,answer:[ans],hint:'Which value of x creates an undefined expression?',step:`x${neg?'+'+Math.abs(c):'-'+c}\\neq 0\\Rightarrow x\\neq ${c},\\;(-\\infty,${c})\\cup(${c},\\infty)`};}
-function gen3(){const c=choose([1,2,3,4,5,6]);return{latex:`\\text{Domain of }f(x)=\\sqrt{${c}-x}`,answer:[`(-inf,${c}]`],hint:'The radicand must be non-negative — which direction does this inequality go?',step:`${c}-x\\geq 0\\Rightarrow x\\leq ${c},\\;(-\\infty,${c}]`};}
-function gen4(){const c=choose([0,1,2,3,4]);const exprStr=c===0?'x':`x-${c}`;return{latex:`\\text{Domain of }f(x)=\\dfrac{5}{\\sqrt{${exprStr}}}`,answer:[`(${c},inf)`],hint:'The denominator must be positive — what does that require of the radicand?',step:`${exprStr}>0\\Rightarrow x>${c},\\;(${c},\\infty)`};}
-function gen5(){const k=choose([-3,-2,-1,0,1,2,3]);return{latex:`\\text{Range of }f(x)=x^2${k>0?'+'+k:k<0?k:''}`,answer:[`[${k},inf)`],hint:'What is the minimum output value of a squared term?',step:`x^2\\geq 0\\text{ for all }x,\\text{ so }f(x)\\geq ${k};\\text{ range }[${k},\\infty)`};}
-function gen6(){const k=choose([-2,-1,0,1,2,3]);return{latex:`\\text{Range of }f(x)=\\sqrt{x}${k>0?'+'+k:k<0?k:''}`,answer:[`[${k},inf)`],hint:'What is the minimum output of a square root, and how does the constant shift it?',step:`\\sqrt{x}\\geq 0\\text{ so }f(x)\\geq ${k};\\text{ range }[${k},\\infty)`};}
-function gen7(){const c=choose([1,4,9,16]);return{latex:`\\text{Domain of }f(x)=\\dfrac{1}{\\sqrt{x}-${Math.sqrt(c)}}`,answer:[`[0,${c})u(${c},inf)`],hint:'Two things must hold at once — what are they?',step:`\\text{Need }x\\geq 0\\text{ and }\\sqrt{x}\\neq ${Math.sqrt(c)}\\Rightarrow x\\neq ${c};\\;[0,${c})\\cup(${c},\\infty)`};}
-function gen8(){const k=choose([0,1,2,4,5]);return{latex:`\\text{Range of }f(x)=-x^2${k>0?'+'+k:''}`,answer:[`(-inf,${k}]`],hint:'When a parabola opens downward, what happens to its range?',step:`-x^2\\leq 0\\text{ so }f(x)\\leq ${k};\\text{ range }(-\\infty,${k}]`};}
-const GENERATORS=[gen1,gen2,gen3,gen4,gen5,gen6,gen7,gen8];
-let ACTIVE,correct,flags,attempted,peeked;
-function init(){ACTIVE=shuffle(GENERATORS.map(g=>g()));correct=0;flags=Array(8).fill(false);attempted=Array(8).fill(false);peeked=Array(8).fill(false);}
-function buildCards(){const wrap=document.getElementById('problems');wrap.innerHTML='';ACTIVE.forEach((p,i)=>{const div=document.createElement('div');div.className='card';div.id='card-'+i;div.innerHTML=`<div class="card-body"><div class="card-meta">Problem ${i+1}</div><div class="card-expr" id="expr-${i}"></div><div class="input-row"><input class="ans-input" id="ai-${i}" placeholder="answer"/><button class="check-btn" id="chk-${i}" onclick="check(${i})">Check</button></div><div class="hint">${p.hint}</div><div class="feedback" id="fb-${i}"></div><span class="reveal-link" id="rl-${i}" onclick="reveal(${i})">Show solution</span><div class="revealed-answer" id="ra-${i}"></div></div>`;wrap.appendChild(div);document.getElementById('ai-'+i).addEventListener('keydown',e=>{if(e.key==='Enter')check(i);});katex.render(p.latex,document.getElementById('expr-'+i),{throwOnError:false,displayMode:true});});}
-function check(i){const p=ACTIVE[i],inp=document.getElementById('ai-'+i),fb=document.getElementById('fb-'+i),card=document.getElementById('card-'+i),good=ok(inp.value,p.answer);inp.className='ans-input';if(good){inp.className='ans-input ok';fb.className='feedback correct';fb.textContent='✓ Correct!';card.className='card correct';if(!flags[i]&&!attempted[i]&&!peeked[i]){flags[i]=true;correct++;updateScore();}attempted[i]=true;document.getElementById('chk-'+i).disabled=true;inp.readOnly=true;}else{attempted[i]=true;inp.className='ans-input bad';fb.className='feedback wrong';fb.textContent='✗ Not quite — try again or show the solution.';card.className=peeked[i]?'card peeked':'card wrong';}}
-function reveal(i){const p=ACTIVE[i],box=document.getElementById('ra-'+i),lnk=document.getElementById('rl-'+i);if(box.style.display==='block'){box.style.display='none';lnk.textContent='Show solution';}else{if(!flags[i]){peeked[i]=true;document.getElementById('card-'+i).className='card peeked';if(!attempted[i]){const fb=document.getElementById('fb-'+i);fb.className='feedback peeked';fb.textContent='⚠ Solution revealed — no point awarded.';}}box.innerHTML='<strong>Solution:</strong><br>';const span=document.createElement('span');box.appendChild(span);katex.render(p.step,span,{throwOnError:false,displayMode:true});box.style.display='block';lnk.textContent='Hide solution';}}
-function updateScore(){const n=ACTIVE.length;document.getElementById('score').textContent=correct+' / '+n;document.getElementById('prog').style.width=Math.round(correct/n*100)+'%';}
-function resetAll(){init();buildCards();updateScore();}
+// ── Crypto-quality RNG ────────────────────────────────────────────────────────
+function _rf() {
+  const b = new Uint32Array(1);
+  crypto.getRandomValues(b);
+  return b[0] / 4294967296;
+}
+function rInt(n)   { return Math.floor(_rf() * n); }
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = rInt(i + 1);
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+// Pick one element at random from an array  e.g. choose([1,4,9])
+function choose(arr) { return arr[rInt(arr.length)]; }
+
+// ── Display helpers ───────────────────────────────────────────────────────────
+// Leading coefficient: 1→'', -1→'-', else the number as a string
+function fc(a) { if (a===1) return ''; if (a===-1) return '-'; return String(a); }
+// Subsequent term with sign: addT(-2,'x')→' - 2x', addT(3,'')→' + 3', addT(0,'x')→''
+function addT(n, v) {
+  if (n===0) return '';
+  const s = n>0?'+':'-', abs = Math.abs(n);
+  if (abs===1 && v) return ' ' + s + ' ' + v;
+  return ' ' + s + ' ' + abs + (v||'');
+}
+
+// ── Problem generators (section-specific, injected below) ─────────────────────
+
+function gen1(){
+  const a=choose([-5,-3,-2,-1,1,2,3,5]);
+  const ans=`(-inf,${a})u(${a},inf)`;
+  const neg=-a, term=neg>=0?`+${neg}`:`-${-neg}`;
+  return{
+    latex:`\\text{Domain of }f(x)=\\dfrac{1}{x${neg>=0?'+'+neg:neg}}`,
+    answer:[ans],
+    hint:'Which x-value makes the denominator equal to zero?',
+    step:`x-${a}=0\\Rightarrow x=${a}.\\quad\\text{Domain: }(-\\infty,${a})\\cup(${a},\\infty)`
+  };
+}
+
+function gen2(){
+  const a=choose([-4,-3,-2,-1,0,1,2,3,4]);
+  const ans=`[${a},inf)`;
+  const neg=-a, term=neg>=0?`+${neg}`:`${neg}`;
+  return{
+    latex:`\\text{Domain of }f(x)=\\sqrt{x${neg>0?'+'+neg:neg===0?'':neg}}`,
+    answer:[ans],
+    hint:'What inequality must the radicand satisfy for a square root to exist?',
+    step:`x${neg>0?'+'+neg:neg===0?'':neg}\\geq 0\\Rightarrow x\\geq ${a}.\\quad\\text{Domain: }[${a},\\infty)`
+  };
+}
+
+function gen3(){
+  // sqrt(a*x + b) with integer boundary: boundary = -b/a must be integer
+  const data=[
+    {a:2,b:-6,bnd:3},{a:3,b:-9,bnd:3},{a:2,b:-4,bnd:2},{a:3,b:6,bnd:-2},
+    {a:2,b:8,bnd:-4},{a:4,b:-8,bnd:2},{a:5,b:-15,bnd:3},{a:2,b:-10,bnd:5}
+  ];
+  const d=choose(data);
+  const ans=`[${d.bnd},inf)`;
+  const bSign=d.b>=0?`+${d.b}`:`${d.b}`;
+  return{
+    latex:`\\text{Domain of }f(x)=\\sqrt{${d.a}x${bSign}}`,
+    answer:[ans],
+    hint:'What is the boundary x-value that makes the radicand exactly zero?',
+    step:`${d.a}x${bSign}\\geq 0\\Rightarrow x\\geq ${d.bnd}.\\quad\\text{Domain: }[${d.bnd},\\infty)`
+  };
+}
+
+function gen4(){
+  const a=choose([-5,-4,-3,-2,-1,0,1,2,3]);
+  const len=choose([2,3,4,5,6]);
+  const b=a+len;
+  const ans=`[${a},${b})`;
+  return{
+    latex:`\\text{Write in interval notation: }${a}\\leq x < ${b}`,
+    answer:[ans],
+    hint:'Which bracket type includes an endpoint and which excludes it?',
+    step:`[${a},${b})`
+  };
+}
+
+function gen5(){
+  const a=choose([-4,-3,-2,-1,0,1,2,3,4]);
+  const ans=`(-inf,${a})`;
+  return{
+    latex:`\\text{Write in interval notation: }x < ${a}`,
+    answer:[ans],
+    hint:'Which endpoint notation matches a strict inequality with no lower bound?',
+    step:`(-\\infty,${a})`
+  };
+}
+
+function gen6(){
+  const a=choose([1,2,3,4,5,6]);
+  const ans=`(${a},inf)`;
+  return{
+    latex:`\\text{Domain of }f(x)=\\dfrac{1}{\\sqrt{x-${a}}}`,
+    answer:[ans],
+    hint:'Why must the radicand be strictly positive rather than just non-negative here?',
+    step:`x-${a}>0\\Rightarrow x>${a}.\\quad\\text{Domain: }(${a},\\infty)`
+  };
+}
+
+function gen7(){
+  const a=choose([-4,-3,-2,-1,0,1,2]);
+  const gap=choose([3,4,5,6]);
+  const b=a+gap;
+  const ans=`(-inf,${a}]u(${b},inf)`;
+  return{
+    latex:`\\text{Write in interval notation: }x\\leq ${a}\\text{ or }x > ${b}`,
+    answer:[ans],
+    hint:'How should a union of two non-overlapping intervals be written?',
+    step:`(-\\infty,${a}]\\cup(${b},\\infty)`
+  };
+}
+
+function gen8(){
+  const pairs=[[1,4],[2,5],[-1,3],[-2,2],[-3,1],[1,6],[2,7],[-2,4]];
+  const [lo,hi]=choose(pairs);
+  const ans=`(-inf,${lo})u(${lo},${hi})u(${hi},inf)`;
+  const s1=lo>=0?`-${lo}`:`+${-lo}`;
+  const s2=hi>=0?`-${hi}`:`+${-hi}`;
+  return{
+    latex:`\\text{Domain of }f(x)=\\dfrac{1}{(x${s1})(x${s2})}`,
+    answer:[ans],
+    hint:'How many values must be excluded when the denominator has two distinct zeros?',
+    step:`\\text{Exclude }x=${lo},\\,x=${hi}.\\quad(-\\infty,${lo})\\cup(${lo},${hi})\\cup(${hi},\\infty)`
+  };
+}
+
+function domainRangeGraph(x1,y1,x2,y2,ttl){
+  const W=340,H=190,padL=45,padR=25,padT=24,padB=34;
+  const xlo=Math.min(x1,0)-1, xhi=Math.max(x2,0)+1;
+  const ylo=Math.min(y1,0)-1, yhi=Math.max(y2,0)+1;
+  const xs=(W-padL-padR)/(xhi-xlo), ys=(H-padT-padB)/(yhi-ylo);
+  const px=x=>padL+(x-xlo)*xs, py=y=>H-padB-(y-ylo)*ys;
+  const ax=py(0), ay=px(0);
+  const p1x=px(x1),p1y=py(y1),p2x=px(x2),p2y=py(y2);
+  const lx1=p1y<ax?p1y-8:p1y+16, lx2=p2y<ax?p2y-8:p2y+16;
+  const ly1x=p1x<ay?p1x-8:p1x+8, ly1a=p1x<ay?'end':'start';
+  const ly2x=p2x<ay?p2x-8:p2x+8, ly2a=p2x<ay?'end':'start';
+  return `<div style="text-align:center;margin:0.25rem 0 0.5rem"><svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">`+
+`<rect width="${W}" height="${H}" fill="#fafaf8" rx="6"/>`+
+`<text x="${W/2}" y="15" text-anchor="middle" font-size="11" font-family="sans-serif" font-weight="bold" fill="#1e3a5c">${ttl}</text>`+
+`<line x1="${padL-15}" y1="${ax}" x2="${W-padR+15}" y2="${ax}" stroke="#888" stroke-width="1.3"/>`+
+`<line x1="${ay}" y1="${padT-4}" x2="${ay}" y2="${H-padB+10}" stroke="#888" stroke-width="1.3"/>`+
+`<path d="M${p1x},${p1y} L${p2x},${p2y}" fill="none" stroke="#1e3a5c" stroke-width="2.5" stroke-linecap="round"/>`+
+`<line x1="${p1x}" y1="${p1y}" x2="${p1x}" y2="${ax}" stroke="#b7b7b7" stroke-width="1" stroke-dasharray="3,3"/>`+
+`<line x1="${p2x}" y1="${p2y}" x2="${p2x}" y2="${ax}" stroke="#b7b7b7" stroke-width="1" stroke-dasharray="3,3"/>`+
+`<line x1="${p1x}" y1="${p1y}" x2="${ay}" y2="${p1y}" stroke="#b7b7b7" stroke-width="1" stroke-dasharray="3,3"/>`+
+`<line x1="${p2x}" y1="${p2y}" x2="${ay}" y2="${p2y}" stroke="#b7b7b7" stroke-width="1" stroke-dasharray="3,3"/>`+
+`<circle cx="${p1x}" cy="${p1y}" r="4.5" fill="#7a5c1e"/>`+
+`<circle cx="${p2x}" cy="${p2y}" r="4.5" fill="#7a5c1e"/>`+
+`<text x="${p1x}" y="${lx1}" text-anchor="middle" font-size="10.5" font-family="sans-serif" fill="#333">${x1}</text>`+
+`<text x="${p2x}" y="${lx2}" text-anchor="middle" font-size="10.5" font-family="sans-serif" fill="#333">${x2}</text>`+
+`<text x="${ly1x}" y="${p1y+4}" text-anchor="${ly1a}" font-size="10.5" font-family="sans-serif" fill="#333">${y1}</text>`+
+`<text x="${ly2x}" y="${p2y+4}" text-anchor="${ly2a}" font-size="10.5" font-family="sans-serif" fill="#333">${y2}</text>`+
+`</svg></div>`;
+}
+
+function gen9(){
+  const x1=choose([-4,-3,-2,-1]);
+  const x2=x1+choose([3,4,5,6]);
+  const y1=choose([-3,-2,-1,0,1]);
+  const y2=y1+choose([3,4,5,6]);
+  const ans=`[${x1},${x2}]`;
+  return{
+    svg: domainRangeGraph(x1,y1,x2,y2,'y = f(x)') +
+      '<p style="font-size:14px;font-family:sans-serif;color:#333;margin-top:6px">State the domain of the function graphed above.</p>',
+    answer:[ans],
+    hint:'Which x-values does the graph actually cover, from leftmost to rightmost point?',
+    step:`\\text{Domain: the graph spans }x=${x1}\\text{ to }x=${x2}.\\quad[${x1},${x2}]`
+  };
+}
+
+function gen10(){
+  const x1=choose([-4,-3,-2,-1]);
+  const x2=x1+choose([3,4,5,6]);
+  const y1=choose([-3,-2,-1,0,1]);
+  const y2=y1+choose([3,4,5,6]);
+  const ans=`[${y1},${y2}]`;
+  return{
+    svg: domainRangeGraph(x1,y1,x2,y2,'y = g(x)') +
+      '<p style="font-size:14px;font-family:sans-serif;color:#333;margin-top:6px">State the range of the function graphed above.</p>',
+    answer:[ans],
+    hint:'Which y-values does the graph actually cover, from lowest to highest point?',
+    step:`\\text{Range: the graph spans }y=${y1}\\text{ to }y=${y2}.\\quad[${y1},${y2}]`
+  };
+}
+
+function domainRangeGraphCurve(x1,y1,x2,y2,ttl){
+  const W=340,H=190,padL=45,padR=25,padT=24,padB=34;
+  const xlo=Math.min(x1,0)-1, xhi=Math.max(x2,0)+1;
+  const ylo=Math.min(y1,0)-1, yhi=Math.max(y2,0)+1;
+  const xs=(W-padL-padR)/(xhi-xlo), ys=(H-padT-padB)/(yhi-ylo);
+  const px=x=>padL+(x-xlo)*xs, py=y=>H-padB-(y-ylo)*ys;
+  const ax=py(0), ay=px(0);
+  const p1x=px(x1),p1y=py(y1),p2x=px(x2),p2y=py(y2);
+  const c1x=p1x+(p2x-p1x)*0.4, c2x=p1x+(p2x-p1x)*0.6;
+  const lx1=p1y<ax?p1y-8:p1y+16, lx2=p2y<ax?p2y-8:p2y+16;
+  const ly1x=p1x<ay?p1x-8:p1x+8, ly1a=p1x<ay?'end':'start';
+  const ly2x=p2x<ay?p2x-8:p2x+8, ly2a=p2x<ay?'end':'start';
+  return `<div style="text-align:center;margin:0.25rem 0 0.5rem"><svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">`+
+`<rect width="${W}" height="${H}" fill="#fafaf8" rx="6"/>`+
+`<text x="${W/2}" y="15" text-anchor="middle" font-size="11" font-family="sans-serif" font-weight="bold" fill="#1e3a5c">${ttl}</text>`+
+`<line x1="${padL-15}" y1="${ax}" x2="${W-padR+15}" y2="${ax}" stroke="#888" stroke-width="1.3"/>`+
+`<line x1="${ay}" y1="${padT-4}" x2="${ay}" y2="${H-padB+10}" stroke="#888" stroke-width="1.3"/>`+
+`<path d="M${p1x},${p1y} C${c1x},${p1y} ${c2x},${p2y} ${p2x},${p2y}" fill="none" stroke="#1e3a5c" stroke-width="2.5" stroke-linecap="round"/>`+
+`<line x1="${p1x}" y1="${p1y}" x2="${p1x}" y2="${ax}" stroke="#b7b7b7" stroke-width="1" stroke-dasharray="3,3"/>`+
+`<line x1="${p2x}" y1="${p2y}" x2="${p2x}" y2="${ax}" stroke="#b7b7b7" stroke-width="1" stroke-dasharray="3,3"/>`+
+`<line x1="${p1x}" y1="${p1y}" x2="${ay}" y2="${p1y}" stroke="#b7b7b7" stroke-width="1" stroke-dasharray="3,3"/>`+
+`<line x1="${p2x}" y1="${p2y}" x2="${ay}" y2="${p2y}" stroke="#b7b7b7" stroke-width="1" stroke-dasharray="3,3"/>`+
+`<circle cx="${p1x}" cy="${p1y}" r="4.5" fill="#7a5c1e"/>`+
+`<circle cx="${p2x}" cy="${p2y}" r="4.5" fill="#7a5c1e"/>`+
+`<text x="${p1x}" y="${lx1}" text-anchor="middle" font-size="10.5" font-family="sans-serif" fill="#333">${x1}</text>`+
+`<text x="${p2x}" y="${lx2}" text-anchor="middle" font-size="10.5" font-family="sans-serif" fill="#333">${x2}</text>`+
+`<text x="${ly1x}" y="${p1y+4}" text-anchor="${ly1a}" font-size="10.5" font-family="sans-serif" fill="#333">${y1}</text>`+
+`<text x="${ly2x}" y="${p2y+4}" text-anchor="${ly2a}" font-size="10.5" font-family="sans-serif" fill="#333">${y2}</text>`+
+`</svg></div>`;
+}
+
+function gen11(){
+  const x1=choose([-4,-3,-2,-1]);
+  const x2=x1+choose([3,4,5,6]);
+  const y1=choose([-3,-2,-1,0,1]);
+  const y2=y1+choose([3,4,5,6]);
+  const ans=`[${x1},${x2}]`;
+  return{
+    svg: domainRangeGraphCurve(x1,y1,x2,y2,'y = p(x)') +
+      '<p style="font-size:14px;font-family:sans-serif;color:#333;margin-top:6px">State the domain of the function graphed above.</p>',
+    answer:[ans],
+    hint:'Looking left to right, where does the curve begin and where does it end?',
+    step:`\\text{Domain: the graph spans }x=${x1}\\text{ to }x=${x2}.\\quad[${x1},${x2}]`
+  };
+}
+
+function gen12(){
+  const x1=choose([-4,-3,-2,-1]);
+  const x2=x1+choose([3,4,5,6]);
+  const y1=choose([-3,-2,-1,0,1]);
+  const y2=y1+choose([3,4,5,6]);
+  const ans=`[${y1},${y2}]`;
+  return{
+    svg: domainRangeGraphCurve(x1,y1,x2,y2,'y = q(x)') +
+      '<p style="font-size:14px;font-family:sans-serif;color:#333;margin-top:6px">State the range of the function graphed above.</p>',
+    answer:[ans],
+    hint:'Looking bottom to top, what is the lowest point and what is the highest point on the curve?',
+    step:`\\text{Range: the graph spans }y=${y1}\\text{ to }y=${y2}.\\quad[${y1},${y2}]`
+  };
+}
+
+const GENERATORS=[gen1,gen2,gen3,gen4,gen5,gen6,gen7,gen8,gen9,gen10,gen11,gen12];
+
+
+// ── State ─────────────────────────────────────────────────────────────────────
+let ACTIVE, correct, flags, attempted, peeked;
+
+function norm(s) {
+  return s.trim().toLowerCase()
+    .replace(/\s+/g, '')
+    .replace(/[−–]/g, '-')
+    .replace(/∞/g, 'inf')
+    .replace(/∪/g, 'u');
+}
+function ok(user, acc) { return acc.some(a => norm(user) === norm(a)); }
+
+function init() {
+  ACTIVE    = shuffle(GENERATORS.map(gen => gen()));
+  correct   = 0;
+  flags     = Array(GENERATORS.length).fill(false);
+  attempted = Array(GENERATORS.length).fill(false);
+  peeked    = Array(GENERATORS.length).fill(false);
+}
+
+function buildCards() {
+  const wrap = document.getElementById('problems');
+  wrap.innerHTML = '';
+  ACTIVE.forEach((p, i) => {
+    const div = document.createElement('div');
+    div.className = 'card'; div.id = 'card-' + i;
+    div.innerHTML =
+      `<div class="card-body">
+        <div class="card-meta">Problem ${i + 1}</div>
+        <div class="card-expr" id="expr-${i}"></div>
+        <div class="input-row">
+          <input class="ans-input" id="ai-${i}" placeholder="answer" />
+          <button class="check-btn" id="chk-${i}" onclick="check(${i})">Check</button>
+        </div>
+        <div class="hint">${p.hint}</div>
+        <div class="feedback" id="fb-${i}"></div>
+        <span class="reveal-link" id="rl-${i}" onclick="reveal(${i})">Show solution</span>
+        <div class="revealed-answer" id="ra-${i}"></div>
+      </div>`;
+    wrap.appendChild(div);
+    document.getElementById('ai-' + i)
+      .addEventListener('keydown', e => { if (e.key === 'Enter') check(i); });
+    if (p.svg) {
+      document.getElementById('expr-' + i).innerHTML = p.svg;
+    } else {
+      katex.render(p.latex, document.getElementById('expr-' + i),
+        { throwOnError: false, displayMode: true });
+    }
+  });
+}
+
+function check(i) {
+  const p = ACTIVE[i], inp = document.getElementById('ai-'+i),
+        fb = document.getElementById('fb-'+i), card = document.getElementById('card-'+i),
+        good = ok(inp.value, p.answer);
+  inp.className = 'ans-input';
+  if (good) {
+    inp.className = 'ans-input ok'; fb.className = 'feedback correct';
+    fb.textContent = '✓ Correct!'; card.className = 'card correct';
+    if (!flags[i] && !attempted[i] && !peeked[i]) { flags[i]=true; correct++; updateScore(); }
+    attempted[i] = true;
+    document.getElementById('chk-'+i).disabled = true; inp.readOnly = true;
+  } else {
+    attempted[i] = true; inp.className = 'ans-input bad'; fb.className = 'feedback wrong';
+    fb.textContent = '✗ Not quite — try again or show the solution.';
+    card.className = peeked[i] ? 'card peeked' : 'card wrong';
+  }
+}
+
+function reveal(i) {
+  const p = ACTIVE[i], box = document.getElementById('ra-'+i),
+        lnk = document.getElementById('rl-'+i);
+  if (box.style.display === 'block') {
+    box.style.display = 'none'; lnk.textContent = 'Show solution';
+  } else {
+    if (!flags[i]) {
+      peeked[i] = true; document.getElementById('card-'+i).className = 'card peeked';
+      if (!attempted[i]) {
+        const fb = document.getElementById('fb-'+i);
+        fb.className = 'feedback peeked';
+        fb.textContent = '⚠ Solution revealed — no point awarded.';
+      }
+    }
+    box.innerHTML = '<strong>Solution:</strong><br>';
+    const span = document.createElement('span'); box.appendChild(span);
+    katex.render(p.step, span, { throwOnError: false, displayMode: true });
+    box.style.display = 'block'; lnk.textContent = 'Hide solution';
+  }
+}
+
+function updateScore() {
+  const n = ACTIVE.length;
+  document.getElementById('score').textContent = correct + ' / ' + n;
+  document.getElementById('prog').style.width = Math.round(correct / n * 100) + '%';
+}
+
+function resetAll() { init(); buildCards(); updateScore(); }
 </script>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/contrib/auto-render.min.js"></script>
-<script>renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});init();buildCards();updateScore();</script>
+
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script>
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left: '$$', right: '$$', display: true},
+      {left: '$',  right: '$',  display: false}
+    ]
+  });
+  init(); buildCards(); updateScore();
+</script>
 </body>
 </html>

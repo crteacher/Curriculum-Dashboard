@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Limit Rules & Algebra — Practice</title>
+<title>Limit Rules &amp; Algebraic Techniques — Practice</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.css">
 <style>
   *{box-sizing:border-box;margin:0;padding:0}
@@ -92,7 +92,7 @@ const BANK=[{"latex": "\\lim_{x \\to 3} (2x^2 - 4x + 1)", "answer": ["7"], "hint
 let ACTIVE,correct,flags,attempted,peeked;
 function norm(s){return s.trim().toLowerCase().replace(/\s+/g,'').replace(/[\u2212\u2013]/g,'-').replace(/infinity|\u221e/gi,'inf');}
 function ok(user,acc){return acc.some(a=>norm(user)===norm(a));}
-function init(){ACTIVE=[...BANK].sort(()=>Math.random()-.5).slice(0,8);correct=0;flags=Array(8).fill(false);attempted=Array(8).fill(false);peeked=Array(8).fill(false);}
+function init(){ACTIVE=[...BANK].sort(()=>Math.random()-.5).slice(0,BANK.length);correct=0;flags=Array(BANK.length).fill(false);attempted=Array(BANK.length).fill(false);peeked=Array(BANK.length).fill(false);}
 function buildCards(){
   const wrap=document.getElementById('problems');wrap.innerHTML='';
   ACTIVE.forEach((p,i)=>{
@@ -105,7 +105,7 @@ function buildCards(){
 }
 function check(i){const p=ACTIVE[i],inp=document.getElementById('ai-'+i),fb=document.getElementById('fb-'+i),card=document.getElementById('card-'+i),good=ok(inp.value,p.answer);inp.className='ans-input';if(good){inp.className='ans-input ok';fb.className='feedback correct';fb.textContent='✓ Correct!';card.className='card correct';if(!flags[i]&&!attempted[i]&&!peeked[i]){flags[i]=true;correct++;updateScore();}attempted[i]=true;document.getElementById('chk-'+i).disabled=true;inp.readOnly=true;}else{attempted[i]=true;inp.className='ans-input bad';fb.className='feedback wrong';fb.textContent='✗ Not quite — try again or show the solution.';card.className=peeked[i]?'card peeked':'card wrong';}}
 function reveal(i){const p=ACTIVE[i],box=document.getElementById('ra-'+i),lnk=document.getElementById('rl-'+i);if(box.style.display==='block'){box.style.display='none';lnk.textContent='Show solution';}else{if(!flags[i]){peeked[i]=true;document.getElementById('card-'+i).className='card peeked';if(!attempted[i]){const fb=document.getElementById('fb-'+i);fb.className='feedback peeked';fb.textContent='⚠ Solution revealed — no point awarded.';}}box.innerHTML='<strong>Solution:</strong><br>';const span=document.createElement('span');box.appendChild(span);katex.render(p.step,span,{throwOnError:false,displayMode:true});box.style.display='block';lnk.textContent='Hide solution';}}
-function updateScore(){document.getElementById('score').textContent=correct+' / 8';document.getElementById('prog').style.width=Math.round(correct/8*100)+'%';}
+function updateScore(){document.getElementById('score').textContent=correct+' / '+BANK.length;document.getElementById('prog').style.width=Math.round(correct/8*100)+'%';}
 function resetAll(){init();buildCards();updateScore();}
 </script>
 <script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>

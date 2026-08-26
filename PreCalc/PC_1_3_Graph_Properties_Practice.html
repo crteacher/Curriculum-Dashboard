@@ -230,7 +230,7 @@ function gen7(){
   const k=choose([-3,-2,-1,0,1,2,3,4,5,6]);
   const hS=h>=0?`-${h}`:`+${-h}`;
   return{
-    latex:`\\text{Absolute max of }f(x)=${a===1?'':a}-(x${hS})^2${addT(k,'')}`,
+    latex:`\\text{Absolute max of }f(x)=${a===1?'-':'-'+a}(x${hS})^2${addT(k,'')}`,
     answer:[String(k)],
     hint:'At which y-value does the vertex of a downward-opening parabola sit?',
     step:`\\text{Vertex at }(${h},${k});\\text{ parabola opens down}\\Rightarrow\\text{absolute max}=${k}`
