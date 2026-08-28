@@ -37,89 +37,121 @@
   },
   "schedule": {
     "active": true,
-    "title": "First Two Weeks",
+    "title": "Aug 31 \u2013 Sep 11",
     "collegeAlgebra": [
       {
         "day": 1,
-        "type": "setup",
-        "title": "Syllabus & Online Setup",
-        "note": "Set up MyOpenMath, Khan Academy, and bookmark this dashboard."
+        "type": "lesson",
+        "sectionId": "CA_1_4"
       },
       {
         "day": 2,
         "type": "lesson",
-        "sectionId": "CA_1_1"
+        "sectionId": "CA_1_5"
       },
       {
         "day": 3,
         "type": "lesson",
-        "sectionId": "CA_1_2"
+        "sectionId": "CA_1_6",
+        "startQuiz": {
+          "title": "Inequalities Quiz",
+          "sections": [
+            "CA_1_3",
+            "CA_1_4"
+          ]
+        }
       },
       {
         "day": 4,
-        "type": "lesson",
-        "sectionId": "CA_1_3"
+        "type": "review",
+        "title": "Exam Review",
+        "sections": [
+          "CA_1_4",
+          "CA_1_5",
+          "CA_1_6"
+        ]
       },
       {
         "day": 5,
-        "type": "lesson",
-        "sectionId": "CA_1_4"
+        "type": "exam",
+        "title": "Unit Exam"
       }
     ],
     "calc1": [
       {
         "day": 1,
-        "type": "setup",
-        "title": "Syllabus & Online Setup",
-        "note": "Set up MyOpenMath, Khan Academy, and bookmark this dashboard."
+        "type": "lesson",
+        "sectionId": "Calc_2_1"
       },
       {
         "day": 2,
         "type": "lesson",
-        "sectionId": "Calc_1_1"
+        "sectionId": "Calc_2_2"
       },
       {
         "day": 3,
         "type": "lesson",
-        "sectionId": "Calc_1_1_5"
+        "sectionId": "Calc_2_2_5"
       },
       {
         "day": 4,
         "type": "lesson",
-        "sectionId": "Calc_1_2",
-        "startQuiz": {
-          "title": "Limits Quiz",
-          "sections": [
-            "Calc_1_1",
-            "Calc_1_1_5"
-          ]
-        }
+        "sectionId": "Calc_2_2_6"
       },
       {
         "day": 5,
         "type": "lesson",
-        "sectionId": "Calc_1_3"
+        "sectionId": "Calc_2_3",
+        "startQuiz": {
+          "title": "Definition of the Derivative Quiz",
+          "sections": [
+            "Calc_2_1",
+            "Calc_2_2",
+            "Calc_2_2_5",
+            "Calc_2_2_6"
+          ]
+        }
       },
       {
         "day": 6,
         "type": "lesson",
-        "sectionId": "Calc_1_4",
+        "sectionId": "Calc_2_4",
         "startQuiz": {
-          "title": "Memory Quiz \u2014 Discontinuities",
+          "title": "Power Rule Quiz",
           "sections": [
-            "Calc_1_3"
+            "Calc_2_3"
           ]
         }
       },
       {
         "day": 7,
         "type": "lesson",
-        "sectionId": "Calc_1_5"
+        "sectionId": "Calc_2_4_5",
+        "startQuiz": {
+          "title": "Trig/Exp/Log Derivatives Quiz",
+          "sections": [
+            "Calc_2_4"
+          ]
+        }
       },
       {
         "day": 8,
-        "type": "lesson",
-        "sectionId": "Calc_2_1"
+        "type": "review",
+        "title": "Exam Review",
+        "sections": [
+          "Calc_2_1",
+          "Calc_2_2",
+          "Calc_2_2_5",
+          "Calc_2_2_6",
+          "Calc_2_3",
+          "Calc_2_4",
+          "Calc_2_4_5"
+        ]
+      },
+      {
+        "day": 9,
+        "type": "exam",
+        "title": "Unit Exam"
       }
     ],
     "calc2": [
@@ -186,24 +218,39 @@
     "preCalc": [
       {
         "day": 1,
-        "type": "setup",
-        "title": "Syllabus & Online Setup",
-        "note": "Set up MyOpenMath, Khan Academy, and bookmark this dashboard."
+        "type": "lesson",
+        "sectionId": "PC_1_3"
       },
       {
         "day": 2,
         "type": "lesson",
-        "sectionId": "PC_1_1"
+        "sectionId": "PC_1_4"
       },
       {
         "day": 3,
         "type": "lesson",
-        "sectionId": "PC_1_1b"
+        "sectionId": "PC_1_5"
       },
       {
         "day": 4,
         "type": "lesson",
-        "sectionId": "PC_1_2a"
+        "sectionId": "PC_1_7"
+      },
+      {
+        "day": 5,
+        "type": "review",
+        "title": "Exam Review",
+        "sections": [
+          "PC_1_3",
+          "PC_1_4",
+          "PC_1_5",
+          "PC_1_7"
+        ]
+      },
+      {
+        "day": 6,
+        "type": "exam",
+        "title": "Unit Exam"
       }
     ]
   }
