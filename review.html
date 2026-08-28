@@ -250,8 +250,8 @@ function buildGrid() {
   if (!pool.length) {
     if (!prereq && !day1) {
       document.getElementById('gridIntro').textContent =
-        'No review problems available yet — check back after your first completed section.';
-      container.innerHTML = '';
+        'No section review problems yet — but study resources are always available.';
+      container.innerHTML = resourcesHtml(cls);
       return;
     }
     document.getElementById('gridIntro').textContent =
