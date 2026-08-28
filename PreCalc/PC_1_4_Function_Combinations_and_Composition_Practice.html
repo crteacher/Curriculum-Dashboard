@@ -256,7 +256,7 @@ function gen8(){
   const x_vals=[-3,-2,-1,0,1,2,3].filter(x=>((m*x+b)%divisor===0));
   if(x_vals.length===0){
     // fallback
-    const fa_=2, x_=3, ans_=6;
+    const fa_=2, x_=3, ans_=2;
     return{
       latex:`f(x)=2x,\\;g(x)=x.\\quad\\left(\\dfrac{f}{g}\\right)(${x_})=`,
       answer:[String(ans_)],

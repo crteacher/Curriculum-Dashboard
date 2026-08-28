@@ -158,7 +158,7 @@ function gen2() {
   const Aabs = Math.abs(A);
   const Asign = A < 0 ? '-' : '+';
   return {
-    latex:  `\\text{Find the slope of }${Aabs > 1 ? Aabs : ''}${A < 0 ? '' : ''}${A}x + ${B}y = ${C}.`,
+    latex:  `\\text{Find the slope of }${A}x + ${B}y = ${C}.`,
     answer: [String(adjM)],
     hint:   `Solve for y to get slope-intercept form. What is the coefficient of x?`,
     step:   `${B}y=-${A < 0 ? `(${A})` : A}x+${C}\\Rightarrow y=${adjM}x+${b}\\quad m=${adjM}`
