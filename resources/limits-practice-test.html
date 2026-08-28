@@ -1,0 +1,1166 @@
+<title>Limits Practice Test</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=JetBrains+Mono:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #f6f1e4;
+    --paper-line: rgba(58, 74, 94, 0.14);
+    --paper-line-strong: rgba(58, 74, 94, 0.26);
+    --ink: #26313f;
+    --ink-soft: #5b6b7d;
+    --card-bg: #fffdf7;
+    --card-border: #ddd2b6;
+    --accent: #2f7d6b;
+    --accent-strong: #1f5c4e;
+    --accent-soft: rgba(47, 125, 107, 0.12);
+    --accent-ink: #f5fbf9;
+    --good: #3f7a52;
+    --good-soft: rgba(63, 122, 82, 0.14);
+    --bad: #b3413a;
+    --bad-soft: rgba(179, 65, 58, 0.12);
+    --shadow: rgba(38, 49, 63, 0.16);
+    --graph-grid: rgba(58, 74, 94, 0.14);
+    --graph-axis: rgba(38, 49, 63, 0.55);
+    --graph-stroke-a: #2f7d6b;
+    --graph-stroke-b: #c1483f;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #1b2330;
+      --paper-line: rgba(238, 242, 240, 0.07);
+      --paper-line-strong: rgba(238, 242, 240, 0.15);
+      --ink: #edf1ef;
+      --ink-soft: #a3aebb;
+      --card-bg: #232e3d;
+      --card-border: #3a4a61;
+      --accent: #5fd1b3;
+      --accent-strong: #86e0c8;
+      --accent-soft: rgba(95, 209, 179, 0.16);
+      --accent-ink: #0c2620;
+      --good: #7bc794;
+      --good-soft: rgba(123, 199, 148, 0.16);
+      --bad: #ff9a90;
+      --bad-soft: rgba(255, 154, 144, 0.14);
+      --shadow: rgba(0, 0, 0, 0.5);
+      --graph-grid: rgba(238, 242, 240, 0.10);
+      --graph-axis: rgba(238, 242, 240, 0.55);
+      --graph-stroke-a: #5fd1b3;
+      --graph-stroke-b: #ff9179;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #1b2330;
+    --paper-line: rgba(238, 242, 240, 0.07);
+    --paper-line-strong: rgba(238, 242, 240, 0.15);
+    --ink: #edf1ef;
+    --ink-soft: #a3aebb;
+    --card-bg: #232e3d;
+    --card-border: #3a4a61;
+    --accent: #5fd1b3;
+    --accent-strong: #86e0c8;
+    --accent-soft: rgba(95, 209, 179, 0.16);
+    --accent-ink: #0c2620;
+    --good: #7bc794;
+    --good-soft: rgba(123, 199, 148, 0.16);
+    --bad: #ff9a90;
+    --bad-soft: rgba(255, 154, 144, 0.14);
+    --shadow: rgba(0, 0, 0, 0.5);
+    --graph-grid: rgba(238, 242, 240, 0.10);
+    --graph-axis: rgba(238, 242, 240, 0.55);
+    --graph-stroke-a: #5fd1b3;
+    --graph-stroke-b: #ff9179;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background:
+      repeating-linear-gradient(0deg, var(--paper-line) 0, var(--paper-line) 1px, transparent 1px, transparent 32px),
+      repeating-linear-gradient(90deg, var(--paper-line) 0, var(--paper-line) 1px, transparent 1px, transparent 32px),
+      var(--paper);
+    color: var(--ink);
+    font-family: "Source Sans 3", ui-sans-serif, system-ui, sans-serif;
+    display: flex;
+    justify-content: center;
+    padding: clamp(20px, 4vw, 56px) 18px 80px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+  }
+
+  .wrap { width: 100%; max-width: 900px; }
+  header { text-align: center; margin-bottom: 22px; }
+
+  .eyebrow {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--accent); font-weight: 600;
+  }
+
+  h1 {
+    font-family: "Fraunces", Georgia, serif; font-weight: 600;
+    font-size: clamp(1.9rem, 5vw, 2.6rem); margin: 6px 0 8px; text-wrap: balance;
+  }
+
+  header p { color: var(--ink-soft); font-size: 1rem; max-width: 60ch; margin: 0 auto; line-height: 1.55; }
+
+  .toolbar {
+    position: sticky; top: 12px; z-index: 5;
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    margin: 22px 0 26px; padding: 12px 16px; flex-wrap: wrap;
+    background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 14px;
+    box-shadow: 0 10px 26px -16px var(--shadow);
+  }
+  .score-box { display: flex; align-items: baseline; gap: 8px; }
+  .score-num { font-family: "JetBrains Mono", monospace; font-size: 1.3rem; font-weight: 700; color: var(--accent-strong); font-variant-numeric: tabular-nums; }
+  .score-label { font-size: 0.78rem; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.06em; }
+
+  button { font-family: inherit; cursor: pointer; }
+  button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .icon-btn {
+    display: inline-flex; align-items: center; gap: 7px; background: var(--card-bg);
+    border: 1px solid var(--card-border); color: var(--ink); padding: 9px 14px;
+    border-radius: 9px; font-size: 0.86rem; font-weight: 600;
+    transition: border-color 0.15s ease, transform 0.1s ease;
+  }
+  .icon-btn:hover { border-color: var(--accent); }
+  .icon-btn:active { transform: translateY(1px); }
+  .icon-btn svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+  .group-head {
+    margin: 34px 0 14px; padding-bottom: 8px; border-bottom: 1.5px solid var(--paper-line-strong);
+  }
+  .group-head .gnum {
+    font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 1.3rem; color: var(--ink);
+  }
+  .group-head .gdesc { font-size: 0.92rem; color: var(--ink-soft); margin-top: 2px; }
+
+  .qcard {
+    background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px;
+    box-shadow: 0 14px 32px -22px var(--shadow), 0 2px 8px -2px var(--shadow);
+    padding: clamp(16px, 3vw, 24px); margin-bottom: 18px;
+  }
+
+  .qcard-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
+  .qcard-head .qtitle { display: flex; align-items: center; gap: 10px; }
+  .qlabel { font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 1.1rem; }
+  .qpoints {
+    font-family: "JetBrains Mono", monospace; font-size: 0.68rem; letter-spacing: 0.05em;
+    color: var(--ink-soft); background: var(--paper-line); padding: 2px 8px; border-radius: 20px;
+  }
+
+  .qprompt { font-size: 1rem; line-height: 1.7; margin-bottom: 14px; }
+  .qprompt .math { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 1.02rem; }
+  .qprompt .frac { display: inline-flex; flex-direction: column; vertical-align: middle; text-align: center; margin: 0 3px; line-height: 1.15; }
+  .qprompt .frac .num { border-bottom: 1.3px solid currentColor; padding: 0 3px 1px; }
+  .qprompt .frac .den { padding: 1px 3px 0; }
+  .qprompt .radical { display: inline-flex; align-items: flex-start; margin: 0 2px; }
+  .qprompt .radical .idx { font-size: 0.62em; margin-right: -0.35em; margin-top: -0.3em; }
+  .qprompt .radical .rsym { font-size: 1.1em; }
+  .qprompt .radical .rad-inner { border-top: 1.3px solid currentColor; padding: 0 3px; margin-left: 1px; }
+
+  .qgraph-wrap { display: flex; justify-content: center; margin: 10px 0 16px; }
+  .qgraph-wrap canvas { width: 100%; max-width: 380px; height: 230px; display: block; }
+  .qgraph-wrap.small canvas { max-width: 280px; height: 190px; }
+
+  .qinputs { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin-bottom: 14px; }
+  .qinputs .field-label { font-size: 0.86rem; color: var(--ink-soft); font-weight: 600; }
+  .qinputs input[type="text"], .qinputs select {
+    font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 0.95rem;
+    background: var(--paper); border: 1.5px solid var(--card-border); border-radius: 8px;
+    padding: 8px 10px; color: var(--ink); min-width: 92px;
+  }
+  .qinputs select { font-family: "Source Sans 3", sans-serif; min-width: 190px; }
+  .qinputs input:focus, .qinputs select:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .qinputs .subrow {
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    padding: 8px 10px; border: 1.5px dashed var(--card-border); border-radius: 10px;
+  }
+  .qinputs .hidden { display: none !important; }
+  .mc-row { display: flex; flex-wrap: wrap; gap: 8px; }
+  .mc-opt {
+    border: 1.5px solid var(--card-border); border-radius: 9px; padding: 8px 13px;
+    font-size: 0.88rem; background: var(--card-bg); color: var(--ink); font-weight: 600;
+    transition: border-color 0.15s ease, background 0.15s ease;
+  }
+  .mc-opt:hover { border-color: var(--accent); }
+  .mc-opt.selected { border-color: var(--accent); background: var(--accent-soft); color: var(--accent-strong); }
+
+  .qactions { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; }
+  .btn-primary {
+    background: var(--accent); color: var(--accent-ink); border: none; padding: 10px 20px;
+    border-radius: 10px; font-size: 0.92rem; font-weight: 700;
+    box-shadow: 0 8px 16px -8px var(--accent-strong); transition: transform 0.1s ease;
+  }
+  .btn-primary:active { transform: translateY(1px); }
+  .btn-secondary {
+    background: transparent; border: 1.5px solid var(--card-border); color: var(--ink);
+    padding: 9px 18px; border-radius: 10px; font-size: 0.92rem; font-weight: 700;
+    transition: border-color 0.15s ease;
+  }
+  .btn-secondary:hover { border-color: var(--accent); }
+
+  .qfeedback {
+    font-size: 0.9rem; font-weight: 700; padding: 9px 13px; border-radius: 9px; margin-bottom: 10px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .qfeedback.good { background: var(--good-soft); color: var(--good); }
+  .qfeedback.bad { background: var(--bad-soft); color: var(--bad); }
+  .qfeedback svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+  .qsolution {
+    background: var(--accent-soft); border: 1px solid var(--card-border); border-left: 4px solid var(--accent);
+    border-radius: 0 12px 12px 0; padding: 14px 16px; font-size: 0.92rem; line-height: 1.7;
+  }
+  .qsolution .sol-label {
+    font-family: "JetBrains Mono", monospace; font-size: 0.68rem; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--accent-strong); font-weight: 700; display: block; margin-bottom: 6px;
+  }
+  .qsolution .step { margin: 3px 0; }
+  .qsolution .final { margin-top: 8px; font-weight: 700; font-family: "JetBrains Mono", monospace; }
+
+  .hidden { display: none !important; }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Calc 1 &middot; Limits &amp; Continuity</div>
+    <h1>Limits Practice Test</h1>
+    <p>Every part regenerates its own random version — work it out on paper, type your answer, and check yourself. Click "New version" on any part as many times as you want to drill it again with different numbers.</p>
+  </header>
+
+  <div class="toolbar">
+    <div class="score-box">
+      <span class="score-num" id="scoreNum">0 / 0</span>
+      <span class="score-label">points checked correct</span>
+    </div>
+    <button class="icon-btn" id="newTestBtn" type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3h5v5"/><path d="M4 20 21 3"/><path d="M21 16v5h-5"/><path d="M15 15l6 6"/><path d="M4 4l5 5"/></svg>
+      New full test
+    </button>
+  </div>
+
+  <div id="groups"></div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  // ============================================================
+  // Utilities
+  // ============================================================
+  function randInt(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+  function randNonZeroInt(min, max) { var v; do { v = randInt(min, max); } while (v === 0); return v; }
+  function randIntExcluding(exclude, min, max) {
+    var v, tries = 0;
+    do { v = randInt(min, max); tries++; } while (exclude.indexOf(v) !== -1 && tries < 200);
+    return v;
+  }
+  function randChoice(arr) { return arr[randInt(0, arr.length - 1)]; }
+  function randBool() { return Math.random() < 0.5; }
+  function shuffle(arr) {
+    var a = arr.slice();
+    for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; }
+    return a;
+  }
+  function fmtNum(n) { return n.toLocaleString("en-US"); }
+  function gcdInt(a, b) { a = Math.abs(a); b = Math.abs(b); while (b) { var t = b; b = a % b; a = t; } return a || 1; }
+  function fracLabel(p, q) {
+    var g = gcdInt(p, q);
+    p = p / g; q = q / g;
+    if (q < 0) { p = -p; q = -q; }
+    return { p: p, q: q };
+  }
+
+  // build a descending-degree polynomial display string from a leading coef + array of lower coefs (index 0 = degree-1 term, ..., last = constant)
+  var SUP = { 4: "&#8308;", 3: "&sup3;", 2: "&sup2;", 1: "", 0: "" };
+  function polyStr(leadCoef, leadDeg, lowerCoefs, constantDisplay) {
+    // lowerCoefs: array length leadDeg, coefs for degree (leadDeg-1) down to degree 1; constantDisplay: string or number or null
+    var parts = [];
+    function pushTerm(coef, deg) {
+      if (!coef) return;
+      var abs = Math.abs(coef);
+      var label = deg === 0 ? "" : ("x" + (SUP[deg] || ("&#8319;" /*fallback*/)));
+      var coefStr = (abs === 1 && deg !== 0) ? "" : fmtNum(abs);
+      parts.push({ neg: coef < 0, text: coefStr + label });
+    }
+    pushTerm(leadCoef, leadDeg);
+    for (var d = leadDeg - 1; d >= 1; d--) {
+      var c = lowerCoefs[leadDeg - 1 - d];
+      pushTerm(c, d);
+    }
+    if (constantDisplay !== null && constantDisplay !== undefined && constantDisplay !== 0) {
+      if (typeof constantDisplay === "string") {
+        parts.push({ neg: false, text: constantDisplay });
+      } else {
+        pushTerm(constantDisplay, 0);
+      }
+    }
+    if (!parts.length) return "0";
+    var out = "";
+    parts.forEach(function (t, i) {
+      if (i === 0) out += (t.neg ? "&minus;" : "") + t.text;
+      else out += (t.neg ? " &minus; " : " + ") + t.text;
+    });
+    return out;
+  }
+
+  function frac(numHtml, denHtml) {
+    return "<span class=\"frac\"><span class=\"num\">" + numHtml + "</span><span class=\"den\">" + denHtml + "</span></span>";
+  }
+  function radical(innerHtml, index) {
+    var idx = index ? "<span class=\"idx\">" + index + "</span>" : "";
+    return "<span class=\"radical\">" + idx + "<span class=\"rsym\">&radic;</span><span class=\"rad-inner\">" + innerHtml + "</span></span>";
+  }
+  function signedTerm(coef, label) {
+    if (coef === 0) return "";
+    var abs = Math.abs(coef);
+    var coefStr = (abs === 1 && label) ? "" : String(abs);
+    return (coef < 0 ? "&minus;" : "+") + " " + coefStr + label;
+  }
+
+  // ---- answer parsing / checking ----
+  function parseAnswer(raw) {
+    if (raw === null || raw === undefined) return { type: "invalid" };
+    var str = String(raw).trim().toLowerCase();
+    if (str === "") return { type: "invalid" };
+    if (["dne", "does not exist", "no limit", "undefined", "not defined"].indexOf(str) !== -1) return { type: "dne" };
+    if (["inf", "infinity", "+inf", "+infinity", "∞", "+∞"].indexOf(str) !== -1) return { type: "inf", sign: 1 };
+    if (["-inf", "-infinity", "-∞"].indexOf(str) !== -1) return { type: "inf", sign: -1 };
+    var fracMatch = str.match(/^(-?\d+(\.\d+)?)\s*\/\s*(-?\d+(\.\d+)?)$/);
+    if (fracMatch) {
+      var p = parseFloat(fracMatch[1]), q = parseFloat(fracMatch[3]);
+      if (q !== 0) return { type: "number", value: p / q };
+    }
+    var cleaned = str.replace(/,/g, "");
+    if (/^-?\d*\.?\d+$/.test(cleaned)) return { type: "number", value: parseFloat(cleaned) };
+    return { type: "invalid" };
+  }
+  function answersMatch(user, correct, tol) {
+    tol = tol === undefined ? 0.01 : tol;
+    if (user.type === "invalid") return false;
+    if (correct.type === "dne") return user.type === "dne";
+    if (correct.type === "inf") return user.type === "inf" && user.sign === correct.sign;
+    if (correct.type === "number") return user.type === "number" && Math.abs(user.value - correct.value) < tol;
+    return false;
+  }
+  function fmtAnswer(a) {
+    if (a.type === "dne") return "DNE";
+    if (a.type === "inf") return a.sign > 0 ? "+&infin;" : "&minus;&infin;";
+    if (a.type === "number") {
+      var v = a.value;
+      var rounded = Math.round(v * 1000) / 1000;
+      return String(rounded);
+    }
+    return "?";
+  }
+
+  // ============================================================
+  // Canvas graph helper
+  // ============================================================
+  function setupCanvas(canvas) {
+    var cssW = canvas.clientWidth || 300, cssH = canvas.clientHeight || 200;
+    var dpr = window.devicePixelRatio || 1;
+    canvas.width = cssW * dpr;
+    canvas.height = cssH * dpr;
+    var ctx = canvas.getContext("2d");
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, cssW, cssH);
+    return { ctx: ctx, w: cssW, h: cssH };
+  }
+  function makeMapper(cssW, cssH, xMin, xMax, yMin, yMax, pad) {
+    pad = pad || 24;
+    var w = cssW - pad * 1.4, h = cssH - pad * 1.6;
+    var sx = w / (xMax - xMin), sy = h / (yMax - yMin);
+    var ox = pad, oy = cssH - pad * 0.9;
+    return function (x, y) { return [ox + (x - xMin) * sx, oy - (y - yMin) * sy]; };
+  }
+  function drawGrid(canvas, xMin, xMax, yMin, yMax) {
+    var setup = setupCanvas(canvas), ctx = setup.ctx, cssW = setup.w, cssH = setup.h;
+    var toPx = makeMapper(cssW, cssH, xMin, xMax, yMin, yMax);
+    var styles = getComputedStyle(document.documentElement);
+    var gridColor = styles.getPropertyValue("--graph-grid").trim();
+    var axisColor = styles.getPropertyValue("--graph-axis").trim();
+    var labelColor = styles.getPropertyValue("--ink-soft").trim();
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = gridColor;
+    ctx.beginPath();
+    for (var gx = Math.ceil(xMin); gx <= Math.floor(xMax); gx++) {
+      var p0 = toPx(gx, yMin), p1 = toPx(gx, yMax);
+      ctx.moveTo(p0[0], p0[1]); ctx.lineTo(p1[0], p1[1]);
+    }
+    for (var gy = Math.ceil(yMin); gy <= Math.floor(yMax); gy++) {
+      var q0 = toPx(xMin, gy), q1 = toPx(xMax, gy);
+      ctx.moveTo(q0[0], q0[1]); ctx.lineTo(q1[0], q1[1]);
+    }
+    ctx.stroke();
+    // axes
+    ctx.lineWidth = 1.6;
+    ctx.strokeStyle = axisColor;
+    ctx.beginPath();
+    if (xMin <= 0 && xMax >= 0) { var a0 = toPx(0, yMin), a1 = toPx(0, yMax); ctx.moveTo(a0[0], a0[1]); ctx.lineTo(a1[0], a1[1]); }
+    if (yMin <= 0 && yMax >= 0) { var b0 = toPx(xMin, 0), b1 = toPx(xMax, 0); ctx.moveTo(b0[0], b0[1]); ctx.lineTo(b1[0], b1[1]); }
+    ctx.stroke();
+    // Tick labels along the bottom/left edges of the plot — always visible even
+    // when the graph's window doesn't happen to include the origin, so every
+    // gridline can be read off directly instead of needing to count from (0,0).
+    ctx.fillStyle = labelColor;
+    ctx.font = "10px 'JetBrains Mono', ui-monospace, monospace";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "top";
+    var xStep = (xMax - xMin) > 16 ? 2 : 1;
+    for (var lx = Math.ceil(xMin / xStep) * xStep; lx <= Math.floor(xMax); lx += xStep) {
+      var lp = toPx(lx, yMin);
+      ctx.fillText(String(lx), Math.min(Math.max(lp[0], 12), cssW - 12), cssH - 13);
+    }
+    ctx.textAlign = "left";
+    ctx.textBaseline = "middle";
+    var yStep = (yMax - yMin) > 16 ? 2 : 1;
+    for (var ly = Math.ceil(yMin / yStep) * yStep; ly <= Math.floor(yMax); ly += yStep) {
+      var lq = toPx(xMin, ly);
+      ctx.fillText(String(ly), 4, Math.min(Math.max(lq[1], 10), cssH - 16));
+    }
+    return { ctx: ctx, toPx: toPx };
+  }
+  function drawSegment(ctx, toPx, x0, y0, x1, y1, color, width) {
+    ctx.strokeStyle = color; ctx.lineWidth = width || 2.4; ctx.lineCap = "round";
+    var p0 = toPx(x0, y0), p1 = toPx(x1, y1);
+    ctx.beginPath(); ctx.moveTo(p0[0], p0[1]); ctx.lineTo(p1[0], p1[1]); ctx.stroke();
+  }
+  function drawCircle(ctx, toPx, x, y, color, open) {
+    var p = toPx(x, y);
+    ctx.beginPath(); ctx.arc(p[0], p[1], 4.3, 0, Math.PI * 2);
+    if (open) {
+      var styles = getComputedStyle(document.documentElement);
+      ctx.fillStyle = styles.getPropertyValue("--card-bg").trim();
+      ctx.fill(); ctx.lineWidth = 2; ctx.strokeStyle = color; ctx.stroke();
+    } else {
+      ctx.fillStyle = color; ctx.fill();
+    }
+  }
+
+  // ============================================================
+  // Question part definitions
+  // ============================================================
+  var PARTS = [];
+
+  // ---------- Group 1: Calculate the limits ----------
+  PARTS.push({
+    id: "1a", group: "1", label: "(a)", points: 4,
+    gen: function () {
+      var r1 = randInt(-9, 9);
+      var r2 = randIntExcluding([r1], -9, 9);
+      var indeterminate = randBool();
+      var a = indeterminate ? r2 : randIntExcluding([r1, r2], -9, 9);
+      return { r1: r1, r2: r2, a: a, answer: { type: "number", value: a - r1 } };
+    },
+    prompt: function (s) {
+      var numer = "x&sup2; " + signedTerm(-(s.r1 + s.r2), "x") + " " + signedTerm(s.r1 * s.r2, "");
+      var denom = "x " + signedTerm(-s.r2, "");
+      return "<span class=\"math\">lim<sub>x&rarr;" + s.a + "</sub> " + frac(numer, denom) + "</span>";
+    },
+    inputsHtml: function () {
+      return "<span class=\"field-label\">Limit =</span><input type=\"text\" class=\"ans-main\" placeholder=\"e.g. 3 or DNE\">";
+    },
+    readAnswer: function (card) { return { main: parseAnswer(card.querySelector(".ans-main").value) }; },
+    isCorrect: function (ua, s) { return answersMatch(ua.main, s.answer); },
+    solutionHtml: function (s) {
+      return "<span class=\"sol-label\">Solution</span>" +
+        "<div class=\"step\">Factor the numerator: x&sup2; " + signedTerm(-(s.r1 + s.r2), "x") + " " + signedTerm(s.r1 * s.r2, "") + " = (x " + signedTerm(-s.r1, "") + ")(x " + signedTerm(-s.r2, "") + ")</div>" +
+        "<div class=\"step\">The denominator is exactly the second factor, (x " + signedTerm(-s.r2, "") + "), so for x &ne; " + s.r2 + " the expression simplifies to x " + signedTerm(-s.r1, "") + ".</div>" +
+        "<div class=\"step\">Substitute x = " + s.a + ": " + s.a + " " + signedTerm(-s.r1, "") + " = " + (s.a - s.r1) + "</div>" +
+        "<div class=\"final\">Answer: " + (s.a - s.r1) + "</div>";
+    }
+  });
+
+  PARTS.push({
+    id: "1b", group: "1", label: "(b)", points: 4,
+    gen: function () {
+      var m, c, k;
+      var tries = 0;
+      do { m = randInt(2, 7); c = randInt(-6, 6); k = m * m - c; tries++; } while ((k < 0 || k > 30) && tries < 500);
+      return { m: m, c: c, k: k, answer: { type: "number", value: 2 * m } };
+    },
+    prompt: function (s) {
+      var numer = "x " + signedTerm(-s.c, "");
+      var denom = radical("x " + signedTerm(s.k, "")) + " " + signedTerm(-s.m, "");
+      return "<span class=\"math\">lim<sub>x&rarr;" + s.c + "</sub> " + frac(numer, denom) + "</span>";
+    },
+    inputsHtml: function () {
+      return "<span class=\"field-label\">Limit =</span><input type=\"text\" class=\"ans-main\" placeholder=\"e.g. 4 or DNE\">";
+    },
+    readAnswer: function (card) { return { main: parseAnswer(card.querySelector(".ans-main").value) }; },
+    isCorrect: function (ua, s) { return answersMatch(ua.main, s.answer); },
+    solutionHtml: function (s) {
+      return "<span class=\"sol-label\">Solution</span>" +
+        "<div class=\"step\">Multiply top and bottom by the conjugate " + radical("x " + signedTerm(s.k, "")) + " + " + s.m + ":</div>" +
+        "<div class=\"step\">The denominator becomes (x " + signedTerm(s.k, "") + ") &minus; " + (s.m * s.m) + " = x " + signedTerm(-s.c, "") + ", which cancels with the numerator.</div>" +
+        "<div class=\"step\">Left with " + radical("x " + signedTerm(s.k, "")) + " + " + s.m + ". Substitute x = " + s.c + ": " + radical(s.c + " " + signedTerm(s.k, "")) + " + " + s.m + " = " + s.m + " + " + s.m + " = " + (2 * s.m) + "</div>" +
+        "<div class=\"final\">Answer: " + (2 * s.m) + "</div>";
+    }
+  });
+
+  PARTS.push({
+    id: "1c", group: "1", label: "(c)", points: 4, hasGraph: true,
+    gen: function () {
+      var c = randInt(1, 5);
+      var side = randChoice(["left", "right"]);
+      var L1 = randInt(-4, 6), L2 = randIntExcluding([L1], -4, 6);
+      var m1 = randNonZeroInt(-2, 2), m2 = randNonZeroInt(-2, 2);
+      var b1 = L1 - m1 * c, b2 = L2 - m2 * c;
+      var leftOpen = randBool(), rightOpen = randBool();
+      return {
+        c: c, side: side, L1: L1, L2: L2, m1: m1, m2: m2, b1: b1, b2: b2,
+        leftOpen: leftOpen, rightOpen: rightOpen,
+        answer: { type: "number", value: side === "left" ? L1 : L2 }
+      };
+    },
+    prompt: function (s) {
+      return "<span class=\"math\">lim<sub>x&rarr;" + s.c + "<sup>" + (s.side === "left" ? "&minus;" : "+") + "</sup></sub> f(x)</span> &nbsp;(from the graph below)";
+    },
+    drawGraph: function (canvas, s) {
+      var xMin = s.c - 4, xMax = s.c + 4;
+      var vals = [s.L1, s.L2, s.m1 * xMin + s.b1, s.m1 * xMax + s.b1, s.m2 * xMin + s.b2, s.m2 * xMax + s.b2];
+      var yMin = Math.min.apply(null, vals) - 1.5, yMax = Math.max.apply(null, vals) + 1.5;
+      var g = drawGrid(canvas, xMin, xMax, yMin, yMax);
+      var styles = getComputedStyle(document.documentElement);
+      var colorA = styles.getPropertyValue("--graph-stroke-a").trim();
+      var colorB = styles.getPropertyValue("--graph-stroke-b").trim();
+      drawSegment(g.ctx, g.toPx, xMin, s.m1 * xMin + s.b1, s.c, s.L1, colorA);
+      drawSegment(g.ctx, g.toPx, s.c, s.L2, xMax, s.m2 * xMax + s.b2, colorB);
+      drawCircle(g.ctx, g.toPx, s.c, s.L1, colorA, s.leftOpen);
+      drawCircle(g.ctx, g.toPx, s.c, s.L2, colorB, s.rightOpen);
+    },
+    inputsHtml: function () {
+      return "<span class=\"field-label\">Limit =</span><input type=\"text\" class=\"ans-main\" placeholder=\"e.g. 2 or DNE\">";
+    },
+    readAnswer: function (card) { return { main: parseAnswer(card.querySelector(".ans-main").value) }; },
+    isCorrect: function (ua, s) { return answersMatch(ua.main, s.answer); },
+    solutionHtml: function (s) {
+      var approach = s.side === "left" ? "from the left (the curve approaching x=" + s.c + " from smaller x-values)" : "from the right (the curve approaching x=" + s.c + " from larger x-values)";
+      var val = s.side === "left" ? s.L1 : s.L2;
+      return "<span class=\"sol-label\">Solution</span>" +
+        "<div class=\"step\">A one-sided limit only cares about the y-value the graph is heading toward " + approach + " &mdash; not whether the point itself is filled in or open.</div>" +
+        "<div class=\"step\">Tracing that piece up to x=" + s.c + ", the graph approaches y = " + val + ".</div>" +
+        "<div class=\"final\">Answer: " + val + "</div>";
+    }
+  });
+
+  PARTS.push({
+    id: "1d", group: "1", label: "(d)", points: 4,
+    gen: function () {
+      var a = randNonZeroInt(-6, 6);
+      var k = randInt(1, 6);
+      return { a: a, k: k, answer: { type: "number", value: k / 2 } };
+    },
+    prompt: function (s) {
+      var kStr = s.k === 1 ? "" : String(s.k) + "&middot;";
+      var numer = kStr + "x(x " + signedTerm(-s.a, "") + ")";
+      var denom = "x&sup2; " + signedTerm(-(s.a * s.a), "");
+      return "<span class=\"math\">lim<sub>x&rarr;" + s.a + "</sub> " + frac(numer, denom) + "</span>";
+    },
+    inputsHtml: function () {
+      return "<span class=\"field-label\">Limit =</span><input type=\"text\" class=\"ans-main\" placeholder=\"e.g. 1/2 or DNE\">";
+    },
+    readAnswer: function (card) { return { main: parseAnswer(card.querySelector(".ans-main").value) }; },
+    isCorrect: function (ua, s) { return answersMatch(ua.main, s.answer); },
+    solutionHtml: function (s) {
+      var kStr = s.k === 1 ? "" : String(s.k) + "&middot;";
+      var frRed = fracLabel(s.k, 2);
+      var ansStr = frRed.q === 1 ? String(frRed.p) : (frRed.p + "/" + frRed.q);
+      return "<span class=\"sol-label\">Solution</span>" +
+        "<div class=\"step\">Factor the denominator as a difference of squares: x&sup2; " + signedTerm(-(s.a * s.a), "") + " = (x " + signedTerm(-s.a, "") + ")(x " + signedTerm(s.a, "") + ")</div>" +
+        "<div class=\"step\">Cancel the shared (x " + signedTerm(-s.a, "") + ") factor (valid since x &ne; " + s.a + "): left with " + kStr + "x / (x " + signedTerm(s.a, "") + ")</div>" +
+        "<div class=\"step\">Substitute x = " + s.a + ": " + kStr + s.a + " / " + (2 * s.a) + " = " + ansStr + "</div>" +
+        "<div class=\"final\">Answer: " + ansStr + "</div>";
+    }
+  });
+
+  // ---------- Group 2: Discontinuities ----------
+  PARTS.push({
+    id: "2a", group: "2", label: "(a)", points: 4,
+    gen: function () {
+      var c = randInt(-3, 4);
+      var leftType = randChoice(["linear", "quadratic"]);
+      var m1, b1, q1, leftVal, leftStr;
+      if (leftType === "linear") {
+        m1 = randNonZeroInt(-4, 4); b1 = randInt(-5, 5);
+        leftVal = m1 * c + b1;
+        leftStr = signedTerm(m1, "x").replace(/^\+ /, "") + " " + signedTerm(b1, "");
+      } else {
+        q1 = randInt(-4, 4);
+        leftVal = c * c + q1 * c;
+        leftStr = "x&sup2; " + signedTerm(q1, "x");
+      }
+      var m2 = randNonZeroInt(-4, 4);
+      var forceContinuous = randBool();
+      var b2 = forceContinuous ? (leftVal - m2 * c) : randInt(-6, 6);
+      var rightVal = m2 * c + b2;
+      var isContinuous = Math.abs(rightVal - leftVal) < 1e-9;
+      var rightStr = signedTerm(m2, "x").replace(/^\+ /, "") + " " + signedTerm(b2, "");
+      return {
+        c: c, leftStr: leftStr, rightStr: rightStr, leftVal: leftVal, rightVal: rightVal,
+        isContinuous: isContinuous,
+        answer: { continuous: isContinuous, atX: c, type: "jump" }
+      };
+    },
+    prompt: function (s) {
+      return "<span class=\"math\">f(x) = { " + s.leftStr + " &nbsp;for x &le; " + s.c + " &nbsp;&nbsp; | &nbsp;&nbsp; " + s.rightStr + " &nbsp;for x &gt; " + s.c + " }</span>" +
+        "<div style=\"margin-top:8px\">Is f continuous everywhere? If not, where, and what type of discontinuity?</div>";
+    },
+    inputsHtml: function (s, uid) {
+      return "<span class=\"field-label\">Continuous everywhere?</span>" +
+        "<select class=\"ans-cont\"><option value=\"\">choose...</option><option value=\"yes\">Yes, continuous</option><option value=\"no\">No, discontinuous</option></select>" +
+        "<span class=\"subrow ans-detail hidden\">" +
+        "<span class=\"field-label\">at x =</span><input type=\"text\" class=\"ans-loc\" placeholder=\"e.g. 2\">" +
+        "<span class=\"field-label\">type:</span>" +
+        "<select class=\"ans-type\"><option value=\"\">choose...</option><option value=\"jump\">Jump</option><option value=\"removable\">Removable</option><option value=\"infinite\">Infinite/unbounded</option></select>" +
+        "</span>";
+    },
+    afterRender: function (card) {
+      var contSel = card.querySelector(".ans-cont"), detail = card.querySelector(".ans-detail");
+      contSel.addEventListener("change", function () {
+        detail.classList.toggle("hidden", contSel.value !== "no");
+      });
+    },
+    readAnswer: function (card) {
+      return {
+        cont: card.querySelector(".ans-cont").value,
+        loc: parseAnswer(card.querySelector(".ans-loc").value),
+        type: card.querySelector(".ans-type").value
+      };
+    },
+    isCorrect: function (ua, s) {
+      if (s.isContinuous) return ua.cont === "yes";
+      return ua.cont === "no" && ua.loc.type === "number" && Math.abs(ua.loc.value - s.c) < 1e-9 && ua.type === "jump";
+    },
+    solutionHtml: function (s) {
+      if (s.isContinuous) {
+        return "<span class=\"sol-label\">Solution</span>" +
+          "<div class=\"step\">Left piece at x=" + s.c + " gives " + s.leftVal + ". Right piece's limit as x&rarr;" + s.c + "<sup>+</sup> also gives " + s.rightVal + ".</div>" +
+          "<div class=\"step\">Since both pieces meet at the same value, f is continuous at x=" + s.c + " (and continuous everywhere else since each piece is a polynomial).</div>" +
+          "<div class=\"final\">Answer: Continuous everywhere.</div>";
+      }
+      return "<span class=\"sol-label\">Solution</span>" +
+        "<div class=\"step\">At x=" + s.c + ": the left piece gives f(" + s.c + ") = " + s.leftVal + ".</div>" +
+        "<div class=\"step\">The right-hand limit as x&rarr;" + s.c + "<sup>+</sup> is " + s.rightVal + ".</div>" +
+        "<div class=\"step\">Since " + s.leftVal + " &ne; " + s.rightVal + ", the two sides don't meet &mdash; this is a <strong>jump discontinuity</strong> at x=" + s.c + ".</div>" +
+        "<div class=\"final\">Answer: Discontinuous at x=" + s.c + " (jump)</div>";
+    }
+  });
+
+  PARTS.push({
+    id: "2b", group: "2", label: "(b)", points: 4,
+    gen: function () {
+      var r = randNonZeroInt(-6, 6);
+      var s2 = randIntExcluding([r, 0], -6, 6);
+      return {
+        r: r, s: s2,
+        answer: [{ x: r, type: "removable" }, { x: s2, type: "infinite" }]
+      };
+    },
+    prompt: function (s) {
+      var numer = "x(x " + signedTerm(-s.r, "") + ")";
+      var denom = "(x " + signedTerm(-s.r, "") + ")(x " + signedTerm(-s.s, "") + ")";
+      return "<span class=\"math\">f(x) = " + frac(numer, denom) + "</span>" +
+        "<div style=\"margin-top:8px\">List every discontinuity (location and type).</div>";
+    },
+    inputsHtml: function () {
+      return "<span class=\"subrow\"><span class=\"field-label\">Discontinuity 1: x =</span><input type=\"text\" class=\"ans-loc1\"><span class=\"field-label\">type:</span>" +
+        "<select class=\"ans-type1\"><option value=\"\">choose...</option><option value=\"removable\">Removable</option><option value=\"jump\">Jump</option><option value=\"infinite\">Infinite/unbounded</option></select></span>" +
+        "<span class=\"subrow\"><span class=\"field-label\">Discontinuity 2: x =</span><input type=\"text\" class=\"ans-loc2\"><span class=\"field-label\">type:</span>" +
+        "<select class=\"ans-type2\"><option value=\"\">choose...</option><option value=\"removable\">Removable</option><option value=\"jump\">Jump</option><option value=\"infinite\">Infinite/unbounded</option></select></span>";
+    },
+    readAnswer: function (card) {
+      return [
+        { loc: parseAnswer(card.querySelector(".ans-loc1").value), type: card.querySelector(".ans-type1").value },
+        { loc: parseAnswer(card.querySelector(".ans-loc2").value), type: card.querySelector(".ans-type2").value }
+      ];
+    },
+    isCorrect: function (ua, s) {
+      var given = ua.map(function (u) { return { x: u.loc.type === "number" ? u.loc.value : null, type: u.type }; });
+      return s.answer.every(function (correct) {
+        return given.some(function (g) { return g.x !== null && Math.abs(g.x - correct.x) < 1e-9 && g.type === correct.type; });
+      });
+    },
+    solutionHtml: function (s) {
+      var r = s.r, sx = s.s;
+      return "<span class=\"sol-label\">Solution</span>" +
+        "<div class=\"step\">Numerator and denominator share the factor (x " + signedTerm(-r, "") + "). It cancels, leaving x/(x " + signedTerm(-sx, "") + ") for x &ne; " + r + ".</div>" +
+        "<div class=\"step\">At x=" + r + ": the factor cancels but the original function is still undefined there &rarr; <strong>removable discontinuity</strong> at x=" + r + ".</div>" +
+        "<div class=\"step\">At x=" + sx + ": the factor (x " + signedTerm(-sx, "") + ") never cancels, so the denominator &rarr; 0 while the numerator doesn't &rarr; <strong>infinite/unbounded discontinuity</strong> (vertical asymptote) at x=" + sx + ".</div>" +
+        "<div class=\"final\">Answer: removable at x=" + r + "; infinite at x=" + sx + "</div>";
+    }
+  });
+
+  PARTS.push({
+    id: "2c", group: "2", label: "(c)", points: 4,
+    gen: function () {
+      var p = randNonZeroInt(-6, 6);
+      var q = randIntExcluding([p], -6, 6);
+      return { p: p, q: q, answer: [{ x: p, type: "infinite" }] };
+    },
+    prompt: function (s) {
+      var numer = "(x " + signedTerm(-s.q, "") + ")&sup2;";
+      var denom = "(x " + signedTerm(-s.p, "") + ")&sup2;";
+      return "<span class=\"math\">f(x) = " + frac(numer, denom) + "</span>" +
+        "<div style=\"margin-top:8px\">Where is f discontinuous, and what type?</div>";
+    },
+    inputsHtml: function () {
+      return "<span class=\"field-label\">x =</span><input type=\"text\" class=\"ans-loc\" placeholder=\"e.g. -2\">" +
+        "<span class=\"field-label\">type:</span>" +
+        "<select class=\"ans-type\"><option value=\"\">choose...</option><option value=\"removable\">Removable</option><option value=\"jump\">Jump</option><option value=\"infinite\">Infinite/unbounded</option></select>";
+    },
+    readAnswer: function (card) { return { loc: parseAnswer(card.querySelector(".ans-loc").value), type: card.querySelector(".ans-type").value }; },
+    isCorrect: function (ua, s) { return ua.loc.type === "number" && Math.abs(ua.loc.value - s.p) < 1e-9 && ua.type === "infinite"; },
+    solutionHtml: function (s) {
+      return "<span class=\"sol-label\">Solution</span>" +
+        "<div class=\"step\">The denominator (x " + signedTerm(-s.p, "") + ")&sup2; is zero only at x=" + s.p + ". The numerator (x " + signedTerm(-s.q, "") + ")&sup2; is nonzero there (since " + s.q + " &ne; " + s.p + "), so nothing cancels.</div>" +
+        "<div class=\"step\">The function blows up toward +&infin; on both sides of x=" + s.p + " &mdash; an <strong>infinite/unbounded discontinuity</strong> (vertical asymptote).</div>" +
+        "<div class=\"final\">Answer: discontinuous at x=" + s.p + " (infinite/unbounded)</div>";
+    }
+  });
+
+  // ---------- Group 3 & 4: limits at infinity ----------
+  function flavorLower(deg, big) {
+    var arr = [];
+    for (var i = 0; i < deg; i++) arr.push(Math.random() < 0.45 ? randInt(-9, 9) * (big ? 11 : 1) : 0);
+    return arr;
+  }
+
+  PARTS.push({
+    id: "3", group: "3", label: "", points: 4,
+    gen: function () {
+      var deg = randChoice([3, 4]);
+      var A = randNonZeroInt(-9, 9), B = randNonZeroInt(-9, 9);
+      var numLower = flavorLower(deg, true);
+      var denLower = flavorLower(deg, false);
+      var numConst = randChoice([0, 0, 1000000, 500000, 250000, -1000000]);
+      var denConst = randChoice([0, 0, "&pi;"]);
+      var fr = fracLabel(A, B);
+      return {
+        deg: deg, A: A, B: B, numLower: numLower, denLower: denLower, numConst: numConst, denConst: denConst,
+        answer: { type: "number", value: A / B }, fr: fr
+      };
+    },
+    prompt: function (s) {
+      var numer = polyStr(s.A, s.deg, s.numLower, s.numConst);
+      var denom = polyStr(s.B, s.deg, s.denLower, s.denConst);
+      return "<span class=\"math\">lim<sub>x&rarr;&minus;&infin;</sub> " + frac(numer, denom) + "</span>";
+    },
+    inputsHtml: function () {
+      return "<span class=\"field-label\">Limit =</span><input type=\"text\" class=\"ans-main\" placeholder=\"e.g. -1/6 or DNE\">";
+    },
+    readAnswer: function (card) { return { main: parseAnswer(card.querySelector(".ans-main").value) }; },
+    isCorrect: function (ua, s) { return answersMatch(ua.main, s.answer); },
+    solutionHtml: function (s) {
+      var ansStr = s.fr.q === 1 ? String(s.fr.p) : (s.fr.p + "/" + s.fr.q);
+      return "<span class=\"sol-label\">Solution</span>" +
+        "<div class=\"step\">Numerator and denominator have the same degree (" + s.deg + "). Every lower-order term (and constants like big numbers or &pi;) becomes insignificant compared to x<sup>" + s.deg + "</sup> as x&rarr;&minus;&infin;.</div>" +
+        "<div class=\"step\">Only the leading coefficients matter: the limit is simply " + s.A + "/" + s.B + " = " + ansStr + ".</div>" +
+        "<div class=\"final\">Answer: " + ansStr + "</div>";
+    }
+  });
+
+  PARTS.push({
+    id: "4", group: "4", label: "", points: 4,
+    gen: function () {
+      var denomDeg = randInt(2, 3);
+      var variant = randChoice(["numHigher", "sameDegree", "numLower"]);
+      var numDeg = variant === "numHigher" ? denomDeg + 1 : (variant === "sameDegree" ? denomDeg : denomDeg - 1);
+      var A = randNonZeroInt(-9, 9), B = randNonZeroInt(-9, 9);
+      var numLower = flavorLower(numDeg, false);
+      var denLower = flavorLower(denomDeg, false);
+      var denConst = randChoice([0, 1, "&pi;"]);
+      var answer;
+      if (variant === "numHigher") answer = { type: "inf", sign: (A / B > 0) ? 1 : -1 };
+      else if (variant === "sameDegree") answer = { type: "number", value: A / B };
+      else answer = { type: "number", value: 0 };
+      return { denomDeg: denomDeg, numDeg: numDeg, variant: variant, A: A, B: B, numLower: numLower, denLower: denLower, denConst: denConst, answer: answer };
+    },
+    prompt: function (s) {
+      var numer = polyStr(s.A, s.numDeg, s.numLower, s.numDeg === 0 ? null : 0);
+      if (s.numDeg === 0) numer = String(s.A);
+      var denom = polyStr(s.B, s.denomDeg, s.denLower, s.denConst);
+      return "<span class=\"math\">lim<sub>x&rarr;&infin;</sub> " + frac(numer, denom) + "</span>";
+    },
+    inputsHtml: function () {
+      return "<span class=\"field-label\">Limit =</span><input type=\"text\" class=\"ans-main\" placeholder=\"e.g. 5, DNE, or &infin;\">";
+    },
+    readAnswer: function (card) { return { main: parseAnswer(card.querySelector(".ans-main").value) }; },
+    isCorrect: function (ua, s) { return answersMatch(ua.main, s.answer); },
+    solutionHtml: function (s) {
+      if (s.variant === "numHigher") {
+        var dirWord = s.answer.sign > 0 ? "+&infin;" : "&minus;&infin;";
+        return "<span class=\"sol-label\">Solution</span>" +
+          "<div class=\"step\">The numerator's degree (" + s.numDeg + ") is higher than the denominator's (" + s.denomDeg + "), so after cancelling, a positive power of x remains &mdash; the ratio grows without bound.</div>" +
+          "<div class=\"step\">The sign is determined by the leading coefficients: " + s.A + "/" + s.B + " is " + (s.A / s.B > 0 ? "positive" : "negative") + ", so as x&rarr;&infin; the expression &rarr; " + dirWord + ".</div>" +
+          "<div class=\"final\">Answer: " + dirWord + "</div>";
+      } else if (s.variant === "sameDegree") {
+        var fr = fracLabel(s.A, s.B);
+        var ansStr = fr.q === 1 ? String(fr.p) : (fr.p + "/" + fr.q);
+        return "<span class=\"sol-label\">Solution</span>" +
+          "<div class=\"step\">Numerator and denominator have the same degree (" + s.numDeg + "), so the limit is the ratio of leading coefficients: " + s.A + "/" + s.B + " = " + ansStr + ".</div>" +
+          "<div class=\"final\">Answer: " + ansStr + "</div>";
+      }
+      return "<span class=\"sol-label\">Solution</span>" +
+        "<div class=\"step\">The denominator's degree (" + s.denomDeg + ") is higher than the numerator's (" + s.numDeg + "), so the denominator grows faster.</div>" +
+        "<div class=\"step\">The whole fraction shrinks toward 0 as x&rarr;&infin;.</div>" +
+        "<div class=\"final\">Answer: 0</div>";
+    }
+  });
+
+  // ---------- Group 5: identify the discontinuity from a graph ----------
+  function genDiscontinuityGraph() {
+    var type = randChoice(["jump", "removable", "infinite", "continuous"]);
+    var c = randInt(-2, 2);
+    return { type: type, c: c };
+  }
+  function makeIdentifyPart(id, label) {
+    return {
+      id: id, group: "5", label: label, points: 3, hasGraph: true, graphSmall: true,
+      gen: genDiscontinuityGraph,
+      prompt: function () { return "What type of discontinuity (if any) does this graph show at x = the marked point?"; },
+      drawGraph: function (canvas, s) {
+        var xMin = s.c - 4, xMax = s.c + 4, yMin = -5, yMax = 5;
+        var g = drawGrid(canvas, xMin, xMax, yMin, yMax);
+        var styles = getComputedStyle(document.documentElement);
+        var colorA = styles.getPropertyValue("--graph-stroke-a").trim();
+        var colorB = styles.getPropertyValue("--graph-stroke-b").trim();
+        var axisColor = styles.getPropertyValue("--graph-axis").trim();
+        if (s.type === "continuous") {
+          drawSegment(g.ctx, g.toPx, xMin, -0.6 * xMin + 1, xMax, -0.6 * xMax + 1, colorA);
+        } else if (s.type === "jump") {
+          drawSegment(g.ctx, g.toPx, xMin, 0.7 * (xMin - s.c) + 3, s.c, 3, colorA);
+          drawSegment(g.ctx, g.toPx, s.c, -1, xMax, 0.7 * (xMax - s.c) - 1, colorB);
+          drawCircle(g.ctx, g.toPx, s.c, 3, colorA, true);
+          drawCircle(g.ctx, g.toPx, s.c, -1, colorB, false);
+        } else if (s.type === "removable") {
+          drawSegment(g.ctx, g.toPx, xMin, 0.6 * (xMin - s.c) + 1, xMax, 0.6 * (xMax - s.c) + 1, colorA);
+          drawCircle(g.ctx, g.toPx, s.c, 1, colorA, true);
+          drawCircle(g.ctx, g.toPx, s.c, 2.6, colorB, false);
+        } else {
+          // infinite: two branches shooting away from a vertical asymptote at x=c
+          g.ctx.setLineDash([4, 4]);
+          g.ctx.strokeStyle = axisColor; g.ctx.lineWidth = 1.3;
+          var a0 = g.toPx(s.c, yMin), a1 = g.toPx(s.c, yMax);
+          g.ctx.beginPath(); g.ctx.moveTo(a0[0], a0[1]); g.ctx.lineTo(a1[0], a1[1]); g.ctx.stroke();
+          g.ctx.setLineDash([]);
+          var leftPts = [], rightPts = [];
+          var i, x;
+          for (i = 0; i <= 20; i++) { x = xMin + (s.c - 0.15 - xMin) * (i / 20); leftPts.push([x, Math.min(yMax, 1 / (x - s.c) * -1 + 0)]); }
+          for (i = 0; i <= 20; i++) { x = s.c + 0.15 + (xMax - s.c - 0.15) * (i / 20); rightPts.push([x, Math.max(yMin, 1 / (x - s.c) * -1 + 0)]); }
+          g.ctx.strokeStyle = colorA; g.ctx.lineWidth = 2.4; g.ctx.beginPath();
+          leftPts.forEach(function (pt, idx) { var p = g.toPx(pt[0], Math.max(yMin, Math.min(yMax, pt[1]))); if (idx === 0) g.ctx.moveTo(p[0], p[1]); else g.ctx.lineTo(p[0], p[1]); });
+          g.ctx.stroke();
+          g.ctx.strokeStyle = colorB; g.ctx.beginPath();
+          rightPts.forEach(function (pt, idx) { var p = g.toPx(pt[0], Math.max(yMin, Math.min(yMax, pt[1]))); if (idx === 0) g.ctx.moveTo(p[0], p[1]); else g.ctx.lineTo(p[0], p[1]); });
+          g.ctx.stroke();
+        }
+      },
+      inputsHtml: function () {
+        var opts = [["jump", "Jump"], ["removable", "Removable"], ["infinite", "Infinite / unbounded"], ["continuous", "Continuous (no discontinuity)"]];
+        return "<div class=\"mc-row\">" + opts.map(function (o) {
+          return "<button type=\"button\" class=\"mc-opt\" data-val=\"" + o[0] + "\">" + o[1] + "</button>";
+        }).join("") + "</div>";
+      },
+      afterRender: function (card) {
+        var opts = card.querySelectorAll(".mc-opt");
+        opts.forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            opts.forEach(function (b) { b.classList.remove("selected"); });
+            btn.classList.add("selected");
+          });
+        });
+      },
+      readAnswer: function (card) {
+        var sel = card.querySelector(".mc-opt.selected");
+        return { type: sel ? sel.getAttribute("data-val") : null };
+      },
+      isCorrect: function (ua, s) { return ua.type === s.type; },
+      solutionHtml: function (s) {
+        var names = { jump: "Jump discontinuity", removable: "Removable discontinuity", infinite: "Infinite/unbounded discontinuity", continuous: "Continuous &mdash; no discontinuity" };
+        var explain = {
+          jump: "The two sides approach different y-values as they reach the marked x &mdash; the graph 'jumps'.",
+          removable: "The graph approaches a single y-value from both sides, but that point is missing (open circle) or misplaced &mdash; you could 'fix' it by filling in one point.",
+          infinite: "The graph shoots off toward &plusmn;&infin; near a vertical asymptote &mdash; it's unbounded near that x-value.",
+          continuous: "Both sides approach the same y-value and the function is defined there &mdash; no break at all."
+        };
+        return "<span class=\"sol-label\">Solution</span>" +
+          "<div class=\"step\">" + explain[s.type] + "</div>" +
+          "<div class=\"final\">Answer: " + names[s.type] + "</div>";
+      }
+    };
+  }
+  PARTS.push(makeIdentifyPart("5a", "(a)"));
+  PARTS.push(makeIdentifyPart("5b", "(b)"));
+  PARTS.push(makeIdentifyPart("5c", "(c)"));
+
+  // ---------- Group 6: definition of continuity (fill in the blanks) ----------
+  PARTS.push({
+    id: "6", group: "6", label: "", points: 4,
+    gen: function () {
+      var blank1 = shuffle([
+        { t: "f(c) is defined", correct: true },
+        { t: "f(c) is undefined", correct: false },
+        { t: "f(c) equals zero", correct: false }
+      ]);
+      var blank2 = shuffle([
+        { t: "lim x&rarr;c f(x) exists", correct: true },
+        { t: "lim x&rarr;c f(x) is infinite", correct: false },
+        { t: "lim x&rarr;c f(x) equals zero", correct: false }
+      ]);
+      var blank3 = shuffle([
+        { t: "lim x&rarr;c f(x) = f(c)", correct: true },
+        { t: "lim x&rarr;c f(x) &ne; f(c)", correct: false },
+        { t: "f(x) = f(c) for all x", correct: false }
+      ]);
+      return { blank1: blank1, blank2: blank2, blank3: blank3 };
+    },
+    prompt: function () {
+      return "Fill in the definition: a function f is continuous at x = c if all of the following hold:";
+    },
+    inputsHtml: function (s) {
+      function opts(arr, cls) {
+        return "<select class=\"" + cls + "\"><option value=\"\">choose...</option>" +
+          arr.map(function (o, i) { return "<option value=\"" + i + "\">" + o.t + "</option>"; }).join("") + "</select>";
+      }
+      return "<div class=\"subrow\"><span class=\"field-label\">1.</span>" + opts(s.blank1, "ans-b1") + "</div>" +
+        "<div class=\"subrow\"><span class=\"field-label\">2.</span>" + opts(s.blank2, "ans-b2") + "</div>" +
+        "<div class=\"subrow\"><span class=\"field-label\">3.</span>" + opts(s.blank3, "ans-b3") + "</div>";
+    },
+    readAnswer: function (card) {
+      return {
+        b1: card.querySelector(".ans-b1").value,
+        b2: card.querySelector(".ans-b2").value,
+        b3: card.querySelector(".ans-b3").value
+      };
+    },
+    isCorrect: function (ua, s) {
+      function ok(sel, arr) { return sel !== "" && arr[parseInt(sel, 10)] && arr[parseInt(sel, 10)].correct; }
+      return ok(ua.b1, s.blank1) && ok(ua.b2, s.blank2) && ok(ua.b3, s.blank3);
+    },
+    solutionHtml: function () {
+      return "<span class=\"sol-label\">Solution</span>" +
+        "<div class=\"step\">A function f is continuous at x = c if:</div>" +
+        "<div class=\"step\">1. f(c) is defined</div>" +
+        "<div class=\"step\">2. lim x&rarr;c f(x) exists</div>" +
+        "<div class=\"step\">3. lim x&rarr;c f(x) = f(c)</div>" +
+        "<div class=\"final\">All three conditions must hold.</div>";
+    }
+  });
+
+  // ---------- Group 7: IVT reasoning ----------
+  PARTS.push({
+    id: "7", group: "7", label: "", points: 4,
+    gen: function () {
+      var a = randInt(-6, 2);
+      var b = randInt(a + 3, 8);
+      var v1 = randInt(-10, 10);
+      var v2 = randIntExcluding([v1], -10, 10);
+      var lo = Math.min(v1, v2), hi = Math.max(v1, v2);
+      var variant = Math.random() < 0.35 ? "boundsMismatch" : "normal";
+      var p, q, v0, answer;
+      if (variant === "boundsMismatch") {
+        var maxNarrow = Math.floor((b - a - 1) / 2);
+        var narrowLeft = randInt(0, maxNarrow);
+        var narrowRight = randInt(0, maxNarrow);
+        if (narrowLeft === 0 && narrowRight === 0) narrowLeft = 1;
+        p = a + narrowLeft;
+        q = b - narrowRight;
+        v0 = randInt(lo, hi);
+        answer = { type: "bool", value: false };
+      } else {
+        p = a; q = b;
+        v0 = randInt(lo - 5, hi + 5);
+        answer = { type: "bool", value: v0 >= lo && v0 <= hi };
+      }
+      return { a: a, b: b, p: p, q: q, v1: v1, v2: v2, v0: v0, lo: lo, hi: hi, variant: variant, answer: answer };
+    },
+    prompt: function (s) {
+      return "Given that f(x) is continuous on [" + s.a + ", " + s.b + "] and f(" + s.a + ") = " + s.v1 + " and f(" + s.b + ") = " + s.v2 +
+        ", can you conclude that f(c) = " + s.v0 + " for some c &isin; [" + s.p + ", " + s.q + "]?";
+    },
+    inputsHtml: function () {
+      return "<div class=\"mc-row\"><button type=\"button\" class=\"mc-opt\" data-val=\"yes\">Yes</button><button type=\"button\" class=\"mc-opt\" data-val=\"no\">No</button></div>";
+    },
+    afterRender: function (card) {
+      var opts = card.querySelectorAll(".mc-opt");
+      opts.forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          opts.forEach(function (b) { b.classList.remove("selected"); });
+          btn.classList.add("selected");
+        });
+      });
+    },
+    readAnswer: function (card) {
+      var sel = card.querySelector(".mc-opt.selected");
+      return { val: sel ? sel.getAttribute("data-val") : null };
+    },
+    isCorrect: function (ua, s) {
+      if (!ua.val) return false;
+      var userYes = ua.val === "yes";
+      return userYes === s.answer.value;
+    },
+    solutionHtml: function (s) {
+      if (s.variant === "boundsMismatch") {
+        var missingBits = [];
+        if (s.p !== s.a) missingBits.push("f(" + s.p + ")");
+        if (s.q !== s.b) missingBits.push("f(" + s.q + ")");
+        var missingStr = missingBits.join(" and ");
+        return "<span class=\"sol-label\">Solution</span>" +
+          "<div class=\"step\">IVT needs the function's values at the endpoints of the <em>specific interval</em> you're concluding over &mdash; here that's " + missingStr + ".</div>" +
+          "<div class=\"step\">We're only given f(" + s.a + ")=" + s.v1 + " and f(" + s.b + ")=" + s.v2 + ", the endpoints of [" + s.a + ", " + s.b + "] &mdash; a wider interval than [" + s.p + ", " + s.q + "].</div>" +
+          "<div class=\"step\">Even though " + s.v0 + " sits between " + s.v1 + " and " + s.v2 + ", that says nothing about what f does specifically on [" + s.p + ", " + s.q + "] without knowing " + missingStr + ". Continuity on the bigger interval doesn't hand you the values you'd need at " + (missingBits.length > 1 ? "those points" : "that point") + ".</div>" +
+          "<div class=\"final\">Answer: No &mdash; the known values are at the endpoints of [" + s.a + ", " + s.b + "], not [" + s.p + ", " + s.q + "].</div>";
+      }
+      if (s.answer.value) {
+        return "<span class=\"sol-label\">Solution</span>" +
+          "<div class=\"step\">f is continuous on [" + s.a + ", " + s.b + "], and " + s.v0 + " lies between f(" + s.a + ")=" + s.v1 + " and f(" + s.b + ")=" + s.v2 + ".</div>" +
+          "<div class=\"step\">By the Intermediate Value Theorem, f must take every value between " + s.v1 + " and " + s.v2 + " at least once on that interval.</div>" +
+          "<div class=\"final\">Answer: Yes.</div>";
+      }
+      return "<span class=\"sol-label\">Solution</span>" +
+        "<div class=\"step\">f(" + s.a + ")=" + s.v1 + " and f(" + s.b + ")=" + s.v2 + ", so IVT only guarantees f hits every value between " + s.lo + " and " + s.hi + ".</div>" +
+        "<div class=\"step\">" + s.v0 + " falls outside that range, so IVT gives no guarantee here (f might still happen to equal " + s.v0 + " somewhere, but we cannot conclude it).</div>" +
+        "<div class=\"final\">Answer: No, not guaranteed.</div>";
+    }
+  });
+
+  // ============================================================
+  // Group metadata
+  // ============================================================
+  var GROUP_META = {
+    "1": { num: "1.", desc: "Calculate the following limits / one-sided limits." },
+    "2": { num: "2.", desc: "Where are the following functions discontinuous? State why." },
+    "3": { num: "3.", desc: "Find the limit." },
+    "4": { num: "4.", desc: "Find the limit." },
+    "5": { num: "5.", desc: "Identify the type of discontinuity (if any) shown in each graph." },
+    "6": { num: "6.", desc: "Give the definition of continuity at a point." },
+    "7": { num: "7.", desc: "Reason about the Intermediate Value Theorem." }
+  };
+
+  // ============================================================
+  // Engine: mount cards
+  // ============================================================
+  var scoreMap = {};
+  var TOTAL_POINTS = PARTS.reduce(function (sum, p) { return sum + p.points; }, 0);
+  var scoreNumEl = document.getElementById("scoreNum");
+
+  function updateScore() {
+    var earned = 0;
+    Object.keys(scoreMap).forEach(function (k) { earned += scoreMap[k]; });
+    scoreNumEl.textContent = earned + " / " + TOTAL_POINTS;
+  }
+
+  window.__PT_STATE = {};
+
+  function mountCard(part, container) {
+    var card = document.createElement("div");
+    card.className = "qcard";
+    card.setAttribute("data-id", part.id);
+
+    var headHtml = "<div class=\"qcard-head\"><div class=\"qtitle\">" +
+      (part.label ? "<span class=\"qlabel\">" + part.label + "</span>" : "") +
+      "<span class=\"qpoints\">" + part.points + " pt" + (part.points === 1 ? "" : "s") + "</span></div>" +
+      "<button class=\"icon-btn new-version-btn\" type=\"button\">" +
+      "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M16 3h5v5\"/><path d=\"M4 20 21 3\"/><path d=\"M21 16v5h-5\"/><path d=\"M15 15l6 6\"/><path d=\"M4 4l5 5\"/></svg>" +
+      "New version</button></div>";
+
+    card.innerHTML = headHtml +
+      "<div class=\"qprompt\"></div>" +
+      (part.hasGraph ? "<div class=\"qgraph-wrap" + (part.graphSmall ? " small" : "") + "\"><canvas></canvas></div>" : "") +
+      "<div class=\"qinputs\"></div>" +
+      "<div class=\"qactions\"><button class=\"btn-primary check-btn\" type=\"button\">Check Answer</button><button class=\"btn-secondary solution-btn\" type=\"button\">Show Solution</button></div>" +
+      "<div class=\"qfeedback hidden\"></div>" +
+      "<div class=\"qsolution hidden\"></div>";
+
+    container.appendChild(card);
+
+    var promptEl = card.querySelector(".qprompt");
+    var inputsEl = card.querySelector(".qinputs");
+    var feedbackEl = card.querySelector(".qfeedback");
+    var solutionEl = card.querySelector(".qsolution");
+    var canvasEl = part.hasGraph ? card.querySelector("canvas") : null;
+
+    var state;
+
+    function render() {
+      state = part.gen();
+      window.__PT_STATE[part.id] = state;
+      promptEl.innerHTML = part.prompt(state);
+      inputsEl.innerHTML = part.inputsHtml(state, part.id);
+      feedbackEl.classList.add("hidden");
+      feedbackEl.innerHTML = "";
+      solutionEl.classList.add("hidden");
+      solutionEl.innerHTML = "";
+      scoreMap[part.id] = 0;
+      updateScore();
+      if (part.afterRender) part.afterRender(card);
+      if (part.hasGraph) part.drawGraph(canvasEl, state);
+    }
+
+    card.querySelector(".new-version-btn").addEventListener("click", render);
+    card.querySelector(".check-btn").addEventListener("click", function () {
+      var ua = part.readAnswer(card);
+      var correct = part.isCorrect(ua, state);
+      feedbackEl.classList.remove("hidden");
+      if (correct) {
+        feedbackEl.className = "qfeedback good";
+        feedbackEl.innerHTML = "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M20 6 9 17l-5-5\"/></svg> Correct!";
+        scoreMap[part.id] = part.points;
+      } else {
+        feedbackEl.className = "qfeedback bad";
+        feedbackEl.innerHTML = "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\"><circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M15 9l-6 6M9 9l6 6\"/></svg> Not quite — check the solution below.";
+        scoreMap[part.id] = 0;
+      }
+      updateScore();
+    });
+    card.querySelector(".solution-btn").addEventListener("click", function () {
+      solutionEl.innerHTML = part.solutionHtml(state);
+      solutionEl.classList.remove("hidden");
+    });
+
+    if (part.hasGraph) {
+      window.addEventListener("resize", function () { if (state) part.drawGraph(canvasEl, state); });
+    }
+
+    render();
+  }
+
+  function buildAll() {
+    var groupsEl = document.getElementById("groups");
+    groupsEl.innerHTML = "";
+    scoreMap = {};
+    var seenGroups = {};
+    var currentContainer = null;
+    PARTS.forEach(function (part) {
+      if (!seenGroups[part.group]) {
+        seenGroups[part.group] = true;
+        var meta = GROUP_META[part.group];
+        var gh = document.createElement("div");
+        gh.className = "group-head";
+        gh.innerHTML = "<div class=\"gnum\">" + meta.num + "</div><div class=\"gdesc\">" + meta.desc + "</div>";
+        groupsEl.appendChild(gh);
+        currentContainer = document.createElement("div");
+        groupsEl.appendChild(currentContainer);
+      }
+      mountCard(part, currentContainer);
+    });
+    updateScore();
+  }
+
+  document.getElementById("newTestBtn").addEventListener("click", buildAll);
+
+  buildAll();
+})();
+</script>

@@ -1,0 +1,590 @@
+<title>Unit Circle Values</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=JetBrains+Mono:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #f6f1e4;
+    --paper-line: rgba(58, 74, 94, 0.14);
+    --paper-line-strong: rgba(58, 74, 94, 0.26);
+    --ink: #26313f;
+    --ink-soft: #5b6b7d;
+    --card-bg: #fffdf7;
+    --card-border: #ddd2b6;
+    --accent: #c1483f;
+    --accent-strong: #a13a32;
+    --accent-soft: rgba(193, 72, 63, 0.12);
+    --accent-ink: #fff9f0;
+    --graph-stroke: #2c5f8a;
+    --graph-grid: rgba(38, 49, 63, 0.14);
+    --graph-axis: rgba(38, 49, 63, 0.55);
+    --good: #3f7a52;
+    --good-soft: rgba(63, 122, 82, 0.14);
+    --shadow: rgba(38, 49, 63, 0.16);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #1b2330;
+      --paper-line: rgba(238, 242, 240, 0.07);
+      --paper-line-strong: rgba(238, 242, 240, 0.15);
+      --ink: #edf1ef;
+      --ink-soft: #a3aebb;
+      --card-bg: #232e3d;
+      --card-border: #3a4a61;
+      --accent: #ff9179;
+      --accent-strong: #ffab97;
+      --accent-soft: rgba(255, 145, 121, 0.16);
+      --accent-ink: #22140f;
+      --graph-stroke: #8fcdf0;
+      --graph-grid: rgba(238, 242, 240, 0.14);
+      --graph-axis: rgba(238, 242, 240, 0.55);
+      --good: #7bc794;
+      --good-soft: rgba(123, 199, 148, 0.16);
+      --shadow: rgba(0, 0, 0, 0.5);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #1b2330;
+    --paper-line: rgba(238, 242, 240, 0.07);
+    --paper-line-strong: rgba(238, 242, 240, 0.15);
+    --ink: #edf1ef;
+    --ink-soft: #a3aebb;
+    --card-bg: #232e3d;
+    --card-border: #3a4a61;
+    --accent: #ff9179;
+    --accent-strong: #ffab97;
+    --accent-soft: rgba(255, 145, 121, 0.16);
+    --accent-ink: #22140f;
+    --graph-stroke: #8fcdf0;
+    --graph-grid: rgba(238, 242, 240, 0.14);
+    --graph-axis: rgba(238, 242, 240, 0.55);
+    --good: #7bc794;
+    --good-soft: rgba(123, 199, 148, 0.16);
+    --shadow: rgba(0, 0, 0, 0.5);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background:
+      repeating-linear-gradient(0deg, var(--paper-line) 0, var(--paper-line) 1px, transparent 1px, transparent 32px),
+      repeating-linear-gradient(90deg, var(--paper-line) 0, var(--paper-line) 1px, transparent 1px, transparent 32px),
+      var(--paper);
+    color: var(--ink);
+    font-family: "Source Sans 3", ui-sans-serif, system-ui, sans-serif;
+    display: flex;
+    justify-content: center;
+    padding: clamp(20px, 4vw, 56px) 18px 60px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+  }
+
+  .wrap { width: 100%; max-width: 780px; }
+
+  header { text-align: center; margin-bottom: 28px; }
+
+  .eyebrow {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  h1 {
+    font-family: "Fraunces", Georgia, serif;
+    font-weight: 600;
+    font-size: clamp(1.9rem, 5vw, 2.6rem);
+    margin: 6px 0 8px;
+    text-wrap: balance;
+  }
+
+  header p { color: var(--ink-soft); font-size: 1rem; max-width: 46ch; margin: 0 auto; line-height: 1.5; }
+
+  .toolbar {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 12px; margin: 26px 0 14px; flex-wrap: wrap;
+  }
+
+  .progress-info { display: flex; flex-direction: column; gap: 6px; min-width: 180px; }
+  .progress-label { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 0.82rem; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+  .progress-track { height: 6px; border-radius: 4px; background: var(--paper-line-strong); overflow: hidden; width: 200px; max-width: 40vw; }
+  .progress-fill { height: 100%; background: var(--accent); border-radius: 4px; transition: width 0.35s ease; }
+
+  button { font-family: inherit; cursor: pointer; }
+  button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .icon-btn {
+    display: inline-flex; align-items: center; gap: 7px;
+    background: var(--card-bg); border: 1px solid var(--card-border); color: var(--ink);
+    padding: 9px 14px; border-radius: 9px; font-size: 0.86rem; font-weight: 600;
+    transition: border-color 0.15s ease, transform 0.1s ease;
+  }
+  .icon-btn:hover { border-color: var(--accent); }
+  .icon-btn:active { transform: translateY(1px); }
+  .icon-btn svg { width: 15px; height: 15px; flex-shrink: 0; }
+
+  .card {
+    background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 18px;
+    box-shadow: 0 18px 40px -22px var(--shadow), 0 2px 8px -2px var(--shadow);
+    padding: clamp(18px, 3.4vw, 30px);
+  }
+
+  .slots {
+    display: grid;
+    grid-template-columns: minmax(220px, 280px) 1fr;
+    grid-template-areas: "diagram angle" "diagram values";
+    gap: 16px;
+  }
+  @media (max-width: 620px) {
+    .slots { grid-template-columns: 1fr; grid-template-areas: "diagram" "angle" "values"; }
+  }
+
+  .slot {
+    border: 1.5px dashed var(--card-border); border-radius: 13px; padding: 14px 16px;
+    position: relative; display: flex; flex-direction: column; min-height: 88px;
+  }
+  .slot.diagram-slot { grid-area: diagram; min-height: 230px; padding: 14px; }
+  .slot.angle-slot { grid-area: angle; justify-content: center; }
+  .slot.values-slot { grid-area: values; justify-content: center; }
+
+  .slot.given { border-style: solid; border-color: var(--accent); background: var(--accent-soft); }
+
+  .slot-label {
+    font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 0.68rem;
+    letter-spacing: 0.11em; text-transform: uppercase; color: var(--ink-soft);
+    margin-bottom: 8px; display: flex; align-items: center; gap: 6px;
+  }
+  .slot.given .slot-label { color: var(--accent-strong); font-weight: 700; }
+
+  .slot-body { flex: 1; display: flex; align-items: center; justify-content: center; text-align: center; }
+
+  .angle-slot .slot-body { flex-direction: column; gap: 4px; }
+  .angle-deg {
+    font-family: "Fraunces", Georgia, serif; font-weight: 600;
+    font-size: clamp(1.6rem, 4vw, 2rem);
+  }
+  .angle-rad { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 1.05rem; color: var(--ink-soft); }
+
+  canvas.diagram-canvas { width: 100%; height: 100%; min-height: 190px; border-radius: 8px; }
+
+  .values-grid {
+    display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px 14px; width: 100%;
+  }
+  .value-cell { text-align: center; }
+  .value-name {
+    font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 0.72rem;
+    text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-soft); margin-bottom: 3px;
+  }
+  .value-num { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 1.05rem; }
+  .value-num.undef { color: var(--ink-soft); font-size: 0.85rem; font-style: italic; }
+  .coord-line { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 1.05rem; margin-bottom: 10px; }
+
+  .hidden-content { filter: blur(9px) saturate(0.6); opacity: 0.55; transition: filter 0.4s ease, opacity 0.4s ease; user-select: none; }
+  canvas.diagram-canvas.hidden-content { opacity: 1; filter: none; }
+
+  .mystery-mark {
+    position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+    font-family: "Fraunces", serif; font-size: 2.1rem; font-weight: 600; color: var(--ink-soft);
+    opacity: 0.75; pointer-events: none; transition: opacity 0.3s ease;
+  }
+  .slot.revealed .hidden-content { filter: none; opacity: 1; }
+  .slot.revealed .mystery-mark { opacity: 0; }
+  .slot.instant, .slot.instant .hidden-content, .slot.instant .mystery-mark { transition: none !important; }
+
+  .frac { display: inline-flex; flex-direction: column; align-items: center; vertical-align: middle; margin: 0 2px; line-height: 1.05; }
+  .frac .num, .frac .den { padding: 0 3px; }
+  .frac .num { border-bottom: 1.5px solid currentColor; padding-bottom: 1px; }
+
+  .action-row { display: flex; justify-content: center; gap: 12px; margin-top: 22px; flex-wrap: wrap; }
+
+  .btn-primary {
+    background: var(--accent); color: var(--accent-ink); border: none; padding: 13px 28px;
+    border-radius: 11px; font-size: 1rem; font-weight: 700;
+    box-shadow: 0 8px 18px -8px var(--accent-strong); transition: transform 0.1s ease, box-shadow 0.15s ease;
+  }
+  .btn-primary:hover { box-shadow: 0 10px 22px -8px var(--accent-strong); }
+  .btn-primary:active { transform: translateY(1px); }
+
+  .btn-check {
+    display: inline-flex; align-items: center; gap: 8px; border: 1.5px solid var(--card-border);
+    background: var(--card-bg); color: var(--ink); padding: 12px 22px; border-radius: 11px;
+    font-size: 0.95rem; font-weight: 700; transition: border-color 0.15s ease, background 0.15s ease, transform 0.1s ease;
+  }
+  .btn-check:active { transform: translateY(1px); }
+  .btn-check.good:hover { border-color: var(--good); background: var(--good-soft); }
+  .btn-check.retry:hover { border-color: var(--accent); background: var(--accent-soft); }
+  .btn-check svg { width: 17px; height: 17px; }
+
+  .nav-row { display: flex; justify-content: center; align-items: center; gap: 18px; margin-top: 18px; }
+  .nav-arrow {
+    background: transparent; border: 1px solid var(--card-border); color: var(--ink-soft);
+    width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    transition: border-color 0.15s ease, color 0.15s ease;
+  }
+  .nav-arrow:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+  .nav-arrow:disabled { opacity: 0.35; cursor: default; }
+  .nav-arrow svg { width: 17px; height: 17px; }
+
+  .dots { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; max-width: 220px; }
+  .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--paper-line-strong); }
+  .dot.done { background: var(--ink-soft); }
+  .dot.current { background: var(--accent); transform: scale(1.35); }
+
+  .summary { text-align: center; padding: clamp(30px, 5vw, 50px) clamp(16px, 4vw, 30px); }
+  .summary h2 { font-family: "Fraunces", serif; font-size: clamp(1.6rem, 4vw, 2.1rem); margin: 4px 0 6px; }
+  .tally { display: flex; justify-content: center; gap: 28px; margin: 22px 0 26px; flex-wrap: wrap; }
+  .tally-item { text-align: center; }
+  .tally-num { font-family: "JetBrains Mono", monospace; font-size: 2.1rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .tally-item.good .tally-num { color: var(--good); }
+  .tally-item.retry .tally-num { color: var(--accent); }
+  .tally-label { font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-soft); margin-top: 2px; }
+  .summary-actions { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
+
+  .hint { text-align: center; color: var(--ink-soft); font-size: 0.82rem; margin-top: 22px; }
+  .hidden { display: none !important; }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">PreCalc &middot; Unit Circle</div>
+    <h1>Unit Circle Values</h1>
+    <p>One piece is given — the diagram, the angle, or the trig values. Recall the other two, then flip the card to check yourself.</p>
+  </header>
+
+  <div id="deckView">
+    <div class="toolbar">
+      <div class="progress-info">
+        <span class="progress-label" id="progressLabel">Card 1 of 16</span>
+        <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:6.25%"></div></div>
+      </div>
+      <button class="icon-btn" id="shuffleBtn" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3h5v5"/><path d="M4 20 21 3"/><path d="M21 16v5h-5"/><path d="M15 15l6 6"/><path d="M4 4l5 5"/></svg>
+        Shuffle
+      </button>
+    </div>
+
+    <div class="card">
+      <div class="slots">
+        <div class="slot diagram-slot" id="slot-diagram">
+          <span class="slot-label" id="label-diagram">Diagram</span>
+          <div class="slot-body">
+            <canvas class="diagram-canvas hidden-content" id="diagramCanvas"></canvas>
+            <span class="mystery-mark" id="mystery-diagram">?</span>
+          </div>
+        </div>
+        <div class="slot angle-slot" id="slot-angle">
+          <span class="slot-label" id="label-angle">Angle</span>
+          <div class="slot-body">
+            <div class="hidden-content" id="angleContent">
+              <div class="angle-deg" id="angleDeg"></div>
+              <div class="angle-rad" id="angleRad"></div>
+            </div>
+            <span class="mystery-mark" id="mystery-angle">?</span>
+          </div>
+        </div>
+        <div class="slot values-slot" id="slot-values">
+          <span class="slot-label" id="label-values">Coordinates &amp; Trig Values</span>
+          <div class="slot-body">
+            <div class="hidden-content" id="valuesContent" style="width:100%">
+              <div class="coord-line" id="coordLine"></div>
+              <div class="values-grid" id="valuesGrid"></div>
+            </div>
+            <span class="mystery-mark" id="mystery-values">?</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="action-row" id="revealRow">
+        <button class="btn-primary" id="revealBtn" type="button">Reveal answer</button>
+      </div>
+      <div class="action-row hidden" id="checkRow">
+        <button class="btn-check good" id="knewItBtn" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+          Knew it
+        </button>
+        <button class="btn-check retry" id="reviewBtn" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 1 2.6 6.3"/><path d="M3 21v-6h6"/></svg>
+          Need review
+        </button>
+      </div>
+
+      <div class="nav-row">
+        <button class="nav-arrow" id="prevBtn" type="button" aria-label="Previous card">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+        </button>
+        <div class="dots" id="dots"></div>
+        <button class="nav-arrow" id="nextBtn" type="button" aria-label="Next card">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6 6-6"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <p class="hint">Space or Enter reveals the card &middot; arrow keys move between cards</p>
+  </div>
+
+  <div id="summaryView" class="hidden">
+    <div class="card summary">
+      <div class="eyebrow">Deck complete</div>
+      <h2 id="summaryHeading">Nice work.</h2>
+      <p id="summarySub" style="color:var(--ink-soft)">Here's how this round went.</p>
+      <div class="tally">
+        <div class="tally-item good"><div class="tally-num" id="tallyGood">0</div><div class="tally-label">Knew it</div></div>
+        <div class="tally-item retry"><div class="tally-num" id="tallyRetry">0</div><div class="tally-label">Need review</div></div>
+      </div>
+      <div class="summary-actions">
+        <button class="btn-primary" id="restartAllBtn" type="button">Study all 16 again</button>
+        <button class="btn-check retry hidden" id="reviewFlaggedBtn" type="button">Review flagged only</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  function frac(neg, numHtml, den) {
+    return (neg ? "−" : "") + "<span class=\"frac\"><span class=\"num\">" + numHtml + "</span><span class=\"den\">" + den + "</span></span>";
+  }
+  function whole(neg, val) { return (neg ? "−" : "") + val; }
+  var UNDEF = "undefined";
+
+  // deg, radLabel, radians (numeric), cos-display, sin-display, tan, cot, sec, csc
+  var LIBRARY = [
+    { deg: 0,   rad: "0",           theta: 0,               cos: whole(false,1), sin: whole(false,0), tan: whole(false,0), cot: UNDEF, sec: whole(false,1), csc: UNDEF },
+    { deg: 30,  rad: "π/6",    theta: Math.PI/6,        cos: frac(false,"√3","2"), sin: frac(false,"1","2"), tan: frac(false,"√3","3"), cot: whole(false,"√3"), sec: frac(false,"2√3","3"), csc: whole(false,2) },
+    { deg: 45,  rad: "π/4",    theta: Math.PI/4,        cos: frac(false,"√2","2"), sin: frac(false,"√2","2"), tan: whole(false,1), cot: whole(false,1), sec: whole(false,"√2"), csc: whole(false,"√2") },
+    { deg: 60,  rad: "π/3",    theta: Math.PI/3,        cos: frac(false,"1","2"), sin: frac(false,"√3","2"), tan: whole(false,"√3"), cot: frac(false,"√3","3"), sec: whole(false,2), csc: frac(false,"2√3","3") },
+    { deg: 90,  rad: "π/2",    theta: Math.PI/2,        cos: whole(false,0), sin: whole(false,1), tan: UNDEF, cot: whole(false,0), sec: UNDEF, csc: whole(false,1) },
+    { deg: 120, rad: "2π/3",   theta: 2*Math.PI/3,      cos: frac(true,"1","2"), sin: frac(false,"√3","2"), tan: whole(true,"√3"), cot: frac(true,"√3","3"), sec: whole(true,2), csc: frac(false,"2√3","3") },
+    { deg: 135, rad: "3π/4",   theta: 3*Math.PI/4,      cos: frac(true,"√2","2"), sin: frac(false,"√2","2"), tan: whole(true,1), cot: whole(true,1), sec: whole(true,"√2"), csc: whole(false,"√2") },
+    { deg: 150, rad: "5π/6",   theta: 5*Math.PI/6,      cos: frac(true,"√3","2"), sin: frac(false,"1","2"), tan: frac(true,"√3","3"), cot: whole(true,"√3"), sec: frac(true,"2√3","3"), csc: whole(false,2) },
+    { deg: 180, rad: "π",      theta: Math.PI,          cos: whole(true,1), sin: whole(false,0), tan: whole(false,0), cot: UNDEF, sec: whole(true,1), csc: UNDEF },
+    { deg: 210, rad: "7π/6",   theta: 7*Math.PI/6,      cos: frac(true,"√3","2"), sin: frac(true,"1","2"), tan: frac(false,"√3","3"), cot: whole(false,"√3"), sec: frac(true,"2√3","3"), csc: whole(true,2) },
+    { deg: 225, rad: "5π/4",   theta: 5*Math.PI/4,      cos: frac(true,"√2","2"), sin: frac(true,"√2","2"), tan: whole(false,1), cot: whole(false,1), sec: whole(true,"√2"), csc: whole(true,"√2") },
+    { deg: 240, rad: "4π/3",   theta: 4*Math.PI/3,      cos: frac(true,"1","2"), sin: frac(true,"√3","2"), tan: whole(false,"√3"), cot: frac(false,"√3","3"), sec: whole(true,2), csc: frac(true,"2√3","3") },
+    { deg: 270, rad: "3π/2",   theta: 3*Math.PI/2,      cos: whole(false,0), sin: whole(true,1), tan: UNDEF, cot: whole(false,0), sec: UNDEF, csc: whole(true,1) },
+    { deg: 300, rad: "5π/3",   theta: 5*Math.PI/3,      cos: frac(false,"1","2"), sin: frac(true,"√3","2"), tan: whole(true,"√3"), cot: frac(true,"√3","3"), sec: whole(false,2), csc: frac(true,"2√3","3") },
+    { deg: 315, rad: "7π/4",   theta: 7*Math.PI/4,      cos: frac(false,"√2","2"), sin: frac(true,"√2","2"), tan: whole(true,1), cot: whole(true,1), sec: whole(false,"√2"), csc: whole(true,"√2") },
+    { deg: 330, rad: "11π/6",  theta: 11*Math.PI/6,     cos: frac(false,"√3","2"), sin: frac(true,"1","2"), tan: frac(true,"√3","3"), cot: whole(true,"√3"), sec: frac(false,"2√3","3"), csc: whole(true,2) }
+  ];
+
+  var PROMPT_TYPES = ["diagram", "angle", "values"];
+
+  var deck = [], index = 0, revealed = false, tallyGood = 0, tallyRetry = 0, flagged = [], reviewMode = false;
+
+  var el = {};
+  ["deckView","summaryView","progressLabel","progressFill",
+   "slot-diagram","label-diagram","diagramCanvas","mystery-diagram",
+   "slot-angle","label-angle","angleContent","angleDeg","angleRad","mystery-angle",
+   "slot-values","label-values","valuesContent","coordLine","valuesGrid","mystery-values",
+   "revealRow","revealBtn","checkRow","knewItBtn","reviewBtn",
+   "prevBtn","nextBtn","dots","shuffleBtn",
+   "summaryHeading","summarySub","tallyGood","tallyRetry","restartAllBtn","reviewFlaggedBtn"
+  ].forEach(function (id) { el[id.replace(/-([a-z])/g, function(_,c){return c.toUpperCase();})] = document.getElementById(id); });
+
+  var ctx = el.diagramCanvas.getContext("2d");
+
+  function shuffle(arr) {
+    var a = arr.slice();
+    for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; }
+    return a;
+  }
+
+  function buildDeck(items) {
+    var types = [];
+    for (var i = 0; i < items.length; i++) types.push(PROMPT_TYPES[i % 3]);
+    types = shuffle(types);
+    var shuffledItems = shuffle(items);
+    return shuffledItems.map(function (item, i) { return { item: item, promptType: types[i] }; });
+  }
+
+  function startDeck(items, isReview) {
+    deck = buildDeck(items);
+    index = 0; revealed = false; tallyGood = 0; tallyRetry = 0; flagged = []; reviewMode = !!isReview;
+    el.summaryView.classList.add("hidden");
+    el.deckView.classList.remove("hidden");
+    renderCard();
+  }
+
+  function renderDots() {
+    el.dots.innerHTML = "";
+    deck.forEach(function (_, i) {
+      var d = document.createElement("span");
+      d.className = "dot" + (i === index ? " current" : i < index ? " done" : "");
+      el.dots.appendChild(d);
+    });
+  }
+
+  function labelFor(type) { return { diagram: "Diagram", angle: "Angle", values: "Coordinates & Trig Values" }[type]; }
+
+  function renderCard() {
+    var entry = deck[index], item = entry.item, given = entry.promptType;
+
+    el.progressLabel.textContent = "Card " + (index + 1) + " of " + deck.length + (reviewMode ? " · review" : "");
+    el.progressFill.style.width = (((index + 1) / deck.length) * 100) + "%";
+
+    var allSlots = ["diagram", "angle", "values"].map(function (type) {
+      var slot = document.getElementById("slot-" + type);
+      slot.classList.add("instant");
+      slot.classList.toggle("given", type === given);
+      slot.classList.remove("revealed");
+      document.getElementById("label-" + type).textContent = labelFor(type) + (type === given ? " — given" : " — your turn");
+      return slot;
+    });
+
+    el.angleDeg.textContent = item.deg + "°";
+    el.angleRad.textContent = item.rad;
+    el.coordLine.innerHTML = "(" + item.cos + ", " + item.sin + ")";
+    el.valuesGrid.innerHTML = ["sin","cos","tan","csc","sec","cot"].map(function (fn) {
+      var v = item[fn];
+      var cls = v === UNDEF ? "value-num undef" : "value-num";
+      return "<div class=\"value-cell\"><div class=\"value-name\">" + fn + "</div><div class=\"" + cls + "\">" + v + "</div></div>";
+    }).join("");
+
+    drawDiagram(item, given === "diagram");
+
+    if (given === "diagram") document.getElementById("slot-diagram").classList.add("revealed");
+    if (given === "angle") document.getElementById("slot-angle").classList.add("revealed");
+    if (given === "values") document.getElementById("slot-values").classList.add("revealed");
+
+    revealed = false;
+    el.revealRow.classList.remove("hidden");
+    el.checkRow.classList.add("hidden");
+
+    el.prevBtn.disabled = index === 0;
+    renderDots();
+
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () { allSlots.forEach(function (s) { s.classList.remove("instant"); }); });
+    });
+  }
+
+  function revealCard() {
+    if (revealed) return;
+    revealed = true;
+    ["diagram", "angle", "values"].forEach(function (type) { document.getElementById("slot-" + type).classList.add("revealed"); });
+    drawDiagram(deck[index].item, true);
+    el.revealRow.classList.add("hidden");
+    el.checkRow.classList.remove("hidden");
+  }
+
+  function goNext(fromCheck, flag) {
+    if (fromCheck) { if (flag) { tallyRetry++; flagged.push(deck[index].item); } else { tallyGood++; } }
+    if (index < deck.length - 1) { index++; renderCard(); } else { showSummary(); }
+  }
+  function goPrev() { if (index === 0) return; index--; renderCard(); }
+
+  function showSummary() {
+    el.deckView.classList.add("hidden");
+    el.summaryView.classList.remove("hidden");
+    el.tallyGood.textContent = tallyGood;
+    el.tallyRetry.textContent = tallyRetry;
+    el.summaryHeading.textContent = tallyRetry === 0 ? "You've got the circle down cold." : "Solid round.";
+    el.summarySub.textContent = reviewMode ? "That was a focused review pass on your flagged angles." : "Flip through again, or drill just the ones you flagged.";
+    if (flagged.length > 0) {
+      el.reviewFlaggedBtn.classList.remove("hidden");
+      el.reviewFlaggedBtn.textContent = "Review flagged only (" + flagged.length + ")";
+    } else { el.reviewFlaggedBtn.classList.add("hidden"); }
+  }
+
+  function drawDiagram(item, showAnswer) {
+    var cvs = el.diagramCanvas;
+    var cssW = cvs.clientWidth || 260, cssH = cvs.clientHeight || 210;
+    var dpr = window.devicePixelRatio || 1;
+    cvs.width = cssW * dpr; cvs.height = cssH * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, cssW, cssH);
+
+    var cx = cssW / 2, cy = cssH / 2;
+    var r = Math.min(cssW, cssH) / 2 - 26;
+
+    var styles = getComputedStyle(document.documentElement);
+    var gridColor = styles.getPropertyValue("--graph-grid").trim();
+    var axisColor = styles.getPropertyValue("--graph-axis").trim();
+    var strokeColor = styles.getPropertyValue("--graph-stroke").trim();
+    var accentColor = styles.getPropertyValue("--accent").trim();
+    var inkSoft = styles.getPropertyValue("--ink-soft").trim();
+
+    // circle
+    ctx.strokeStyle = gridColor;
+    ctx.lineWidth = 1.4;
+    ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.stroke();
+
+    // axes
+    ctx.strokeStyle = axisColor;
+    ctx.lineWidth = 1.3;
+    ctx.beginPath();
+    ctx.moveTo(cx - r - 14, cy); ctx.lineTo(cx + r + 14, cy);
+    ctx.moveTo(cx, cy - r - 14); ctx.lineTo(cx, cy + r + 14);
+    ctx.stroke();
+
+    // axis ticks -1 / 1
+    ctx.fillStyle = inkSoft;
+    ctx.font = "10px 'JetBrains Mono', monospace";
+    ctx.fillText("1", cx + r + 3, cy - 4);
+    ctx.fillText("−1", cx - r - 18, cy - 4);
+    ctx.fillText("1", cx + 4, cy - r - 4);
+    ctx.fillText("−1", cx + 4, cy + r + 12);
+
+    if (!showAnswer) return;
+
+    var px = cx + r * Math.cos(item.theta);
+    var py = cy - r * Math.sin(item.theta);
+
+    // reference angle arc from positive x-axis
+    ctx.strokeStyle = accentColor;
+    ctx.lineWidth = 1.4;
+    ctx.setLineDash([3, 3]);
+    ctx.beginPath();
+    ctx.arc(cx, cy, 22, -item.theta, 0, item.theta > 0);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // radius line
+    ctx.strokeStyle = strokeColor;
+    ctx.lineWidth = 2.4;
+    ctx.lineCap = "round";
+    ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(px, py); ctx.stroke();
+
+    // point
+    ctx.fillStyle = accentColor;
+    ctx.beginPath(); ctx.arc(px, py, 5, 0, Math.PI * 2); ctx.fill();
+    ctx.strokeStyle = styles.getPropertyValue("--card-bg").trim();
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+  }
+
+  el.revealBtn.addEventListener("click", revealCard);
+  el.knewItBtn.addEventListener("click", function () { goNext(true, false); });
+  el.reviewBtn.addEventListener("click", function () { goNext(true, true); });
+  el.nextBtn.addEventListener("click", function () { if (index < deck.length - 1) { index++; renderCard(); } else if (revealed) { showSummary(); } });
+  el.prevBtn.addEventListener("click", goPrev);
+  el.shuffleBtn.addEventListener("click", function () { startDeck(LIBRARY, false); });
+  el.restartAllBtn.addEventListener("click", function () { startDeck(LIBRARY, false); });
+  el.reviewFlaggedBtn.addEventListener("click", function () { startDeck(flagged, true); });
+
+  document.addEventListener("keydown", function (e) {
+    if (!el.deckView.classList.contains("hidden")) {
+      if (e.code === "Space" || e.code === "Enter") { e.preventDefault(); revealCard(); }
+      else if (e.code === "ArrowRight") { el.nextBtn.click(); }
+      else if (e.code === "ArrowLeft") { el.prevBtn.click(); }
+    }
+  });
+
+  window.addEventListener("resize", function () {
+    if (!el.deckView.classList.contains("hidden")) drawDiagram(deck[index].item, revealed || deck[index].promptType === "diagram");
+  });
+
+  startDeck(LIBRARY, false);
+})();
+</script>

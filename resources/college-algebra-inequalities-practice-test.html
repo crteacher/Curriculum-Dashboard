@@ -1,0 +1,865 @@
+<title>Inequalities & Equations Practice Test</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=JetBrains+Mono:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #f6f1e4;
+    --paper-line: rgba(58, 74, 94, 0.14);
+    --paper-line-strong: rgba(58, 74, 94, 0.26);
+    --ink: #26313f;
+    --ink-soft: #5b6b7d;
+    --card-bg: #fffdf7;
+    --card-border: #ddd2b6;
+    --accent: #b5790a;
+    --accent-strong: #8f5f06;
+    --accent-soft: rgba(181, 121, 10, 0.12);
+    --accent-ink: #fffaf0;
+    --good: #3f7a52;
+    --good-soft: rgba(63, 122, 82, 0.14);
+    --bad: #b3413a;
+    --bad-soft: rgba(179, 65, 58, 0.12);
+    --shadow: rgba(38, 49, 63, 0.16);
+    --graph-grid: rgba(58, 74, 94, 0.14);
+    --graph-axis: rgba(38, 49, 63, 0.55);
+    --graph-stroke-a: #b5790a;
+    --graph-stroke-b: #2f7d6b;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #1b2330;
+      --paper-line: rgba(238, 242, 240, 0.07);
+      --paper-line-strong: rgba(238, 242, 240, 0.15);
+      --ink: #edf1ef;
+      --ink-soft: #a3aebb;
+      --card-bg: #232e3d;
+      --card-border: #3a4a61;
+      --accent: #e8b04f;
+      --accent-strong: #f2c675;
+      --accent-soft: rgba(232, 176, 79, 0.16);
+      --accent-ink: #2b1e05;
+      --good: #7bc794;
+      --good-soft: rgba(123, 199, 148, 0.16);
+      --bad: #ff9a90;
+      --bad-soft: rgba(255, 154, 144, 0.14);
+      --shadow: rgba(0, 0, 0, 0.5);
+      --graph-grid: rgba(238, 242, 240, 0.10);
+      --graph-axis: rgba(238, 242, 240, 0.55);
+      --graph-stroke-a: #e8b04f;
+      --graph-stroke-b: #5fd1b3;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #1b2330;
+    --paper-line: rgba(238, 242, 240, 0.07);
+    --paper-line-strong: rgba(238, 242, 240, 0.15);
+    --ink: #edf1ef;
+    --ink-soft: #a3aebb;
+    --card-bg: #232e3d;
+    --card-border: #3a4a61;
+    --accent: #e8b04f;
+    --accent-strong: #f2c675;
+    --accent-soft: rgba(232, 176, 79, 0.16);
+    --accent-ink: #2b1e05;
+    --good: #7bc794;
+    --good-soft: rgba(123, 199, 148, 0.16);
+    --bad: #ff9a90;
+    --bad-soft: rgba(255, 154, 144, 0.14);
+    --shadow: rgba(0, 0, 0, 0.5);
+    --graph-grid: rgba(238, 242, 240, 0.10);
+    --graph-axis: rgba(238, 242, 240, 0.55);
+    --graph-stroke-a: #e8b04f;
+    --graph-stroke-b: #5fd1b3;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background:
+      repeating-linear-gradient(0deg, var(--paper-line) 0, var(--paper-line) 1px, transparent 1px, transparent 32px),
+      repeating-linear-gradient(90deg, var(--paper-line) 0, var(--paper-line) 1px, transparent 1px, transparent 32px),
+      var(--paper);
+    color: var(--ink);
+    font-family: "Source Sans 3", ui-sans-serif, system-ui, sans-serif;
+    display: flex;
+    justify-content: center;
+    padding: clamp(20px, 4vw, 56px) 18px 80px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+  }
+
+  .wrap { width: 100%; max-width: 900px; }
+  header { text-align: center; margin-bottom: 22px; }
+
+  .eyebrow {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--accent); font-weight: 600;
+  }
+
+  h1 {
+    font-family: "Fraunces", Georgia, serif; font-weight: 600;
+    font-size: clamp(1.9rem, 5vw, 2.6rem); margin: 6px 0 8px; text-wrap: balance;
+  }
+
+  header p { color: var(--ink-soft); font-size: 1rem; max-width: 60ch; margin: 0 auto; line-height: 1.55; }
+
+  .toolbar {
+    position: sticky; top: 12px; z-index: 5;
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    margin: 22px 0 26px; padding: 12px 16px; flex-wrap: wrap;
+    background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 14px;
+    box-shadow: 0 10px 26px -16px var(--shadow);
+  }
+  .score-box { display: flex; align-items: baseline; gap: 8px; }
+  .score-num { font-family: "JetBrains Mono", monospace; font-size: 1.3rem; font-weight: 700; color: var(--accent-strong); font-variant-numeric: tabular-nums; }
+  .score-label { font-size: 0.78rem; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.06em; }
+
+  button { font-family: inherit; cursor: pointer; }
+  button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .icon-btn {
+    display: inline-flex; align-items: center; gap: 7px; background: var(--card-bg);
+    border: 1px solid var(--card-border); color: var(--ink); padding: 9px 14px;
+    border-radius: 9px; font-size: 0.86rem; font-weight: 600;
+    transition: border-color 0.15s ease, transform 0.1s ease;
+  }
+  .icon-btn:hover { border-color: var(--accent); }
+  .icon-btn:active { transform: translateY(1px); }
+  .icon-btn svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+  .group-head {
+    margin: 34px 0 14px; padding-bottom: 8px; border-bottom: 1.5px solid var(--paper-line-strong);
+  }
+  .group-head .gnum {
+    font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 1.3rem; color: var(--ink);
+  }
+  .group-head .gdesc { font-size: 0.92rem; color: var(--ink-soft); margin-top: 2px; }
+
+  .qcard {
+    background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px;
+    box-shadow: 0 14px 32px -22px var(--shadow), 0 2px 8px -2px var(--shadow);
+    padding: clamp(16px, 3vw, 24px); margin-bottom: 18px;
+  }
+
+  .qcard-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
+  .qcard-head .qtitle { display: flex; align-items: center; gap: 10px; }
+  .qlabel { font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 1.1rem; }
+  .qpoints {
+    font-family: "JetBrains Mono", monospace; font-size: 0.68rem; letter-spacing: 0.05em;
+    color: var(--ink-soft); background: var(--paper-line); padding: 2px 8px; border-radius: 20px;
+  }
+
+  .qprompt { font-size: 1rem; line-height: 1.7; margin-bottom: 14px; }
+  .qprompt .math { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 1.02rem; }
+  .qprompt .frac { display: inline-flex; flex-direction: column; vertical-align: middle; text-align: center; margin: 0 3px; line-height: 1.15; }
+  .qprompt .frac .num { border-bottom: 1.3px solid currentColor; padding: 0 3px 1px; }
+  .qprompt .frac .den { padding: 1px 3px 0; }
+
+  .qinputs { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin-bottom: 14px; }
+  .qinputs .field-label { font-size: 0.86rem; color: var(--ink-soft); font-weight: 600; }
+  .qinputs input[type="text"], .qinputs select {
+    font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 0.95rem;
+    background: var(--paper); border: 1.5px solid var(--card-border); border-radius: 8px;
+    padding: 8px 10px; color: var(--ink); min-width: 92px;
+  }
+  .qinputs select { font-family: "Source Sans 3", sans-serif; min-width: 190px; }
+  .qinputs input:focus, .qinputs select:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .qinputs .subrow {
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    padding: 8px 10px; border: 1.5px dashed var(--card-border); border-radius: 10px;
+  }
+  .qinputs label.chk { display: inline-flex; align-items: center; gap: 6px; font-size: 0.86rem; color: var(--ink-soft); font-weight: 600; }
+  .qinputs .hidden { display: none !important; }
+  .mc-row { display: flex; flex-wrap: wrap; gap: 8px; }
+  .mc-opt {
+    border: 1.5px solid var(--card-border); border-radius: 9px; padding: 8px 13px;
+    font-size: 0.88rem; background: var(--card-bg); color: var(--ink); font-weight: 600;
+    transition: border-color 0.15s ease, background 0.15s ease;
+  }
+  .mc-opt:hover { border-color: var(--accent); }
+  .mc-opt.selected { border-color: var(--accent); background: var(--accent-soft); color: var(--accent-strong); }
+
+  .qactions { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; }
+  .btn-primary {
+    background: var(--accent); color: var(--accent-ink); border: none; padding: 10px 20px;
+    border-radius: 10px; font-size: 0.92rem; font-weight: 700;
+    box-shadow: 0 8px 16px -8px var(--accent-strong); transition: transform 0.1s ease;
+  }
+  .btn-primary:active { transform: translateY(1px); }
+  .btn-secondary {
+    background: transparent; border: 1.5px solid var(--card-border); color: var(--ink);
+    padding: 9px 18px; border-radius: 10px; font-size: 0.92rem; font-weight: 700;
+    transition: border-color 0.15s ease;
+  }
+  .btn-secondary:hover { border-color: var(--accent); }
+
+  .qfeedback {
+    font-size: 0.9rem; font-weight: 700; padding: 9px 13px; border-radius: 9px; margin-bottom: 10px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .qfeedback.good { background: var(--good-soft); color: var(--good); }
+  .qfeedback.bad { background: var(--bad-soft); color: var(--bad); }
+  .qfeedback svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+  .qsolution {
+    background: var(--accent-soft); border: 1px solid var(--card-border); border-left: 4px solid var(--accent);
+    border-radius: 0 12px 12px 0; padding: 14px 16px; font-size: 0.92rem; line-height: 1.7;
+  }
+  .qsolution .sol-label {
+    font-family: "JetBrains Mono", monospace; font-size: 0.68rem; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--accent-strong); font-weight: 700; display: block; margin-bottom: 6px;
+  }
+  .qsolution .step { margin: 3px 0; }
+  .qsolution .final { margin-top: 8px; font-weight: 700; font-family: "JetBrains Mono", monospace; }
+
+  .hidden { display: none !important; }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">College Algebra &middot; &sect;1.1&ndash;1.6</div>
+    <h1>Inequalities &amp; Equations Practice Test</h1>
+    <p>Every part regenerates its own random version — work it out on paper, type your answer, and check yourself. Click "New version" on any part as many times as you want to drill it again with different numbers.</p>
+  </header>
+
+  <div class="toolbar">
+    <div class="score-box">
+      <span class="score-num" id="scoreNum">0 / 0</span>
+      <span class="score-label">points checked correct</span>
+    </div>
+    <button class="icon-btn" id="newTestBtn" type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3h5v5"/><path d="M4 20 21 3"/><path d="M21 16v5h-5"/><path d="M15 15l6 6"/><path d="M4 4l5 5"/></svg>
+      New full test
+    </button>
+  </div>
+
+  <div id="groups"></div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  // ============================================================
+  // Utilities (shared with the rest of the practice-test family)
+  // ============================================================
+  function randInt(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+  function randNonZeroInt(min, max) { var v; do { v = randInt(min, max); } while (v === 0); return v; }
+  function randIntExcluding(exclude, min, max) {
+    var v, tries = 0;
+    do { v = randInt(min, max); tries++; } while (exclude.indexOf(v) !== -1 && tries < 200);
+    return v;
+  }
+  function randChoice(arr) { return arr[randInt(0, arr.length - 1)]; }
+  function randBool() { return Math.random() < 0.5; }
+  function shuffle(arr) {
+    var a = arr.slice();
+    for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; }
+    return a;
+  }
+  function gcdInt(a, b) { a = Math.abs(a); b = Math.abs(b); while (b) { var t = b; b = a % b; a = t; } return a || 1; }
+  function fracLabel(p, q) {
+    var g = gcdInt(p, q);
+    p = p / g; q = q / g;
+    if (q < 0) { p = -p; q = -q; }
+    return { p: p, q: q };
+  }
+  function frac(numHtml, denHtml) {
+    return "<span class=\"frac\"><span class=\"num\">" + numHtml + "</span><span class=\"den\">" + denHtml + "</span></span>";
+  }
+  function signedTerm(coef, label) {
+    if (coef === 0) return "";
+    var abs = Math.abs(coef);
+    var coefStr = (abs === 1 && label) ? "" : String(abs);
+    return (coef < 0 ? "&minus;" : "+") + " " + coefStr + label;
+  }
+  function leadTerm(coef, label) {
+    if (coef === 0) return "0";
+    var abs = Math.abs(coef);
+    var coefStr = (abs === 1 && label) ? "" : String(abs);
+    return (coef < 0 ? "&minus;" : "") + coefStr + label;
+  }
+
+  // ---- answer parsing / checking ----
+  function parseAnswer(raw) {
+    if (raw === null || raw === undefined) return { type: "invalid" };
+    var str = String(raw).trim().toLowerCase();
+    if (str === "") return { type: "invalid" };
+    if (["dne", "does not exist", "no solution", "no solutions", "none", "undefined", "not defined"].indexOf(str) !== -1) return { type: "dne" };
+    if (["inf", "infinity", "+inf", "+infinity", "∞", "+∞"].indexOf(str) !== -1) return { type: "inf", sign: 1 };
+    if (["-inf", "-infinity", "-∞"].indexOf(str) !== -1) return { type: "inf", sign: -1 };
+    var fracMatch = str.match(/^(-?\d+(\.\d+)?)\s*\/\s*(-?\d+(\.\d+)?)$/);
+    if (fracMatch) {
+      var p = parseFloat(fracMatch[1]), q = parseFloat(fracMatch[3]);
+      if (q !== 0) return { type: "number", value: p / q };
+    }
+    var cleaned = str.replace(/,/g, "");
+    if (/^-?\d*\.?\d+$/.test(cleaned)) return { type: "number", value: parseFloat(cleaned) };
+    return { type: "invalid" };
+  }
+  function answersMatch(user, correct, tol) {
+    tol = tol === undefined ? 0.01 : tol;
+    if (user.type === "invalid") return false;
+    if (correct.type === "dne") return user.type === "dne";
+    if (correct.type === "inf") return user.type === "inf" && user.sign === correct.sign;
+    if (correct.type === "number") return user.type === "number" && Math.abs(user.value - correct.value) < tol;
+    return false;
+  }
+  // comma-separated list of numbers -> sorted array, ignoring blanks; "no solution"/"none" -> []
+  function parseNumList(raw) {
+    if (!raw) return [];
+    var str = String(raw).trim().toLowerCase();
+    if (["no solution", "no solutions", "none", "dne"].indexOf(str) !== -1) return [];
+    return str.split(",").map(function (s) {
+      var v = parseFloat(s.trim());
+      return isNaN(v) ? null : v;
+    }).filter(function (v) { return v !== null; }).sort(function (a, b) { return a - b; });
+  }
+  function numSetsMatch(a, b, tol) {
+    tol = tol === undefined ? 0.01 : tol;
+    if (a.length !== b.length) return false;
+    for (var i = 0; i < a.length; i++) { if (Math.abs(a[i] - b[i]) > tol) return false; }
+    return true;
+  }
+  function isNoSolutionText(raw) {
+    var str = String(raw || "").trim().toLowerCase();
+    return ["no solution", "no solutions", "none", "dne", "does not exist"].indexOf(str) !== -1;
+  }
+
+  // ---- shared "interval notation" answer input: one text field where the student
+  // types the actual interval notation by hand — parens/brackets, -infinity/infinity
+  // for unbounded sides, and "U" (or "u"/"∪") between pieces of a union ----
+  function parseBoundToken(raw) {
+    var s = String(raw).trim().toLowerCase();
+    if (["-infinity", "-inf", "-oo", "-∞"].indexOf(s) !== -1) return -Infinity;
+    if (["infinity", "+infinity", "inf", "+inf", "oo", "+oo", "∞", "+∞"].indexOf(s) !== -1) return Infinity;
+    var m = s.match(/^(-?\d+(\.\d+)?)\s*\/\s*(-?\d+(\.\d+)?)$/);
+    if (m) { var p = parseFloat(m[1]), q = parseFloat(m[3]); if (q !== 0) return p / q; }
+    var cleaned = s.replace(/,/g, "");
+    if (/^-?\d*\.?\d+$/.test(cleaned)) return parseFloat(cleaned);
+    return null;
+  }
+  function parseIntervalUnion(raw) {
+    if (raw === null || raw === undefined) return { intervals: [], invalid: true };
+    var str = String(raw).trim();
+    if (str === "") return { intervals: [], invalid: true };
+    var lower = str.toLowerCase();
+    if (["empty", "empty set", "no solution", "none", "∅", "{}", "dne"].indexOf(lower) !== -1) {
+      return { intervals: [], invalid: false };
+    }
+    if (["all reals", "all real numbers", "reals"].indexOf(lower) !== -1) {
+      return { intervals: [{ lo: -Infinity, loIncl: false, hi: Infinity, hiIncl: false }], invalid: false };
+    }
+    var re = /([\(\[])\s*([^,()\[\]]+)\s*,\s*([^,()\[\]]+)\s*([\)\]])/g;
+    var m, intervals = [];
+    while ((m = re.exec(str)) !== null) {
+      var lo = parseBoundToken(m[2]), hi = parseBoundToken(m[3]);
+      if (lo === null || hi === null) return { intervals: [], invalid: true };
+      intervals.push({
+        lo: lo, hi: hi,
+        loIncl: m[1] === "[" && lo !== -Infinity && lo !== Infinity,
+        hiIncl: m[4] === "]" && hi !== -Infinity && hi !== Infinity
+      });
+    }
+    if (intervals.length === 0) return { intervals: [], invalid: true };
+    return { intervals: intervals, invalid: false };
+  }
+  function boundEqual(uv, uIncl, ev, eIncl) {
+    if (ev === -Infinity || ev === Infinity) return uv === ev;
+    return uv !== -Infinity && uv !== Infinity && Math.abs(uv - ev) < 0.01 && uIncl === eIncl;
+  }
+  function ivSortKey(iv) { return iv.lo === -Infinity ? -1e18 : iv.lo; }
+  // expected: array of {lo,loIncl,hi,hiIncl} — an empty array means "no solution"
+  function intervalAnswerCorrect(parsed, expected) {
+    if (parsed.invalid) return false;
+    if (parsed.intervals.length !== expected.length) return false;
+    var us = parsed.intervals.slice().sort(function (a, b) { return ivSortKey(a) - ivSortKey(b); });
+    var es = expected.slice().sort(function (a, b) { return ivSortKey(a) - ivSortKey(b); });
+    for (var i = 0; i < us.length; i++) {
+      if (!boundEqual(us[i].lo, us[i].loIncl, es[i].lo, es[i].loIncl)) return false;
+      if (!boundEqual(us[i].hi, us[i].hiIncl, es[i].hi, es[i].hiIncl)) return false;
+    }
+    return true;
+  }
+  function oneIntervalNotation(iv) {
+    var loStr = iv.lo === -Infinity ? "&minus;&infin;" : String(iv.lo);
+    var hiStr = iv.hi === Infinity ? "&infin;" : String(iv.hi);
+    var loBrk = iv.lo === -Infinity ? "(" : (iv.loIncl ? "[" : "(");
+    var hiBrk = iv.hi === Infinity ? ")" : (iv.hiIncl ? "]" : ")");
+    return loBrk + loStr + ", " + hiStr + hiBrk;
+  }
+  function intervalNotation(expected) {
+    if (expected.length === 0) return "&empty; (no solution)";
+    return expected.slice().sort(function (a, b) { return ivSortKey(a) - ivSortKey(b); }).map(oneIntervalNotation).join(" &cup; ");
+  }
+  function intervalTextInputHtml(placeholder) {
+    return "<span class=\"field-label\">Solution:</span><input type=\"text\" class=\"ans-interval\" placeholder=\"" + (placeholder || "e.g. (-3, 5]") + "\" style=\"min-width:260px\">";
+  }
+  function readIntervalTextAnswer(card) { return parseIntervalUnion(card.querySelector(".ans-interval").value); }
+
+  // ============================================================
+  // Question part definitions
+  // ============================================================
+  var PARTS = [];
+
+  // ---------- Q1: linear equation ----------
+  PARTS.push({
+    id: "1", group: "1", label: "", points: 4,
+    gen: function () {
+      var a = randNonZeroInt(-9, 9);
+      var c = randIntExcluding([a, 0], -9, 9);
+      var b = randInt(-12, 12), d = randInt(-12, 12);
+      var fr = fracLabel(d - b, a - c);
+      return { a: a, b: b, c: c, d: d, answer: { type: "number", value: (d - b) / (a - c) }, fr: fr };
+    },
+    prompt: function (s) {
+      return "<span class=\"math\">" + leadTerm(s.a, "x") + " " + signedTerm(s.b, "") + " = " + leadTerm(s.c, "x") + " " + signedTerm(s.d, "") + "</span>" +
+        "<div style=\"margin-top:8px\">Solve for x.</div>";
+    },
+    inputsHtml: function () {
+      return "<span class=\"field-label\">x =</span><input type=\"text\" class=\"ans-main\" placeholder=\"e.g. 3 or -2/5\">";
+    },
+    readAnswer: function (card) { return { main: parseAnswer(card.querySelector(".ans-main").value) }; },
+    isCorrect: function (ua, s) { return answersMatch(ua.main, s.answer, 0.001); },
+    solutionHtml: function (s) {
+      var ansStr = s.fr.q === 1 ? String(s.fr.p) : (s.fr.p + "/" + s.fr.q);
+      return "<span class=\"sol-label\">Solution</span>" +
+        "<div class=\"step\">Get every x-term on one side: " + leadTerm(s.a - s.c, "x") + " = " + (s.d - s.b) + " " + "(subtract " + leadTerm(s.c, "x") + " and " + s.b + " from both sides).</div>" +
+        "<div class=\"step\">Divide by " + (s.a - s.c) + ": x = " + (s.d - s.b) + "/" + (s.a - s.c) + " = " + ansStr + "</div>" +
+        "<div class=\"final\">Answer: x = " + ansStr + "</div>";
+    }
+  });
+
+  // ---------- Q2: one-sided linear inequality ----------
+  PARTS.push({
+    id: "2", group: "2", label: "", points: 4,
+    gen: function () {
+      var c = randNonZeroInt(-6, 6);
+      var a = randIntExcluding([0], c + 1, c + 9);
+      var b = randInt(-10, 10), d = randInt(-10, 10);
+      var threshold = (d - b) / (a - c);
+      var op = randChoice(["<", ">", "<=", ">="]);
+      var strict = op === "<" || op === ">";
+      var lessDirection = op === "<" || op === "<=";
+      var lo = lessDirection ? -Infinity : threshold;
+      var hi = lessDirection ? threshold : Infinity;
+      var loIncl = lessDirection ? false : !strict;
+      var hiIncl = lessDirection ? !strict : false;
+      return { a: a, b: b, c: c, d: d, op: op, threshold: threshold, lo: lo, hi: hi, loIncl: loIncl, hiIncl: hiIncl };
+    },
+    prompt: function (s) {
+      var opHtml = { "<": "&lt;", ">": "&gt;", "<=": "&le;", ">=": "&ge;" }[s.op];
+      return "<span class=\"math\">" + leadTerm(s.a, "x") + " " + signedTerm(s.b, "") + " " + opHtml + " " + leadTerm(s.c, "x") + " " + signedTerm(s.d, "") + "</span>" +
+        "<div style=\"margin-top:8px\">Solve for x. Give your answer in interval notation.</div>";
+    },
+    inputsHtml: function () { return intervalTextInputHtml("e.g. (-inf, 4]"); },
+    readAnswer: readIntervalTextAnswer,
+    isCorrect: function (ua, s) { return intervalAnswerCorrect(ua, [{ lo: s.lo, loIncl: s.loIncl, hi: s.hi, hiIncl: s.hiIncl }]); },
+    solutionHtml: function (s) {
+      var opHtml = { "<": "&lt;", ">": "&gt;", "<=": "&le;", ">=": "&ge;" }[s.op];
+      var fr = fracLabel(s.d - s.b, s.a - s.c);
+      var thStr = fr.q === 1 ? String(fr.p) : (fr.p + "/" + fr.q);
+      return "<span class=\"sol-label\">Solution</span>" +
+        "<div class=\"step\">Collect x-terms: " + leadTerm(s.a - s.c, "x") + " " + opHtml + " " + (s.d - s.b) + "</div>" +
+        "<div class=\"step\">Divide by " + (s.a - s.c) + " (positive, so the inequality direction stays the same): x " + opHtml + " " + thStr + "</div>" +
+        "<div class=\"final\">Answer: " + intervalNotation([{ lo: s.lo, loIncl: s.loIncl, hi: s.hi, hiIncl: s.hiIncl }]) + "</div>";
+    }
+  });
+
+  // ---------- Q3: which equation has no solution (MC) ----------
+  PARTS.push({
+    id: "3", group: "3", label: "", points: 4,
+    gen: function () {
+      var noSolCoef = randNonZeroInt(2, 6);
+      var b1 = randInt(-10, 10), d1 = randIntExcluding([b1], -10, 10);
+      var noSolEq = { a: noSolCoef, b: b1, c: noSolCoef, d: d1 };
+      function makeUniqueEq() {
+        var a = randNonZeroInt(-9, 9);
+        var c = randIntExcluding([a, 0], -9, 9);
+        var b = randInt(-10, 10), d = randInt(-10, 10);
+        return { a: a, b: b, c: c, d: d };
+      }
+      var distractors = [makeUniqueEq(), makeUniqueEq(), makeUniqueEq()];
+      var all = shuffle([{ eq: noSolEq, key: "nosol" }].concat(distractors.map(function (e) { return { eq: e, key: "sol" }; })));
+      return { options: all };
+    },
+    prompt: function () { return "Which of the following equations has NO solution?"; },
+    inputsHtml: function (s) {
+      return "<div class=\"mc-row\">" + s.options.map(function (o, i) {
+        var eq = o.eq;
+        var text = leadTerm(eq.a, "x") + " " + signedTerm(eq.b, "") + " = " + leadTerm(eq.c, "x") + " " + signedTerm(eq.d, "");
+        return "<button type=\"button\" class=\"mc-opt\" data-val=\"" + i + "\">" + text + "</button>";
+      }).join("") + "</div>";
+    },
+    afterRender: function (card) {
+      var opts = card.querySelectorAll(".mc-opt");
+      opts.forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          opts.forEach(function (b) { b.classList.remove("selected"); });
+          btn.classList.add("selected");
+        });
+      });
+    },
+    readAnswer: function (card) {
+      var sel = card.querySelector(".mc-opt.selected");
+      return { idx: sel ? parseInt(sel.getAttribute("data-val"), 10) : null };
+    },
+    isCorrect: function (ua, s) { return ua.idx !== null && s.options[ua.idx].key === "nosol"; },
+    solutionHtml: function (s) {
+      var idx = s.options.findIndex(function (o) { return o.key === "nosol"; });
+      var eq = s.options[idx].eq;
+      var text = leadTerm(eq.a, "x") + " " + signedTerm(eq.b, "") + " = " + leadTerm(eq.c, "x") + " " + signedTerm(eq.d, "");
+      return "<span class=\"sol-label\">Solution</span>" +
+        "<div class=\"step\">In <span class=\"math\">" + text + "</span>, the x-coefficient is the same (" + eq.a + ") on both sides. Subtracting " + leadTerm(eq.a, "x") + " from both sides leaves " + eq.b + " = " + eq.d + ", which is false since " + eq.b + " &ne; " + eq.d + ".</div>" +
+        "<div class=\"step\">Every other option has different x-coefficients on each side, so those always simplify down to exactly one value of x.</div>" +
+        "<div class=\"final\">Answer: " + text + "</div>";
+    }
+  });
+
+  // ---------- Q4: compound (two-sided) inequality ----------
+  PARTS.push({
+    id: "4", group: "4", label: "", points: 4,
+    gen: function () {
+      var a = randInt(1, 8);
+      var b = randInt(-10, 10);
+      var lo0 = randInt(-20, 10);
+      var hi0 = randInt(lo0 + 4, lo0 + 20);
+      var loStrict = randBool(), hiStrict = randBool();
+      var xLo = (lo0 - b) / a, xHi = (hi0 - b) / a;
+      return { a: a, b: b, lo0: lo0, hi0: hi0, loStrict: loStrict, hiStrict: hiStrict, xLo: xLo, xHi: xHi };
+    },
+    prompt: function (s) {
+      var loOp = s.loStrict ? "&lt;" : "&le;", hiOp = s.hiStrict ? "&lt;" : "&le;";
+      return "<span class=\"math\">" + s.lo0 + " " + loOp + " " + leadTerm(s.a, "x") + " " + signedTerm(s.b, "") + " " + hiOp + " " + s.hi0 + "</span>" +
+        "<div style=\"margin-top:8px\">Solve for x. Give your answer in interval notation.</div>";
+    },
+    inputsHtml: function () { return intervalTextInputHtml("e.g. [-3, 5)"); },
+    readAnswer: readIntervalTextAnswer,
+    isCorrect: function (ua, s) {
+      return intervalAnswerCorrect(ua, [{ lo: s.xLo, loIncl: !s.loStrict, hi: s.xHi, hiIncl: !s.hiStrict }]);
+    },
+    solutionHtml: function (s) {
+      var frLo = fracLabel(s.lo0 - s.b, s.a), frHi = fracLabel(s.hi0 - s.b, s.a);
+      var loStr = frLo.q === 1 ? String(frLo.p) : (frLo.p + "/" + frLo.q);
+      var hiStr = frHi.q === 1 ? String(frHi.p) : (frHi.p + "/" + frHi.q);
+      return "<span class=\"sol-label\">Solution</span>" +
+        "<div class=\"step\">Subtract " + s.b + " from all three parts, then divide all three parts by " + s.a + " (positive, so directions don't flip).</div>" +
+        "<div class=\"step\">" + (s.lo0 - s.b) + " " + (s.loStrict ? "&lt;" : "&le;") + " " + leadTerm(s.a, "x") + " " + (s.hiStrict ? "&lt;" : "&le;") + " " + (s.hi0 - s.b) + " &nbsp;&rarr;&nbsp; " + loStr + " " + (s.loStrict ? "&lt;" : "&le;") + " x " + (s.hiStrict ? "&lt;" : "&le;") + " " + hiStr + "</div>" +
+        "<div class=\"final\">Answer: " + intervalNotation([{ lo: s.xLo, loIncl: !s.loStrict, hi: s.xHi, hiIncl: !s.hiStrict }]) + "</div>";
+    }
+  });
+
+  // ---------- Q5: compound inequality — sometimes a single inequality, sometimes
+  // an AND (intersection), sometimes an OR (union) ----------
+  function makeCompoundClause(dir) {
+    // dir "less": "x - p [<] t"   dir "greater": "r*x - p [>] t"  (t is the threshold once solved)
+    var r = dir === "greater" ? randInt(1, 3) : 1;
+    var p = randInt(1, 9);
+    var strict = randBool();
+    var t = randInt(-10, 20);
+    var q = dir === "less" ? (t - p) : (r * t - p);
+    return { dir: dir, r: r, p: p, q: q, strict: strict, t: t };
+  }
+  function compoundClauseHtml(c) {
+    var rStr = c.r === 1 ? "" : String(c.r);
+    var op = c.dir === "less" ? (c.strict ? "&lt;" : "&le;") : (c.strict ? "&gt;" : "&ge;");
+    var varTerm = c.dir === "less" ? "x" : (rStr + "x");
+    return varTerm + " " + signedTerm(-c.p, "") + " " + op + " " + c.q;
+  }
+  function compoundClauseSolvedHtml(c) {
+    var op = c.dir === "less" ? (c.strict ? "&lt;" : "&le;") : (c.strict ? "&gt;" : "&ge;");
+    return "x " + op + " " + c.t;
+  }
+  PARTS.push({
+    id: "5", group: "5", label: "", points: 4,
+    gen: function () {
+      var variant = randChoice(["single", "and", "or"]);
+      if (variant === "single") {
+        var c1 = makeCompoundClause(randChoice(["less", "greater"]));
+        var expected = c1.dir === "less"
+          ? [{ lo: -Infinity, loIncl: false, hi: c1.t, hiIncl: !c1.strict }]
+          : [{ lo: c1.t, loIncl: !c1.strict, hi: Infinity, hiIncl: false }];
+        return { variant: variant, c1: c1, expected: expected };
+      }
+      var cLess = makeCompoundClause("less");
+      var cGreater = makeCompoundClause("greater");
+      var expected;
+      if (variant === "and") {
+        expected = cGreater.t < cLess.t
+          ? [{ lo: cGreater.t, loIncl: !cGreater.strict, hi: cLess.t, hiIncl: !cLess.strict }]
+          : [];
+      } else {
+        expected = cLess.t > cGreater.t
+          ? [{ lo: -Infinity, loIncl: false, hi: Infinity, hiIncl: false }]
+          : [
+              { lo: -Infinity, loIncl: false, hi: cLess.t, hiIncl: !cLess.strict },
+              { lo: cGreater.t, loIncl: !cGreater.strict, hi: Infinity, hiIncl: false }
+            ];
+      }
+      return { variant: variant, cLess: cLess, cGreater: cGreater, expected: expected };
+    },
+    prompt: function (s) {
+      if (s.variant === "single") {
+        return "<span class=\"math\">" + compoundClauseHtml(s.c1) + "</span>" +
+          "<div style=\"margin-top:8px\">Solve for x. Give your answer in interval notation.</div>";
+      }
+      var joiner = s.variant === "and" ? "<strong>AND</strong>" : "<strong>OR</strong>";
+      return "<span class=\"math\">" + compoundClauseHtml(s.cLess) + " &nbsp;&nbsp;" + joiner + "&nbsp;&nbsp; " + compoundClauseHtml(s.cGreater) + "</span>" +
+        "<div style=\"margin-top:8px\">Solve for x. Give your answer in interval notation (use U for union if needed).</div>";
+    },
+    inputsHtml: function () { return intervalTextInputHtml("e.g. (-inf, 4) U (6, inf)"); },
+    readAnswer: readIntervalTextAnswer,
+    isCorrect: function (ua, s) { return intervalAnswerCorrect(ua, s.expected); },
+    solutionHtml: function (s) {
+      if (s.variant === "single") {
+        return "<span class=\"sol-label\">Solution</span>" +
+          "<div class=\"step\">Solve directly: " + compoundClauseHtml(s.c1) + " &rarr; " + compoundClauseSolvedHtml(s.c1) + ".</div>" +
+          "<div class=\"final\">Answer: " + intervalNotation(s.expected) + "</div>";
+      }
+      var lessSolved = compoundClauseSolvedHtml(s.cLess), greaterSolved = compoundClauseSolvedHtml(s.cGreater);
+      if (s.variant === "and") {
+        var nonempty = s.expected.length > 0;
+        var tail = nonempty
+          ? "Since " + s.cGreater.t + " is less than " + s.cLess.t + ", the two pieces overlap on a bounded stretch of the number line."
+          : "Since " + s.cGreater.t + " is not less than " + s.cLess.t + ", there's no x that can satisfy both pieces at the same time &mdash; the solution is empty.";
+        return "<span class=\"sol-label\">Solution</span>" +
+          "<div class=\"step\">First piece: " + compoundClauseHtml(s.cLess) + " &rarr; " + lessSolved + ".</div>" +
+          "<div class=\"step\">Second piece: " + compoundClauseHtml(s.cGreater) + " &rarr; " + greaterSolved + ".</div>" +
+          "<div class=\"step\">AND means both must hold at once. " + tail + "</div>" +
+          "<div class=\"final\">Answer: " + intervalNotation(s.expected) + "</div>";
+      }
+      var allReals = s.cLess.t > s.cGreater.t;
+      var tail2 = allReals
+        ? "Since the first piece's threshold (" + s.cLess.t + ") is bigger than the second's (" + s.cGreater.t + "), every real number satisfies at least one of the two pieces &mdash; they overlap completely."
+        : "Since the first piece's threshold (" + s.cLess.t + ") is not bigger than the second's (" + s.cGreater.t + "), there's a gap that neither piece covers &mdash; the solution stays as two separate rays.";
+      return "<span class=\"sol-label\">Solution</span>" +
+        "<div class=\"step\">First piece: " + compoundClauseHtml(s.cLess) + " &rarr; " + lessSolved + ".</div>" +
+        "<div class=\"step\">Second piece: " + compoundClauseHtml(s.cGreater) + " &rarr; " + greaterSolved + ".</div>" +
+        "<div class=\"step\">OR means either can hold. " + tail2 + "</div>" +
+        "<div class=\"final\">Answer: " + intervalNotation(s.expected) + "</div>";
+    }
+  });
+
+  // ---------- Q6: absolute value equation ----------
+  PARTS.push({
+    id: "6", group: "6", label: "", points: 4,
+    gen: function () {
+      var k = randInt(1, 4);
+      var h = randInt(-6, 6);
+      var c = randInt(-10, 10);
+      var roll = Math.random();
+      var D = roll < 0.7 ? randInt(1, 8) : (roll < 0.85 ? 0 : randInt(-8, -1));
+      var n = D * k + c;
+      var answer = D > 0 ? [h - D, h + D].sort(function (a, b) { return a - b; }) : (D === 0 ? [h] : []);
+      return { k: k, h: h, c: c, n: n, D: D, answer: answer };
+    },
+    prompt: function (s) {
+      return "<span class=\"math\">" + (s.k === 1 ? "" : s.k) + "|x " + signedTerm(-s.h, "") + "| " + signedTerm(s.c, "") + " = " + s.n + "</span>" +
+        "<div style=\"margin-top:8px\">Solve for x. If there is no solution, say so.</div>";
+    },
+    inputsHtml: function () {
+      return "<span class=\"field-label\">x =</span><input type=\"text\" class=\"ans-main\" placeholder=\"e.g. 2, -4  or  no solution\">";
+    },
+    readAnswer: function (card) {
+      var raw = card.querySelector(".ans-main").value;
+      return { noSol: isNoSolutionText(raw), list: parseNumList(raw) };
+    },
+    isCorrect: function (ua, s) {
+      if (s.answer.length === 0) return ua.noSol;
+      return !ua.noSol && numSetsMatch(ua.list, s.answer);
+    },
+    solutionHtml: function (s) {
+      var D = s.D;
+      var isolate = "|x " + signedTerm(-s.h, "") + "| = " + D;
+      if (D > 0) {
+        return "<span class=\"sol-label\">Solution</span>" +
+          "<div class=\"step\">Isolate the absolute value: " + isolate + ".</div>" +
+          "<div class=\"step\">Split into two cases: x " + signedTerm(-s.h, "") + " = " + D + " or x " + signedTerm(-s.h, "") + " = " + (-D) + ", giving x = " + (s.h + D) + " or x = " + (s.h - D) + ".</div>" +
+          "<div class=\"final\">Answer: x = " + s.answer.join(", ") + "</div>";
+      } else if (D === 0) {
+        return "<span class=\"sol-label\">Solution</span>" +
+          "<div class=\"step\">Isolate the absolute value: " + isolate + ". An absolute value can only equal 0 when its inside is 0.</div>" +
+          "<div class=\"step\">x " + signedTerm(-s.h, "") + " = 0 &rarr; x = " + s.h + " (a single solution).</div>" +
+          "<div class=\"final\">Answer: x = " + s.h + "</div>";
+      }
+      return "<span class=\"sol-label\">Solution</span>" +
+        "<div class=\"step\">Isolate the absolute value: " + isolate + ". An absolute value can never equal a negative number.</div>" +
+        "<div class=\"final\">Answer: No solution</div>";
+    }
+  });
+
+  // ---------- Group 7: extra credit — absolute value inequality ----------
+  PARTS.push({
+    id: "7", group: "7", label: "(EC)", points: 4,
+    gen: function () {
+      var k = randInt(1, 5);
+      var h = randInt(-10, 10);
+      var m = randInt(1, 9);
+      var outside = randBool();
+      var strict = randBool();
+      var lowT = (h - m) / k, highT = (h + m) / k;
+      return { k: k, h: h, m: m, outside: outside, strict: strict, lowT: lowT, highT: highT };
+    },
+    prompt: function (s) {
+      var op = s.outside ? (s.strict ? "&gt;" : "&ge;") : (s.strict ? "&lt;" : "&le;");
+      return "<span class=\"math\">|" + (s.k === 1 ? "" : s.k) + "x " + signedTerm(-s.h, "") + "| " + op + " " + s.m + "</span>" +
+        "<div style=\"margin-top:8px\">Solve for x. Give your answer in interval notation.</div>";
+    },
+    inputsHtml: function (s) {
+      return intervalTextInputHtml(s.outside ? "e.g. (-inf, -2] U [5, inf)" : "e.g. [-2, 5]");
+    },
+    readAnswer: readIntervalTextAnswer,
+    isCorrect: function (ua, s) {
+      var expected = s.outside
+        ? [{ lo: -Infinity, loIncl: false, hi: s.lowT, hiIncl: !s.strict }, { lo: s.highT, loIncl: !s.strict, hi: Infinity, hiIncl: false }]
+        : [{ lo: s.lowT, loIncl: !s.strict, hi: s.highT, hiIncl: !s.strict }];
+      return intervalAnswerCorrect(ua, expected);
+    },
+    solutionHtml: function (s) {
+      var kStr = s.k === 1 ? "" : String(s.k);
+      if (s.outside) {
+        var op = s.strict ? "&gt;" : "&ge;";
+        var expected = [{ lo: -Infinity, loIncl: false, hi: s.lowT, hiIncl: !s.strict }, { lo: s.highT, loIncl: !s.strict, hi: Infinity, hiIncl: false }];
+        return "<span class=\"sol-label\">Solution</span>" +
+          "<div class=\"step\">|" + kStr + "x " + signedTerm(-s.h, "") + "| " + op + " " + s.m + " splits into " + kStr + "x " + signedTerm(-s.h, "") + " " + op + " " + s.m + " OR " + kStr + "x " + signedTerm(-s.h, "") + " " + (s.strict ? "&lt;" : "&le;") + " " + (-s.m) + ".</div>" +
+          "<div class=\"step\">Solving each piece: x " + op + " " + s.highT + " or x " + (s.strict ? "&lt;" : "&le;") + " " + s.lowT + ".</div>" +
+          "<div class=\"final\">Answer: " + intervalNotation(expected) + "</div>";
+      }
+      var op2 = s.strict ? "&lt;" : "&le;";
+      var expected2 = [{ lo: s.lowT, loIncl: !s.strict, hi: s.highT, hiIncl: !s.strict }];
+      return "<span class=\"sol-label\">Solution</span>" +
+        "<div class=\"step\">|" + kStr + "x " + signedTerm(-s.h, "") + "| " + op2 + " " + s.m + " means the inside is trapped between &minus;" + s.m + " and " + s.m + ": " + (-s.m) + " " + op2 + " " + kStr + "x " + signedTerm(-s.h, "") + " " + op2 + " " + s.m + ".</div>" +
+        "<div class=\"step\">Solving: " + s.lowT + " " + op2 + " x " + op2 + " " + s.highT + ".</div>" +
+        "<div class=\"final\">Answer: " + intervalNotation(expected2) + "</div>";
+    }
+  });
+
+  // ============================================================
+  // Group metadata
+  // ============================================================
+  var GROUP_META = {
+    "1": { num: "1.", desc: "Solve for x." },
+    "2": { num: "2.", desc: "Solve for x. Give answer in interval notation." },
+    "3": { num: "3.", desc: "Identify an equation with no solution." },
+    "4": { num: "4.", desc: "Solve for x. Give answer in interval notation." },
+    "5": { num: "5.", desc: "Solve for x. Give answer in interval notation." },
+    "6": { num: "6.", desc: "Solve for x." },
+    "7": { num: "7.", desc: "Extra credit." }
+  };
+
+  // ============================================================
+  // Engine: mount cards
+  // ============================================================
+  var scoreMap = {};
+  var TOTAL_POINTS = PARTS.reduce(function (sum, p) { return sum + p.points; }, 0);
+  var scoreNumEl = document.getElementById("scoreNum");
+
+  function updateScore() {
+    var earned = 0;
+    Object.keys(scoreMap).forEach(function (k) { earned += scoreMap[k]; });
+    scoreNumEl.textContent = earned + " / " + TOTAL_POINTS;
+  }
+
+  window.__PT_STATE = {};
+
+  function mountCard(part, container) {
+    var card = document.createElement("div");
+    card.className = "qcard";
+    card.setAttribute("data-id", part.id);
+
+    var headHtml = "<div class=\"qcard-head\"><div class=\"qtitle\">" +
+      (part.label ? "<span class=\"qlabel\">" + part.label + "</span>" : "") +
+      "<span class=\"qpoints\">" + part.points + " pt" + (part.points === 1 ? "" : "s") + "</span></div>" +
+      "<button class=\"icon-btn new-version-btn\" type=\"button\">" +
+      "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M16 3h5v5\"/><path d=\"M4 20 21 3\"/><path d=\"M21 16v5h-5\"/><path d=\"M15 15l6 6\"/><path d=\"M4 4l5 5\"/></svg>" +
+      "New version</button></div>";
+
+    card.innerHTML = headHtml +
+      "<div class=\"qprompt\"></div>" +
+      "<div class=\"qinputs\"></div>" +
+      "<div class=\"qactions\"><button class=\"btn-primary check-btn\" type=\"button\">Check Answer</button><button class=\"btn-secondary solution-btn\" type=\"button\">Show Solution</button></div>" +
+      "<div class=\"qfeedback hidden\"></div>" +
+      "<div class=\"qsolution hidden\"></div>";
+
+    container.appendChild(card);
+
+    var promptEl = card.querySelector(".qprompt");
+    var inputsEl = card.querySelector(".qinputs");
+    var feedbackEl = card.querySelector(".qfeedback");
+    var solutionEl = card.querySelector(".qsolution");
+
+    var state;
+
+    function render() {
+      state = part.gen();
+      window.__PT_STATE[part.id] = state;
+      promptEl.innerHTML = part.prompt(state);
+      inputsEl.innerHTML = part.inputsHtml(state, part.id);
+      feedbackEl.classList.add("hidden");
+      feedbackEl.innerHTML = "";
+      solutionEl.classList.add("hidden");
+      solutionEl.innerHTML = "";
+      scoreMap[part.id] = 0;
+      updateScore();
+      if (part.afterRender) part.afterRender(card);
+    }
+
+    card.querySelector(".new-version-btn").addEventListener("click", render);
+    card.querySelector(".check-btn").addEventListener("click", function () {
+      var ua = part.readAnswer(card);
+      var correct = part.isCorrect(ua, state);
+      feedbackEl.classList.remove("hidden");
+      if (correct) {
+        feedbackEl.className = "qfeedback good";
+        feedbackEl.innerHTML = "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M20 6 9 17l-5-5\"/></svg> Correct!";
+        scoreMap[part.id] = part.points;
+      } else {
+        feedbackEl.className = "qfeedback bad";
+        feedbackEl.innerHTML = "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\"><circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M15 9l-6 6M9 9l6 6\"/></svg> Not quite — check the solution below.";
+        scoreMap[part.id] = 0;
+      }
+      updateScore();
+    });
+    card.querySelector(".solution-btn").addEventListener("click", function () {
+      solutionEl.innerHTML = part.solutionHtml(state);
+      solutionEl.classList.remove("hidden");
+    });
+
+    render();
+  }
+
+  function buildAll() {
+    var groupsEl = document.getElementById("groups");
+    groupsEl.innerHTML = "";
+    scoreMap = {};
+    var seenGroups = {};
+    var currentContainer = null;
+    PARTS.forEach(function (part) {
+      if (!seenGroups[part.group]) {
+        seenGroups[part.group] = true;
+        var meta = GROUP_META[part.group];
+        var gh = document.createElement("div");
+        gh.className = "group-head";
+        gh.innerHTML = "<div class=\"gnum\">" + meta.num + "</div><div class=\"gdesc\">" + meta.desc + "</div>";
+        groupsEl.appendChild(gh);
+        currentContainer = document.createElement("div");
+        groupsEl.appendChild(currentContainer);
+      }
+      mountCard(part, currentContainer);
+    });
+    updateScore();
+  }
+
+  document.getElementById("newTestBtn").addEventListener("click", buildAll);
+
+  buildAll();
+})();
+</script>

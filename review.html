@@ -71,6 +71,7 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;min-height:100vh
   text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px}
 .prob-text{font-size:16px;line-height:2;overflow-x:auto}
 .katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}
+.sec-card.res-card{background:#f5f3ef;border-style:dashed}
 </style>
 </head>
 <body>
@@ -155,6 +156,52 @@ const DAY1_LINKS = {
   calc1: { href: './Calc 1/Calc1_Day1_Skills_Check.html',         label: 'Day 1 Skills Check' }
 };
 
+// Practice tests & flashcard decks — open in new tab.
+const RESOURCES = {
+  ca: {
+    tests:      [{ label: 'Inequalities &amp; Equations', href: './resources/college-algebra-inequalities-practice-test.html' }],
+    flashcards: [{ label: 'Factoring Patterns',           href: './resources/factoring-patterns.html' },
+                 { label: 'Exponent &amp; Radical Rules', href: './resources/exponent-radical-rules.html' }]
+  },
+  pc: {
+    tests:      [{ label: 'Function Basics',              href: './resources/precalc-function-basics-practice-test.html' }],
+    flashcards: [{ label: 'Function Library',             href: './resources/function-library.html' },
+                 { label: 'Unit Circle Values',           href: './resources/unit-circle.html' },
+                 { label: 'Trig Identities',              href: './resources/trig-identities.html' },
+                 { label: 'Law of Sines &amp; Cosines',   href: './resources/law-of-sines-cosines.html' }]
+  },
+  calc1: {
+    tests:      [{ label: 'Limits',                       href: './resources/limits-practice-test.html' }],
+    flashcards: [{ label: 'Derivative Rules',             href: './resources/derivative-rules.html' },
+                 { label: 'Basic Antiderivatives',        href: './resources/basic-antiderivatives.html' }]
+  },
+  c2: {
+    tests:      [],
+    flashcards: [{ label: 'Series Convergence Tests',     href: './resources/series-tests.html' },
+                 { label: 'Volumes of Revolution',        href: './resources/volumes-of-revolution.html' }]
+  }
+};
+
+function resourcesHtml(cls) {
+  const res = RESOURCES[_currentCourse] || {};
+  const tests = res.tests || [], cards = res.flashcards || [];
+  if (!tests.length && !cards.length) return '';
+  const items = [
+    ...tests.map(t => `<div class="sec-card res-card ${cls}" onclick="window.open('${t.href}','_blank')">
+        <div class="sec-card-num">📝 Practice Test</div>
+        <div class="sec-card-title">${t.label}</div>
+        <div class="sec-card-count">Opens in new tab</div></div>`),
+    ...cards.map(c => `<div class="sec-card res-card ${cls}" onclick="window.open('${c.href}','_blank')">
+        <div class="sec-card-num">🃏 Flashcards</div>
+        <div class="sec-card-title">${c.label}</div>
+        <div class="sec-card-count">Opens in new tab</div></div>`)
+  ].join('');
+  return `<div class="unit-block">
+    <div class="unit-label">Study Resources</div>
+    <div class="section-grid">${items}</div>
+  </div>`;
+}
+
 function setCourse(course) {
   _currentCourse = course;
   document.getElementById('btnCA').className = 'course-btn ca' + (course==='ca' ? ' active' : '');
@@ -212,7 +259,7 @@ function buildGrid() {
     container.innerHTML = `<div class="unit-block">
       <div class="unit-label">Quick Start</div>
       <div class="section-grid">${prereqCard}${day1Card}</div>
-    </div>`;
+    </div>` + resourcesHtml(cls);
     return;
   }
 
@@ -247,6 +294,7 @@ function buildGrid() {
     html += `</div></div>`;
   });
 
+  html += resourcesHtml(cls);
   container.innerHTML = html;
 }
 

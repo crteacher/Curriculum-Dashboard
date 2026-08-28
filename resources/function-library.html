@@ -1,0 +1,897 @@
+<title>Function Library</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=JetBrains+Mono:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #f6f1e4;
+    --paper-line: rgba(58, 74, 94, 0.14);
+    --paper-line-strong: rgba(58, 74, 94, 0.26);
+    --ink: #26313f;
+    --ink-soft: #5b6b7d;
+    --card-bg: #fffdf7;
+    --card-border: #ddd2b6;
+    --accent: #c1483f;
+    --accent-strong: #a13a32;
+    --accent-soft: rgba(193, 72, 63, 0.12);
+    --accent-ink: #fff9f0;
+    --graph-stroke: #2c5f8a;
+    --graph-grid: rgba(38, 49, 63, 0.14);
+    --graph-axis: rgba(38, 49, 63, 0.55);
+    --good: #3f7a52;
+    --good-soft: rgba(63, 122, 82, 0.14);
+    --shadow: rgba(38, 49, 63, 0.16);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #1b2330;
+      --paper-line: rgba(238, 242, 240, 0.07);
+      --paper-line-strong: rgba(238, 242, 240, 0.15);
+      --ink: #edf1ef;
+      --ink-soft: #a3aebb;
+      --card-bg: #232e3d;
+      --card-border: #3a4a61;
+      --accent: #ff9179;
+      --accent-strong: #ffab97;
+      --accent-soft: rgba(255, 145, 121, 0.16);
+      --accent-ink: #22140f;
+      --graph-stroke: #8fcdf0;
+      --graph-grid: rgba(238, 242, 240, 0.14);
+      --graph-axis: rgba(238, 242, 240, 0.55);
+      --good: #7bc794;
+      --good-soft: rgba(123, 199, 148, 0.16);
+      --shadow: rgba(0, 0, 0, 0.5);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #1b2330;
+    --paper-line: rgba(238, 242, 240, 0.07);
+    --paper-line-strong: rgba(238, 242, 240, 0.15);
+    --ink: #edf1ef;
+    --ink-soft: #a3aebb;
+    --card-bg: #232e3d;
+    --card-border: #3a4a61;
+    --accent: #ff9179;
+    --accent-strong: #ffab97;
+    --accent-soft: rgba(255, 145, 121, 0.16);
+    --accent-ink: #22140f;
+    --graph-stroke: #8fcdf0;
+    --graph-grid: rgba(238, 242, 240, 0.14);
+    --graph-axis: rgba(238, 242, 240, 0.55);
+    --good: #7bc794;
+    --good-soft: rgba(123, 199, 148, 0.16);
+    --shadow: rgba(0, 0, 0, 0.5);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background:
+      repeating-linear-gradient(0deg, var(--paper-line) 0, var(--paper-line) 1px, transparent 1px, transparent 32px),
+      repeating-linear-gradient(90deg, var(--paper-line) 0, var(--paper-line) 1px, transparent 1px, transparent 32px),
+      var(--paper);
+    color: var(--ink);
+    font-family: "Source Sans 3", ui-sans-serif, system-ui, sans-serif;
+    display: flex;
+    justify-content: center;
+    padding: clamp(20px, 4vw, 56px) 18px 60px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+  }
+
+  .wrap {
+    width: 100%;
+    max-width: 780px;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+
+  .eyebrow {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  h1 {
+    font-family: "Fraunces", Georgia, serif;
+    font-weight: 600;
+    font-size: clamp(1.9rem, 5vw, 2.6rem);
+    margin: 6px 0 8px;
+    text-wrap: balance;
+  }
+
+  header p {
+    color: var(--ink-soft);
+    font-size: 1rem;
+    max-width: 46ch;
+    margin: 0 auto;
+    line-height: 1.5;
+  }
+
+  .toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin: 26px 0 14px;
+    flex-wrap: wrap;
+  }
+
+  .progress-info {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 180px;
+  }
+
+  .progress-label {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 0.82rem;
+    color: var(--ink-soft);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .progress-track {
+    height: 6px;
+    border-radius: 4px;
+    background: var(--paper-line-strong);
+    overflow: hidden;
+    width: 200px;
+    max-width: 40vw;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 4px;
+    transition: width 0.35s ease;
+  }
+
+  button {
+    font-family: inherit;
+    cursor: pointer;
+  }
+
+  button:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  .icon-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    color: var(--ink);
+    padding: 9px 14px;
+    border-radius: 9px;
+    font-size: 0.86rem;
+    font-weight: 600;
+    transition: border-color 0.15s ease, transform 0.1s ease;
+  }
+
+  .icon-btn:hover { border-color: var(--accent); }
+  .icon-btn:active { transform: translateY(1px); }
+  .icon-btn svg { width: 15px; height: 15px; flex-shrink: 0; }
+
+  .card-shell {
+    perspective: 1400px;
+  }
+
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 18px;
+    box-shadow: 0 18px 40px -22px var(--shadow), 0 2px 8px -2px var(--shadow);
+    padding: clamp(18px, 3.4vw, 30px);
+  }
+
+  .slots {
+    display: grid;
+    grid-template-columns: minmax(230px, 300px) 1fr;
+    grid-template-areas: "graph name" "graph equation";
+    gap: 16px;
+  }
+
+  @media (max-width: 620px) {
+    .slots {
+      grid-template-columns: 1fr;
+      grid-template-areas: "graph" "name" "equation";
+    }
+  }
+
+  .slot {
+    border: 1.5px dashed var(--card-border);
+    border-radius: 13px;
+    padding: 14px 16px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-height: 88px;
+  }
+
+  .slot.graph-slot { grid-area: graph; min-height: 230px; padding: 14px; }
+  .slot.name-slot { grid-area: name; justify-content: center; }
+  .slot.equation-slot { grid-area: equation; justify-content: center; }
+
+  .slot.given {
+    border-style: solid;
+    border-color: var(--accent);
+    background: var(--accent-soft);
+  }
+
+  .slot-label {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .slot.given .slot-label { color: var(--accent-strong); font-weight: 700; }
+
+  .slot-body {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .name-slot .slot-body {
+    font-family: "Fraunces", Georgia, serif;
+    font-size: clamp(1.15rem, 3vw, 1.5rem);
+    font-weight: 600;
+    line-height: 1.25;
+  }
+
+  .name-slot .sub {
+    display: block;
+    font-family: "Source Sans 3", sans-serif;
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--ink-soft);
+    margin-top: 4px;
+  }
+
+  .equation-slot .slot-body {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: clamp(1.2rem, 3.2vw, 1.55rem);
+    font-weight: 500;
+  }
+
+  canvas.graph-canvas {
+    width: 100%;
+    height: 100%;
+    min-height: 190px;
+    border-radius: 8px;
+  }
+
+  .hidden-content {
+    filter: blur(9px) saturate(0.6);
+    opacity: 0.55;
+    transition: filter 0.4s ease, opacity 0.4s ease;
+    user-select: none;
+  }
+
+  canvas.graph-canvas.hidden-content {
+    filter: blur(18px) saturate(0.3);
+    opacity: 0.3;
+  }
+
+  .mystery-mark {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Fraunces", serif;
+    font-size: 2.1rem;
+    font-weight: 600;
+    color: var(--ink-soft);
+    opacity: 0.75;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+
+  .slot.revealed .hidden-content { filter: none; opacity: 1; }
+  .slot.revealed .mystery-mark { opacity: 0; }
+
+  .slot.instant, .slot.instant .hidden-content, .slot.instant .mystery-mark {
+    transition: none !important;
+  }
+
+  /* fraction + radical typography */
+  .frac { display: inline-flex; flex-direction: column; align-items: center; vertical-align: middle; margin: 0 2px; line-height: 1.05; }
+  .frac .num, .frac .den { padding: 0 3px; }
+  .frac .num { border-bottom: 1.5px solid currentColor; padding-bottom: 1px; }
+  .radical { position: relative; display: inline-flex; align-items: baseline; }
+  .radical .idx { font-size: 0.55em; position: relative; top: -0.7em; margin-right: -0.35em; }
+  .radical .rad-sign { font-size: 1.15em; }
+  .radical .radicand { border-top: 1.5px solid currentColor; padding: 0 3px 0 2px; margin-left: 1px; }
+
+  .action-row {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 22px;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: var(--accent-ink);
+    border: none;
+    padding: 13px 28px;
+    border-radius: 11px;
+    font-size: 1rem;
+    font-weight: 700;
+    box-shadow: 0 8px 18px -8px var(--accent-strong);
+    transition: transform 0.1s ease, box-shadow 0.15s ease;
+  }
+  .btn-primary:hover { box-shadow: 0 10px 22px -8px var(--accent-strong); }
+  .btn-primary:active { transform: translateY(1px); }
+
+  .btn-check {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: 1.5px solid var(--card-border);
+    background: var(--card-bg);
+    color: var(--ink);
+    padding: 12px 22px;
+    border-radius: 11px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    transition: border-color 0.15s ease, background 0.15s ease, transform 0.1s ease;
+  }
+  .btn-check:active { transform: translateY(1px); }
+  .btn-check.good:hover { border-color: var(--good); background: var(--good-soft); }
+  .btn-check.retry:hover { border-color: var(--accent); background: var(--accent-soft); }
+  .btn-check svg { width: 17px; height: 17px; }
+
+  .nav-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 18px;
+    margin-top: 18px;
+  }
+
+  .nav-arrow {
+    background: transparent;
+    border: 1px solid var(--card-border);
+    color: var(--ink-soft);
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color 0.15s ease, color 0.15s ease;
+  }
+  .nav-arrow:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+  .nav-arrow:disabled { opacity: 0.35; cursor: default; }
+  .nav-arrow svg { width: 17px; height: 17px; }
+
+  .dots {
+    display: flex;
+    gap: 6px;
+  }
+  .dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--paper-line-strong);
+  }
+  .dot.done { background: var(--ink-soft); }
+  .dot.current { background: var(--accent); transform: scale(1.35); }
+
+  .summary {
+    text-align: center;
+    padding: clamp(30px, 5vw, 50px) clamp(16px, 4vw, 30px);
+  }
+
+  .summary h2 {
+    font-family: "Fraunces", serif;
+    font-size: clamp(1.6rem, 4vw, 2.1rem);
+    margin: 4px 0 6px;
+  }
+
+  .tally {
+    display: flex;
+    justify-content: center;
+    gap: 28px;
+    margin: 22px 0 26px;
+    flex-wrap: wrap;
+  }
+
+  .tally-item { text-align: center; }
+  .tally-num {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 2.1rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+  .tally-item.good .tally-num { color: var(--good); }
+  .tally-item.retry .tally-num { color: var(--accent); }
+  .tally-label {
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-top: 2px;
+  }
+
+  .summary-actions {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .hint {
+    text-align: center;
+    color: var(--ink-soft);
+    font-size: 0.82rem;
+    margin-top: 22px;
+  }
+
+  .hidden { display: none !important; }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">PreCalc &middot; Library of Functions</div>
+    <h1>Function Library</h1>
+    <p>One representation is given. Recall the other two — the name, the equation, or the graph — then flip the card to check yourself.</p>
+  </header>
+
+  <div id="deckView">
+    <div class="toolbar">
+      <div class="progress-info">
+        <span class="progress-label" id="progressLabel">Card 1 of 10</span>
+        <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:10%"></div></div>
+      </div>
+      <button class="icon-btn" id="shuffleBtn" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3h5v5"/><path d="M4 20 21 3"/><path d="M21 16v5h-5"/><path d="M15 15l6 6"/><path d="M4 4l5 5"/></svg>
+        Shuffle
+      </button>
+    </div>
+
+    <div class="card-shell">
+      <div class="card">
+        <div class="slots" id="slots">
+          <div class="slot graph-slot" id="slot-graph">
+            <span class="slot-label" id="label-graph">Graph</span>
+            <div class="slot-body">
+              <canvas class="graph-canvas hidden-content" id="graphCanvas"></canvas>
+              <span class="mystery-mark" id="mystery-graph">?</span>
+            </div>
+          </div>
+          <div class="slot name-slot" id="slot-name">
+            <span class="slot-label" id="label-name">Name</span>
+            <div class="slot-body">
+              <span class="hidden-content" id="nameContent"></span>
+              <span class="mystery-mark" id="mystery-name">?</span>
+            </div>
+          </div>
+          <div class="slot equation-slot" id="slot-equation">
+            <span class="slot-label" id="label-equation">Equation</span>
+            <div class="slot-body">
+              <span class="hidden-content" id="equationContent"></span>
+              <span class="mystery-mark" id="mystery-equation">?</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="action-row" id="revealRow">
+          <button class="btn-primary" id="revealBtn" type="button">Reveal answer</button>
+        </div>
+        <div class="action-row hidden" id="checkRow">
+          <button class="btn-check good" id="knewItBtn" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            Knew it
+          </button>
+          <button class="btn-check retry" id="reviewBtn" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 1 2.6 6.3"/><path d="M3 21v-6h6"/></svg>
+            Need review
+          </button>
+        </div>
+
+        <div class="nav-row">
+          <button class="nav-arrow" id="prevBtn" type="button" aria-label="Previous card">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+          </button>
+          <div class="dots" id="dots"></div>
+          <button class="nav-arrow" id="nextBtn" type="button" aria-label="Next card">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <p class="hint">Space or Enter reveals the card &middot; arrow keys move between cards</p>
+  </div>
+
+  <div id="summaryView" class="hidden">
+    <div class="card summary">
+      <div class="eyebrow">Deck complete</div>
+      <h2 id="summaryHeading">Nice work.</h2>
+      <p id="summarySub" style="color:var(--ink-soft)">Here's how this round went.</p>
+      <div class="tally">
+        <div class="tally-item good"><div class="tally-num" id="tallyGood">0</div><div class="tally-label">Knew it</div></div>
+        <div class="tally-item retry"><div class="tally-num" id="tallyRetry">0</div><div class="tally-label">Need review</div></div>
+      </div>
+      <div class="summary-actions">
+        <button class="btn-primary" id="restartAllBtn" type="button">Study all 10 again</button>
+        <button class="btn-check retry hidden" id="reviewFlaggedBtn" type="button">Review flagged only</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  // ---- function library data -------------------------------------------------
+  var LIBRARY = [
+    { key: "const", name: "Constant Function", fn: function (x) { return 2; },
+      eq: eqPlain("f(x) = 2"),
+      xMin: -5, xMax: 5, yMin: -2, yMax: 5, tickX: 1, tickY: 1 },
+
+    { key: "linear", name: "Linear Function", sub: "(Identity)", fn: function (x) { return x; },
+      eq: eqPlain("f(x) = x"),
+      xMin: -5, xMax: 5, yMin: -5, yMax: 5, tickX: 1, tickY: 1 },
+
+    { key: "abs", name: "Absolute Value Function", fn: function (x) { return Math.abs(x); },
+      eq: eqPlain("f(x) = |x|"),
+      xMin: -5, xMax: 5, yMin: -1, yMax: 5, tickX: 1, tickY: 1 },
+
+    { key: "quad", name: "Quadratic Function", sub: "(Squaring)", fn: function (x) { return x * x; },
+      eq: eqSup("f(x) = x", "2"),
+      xMin: -3.5, xMax: 3.5, yMin: -1, yMax: 9, tickX: 1, tickY: 2 },
+
+    { key: "cubic", name: "Cubic Function", fn: function (x) { return x * x * x; },
+      eq: eqSup("f(x) = x", "3"),
+      xMin: -2.2, xMax: 2.2, yMin: -9, yMax: 9, tickX: 1, tickY: 3 },
+
+    { key: "sqrt", name: "Square Root Function", fn: function (x) { return Math.sqrt(x); },
+      eq: eqRadical(null, "x"),
+      xMin: -1.5, xMax: 9, yMin: -1.5, yMax: 3.5, tickX: 1, tickY: 1 },
+
+    { key: "cbrt", name: "Cube Root Function", fn: function (x) { return Math.cbrt(x); },
+      eq: eqRadical("3", "x"),
+      xMin: -9, xMax: 9, yMin: -2.5, yMax: 2.5, tickX: 2, tickY: 1 },
+
+    { key: "recip", name: "Reciprocal Function", fn: function (x) { return 1 / x; },
+      eq: eqFrac("1", "x"),
+      xMin: -5, xMax: 5, yMin: -5, yMax: 5, tickX: 1, tickY: 1,
+      asymptoteV: 0, asymptoteH: 0 },
+
+    { key: "exp", name: "Exponential Function", fn: function (x) { return Math.exp(x); },
+      eq: eqSup("f(x) = e", "x"),
+      xMin: -4, xMax: 2.3, yMin: -1, yMax: 8, tickX: 1, tickY: 2,
+      asymptoteH: 0 },
+
+    { key: "log", name: "Logarithmic Function", fn: function (x) { return Math.log(x); },
+      eq: eqPlain("f(x) = ln(x)"),
+      xMin: -1.5, xMax: 8, yMin: -3, yMax: 3, tickX: 1, tickY: 1,
+      asymptoteV: 0 }
+  ];
+
+  function eqPlain(text) { return { html: escapeHtml(text) }; }
+  function eqSup(base, sup) { return { html: escapeHtml(base) + "<sup>" + escapeHtml(sup) + "</sup>" }; }
+  function eqFrac(num, den) {
+    return { html: "f(x) = <span class=\"frac\"><span class=\"num\">" + escapeHtml(num) + "</span><span class=\"den\">" + escapeHtml(den) + "</span></span>" };
+  }
+  function eqRadical(index, radicand) {
+    var idx = index ? "<span class=\"idx\">" + escapeHtml(index) + "</span>" : "";
+    return { html: "f(x) = <span class=\"radical\">" + idx + "<span class=\"rad-sign\">&radic;</span><span class=\"radicand\">" + escapeHtml(radicand) + "</span></span>" };
+  }
+  function escapeHtml(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+
+  var PROMPT_TYPES = ["graph", "name", "equation"];
+
+  // ---- state -------------------------------------------------------------
+  var deck = [];          // array of { item, promptType }
+  var index = 0;
+  var revealed = false;
+  var tallyGood = 0, tallyRetry = 0;
+  var flagged = [];       // keys flagged "need review" this round
+  var reviewMode = false;
+
+  // ---- dom refs ------------------------------------------------------------
+  var el = {};
+  ["deckView","summaryView","progressLabel","progressFill","slots",
+   "slot-graph","label-graph","graphCanvas","mystery-graph",
+   "slot-name","label-name","nameContent","mystery-name",
+   "slot-equation","label-equation","equationContent","mystery-equation",
+   "revealRow","revealBtn","checkRow","knewItBtn","reviewBtn",
+   "prevBtn","nextBtn","dots","shuffleBtn",
+   "summaryHeading","summarySub","tallyGood","tallyRetry",
+   "restartAllBtn","reviewFlaggedBtn"
+  ].forEach(function (id) { el[id.replace(/-([a-z])/g, function(_,c){return c.toUpperCase();})] = document.getElementById(id); });
+
+  var ctx = el.graphCanvas.getContext("2d");
+
+  function shuffle(arr) {
+    var a = arr.slice();
+    for (var i = a.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    return a;
+  }
+
+  function buildDeck(items) {
+    var types = [];
+    for (var i = 0; i < items.length; i++) types.push(PROMPT_TYPES[i % 3]);
+    types = shuffle(types);
+    var shuffledItems = shuffle(items);
+    return shuffledItems.map(function (item, i) {
+      return { item: item, promptType: types[i] };
+    });
+  }
+
+  function startDeck(items, isReview) {
+    deck = buildDeck(items);
+    index = 0;
+    revealed = false;
+    tallyGood = 0; tallyRetry = 0; flagged = [];
+    reviewMode = !!isReview;
+    el.summaryView.classList.add("hidden");
+    el.deckView.classList.remove("hidden");
+    renderDots();
+    renderCard();
+  }
+
+  function renderDots() {
+    el.dots.innerHTML = "";
+    deck.forEach(function (_, i) {
+      var d = document.createElement("span");
+      d.className = "dot" + (i === index ? " current" : i < index ? " done" : "");
+      el.dots.appendChild(d);
+    });
+  }
+
+  function labelFor(type) {
+    return { graph: "Graph", name: "Name", equation: "Equation" }[type];
+  }
+
+  function renderCard() {
+    var entry = deck[index];
+    var item = entry.item;
+    var given = entry.promptType;
+
+    el.progressLabel.textContent = "Card " + (index + 1) + " of " + deck.length + (reviewMode ? " · review" : "");
+    el.progressFill.style.width = (((index + 1) / deck.length) * 100) + "%";
+
+    // reset slot states — snap instantly, no transition, so the answer
+    // never flashes visible before fading out on a new card
+    var allSlots = ["graph", "name", "equation"].map(function (type) {
+      var slot = document.getElementById("slot-" + type);
+      slot.classList.add("instant");
+      slot.classList.toggle("given", type === given);
+      slot.classList.remove("revealed");
+      document.getElementById("label-" + type).textContent = labelFor(type) + (type === given ? " — given" : " — your turn");
+      return slot;
+    });
+
+    // fill content
+    el.nameContent.innerHTML = item.name + (item.sub ? "<span class=\"sub\">" + item.sub + "</span>" : "");
+    el.equationContent.innerHTML = item.eq.html;
+    drawGraph(item, given === "graph");
+
+    if (given === "graph") document.getElementById("slot-graph").classList.add("revealed");
+    if (given === "name") document.getElementById("slot-name").classList.add("revealed");
+    if (given === "equation") document.getElementById("slot-equation").classList.add("revealed");
+
+    revealed = false;
+    el.revealRow.classList.remove("hidden");
+    el.checkRow.classList.add("hidden");
+
+    el.prevBtn.disabled = index === 0;
+    el.nextBtn.disabled = false;
+    renderDots();
+
+    // now that the hidden/given state has painted with no transition,
+    // re-enable transitions so only the reveal action animates
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () {
+        allSlots.forEach(function (slot) { slot.classList.remove("instant"); });
+      });
+    });
+  }
+
+  function revealCard() {
+    if (revealed) return;
+    revealed = true;
+    ["graph", "name", "equation"].forEach(function (type) {
+      document.getElementById("slot-" + type).classList.add("revealed");
+    });
+    drawGraph(deck[index].item, true);
+    el.revealRow.classList.add("hidden");
+    el.checkRow.classList.remove("hidden");
+  }
+
+  function goNext(fromCheck, flag) {
+    if (fromCheck) {
+      if (flag) { tallyRetry++; flagged.push(deck[index].item); }
+      else { tallyGood++; }
+    }
+    if (index < deck.length - 1) {
+      index++;
+      renderCard();
+    } else {
+      showSummary();
+    }
+  }
+
+  function goPrev() {
+    if (index === 0) return;
+    index--;
+    renderCard();
+  }
+
+  function showSummary() {
+    el.deckView.classList.add("hidden");
+    el.summaryView.classList.remove("hidden");
+    el.tallyGood.textContent = tallyGood;
+    el.tallyRetry.textContent = tallyRetry;
+    el.summaryHeading.textContent = tallyRetry === 0 ? "You know this library cold." : "Solid round.";
+    el.summarySub.textContent = reviewMode
+      ? "That was a focused review pass on your flagged functions."
+      : "Flip through again, or drill just the ones you flagged.";
+    if (flagged.length > 0) {
+      el.reviewFlaggedBtn.classList.remove("hidden");
+      el.reviewFlaggedBtn.textContent = "Review flagged only (" + flagged.length + ")";
+    } else {
+      el.reviewFlaggedBtn.classList.add("hidden");
+    }
+  }
+
+  // ---- canvas graphing -----------------------------------------------------
+  function drawGraph(item, showCurve) {
+    var cvs = el.graphCanvas;
+    var cssW = cvs.clientWidth || 280, cssH = cvs.clientHeight || 210;
+    var dpr = window.devicePixelRatio || 1;
+    cvs.width = cssW * dpr;
+    cvs.height = cssH * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, cssW, cssH);
+
+    var xMin = item.xMin, xMax = item.xMax, yMin = item.yMin, yMax = item.yMax;
+    var padPx = 8;
+    var w = cssW - padPx * 2, h = cssH - padPx * 2;
+    var sx = w / (xMax - xMin), sy = h / (yMax - yMin);
+
+    function toPx(x, y) {
+      return [padPx + (x - xMin) * sx, padPx + h - (y - yMin) * sy];
+    }
+
+    var styles = getComputedStyle(document.documentElement);
+    var gridColor = styles.getPropertyValue("--graph-grid").trim();
+    var axisColor = styles.getPropertyValue("--graph-axis").trim();
+    var strokeColor = styles.getPropertyValue("--graph-stroke").trim();
+    var inkSoft = styles.getPropertyValue("--ink-soft").trim();
+
+    // grid lines
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = gridColor;
+    ctx.beginPath();
+    for (var gx = Math.ceil(xMin / item.tickX) * item.tickX; gx <= xMax; gx += item.tickX) {
+      var p1 = toPx(gx, yMin), p2 = toPx(gx, yMax);
+      ctx.moveTo(p1[0] + 0.5, p1[1]); ctx.lineTo(p2[0] + 0.5, p2[1]);
+    }
+    for (var gy = Math.ceil(yMin / item.tickY) * item.tickY; gy <= yMax; gy += item.tickY) {
+      var q1 = toPx(xMin, gy), q2 = toPx(xMax, gy);
+      ctx.moveTo(q1[0], q1[1] + 0.5); ctx.lineTo(q2[0], q2[1] + 0.5);
+    }
+    ctx.stroke();
+
+    // axes
+    ctx.strokeStyle = axisColor;
+    ctx.lineWidth = 1.4;
+    ctx.beginPath();
+    if (xMin <= 0 && xMax >= 0) { var a1 = toPx(0, yMin), a2 = toPx(0, yMax); ctx.moveTo(a1[0], a1[1]); ctx.lineTo(a2[0], a2[1]); }
+    if (yMin <= 0 && yMax >= 0) { var b1 = toPx(xMin, 0), b2 = toPx(xMax, 0); ctx.moveTo(b1[0], b1[1]); ctx.lineTo(b2[0], b2[1]); }
+    ctx.stroke();
+
+    // axis origin tick label
+    ctx.fillStyle = inkSoft;
+    ctx.font = "10px 'JetBrains Mono', monospace";
+    if (xMin <= 0 && xMax >= 0 && yMin <= 0 && yMax >= 0) {
+      var o = toPx(0, 0);
+      ctx.fillText("0", o[0] + 4, o[1] + 12);
+    }
+
+    // Everything below this line gives away the answer (the curve's shape,
+    // and even asymptote placement hints at the family), so none of it is
+    // drawn at all — not just blurred — until the slot is actually revealed.
+    if (!showCurve) return;
+
+    // asymptotes (dashed)
+    ctx.setLineDash([4, 4]);
+    ctx.strokeStyle = axisColor;
+    ctx.lineWidth = 1.2;
+    if (typeof item.asymptoteV === "number") {
+      ctx.beginPath();
+      var v1 = toPx(item.asymptoteV, yMin), v2 = toPx(item.asymptoteV, yMax);
+      ctx.moveTo(v1[0], v1[1]); ctx.lineTo(v2[0], v2[1]); ctx.stroke();
+    }
+    if (typeof item.asymptoteH === "number") {
+      ctx.beginPath();
+      var h1 = toPx(xMin, item.asymptoteH), h2 = toPx(xMax, item.asymptoteH);
+      ctx.moveTo(h1[0], h1[1]); ctx.lineTo(h2[0], h2[1]); ctx.stroke();
+    }
+    ctx.setLineDash([]);
+
+    // curve
+    var samples = 420;
+    var padY = (yMax - yMin) * 0.2;
+    ctx.strokeStyle = strokeColor;
+    ctx.lineWidth = 2.4;
+    ctx.lineJoin = "round";
+    ctx.lineCap = "round";
+    ctx.beginPath();
+    var drawing = false;
+    for (var i = 0; i <= samples; i++) {
+      var x = xMin + (xMax - xMin) * (i / samples);
+      var y = item.fn(x);
+      var valid = isFinite(y) && y >= yMin - padY && y <= yMax + padY;
+      if (valid) {
+        var pt = toPx(x, Math.max(yMin - padY, Math.min(yMax + padY, y)));
+        if (!drawing) { ctx.moveTo(pt[0], pt[1]); drawing = true; }
+        else { ctx.lineTo(pt[0], pt[1]); }
+      } else {
+        drawing = false;
+      }
+    }
+    ctx.stroke();
+  }
+
+  // ---- events ----------------------------------------------------------
+  el.revealBtn.addEventListener("click", revealCard);
+  el.knewItBtn.addEventListener("click", function () { goNext(true, false); });
+  el.reviewBtn.addEventListener("click", function () { goNext(true, true); });
+  el.nextBtn.addEventListener("click", function () { if (index < deck.length - 1) { index++; renderCard(); } else if (revealed) { showSummary(); } });
+  el.prevBtn.addEventListener("click", goPrev);
+  el.shuffleBtn.addEventListener("click", function () { startDeck(LIBRARY, false); });
+  el.restartAllBtn.addEventListener("click", function () { startDeck(LIBRARY, false); });
+  el.reviewFlaggedBtn.addEventListener("click", function () { startDeck(flagged, true); });
+
+  document.addEventListener("keydown", function (e) {
+    if (!el.deckView.classList.contains("hidden")) {
+      if (e.code === "Space" || e.code === "Enter") { e.preventDefault(); revealCard(); }
+      else if (e.code === "ArrowRight") { el.nextBtn.click(); }
+      else if (e.code === "ArrowLeft") { el.prevBtn.click(); }
+    }
+  });
+
+  window.addEventListener("resize", function () {
+    if (!el.deckView.classList.contains("hidden")) {
+      drawGraph(deck[index].item, revealed || deck[index].promptType === "graph");
+    }
+  });
+
+  startDeck(LIBRARY, false);
+})();
+</script>

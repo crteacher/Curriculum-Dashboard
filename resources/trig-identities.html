@@ -1,0 +1,467 @@
+<title>Trig Identities</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=JetBrains+Mono:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #f6f1e4;
+    --paper-line: rgba(58, 74, 94, 0.14);
+    --paper-line-strong: rgba(58, 74, 94, 0.26);
+    --ink: #26313f;
+    --ink-soft: #5b6b7d;
+    --card-bg: #fffdf7;
+    --card-border: #ddd2b6;
+    --accent: #c1483f;
+    --accent-strong: #a13a32;
+    --accent-soft: rgba(193, 72, 63, 0.12);
+    --accent-ink: #fff9f0;
+    --good: #3f7a52;
+    --good-soft: rgba(63, 122, 82, 0.14);
+    --shadow: rgba(38, 49, 63, 0.16);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #1b2330;
+      --paper-line: rgba(238, 242, 240, 0.07);
+      --paper-line-strong: rgba(238, 242, 240, 0.15);
+      --ink: #edf1ef;
+      --ink-soft: #a3aebb;
+      --card-bg: #232e3d;
+      --card-border: #3a4a61;
+      --accent: #ff9179;
+      --accent-strong: #ffab97;
+      --accent-soft: rgba(255, 145, 121, 0.16);
+      --accent-ink: #22140f;
+      --good: #7bc794;
+      --good-soft: rgba(123, 199, 148, 0.16);
+      --shadow: rgba(0, 0, 0, 0.5);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #1b2330;
+    --paper-line: rgba(238, 242, 240, 0.07);
+    --paper-line-strong: rgba(238, 242, 240, 0.15);
+    --ink: #edf1ef;
+    --ink-soft: #a3aebb;
+    --card-bg: #232e3d;
+    --card-border: #3a4a61;
+    --accent: #ff9179;
+    --accent-strong: #ffab97;
+    --accent-soft: rgba(255, 145, 121, 0.16);
+    --accent-ink: #22140f;
+    --good: #7bc794;
+    --good-soft: rgba(123, 199, 148, 0.16);
+    --shadow: rgba(0, 0, 0, 0.5);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background:
+      repeating-linear-gradient(0deg, var(--paper-line) 0, var(--paper-line) 1px, transparent 1px, transparent 32px),
+      repeating-linear-gradient(90deg, var(--paper-line) 0, var(--paper-line) 1px, transparent 1px, transparent 32px),
+      var(--paper);
+    color: var(--ink);
+    font-family: "Source Sans 3", ui-sans-serif, system-ui, sans-serif;
+    display: flex;
+    justify-content: center;
+    padding: clamp(20px, 4vw, 56px) 18px 60px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+  }
+
+  .wrap { width: 100%; max-width: 780px; }
+  header { text-align: center; margin-bottom: 28px; }
+
+  .eyebrow {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--accent); font-weight: 600;
+  }
+
+  h1 {
+    font-family: "Fraunces", Georgia, serif; font-weight: 600;
+    font-size: clamp(1.9rem, 5vw, 2.6rem); margin: 6px 0 8px; text-wrap: balance;
+  }
+
+  header p { color: var(--ink-soft); font-size: 1rem; max-width: 46ch; margin: 0 auto; line-height: 1.5; }
+
+  .toolbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 26px 0 14px; flex-wrap: wrap; }
+  .progress-info { display: flex; flex-direction: column; gap: 6px; min-width: 180px; }
+  .progress-label { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 0.82rem; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+  .progress-track { height: 6px; border-radius: 4px; background: var(--paper-line-strong); overflow: hidden; width: 200px; max-width: 40vw; }
+  .progress-fill { height: 100%; background: var(--accent); border-radius: 4px; transition: width 0.35s ease; }
+
+  button { font-family: inherit; cursor: pointer; }
+  button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .icon-btn {
+    display: inline-flex; align-items: center; gap: 7px; background: var(--card-bg);
+    border: 1px solid var(--card-border); color: var(--ink); padding: 9px 14px;
+    border-radius: 9px; font-size: 0.86rem; font-weight: 600;
+    transition: border-color 0.15s ease, transform 0.1s ease;
+  }
+  .icon-btn:hover { border-color: var(--accent); }
+  .icon-btn:active { transform: translateY(1px); }
+  .icon-btn svg { width: 15px; height: 15px; flex-shrink: 0; }
+
+  .card {
+    background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 18px;
+    box-shadow: 0 18px 40px -22px var(--shadow), 0 2px 8px -2px var(--shadow);
+    padding: clamp(18px, 3.4vw, 30px);
+  }
+
+  .slots { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  @media (max-width: 620px) { .slots { grid-template-columns: 1fr; } }
+
+  .slot {
+    border: 1.5px dashed var(--card-border); border-radius: 13px; padding: 16px 14px;
+    position: relative; display: flex; flex-direction: column; justify-content: center;
+    min-height: 140px; text-align: center;
+  }
+  .slot.given { border-style: solid; border-color: var(--accent); background: var(--accent-soft); }
+
+  .slot-label {
+    font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 0.66rem;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-soft);
+    margin-bottom: 10px; display: block;
+  }
+  .slot.given .slot-label { color: var(--accent-strong); font-weight: 700; }
+
+  .slot-body { flex: 1; display: flex; align-items: center; justify-content: center; }
+
+  .name-text {
+    font-family: "Fraunces", Georgia, serif; font-weight: 600;
+    font-size: clamp(1rem, 2.4vw, 1.22rem); line-height: 1.3;
+  }
+  .formula-text {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: clamp(0.86rem, 2vw, 1rem); line-height: 1.6;
+  }
+  .example-text {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: clamp(0.78rem, 1.9vw, 0.9rem); line-height: 1.55; color: var(--ink);
+  }
+  .example-text .ex-label {
+    display: block; font-family: "Source Sans 3", sans-serif; font-size: 0.72rem;
+    color: var(--ink-soft); margin-bottom: 5px; font-weight: 600;
+  }
+
+  .hidden-content { filter: blur(9px) saturate(0.6); opacity: 0.55; transition: filter 0.4s ease, opacity 0.4s ease; user-select: none; }
+  .mystery-mark {
+    position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+    font-family: "Fraunces", serif; font-size: 2rem; font-weight: 600; color: var(--ink-soft);
+    opacity: 0.75; pointer-events: none; transition: opacity 0.3s ease;
+  }
+  .slot.revealed .hidden-content { filter: none; opacity: 1; }
+  .slot.revealed .mystery-mark { opacity: 0; }
+  .slot.instant, .slot.instant .hidden-content, .slot.instant .mystery-mark { transition: none !important; }
+
+  .action-row { display: flex; justify-content: center; gap: 12px; margin-top: 22px; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--accent); color: var(--accent-ink); border: none; padding: 13px 28px;
+    border-radius: 11px; font-size: 1rem; font-weight: 700;
+    box-shadow: 0 8px 18px -8px var(--accent-strong); transition: transform 0.1s ease, box-shadow 0.15s ease;
+  }
+  .btn-primary:hover { box-shadow: 0 10px 22px -8px var(--accent-strong); }
+  .btn-primary:active { transform: translateY(1px); }
+
+  .btn-check {
+    display: inline-flex; align-items: center; gap: 8px; border: 1.5px solid var(--card-border);
+    background: var(--card-bg); color: var(--ink); padding: 12px 22px; border-radius: 11px;
+    font-size: 0.95rem; font-weight: 700; transition: border-color 0.15s ease, background 0.15s ease, transform 0.1s ease;
+  }
+  .btn-check:active { transform: translateY(1px); }
+  .btn-check.good:hover { border-color: var(--good); background: var(--good-soft); }
+  .btn-check.retry:hover { border-color: var(--accent); background: var(--accent-soft); }
+  .btn-check svg { width: 17px; height: 17px; }
+
+  .nav-row { display: flex; justify-content: center; align-items: center; gap: 18px; margin-top: 18px; }
+  .nav-arrow {
+    background: transparent; border: 1px solid var(--card-border); color: var(--ink-soft);
+    width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    transition: border-color 0.15s ease, color 0.15s ease;
+  }
+  .nav-arrow:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+  .nav-arrow:disabled { opacity: 0.35; cursor: default; }
+  .nav-arrow svg { width: 17px; height: 17px; }
+
+  .dots { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; max-width: 260px; }
+  .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--paper-line-strong); }
+  .dot.done { background: var(--ink-soft); }
+  .dot.current { background: var(--accent); transform: scale(1.35); }
+
+  .summary { text-align: center; padding: clamp(30px, 5vw, 50px) clamp(16px, 4vw, 30px); }
+  .summary h2 { font-family: "Fraunces", serif; font-size: clamp(1.6rem, 4vw, 2.1rem); margin: 4px 0 6px; }
+  .tally { display: flex; justify-content: center; gap: 28px; margin: 22px 0 26px; flex-wrap: wrap; }
+  .tally-item { text-align: center; }
+  .tally-num { font-family: "JetBrains Mono", monospace; font-size: 2.1rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .tally-item.good .tally-num { color: var(--good); }
+  .tally-item.retry .tally-num { color: var(--accent); }
+  .tally-label { font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-soft); margin-top: 2px; }
+  .summary-actions { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
+
+  .hint { text-align: center; color: var(--ink-soft); font-size: 0.82rem; margin-top: 22px; }
+  .hidden { display: none !important; }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">PreCalc &middot; §7.1&ndash;7.3</div>
+    <h1>Trig Identities</h1>
+    <p>One piece is given — the identity's name, its formula, or a worked example. Recall the other two, then flip the card to check yourself.</p>
+  </header>
+
+  <div id="deckView">
+    <div class="toolbar">
+      <div class="progress-info">
+        <span class="progress-label" id="progressLabel">Card 1 of 13</span>
+        <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:7.7%"></div></div>
+      </div>
+      <button class="icon-btn" id="shuffleBtn" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3h5v5"/><path d="M4 20 21 3"/><path d="M21 16v5h-5"/><path d="M15 15l6 6"/><path d="M4 4l5 5"/></svg>
+        Shuffle
+      </button>
+    </div>
+
+    <div class="card">
+      <div class="slots">
+        <div class="slot" id="slot-name">
+          <span class="slot-label" id="label-name">Name</span>
+          <div class="slot-body"><span class="name-text hidden-content" id="nameContent"></span><span class="mystery-mark" id="mystery-name">?</span></div>
+        </div>
+        <div class="slot" id="slot-formula">
+          <span class="slot-label" id="label-formula">Formula</span>
+          <div class="slot-body"><span class="formula-text hidden-content" id="formulaContent"></span><span class="mystery-mark" id="mystery-formula">?</span></div>
+        </div>
+        <div class="slot" id="slot-example">
+          <span class="slot-label" id="label-example">Example</span>
+          <div class="slot-body"><span class="example-text hidden-content" id="exampleContent"></span><span class="mystery-mark" id="mystery-example">?</span></div>
+        </div>
+      </div>
+
+      <div class="action-row" id="revealRow">
+        <button class="btn-primary" id="revealBtn" type="button">Reveal answer</button>
+      </div>
+      <div class="action-row hidden" id="checkRow">
+        <button class="btn-check good" id="knewItBtn" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+          Knew it
+        </button>
+        <button class="btn-check retry" id="reviewBtn" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 1 2.6 6.3"/><path d="M3 21v-6h6"/></svg>
+          Need review
+        </button>
+      </div>
+
+      <div class="nav-row">
+        <button class="nav-arrow" id="prevBtn" type="button" aria-label="Previous card">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+        </button>
+        <div class="dots" id="dots"></div>
+        <button class="nav-arrow" id="nextBtn" type="button" aria-label="Next card">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6 6-6"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <p class="hint">Space or Enter reveals the card &middot; arrow keys move between cards</p>
+  </div>
+
+  <div id="summaryView" class="hidden">
+    <div class="card summary">
+      <div class="eyebrow">Deck complete</div>
+      <h2 id="summaryHeading">Nice work.</h2>
+      <p id="summarySub" style="color:var(--ink-soft)">Here's how this round went.</p>
+      <div class="tally">
+        <div class="tally-item good"><div class="tally-num" id="tallyGood">0</div><div class="tally-label">Knew it</div></div>
+        <div class="tally-item retry"><div class="tally-num" id="tallyRetry">0</div><div class="tally-label">Need review</div></div>
+      </div>
+      <div class="summary-actions">
+        <button class="btn-primary" id="restartAllBtn" type="button">Study all 13 again</button>
+        <button class="btn-check retry hidden" id="reviewFlaggedBtn" type="button">Review flagged only</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var LIBRARY = [
+    { name: "Pythagorean Identity",
+      formula: "sin&sup2;&theta; + cos&sup2;&theta; = 1",
+      example: "sin&theta;=3/5 &rarr; cos&sup2;&theta;=1&minus;9/25=16/25" },
+    { name: "Pythagorean Identities <span style=\"font-weight:400;font-size:0.72em;color:var(--ink-soft)\">(derived)</span>",
+      formula: "tan&sup2;&theta; + 1 = sec&sup2;&theta;<br>cot&sup2;&theta; + 1 = csc&sup2;&theta;",
+      example: "tan&theta;=3/4 &rarr; sec&sup2;&theta;=1+9/16=25/16" },
+    { name: "Reciprocal Identities",
+      formula: "csc&theta;=1/sin&theta;&nbsp;&nbsp; sec&theta;=1/cos&theta;&nbsp;&nbsp; cot&theta;=1/tan&theta;",
+      example: "sin&theta;=1/2 &rarr; csc&theta;=2" },
+    { name: "Quotient Identities",
+      formula: "tan&theta; = sin&theta;/cos&theta;<br>cot&theta; = cos&theta;/sin&theta;",
+      example: "sin&theta;=1/2, cos&theta;=&radic;3/2 &rarr; tan&theta;=&radic;3/3" },
+    { name: "Even / Odd Identities",
+      formula: "cos(&minus;&theta;)=cos&theta; (even)<br>sin(&minus;&theta;)=&minus;sin&theta; (odd)<br>tan(&minus;&theta;)=&minus;tan&theta; (odd)",
+      example: "cos(&minus;60&deg;) = cos 60&deg; = 1/2" },
+    { name: "Sine Sum &amp; Difference",
+      formula: "sin(A&plusmn;B) = sin A cos B &plusmn; cos A sin B",
+      example: "sin75&deg;=sin(45&deg;+30&deg;)=(&radic;6+&radic;2)/4" },
+    { name: "Cosine Sum &amp; Difference",
+      formula: "cos(A&plusmn;B) = cos A cos B &#8723; sin A sin B",
+      example: "cos75&deg;=cos45&deg;cos30&deg;&minus;sin45&deg;sin30&deg;=(&radic;6&minus;&radic;2)/4" },
+    { name: "Tangent Sum &amp; Difference",
+      formula: "tan(A&plusmn;B) = (tan A &plusmn; tan B) / (1 &#8723; tan A tan B)",
+      example: "A=45&deg;, B=30&deg; &rarr; tan75&deg; = 2+&radic;3" },
+    { name: "Double Angle &mdash; Sine",
+      formula: "sin(2&theta;) = 2 sin&theta; cos&theta;",
+      example: "sin&theta;=3/5, cos&theta;=4/5 &rarr; sin2&theta;=2(3/5)(4/5)=24/25" },
+    { name: "Double Angle &mdash; Cosine",
+      formula: "cos(2&theta;) = cos&sup2;&theta;&minus;sin&sup2;&theta;<br>= 1&minus;2sin&sup2;&theta; = 2cos&sup2;&theta;&minus;1",
+      example: "same &theta; &rarr; cos2&theta;=16/25&minus;9/25=7/25" },
+    { name: "Double Angle &mdash; Tangent",
+      formula: "tan(2&theta;) = 2tan&theta; / (1&minus;tan&sup2;&theta;)",
+      example: "tan&theta;=3/4 &rarr; tan2&theta;=1.5/(1&minus;9/16)=24/7" },
+    { name: "Half Angle &mdash; Sine &amp; Cosine",
+      formula: "cos(&theta;/2) = &plusmn;&radic;((1+cos&theta;)/2)<br>sin(&theta;/2) = &plusmn;&radic;((1&minus;cos&theta;)/2)",
+      example: "&theta;=60&deg; &rarr; cos30&deg;=&radic;((1+0.5)/2)=&radic;3/2" },
+    { name: "Half Angle &mdash; Tangent",
+      formula: "tan(&theta;/2) = sin&theta;/(1+cos&theta;) = (1&minus;cos&theta;)/sin&theta;",
+      example: "&theta;=60&deg; &rarr; tan30&deg;=(&radic;3/2)/(1.5)=&radic;3/3" }
+  ];
+
+  var PROMPT_TYPES = ["name", "formula", "example"];
+  var deck = [], index = 0, revealed = false, tallyGood = 0, tallyRetry = 0, flagged = [], reviewMode = false;
+
+  var el = {};
+  ["deckView","summaryView","progressLabel","progressFill",
+   "slot-name","label-name","nameContent","mystery-name",
+   "slot-formula","label-formula","formulaContent","mystery-formula",
+   "slot-example","label-example","exampleContent","mystery-example",
+   "revealRow","revealBtn","checkRow","knewItBtn","reviewBtn",
+   "prevBtn","nextBtn","dots","shuffleBtn",
+   "summaryHeading","summarySub","tallyGood","tallyRetry","restartAllBtn","reviewFlaggedBtn"
+  ].forEach(function (id) { el[id.replace(/-([a-z])/g, function(_,c){return c.toUpperCase();})] = document.getElementById(id); });
+
+  function shuffle(arr) {
+    var a = arr.slice();
+    for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; }
+    return a;
+  }
+
+  function buildDeck(items) {
+    var types = [];
+    for (var i = 0; i < items.length; i++) types.push(PROMPT_TYPES[i % 3]);
+    types = shuffle(types);
+    var shuffledItems = shuffle(items);
+    return shuffledItems.map(function (item, i) { return { item: item, promptType: types[i] }; });
+  }
+
+  function startDeck(items, isReview) {
+    deck = buildDeck(items);
+    index = 0; revealed = false; tallyGood = 0; tallyRetry = 0; flagged = []; reviewMode = !!isReview;
+    el.summaryView.classList.add("hidden");
+    el.deckView.classList.remove("hidden");
+    renderCard();
+  }
+
+  function renderDots() {
+    el.dots.innerHTML = "";
+    deck.forEach(function (_, i) {
+      var d = document.createElement("span");
+      d.className = "dot" + (i === index ? " current" : i < index ? " done" : "");
+      el.dots.appendChild(d);
+    });
+  }
+
+  function labelFor(type) { return { name: "Name", formula: "Formula", example: "Example" }[type]; }
+
+  function renderCard() {
+    var entry = deck[index], item = entry.item, given = entry.promptType;
+
+    el.progressLabel.textContent = "Card " + (index + 1) + " of " + deck.length + (reviewMode ? " · review" : "");
+    el.progressFill.style.width = (((index + 1) / deck.length) * 100) + "%";
+
+    var allSlots = ["name", "formula", "example"].map(function (type) {
+      var slot = document.getElementById("slot-" + type);
+      slot.classList.add("instant");
+      slot.classList.toggle("given", type === given);
+      slot.classList.remove("revealed");
+      document.getElementById("label-" + type).textContent = labelFor(type) + (type === given ? " — given" : " — your turn");
+      return slot;
+    });
+
+    el.nameContent.innerHTML = item.name;
+    el.formulaContent.innerHTML = item.formula;
+    el.exampleContent.innerHTML = "<span class=\"ex-label\">Example</span>" + item.example;
+
+    if (given === "name") document.getElementById("slot-name").classList.add("revealed");
+    if (given === "formula") document.getElementById("slot-formula").classList.add("revealed");
+    if (given === "example") document.getElementById("slot-example").classList.add("revealed");
+
+    revealed = false;
+    el.revealRow.classList.remove("hidden");
+    el.checkRow.classList.add("hidden");
+    el.prevBtn.disabled = index === 0;
+    renderDots();
+
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () { allSlots.forEach(function (s) { s.classList.remove("instant"); }); });
+    });
+  }
+
+  function revealCard() {
+    if (revealed) return;
+    revealed = true;
+    ["name", "formula", "example"].forEach(function (type) { document.getElementById("slot-" + type).classList.add("revealed"); });
+    el.revealRow.classList.add("hidden");
+    el.checkRow.classList.remove("hidden");
+  }
+
+  function goNext(fromCheck, flag) {
+    if (fromCheck) { if (flag) { tallyRetry++; flagged.push(deck[index].item); } else { tallyGood++; } }
+    if (index < deck.length - 1) { index++; renderCard(); } else { showSummary(); }
+  }
+  function goPrev() { if (index === 0) return; index--; renderCard(); }
+
+  function showSummary() {
+    el.deckView.classList.add("hidden");
+    el.summaryView.classList.remove("hidden");
+    el.tallyGood.textContent = tallyGood;
+    el.tallyRetry.textContent = tallyRetry;
+    el.summaryHeading.textContent = tallyRetry === 0 ? "You know these identities cold." : "Solid round.";
+    el.summarySub.textContent = reviewMode ? "That was a focused review pass on your flagged identities." : "Flip through again, or drill just the ones you flagged.";
+    if (flagged.length > 0) {
+      el.reviewFlaggedBtn.classList.remove("hidden");
+      el.reviewFlaggedBtn.textContent = "Review flagged only (" + flagged.length + ")";
+    } else { el.reviewFlaggedBtn.classList.add("hidden"); }
+  }
+
+  el.revealBtn.addEventListener("click", revealCard);
+  el.knewItBtn.addEventListener("click", function () { goNext(true, false); });
+  el.reviewBtn.addEventListener("click", function () { goNext(true, true); });
+  el.nextBtn.addEventListener("click", function () { if (index < deck.length - 1) { index++; renderCard(); } else if (revealed) { showSummary(); } });
+  el.prevBtn.addEventListener("click", goPrev);
+  el.shuffleBtn.addEventListener("click", function () { startDeck(LIBRARY, false); });
+  el.restartAllBtn.addEventListener("click", function () { startDeck(LIBRARY, false); });
+  el.reviewFlaggedBtn.addEventListener("click", function () { startDeck(flagged, true); });
+
+  document.addEventListener("keydown", function (e) {
+    if (!el.deckView.classList.contains("hidden")) {
+      if (e.code === "Space" || e.code === "Enter") { e.preventDefault(); revealCard(); }
+      else if (e.code === "ArrowRight") { el.nextBtn.click(); }
+      else if (e.code === "ArrowLeft") { el.prevBtn.click(); }
+    }
+  });
+
+  startDeck(LIBRARY, false);
+})();
+</script>
