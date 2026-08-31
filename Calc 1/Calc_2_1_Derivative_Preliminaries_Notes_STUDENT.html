@@ -149,7 +149,7 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 <div class="container">
 <h1 class="page-title">Derivative Preliminaries</h1>
 <p class="page-sub">Calculus I &nbsp;&middot;&nbsp; &sect;2.1 &nbsp;&middot;&nbsp; Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026 &nbsp;&middot;&nbsp; <strong>STUDENT</strong></p>
-<div class="opening-q">Before we can define the derivative, we need two ideas: average rate of change (secant slope) and what happens as the interval shrinks to zero. What does it mean geometrically when that interval vanishes?</div>
+<div class="opening-q">A car's position is $s(t)=t^2$ miles at time $t$ hours. It's easy to say where it is at $t=1$ or $t=2$. But what does it mean to say the car is going 60 mph at exactly $t=1.5$? How do you measure speed at a single instant &mdash; not over an interval?</div>
 <div class="two-col">
 <div class="col"><div class="section-head">Average Rate of Change</div>
 <div class="accent-box"><p>The <strong>average rate of change</strong> of $f$ over $[a,b]$:</p>$$\dfrac{f(b)-f(a)}{b-a}$$<p>This is the slope of the <strong>secant line</strong> through $(a,f(a))$ and $(b,f(b))$.</p><p><strong>Units:</strong> change in output per unit change in input. For position $s(t)$, this is average velocity.</p></div>
@@ -205,9 +205,9 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">$\dfrac{(2+h)^2-4}{h}=\dfrac{4+4h+h^2-4}{h}=\dfrac{4h+h^2}{h}=4+h$</div></div>
 </div>
 <div class="ex-block">
-  <div class="ex-label">Example 3 &nbsp;&mdash;&nbsp; Limit of secant slope</div>
-  <div class="ex-body">Using the result above, find $f'(2)$ for $f(x)=x^2$.</div>
-  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">$f'(2)=\displaystyle\lim_{h\to 0}(4+h)=4$<br>Tangent slope at $x=2$ is $4$.</div></div>
+  <div class="ex-label">Example 3 &nbsp;&mdash;&nbsp; Estimating instantaneous speed with a table</div>
+  <div class="ex-body">Back to the opening question: for $s(t)=t^2$ (miles, $t$ in hours), estimate the car's speed at the instant $t=1.5$ by computing average velocity over shorter and shorter time intervals starting at $t=1.5$.</div>
+  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden"><table style="width:100%;border-collapse:collapse;font-size:12.5px;margin-bottom:.5rem"><tr style="background:#1e3a5c;color:#fff"><th style="padding:3px 6px;text-align:left">Interval</th><th style="padding:3px 6px;text-align:right">Avg. velocity (mph)</th></tr><tr><td style="padding:3px 6px;border-bottom:1px solid #e0dcd0">[1.5,&nbsp;2.5]</td><td style="padding:3px 6px;text-align:right;border-bottom:1px solid #e0dcd0">4</td></tr><tr><td style="padding:3px 6px;border-bottom:1px solid #e0dcd0">[1.5,&nbsp;2.0]</td><td style="padding:3px 6px;text-align:right;border-bottom:1px solid #e0dcd0">3.5</td></tr><tr><td style="padding:3px 6px;border-bottom:1px solid #e0dcd0">[1.5,&nbsp;1.6]</td><td style="padding:3px 6px;text-align:right;border-bottom:1px solid #e0dcd0">3.1</td></tr><tr><td style="padding:3px 6px;border-bottom:1px solid #e0dcd0">[1.5,&nbsp;1.51]</td><td style="padding:3px 6px;text-align:right;border-bottom:1px solid #e0dcd0">3.01</td></tr><tr><td style="padding:3px 6px">[1.5,&nbsp;1.501]</td><td style="padding:3px 6px;text-align:right">3.001</td></tr></table>As the interval shrinks toward $t=1.5$, the average velocity gets closer and closer to $3$ mph &mdash; without ever computing a limit symbolically, the table makes it clear the car's speed at that instant is $3$ mph.</div></div>
 </div>
 <div class="ex-block">
   <div class="ex-label">Example 4 &nbsp;&mdash;&nbsp; Average velocity</div>
@@ -229,8 +229,8 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 </div>
 <div class="pr-row">
   <div class="pr-num">3.</div>
-  <div class="pr-prob">Using the result above, find $f'(1)$ for $f(x)=3x^2$.</div>
-  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$\lim_{h\to 0}(6+3h)=6$</div></div>
+  <div class="pr-prob">Using the secant slope $6+3h$ from Problem 2, describe what happens to it as $h\to 0$ (don't evaluate a limit &mdash; just describe the trend).</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">As $h$ shrinks toward $0$, the secant slope $6+3h$ gets closer and closer to $6$, and the secant line swings toward the tangent line at $x=1$.</div></div>
 </div>
 <div class="pr-row">
   <div class="pr-num">4.</div>
@@ -244,8 +244,8 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 </div>
 <div class="pr-row">
   <div class="pr-num">6.</div>
-  <div class="pr-prob">For $f(x)=x^2$, as $h\to 0$, the secant slope $4+h$ approaches what value?</div>
-  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$4$ — this is $f'(2)$</div></div>
+  <div class="pr-prob">True or False: If $f(a)=f(b)$ for $a\neq b$, the average rate of change of $f$ on $[a,b]$ must be $0$.</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">True &mdash; the numerator $f(b)-f(a)=0$, so the secant slope is $0$ regardless of what $f$ does in between.</div></div>
 </div>
 </div>
 
