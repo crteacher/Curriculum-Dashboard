@@ -34,6 +34,7 @@
   .card-body{padding:14px 16px}
   .card-meta{font-family:sans-serif;font-size:12px;color:#888;margin-bottom:4px}
   .card-expr{font-size:17px;margin-bottom:12px;line-height:2.2;overflow-x:auto}
+  .card-expr svg{max-width:100%;height:auto}
   .katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}
   .input-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
   .ans-input{font-family:'Courier New',monospace;font-size:14px;border:1px solid #ccc;
@@ -57,9 +58,6 @@
   .revealed-answer{display:none;margin-top:8px;font-family:sans-serif;font-size:13px;
     color:#444;background:#f5f3ef;border-radius:6px;padding:8px 11px;line-height:1.8;overflow-x:auto}
   code{font-family:'Courier New',monospace;background:#f0ede7;padding:1px 5px;border-radius:3px;font-size:12px}
-
-
-.hint{display:none!important}
 </style>
 </head>
 <body>
@@ -71,10 +69,8 @@
     <div class="section-title">Core Ideas</div>
 
   <div class="concept">
-    <span class="concept-label">Average rate of change (ARC)</span>
-    $$\text{ARC} = \frac{f(b)-f(a)}{b-a}$$
-    This is the slope of the <em>secant line</em> connecting $(a,f(a))$ and $(b,f(b))$.
-    <br>For $f(x)=3x^2$ from $x=1$ to $x=3$: $\;\dfrac{27-3}{3-1}=\dfrac{24}{2}=12$.
+    <span class="concept-label">Positive &amp; negative intervals</span>
+    A graph is <em>positive</em> where it lies above the x-axis ($f(x)>0$) and <em>negative</em> where it lies below ($f(x)<0$). It crosses zero at each x-intercept — that's the boundary between a positive interval and a negative one.
   </div>
   <div class="concept">
     <span class="concept-label">Increasing, decreasing, extrema</span>
@@ -82,13 +78,18 @@
     <br><strong>Local max/min:</strong> highest/lowest in a neighborhood.
     <br><strong>Absolute max/min:</strong> highest/lowest over the entire domain (may not exist).
   </div>
+  <div class="concept">
+    <span class="concept-label">Average rate of change (ARC)</span>
+    $$\text{ARC} = \frac{f(b)-f(a)}{b-a}$$
+    This is the slope of the <em>secant line</em> connecting $(a,f(a))$ and $(b,f(b))$.
+  </div>
 
   </div>
 
   <div class="section">
     <div class="section-title">Practice Problems</div>
     <p style="font-family:sans-serif;font-size:13px;color:#666;margin-bottom:1rem;">
-      Enter your answer as an integer (average rate of change or vertex value).
+      Read each graph and enter your answer. Intervals look like (-inf,3)u(5,inf) &mdash; use "inf" for infinity and "u" for union. Single values are just numbers.
       Press <strong>Check</strong> or hit Enter.
     </p>
     <div class="score-bar">
@@ -134,120 +135,168 @@ function addT(n, v) {
 
 // ── Problem generators (section-specific, injected below) ─────────────────────
 
+// Shared graph-drawing helper. f: JS function of x. Draws axes + curve from
+// actual sampled values, so the picture and the computed answer always agree.
+function graphSVG(f,xMin,xMax,opts){
+  opts=opts||{};
+  const W=480,H=190,padL=42,padR=22,padT=22,padB=26;
+  const plotW=W-padL-padR, plotH=H-padT-padB, n=48;
+  const pts=[]; let yMin=Infinity,yMax=-Infinity;
+  for(let i=0;i<=n;i++){
+    const x=xMin+(xMax-xMin)*i/n, y=f(x);
+    pts.push([x,y]);
+    if(y<yMin)yMin=y; if(y>yMax)yMax=y;
+  }
+  const yPad=Math.max((yMax-yMin)*0.18,0.6);
+  yMin-=yPad; yMax+=yPad;
+  const sx=plotW/(xMax-xMin), sy=plotH/(yMax-yMin);
+  const px=x=>padL+(x-xMin)*sx, py=y=>padT+(yMax-y)*sy;
+  const axisY=Math.max(padT,Math.min(H-padB,py(0)));
+  const axisX=Math.max(padL,Math.min(W-padR,px(0)));
+  const poly=pts.map(p=>px(p[0]).toFixed(1)+','+py(p[1]).toFixed(1)).join(' ');
+  let svg=`<svg width="480" height="190" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">`;
+  svg+=`<rect width="${W}" height="${H}" fill="#fafaf8" rx="6"/>`;
+  svg+=`<line x1="${padL-10}" y1="${axisY}" x2="${W-padR+8}" y2="${axisY}" stroke="#888" stroke-width="1.5"/>`;
+  svg+=`<line x1="${axisX}" y1="${padT-8}" x2="${axisX}" y2="${H-padB+8}" stroke="#888" stroke-width="1.5"/>`;
+  svg+=`<text x="${W-padR+8}" y="${axisY-5}" font-size="9" font-family="sans-serif" fill="#888">x</text>`;
+  svg+=`<text x="${axisX+4}" y="${padT-10}" font-size="9" font-family="sans-serif" fill="#888">y</text>`;
+  svg+=`<polyline points="${poly}" fill="none" stroke="#1e3a5c" stroke-width="2.2" stroke-linejoin="round"/>`;
+  (opts.marks||[]).forEach(m=>{
+    const cx=px(m.x).toFixed(1), cy=py(m.y).toFixed(1);
+    svg+=`<circle cx="${cx}" cy="${cy}" r="4" fill="${m.color||'#7a5c1e'}"/>`;
+    if(m.label){
+      const dy=(m.dy!==undefined)?m.dy:-9;
+      svg+=`<text x="${cx}" y="${(parseFloat(cy)+dy).toFixed(1)}" font-size="10" font-family="sans-serif" fill="${m.color||'#7a5c1e'}" font-weight="bold" text-anchor="middle">${m.label}</text>`;
+    }
+  });
+  svg+='</svg>';
+  return svg;
+}
+
 function gen1(){
-  // ARC of f(x)=x^2 from x=p to x=q. ARC = p+q.
-  const p=choose([-3,-2,-1,0,1,2]);
-  const q=p+choose([1,2,3,4]);
-  const ans=p+q;
-  const fp=p*p, fq=q*q;
+  // Upward parabola: positive/negative intervals from two marked roots.
+  const r1=choose([-4,-3,-2,-1]);
+  const r2=r1+choose([3,4,5,6]);
+  const f=x=>(x-r1)*(x-r2);
+  const svg=graphSVG(f,r1-2,r2+2,{marks:[
+    {x:r1,y:0,label:String(r1),color:'#7a5c1e',dy:16},
+    {x:r2,y:0,label:String(r2),color:'#7a5c1e',dy:16}
+  ]});
   return{
-    latex:`\\text{ARC of }f(x)=x^2\\text{ from }x=${p}\\text{ to }x=${q}`,
-    answer:[String(ans)],
-    hint:'What ratio defines average rate of change between two points?',
-    step:`\\dfrac{f(${q})-f(${p})}{${q}-${p}}=\\dfrac{${fq}-${fp}}{${q-p}}=\\dfrac{${fq-fp}}{${q-p}}=${ans}`
+    svg:svg,
+    answer:[`(-inf,${r1})u(${r2},inf)`,`(${r2},inf)u(-inf,${r1})`],
+    hint:"Compare the curve's height to the horizontal axis at each x-value — where does it sit above?",
+    step:`(x-${r1})(x-${r2})=0\\text{ at }x=${r1},${r2}\\text{; opens upward}\\Rightarrow\\text{negative between the roots, positive outside}\\Rightarrow(-\\infty,${r1})\\cup(${r2},\\infty)`
   };
 }
 
 function gen2(){
-  // ARC of f(x)=a*x^2 from x=p to x=q. ARC = a*(p+q).
-  const a=choose([2,3,4]);
-  const p=choose([-2,-1,0,1]);
-  const q=p+choose([1,2,3]);
-  const ans=a*(p+q);
-  const fp=a*p*p, fq=a*q*q;
+  // Upward parabola: increasing/decreasing from the vertex.
+  const h=choose([-3,-2,-1,0,1,2,3]);
+  const k=choose([-4,-3,-2,-1,0,1,2,3,4]);
+  const f=x=>(x-h)*(x-h)+k;
+  const svg=graphSVG(f,h-3,h+3,{marks:[{x:h,y:k,label:'vertex',color:'#7a5c1e',dy:-10}]});
   return{
-    latex:`\\text{ARC of }f(x)=${a}x^2\\text{ from }x=${p}\\text{ to }x=${q}`,
-    answer:[String(ans)],
-    hint:'What is the slope of the secant line connecting the two points on this curve?',
-    step:`\\dfrac{${fq}-${fp}}{${q}-${p}}=\\dfrac{${fq-fp}}{${q-p}}=${ans}`
+    svg:svg,
+    answer:[`(-inf,${h})`],
+    hint:'Look at the vertex — which side of it does the curve fall as you scan left to right?',
+    step:`\\text{Vertex at }x=${h}\\text{; opens upward}\\Rightarrow\\text{decreasing left of the vertex}\\Rightarrow(-\\infty,${h})`
   };
 }
 
 function gen3(){
-  // ARC of f(x)=m*x+b from p to q. ARC = m (the slope).
-  const m=choose([-4,-3,-2,-1,2,3,4,5]);
-  const b=choose([-5,-4,-3,-2,-1,0,1,2,3,4,5]);
-  const p=choose([-3,-2,-1,0,1]);
-  const q=p+choose([1,2,3,4]);
-  const ans=m;
-  const fp=m*p+b, fq=m*q+b;
-  const bS=b>=0?`+${b}`:`${b}`;
+  // Downward parabola: positive/negative intervals from two marked roots.
+  const r1=choose([-3,-2,-1]);
+  const r2=r1+choose([3,4,5]);
+  const f=x=>-(x-r1)*(x-r2);
+  const svg=graphSVG(f,r1-2,r2+2,{marks:[
+    {x:r1,y:0,label:String(r1),color:'#7a5c1e',dy:-10},
+    {x:r2,y:0,label:String(r2),color:'#7a5c1e',dy:-10}
+  ]});
   return{
-    latex:`\\text{ARC of }f(x)=${fc(m)}x${b!==0?bS:''}\\text{ from }x=${p}\\text{ to }x=${q}`,
-    answer:[String(ans)],
-    hint:'What does ARC simplify to for a linear function?',
-    step:`\\dfrac{${fq}-${fp}}{${q}-${p}}=\\dfrac{${fq-fp}}{${q-p}}=${ans}`
+    svg:svg,
+    answer:[`(-inf,${r1})u(${r2},inf)`,`(${r2},inf)u(-inf,${r1})`],
+    hint:'Outside the two marked crossings, is the curve above or below the horizontal axis?',
+    step:`-(x-${r1})(x-${r2})=0\\text{ at }x=${r1},${r2}\\text{; opens downward}\\Rightarrow\\text{negative outside the roots}\\Rightarrow(-\\infty,${r1})\\cup(${r2},\\infty)`
   };
 }
 
 function gen4(){
-  // ARC of f(x)=x^3 from x=1 to x=k (k=2 or 3). ARC = k^2+k+1.
-  const k=choose([2,3]);
-  const ans=k*k+k+1;
-  const f1=1, fk=k*k*k;
+  // V-shape (absolute value): local minimum.
+  const h=choose([-3,-2,-1,0,1,2,3]);
+  const k=choose([-4,-3,-2,-1,0,1,2,3]);
+  const a=choose([1,2]);
+  const f=x=>a*Math.abs(x-h)+k;
+  const svg=graphSVG(f,h-3,h+3,{marks:[{x:h,y:k,label:'min',color:'#7a5c1e',dy:15}]});
   return{
-    latex:`\\text{ARC of }f(x)=x^3\\text{ from }x=1\\text{ to }x=${k}`,
-    answer:[String(ans)],
-    hint:'What ratio gives the average rate of change over this interval?',
-    step:`\\dfrac{${fk}-1}{${k}-1}=\\dfrac{${fk-1}}{${k-1}}=${ans}`
+    svg:svg,
+    answer:[String(k)],
+    hint:'What height does the lowest point on the graph reach?',
+    step:`\\text{Vertex of the V at }(${h},${k})\\text{ is the lowest point}\\Rightarrow\\text{local minimum}=${k}`
   };
 }
 
 function gen5(){
-  // ARC of f(x)=x^2+c from x=a to x=b. c cancels. ARC = a+b.
-  const c=choose([-5,-4,-3,-2,-1,1,2,3,4,5]);
-  const p=choose([-3,-2,-1,0,1,2]);
-  const q=p+choose([1,2,3]);
-  const ans=p+q;
-  const fp=p*p+c, fq=q*q+c;
-  const cS=c>=0?`+${c}`:`${c}`;
+  // Line: positive/negative interval from its x-intercept.
+  const m=choose([-3,-2,-1,1,2,3]);
+  const root=choose([-3,-2,-1,0,1,2,3]);
+  const b=-m*root;
+  const f=x=>m*x+b;
+  const svg=graphSVG(f,root-4,root+4,{marks:[{x:root,y:0,label:String(root),color:'#7a5c1e',dy:16}]});
+  const ans=m>0?`(${root},inf)`:`(-inf,${root})`;
   return{
-    latex:`\\text{ARC of }f(x)=x^2${cS}\\text{ from }x=${p}\\text{ to }x=${q}`,
-    answer:[String(ans)],
-    hint:'What cancels when the same constant appears in both f(b) and f(a)?',
-    step:`\\dfrac{(${q}^2${cS})-(${p}^2${cS})}{${q}-${p}}=\\dfrac{${q*q}-${p*p}}{${q-p}}=${ans}`
+    svg:svg,
+    answer:[ans],
+    hint:'Which side of the marked crossing point lies above the horizontal axis?',
+    step:`f(x)=${fc(m)}x${addT(b,'')}\\text{; crosses zero at }x=${root}\\text{; slope is }${m>0?'positive':'negative'}\\Rightarrow\\text{positive on }${ans}`
   };
 }
 
 function gen6(){
-  // ARC of f(x)=-x^2 from x=p to x=q. ARC = -(p+q).
-  const p=choose([-3,-2,-1,0,1]);
-  const q=p+choose([1,2,3,4]);
-  const ans=-(p+q);
-  const fp=-p*p, fq=-q*q;
+  // Downward parabola: increasing/decreasing from the peak.
+  const h=choose([-3,-2,-1,0,1,2,3]);
+  const k=choose([-3,-2,-1,0,1,2,3,4]);
+  const f=x=>-(x-h)*(x-h)+k;
+  const svg=graphSVG(f,h-3,h+3,{marks:[{x:h,y:k,label:'peak',color:'#7a5c1e',dy:-10}]});
   return{
-    latex:`\\text{ARC of }f(x)=-x^2\\text{ from }x=${p}\\text{ to }x=${q}`,
-    answer:[String(ans)],
-    hint:'How does the negative coefficient affect the average rate of change?',
-    step:`\\dfrac{${fq}-${fp}}{${q}-${p}}=\\dfrac{${fq-fp}}{${q-p}}=${ans}`
+    svg:svg,
+    answer:[`(-inf,${h})`],
+    hint:'Look at the peak — which side does the curve climb up to reach it?',
+    step:`\\text{Vertex at }x=${h}\\text{; opens downward}\\Rightarrow\\text{increasing left of the peak}\\Rightarrow(-\\infty,${h})`
   };
 }
 
 function gen7(){
-  // Absolute max of f(x)=-a*(x-h)^2+k. Max = k.
-  const a=choose([1,2,3]);
-  const h=choose([-3,-2,-1,0,1,2,3]);
-  const k=choose([-3,-2,-1,0,1,2,3,4,5,6]);
-  const hS=h>=0?`-${h}`:`+${-h}`;
+  // Upward parabola: absolute minimum value.
+  const h=choose([-2,-1,0,1,2]);
+  const k=choose([-3,-2,-1,0,1,2,3]);
+  const f=x=>(x-h)*(x-h)+k;
+  const svg=graphSVG(f,h-3,h+3,{marks:[{x:h,y:k,label:'min',color:'#7a5c1e',dy:15}]});
   return{
-    latex:`\\text{Absolute max of }f(x)=${a===1?'-':'-'+a}(x${hS})^2${addT(k,'')}`,
+    svg:svg,
     answer:[String(k)],
-    hint:'At which y-value does the vertex of a downward-opening parabola sit?',
-    step:`\\text{Vertex at }(${h},${k});\\text{ parabola opens down}\\Rightarrow\\text{absolute max}=${k}`
+    hint:"This curve's lowest point never repeats — what y-value does it reach?",
+    step:`\\text{Vertex at }(${h},${k})\\text{; opens upward}\\Rightarrow\\text{absolute minimum}=${k}`
   };
 }
 
 function gen8(){
-  // ARC of f(x)=x^2-2x from x=p to x=q. ARC = p+q-2.
-  const p=choose([-2,-1,0,1,2]);
+  // Line: ARC read from two marked points (equals the slope).
+  const m=choose([-3,-2,-1,1,2,3]);
+  const b=choose([-3,-2,-1,0,1,2,3]);
+  const p=choose([-3,-2,-1,0,1]);
   const q=p+choose([2,3,4]);
-  const ans=p+q-2;
-  const fp=p*p-2*p, fq=q*q-2*q;
+  const f=x=>m*x+b;
+  const fp=f(p), fq=f(q);
+  const svg=graphSVG(f,p-1.5,q+1.5,{marks:[
+    {x:p,y:fp,label:`(${p},${fp})`,color:'#7a5c1e',dy:(m>0?15:-10)},
+    {x:q,y:fq,label:`(${q},${fq})`,color:'#7a5c1e',dy:(m>0?-10:15)}
+  ]});
   return{
-    latex:`\\text{ARC of }f(x)=x^2-2x\\text{ from }x=${p}\\text{ to }x=${q}`,
-    answer:[String(ans)],
-    hint:'What is the difference quotient equal to for this quadratic?',
-    step:`\\dfrac{${fq}-${fp}}{${q}-${p}}=\\dfrac{${fq-fp}}{${q-p}}=${ans}`
+    svg:svg,
+    answer:[String(m)],
+    hint:'What single number describes the steepness of a straight line?',
+    step:`\\text{ARC}=\\dfrac{${fq}-(${fp})}{${q}-(${p})}=\\dfrac{${fq-fp}}{${q-p}}=${m}`
   };
 }
 

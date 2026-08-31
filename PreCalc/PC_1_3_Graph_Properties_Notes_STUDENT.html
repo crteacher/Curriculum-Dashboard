@@ -87,8 +87,34 @@ details[open]>.mistake-toggle{color:#1e3a5c}
   <p>The interval names the $x$-positions over which the curve rises. Read the horizontal axis, and use open intervals at the turning points.</p>
 </div>
 </details>
-</div><div class="col"><div class="section-head">Maxima, Minima & Average Rate of Change</div>
-<div class="accent-box"><p><strong>Local max/min:</strong> highest/lowest in some open interval around the point.</p><p><strong>Absolute max/min:</strong> highest/lowest on the entire domain (may not exist).</p><p><strong>Average rate of change</strong> from $a$ to $b$:</p><p>$$\text{ARC}=\dfrac{f(b)-f(a)}{b-a}$$</p><p>This equals the slope of the <em>secant line</em> connecting $(a,f(a))$ and $(b,f(b))$.</p></div>
+</div><div class="col"><div class="section-head">Positive &amp; Negative Intervals</div>
+<div class="accent-box"><p>A graph is <strong>positive</strong> on $(a,b)$ where it lies above the $x$-axis: $f(x)>0$. It's <strong>negative</strong> where it lies below: $f(x)<0$. It equals zero at each $x$-intercept — the boundary between the two.</p></div>
+<div style="text-align:center;margin:0.6rem 0"><svg width="380" height="140" viewBox="0 0 520 190" xmlns="http://www.w3.org/2000/svg">
+<rect width="520" height="190" fill="#fafaf8" rx="6"/>
+<line x1="30" y1="98.3" x2="506" y2="98.3" stroke="#888" stroke-width="1.5"/>
+<line x1="270" y1="9" x2="270" y2="176" stroke="#888" stroke-width="1.5"/>
+<polyline points="50.0,40.6 62.2,51.8 74.4,62.4 86.7,72.3 98.9,81.6 111.1,90.3 123.3,98.3 135.6,105.6 147.8,112.4 160.0,118.5 172.2,123.9 184.4,128.7 196.7,132.9 208.9,136.4 221.1,139.3 233.3,141.5 245.6,143.1 257.8,144.1 270.0,144.4 282.2,144.1 294.4,143.1 306.7,141.5 318.9,139.3 331.1,136.4 343.3,132.9 355.6,128.7 367.8,123.9 380.0,118.5 392.2,112.4 404.4,105.6 416.7,98.3 428.9,90.3 441.1,81.6 453.3,72.3 465.6,62.4 477.8,51.8 490.0,40.6" fill="none" stroke="#1e3a5c" stroke-width="2.2" stroke-linejoin="round"/>
+<circle cx="123.3" cy="98.3" r="3.5" fill="#555"/>
+<circle cx="416.7" cy="98.3" r="3.5" fill="#555"/>
+<text x="123.3" y="113" font-size="9" font-family="sans-serif" fill="#555" text-anchor="middle">-2</text>
+<text x="416.7" y="113" font-size="9" font-family="sans-serif" fill="#555" text-anchor="middle">2</text>
+<text x="75" y="55" font-size="9.5" font-family="sans-serif" fill="#1e3a5c" font-weight="bold" font-style="italic">positive</text>
+<text x="465" y="55" font-size="9.5" font-family="sans-serif" fill="#1e3a5c" font-weight="bold" font-style="italic" text-anchor="end">positive</text>
+<text x="270" y="168" font-size="9.5" font-family="sans-serif" fill="#7a5c1e" font-weight="bold" font-style="italic" text-anchor="middle">negative</text>
+</svg></div>
+<div style="text-align:center;font-family:sans-serif;font-size:11px;color:#666;margin-bottom:0.6rem">$f(x)=x^2-4$: negative between the roots, positive outside.</div>
+<details class="mistake-panel">
+<summary class="mistake-toggle">▸ Common Mistake</summary>
+<div class="mistake-body">
+  <p>Positive/negative describes the $y$-value (above or below the $x$-axis); increasing/decreasing describes the trend (rising or falling left to right). These aren't the same thing — a graph can be negative <em>and</em> increasing at the same time.</p>
+  <p>For example, $f(x)=x^2-4$ on $(0,2)$ is negative (it stays below the axis there) but increasing (it's climbing back up toward zero as $x$ increases). Don't assume "negative" means "decreasing."</p>
+</div>
+</details>
+</div></div>
+<div class="two-col"><div class="col"><div class="section-head">Local &amp; Absolute Max/Min</div>
+<div class="accent-box"><p><strong>Local max/min:</strong> highest/lowest in some open interval around the point.</p><p><strong>Absolute max/min:</strong> highest/lowest on the entire domain (may not exist).</p></div>
+</div><div class="col"><div class="section-head">Average Rate of Change</div>
+<div class="accent-box"><p>Average rate of change from $a$ to $b$:</p><p>$$\text{ARC}=\dfrac{f(b)-f(a)}{b-a}$$</p><p>This equals the slope of the <em>secant line</em> connecting $(a,f(a))$ and $(b,f(b))$.</p></div>
 <details class="mistake-panel">
 <summary class="mistake-toggle">▸ Common Mistake</summary>
 <div class="mistake-body">
@@ -101,7 +127,7 @@ details[open]>.mistake-toggle{color:#1e3a5c}
 <rect width="520" height="160" fill="#fafaf8" rx="6"/>
 <line x1="30" y1="101" x2="490" y2="101" stroke="#888" stroke-width="1.5" marker-end="url(#arr)"/>
 <line x1="107" y1="130" x2="107" y2="30" stroke="#888" stroke-width="1.5"/>
-<polyline points="30.0,52.9; 33.8,55.2; 37.7,57.4; 41.5,59.5; 45.3,61.4; 49.2,63.3; 53.0,65.1; 56.8,66.8; 60.7,68.4; 64.5,69.9; 68.3,71.4; 72.2,72.7; 76.0,73.9; 79.8,75.1; 83.7,76.2; 87.5,77.2; 91.3,78.1; 95.2,78.9; 99.0,79.7; 102.8,80.3; 106.7,81.0; 110.5,81.5; 114.3,82.0; 118.2,82.4; 122.0,82.7; 125.8,83.0; 129.7,83.2; 133.5,83.3; 137.3,83.4; 141.2,83.4; 145.0,83.4; 148.8,83.3; 152.7,83.2; 156.5,83.0; 160.3,82.8; 164.2,82.5; 168.0,82.2; 171.8,81.8; 175.7,81.4; 179.5,81.0; 183.3,80.5; 187.2,80.0; 191.0,79.4; 194.8,78.8; 198.7,78.2; 202.5,77.6; 206.3,76.9; 210.2,76.2; 214.0,75.5; 217.8,74.7; 221.7,74.0; 225.5,73.2; 229.3,72.4; 233.2,71.6; 237.0,70.8; 240.8,70.0; 244.7,69.1; 248.5,68.3; 252.3,67.4; 256.2,66.6; 260.0,65.7; 263.8,64.9; 267.7,64.0; 271.5,63.2; 275.3,62.3; 279.2,61.5; 283.0,60.6; 286.8,59.8; 290.7,59.0; 294.5,58.2; 298.3,57.4; 302.2,56.7; 306.0,55.9; 309.8,55.2; 313.7,54.5; 317.5,53.9; 321.3,53.2; 325.2,52.6; 329.0,52.0; 332.8,51.5; 336.7,51.0; 340.5,50.5; 344.3,50.0; 348.2,49.6; 352.0,49.3; 355.8,48.9; 359.7,48.7; 363.5,48.4; 367.3,48.2; 371.2,48.1; 375.0,48.0; 378.8,48.0; 382.7,48.0; 386.5,48.1; 390.3,48.3; 394.2,48.5; 398.0,48.7; 401.8,49.1; 405.7,49.5; 409.5,49.9; 413.3,50.5; 417.2,51.1; 421.0,51.8; 424.8,52.5; 428.7,53.4; 432.5,54.3; 436.3,55.3; 440.2,56.3; 444.0,57.5; 447.8,58.7; 451.7,60.1; 455.5,61.5; 459.3,63.0; 463.2,64.6; 467.0,66.3; 470.8,68.1; 474.7,70.0; 478.5,72.0; 482.3,74.1; 486.2,76.3" fill="none" stroke="#1e3a5c" stroke-width="2.2" stroke-linejoin="round"/>
+<polyline points="30.0,52.9 33.8,55.2 37.7,57.4 41.5,59.5 45.3,61.4 49.2,63.3 53.0,65.1 56.8,66.8 60.7,68.4 64.5,69.9 68.3,71.4 72.2,72.7 76.0,73.9 79.8,75.1 83.7,76.2 87.5,77.2 91.3,78.1 95.2,78.9 99.0,79.7 102.8,80.3 106.7,81.0 110.5,81.5 114.3,82.0 118.2,82.4 122.0,82.7 125.8,83.0 129.7,83.2 133.5,83.3 137.3,83.4 141.2,83.4 145.0,83.4 148.8,83.3 152.7,83.2 156.5,83.0 160.3,82.8 164.2,82.5 168.0,82.2 171.8,81.8 175.7,81.4 179.5,81.0 183.3,80.5 187.2,80.0 191.0,79.4 194.8,78.8 198.7,78.2 202.5,77.6 206.3,76.9 210.2,76.2 214.0,75.5 217.8,74.7 221.7,74.0 225.5,73.2 229.3,72.4 233.2,71.6 237.0,70.8 240.8,70.0 244.7,69.1 248.5,68.3 252.3,67.4 256.2,66.6 260.0,65.7 263.8,64.9 267.7,64.0 271.5,63.2 275.3,62.3 279.2,61.5 283.0,60.6 286.8,59.8 290.7,59.0 294.5,58.2 298.3,57.4 302.2,56.7 306.0,55.9 309.8,55.2 313.7,54.5 317.5,53.9 321.3,53.2 325.2,52.6 329.0,52.0 332.8,51.5 336.7,51.0 340.5,50.5 344.3,50.0 348.2,49.6 352.0,49.3 355.8,48.9 359.7,48.7 363.5,48.4 367.3,48.2 371.2,48.1 375.0,48.0 378.8,48.0 382.7,48.0 386.5,48.1 390.3,48.3 394.2,48.5 398.0,48.7 401.8,49.1 405.7,49.5 409.5,49.9 413.3,50.5 417.2,51.1 421.0,51.8 424.8,52.5 428.7,53.4 432.5,54.3 436.3,55.3 440.2,56.3 444.0,57.5 447.8,58.7 451.7,60.1 455.5,61.5 459.3,63.0 463.2,64.6 467.0,66.3 470.8,68.1 474.7,70.0 478.5,72.0 482.3,74.1 486.2,76.3" fill="none" stroke="#1e3a5c" stroke-width="2.2" stroke-linejoin="round"/>
 <circle cx="168.0" cy="82.2" r="4" fill="#7a5c1e"/>
 <text x="166" y="74" font-size="9.5" font-family="sans-serif" fill="#7a5c1e" font-weight="bold">local max</text>
 <circle cx="352.0" cy="49.3" r="4" fill="#7a5c1e"/>
@@ -111,10 +137,56 @@ details[open]>.mistake-toggle{color:#1e3a5c}
 <text x="383" y="39" font-size="9" font-family="sans-serif" fill="#2a7a2a" font-style="italic">increasing ↗</text>
 </svg></div><div class="section-head">Worked Examples</div>
 <div class="examples-grid">
-<div class="ex-block"><div class="ex-label">Example 1 &mdash; Increasing/decreasing from graph</div><div class="ex-body">A function increases on $(-\infty,1)$, decreases on $(1,3)$, and increases again on $(3,\infty)$. Identify local max and min.</div><div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">Local max at $x=1$; local min at $x=3$.</div></div></div>
-<div class="ex-block"><div class="ex-label">Example 2 &mdash; Average rate of change</div><div class="ex-body">Find the ARC of $f(x)=3x^2$ from $x=1$ to $x=3$.</div><div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">$\dfrac{f(3)-f(1)}{3-1}=\dfrac{27-3}{2}=\dfrac{24}{2}=12$.</div></div></div>
-<div class="ex-block"><div class="ex-label">Example 3 &mdash; ARC from a table</div><div class="ex-body">Table: $x$: 0,2,4,6; $f(x)$: 1,5,3,7. Find the ARC from $x=2$ to $x=6$.</div><div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">$\dfrac{7-5}{6-2}=\dfrac{2}{4}=0.5$.</div></div></div>
-<div class="ex-block"><div class="ex-label">Example 4 &mdash; Identify properties from formula</div><div class="ex-body">For $f(x)=-x^2+4$, find any absolute max or min, and state where $f$ is increasing and decreasing.</div><div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">Vertex at $(0,4)$ — absolute max of 4. Increasing on $(-\infty,0)$, decreasing on $(0,\infty)$.</div></div></div>
+<div class="ex-block"><div class="ex-label">Example 1 &mdash; Positive/negative &amp; increasing/decreasing from a graph</div><div class="ex-body">For the graph of $f(x)=x^3-3x$ shown below, state where $f$ is positive/negative and where it is increasing/decreasing.<br><div style="text-align:center;margin:0.5rem 0"><svg width="340" height="125" viewBox="0 0 520 190" xmlns="http://www.w3.org/2000/svg">
+<rect width="520" height="190" fill="#fafaf8" rx="6"/>
+<line x1="30" y1="92.5" x2="506" y2="92.5" stroke="#888" stroke-width="1.5"/>
+<line x1="270" y1="9" x2="270" y2="176" stroke="#888" stroke-width="1.5"/>
+<polyline points="50.0,144.4 60.0,130.5 70.0,118.2 80.0,107.4 90.0,98.0 100.0,90.1 110.0,83.5 120.0,78.1 130.0,73.8 140.0,70.7 150.0,68.5 160.0,67.2 170.0,66.8 180.0,67.2 190.0,68.3 200.0,70.0 210.0,72.2 220.0,74.9 230.0,77.9 240.0,81.3 250.0,84.9 260.0,88.7 270.0,92.5 280.0,96.3 290.0,100.1 300.0,103.7 310.0,107.1 320.0,110.1 330.0,112.8 340.0,115.0 350.0,116.7 360.0,117.8 370.0,118.2 380.0,117.8 390.0,116.5 400.0,114.3 410.0,111.2 420.0,106.9 430.0,101.5 440.0,94.9 450.0,87.0 460.0,77.6 470.0,66.8 480.0,54.5 490.0,40.6" fill="none" stroke="#1e3a5c" stroke-width="2.2" stroke-linejoin="round"/>
+<circle cx="96.8" cy="92.5" r="3.5" fill="#555"/>
+<circle cx="270.0" cy="92.5" r="3.5" fill="#555"/>
+<circle cx="443.2" cy="92.5" r="3.5" fill="#555"/>
+<circle cx="170.0" cy="66.8" r="4" fill="#7a5c1e"/>
+<text x="170.0" y="58" font-size="9" font-family="sans-serif" fill="#7a5c1e" font-weight="bold" text-anchor="middle">local max</text>
+<circle cx="370.0" cy="118.2" r="4" fill="#7a5c1e"/>
+<text x="370.0" y="132" font-size="9" font-family="sans-serif" fill="#7a5c1e" font-weight="bold" text-anchor="middle">local min</text>
+<text x="96.8" y="108" font-size="9" font-family="sans-serif" fill="#555" text-anchor="middle">&#8722;&radic;3</text>
+<text x="443.2" y="108" font-size="9" font-family="sans-serif" fill="#555" text-anchor="middle">&radic;3</text>
+</svg></div></div><div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">Positive on $(-\sqrt3,0)\cup(\sqrt3,\infty)$; negative on $(-\infty,-\sqrt3)\cup(0,\sqrt3)$. Increasing on $(-\infty,-1)$ and $(1,\infty)$; decreasing on $(-1,1)$.</div></div></div>
+<div class="ex-block"><div class="ex-label">Example 2 &mdash; Positive/negative &amp; increasing/decreasing from a graph</div><div class="ex-body">For the graph of $f(x)=-x^2-2x+3$ shown below, state where $f$ is positive/negative and where it is increasing/decreasing.<br><div style="text-align:center;margin:0.5rem 0"><svg width="340" height="125" viewBox="0 0 520 190" xmlns="http://www.w3.org/2000/svg">
+<rect width="520" height="190" fill="#fafaf8" rx="6"/>
+<line x1="30" y1="86.7" x2="506" y2="86.7" stroke="#888" stroke-width="1.5"/>
+<line x1="343.3" y1="9" x2="343.3" y2="176" stroke="#888" stroke-width="1.5"/>
+<polyline points="50.0,144.4 61.0,134.3 72.0,124.7 83.0,115.6 94.0,107.0 105.0,99.0 116.0,91.5 127.0,84.5 138.0,78.0 149.0,72.0 160.0,66.5 171.0,61.6 182.0,57.2 193.0,53.3 204.0,49.9 215.0,47.1 226.0,44.7 237.0,42.9 248.0,41.6 259.0,40.8 270.0,40.6 281.0,40.8 292.0,41.6 303.0,42.9 314.0,44.7 325.0,47.1 336.0,49.9 347.0,53.3 358.0,57.2 369.0,61.6 380.0,66.5 391.0,72.0 402.0,78.0 413.0,84.5 424.0,91.5 435.0,99.0 446.0,107.0 457.0,115.6 468.0,124.7 479.0,134.3 490.0,144.4" fill="none" stroke="#1e3a5c" stroke-width="2.2" stroke-linejoin="round"/>
+<circle cx="123.3" cy="86.7" r="3.5" fill="#555"/>
+<circle cx="416.7" cy="86.7" r="3.5" fill="#555"/>
+<circle cx="270.0" cy="40.6" r="4" fill="#7a5c1e"/>
+<text x="270.0" y="32" font-size="9" font-family="sans-serif" fill="#7a5c1e" font-weight="bold" text-anchor="middle">local max</text>
+<text x="123.3" y="102" font-size="9" font-family="sans-serif" fill="#555" text-anchor="middle">&#8722;3</text>
+<text x="416.7" y="102" font-size="9" font-family="sans-serif" fill="#555" text-anchor="middle">1</text>
+</svg></div></div><div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">Positive on $(-3,1)$; negative on $(-\infty,-3)\cup(1,\infty)$. Increasing on $(-\infty,-1)$; decreasing on $(-1,\infty)$.</div></div></div>
+<div class="ex-block"><div class="ex-label">Example 3 &mdash; Local vs. absolute extrema from a graph</div><div class="ex-body">The graph of $f(x)=x^4-4x^2$ is shown below. Identify the local maximum and the absolute minimum.<br><div style="text-align:center;margin:0.5rem 0"><svg width="340" height="125" viewBox="0 0 520 190" xmlns="http://www.w3.org/2000/svg">
+<rect width="520" height="190" fill="#fafaf8" rx="6"/>
+<line x1="30" y1="92.9" x2="506" y2="92.9" stroke="#888" stroke-width="1.5"/>
+<line x1="270" y1="9" x2="270" y2="176" stroke="#888" stroke-width="1.5"/>
+<polyline points="50.0,40.6 60.0,69.6 70.0,92.9 80.0,111.1 90.0,124.6 100.0,134.2 110.0,140.4 120.0,143.6 130.0,144.4 140.0,143.2 150.0,140.4 160.0,136.4 170.0,131.6 180.0,126.2 190.0,120.6 200.0,115.1 210.0,109.8 220.0,105.0 230.0,100.8 240.0,97.5 250.0,95.0 260.0,93.4 270.0,92.9 280.0,93.4 290.0,95.0 300.0,97.5 310.0,100.8 320.0,105.0 330.0,109.8 340.0,115.1 350.0,120.6 360.0,126.2 370.0,131.6 380.0,136.4 390.0,140.4 400.0,143.2 410.0,144.4 420.0,143.6 430.0,140.4 440.0,134.2 450.0,124.6 460.0,111.1 470.0,92.9 480.0,69.6 490.0,40.6" fill="none" stroke="#1e3a5c" stroke-width="2.2" stroke-linejoin="round"/>
+<circle cx="270.0" cy="92.9" r="4" fill="#7a5c1e"/>
+<text x="270.0" y="84" font-size="9" font-family="sans-serif" fill="#7a5c1e" font-weight="bold" text-anchor="middle">local max</text>
+<circle cx="128.6" cy="144.4" r="4" fill="#7a5c1e"/>
+<text x="128.6" y="159" font-size="9" font-family="sans-serif" fill="#7a5c1e" font-weight="bold" text-anchor="middle">absolute min</text>
+<circle cx="411.4" cy="144.4" r="4" fill="#7a5c1e"/>
+<text x="411.4" y="159" font-size="9" font-family="sans-serif" fill="#7a5c1e" font-weight="bold" text-anchor="middle">absolute min</text>
+</svg></div></div><div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">Local max at $(0,0)$ — but not the absolute max, since the curve rises without bound. Absolute min of $-4$, attained at both $x=-\sqrt2$ and $x=\sqrt2$.</div></div></div>
+<div class="ex-block"><div class="ex-label">Example 4 &mdash; Average rate of change from a graph</div><div class="ex-body">For $f(x)=x^2$ shown below, find the average rate of change from the marked point $(0,0)$ to the marked point $(3,9)$.<br><div style="text-align:center;margin:0.5rem 0"><svg width="340" height="125" viewBox="0 0 520 190" xmlns="http://www.w3.org/2000/svg">
+<rect width="520" height="190" fill="#fafaf8" rx="6"/>
+<line x1="30" y1="144.4" x2="506" y2="144.4" stroke="#888" stroke-width="1.5"/>
+<line x1="152.3" y1="9" x2="152.3" y2="176" stroke="#888" stroke-width="1.5"/>
+<polyline points="50.0,134.9 60.2,136.7 70.5,138.3 80.7,139.8 90.9,141.0 101.2,142.0 111.4,142.9 121.6,143.6 131.9,144.0 142.1,144.3 152.3,144.4 162.6,144.3 172.8,144.0 183.0,143.6 193.3,142.9 203.5,142.0 213.7,141.0 224.0,139.8 234.2,138.3 244.4,136.7 254.7,134.9 264.9,132.9 275.1,130.7 285.3,128.3 295.6,125.7 305.8,123.0 316.0,120.0 326.3,116.9 336.5,113.5 346.7,110.0 357.0,106.3 367.2,102.4 377.4,98.3 387.7,94.0 397.9,89.5 408.1,84.8 418.4,80.0 428.6,74.9 438.8,69.7 449.1,64.2 459.3,58.6 469.5,52.8 479.8,46.8 490.0,40.6" fill="none" stroke="#1e3a5c" stroke-width="2.2" stroke-linejoin="round"/>
+<line x1="152.3" y1="144.4" x2="459.3" y2="58.6" stroke="#7a5c1e" stroke-width="1.3" stroke-dasharray="4,3"/>
+<circle cx="152.3" cy="144.4" r="4" fill="#7a5c1e"/>
+<text x="152.3" y="159" font-size="9" font-family="sans-serif" fill="#7a5c1e" font-weight="bold" text-anchor="middle">(0,0)</text>
+<circle cx="459.3" cy="58.6" r="4" fill="#7a5c1e"/>
+<text x="459.3" y="49" font-size="9" font-family="sans-serif" fill="#7a5c1e" font-weight="bold" text-anchor="middle">(3,9)</text>
+</svg></div></div><div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">$\dfrac{9-0}{3-0}=\dfrac{9}{3}=3$ — the slope of the dashed secant line.</div></div></div>
 </div>
 <div class="section-head">Practice Problems</div>
 <div class="practice">
