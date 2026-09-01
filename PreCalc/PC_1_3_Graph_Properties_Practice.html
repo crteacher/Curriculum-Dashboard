@@ -35,6 +35,7 @@
   .card-meta{font-family:sans-serif;font-size:12px;color:#888;margin-bottom:4px}
   .card-expr{font-size:17px;margin-bottom:12px;line-height:2.2;overflow-x:auto}
   .card-expr svg{max-width:100%;height:auto}
+  .card-question{font-family:sans-serif;font-size:14px;font-weight:700;color:#1e3a5c;margin-bottom:10px}
   .katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}
   .input-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
   .ans-input{font-family:'Courier New',monospace;font-size:14px;border:1px solid #ccc;
@@ -198,6 +199,7 @@ function gen1(){
   const svg=graphSVG(f,r1-2,r2+2);
   return{
     svg:svg,
+    q:'Where is the function positive? Give your answer in interval notation.',
     answer:[`(-inf,${r1})u(${r2},inf)`,`(${r2},inf)u(-inf,${r1})`],
     hint:"Between and outside the two x-intercepts on the grid, where does the curve sit relative to the x-axis?",
     step:`(x-${r1})(x-${r2})=0\\text{ at }x=${r1},${r2}\\text{; opens upward}\\Rightarrow\\text{negative between the roots, positive outside}\\Rightarrow(-\\infty,${r1})\\cup(${r2},\\infty)`
@@ -212,6 +214,7 @@ function gen2(){
   const svg=graphSVG(f,h-3,h+3);
   return{
     svg:svg,
+    q:'Where is the function decreasing? Give your answer in interval notation.',
     answer:[`(-inf,${h})`],
     hint:'Find the vertex on the grid — which side of it does the curve fall as you scan left to right?',
     step:`\\text{Vertex at }x=${h}\\text{; opens upward}\\Rightarrow\\text{decreasing left of the vertex}\\Rightarrow(-\\infty,${h})`
@@ -226,6 +229,7 @@ function gen3(){
   const svg=graphSVG(f,r1-2,r2+2);
   return{
     svg:svg,
+    q:'Where is the function negative? Give your answer in interval notation.',
     answer:[`(-inf,${r1})u(${r2},inf)`,`(${r2},inf)u(-inf,${r1})`],
     hint:'Read the two x-intercepts off the grid — outside of them, is the curve above or below the x-axis?',
     step:`-(x-${r1})(x-${r2})=0\\text{ at }x=${r1},${r2}\\text{; opens downward}\\Rightarrow\\text{negative outside the roots}\\Rightarrow(-\\infty,${r1})\\cup(${r2},\\infty)`
@@ -241,9 +245,10 @@ function gen4(){
   const svg=graphSVG(f,h-3,h+3);
   return{
     svg:svg,
+    q:'What is the global minimum of the function?',
     answer:[String(k)],
     hint:'Find the lowest point on the grid — what height (y-value) does it reach?',
-    step:`\\text{Vertex of the V at }(${h},${k})\\text{ is the lowest point}\\Rightarrow\\text{local minimum}=${k}`
+    step:`\\text{Vertex of the V at }(${h},${k})\\text{ is the lowest point on the whole graph}\\Rightarrow\\text{global minimum}=${k}`
   };
 }
 
@@ -257,6 +262,7 @@ function gen5(){
   const ans=m>0?`(${root},inf)`:`(-inf,${root})`;
   return{
     svg:svg,
+    q:'Where is the function positive? Give your answer in interval notation.',
     answer:[ans],
     hint:'Read the x-intercept off the grid — which side of it lies above the horizontal axis?',
     step:`f(x)=${fc(m)}x${addT(b,'')}\\text{; crosses zero at }x=${root}\\text{; slope is }${m>0?'positive':'negative'}\\Rightarrow\\text{positive on }${ans}`
@@ -271,6 +277,7 @@ function gen6(){
   const svg=graphSVG(f,h-3,h+3);
   return{
     svg:svg,
+    q:'Where is the function increasing? Give your answer in interval notation.',
     answer:[`(-inf,${h})`],
     hint:'Find the peak on the grid — which side does the curve climb up to reach it?',
     step:`\\text{Vertex at }x=${h}\\text{; opens downward}\\Rightarrow\\text{increasing left of the peak}\\Rightarrow(-\\infty,${h})`
@@ -285,9 +292,10 @@ function gen7(){
   const svg=graphSVG(f,h-3,h+3);
   return{
     svg:svg,
+    q:'What is the global minimum of the function?',
     answer:[String(k)],
     hint:"This curve's lowest point never repeats — what y-value does the grid show it reaching?",
-    step:`\\text{Vertex at }(${h},${k})\\text{; opens upward}\\Rightarrow\\text{absolute minimum}=${k}`
+    step:`\\text{Vertex at }(${h},${k})\\text{; opens upward}\\Rightarrow\\text{global minimum}=${k}`
   };
 }
 
@@ -302,6 +310,7 @@ function gen8(){
   const svg=graphSVG(f,p-1.5,q+1.5,{title:`Average rate of change from x = ${p} to x = ${q}`});
   return{
     svg:svg,
+    q:`What is the average rate of change of the function from x = ${p} to x = ${q}?`,
     answer:[String(m)],
     hint:'What single number describes the steepness of a line between two points on the grid?',
     step:`\\text{ARC}=\\dfrac{${fq}-(${fp})}{${q}-(${p})}=\\dfrac{${fq-fp}}{${q-p}}=${m}`
@@ -337,10 +346,12 @@ function buildCards() {
   ACTIVE.forEach((p, i) => {
     const div = document.createElement('div');
     div.className = 'card'; div.id = 'card-' + i;
+    const qLine = p.q ? `<div class="card-question">${p.q}</div>` : '';
     div.innerHTML =
       `<div class="card-body">
         <div class="card-meta">Problem ${i + 1}</div>
         <div class="card-expr" id="expr-${i}"></div>
+        ${qLine}
         <div class="input-row">
           <input class="ans-input" id="ai-${i}" placeholder="answer" />
           <button class="check-btn" id="chk-${i}" onclick="check(${i})">Check</button>
