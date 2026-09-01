@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Applications of Linear Equations &amp; Inequalities &mdash; Practice</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
 <style>
   *{box-sizing:border-box;margin:0;padding:0}
   body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.7}
@@ -33,7 +33,8 @@
   .card.correct{border-color:#3a7a3a}.card.wrong{border-color:#b03030}.card.peeked{border-color:#b8860b}
   .card-body{padding:14px 16px}
   .card-meta{font-family:sans-serif;font-size:12px;color:#888;margin-bottom:4px}
-  .card-expr{font-size:17px;margin-bottom:12px;line-height:2.2;overflow-x:auto}
+  .card-expr{font-size:17px;margin-bottom:12px;line-height:1.5;overflow-wrap:break-word;white-space:normal;overflow-x:auto}
+  .card-expr svg{max-width:100%;height:auto}
   .katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}
   .input-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
   .ans-input{font-family:'Courier New',monospace;font-size:14px;border:1px solid #ccc;
@@ -56,10 +57,9 @@
   .reveal-link:hover{color:#555}
   .revealed-answer{display:none;margin-top:8px;font-family:sans-serif;font-size:13px;
     color:#444;background:#f5f3ef;border-radius:6px;padding:8px 11px;line-height:1.8;overflow-x:auto}
+  .interval-hint{font-family:sans-serif;font-size:11px;color:#1e3a5c;margin-top:4px;
+    padding:2px 7px;background:#eef3f9;border-radius:4px;display:inline-block}
   code{font-family:'Courier New',monospace;background:#f0ede7;padding:1px 5px;border-radius:3px;font-size:12px}
-
-
-.hint{display:none!important}
 </style>
 </head>
 <body>
@@ -162,9 +162,9 @@ function gen1() {
   const k      = rInt(4) + 2;     // answer: # tickets {2..5}
   const c      = a * k + b;
   return {
-    latex:  `\\text{${event.charAt(0).toUpperCase()+event.slice(1)} ${item}s cost }\\$${a}\\text{ each plus a }\\$${b}\\text{ order fee. You paid }\\$${c}\\text{. How many ${item}s?}`,
+    text:   `${event.charAt(0).toUpperCase()+event.slice(1)} ${item}s cost $${a} each plus a $${b} order fee. You paid $${c}. How many ${item}s?`,
     answer: [String(k)],
-    hint:   `What is the per-${item} cost, and what is the fixed fee? Which of those involves x?`,
+    hint:   `In a flat-fee-plus-per-unit situation, which part of the total cost changes with the quantity?`,
     step:   `${a}x+${b}=${c}\\Rightarrow ${a}x=${c-b}\\Rightarrow x=${k}\\text{ ${item}s}`
   };
 }
@@ -177,9 +177,9 @@ function gen2() {
   const k      = rInt(4) + 2;     // answer {2..5}
   const c      = a * k + b;
   return {
-    latex:  `\\text{Each ${snack} costs }\\$${a}\\text{. There's a }\\$${b}\\text{ delivery fee. You spent }\\$${c}\\text{. How many ${snack}s?}`,
+    text:   `Each ${snack} costs $${a}. There's a $${b} delivery fee. You spent $${c}. How many ${snack}s?`,
     answer: [String(k)],
-    hint:   `Identify the per-item cost and the flat fee. Which one multiplies by the number of ${snack}s?`,
+    hint:   `In a cost equation with a per-item rate and a flat fee, which component contains the variable x?`,
     step:   `${a}x+${b}=${c}\\Rightarrow x=${k}\\text{ ${snack}s}`
   };
 }
@@ -189,9 +189,9 @@ function gen3() {
   const k  = rInt(8) + 5;        // smaller integer {5..12}
   const c  = 2 * k + 1;
   return {
-    latex:  `\\text{The sum of two consecutive integers is }${c}\\text{. Find the smaller one.}`,
+    text:   `The sum of two consecutive integers is ${c}. Find the smaller one.`,
     answer: [String(k)],
-    hint:   `If the smaller integer is x, how do you write the next consecutive integer in terms of x?`,
+    hint:   `If the smaller of two consecutive integers is x, how does the larger one relate to x?`,
     step:   `x+(x+1)=${c}\\Rightarrow 2x=${c-1}\\Rightarrow x=${k}`
   };
 }
@@ -204,9 +204,9 @@ function gen4() {
   const places = ['dog park','garden bed','basketball court','community pool deck','school hallway'];
   const place  = choose(places);
   return {
-    latex:  `\\text{A rectangular ${place} has a length }${d}\\text{ ft more than its width. The perimeter is }${P}\\text{ ft. Find the width.}`,
+    text:   `A rectangular ${place} has a length ${d} ft more than its width. The perimeter is ${P} ft. Find the width.`,
     answer: [String(w)],
-    hint:   `If the width is w, how do you express the length? Which perimeter formula applies?`,
+    hint:   `For a rectangle where length exceeds width by a known amount, which equation relates perimeter to width?`,
     step:   `2(w+${d})+2w=${P}\\Rightarrow 4w+${2*d}=${P}\\Rightarrow w=${w}\\text{ ft}`
   };
 }
@@ -224,7 +224,7 @@ function gen5() {
   ];
   const [nameA, nameB] = choose(pairs);
   return {
-    latex:  `\\text{${nameA}: }\\$${aRate}\\text{/mo + }\\$${b}\\text{ signup. ${nameB}: }\\$${cRate}\\text{/mo, no signup. After how many months is the total cost equal?}`,
+    text:   `${nameA}: $${aRate}/mo + $${b} signup. ${nameB}: $${cRate}/mo, no signup. After how many months is the total cost equal?`,
     answer: [String(k)],
     hint:   `Write a total-cost expression for each plan in terms of months. What equation does "equal total" give you?`,
     step:   `${aRate}x+${b}=${cRate}x\\Rightarrow ${b}=${diff}x\\Rightarrow x=${k}\\text{ months}`
@@ -239,7 +239,7 @@ function gen6() {
   const rem = rInt(a - 1) + 1;   // leftover {1..a-1}
   const budget = a * k + rem;
   return {
-    latex:  `\\text{You have }\\$${budget}\\text{. Each ${clothing} costs }\\$${a}\\text{. How many can you buy?}`,
+    text:   `You have $${budget}. Each ${clothing} costs $${a}. How many can you buy?`,
     answer: [String(k)],
     hint:   `Write an inequality: cost per item times quantity ≤ budget. Can x be a fraction here?`,
     step:   `${a}x\\leq${budget}\\Rightarrow x\\leq${(budget/a).toFixed(2)}\\Rightarrow\\text{at most }${k}\\text{ ${clothing}s}`
@@ -254,7 +254,7 @@ function gen7() {
   const saved   = rInt(weekly - 1) + 1; // already saved (less than one week's worth so answer is exactly k)
   const target  = saved + weekly * k;
   return {
-    latex:  `\\text{You have }\\$${saved}\\text{ saved and put away }\\$${weekly}\\text{ per week. How many weeks until you can afford ${goal.item} (}\\$${target}\\text{)?}`,
+    text:   `You have $${saved} saved and put away $${weekly} per week. How many weeks until you can afford ${goal.item} ($${target})?`,
     answer: [String(k)],
     hint:   `Which quantity is fixed at the start, and which grows each week? What inequality means "enough to afford it"?`,
     step:   `${saved}+${weekly}x\\geq${target}\\Rightarrow ${weekly}x\\geq${target-saved}\\Rightarrow x\\geq${k}\\text{ weeks}`
@@ -279,14 +279,14 @@ function gen8() {
     const tgt2    = 300;
     const min2    = 60;
     return {
-      latex:  `\\text{You have }${curr2}\\text{ total points across 3 assignments. You need at least }${tgt2}\\text{ points total after 4 assignments. What is the minimum score on the next one?}`,
+      text:   `You have ${curr2} total points across 3 assignments. You need at least ${tgt2} points total after 4 assignments. What is the minimum score on the next one?`,
       answer: [String(min2)],
       hint:   `Your current total plus the new score must reach the target. What inequality expresses that?`,
       step:   `240+x\\geq300\\Rightarrow x\\geq60\\text{ points}`
     };
   }
   return {
-    latex:  `\\text{You have }${current}\\text{ total points across }${n}\\text{ assignments. You need at least }${target}\\text{ points total after }${n+1}\\text{ assignments. What is the minimum score on the next one?}`,
+    text:   `You have ${current} total points across ${n} assignments. You need at least ${target} points total after ${n+1} assignments. What is the minimum score on the next one?`,
     answer: [String(minScore)],
     hint:   `Your current total plus the new score must reach the target. What inequality expresses that?`,
     step:   `${current}+x\\geq${target}\\Rightarrow x\\geq${minScore}\\text{ points}`
@@ -300,7 +300,13 @@ const GENERATORS = [gen1, gen2, gen3, gen4, gen5, gen6, gen7, gen8];
 let ACTIVE, correct, flags, attempted, peeked;
 
 function norm(s) {
-  return s.trim().toLowerCase().replace(/\s+/g, '').replace(/[−–]/g, '-');
+  return s.trim().toLowerCase()
+    .replace(/\s+/g, '')
+    .replace(/[−–]/g, '-')
+    .replace(/∞/g, 'inf')
+    .replace(/∪/g, 'u')
+    .replace(/infinity/g, 'inf')
+    .replace(/union/g, 'u');
 }
 function ok(user, acc) { return acc.some(a => norm(user) === norm(a)); }
 
@@ -323,10 +329,11 @@ function buildCards() {
         <div class="card-meta">Problem ${i + 1}</div>
         <div class="card-expr" id="expr-${i}"></div>
         <div class="input-row">
-          <input class="ans-input" id="ai-${i}" placeholder="answer" />
+          <input class="ans-input" id="ai-${i}" placeholder="${p.interval ? '[a,b)' : 'answer'}" />
           <button class="check-btn" id="chk-${i}" onclick="check(${i})">Check</button>
         </div>
         <div class="hint">${p.hint}</div>
+        ${p.interval ? '<div class="interval-hint">Use <code>inf</code> and <code>u</code> for union &mdash; e.g. <code>[2,inf)</code> or <code>(-inf,0)u(0,inf)</code></div>' : ''}
         <div class="feedback" id="fb-${i}"></div>
         <span class="reveal-link" id="rl-${i}" onclick="reveal(${i})">Show solution</span>
         <div class="revealed-answer" id="ra-${i}"></div>
@@ -336,6 +343,8 @@ function buildCards() {
       .addEventListener('keydown', e => { if (e.key === 'Enter') check(i); });
     if (p.svg) {
       document.getElementById('expr-' + i).innerHTML = p.svg;
+    } else if (p.text) {
+      document.getElementById('expr-' + i).innerHTML = p.text;
     } else {
       katex.render(p.latex, document.getElementById('expr-' + i),
         { throwOnError: false, displayMode: true });
@@ -391,8 +400,8 @@ function updateScore() {
 function resetAll() { init(); buildCards(); updateScore(); }
 </script>
 
-<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/contrib/auto-render.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
 <script>
   renderMathInElement(document.body, {
     delimiters: [
