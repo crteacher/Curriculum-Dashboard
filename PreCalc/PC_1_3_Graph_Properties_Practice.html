@@ -135,57 +135,71 @@ function addT(n, v) {
 
 // ── Problem generators (section-specific, injected below) ─────────────────────
 
-// Shared graph-drawing helper. f: JS function of x. Draws axes + curve from
-// actual sampled values, so the picture and the computed answer always agree.
+// Shared graph-drawing helper. f: JS function of x. Draws a numbered coordinate
+// grid + curve from actual sampled values, so the picture and the computed
+// answer always agree. No points are labeled on the graph -- read values
+// straight off the grid, the way you would on paper.
 function graphSVG(f,xMin,xMax,opts){
   opts=opts||{};
-  const W=480,H=190,padL=42,padR=22,padT=22,padB=26;
-  const plotW=W-padL-padR, plotH=H-padT-padB, n=48;
+  xMin=Math.floor(xMin); xMax=Math.ceil(xMax);
+  const W=480,H=300,padL=32,padR=14,padT=14,padB=26;
+  const plotW=W-padL-padR, plotH=H-padT-padB, n=60;
   const pts=[]; let yMin=Infinity,yMax=-Infinity;
   for(let i=0;i<=n;i++){
     const x=xMin+(xMax-xMin)*i/n, y=f(x);
     pts.push([x,y]);
     if(y<yMin)yMin=y; if(y>yMax)yMax=y;
   }
-  const yPad=Math.max((yMax-yMin)*0.18,0.6);
-  yMin-=yPad; yMax+=yPad;
+  const yPad=Math.max((yMax-yMin)*0.15,0.8);
+  yMin=Math.floor(yMin-yPad); yMax=Math.ceil(yMax+yPad);
   const sx=plotW/(xMax-xMin), sy=plotH/(yMax-yMin);
   const px=x=>padL+(x-xMin)*sx, py=y=>padT+(yMax-y)*sy;
   const axisY=Math.max(padT,Math.min(H-padB,py(0)));
   const axisX=Math.max(padL,Math.min(W-padR,px(0)));
+  function niceStep(range){ if(range<=12) return 1; if(range<=24) return 2; return 5; }
+  const xStep=niceStep(xMax-xMin), yStep=niceStep(yMax-yMin);
+
+  let svg=`<svg width="480" height="300" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">`;
+  svg+=`<rect width="${W}" height="${H}" fill="#fcfcfb" rx="6"/>`;
+  for(let gx=Math.ceil(xMin/xStep)*xStep; gx<=xMax; gx+=xStep){
+    const X=px(gx).toFixed(1);
+    svg+=`<line x1="${X}" y1="${padT}" x2="${X}" y2="${H-padB}" stroke="#ececea" stroke-width="1"/>`;
+  }
+  for(let gy=Math.ceil(yMin/yStep)*yStep; gy<=yMax; gy+=yStep){
+    const Y=py(gy).toFixed(1);
+    svg+=`<line x1="${padL}" y1="${Y}" x2="${W-padR}" y2="${Y}" stroke="#ececea" stroke-width="1"/>`;
+  }
+  svg+=`<line x1="${padL}" y1="${axisY}" x2="${W-padR}" y2="${axisY}" stroke="#999" stroke-width="1.3"/>`;
+  svg+=`<line x1="${axisX}" y1="${padT}" x2="${axisX}" y2="${H-padB}" stroke="#999" stroke-width="1.3"/>`;
+  for(let gx=Math.ceil(xMin/xStep)*xStep; gx<=xMax; gx+=xStep){
+    if(gx===0) continue;
+    const X=px(gx).toFixed(1);
+    svg+=`<text x="${X}" y="${H-padB+11}" font-size="9" font-family="sans-serif" fill="#999" text-anchor="middle">${gx}</text>`;
+  }
+  for(let gy=Math.ceil(yMin/yStep)*yStep; gy<=yMax; gy+=yStep){
+    if(gy===0) continue;
+    const Y=py(gy).toFixed(1);
+    svg+=`<text x="${padL-5}" y="${(parseFloat(Y)+3).toFixed(1)}" font-size="9" font-family="sans-serif" fill="#999" text-anchor="end">${gy}</text>`;
+  }
+  if(opts.title){
+    svg+=`<text x="${padL}" y="11" font-size="10.5" font-family="sans-serif" fill="#555" font-weight="bold">${opts.title}</text>`;
+  }
   const poly=pts.map(p=>px(p[0]).toFixed(1)+','+py(p[1]).toFixed(1)).join(' ');
-  let svg=`<svg width="480" height="190" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">`;
-  svg+=`<rect width="${W}" height="${H}" fill="#fafaf8" rx="6"/>`;
-  svg+=`<line x1="${padL-10}" y1="${axisY}" x2="${W-padR+8}" y2="${axisY}" stroke="#888" stroke-width="1.5"/>`;
-  svg+=`<line x1="${axisX}" y1="${padT-8}" x2="${axisX}" y2="${H-padB+8}" stroke="#888" stroke-width="1.5"/>`;
-  svg+=`<text x="${W-padR+8}" y="${axisY-5}" font-size="9" font-family="sans-serif" fill="#888">x</text>`;
-  svg+=`<text x="${axisX+4}" y="${padT-10}" font-size="9" font-family="sans-serif" fill="#888">y</text>`;
-  svg+=`<polyline points="${poly}" fill="none" stroke="#1e3a5c" stroke-width="2.2" stroke-linejoin="round"/>`;
-  (opts.marks||[]).forEach(m=>{
-    const cx=px(m.x).toFixed(1), cy=py(m.y).toFixed(1);
-    svg+=`<circle cx="${cx}" cy="${cy}" r="4" fill="${m.color||'#7a5c1e'}"/>`;
-    if(m.label){
-      const dy=(m.dy!==undefined)?m.dy:-9;
-      svg+=`<text x="${cx}" y="${(parseFloat(cy)+dy).toFixed(1)}" font-size="10" font-family="sans-serif" fill="${m.color||'#7a5c1e'}" font-weight="bold" text-anchor="middle">${m.label}</text>`;
-    }
-  });
+  svg+=`<polyline points="${poly}" fill="none" stroke="#1e3a5c" stroke-width="2.4" stroke-linejoin="round"/>`;
   svg+='</svg>';
   return svg;
 }
 
 function gen1(){
-  // Upward parabola: positive/negative intervals from two marked roots.
+  // Upward parabola: positive/negative intervals from two x-intercepts.
   const r1=choose([-4,-3,-2,-1]);
   const r2=r1+choose([3,4,5,6]);
   const f=x=>(x-r1)*(x-r2);
-  const svg=graphSVG(f,r1-2,r2+2,{marks:[
-    {x:r1,y:0,label:String(r1),color:'#7a5c1e',dy:16},
-    {x:r2,y:0,label:String(r2),color:'#7a5c1e',dy:16}
-  ]});
+  const svg=graphSVG(f,r1-2,r2+2);
   return{
     svg:svg,
     answer:[`(-inf,${r1})u(${r2},inf)`,`(${r2},inf)u(-inf,${r1})`],
-    hint:"Compare the curve's height to the horizontal axis at each x-value — where does it sit above?",
+    hint:"Between and outside the two x-intercepts on the grid, where does the curve sit relative to the x-axis?",
     step:`(x-${r1})(x-${r2})=0\\text{ at }x=${r1},${r2}\\text{; opens upward}\\Rightarrow\\text{negative between the roots, positive outside}\\Rightarrow(-\\infty,${r1})\\cup(${r2},\\infty)`
   };
 }
@@ -195,28 +209,25 @@ function gen2(){
   const h=choose([-3,-2,-1,0,1,2,3]);
   const k=choose([-4,-3,-2,-1,0,1,2,3,4]);
   const f=x=>(x-h)*(x-h)+k;
-  const svg=graphSVG(f,h-3,h+3,{marks:[{x:h,y:k,label:'vertex',color:'#7a5c1e',dy:-10}]});
+  const svg=graphSVG(f,h-3,h+3);
   return{
     svg:svg,
     answer:[`(-inf,${h})`],
-    hint:'Look at the vertex — which side of it does the curve fall as you scan left to right?',
+    hint:'Find the vertex on the grid — which side of it does the curve fall as you scan left to right?',
     step:`\\text{Vertex at }x=${h}\\text{; opens upward}\\Rightarrow\\text{decreasing left of the vertex}\\Rightarrow(-\\infty,${h})`
   };
 }
 
 function gen3(){
-  // Downward parabola: positive/negative intervals from two marked roots.
+  // Downward parabola: positive/negative intervals from two x-intercepts.
   const r1=choose([-3,-2,-1]);
   const r2=r1+choose([3,4,5]);
   const f=x=>-(x-r1)*(x-r2);
-  const svg=graphSVG(f,r1-2,r2+2,{marks:[
-    {x:r1,y:0,label:String(r1),color:'#7a5c1e',dy:-10},
-    {x:r2,y:0,label:String(r2),color:'#7a5c1e',dy:-10}
-  ]});
+  const svg=graphSVG(f,r1-2,r2+2);
   return{
     svg:svg,
     answer:[`(-inf,${r1})u(${r2},inf)`,`(${r2},inf)u(-inf,${r1})`],
-    hint:'Outside the two marked crossings, is the curve above or below the horizontal axis?',
+    hint:'Read the two x-intercepts off the grid — outside of them, is the curve above or below the x-axis?',
     step:`-(x-${r1})(x-${r2})=0\\text{ at }x=${r1},${r2}\\text{; opens downward}\\Rightarrow\\text{negative outside the roots}\\Rightarrow(-\\infty,${r1})\\cup(${r2},\\infty)`
   };
 }
@@ -227,11 +238,11 @@ function gen4(){
   const k=choose([-4,-3,-2,-1,0,1,2,3]);
   const a=choose([1,2]);
   const f=x=>a*Math.abs(x-h)+k;
-  const svg=graphSVG(f,h-3,h+3,{marks:[{x:h,y:k,label:'min',color:'#7a5c1e',dy:15}]});
+  const svg=graphSVG(f,h-3,h+3);
   return{
     svg:svg,
     answer:[String(k)],
-    hint:'What height does the lowest point on the graph reach?',
+    hint:'Find the lowest point on the grid — what height (y-value) does it reach?',
     step:`\\text{Vertex of the V at }(${h},${k})\\text{ is the lowest point}\\Rightarrow\\text{local minimum}=${k}`
   };
 }
@@ -242,12 +253,12 @@ function gen5(){
   const root=choose([-3,-2,-1,0,1,2,3]);
   const b=-m*root;
   const f=x=>m*x+b;
-  const svg=graphSVG(f,root-4,root+4,{marks:[{x:root,y:0,label:String(root),color:'#7a5c1e',dy:16}]});
+  const svg=graphSVG(f,root-4,root+4);
   const ans=m>0?`(${root},inf)`:`(-inf,${root})`;
   return{
     svg:svg,
     answer:[ans],
-    hint:'Which side of the marked crossing point lies above the horizontal axis?',
+    hint:'Read the x-intercept off the grid — which side of it lies above the horizontal axis?',
     step:`f(x)=${fc(m)}x${addT(b,'')}\\text{; crosses zero at }x=${root}\\text{; slope is }${m>0?'positive':'negative'}\\Rightarrow\\text{positive on }${ans}`
   };
 }
@@ -257,11 +268,11 @@ function gen6(){
   const h=choose([-3,-2,-1,0,1,2,3]);
   const k=choose([-3,-2,-1,0,1,2,3,4]);
   const f=x=>-(x-h)*(x-h)+k;
-  const svg=graphSVG(f,h-3,h+3,{marks:[{x:h,y:k,label:'peak',color:'#7a5c1e',dy:-10}]});
+  const svg=graphSVG(f,h-3,h+3);
   return{
     svg:svg,
     answer:[`(-inf,${h})`],
-    hint:'Look at the peak — which side does the curve climb up to reach it?',
+    hint:'Find the peak on the grid — which side does the curve climb up to reach it?',
     step:`\\text{Vertex at }x=${h}\\text{; opens downward}\\Rightarrow\\text{increasing left of the peak}\\Rightarrow(-\\infty,${h})`
   };
 }
@@ -271,31 +282,28 @@ function gen7(){
   const h=choose([-2,-1,0,1,2]);
   const k=choose([-3,-2,-1,0,1,2,3]);
   const f=x=>(x-h)*(x-h)+k;
-  const svg=graphSVG(f,h-3,h+3,{marks:[{x:h,y:k,label:'min',color:'#7a5c1e',dy:15}]});
+  const svg=graphSVG(f,h-3,h+3);
   return{
     svg:svg,
     answer:[String(k)],
-    hint:"This curve's lowest point never repeats — what y-value does it reach?",
+    hint:"This curve's lowest point never repeats — what y-value does the grid show it reaching?",
     step:`\\text{Vertex at }(${h},${k})\\text{; opens upward}\\Rightarrow\\text{absolute minimum}=${k}`
   };
 }
 
 function gen8(){
-  // Line: ARC read from two marked points (equals the slope).
+  // Line: ARC over a stated interval (equals the slope).
   const m=choose([-3,-2,-1,1,2,3]);
   const b=choose([-3,-2,-1,0,1,2,3]);
   const p=choose([-3,-2,-1,0,1]);
   const q=p+choose([2,3,4]);
   const f=x=>m*x+b;
   const fp=f(p), fq=f(q);
-  const svg=graphSVG(f,p-1.5,q+1.5,{marks:[
-    {x:p,y:fp,label:`(${p},${fp})`,color:'#7a5c1e',dy:(m>0?15:-10)},
-    {x:q,y:fq,label:`(${q},${fq})`,color:'#7a5c1e',dy:(m>0?-10:15)}
-  ]});
+  const svg=graphSVG(f,p-1.5,q+1.5,{title:`Average rate of change from x = ${p} to x = ${q}`});
   return{
     svg:svg,
     answer:[String(m)],
-    hint:'What single number describes the steepness of a straight line?',
+    hint:'What single number describes the steepness of a line between two points on the grid?',
     step:`\\text{ARC}=\\dfrac{${fq}-(${fp})}{${q}-(${p})}=\\dfrac{${fq-fp}}{${q-p}}=${m}`
   };
 }
