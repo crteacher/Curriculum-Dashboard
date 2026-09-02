@@ -182,6 +182,16 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   <div class="ex-body">$f(x)=\begin{cases}ax-4 & x\leq 2 \\ x^2 & x>2\end{cases}$ &ensp; Find $a$ so $f$ is differentiable at $x=2$.</div>
   <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">Right slope: $f'(2^+)=2x\big|_{x=2}=4$, so need left slope $a=4$.<br>Check continuity: $a(2)-4=4$ &Rightarrow; $2a=8$ &Rightarrow; $a=4$ &checkmark;<br><strong>$a=4$</strong></div></div>
 </div>
+<div class="ex-block">
+  <div class="ex-label">Example 5 &nbsp;&mdash;&nbsp; Reading a corner from a graph</div>
+  <div class="ex-body">Is the function shown below differentiable at the marked point?<svg width="280" height="160" style="display:block;margin:8px auto 4px;border:1px solid #e8e4dc;border-radius:6px;background:#fafaf8"><line x1="15" y1="80" x2="265" y2="80" stroke="#ccc" stroke-width="1"/><line x1="140" y1="5" x2="140" y2="138" stroke="#bbb" stroke-width="1" stroke-dasharray="4,3"/><polyline points="105,150 140,80 175,115" stroke="#1e3a5c" stroke-width="2.5" fill="none" stroke-linejoin="miter"/><circle cx="140" cy="80" r="4" fill="#1e3a5c"/><text x="140" y="154" font-size="11" text-anchor="middle" font-family="sans-serif" fill="#555">x = c</text></svg></div>
+  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">The left piece has slope $2$; the right piece has slope $-1$.<br>$2\neq -1 \Rightarrow$ <strong>not differentiable</strong> at $x=c$ (corner) — even though the graph is continuous there (the two pieces meet with no gap).</div></div>
+</div>
+<div class="ex-block">
+  <div class="ex-label">Example 6 &nbsp;&mdash;&nbsp; Reading a jump from a graph</div>
+  <div class="ex-body">Is the function shown below differentiable at the marked point?<svg width="280" height="130" style="display:block;margin:8px auto 4px;border:1px solid #e8e4dc;border-radius:6px;background:#fafaf8"><line x1="15" y1="65" x2="265" y2="65" stroke="#ccc" stroke-width="1"/><line x1="140" y1="5" x2="140" y2="110" stroke="#bbb" stroke-width="1" stroke-dasharray="4,3"/><line x1="85" y1="65" x2="135" y2="65" stroke="#1e3a5c" stroke-width="2.5"/><circle cx="140" cy="65" r="4.5" fill="white" stroke="#1e3a5c" stroke-width="2.5"/><circle cx="140" cy="33" r="4.5" fill="#1e3a5c"/><line x1="140" y1="33" x2="195" y2="33" stroke="#1e3a5c" stroke-width="2.5"/><text x="140" y="126" font-size="11" text-anchor="middle" font-family="sans-serif" fill="#555">x = c</text></svg></div>
+  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">The open circle shows where the left piece is heading; the filled circle shows the function's actual value. They don't match, so $f$ isn't even <em>continuous</em> at $x=c$.<br>Not continuous $\Rightarrow$ <strong>not differentiable</strong> — no need to check slopes at all.</div></div>
+</div>
 </div>
 <div class="section-head">Practice Problems</div>
 <div class="practice">
