@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Derivative at a Point &mdash; Notes</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75;font-size:15px}
@@ -18,6 +18,15 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 .opening-q{background:#eef3f9;border-left:4px solid #1e3a5c;
   border-radius:0 8px 8px 0;padding:1rem 1.2rem;font-size:15px;
   margin-bottom:1.5rem;font-style:italic;line-height:1.75}
+.hook-question{margin:0}
+.hook-graph{text-align:center;margin:.7rem 0 .3rem;font-style:normal}
+.hook-graph svg{max-width:100%;height:auto}
+.hook-reveal{margin-top:.5rem;font-style:normal}
+.hook-reveal-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;
+  color:#1e3a5c;text-transform:uppercase;letter-spacing:.07em;list-style:none;user-select:none;display:block}
+.hook-reveal-toggle::-webkit-details-marker{display:none}
+.hook-reveal-body{margin-top:.5rem;font-size:14px;line-height:1.75;padding-top:.5rem;
+  border-top:1px solid #c8d8ec}
 
 /* ── Section heading ── */
 .section-head{font-family:sans-serif;font-size:11px;font-weight:700;
@@ -64,6 +73,31 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   border-radius:5px;padding:4px 9px;line-height:1.75}
 .pr-ans.student{border-bottom:1.5px solid #bbb;min-height:2.2rem}
 
+/* ── Student interactive ── */
+.st-work{width:100%;min-height:3rem;border:1px solid #ccc;border-radius:5px;
+  padding:.35rem .5rem;font-family:Georgia,serif;font-size:13px;resize:vertical;
+  background:#fafafa;display:block;margin-bottom:.3rem}
+.st-work-sm{width:100%;min-height:1.5rem;border:1px solid #ccc;border-radius:4px;
+  padding:.2rem .4rem;font-family:Georgia,serif;font-size:12px;resize:vertical;
+  background:#fafafa;display:block;margin-bottom:.2rem}
+.st-btn{font-family:sans-serif;font-size:10px;font-weight:700;color:#1e3a5c;
+  background:none;border:1.5px solid #1e3a5c;border-radius:4px;
+  padding:2px 9px;cursor:pointer;margin-bottom:.2rem;display:inline-block}
+.st-btn-sm{font-family:sans-serif;font-size:9px;font-weight:700;color:#1e3a5c;
+  background:none;border:1px solid #1e3a5c;border-radius:3px;
+  padding:1px 6px;cursor:pointer;margin-bottom:.15rem;display:inline-block}
+.st-btn:hover,.st-btn-sm:hover{background:#eef3f9}
+.st-ans-hidden{display:none;background:#fef9e7;border-left:3px solid #7a5c1e;
+  border-radius:0 5px 5px 0;padding:.4rem .7rem;font-size:13px;
+  color:#5a3e00;line-height:1.85}
+.st-ans-hidden.visible{display:block}
+
+/* ── SVG figures ── */
+.svg-figure{text-align:center;margin:.4rem 0 .6rem}
+.svg-figure svg{max-width:100%;height:auto}
+.svg-caption{font-family:sans-serif;font-size:11px;color:#555;
+  margin-top:.2rem;font-style:italic}
+
 /* ── KaTeX overflow ── */
 .katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}
 
@@ -93,19 +127,22 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   .pr-ans.instructor{font-size:9.5pt;padding:2px 7px;line-height:1.55;
     background:#fef9e7 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
   .pr-ans.student{min-height:1.6rem}
+  .st-work{background:none;border:none;border-bottom:1.5px solid #bbb;
+    border-radius:0;min-height:2.6rem;resize:none}
+  .st-work-sm{background:none;border:none;border-bottom:1.5px solid #bbb;
+    border-radius:0;min-height:1.3rem;resize:none}
+  .st-btn,.st-btn-sm{display:none}
+  .st-ans-hidden{display:none !important}
   .opening-q{
     background:#eef3f9 !important;
     -webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .hook-graph{margin:.4rem 0 .2rem}
+  details.hook-reveal:not([open]){display:none}
+  .svg-figure{margin:.25rem 0 .4rem}
+  .svg-figure svg{max-width:100%;height:auto}
+  .svg-caption{font-size:9pt}
 }
 @page{margin:.55in .65in;size:letter}
-.proof-panel{margin:.4rem 0 1.1rem;border-left:3px solid #7a9a6a;border-radius:0 6px 6px 0;background:#f5f7f3}
-.proof-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#5a7a4a;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
-.proof-toggle::-webkit-details-marker{display:none}
-details[open]>.proof-toggle{color:#1e3a5c}
-.proof-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #c8d8b8}
-.proof-body p{margin-bottom:.45rem}
-.proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
-@media print{.proof-panel{display:none}}
 </style>
 </head>
 <body>
@@ -147,6 +184,7 @@ details[open]>.proof-toggle{color:#1e3a5c}
 </div>
 </details>
 <p class="body-text"><strong>Normal line</strong> (perpendicular to tangent): slope $= -1/f'(c)$, same point $(c, f(c))$. The normal line equation is $y = -\dfrac{1}{f'(c)}(x-c)+f(c)$.</p>
+<div class="svg-figure"><svg width="260" height="210" viewBox="0 0 260 210" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:4px auto"><defs><clipPath id="gvp1"><rect x="26" y="26" width="208" height="158"/></clipPath></defs><rect x="26" y="26" width="208" height="158" fill="#fafaf8" rx="2"/><line x1="26.0" y1="26" x2="26.0" y2="184" stroke="#ddd" stroke-width="1"/><line x1="60.7" y1="26" x2="60.7" y2="184" stroke="#ddd" stroke-width="1"/><line x1="95.3" y1="26" x2="95.3" y2="184" stroke="#ddd" stroke-width="1"/><line x1="130.0" y1="26" x2="130.0" y2="184" stroke="#ddd" stroke-width="1"/><line x1="164.7" y1="26" x2="164.7" y2="184" stroke="#ddd" stroke-width="1"/><line x1="199.3" y1="26" x2="199.3" y2="184" stroke="#ddd" stroke-width="1"/><line x1="234.0" y1="26" x2="234.0" y2="184" stroke="#ddd" stroke-width="1"/><line x1="26" y1="184.0" x2="234" y2="184.0" stroke="#ddd" stroke-width="1"/><line x1="26" y1="175.2" x2="234" y2="175.2" stroke="#ddd" stroke-width="1"/><line x1="26" y1="166.4" x2="234" y2="166.4" stroke="#ddd" stroke-width="1"/><line x1="26" y1="157.7" x2="234" y2="157.7" stroke="#ddd" stroke-width="1"/><line x1="26" y1="148.9" x2="234" y2="148.9" stroke="#ddd" stroke-width="1"/><line x1="26" y1="140.1" x2="234" y2="140.1" stroke="#ddd" stroke-width="1"/><line x1="26" y1="131.3" x2="234" y2="131.3" stroke="#ddd" stroke-width="1"/><line x1="26" y1="122.6" x2="234" y2="122.6" stroke="#ddd" stroke-width="1"/><line x1="26" y1="113.8" x2="234" y2="113.8" stroke="#ddd" stroke-width="1"/><line x1="26" y1="105.0" x2="234" y2="105.0" stroke="#ddd" stroke-width="1"/><line x1="26" y1="96.2" x2="234" y2="96.2" stroke="#ddd" stroke-width="1"/><line x1="26" y1="87.4" x2="234" y2="87.4" stroke="#ddd" stroke-width="1"/><line x1="26" y1="78.7" x2="234" y2="78.7" stroke="#ddd" stroke-width="1"/><line x1="26" y1="69.9" x2="234" y2="69.9" stroke="#ddd" stroke-width="1"/><line x1="26" y1="61.1" x2="234" y2="61.1" stroke="#ddd" stroke-width="1"/><line x1="26" y1="52.3" x2="234" y2="52.3" stroke="#ddd" stroke-width="1"/><line x1="26" y1="43.6" x2="234" y2="43.6" stroke="#ddd" stroke-width="1"/><line x1="26" y1="34.8" x2="234" y2="34.8" stroke="#ddd" stroke-width="1"/><line x1="26" y1="26.0" x2="234" y2="26.0" stroke="#ddd" stroke-width="1"/><line x1="26" y1="166.4" x2="234" y2="166.4" stroke="#555" stroke-width="1.5"/><line x1="60.7" y1="26" x2="60.7" y2="184" stroke="#555" stroke-width="1.5"/><line x1="26.0" y1="163.4" x2="26.0" y2="169.4" stroke="#555" stroke-width="1"/><text x="26.0" y="178.4" text-anchor="middle" font-size="8" fill="#888" font-family="sans-serif">-1</text><line x1="95.3" y1="163.4" x2="95.3" y2="169.4" stroke="#555" stroke-width="1"/><text x="95.3" y="178.4" text-anchor="middle" font-size="8" fill="#888" font-family="sans-serif">1</text><line x1="130.0" y1="163.4" x2="130.0" y2="169.4" stroke="#555" stroke-width="1"/><text x="130.0" y="178.4" text-anchor="middle" font-size="8" fill="#888" font-family="sans-serif">2</text><line x1="164.7" y1="163.4" x2="164.7" y2="169.4" stroke="#555" stroke-width="1"/><text x="164.7" y="178.4" text-anchor="middle" font-size="8" fill="#888" font-family="sans-serif">3</text><line x1="199.3" y1="163.4" x2="199.3" y2="169.4" stroke="#555" stroke-width="1"/><text x="199.3" y="178.4" text-anchor="middle" font-size="8" fill="#888" font-family="sans-serif">4</text><line x1="234.0" y1="163.4" x2="234.0" y2="169.4" stroke="#555" stroke-width="1"/><text x="234.0" y="178.4" text-anchor="middle" font-size="8" fill="#888" font-family="sans-serif">5</text><line x1="57.7" y1="184.0" x2="63.7" y2="184.0" stroke="#555" stroke-width="1"/><text x="55.7" y="187.0" text-anchor="end" font-size="8" fill="#888" font-family="sans-serif">-2</text><line x1="57.7" y1="175.2" x2="63.7" y2="175.2" stroke="#555" stroke-width="1"/><text x="55.7" y="178.2" text-anchor="end" font-size="8" fill="#888" font-family="sans-serif">-1</text><line x1="57.7" y1="157.7" x2="63.7" y2="157.7" stroke="#555" stroke-width="1"/><text x="55.7" y="160.7" text-anchor="end" font-size="8" fill="#888" font-family="sans-serif">1</text><line x1="57.7" y1="148.9" x2="63.7" y2="148.9" stroke="#555" stroke-width="1"/><text x="55.7" y="151.9" text-anchor="end" font-size="8" fill="#888" font-family="sans-serif">2</text><line x1="57.7" y1="140.1" x2="63.7" y2="140.1" stroke="#555" stroke-width="1"/><text x="55.7" y="143.1" text-anchor="end" font-size="8" fill="#888" font-family="sans-serif">3</text><line x1="57.7" y1="131.3" x2="63.7" y2="131.3" stroke="#555" stroke-width="1"/><text x="55.7" y="134.3" text-anchor="end" font-size="8" fill="#888" font-family="sans-serif">4</text><line x1="57.7" y1="122.6" x2="63.7" y2="122.6" stroke="#555" stroke-width="1"/><text x="55.7" y="125.6" text-anchor="end" font-size="8" fill="#888" font-family="sans-serif">5</text><line x1="57.7" y1="113.8" x2="63.7" y2="113.8" stroke="#555" stroke-width="1"/><text x="55.7" y="116.8" text-anchor="end" font-size="8" fill="#888" font-family="sans-serif">6</text><line x1="57.7" y1="105.0" x2="63.7" y2="105.0" stroke="#555" stroke-width="1"/><text x="55.7" y="108.0" text-anchor="end" font-size="8" fill="#888" font-family="sans-serif">7</text><line x1="57.7" y1="96.2" x2="63.7" y2="96.2" stroke="#555" stroke-width="1"/><text x="55.7" y="99.2" text-anchor="end" font-size="8" fill="#888" font-family="sans-serif">8</text><line x1="57.7" y1="87.4" x2="63.7" y2="87.4" stroke="#555" stroke-width="1"/><text x="55.7" y="90.4" text-anchor="end" font-size="8" fill="#888" font-family="sans-serif">9</text><line x1="57.7" y1="78.7" x2="63.7" y2="78.7" stroke="#555" stroke-width="1"/><line x1="57.7" y1="69.9" x2="63.7" y2="69.9" stroke="#555" stroke-width="1"/><line x1="57.7" y1="61.1" x2="63.7" y2="61.1" stroke="#555" stroke-width="1"/><line x1="57.7" y1="52.3" x2="63.7" y2="52.3" stroke="#555" stroke-width="1"/><line x1="57.7" y1="43.6" x2="63.7" y2="43.6" stroke="#555" stroke-width="1"/><line x1="57.7" y1="34.8" x2="63.7" y2="34.8" stroke="#555" stroke-width="1"/><line x1="57.7" y1="26.0" x2="63.7" y2="26.0" stroke="#555" stroke-width="1"/><text x="237" y="170.4" font-size="10" fill="#555" font-family="sans-serif">x</text><text x="63.7" y="24" font-size="10" fill="#555" font-family="sans-serif">y</text><line x1="101.1" y1="184.0" x2="205.1" y2="26.0" stroke="#7a5c1e" stroke-width="2" stroke-dasharray="6,3" clip-path="url(#gvp1)"/><text x="201.1" y="20.0" font-size="10" fill="#7a5c1e" font-family="sans-serif" font-weight="bold">tangent</text><polyline points="26.0,157.7 34.7,161.5 43.3,164.2 52.0,165.9 60.7,166.4 69.3,165.9 78.0,164.2 86.7,161.5 95.3,157.7 104.0,152.7 112.7,146.7 121.3,139.6 130.0,131.3 138.7,122.0 147.3,111.6 156.0,100.1 164.7,87.4 173.3,73.7 182.0,58.9 190.7,43.0 199.3,26.0 208.0,7.9 216.7,-11.3 225.3,-31.6 234.0,-53.0" fill="none" stroke="#1e3a5c" stroke-width="2" stroke-linejoin="round" clip-path="url(#gvp1)"/><circle cx="164.7" cy="87.4" r="4" fill="#1e3a5c" stroke="white" stroke-width="1.5"/><text x="170.7" y="79.4" text-anchor="middle" font-size="10" fill="#1e3a5c" font-family="sans-serif" font-weight="bold">(3, 9)</text></svg><div class="svg-caption">Tangent line to $f(x)=x^2$ at $x=3$ (Examples 1&amp;2): slope $f'(3)=6$, line $y=6x-9$.</div></div>
 </div>
 </div>
 <div class="section-head">Worked Examples</div>
@@ -207,9 +245,15 @@ details[open]>.proof-toggle{color:#1e3a5c}
 </div>
 
 </div>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/contrib/auto-render.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
 <script>
+function toggleAns(btn) {
+  if (!btn.dataset.orig) btn.dataset.orig = btn.textContent;
+  var ans = btn.nextElementSibling;
+  var showing = ans.classList.toggle('visible');
+  btn.textContent = showing ? 'Hide' : btn.dataset.orig;
+}
   renderMathInElement(document.body, {
     delimiters: [
       {left: '$$', right: '$$', display: true},
@@ -218,6 +262,5 @@ details[open]>.proof-toggle{color:#1e3a5c}
     throwOnError: false
   });
 </script>
-<!-- proof-layer:done -->
 </body>
 </html>

@@ -57,9 +57,6 @@
   .revealed-answer{display:none;margin-top:8px;font-family:sans-serif;font-size:13px;
     color:#444;background:#f5f3ef;border-radius:6px;padding:8px 11px;line-height:1.8;overflow-x:auto}
   code{font-family:'Courier New',monospace;background:#f0ede7;padding:1px 5px;border-radius:3px;font-size:12px}
-
-
-.hint{display:none!important}
 </style>
 </head>
 <body>
@@ -117,6 +114,8 @@ function shuffle(arr) {
   }
   return a;
 }
+// Pick one element at random from an array  e.g. choose([1,4,9])
+function choose(arr) { return arr[rInt(arr.length)]; }
 
 // ── Display helpers ───────────────────────────────────────────────────────────
 // Leading coefficient: 1→'', -1→'-', else the number as a string
@@ -230,7 +229,47 @@ function gen8() {
   };
 }
 
-const GENERATORS = [gen1, gen2, gen3, gen4, gen5, gen6, gen7, gen8];
+// Slot 9 (GRAPH): Read the tangent slope from a labeled rise/run diagram.
+function gen9() {
+  const run = choose([1,2]);
+  const m = choose([-4,-3,-2,-1,1,2,3,4]);
+  const rise = m*run;
+  const W=280,H=170,px=120,py=95;
+  // Fixed on-screen half-length for the tangent segment (not a literal
+  // px-per-unit scale) so the diagram always fits the canvas regardless
+  // of how large |rise| gets for run=2 combos. The angle still reflects
+  // the true slope; only the absolute size is normalized.
+  const L=40;
+  const len0=Math.sqrt(run*run+rise*rise);
+  const ux0=run/len0, uy0=-rise/len0;
+  const ax=px-ux0*L, ay=py-uy0*L, bx=px+ux0*L, by=py+uy0*L;
+  const len=Math.sqrt((bx-ax)**2+(by-ay)**2);
+  const ux=(bx-ax)/len, uy=(by-ay)/len;
+  const pxp=-uy, pyp=ux;
+  const ext=28, bulge=22;
+  const cax=ax-ux*ext, cay=ay-uy*ext;
+  const cbx=bx+ux*ext, cby=by+uy*ext;
+  const ctrlx=px+pxp*bulge, ctrly=py+pyp*bulge;
+  const cornerx=ax, cornery=by;
+  const svg=`<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" style="display:block;margin:4px auto;border:1px solid #e8e4dc;border-radius:6px;background:#fafaf8">
+  <path d="M ${cax.toFixed(1)},${cay.toFixed(1)} Q ${ctrlx.toFixed(1)},${ctrly.toFixed(1)} ${cbx.toFixed(1)},${cby.toFixed(1)}" stroke="#1a1a1a" stroke-width="2" fill="none"/>
+  <line x1="${ax.toFixed(1)}" y1="${ay.toFixed(1)}" x2="${bx.toFixed(1)}" y2="${by.toFixed(1)}" stroke="#1e3a5c" stroke-width="2.2"/>
+  <line x1="${ax.toFixed(1)}" y1="${ay.toFixed(1)}" x2="${cornerx.toFixed(1)}" y2="${cornery.toFixed(1)}" stroke="#7a5c1e" stroke-width="1.5" stroke-dasharray="4,2"/>
+  <line x1="${cornerx.toFixed(1)}" y1="${cornery.toFixed(1)}" x2="${bx.toFixed(1)}" y2="${by.toFixed(1)}" stroke="#7a5c1e" stroke-width="1.5" stroke-dasharray="4,2"/>
+  <circle cx="${px}" cy="${py}" r="4" fill="#1e3a5c"/>
+  <text x="${px+7}" y="${py-8}" font-size="10" font-family="sans-serif" fill="#1e3a5c" font-weight="bold">P</text>
+  <text x="${((ax+cornerx)/2).toFixed(1)}" y="${(cornery + (ay<cornery?13:-9)).toFixed(1)}" font-size="10" font-family="sans-serif" fill="#7a5c1e" text-anchor="middle">run = ${run}</text>
+  <text x="${(cornerx + (bx>=cornerx?8:-8)).toFixed(1)}" y="${((cornery+by)/2).toFixed(1)}" font-size="10" font-family="sans-serif" fill="#7a5c1e" text-anchor="${bx>=cornerx?'start':'end'}">rise = ${rise}</text>
+</svg>`;
+  return {
+    svg: `<div style="font-family:sans-serif;font-size:14px;margin-bottom:6px">The line shown is tangent to f at P. What is the slope of the tangent line?</div>${svg}`,
+    answer: [String(m)],
+    hint: `Slope of a line is rise over run. What do the two labeled segments give you?`,
+    step: `\\text{slope}=\\dfrac{\\text{rise}}{\\text{run}}=\\dfrac{${rise}}{${run}}=${m}`
+  };
+}
+
+const GENERATORS = [gen1, gen2, gen3, gen4, gen5, gen6, gen7, gen8, gen9];
 
 
 // ── State ─────────────────────────────────────────────────────────────────────
@@ -244,9 +283,9 @@ function ok(user, acc) { return acc.some(a => norm(user) === norm(a)); }
 function init() {
   ACTIVE    = shuffle(GENERATORS.map(gen => gen()));
   correct   = 0;
-  flags     = Array(8).fill(false);
-  attempted = Array(8).fill(false);
-  peeked    = Array(8).fill(false);
+  flags     = Array(GENERATORS.length).fill(false);
+  attempted = Array(GENERATORS.length).fill(false);
+  peeked    = Array(GENERATORS.length).fill(false);
 }
 
 function buildCards() {
@@ -271,8 +310,12 @@ function buildCards() {
     wrap.appendChild(div);
     document.getElementById('ai-' + i)
       .addEventListener('keydown', e => { if (e.key === 'Enter') check(i); });
-    katex.render(p.latex, document.getElementById('expr-' + i),
-      { throwOnError: false, displayMode: true });
+    if (p.svg) {
+      document.getElementById('expr-' + i).innerHTML = p.svg;
+    } else {
+      katex.render(p.latex, document.getElementById('expr-' + i),
+        { throwOnError: false, displayMode: true });
+    }
   });
 }
 
@@ -316,8 +359,9 @@ function reveal(i) {
 }
 
 function updateScore() {
-  document.getElementById('score').textContent = correct + ' / 8';
-  document.getElementById('prog').style.width = Math.round(correct / 8 * 100) + '%';
+  const n = ACTIVE.length;
+  document.getElementById('score').textContent = correct + ' / ' + n;
+  document.getElementById('prog').style.width = Math.round(correct / n * 100) + '%';
 }
 
 function resetAll() { init(); buildCards(); updateScore(); }
