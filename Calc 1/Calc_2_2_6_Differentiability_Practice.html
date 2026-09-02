@@ -57,9 +57,6 @@
   .revealed-answer{display:none;margin-top:8px;font-family:sans-serif;font-size:13px;
     color:#444;background:#f5f3ef;border-radius:6px;padding:8px 11px;line-height:1.8;overflow-x:auto}
   code{font-family:'Courier New',monospace;background:#f0ede7;padding:1px 5px;border-radius:3px;font-size:12px}
-
-
-.hint{display:none!important}
 </style>
 </head>
 <body>
@@ -184,12 +181,33 @@ function gen4() {
   };
 }
 
-// Slot 5 (GRAPH): Corner — two line segments with unequal slopes meeting at x=c → "no"
+// Slot 5 (GRAPH): Usually a corner (unequal slopes meeting at x=c → "no"), but
+// sometimes a smooth curve with no corner at all → "yes". Previously this slot
+// was always "no", which meant neither graph question ever tested the "yes"
+// case (2026-09-02 instructor request).
 function gen5() {
   const c  = rInt(5) - 2;     // c in {-2,-1,0,1,2}
+  const W=280, H=160, cx=140, cy=80, dx=35;
+  if (rInt(2) === 0) {
+    // Smooth curve through the marked point — no corner, so differentiable.
+    const bulge = choose([-40, -30, 30, 40]);
+    const x0=cx-dx, y0=cy, x2=cx+dx, y2=cy, ctrlx=cx, ctrly=cy+bulge;
+    const svg = `<svg width="${W}" height="${H}" style="display:block;margin:4px auto;border:1px solid #e8e4dc;border-radius:6px;background:#fafaf8">
+  <line x1="15" y1="${cy}" x2="${W-15}" y2="${cy}" stroke="#ccc" stroke-width="1"/>
+  <line x1="${cx}" y1="5" x2="${cx}" y2="${H-22}" stroke="#bbb" stroke-width="1" stroke-dasharray="4,3"/>
+  <path d="M ${x0},${y0} Q ${ctrlx},${ctrly} ${x2},${y2}" stroke="#1e3a5c" stroke-width="2.5" fill="none"/>
+  <circle cx="${cx}" cy="${(y0+2*ctrly+y2)/4}" r="4" fill="#1e3a5c"/>
+  <text x="${cx}" y="${H-6}" font-size="11" text-anchor="middle" font-family="sans-serif" fill="#555">x = ${c}</text>
+</svg>`;
+    return {
+      svg: `<div style="font-family:sans-serif;font-size:14px;margin-bottom:6px">Is <em>f</em> differentiable at <em>x</em> = ${c}?</div>${svg}`,
+      answer: ['yes', 'y'],
+      hint: `Look at the slopes on each side of x = ${c}. Is there any corner, jump, or break in the curve?`,
+      step: `\\text{Yes — the curve is smooth at }x=${c}\\text{: no corner, no jump, no vertical tangent.}`
+    };
+  }
   const mL = rInt(2) + 1;     // left slope: 1 or 2
   const mR = -(rInt(2) + 1);  // right slope: -1 or -2
-  const W=280, H=160, cx=140, cy=80, dx=35;
   const x0=cx-dx, y0=cy+mL*dx;   // left endpoint (below corner in SVG)
   const x2=cx+dx, y2=cy-mR*dx;   // right endpoint (mR<0 so -mR>0, also below corner)
   const svg = `<svg width="${W}" height="${H}" style="display:block;margin:4px auto;border:1px solid #e8e4dc;border-radius:6px;background:#fafaf8">
@@ -207,12 +225,31 @@ function gen5() {
   };
 }
 
-// Slot 6 (GRAPH): Jump discontinuity — open/filled circles at x=c → "no"
+// Slot 6 (GRAPH): Usually a jump discontinuity → "no", but sometimes a
+// continuous straight line through the marked point → "yes" (same fix as
+// gen5 above — this slot was always "no" before 2026-09-02).
 function gen6() {
   const c    = rInt(5) - 2;       // c in {-2,-1,0,1,2}
+  const W=280, H=130, cx=140, cy=65, dx=55;
+  if (rInt(2) === 0) {
+    const m = choose([-0.6, -0.3, 0, 0.3, 0.6]);
+    const y0 = cy - m*dx, y2 = cy + m*dx;
+    const svg = `<svg width="${W}" height="${H}" style="display:block;margin:4px auto;border:1px solid #e8e4dc;border-radius:6px;background:#fafaf8">
+  <line x1="15" y1="${cy}" x2="${W-15}" y2="${cy}" stroke="#ccc" stroke-width="1"/>
+  <line x1="${cx}" y1="5" x2="${cx}" y2="${H-20}" stroke="#bbb" stroke-width="1" stroke-dasharray="4,3"/>
+  <line x1="${cx-dx}" y1="${y0}" x2="${cx+dx}" y2="${y2}" stroke="#1e3a5c" stroke-width="2.5"/>
+  <circle cx="${cx}" cy="${cy}" r="4.5" fill="#1e3a5c"/>
+  <text x="${cx}" y="${H-4}" font-size="11" text-anchor="middle" font-family="sans-serif" fill="#555">x = ${c}</text>
+</svg>`;
+    return {
+      svg: `<div style="font-family:sans-serif;font-size:14px;margin-bottom:6px">Is <em>f</em> differentiable at <em>x</em> = ${c}?</div>${svg}`,
+      answer: ['yes', 'y'],
+      hint: `Is f continuous at x = ${c}? Check whether the left and right limits agree, and whether the slopes match too.`,
+      step: `\\text{Yes — the line passes straight through }x=${c}\\text{: no jump, no corner.}`
+    };
+  }
   const jsgn = rInt(2)*2 - 1;     // +1 or -1 (jump direction)
   const jump = 32;                 // pixel height of jump
-  const W=280, H=130, cx=140, cy=65, dx=55;
   const yL = cy;                   // left piece y (limit from left)
   const yR = cy - jsgn*jump;      // right piece y (actual value)
   const svg = `<svg width="${W}" height="${H}" style="display:block;margin:4px auto;border:1px solid #e8e4dc;border-radius:6px;background:#fafaf8">
