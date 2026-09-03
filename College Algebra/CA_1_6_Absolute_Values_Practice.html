@@ -33,7 +33,8 @@
   .card.correct{border-color:#3a7a3a}.card.wrong{border-color:#b03030}.card.peeked{border-color:#b8860b}
   .card-body{padding:14px 16px}
   .card-meta{font-family:sans-serif;font-size:12px;color:#888;margin-bottom:4px}
-  .card-expr{font-size:17px;margin-bottom:12px;line-height:2.2;overflow-x:auto}
+  .card-expr{font-size:17px;margin-bottom:12px;line-height:1.5;overflow-wrap:break-word;white-space:normal;overflow-x:auto}
+  .card-expr svg{max-width:100%;height:auto}
   .katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}
   .input-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
   .ans-input{font-family:'Courier New',monospace;font-size:14px;border:1px solid #ccc;
@@ -56,6 +57,8 @@
   .reveal-link:hover{color:#555}
   .revealed-answer{display:none;margin-top:8px;font-family:sans-serif;font-size:13px;
     color:#444;background:#f5f3ef;border-radius:6px;padding:8px 11px;line-height:1.8;overflow-x:auto}
+  .interval-hint{font-family:sans-serif;font-size:11px;color:#1e3a5c;margin-top:4px;
+    padding:2px 7px;background:#eef3f9;border-radius:4px;display:inline-block}
   code{font-family:'Courier New',monospace;background:#f0ede7;padding:1px 5px;border-radius:3px;font-size:12px}
 
 
@@ -90,7 +93,7 @@
   <div class="section">
     <div class="section-title">Practice Problems</div>
     <p style="font-family:sans-serif;font-size:13px;color:#666;margin-bottom:1rem;">
-      Most answers are integers — enter the boundary value or solution. For counting problems, enter <code>none</code>, <code>one</code>, or <code>two</code>.
+      Equation problems: enter one solution, or both separated by a comma (e.g. <code>5,-9</code>). Inequality problems: enter full interval notation, e.g. <code>(-3,5)</code> or <code>(-inf,-2)u(4,inf)</code>. For counting: <code>none</code>, <code>one</code>, or <code>two</code>.
       Press <strong>Check</strong> or hit Enter.
     </p>
     <div class="score-bar">
@@ -136,7 +139,8 @@ function addT(n, v) {
 
 // ── Problem generators (section-specific, injected below) ─────────────────────
 
-// gen1: |x + b| = k  →  larger solution = k - b
+// gen1: |x + b| = k  →  two solutions; accept the larger alone or both
+// (comma-separated, either order)
 function gen1() {
   const b   = rInt(4) + 1;          // b in {1..4}
   const k   = rInt(4) + b + 1;      // k > b so larger solution k-b > 0
@@ -144,9 +148,9 @@ function gen1() {
   const sml = -(k + b);
   return {
     latex:  `|x + ${b}| = ${k}`,
-    answer: [String(big)],
-    hint:   `Distance can't be negative, so split into two cases. Which case gives the larger x?`,
-    step:   `x+${b}=${k}\\Rightarrow x=${big};\\quad x+${b}=-${k}\\Rightarrow x=${sml}\\quad\\text{larger: }${big}`
+    answer: [String(big), `${big},${sml}`, `${sml},${big}`],
+    hint:   `Distance can't be negative, so split into two cases. What are both solutions?`,
+    step:   `x+${b}=${k}\\Rightarrow x=${big};\\quad x+${b}=-${k}\\Rightarrow x=${sml}\\quad\\text{solutions: }${big},\\,${sml}`
   };
 }
 
@@ -163,9 +167,9 @@ function gen2() {
   const kk  = a * pp;
   return {
     latex:  `|${a}x| = ${kk}`,
-    answer: [String(pp)],
-    hint:   `Split into two equations. Which one gives a positive solution for x?`,
-    step:   `${a}x=${kk}\\Rightarrow x=${pp};\\quad ${a}x=-${kk}\\Rightarrow x=-${pp}\\quad\\text{positive: }${pp}`
+    answer: [String(pp), `${pp},-${pp}`, `-${pp},${pp}`],
+    hint:   `Split into two equations. What are both solutions for x?`,
+    step:   `${a}x=${kk}\\Rightarrow x=${pp};\\quad ${a}x=-${kk}\\Rightarrow x=-${pp}\\quad\\text{solutions: }${pp},\\,-${pp}`
   };
 }
 
@@ -177,9 +181,9 @@ function gen3() {
   const sml = p - q;                 // could be negative or positive
   return {
     latex:  `|x - ${p}| = ${q}`,
-    answer: [String(big)],
-    hint:   `Think of this as: how far is x from ${p}? What are the two values exactly ${q} away?`,
-    step:   `x-${p}=${q}\\Rightarrow x=${big};\\quad x-${p}=-${q}\\Rightarrow x=${sml}\\quad\\text{larger: }${big}`
+    answer: [String(big), `${big},${sml}`, `${sml},${big}`],
+    hint:   `What are the two numbers that sit exactly that distance from the center point?`,
+    step:   `x-${p}=${q}\\Rightarrow x=${big};\\quad x-${p}=-${q}\\Rightarrow x=${sml}\\quad\\text{solutions: }${big},\\,${sml}`
   };
 }
 
@@ -194,54 +198,53 @@ function gen4() {
   const sml = -(k + a);
   return {
     latex:  `${c}|x + ${a}| + ${d} = ${e}`,
-    answer: [String(big)],
-    hint:   `Before splitting, what do you need to do with the ${c} and the ${d}?`,
-    step:   `${c}|x+${a}|=${e-d}\\Rightarrow|x+${a}|=${k}\\Rightarrow x=${big}\\text{ or }x=${sml}\\quad\\text{larger: }${big}`
+    answer: [String(big), `${big},${sml}`, `${sml},${big}`],
+    hint:   `Before the absolute value can be split, what coefficient outside it must be dealt with?`,
+    step:   `${c}|x+${a}|=${e-d}\\Rightarrow|x+${a}|=${k}\\Rightarrow x=${big}\\text{ or }x=${sml}\\quad\\text{solutions: }${big},\\,${sml}`
   };
 }
 
-// gen5: |x + b| < k  →  right boundary = k - b
+// gen5: |x + b| < k  →  full interval (L,R)
 function gen5() {
   const b   = rInt(3) + 1;           // b in {1..3}
   const R   = rInt(4) + 2;           // right boundary {2..5}
   const k   = R + b;
-  const L   = -(k + b);              // left boundary (negative)
+  const L   = -(k + b);              // left boundary (always negative)
   return {
     latex:  `|x + ${b}| < ${k}`,
-    answer: [String(R)],
-    hint:   `Less than means "between." What is the right boundary of the solution interval?`,
-    step:   `-${k}<x+${b}<${k}\\Rightarrow${L}<x<${R}\\quad\\text{right boundary: }${R}`
+    answer: [`(${L},${R})`, `${L},${R}`],
+    hint:   `Less than absolute value means the expression is bounded — what interval contains all solutions?`,
+    interval: true,
+    step:   `-${k}<x+${b}<${k}\\Rightarrow${L}<x<${R}\\Rightarrow(${L},\\,${R})`
   };
 }
 
-// gen6: |ax + b| < k  →  right boundary (integer)
+// gen6: |ax| < k  →  full interval (-R,R)
 function gen6() {
   const a   = rInt(2) + 2;           // a in {2,3}
   const R   = rInt(3) + 2;           // right boundary {2..4}
-  const L   = -(rInt(3) + 1);        // left boundary (negative) {-1..-3}
-  // a*R + b = k and a*L + b = -k  →  a*(R+L) + 2b = 0 → b = -a*(R+L)/2
-  // Need R+L even if a=2, or R+L divisible by a
-  // Simplest: let b = 0, then |ax| < k → -k/a < x < k/a, R = k/a = integer → k = a*R
+  // b = 0, so |ax| < k → -k/a < x < k/a, with k = a*R → x in (-R, R)
   const k   = a * R;
-  const Lv  = -R;
   return {
     latex:  `|${a}x| < ${k}`,
-    answer: [String(R)],
-    hint:   `Less than means "between." After setting up the compound inequality, what is the right boundary?`,
-    step:   `-${k}<${a}x<${k}\\Rightarrow -${R}<x<${R}\\quad\\text{right boundary: }${R}`
+    answer: [`(-${R},${R})`, `-${R},${R}`],
+    hint:   `For |ax| < k, the solution is symmetric about zero — what is that symmetric interval?`,
+    interval: true,
+    step:   `-${k}<${a}x<${k}\\Rightarrow(-${R},\\,${R})`
   };
 }
 
-// gen7: |x - p| > q  →  right cutoff = p + q
+// gen7: |x - p| > q  →  full union (-inf,p-q)u(p+q,inf)
 function gen7() {
   const p   = rInt(3) + 2;           // center {2..4}
   const q   = rInt(3) + 2;           // half-distance {2..4}
   const cut = p + q;                 // right cutoff (positive)
   return {
     latex:  `|x - ${p}| > ${q}`,
-    answer: [String(cut)],
-    hint:   `Greater than means "outside." The solution is two pieces — what is the right cutoff value?`,
-    step:   `x-${p}<-${q}\\Rightarrow x<${p-q};\\quad x-${p}>${q}\\Rightarrow x>${cut}\\quad\\text{right cutoff: }${cut}`
+    answer: [`(-inf,${p-q})u(${cut},inf)`],
+    hint:   `Greater-than absolute value means "outside a range" — what union of intervals is the full solution?`,
+    interval: true,
+    step:   `x-${p}<-${q}\\Rightarrow x<${p-q};\\quad x-${p}>${q}\\Rightarrow x>${cut}\\Rightarrow(-\\infty,${p-q})\\cup(${cut},\\infty)`
   };
 }
 
@@ -271,7 +274,13 @@ const GENERATORS = [gen1, gen2, gen3, gen4, gen5, gen6, gen7, gen8];
 let ACTIVE, correct, flags, attempted, peeked;
 
 function norm(s) {
-  return s.trim().toLowerCase().replace(/\s+/g, '').replace(/[−–]/g, '-');
+  return s.trim().toLowerCase()
+    .replace(/\s+/g, '')
+    .replace(/[−–]/g, '-')
+    .replace(/∞/g, 'inf')
+    .replace(/∪/g, 'u')
+    .replace(/infinity/g, 'inf')
+    .replace(/union/g, 'u');
 }
 function ok(user, acc) { return acc.some(a => norm(user) === norm(a)); }
 
@@ -294,10 +303,11 @@ function buildCards() {
         <div class="card-meta">Problem ${i + 1}</div>
         <div class="card-expr" id="expr-${i}"></div>
         <div class="input-row">
-          <input class="ans-input" id="ai-${i}" placeholder="answer" />
+          <input class="ans-input" id="ai-${i}" placeholder="${p.interval ? '[a,b)' : 'answer'}" />
           <button class="check-btn" id="chk-${i}" onclick="check(${i})">Check</button>
         </div>
         <div class="hint">${p.hint}</div>
+        ${p.interval ? '<div class="interval-hint">Use <code>inf</code> and <code>u</code> for union &mdash; e.g. <code>[2,inf)</code> or <code>(-inf,0)u(0,inf)</code></div>' : ''}
         <div class="feedback" id="fb-${i}"></div>
         <span class="reveal-link" id="rl-${i}" onclick="reveal(${i})">Show solution</span>
         <div class="revealed-answer" id="ra-${i}"></div>
@@ -307,6 +317,8 @@ function buildCards() {
       .addEventListener('keydown', e => { if (e.key === 'Enter') check(i); });
     if (p.svg) {
       document.getElementById('expr-' + i).innerHTML = p.svg;
+    } else if (p.text) {
+      document.getElementById('expr-' + i).innerHTML = p.text;
     } else {
       katex.render(p.latex, document.getElementById('expr-' + i),
         { throwOnError: false, displayMode: true });

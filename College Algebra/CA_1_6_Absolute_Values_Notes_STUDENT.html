@@ -18,6 +18,15 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 .opening-q{background:#eef3f9;border-left:4px solid #1e3a5c;
   border-radius:0 8px 8px 0;padding:1rem 1.2rem;font-size:15px;
   margin-bottom:1.5rem;font-style:italic;line-height:1.75}
+.hook-question{margin:0}
+.hook-graph{text-align:center;margin:.7rem 0 .3rem;font-style:normal}
+.hook-graph svg{max-width:100%;height:auto}
+.hook-reveal{margin-top:.5rem;font-style:normal}
+.hook-reveal-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;
+  color:#1e3a5c;text-transform:uppercase;letter-spacing:.07em;list-style:none;user-select:none;display:block}
+.hook-reveal-toggle::-webkit-details-marker{display:none}
+.hook-reveal-body{margin-top:.5rem;font-size:14px;line-height:1.75;padding-top:.5rem;
+  border-top:1px solid #c8d8ec}
 
 /* ── Section heading ── */
 .section-head{font-family:sans-serif;font-size:11px;font-weight:700;
@@ -127,34 +136,13 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   .opening-q{
     background:#eef3f9 !important;
     -webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .hook-graph{margin:.4rem 0 .2rem}
+  details.hook-reveal:not([open]){display:none}
   .svg-figure{margin:.25rem 0 .4rem}
   .svg-figure svg{max-width:100%;height:auto}
   .svg-caption{font-size:9pt}
 }
 @page{margin:.55in .65in;size:letter}
-.mistake-panel{margin:.4rem 0 1.1rem;border-left:3px solid #b8860b;border-radius:0 6px 6px 0;background:#fdf8e8}
-.mistake-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#9a6a00;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
-.mistake-toggle::-webkit-details-marker{display:none}
-details[open]>.mistake-toggle{color:#1e3a5c}
-.mistake-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #e8d8a8}
-.mistake-body p{margin-bottom:.45rem}
-.panel-row{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.1rem}
-.panel-row>.proof-panel,.panel-row>.mistake-panel{margin:0;min-width:0}
-.panel-row:has(.proof-panel):has(.mistake-panel){grid-template-columns:1fr}
-@media print{
-  .panel-row{break-inside:avoid}
-  .mistake-panel{break-inside:avoid}
-  details.mistake-panel:not([open]){display:none}
-}
-
-.proof-panel{margin:.4rem 0 1.1rem;border-left:3px solid #7a9a6a;border-radius:0 6px 6px 0;background:#f5f7f3}
-.proof-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#5a7a4a;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
-.proof-toggle::-webkit-details-marker{display:none}
-details[open]>.proof-toggle{color:#1e3a5c}
-.proof-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #c8d8b8}
-.proof-body p{margin-bottom:.45rem}
-.proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
-@media print{.proof-panel{break-inside:avoid}}
 </style>
 </head>
 <body>
@@ -184,7 +172,9 @@ details[open]>.proof-toggle{color:#1e3a5c}
 <p class="body-text"><strong>Strategy:</strong> isolate $|\ldots|$ &rarr; check sign of RHS &rarr; split into $+$ and $-$ cases.</p>
 </div>
 <div class="col"><div class="section-head">Absolute Value Inequalities</div>
-<div class="accent-box"><p><strong>Less than (between):</strong><br>$|\text{expr}| < k \Rightarrow -k < \text{expr} < k$<br>Solution is a single interval.</p><p><strong>Greater than (outside):</strong><br>$|\text{expr}| > k \Rightarrow \text{expr} < -k$ OR $\text{expr} > k$<br>Solution is a union of two intervals.</p><p>Remember: $\leq$ and $\geq$ follow the same pattern with closed brackets where needed.</p></div>
+<div class="accent-box"><p><strong>Less than (between):</strong><br>$|\text{expr}| < k \Rightarrow -k < \text{expr} < k$<br>Solution is a single interval.</p><div class="svg-figure"><svg width="280" height="70" viewBox="0 0 280 70" xmlns="http://www.w3.org/2000/svg"><line x1="15" y1="35" x2="265" y2="35" stroke="#999" stroke-width="1.5"/><polygon points="15,35 22,31 22,39" fill="#999"/><polygon points="265,35 258,31 258,39" fill="#999"/><line x1="85" y1="35" x2="195" y2="35" stroke="#1e3a5c" stroke-width="3.5"/><line x1="85" y1="29" x2="85" y2="41" stroke="#555" stroke-width="1.2"/><text x="85" y="54" text-anchor="middle" font-size="12" fill="#555" font-family="sans-serif">-k</text><circle cx="85" cy="35" r="5" fill="#eef3f9" stroke="#1e3a5c" stroke-width="2"/><line x1="195" y1="29" x2="195" y2="41" stroke="#555" stroke-width="1.2"/><text x="195" y="54" text-anchor="middle" font-size="12" fill="#555" font-family="sans-serif">k</text><circle cx="195" cy="35" r="5" fill="#eef3f9" stroke="#1e3a5c" stroke-width="2"/></svg><div class="svg-caption">Between: solution is the interval (-k, k)</div></div>
+<p><strong>Greater than (outside):</strong><br>$|\text{expr}| > k \Rightarrow \text{expr} < -k$ OR $\text{expr} > k$<br>Solution is a union of two intervals.</p><div class="svg-figure"><svg width="280" height="70" viewBox="0 0 280 70" xmlns="http://www.w3.org/2000/svg"><line x1="15" y1="35" x2="265" y2="35" stroke="#999" stroke-width="1.5"/><polygon points="15,35 22,31 22,39" fill="#999"/><polygon points="265,35 258,31 258,39" fill="#999"/><line x1="20" y1="35" x2="85" y2="35" stroke="#1e3a5c" stroke-width="3.5"/><line x1="195" y1="35" x2="260" y2="35" stroke="#1e3a5c" stroke-width="3.5"/><line x1="85" y1="29" x2="85" y2="41" stroke="#555" stroke-width="1.2"/><text x="85" y="54" text-anchor="middle" font-size="12" fill="#555" font-family="sans-serif">-k</text><circle cx="85" cy="35" r="5" fill="#eef3f9" stroke="#1e3a5c" stroke-width="2"/><line x1="195" y1="29" x2="195" y2="41" stroke="#555" stroke-width="1.2"/><text x="195" y="54" text-anchor="middle" font-size="12" fill="#555" font-family="sans-serif">k</text><circle cx="195" cy="35" r="5" fill="#eef3f9" stroke="#1e3a5c" stroke-width="2"/></svg><div class="svg-caption">Outside: solution is (-inf, -k) U (k, inf)</div></div>
+<p>Remember: $\leq$ and $\geq$ follow the same pattern with closed brackets where needed.</p></div>
 <details class="proof-panel">
 <summary class="proof-toggle">▸ Show Proof</summary>
 <div class="proof-body">
@@ -219,12 +209,14 @@ details[open]>.proof-toggle{color:#1e3a5c}
 <div class="ex-block">
   <div class="ex-label">Example 3 &nbsp;&mdash;&nbsp; Absolute value inequality (less than)</div>
   <div class="ex-body">Solve $|2x - 4| < 6$ and write in interval notation.</div>
-  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">$-6 < 2x - 4 < 6 \Rightarrow -2 < 2x < 10 \Rightarrow -1 < x < 5 \Rightarrow (-1, 5)$</div></div>
+  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">$-6 < 2x - 4 < 6 \Rightarrow -2 < 2x < 10 \Rightarrow -1 < x < 5 \Rightarrow (-1, 5)$<div class="svg-figure"><svg width="280" height="70" viewBox="0 0 280 70" xmlns="http://www.w3.org/2000/svg"><line x1="15" y1="35" x2="265" y2="35" stroke="#999" stroke-width="1.5"/><polygon points="15,35 22,31 22,39" fill="#999"/><polygon points="265,35 258,31 258,39" fill="#999"/><line x1="74" y1="35" x2="206" y2="35" stroke="#1e3a5c" stroke-width="3.5"/><line x1="96" y1="29" x2="96" y2="41" stroke="#bbb" stroke-width="1.2"/><text x="96" y="54" text-anchor="middle" font-size="11" fill="#999" font-family="sans-serif">0</text><line x1="74" y1="29" x2="74" y2="41" stroke="#555" stroke-width="1.2"/><text x="74" y="54" text-anchor="middle" font-size="12" fill="#555" font-family="sans-serif">-1</text><circle cx="74" cy="35" r="5" fill="#eef3f9" stroke="#1e3a5c" stroke-width="2"/><line x1="206" y1="29" x2="206" y2="41" stroke="#555" stroke-width="1.2"/><text x="206" y="54" text-anchor="middle" font-size="12" fill="#555" font-family="sans-serif">5</text><circle cx="206" cy="35" r="5" fill="#eef3f9" stroke="#1e3a5c" stroke-width="2"/></svg><div class="svg-caption">Solution: (-1, 5)</div></div>
+</div></div>
 </div>
 <div class="ex-block">
   <div class="ex-label">Example 4 &nbsp;&mdash;&nbsp; Absolute value inequality (greater than)</div>
   <div class="ex-body">Solve $|2x - 4| > 6$ and write in interval notation.</div>
-  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">$2x - 4 < -6$ or $2x - 4 > 6$<br>$x < -1$ or $x > 5 \Rightarrow (-\infty, -1) \cup (5, \infty)$</div></div>
+  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">$2x - 4 < -6$ or $2x - 4 > 6$<br>$x < -1$ or $x > 5 \Rightarrow (-\infty, -1) \cup (5, \infty)$<div class="svg-figure"><svg width="280" height="70" viewBox="0 0 280 70" xmlns="http://www.w3.org/2000/svg"><line x1="15" y1="35" x2="265" y2="35" stroke="#999" stroke-width="1.5"/><polygon points="15,35 22,31 22,39" fill="#999"/><polygon points="265,35 258,31 258,39" fill="#999"/><line x1="20" y1="35" x2="74" y2="35" stroke="#1e3a5c" stroke-width="3.5"/><line x1="206" y1="35" x2="260" y2="35" stroke="#1e3a5c" stroke-width="3.5"/><line x1="96" y1="29" x2="96" y2="41" stroke="#bbb" stroke-width="1.2"/><text x="96" y="54" text-anchor="middle" font-size="11" fill="#999" font-family="sans-serif">0</text><line x1="74" y1="29" x2="74" y2="41" stroke="#555" stroke-width="1.2"/><text x="74" y="54" text-anchor="middle" font-size="12" fill="#555" font-family="sans-serif">-1</text><circle cx="74" cy="35" r="5" fill="#eef3f9" stroke="#1e3a5c" stroke-width="2"/><line x1="206" y1="29" x2="206" y2="41" stroke="#555" stroke-width="1.2"/><text x="206" y="54" text-anchor="middle" font-size="12" fill="#555" font-family="sans-serif">5</text><circle cx="206" cy="35" r="5" fill="#eef3f9" stroke="#1e3a5c" stroke-width="2"/></svg><div class="svg-caption">Solution: (-inf, -1) U (5, inf)</div></div>
+</div></div>
 </div>
 </div>
 <div class="section-head">Practice Problems</div>
@@ -279,7 +271,5 @@ function toggleAns(btn) {
     throwOnError: false
   });
 </script>
-<!-- mistake-layer:done -->
-<!-- proof-layer:done -->
 </body>
 </html>
