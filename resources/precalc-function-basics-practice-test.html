@@ -121,6 +121,19 @@
   .score-box { display: flex; align-items: baseline; gap: 8px; }
   .score-num { font-family: "JetBrains Mono", monospace; font-size: 1.3rem; font-weight: 700; color: var(--accent-strong); font-variant-numeric: tabular-nums; }
   .score-label { font-size: 0.78rem; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.06em; }
+  .score-group { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .score-divider { width: 1px; align-self: stretch; min-height: 24px; background: var(--card-border); }
+  .exam-score-box .score-num { color: var(--ink); }
+  .exam-score-box .score-label { display: flex; align-items: center; gap: 5px; }
+  .exam-score-box .score-label svg { width: 11px; height: 11px; flex-shrink: 0; }
+
+  .exam-badge {
+    display: inline-flex; align-items: center; gap: 5px; font-size: 0.68rem; font-weight: 700;
+    padding: 3px 9px; border-radius: 20px; letter-spacing: 0.02em; white-space: nowrap;
+  }
+  .exam-badge svg { width: 11px; height: 11px; flex-shrink: 0; }
+  .exam-badge.exam-good { background: var(--good-soft); color: var(--good); }
+  .exam-badge.exam-bad { background: var(--bad-soft); color: var(--bad); }
 
   button { font-family: inherit; cursor: pointer; }
   button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
@@ -234,17 +247,27 @@
   <header>
     <div class="eyebrow">PreCalc &middot; &sect;1.1&ndash;1.7 &middot; Function Basics</div>
     <h1>Function Basics Practice Test</h1>
-    <p>Every part regenerates its own random version — work it out on paper, type your answer, and check yourself. Click "New version" on any part as many times as you want to drill it again with different numbers.</p>
+    <p>Every part regenerates its own random version — work it out on paper, type your answer, and check yourself. Click "New version" on any part as many times as you want to drill it again with different numbers. Your <strong>Exam Score</strong> locks in the first time you check each part (or peek its solution) — everything after that is just practice. Use "Reset exam" any time for a brand-new attempt.</p>
   </header>
 
   <div class="toolbar">
-    <div class="score-box">
-      <span class="score-num" id="scoreNum">0 / 0</span>
-      <span class="score-label">points checked correct</span>
+    <div class="score-group">
+      <div class="score-box">
+        <span class="score-num" id="scoreNum">0 / 0</span>
+        <span class="score-label">points checked correct</span>
+      </div>
+      <div class="score-divider"></div>
+      <div class="score-box exam-score-box">
+        <span class="score-num" id="examScoreNum">0 / 0</span>
+        <span class="score-label">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+          exam score
+        </span>
+      </div>
     </div>
     <button class="icon-btn" id="newTestBtn" type="button">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3h5v5"/><path d="M4 20 21 3"/><path d="M21 16v5h-5"/><path d="M15 15l6 6"/><path d="M4 4l5 5"/></svg>
-      New full test
+      Reset exam
     </button>
   </div>
 
@@ -339,6 +362,76 @@
     if (a.length !== b.length) return false;
     for (var i = 0; i < a.length; i++) { if (Math.abs(a[i] - b[i]) > tol) return false; }
     return true;
+  }
+
+  // ---- shared "interval notation" answer input: one text field where the student
+  // types the actual interval notation by hand — parens/brackets, -infinity/infinity
+  // for unbounded sides, and "U" (or "u"/"∪") between pieces of a union ----
+  function parseBoundToken(raw) {
+    var s = String(raw).trim().toLowerCase();
+    if (["-infinity", "-inf", "-oo", "-∞"].indexOf(s) !== -1) return -Infinity;
+    if (["infinity", "+infinity", "inf", "+inf", "oo", "+oo", "∞", "+∞"].indexOf(s) !== -1) return Infinity;
+    var m = s.match(/^(-?\d+(\.\d+)?)\s*\/\s*(-?\d+(\.\d+)?)$/);
+    if (m) { var p = parseFloat(m[1]), q = parseFloat(m[3]); if (q !== 0) return p / q; }
+    var cleaned = s.replace(/,/g, "");
+    if (/^-?\d*\.?\d+$/.test(cleaned)) return parseFloat(cleaned);
+    return null;
+  }
+  function parseIntervalUnion(raw) {
+    if (raw === null || raw === undefined) return { intervals: [], invalid: true };
+    var str = String(raw).trim();
+    if (str === "") return { intervals: [], invalid: true };
+    var lower = str.toLowerCase();
+    if (["empty", "empty set", "no solution", "none", "∅", "{}", "dne"].indexOf(lower) !== -1) {
+      return { intervals: [], invalid: false };
+    }
+    if (["all reals", "all real numbers", "reals"].indexOf(lower) !== -1) {
+      return { intervals: [{ lo: -Infinity, loIncl: false, hi: Infinity, hiIncl: false }], invalid: false };
+    }
+    var re = /([\(\[])\s*([^,()\[\]]+)\s*,\s*([^,()\[\]]+)\s*([\)\]])/g;
+    var m, intervals = [];
+    while ((m = re.exec(str)) !== null) {
+      var lo = parseBoundToken(m[2]), hi = parseBoundToken(m[3]);
+      if (lo === null || hi === null) return { intervals: [], invalid: true };
+      intervals.push({
+        lo: lo, hi: hi,
+        loIncl: m[1] === "[" && lo !== -Infinity && lo !== Infinity,
+        hiIncl: m[4] === "]" && hi !== -Infinity && hi !== Infinity
+      });
+    }
+    if (intervals.length === 0) return { intervals: [], invalid: true };
+    return { intervals: intervals, invalid: false };
+  }
+  function boundEqual(uv, uIncl, ev, eIncl) {
+    if (ev === -Infinity || ev === Infinity) return uv === ev;
+    return uv !== -Infinity && uv !== Infinity && Math.abs(uv - ev) < 0.01 && uIncl === eIncl;
+  }
+  function ivSortKey(iv) { return iv.lo === -Infinity ? -1e18 : iv.lo; }
+  // expected: array of {lo,loIncl,hi,hiIncl} — an empty array means "no solution"
+  function intervalAnswerCorrect(parsed, expected) {
+    if (parsed.invalid) return false;
+    if (parsed.intervals.length !== expected.length) return false;
+    var us = parsed.intervals.slice().sort(function (a, b) { return ivSortKey(a) - ivSortKey(b); });
+    var es = expected.slice().sort(function (a, b) { return ivSortKey(a) - ivSortKey(b); });
+    for (var i = 0; i < us.length; i++) {
+      if (!boundEqual(us[i].lo, us[i].loIncl, es[i].lo, es[i].loIncl)) return false;
+      if (!boundEqual(us[i].hi, us[i].hiIncl, es[i].hi, es[i].hiIncl)) return false;
+    }
+    return true;
+  }
+  function oneIntervalNotation(iv) {
+    var loStr = iv.lo === -Infinity ? "&minus;&infin;" : String(iv.lo);
+    var hiStr = iv.hi === Infinity ? "&infin;" : String(iv.hi);
+    var loBrk = iv.lo === -Infinity ? "(" : (iv.loIncl ? "[" : "(");
+    var hiBrk = iv.hi === Infinity ? ")" : (iv.hiIncl ? "]" : ")");
+    return loBrk + loStr + ", " + hiStr + hiBrk;
+  }
+  function intervalNotation(expected) {
+    if (expected.length === 0) return "&empty; (no solution)";
+    return expected.slice().sort(function (a, b) { return ivSortKey(a) - ivSortKey(b); }).map(oneIntervalNotation).join(" &cup; ");
+  }
+  function intervalTextInputHtml(cls, label, placeholder) {
+    return "<span class=\"field-label\">" + label + "</span><input type=\"text\" class=\"" + cls + "\" placeholder=\"" + (placeholder || "e.g. (-3, 5]") + "\" style=\"min-width:240px\">";
   }
 
   // ============================================================
@@ -580,38 +673,33 @@
     gen: function () {
       var a = randInt(1, 8);
       var b = randIntExcluding([a], 1, 8);
-      var excluded = b > a ? [b] : [b, -b];
-      return { a: a, b: b, excluded: excluded.sort(function (x, y) { return x - y; }) };
+      var excluded = (b > a ? [b] : [b, -b]).sort(function (x, y) { return x - y; });
+      var lo = -a, cur = lo, curIncl = true, expected = [];
+      excluded.forEach(function (e) {
+        expected.push({ lo: cur, loIncl: curIncl, hi: e, hiIncl: false });
+        cur = e; curIncl = false;
+      });
+      expected.push({ lo: cur, loIncl: curIncl, hi: Infinity, hiIncl: false });
+      return { a: a, b: b, excluded: excluded, expected: expected };
     },
     prompt: function (s) {
       var numer = radical("x " + signedTerm(s.a, ""));
       var denom = "x&sup2; " + signedTerm(-(s.b * s.b), "");
       return "<span class=\"math\">f(x) = " + frac(numer, denom) + "</span>" +
-        "<div style=\"margin-top:8px\">Find the domain of f.</div>";
+        "<div style=\"margin-top:8px\">Find the domain of f. Give your answer in interval notation.</div>";
     },
     inputsHtml: function () {
-      return "<span class=\"subrow\"><span class=\"field-label\">Domain: x &ge;</span><input type=\"text\" class=\"ans-lower\" placeholder=\"e.g. -3\">" +
-        "<span class=\"field-label\">excluding x =</span><input type=\"text\" class=\"ans-ex1\" placeholder=\"e.g. 2\">" +
-        "<span class=\"field-label\">and x =</span><input type=\"text\" class=\"ans-ex2\" placeholder=\"none, if only one\"></span>";
+      return intervalTextInputHtml("ans-domain", "Domain:", "e.g. [-3, 2) U (2, infinity)");
     },
-    readAnswer: function (card) {
-      return {
-        lower: parseOptionalNum(card.querySelector(".ans-lower").value),
-        excluded: [parseOptionalNum(card.querySelector(".ans-ex1").value), parseOptionalNum(card.querySelector(".ans-ex2").value)]
-          .filter(function (v) { return v !== null; }).sort(function (x, y) { return x - y; })
-      };
-    },
-    isCorrect: function (ua, s) {
-      if (ua.lower === null || Math.abs(ua.lower - (-s.a)) > 0.01) return false;
-      return numSetsMatch(ua.excluded, s.excluded);
-    },
+    readAnswer: function (card) { return parseIntervalUnion(card.querySelector(".ans-domain").value); },
+    isCorrect: function (ua, s) { return intervalAnswerCorrect(ua, s.expected); },
     solutionHtml: function (s) {
       var secondPart = s.excluded.length === 2 ? (" Since " + s.b + " &le; " + s.a + ", both x = " + s.b + " and x = " + (-s.b) + " land inside that interval, so both must be excluded.") :
         (" Since " + s.b + " &gt; " + s.a + ", only x = " + s.b + " lands inside that interval (x = " + (-s.b) + " is already below &minus;" + s.a + ", so it was never in the domain to begin with).");
       return "<span class=\"sol-label\">Solution</span>" +
         "<div class=\"step\">The square root needs x " + signedTerm(s.a, "") + " &ge; 0, so x &ge; " + (-s.a) + ".</div>" +
         "<div class=\"step\">The denominator x&sup2; &minus; " + (s.b * s.b) + " = (x " + signedTerm(-s.b, "") + ")(x " + signedTerm(s.b, "") + ") can't be zero, so x &ne; " + s.b + " and x &ne; " + (-s.b) + "." + secondPart + "</div>" +
-        "<div class=\"final\">Answer: x &ge; " + (-s.a) + ", excluding x = " + s.excluded.join(" and x = ") + "</div>";
+        "<div class=\"final\">Answer: " + intervalNotation(s.expected) + "</div>";
     }
   });
 
@@ -639,7 +727,7 @@
       }
       return { p: p, q: q, h: h, k: k, slope: slope, sign: sign, inside: inside, fp: fp, fq: fq, domLo: domLo, domHi: domHi, ranLo: ranLo, ranHi: ranHi };
     },
-    prompt: function () { return "Find the domain and range of the function graphed below."; },
+    prompt: function () { return "Find the domain and range of the function graphed below. Give each in interval notation."; },
     drawGraph: function (canvas, s) {
       var styles = getComputedStyle(document.documentElement);
       var colorA = styles.getPropertyValue("--graph-stroke-a").trim();
@@ -657,21 +745,19 @@
       drawCircle(g.ctx, g.toPx, s.q, s.fq, colorA, false);
     },
     inputsHtml: function () {
-      return "<span class=\"subrow\"><span class=\"field-label\">Domain:</span><input type=\"text\" class=\"ans-dlo\" placeholder=\"low\">&ndash;<input type=\"text\" class=\"ans-dhi\" placeholder=\"high\"></span>" +
-        "<span class=\"subrow\"><span class=\"field-label\">Range:</span><input type=\"text\" class=\"ans-rlo\" placeholder=\"low\">&ndash;<input type=\"text\" class=\"ans-rhi\" placeholder=\"high\"></span>";
+      return "<div class=\"subrow\">" + intervalTextInputHtml("ans-domain", "Domain:", "e.g. [-3, 5]") + "</div>" +
+        "<div class=\"subrow\">" + intervalTextInputHtml("ans-range", "Range:", "e.g. [-2, 4]") + "</div>";
     },
     readAnswer: function (card) {
       return {
-        dlo: parseOptionalNum(card.querySelector(".ans-dlo").value),
-        dhi: parseOptionalNum(card.querySelector(".ans-dhi").value),
-        rlo: parseOptionalNum(card.querySelector(".ans-rlo").value),
-        rhi: parseOptionalNum(card.querySelector(".ans-rhi").value)
+        domain: parseIntervalUnion(card.querySelector(".ans-domain").value),
+        range: parseIntervalUnion(card.querySelector(".ans-range").value)
       };
     },
     isCorrect: function (ua, s) {
-      if ([ua.dlo, ua.dhi, ua.rlo, ua.rhi].some(function (v) { return v === null; })) return false;
-      return Math.abs(ua.dlo - s.domLo) < 0.01 && Math.abs(ua.dhi - s.domHi) < 0.01 &&
-        Math.abs(ua.rlo - s.ranLo) < 0.01 && Math.abs(ua.rhi - s.ranHi) < 0.01;
+      var expDom = [{ lo: s.domLo, loIncl: true, hi: s.domHi, hiIncl: true }];
+      var expRan = [{ lo: s.ranLo, loIncl: true, hi: s.ranHi, hiIncl: true }];
+      return intervalAnswerCorrect(ua.domain, expDom) && intervalAnswerCorrect(ua.range, expRan);
     },
     solutionHtml: function (s) {
       return "<span class=\"sol-label\">Solution</span>" +
@@ -722,27 +808,38 @@
 
   PARTS.push({
     id: "4", group: "4", label: "", points: 4, hasGraph: true,
-    gen: genWMShape,
-    prompt: function (s) {
-      return "The graph below continues in the same direction indefinitely past both ends. Is f increasing, decreasing, or constant on each interval?";
+    gen: function () {
+      var s = genWMShape();
+      var bounds = [-Infinity, s.x1, s.x2, s.x3, Infinity];
+      var incExpected = [], decExpected = [];
+      for (var i = 0; i < 4; i++) {
+        var iv = { lo: bounds[i], loIncl: false, hi: bounds[i + 1], hiIncl: false };
+        (s.pattern[i] === "inc" ? incExpected : decExpected).push(iv);
+      }
+      s.incExpected = incExpected;
+      s.decExpected = decExpected;
+      return s;
+    },
+    prompt: function () {
+      return "The graph below continues in the same direction indefinitely past both ends. Give the intervals where f is increasing and where it is decreasing, in interval notation.";
     },
     drawGraph: drawWMShape,
-    inputsHtml: function (s) {
-      function opts(cls) { return "<select class=\"" + cls + "\"><option value=\"\">choose...</option><option value=\"inc\">Increasing</option><option value=\"dec\">Decreasing</option><option value=\"const\">Constant</option></select>"; }
-      return "<div class=\"subrow\"><span class=\"field-label\">x &lt; " + s.x1 + ":</span>" + opts("ans-i0") + "</div>" +
-        "<div class=\"subrow\"><span class=\"field-label\">" + s.x1 + " &lt; x &lt; " + s.x2 + ":</span>" + opts("ans-i1") + "</div>" +
-        "<div class=\"subrow\"><span class=\"field-label\">" + s.x2 + " &lt; x &lt; " + s.x3 + ":</span>" + opts("ans-i2") + "</div>" +
-        "<div class=\"subrow\"><span class=\"field-label\">x &gt; " + s.x3 + ":</span>" + opts("ans-i3") + "</div>";
+    inputsHtml: function () {
+      return "<div class=\"subrow\">" + intervalTextInputHtml("ans-inc", "Increasing on:", "e.g. (-infinity, -2) U (1, 4)") + "</div>" +
+        "<div class=\"subrow\">" + intervalTextInputHtml("ans-dec", "Decreasing on:", "e.g. (-2, 1) U (4, infinity)") + "</div>";
     },
     readAnswer: function (card) {
-      return [card.querySelector(".ans-i0").value, card.querySelector(".ans-i1").value, card.querySelector(".ans-i2").value, card.querySelector(".ans-i3").value];
+      return {
+        inc: parseIntervalUnion(card.querySelector(".ans-inc").value),
+        dec: parseIntervalUnion(card.querySelector(".ans-dec").value)
+      };
     },
-    isCorrect: function (ua, s) { return ua.every(function (v, i) { return v === s.pattern[i]; }); },
+    isCorrect: function (ua, s) { return intervalAnswerCorrect(ua.inc, s.incExpected) && intervalAnswerCorrect(ua.dec, s.decExpected); },
     solutionHtml: function (s) {
       var words = { dec: "decreasing", inc: "increasing" };
       return "<span class=\"sol-label\">Solution</span>" +
         "<div class=\"step\">Read the graph left to right: it goes " + words[s.pattern[0]] + ", then " + words[s.pattern[1]] + ", then " + words[s.pattern[2]] + ", then " + words[s.pattern[3]] + " &mdash; there's no flat piece, so nothing is constant.</div>" +
-        "<div class=\"final\">Answer: x &lt; " + s.x1 + " (" + words[s.pattern[0]] + "), " + s.x1 + " to " + s.x2 + " (" + words[s.pattern[1]] + "), " + s.x2 + " to " + s.x3 + " (" + words[s.pattern[2]] + "), x &gt; " + s.x3 + " (" + words[s.pattern[3]] + ")</div>";
+        "<div class=\"final\">Answer: increasing on " + intervalNotation(s.incExpected) + "; decreasing on " + intervalNotation(s.decExpected) + "</div>";
     }
   });
 
@@ -1001,6 +1098,15 @@
     scoreNumEl.textContent = earned + " / " + TOTAL_POINTS;
   }
 
+  var examScoreMap = {};
+  var examScoreNumEl = document.getElementById("examScoreNum");
+
+  function updateExamScore() {
+    var earned = 0;
+    Object.keys(examScoreMap).forEach(function (k) { earned += examScoreMap[k]; });
+    examScoreNumEl.textContent = earned + " / " + TOTAL_POINTS;
+  }
+
   window.__PT_STATE = {};
 
   function mountCard(part, container) {
@@ -1010,7 +1116,8 @@
 
     var headHtml = "<div class=\"qcard-head\"><div class=\"qtitle\">" +
       (part.label ? "<span class=\"qlabel\">" + part.label + "</span>" : "") +
-      "<span class=\"qpoints\">" + part.points + " pt" + (part.points === 1 ? "" : "s") + "</span></div>" +
+      "<span class=\"qpoints\">" + part.points + " pt" + (part.points === 1 ? "" : "s") + "</span>" +
+      "<span class=\"exam-badge hidden\"></span></div>" +
       "<button class=\"icon-btn new-version-btn\" type=\"button\">" +
       "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M16 3h5v5\"/><path d=\"M4 20 21 3\"/><path d=\"M21 16v5h-5\"/><path d=\"M15 15l6 6\"/><path d=\"M4 4l5 5\"/></svg>" +
       "New version</button></div>";
@@ -1029,9 +1136,20 @@
     var inputsEl = card.querySelector(".qinputs");
     var feedbackEl = card.querySelector(".qfeedback");
     var solutionEl = card.querySelector(".qsolution");
+    var examBadgeEl = card.querySelector(".exam-badge");
     var canvasEl = part.hasGraph ? card.querySelector("canvas") : null;
 
     var state;
+    var examAttempted = false;
+
+    function lockExam(pts, note) {
+      if (examAttempted) return;
+      examAttempted = true;
+      examScoreMap[part.id] = pts;
+      examBadgeEl.className = "exam-badge " + (pts >= part.points ? "exam-good" : "exam-bad");
+      examBadgeEl.innerHTML = "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"4\" y=\"10\" width=\"16\" height=\"10\" rx=\"2\"/><path d=\"M8 10V7a4 4 0 0 1 8 0v3\"/></svg> Exam: " + pts + "/" + part.points + (note ? " (" + note + ")" : "");
+      updateExamScore();
+    }
 
     function render() {
       state = part.gen();
@@ -1063,10 +1181,12 @@
         scoreMap[part.id] = 0;
       }
       updateScore();
+      lockExam(correct ? part.points : 0);
     });
     card.querySelector(".solution-btn").addEventListener("click", function () {
       solutionEl.innerHTML = part.solutionHtml(state);
       solutionEl.classList.remove("hidden");
+      lockExam(0, "viewed solution");
     });
 
     if (part.hasGraph) {
@@ -1080,6 +1200,7 @@
     var groupsEl = document.getElementById("groups");
     groupsEl.innerHTML = "";
     scoreMap = {};
+    examScoreMap = {};
     var seenGroups = {};
     var currentContainer = null;
     PARTS.forEach(function (part) {
@@ -1096,6 +1217,7 @@
       mountCard(part, currentContainer);
     });
     updateScore();
+    updateExamScore();
   }
 
   document.getElementById("newTestBtn").addEventListener("click", buildAll);

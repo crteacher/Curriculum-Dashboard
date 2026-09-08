@@ -1,0 +1,1057 @@
+<title>Derivative Basics Practice Test</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=JetBrains+Mono:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #f6f1e4;
+    --paper-line: rgba(58, 74, 94, 0.14);
+    --paper-line-strong: rgba(58, 74, 94, 0.26);
+    --ink: #26313f;
+    --ink-soft: #5b6b7d;
+    --card-bg: #fffdf7;
+    --card-border: #ddd2b6;
+    --accent: #2f7d6b;
+    --accent-strong: #1f5c4e;
+    --accent-soft: rgba(47, 125, 107, 0.12);
+    --accent-ink: #f5fbf9;
+    --good: #3f7a52;
+    --good-soft: rgba(63, 122, 82, 0.14);
+    --bad: #b3413a;
+    --bad-soft: rgba(179, 65, 58, 0.12);
+    --shadow: rgba(38, 49, 63, 0.16);
+    --graph-grid: rgba(58, 74, 94, 0.14);
+    --graph-axis: rgba(38, 49, 63, 0.55);
+    --graph-stroke-a: #2f7d6b;
+    --graph-stroke-b: #c1483f;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #1b2330;
+      --paper-line: rgba(238, 242, 240, 0.07);
+      --paper-line-strong: rgba(238, 242, 240, 0.15);
+      --ink: #edf1ef;
+      --ink-soft: #a3aebb;
+      --card-bg: #232e3d;
+      --card-border: #3a4a61;
+      --accent: #5fd1b3;
+      --accent-strong: #86e0c8;
+      --accent-soft: rgba(95, 209, 179, 0.16);
+      --accent-ink: #0c2620;
+      --good: #7bc794;
+      --good-soft: rgba(123, 199, 148, 0.16);
+      --bad: #ff9a90;
+      --bad-soft: rgba(255, 154, 144, 0.14);
+      --shadow: rgba(0, 0, 0, 0.5);
+      --graph-grid: rgba(238, 242, 240, 0.10);
+      --graph-axis: rgba(238, 242, 240, 0.55);
+      --graph-stroke-a: #5fd1b3;
+      --graph-stroke-b: #ff9179;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #1b2330;
+    --paper-line: rgba(238, 242, 240, 0.07);
+    --paper-line-strong: rgba(238, 242, 240, 0.15);
+    --ink: #edf1ef;
+    --ink-soft: #a3aebb;
+    --card-bg: #232e3d;
+    --card-border: #3a4a61;
+    --accent: #5fd1b3;
+    --accent-strong: #86e0c8;
+    --accent-soft: rgba(95, 209, 179, 0.16);
+    --accent-ink: #0c2620;
+    --good: #7bc794;
+    --good-soft: rgba(123, 199, 148, 0.16);
+    --bad: #ff9a90;
+    --bad-soft: rgba(255, 154, 144, 0.14);
+    --shadow: rgba(0, 0, 0, 0.5);
+    --graph-grid: rgba(238, 242, 240, 0.10);
+    --graph-axis: rgba(238, 242, 240, 0.55);
+    --graph-stroke-a: #5fd1b3;
+    --graph-stroke-b: #ff9179;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background:
+      repeating-linear-gradient(0deg, var(--paper-line) 0, var(--paper-line) 1px, transparent 1px, transparent 32px),
+      repeating-linear-gradient(90deg, var(--paper-line) 0, var(--paper-line) 1px, transparent 1px, transparent 32px),
+      var(--paper);
+    color: var(--ink);
+    font-family: "Source Sans 3", ui-sans-serif, system-ui, sans-serif;
+    display: flex;
+    justify-content: center;
+    padding: clamp(20px, 4vw, 56px) 18px 80px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+  }
+
+  .wrap { width: 100%; max-width: 900px; }
+  header { text-align: center; margin-bottom: 22px; }
+
+  .eyebrow {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--accent); font-weight: 600;
+  }
+
+  h1 {
+    font-family: "Fraunces", Georgia, serif; font-weight: 600;
+    font-size: clamp(1.9rem, 5vw, 2.6rem); margin: 6px 0 8px; text-wrap: balance;
+  }
+
+  header p { color: var(--ink-soft); font-size: 1rem; max-width: 60ch; margin: 0 auto; line-height: 1.55; }
+
+  .toolbar {
+    position: sticky; top: 12px; z-index: 5;
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    margin: 22px 0 26px; padding: 12px 16px; flex-wrap: wrap;
+    background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 14px;
+    box-shadow: 0 10px 26px -16px var(--shadow);
+  }
+  .score-box { display: flex; align-items: baseline; gap: 8px; }
+  .score-num { font-family: "JetBrains Mono", monospace; font-size: 1.3rem; font-weight: 700; color: var(--accent-strong); font-variant-numeric: tabular-nums; }
+  .score-label { font-size: 0.78rem; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.06em; }
+  .score-group { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .score-divider { width: 1px; align-self: stretch; min-height: 24px; background: var(--card-border); }
+  .exam-score-box .score-num { color: var(--ink); }
+  .exam-score-box .score-label { display: flex; align-items: center; gap: 5px; }
+  .exam-score-box .score-label svg { width: 11px; height: 11px; flex-shrink: 0; }
+
+  .exam-badge {
+    display: inline-flex; align-items: center; gap: 5px; font-size: 0.68rem; font-weight: 700;
+    padding: 3px 9px; border-radius: 20px; letter-spacing: 0.02em; white-space: nowrap;
+  }
+  .exam-badge svg { width: 11px; height: 11px; flex-shrink: 0; }
+  .exam-badge.exam-good { background: var(--good-soft); color: var(--good); }
+  .exam-badge.exam-bad { background: var(--bad-soft); color: var(--bad); }
+
+  button { font-family: inherit; cursor: pointer; }
+  button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .icon-btn {
+    display: inline-flex; align-items: center; gap: 7px; background: var(--card-bg);
+    border: 1px solid var(--card-border); color: var(--ink); padding: 9px 14px;
+    border-radius: 9px; font-size: 0.86rem; font-weight: 600;
+    transition: border-color 0.15s ease, transform 0.1s ease;
+  }
+  .icon-btn:hover { border-color: var(--accent); }
+  .icon-btn:active { transform: translateY(1px); }
+  .icon-btn svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+  .group-head {
+    margin: 34px 0 14px; padding-bottom: 8px; border-bottom: 1.5px solid var(--paper-line-strong);
+  }
+  .group-head .gnum {
+    font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 1.3rem; color: var(--ink);
+  }
+  .group-head .gdesc { font-size: 0.92rem; color: var(--ink-soft); margin-top: 2px; }
+
+  .qcard {
+    background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px;
+    box-shadow: 0 14px 32px -22px var(--shadow), 0 2px 8px -2px var(--shadow);
+    padding: clamp(16px, 3vw, 24px); margin-bottom: 18px;
+  }
+
+  .qcard-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
+  .qcard-head .qtitle { display: flex; align-items: center; gap: 10px; }
+  .qlabel { font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 1.1rem; }
+  .qpoints {
+    font-family: "JetBrains Mono", monospace; font-size: 0.68rem; letter-spacing: 0.05em;
+    color: var(--ink-soft); background: var(--paper-line); padding: 2px 8px; border-radius: 20px;
+  }
+
+  .qprompt { font-size: 1rem; line-height: 1.7; margin-bottom: 14px; }
+  .qprompt .math { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 1.02rem; }
+  .qprompt .frac { display: inline-flex; flex-direction: column; vertical-align: middle; text-align: center; margin: 0 3px; line-height: 1.15; }
+  .qprompt .frac .num { border-bottom: 1.3px solid currentColor; padding: 0 3px 1px; }
+  .qprompt .frac .den { padding: 1px 3px 0; }
+  .qprompt .radical { display: inline-flex; align-items: flex-start; margin: 0 2px; }
+  .qprompt .radical .idx { font-size: 0.62em; margin-right: -0.35em; margin-top: -0.3em; }
+  .qprompt .radical .rsym { font-size: 1.1em; }
+  .qprompt .radical .rad-inner { border-top: 1.3px solid currentColor; padding: 0 3px; margin-left: 1px; }
+
+  .qgraph-wrap { display: flex; justify-content: center; margin: 10px 0 16px; }
+  .qgraph-wrap canvas { width: 100%; max-width: 380px; height: 230px; display: block; }
+  .qgraph-wrap.small canvas { max-width: 280px; height: 190px; }
+
+  .qinputs { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin-bottom: 14px; }
+  .qinputs .field-label { font-size: 0.86rem; color: var(--ink-soft); font-weight: 600; }
+  .qinputs input[type="text"], .qinputs select {
+    font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 0.95rem;
+    background: var(--paper); border: 1.5px solid var(--card-border); border-radius: 8px;
+    padding: 8px 10px; color: var(--ink); min-width: 92px;
+  }
+  .qinputs select { font-family: "Source Sans 3", sans-serif; min-width: 190px; }
+  .qinputs input:focus, .qinputs select:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .qinputs .subrow {
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    padding: 8px 10px; border: 1.5px dashed var(--card-border); border-radius: 10px;
+  }
+  .qinputs .hidden { display: none !important; }
+  .mc-row { display: flex; flex-wrap: wrap; gap: 8px; }
+  .mc-opt {
+    border: 1.5px solid var(--card-border); border-radius: 9px; padding: 8px 13px;
+    font-size: 0.88rem; background: var(--card-bg); color: var(--ink); font-weight: 600;
+    transition: border-color 0.15s ease, background 0.15s ease;
+  }
+  .mc-opt:hover { border-color: var(--accent); }
+  .mc-opt.selected { border-color: var(--accent); background: var(--accent-soft); color: var(--accent-strong); }
+
+  .qactions { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; }
+  .btn-primary {
+    background: var(--accent); color: var(--accent-ink); border: none; padding: 10px 20px;
+    border-radius: 10px; font-size: 0.92rem; font-weight: 700;
+    box-shadow: 0 8px 16px -8px var(--accent-strong); transition: transform 0.1s ease;
+  }
+  .btn-primary:active { transform: translateY(1px); }
+  .btn-secondary {
+    background: transparent; border: 1.5px solid var(--card-border); color: var(--ink);
+    padding: 9px 18px; border-radius: 10px; font-size: 0.92rem; font-weight: 700;
+    transition: border-color 0.15s ease;
+  }
+  .btn-secondary:hover { border-color: var(--accent); }
+
+  .qfeedback {
+    font-size: 0.9rem; font-weight: 700; padding: 9px 13px; border-radius: 9px; margin-bottom: 10px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .qfeedback.good { background: var(--good-soft); color: var(--good); }
+  .qfeedback.bad { background: var(--bad-soft); color: var(--bad); }
+  .qfeedback svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+  .qsolution {
+    background: var(--accent-soft); border: 1px solid var(--card-border); border-left: 4px solid var(--accent);
+    border-radius: 0 12px 12px 0; padding: 14px 16px; font-size: 0.92rem; line-height: 1.7;
+  }
+  .qsolution .sol-label {
+    font-family: "JetBrains Mono", monospace; font-size: 0.68rem; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--accent-strong); font-weight: 700; display: block; margin-bottom: 6px;
+  }
+  .qsolution .step { margin: 3px 0; }
+  .qsolution .final { margin-top: 8px; font-weight: 700; font-family: "JetBrains Mono", monospace; }
+
+  .hidden { display: none !important; }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Calc 1 &middot; Derivatives</div>
+    <h1>Derivative Basics Practice Test</h1>
+    <p>Every part regenerates its own random version — work it out on paper, type your answer, and check yourself. Click "New version" on any part as many times as you want to drill it again with different numbers. Your <strong>Exam Score</strong> locks in the first time you check each part (or peek its solution) — everything after that is just practice. Use "Reset exam" any time for a brand-new attempt.</p>
+  </header>
+
+  <div class="toolbar">
+    <div class="score-group">
+      <div class="score-box">
+        <span class="score-num" id="scoreNum">0 / 0</span>
+        <span class="score-label">points checked correct</span>
+      </div>
+      <div class="score-divider"></div>
+      <div class="score-box exam-score-box">
+        <span class="score-num" id="examScoreNum">0 / 0</span>
+        <span class="score-label">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+          exam score
+        </span>
+      </div>
+    </div>
+    <button class="icon-btn" id="newTestBtn" type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3h5v5"/><path d="M4 20 21 3"/><path d="M21 16v5h-5"/><path d="M15 15l6 6"/><path d="M4 4l5 5"/></svg>
+      Reset exam
+    </button>
+  </div>
+
+  <div id="groups"></div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  // ============================================================
+  // Utilities
+  // ============================================================
+  function randInt(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+  function randNonZeroInt(min, max) { var v; do { v = randInt(min, max); } while (v === 0); return v; }
+  function randIntExcluding(exclude, min, max) {
+    var v, tries = 0;
+    do { v = randInt(min, max); tries++; } while (exclude.indexOf(v) !== -1 && tries < 200);
+    return v;
+  }
+  function randChoice(arr) { return arr[randInt(0, arr.length - 1)]; }
+  function randBool() { return Math.random() < 0.5; }
+  function shuffle(arr) {
+    var a = arr.slice();
+    for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; }
+    return a;
+  }
+  function fmtNum(n) { return n.toLocaleString("en-US"); }
+  function gcdInt(a, b) { a = Math.abs(a); b = Math.abs(b); while (b) { var t = b; b = a % b; a = t; } return a || 1; }
+  function fracLabel(p, q) {
+    var g = gcdInt(p, q);
+    p = p / g; q = q / g;
+    if (q < 0) { p = -p; q = -q; }
+    return { p: p, q: q };
+  }
+  function fracStr(p, q) {
+    var fr = fracLabel(p, q);
+    return fr.q === 1 ? String(fr.p) : (fr.p + "/" + fr.q);
+  }
+
+  function frac(numHtml, denHtml) {
+    return "<span class=\"frac\"><span class=\"num\">" + numHtml + "</span><span class=\"den\">" + denHtml + "</span></span>";
+  }
+  function radical(innerHtml, index) {
+    var idx = index ? "<span class=\"idx\">" + index + "</span>" : "";
+    return "<span class=\"radical\">" + idx + "<span class=\"rsym\">&radic;</span><span class=\"rad-inner\">" + innerHtml + "</span></span>";
+  }
+  function signedTerm(coef, label) {
+    if (coef === 0) return "";
+    var abs = Math.abs(coef);
+    var coefStr = (abs === 1 && label) ? "" : String(abs);
+    return (coef < 0 ? "&minus;" : "+") + " " + coefStr + label;
+  }
+  function leadTerm(coef, label) {
+    if (coef === 0) return "0";
+    var abs = Math.abs(coef);
+    var coefStr = (abs === 1 && label) ? "" : String(abs);
+    return (coef < 0 ? "&minus;" : "") + coefStr + label;
+  }
+
+  // ---- answer parsing / checking ----
+  function parseAnswer(raw) {
+    if (raw === null || raw === undefined) return { type: "invalid" };
+    var str = String(raw).trim().toLowerCase();
+    if (str === "") return { type: "invalid" };
+    if (["dne", "does not exist", "no limit", "undefined", "not defined"].indexOf(str) !== -1) return { type: "dne" };
+    if (["inf", "infinity", "+inf", "+infinity", "∞", "+∞"].indexOf(str) !== -1) return { type: "inf", sign: 1 };
+    if (["-inf", "-infinity", "-∞"].indexOf(str) !== -1) return { type: "inf", sign: -1 };
+    var fracMatch = str.match(/^(-?\d+(\.\d+)?)\s*\/\s*(-?\d+(\.\d+)?)$/);
+    if (fracMatch) {
+      var p = parseFloat(fracMatch[1]), q = parseFloat(fracMatch[3]);
+      if (q !== 0) return { type: "number", value: p / q };
+    }
+    var cleaned = str.replace(/,/g, "");
+    if (/^-?\d*\.?\d+$/.test(cleaned)) return { type: "number", value: parseFloat(cleaned) };
+    return { type: "invalid" };
+  }
+  function answersMatch(user, correct, tol) {
+    tol = tol === undefined ? 0.01 : tol;
+    if (user.type === "invalid") return false;
+    if (correct.type === "dne") return user.type === "dne";
+    if (correct.type === "inf") return user.type === "inf" && user.sign === correct.sign;
+    if (correct.type === "number") return user.type === "number" && Math.abs(user.value - correct.value) < tol;
+    return false;
+  }
+  function parseNumberList(raw) {
+    if (raw === null || raw === undefined) return [];
+    return String(raw).split(",").map(function (s) { return parseFloat(s.trim()); }).filter(function (v) { return !isNaN(v); });
+  }
+  function numberSetsMatch(a, b, tol) {
+    tol = tol === undefined ? 0.15 : tol;
+    if (a.length !== b.length) return false;
+    var bUsed = b.slice();
+    for (var i = 0; i < a.length; i++) {
+      var idx = -1;
+      for (var j = 0; j < bUsed.length; j++) { if (bUsed[j] !== null && Math.abs(bUsed[j] - a[i]) < tol) { idx = j; break; } }
+      if (idx === -1) return false;
+      bUsed[idx] = null;
+    }
+    return true;
+  }
+
+  // ============================================================
+  // Canvas graph helper
+  // ============================================================
+  function setupCanvas(canvas) {
+    var cssW = canvas.clientWidth || 300, cssH = canvas.clientHeight || 200;
+    var dpr = window.devicePixelRatio || 1;
+    canvas.width = cssW * dpr;
+    canvas.height = cssH * dpr;
+    var ctx = canvas.getContext("2d");
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, cssW, cssH);
+    return { ctx: ctx, w: cssW, h: cssH };
+  }
+  function makeMapper(cssW, cssH, xMin, xMax, yMin, yMax, pad) {
+    pad = pad || 24;
+    var w = cssW - pad * 1.4, h = cssH - pad * 1.6;
+    var sx = w / (xMax - xMin), sy = h / (yMax - yMin);
+    var ox = pad, oy = cssH - pad * 0.9;
+    return function (x, y) { return [ox + (x - xMin) * sx, oy - (y - yMin) * sy]; };
+  }
+  function drawGrid(canvas, xMin, xMax, yMin, yMax) {
+    var setup = setupCanvas(canvas), ctx = setup.ctx, cssW = setup.w, cssH = setup.h;
+    var toPx = makeMapper(cssW, cssH, xMin, xMax, yMin, yMax);
+    var styles = getComputedStyle(document.documentElement);
+    var gridColor = styles.getPropertyValue("--graph-grid").trim();
+    var axisColor = styles.getPropertyValue("--graph-axis").trim();
+    var labelColor = styles.getPropertyValue("--ink-soft").trim();
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = gridColor;
+    ctx.beginPath();
+    for (var gx = Math.ceil(xMin); gx <= Math.floor(xMax); gx++) {
+      var p0 = toPx(gx, yMin), p1 = toPx(gx, yMax);
+      ctx.moveTo(p0[0], p0[1]); ctx.lineTo(p1[0], p1[1]);
+    }
+    for (var gy = Math.ceil(yMin); gy <= Math.floor(yMax); gy++) {
+      var q0 = toPx(xMin, gy), q1 = toPx(xMax, gy);
+      ctx.moveTo(q0[0], q0[1]); ctx.lineTo(q1[0], q1[1]);
+    }
+    ctx.stroke();
+    ctx.lineWidth = 1.6;
+    ctx.strokeStyle = axisColor;
+    ctx.beginPath();
+    if (xMin <= 0 && xMax >= 0) { var a0 = toPx(0, yMin), a1 = toPx(0, yMax); ctx.moveTo(a0[0], a0[1]); ctx.lineTo(a1[0], a1[1]); }
+    if (yMin <= 0 && yMax >= 0) { var b0 = toPx(xMin, 0), b1 = toPx(xMax, 0); ctx.moveTo(b0[0], b0[1]); ctx.lineTo(b1[0], b1[1]); }
+    ctx.stroke();
+    ctx.fillStyle = labelColor;
+    ctx.font = "10px 'JetBrains Mono', ui-monospace, monospace";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "top";
+    var xStep = (xMax - xMin) > 16 ? 2 : 1;
+    for (var lx = Math.ceil(xMin / xStep) * xStep; lx <= Math.floor(xMax); lx += xStep) {
+      var lp = toPx(lx, yMin);
+      ctx.fillText(String(lx), Math.min(Math.max(lp[0], 12), cssW - 12), cssH - 13);
+    }
+    ctx.textAlign = "left";
+    ctx.textBaseline = "middle";
+    var yStep = (yMax - yMin) > 16 ? 2 : 1;
+    for (var ly = Math.ceil(yMin / yStep) * yStep; ly <= Math.floor(yMax); ly += yStep) {
+      var lq = toPx(xMin, ly);
+      ctx.fillText(String(ly), 4, Math.min(Math.max(lq[1], 10), cssH - 16));
+    }
+    return { ctx: ctx, toPx: toPx };
+  }
+  function strokePolyline(g, pts, color, width) {
+    g.ctx.strokeStyle = color; g.ctx.lineWidth = width || 2.4; g.ctx.lineCap = "round"; g.ctx.lineJoin = "round";
+    g.ctx.beginPath();
+    pts.forEach(function (pt, i) {
+      var p = g.toPx(pt[0], pt[1]);
+      if (i === 0) g.ctx.moveTo(p[0], p[1]); else g.ctx.lineTo(p[0], p[1]);
+    });
+    g.ctx.stroke();
+  }
+  function drawCircle(ctx, toPx, x, y, color, open) {
+    var p = toPx(x, y);
+    ctx.beginPath(); ctx.arc(p[0], p[1], 4.3, 0, Math.PI * 2);
+    if (open) {
+      var styles = getComputedStyle(document.documentElement);
+      ctx.fillStyle = styles.getPropertyValue("--card-bg").trim();
+      ctx.fill(); ctx.lineWidth = 2; ctx.strokeStyle = color; ctx.stroke();
+    } else {
+      ctx.fillStyle = color; ctx.fill();
+    }
+  }
+  function drawPointLabel(g, x, yTop, yBot, label, styles) {
+    g.ctx.setLineDash([3, 3]);
+    g.ctx.strokeStyle = styles.getPropertyValue("--graph-axis").trim();
+    g.ctx.lineWidth = 1;
+    var top = g.toPx(x, yTop), bot = g.toPx(x, yBot);
+    g.ctx.beginPath(); g.ctx.moveTo(top[0], top[1]); g.ctx.lineTo(bot[0], bot[1]); g.ctx.stroke();
+    g.ctx.setLineDash([]);
+    g.ctx.fillStyle = styles.getPropertyValue("--ink").trim();
+    g.ctx.font = "bold 12px 'Source Sans 3', sans-serif";
+    g.ctx.textAlign = "center";
+    var lp = g.toPx(x, yTop);
+    g.ctx.fillText(label, lp[0], lp[1] + 2);
+  }
+
+  // ============================================================
+  // Question part definitions
+  // ============================================================
+  var PARTS = [];
+
+  // ---------- Group 1: limit definition of the derivative ----------
+  PARTS.push({
+    id: "1a", group: "1", label: "(a)", points: 4,
+    gen: function () {
+      var k = randNonZeroInt(-6, 6);
+      var a = randInt(-4, 5);
+      return { k: k, a: a, answer: { type: "number", value: 2 * a - k } };
+    },
+    prompt: function (s) {
+      return "<span class=\"math\">f(x) = x&sup2; " + signedTerm(-s.k, "x") + "</span>" +
+        "<div style=\"margin-top:8px\">Use the limit definition of the derivative to find f&prime;(" + s.a + ").</div>";
+    },
+    inputsHtml: function (s) {
+      return "<span class=\"field-label\">f&prime;(" + s.a + ") =</span><input type=\"text\" class=\"ans-main\" placeholder=\"e.g. 3\">";
+    },
+    readAnswer: function (card) { return { main: parseAnswer(card.querySelector(".ans-main").value) }; },
+    isCorrect: function (ua, s) { return answersMatch(ua.main, s.answer); },
+    solutionHtml: function (s) {
+      var a = s.a, k = s.k;
+      return "<span class=\"sol-label\">Solution</span>" +
+        "<div class=\"step\">f&prime;(" + a + ") = lim<sub>h&rarr;0</sub> [f(" + a + "+h) &minus; f(" + a + ")] / h</div>" +
+        "<div class=\"step\">f(" + a + "+h) = (" + a + "+h)&sup2; " + signedTerm(-k, "(" + a + "+h)") + " = " + a + "&sup2; + 2(" + a + ")h + h&sup2; " + signedTerm(-k * a, "") + " " + signedTerm(-k, "h") + "</div>" +
+        "<div class=\"step\">f(" + a + "+h) &minus; f(" + a + ") = 2(" + a + ")h + h&sup2; " + signedTerm(-k, "h") + " = h(2(" + a + ") + h " + signedTerm(-k, "") + ")</div>" +
+        "<div class=\"step\">Divide by h and let h&rarr;0: 2(" + a + ") " + signedTerm(-k, "") + " = " + (2 * a - k) + "</div>" +
+        "<div class=\"final\">Answer: f&prime;(" + a + ") = " + (2 * a - k) + "</div>";
+    }
+  });
+
+  PARTS.push({
+    id: "1b", group: "1", label: "(b)", points: 4,
+    gen: function () {
+      var c = randNonZeroInt(-8, 8);
+      var p = randNonZeroInt(-5, 5);
+      return { c: c, p: p, answer: { type: "number", value: -c / (p * p) } };
+    },
+    prompt: function (s) {
+      return "<span class=\"math\">f(x) = " + frac(s.c, "x") + "</span>" +
+        "<div style=\"margin-top:8px\">Use the limit definition of the derivative to find f&prime;(" + s.p + ").</div>";
+    },
+    inputsHtml: function (s) {
+      return "<span class=\"field-label\">f&prime;(" + s.p + ") =</span><input type=\"text\" class=\"ans-main\" placeholder=\"e.g. -1/4\">";
+    },
+    readAnswer: function (card) { return { main: parseAnswer(card.querySelector(".ans-main").value) }; },
+    isCorrect: function (ua, s) { return answersMatch(ua.main, s.answer); },
+    solutionHtml: function (s) {
+      var c = s.c, p = s.p;
+      var ansStr = fracStr(-c, p * p);
+      return "<span class=\"sol-label\">Solution</span>" +
+        "<div class=\"step\">f&prime;(" + p + ") = lim<sub>h&rarr;0</sub> " + frac(frac(c, "(" + p + "+h)") + " &minus; " + frac(c, p), "h") + "</div>" +
+        "<div class=\"step\">Combine the fractions on top over a common denominator " + p + "(" + p + "+h): the numerator becomes " + c + "&middot;" + p + " &minus; " + c + "(" + p + "+h) = " + c + "(" + p + " &minus; (" + p + "+h)) = &minus;" + c + "h</div>" +
+        "<div class=\"step\">So the difference quotient is " + frac("&minus;" + c + "h", p + "(" + p + "+h)&middot;h") + " = " + frac("&minus;" + c, p + "(" + p + "+h)") + ". Let h&rarr;0: " + frac("&minus;" + c, p + "&sup2;") + " = " + ansStr + "</div>" +
+        "<div class=\"final\">Answer: f&prime;(" + p + ") = " + ansStr + "</div>";
+    }
+  });
+
+  PARTS.push({
+    id: "1c", group: "1", label: "(c)", points: 4,
+    gen: function () {
+      var m = randNonZeroInt(-9, 9);
+      var b = randInt(-6, 6);
+      return { m: m, b: b, answer: { type: "number", value: m } };
+    },
+    prompt: function (s) {
+      var fx = signedTerm(s.m, "x").replace(/^\+ /, "") + " " + signedTerm(s.b, "");
+      return "<span class=\"math\">f(x) = " + fx + "</span>" +
+        "<div style=\"margin-top:8px\">Use the limit definition of the derivative to find f&prime;(x).</div>";
+    },
+    inputsHtml: function () {
+      return "<span class=\"field-label\">f&prime;(x) =</span><input type=\"text\" class=\"ans-main\" placeholder=\"e.g. 6\">";
+    },
+    readAnswer: function (card) { return { main: parseAnswer(card.querySelector(".ans-main").value) }; },
+    isCorrect: function (ua, s) { return answersMatch(ua.main, s.answer); },
+    solutionHtml: function (s) {
+      var m = s.m, b = s.b;
+      var fx = signedTerm(m, "x").replace(/^\+ /, "") + " " + signedTerm(b, "");
+      return "<span class=\"sol-label\">Solution</span>" +
+        "<div class=\"step\">f&prime;(x) = lim<sub>h&rarr;0</sub> [f(x+h) &minus; f(x)] / h</div>" +
+        "<div class=\"step\">f(x+h) = " + m + "(x+h) " + signedTerm(b, "") + " = " + fx + " + " + m + "h</div>" +
+        "<div class=\"step\">f(x+h) &minus; f(x) = " + m + "h, so the difference quotient is simply " + m + " for every h &ne; 0.</div>" +
+        "<div class=\"final\">Answer: f&prime;(x) = " + m + " (a line's slope is constant everywhere)</div>";
+    }
+  });
+
+  // ---------- Group 2: tangent line ----------
+  PARTS.push({
+    id: "2", group: "2", label: "", points: 4,
+    gen: function () {
+      var b = randInt(-6, 6);
+      var c = randNonZeroInt(-6, 6);
+      var a = randInt(-4, 4);
+      var slope = 2 * a + b;
+      var intercept = c - a * a;
+      return { b: b, c: c, a: a, answerSlope: { type: "number", value: slope }, answerIntercept: { type: "number", value: intercept } };
+    },
+    prompt: function (s) {
+      var fx = "x&sup2; " + signedTerm(s.b, "x") + " " + signedTerm(s.c, "");
+      return "<span class=\"math\">f(x) = " + fx + "</span>" +
+        "<div style=\"margin-top:8px\">Find the tangent line to f(x) at x = " + s.a + ". Give it in slope-intercept form, y = mx + b.</div>";
+    },
+    inputsHtml: function () {
+      return "<span class=\"field-label\">slope (m) =</span><input type=\"text\" class=\"ans-slope\" placeholder=\"e.g. 4\">" +
+        "<span class=\"field-label\">y-intercept (b) =</span><input type=\"text\" class=\"ans-intercept\" placeholder=\"e.g. -3\">";
+    },
+    readAnswer: function (card) {
+      return {
+        slope: parseAnswer(card.querySelector(".ans-slope").value),
+        intercept: parseAnswer(card.querySelector(".ans-intercept").value)
+      };
+    },
+    isCorrect: function (ua, s) { return answersMatch(ua.slope, s.answerSlope) && answersMatch(ua.intercept, s.answerIntercept); },
+    solutionHtml: function (s) {
+      var a = s.a, b = s.b, c = s.c;
+      var fa = a * a + b * a + c;
+      var slope = 2 * a + b;
+      var intercept = c - a * a;
+      return "<span class=\"sol-label\">Solution</span>" +
+        "<div class=\"step\">f&prime;(x) = 2x " + signedTerm(b, "") + ", so the slope at x=" + a + " is f&prime;(" + a + ") = 2(" + a + ") " + signedTerm(b, "") + " = " + slope + ".</div>" +
+        "<div class=\"step\">The point of tangency is (" + a + ", f(" + a + ")) = (" + a + ", " + fa + ").</div>" +
+        "<div class=\"step\">Point-slope form: y &minus; " + fa + " = " + slope + "(x &minus; " + a + "). Distributing and solving for y gives y = " + slope + "x " + signedTerm(intercept, "") + ".</div>" +
+        "<div class=\"final\">Answer: y = " + signedTerm(slope, "x").replace(/^\+ /, "") + " " + signedTerm(intercept, "") + "</div>";
+    }
+  });
+
+  // ---------- Group 3: derivative from a graph ----------
+  function cubicF(x, a, p, q) {
+    return (a / 3) * Math.pow(x, 3) - (a * (p + q) / 2) * Math.pow(x, 2) + a * p * q * x;
+  }
+  PARTS.push({
+    id: "3", group: "3", label: "", points: 4, hasGraph: true,
+    gen: function () {
+      var a = randChoice([1, -1]);
+      var p = randInt(-3, 3);
+      var q = randIntExcluding([p], -3, 3);
+      var lo = Math.min(p, q), hi = Math.max(p, q);
+      return { a: a, p: p, q: q, answerCrit: [lo, hi], shape: a > 0 ? "up" : "down" };
+    },
+    prompt: function () {
+      return "The graph of f(x) is shown below. Find every x-value where f&prime;(x) = 0, and identify the general shape of the graph of f&prime;(x) itself.";
+    },
+    drawGraph: function (canvas, s) {
+      var lo = Math.min(s.p, s.q), hi = Math.max(s.p, s.q);
+      var xMin = lo - 2, xMax = hi + 2;
+      var pts = [];
+      var n = 48;
+      var vals = [];
+      for (var i = 0; i <= n; i++) {
+        var x = xMin + (xMax - xMin) * (i / n);
+        var y = cubicF(x, s.a, s.p, s.q);
+        pts.push([x, y]);
+        vals.push(y);
+      }
+      var yMin = Math.min.apply(null, vals) - 1.2, yMax = Math.max.apply(null, vals) + 1.2;
+      var g = drawGrid(canvas, xMin, xMax, yMin, yMax);
+      var styles = getComputedStyle(document.documentElement);
+      var colorA = styles.getPropertyValue("--graph-stroke-a").trim();
+      strokePolyline(g, pts, colorA);
+    },
+    inputsHtml: function () {
+      return "<span class=\"field-label\">f&prime;(x) = 0 at x =</span><input type=\"text\" class=\"ans-crit\" placeholder=\"e.g. -1, 2\">" +
+        "<div class=\"mc-row\">" +
+        [["up", "Upward-opening parabola"], ["down", "Downward-opening parabola"], ["line", "A straight line"], ["flat", "A horizontal (constant) line"]].map(function (o) {
+          return "<button type=\"button\" class=\"mc-opt\" data-val=\"" + o[0] + "\">" + o[1] + "</button>";
+        }).join("") + "</div>";
+    },
+    afterRender: function (card) {
+      var opts = card.querySelectorAll(".mc-opt");
+      opts.forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          opts.forEach(function (b) { b.classList.remove("selected"); });
+          btn.classList.add("selected");
+        });
+      });
+    },
+    readAnswer: function (card) {
+      var sel = card.querySelector(".mc-opt.selected");
+      return { crit: parseNumberList(card.querySelector(".ans-crit").value), shape: sel ? sel.getAttribute("data-val") : null };
+    },
+    isCorrect: function (ua, s) { return numberSetsMatch(ua.crit, s.answerCrit) && ua.shape === s.shape; },
+    solutionHtml: function (s) {
+      var lo = Math.min(s.p, s.q), hi = Math.max(s.p, s.q);
+      var shapeName = s.shape === "up" ? "an upward-opening parabola" : "a downward-opening parabola";
+      return "<span class=\"sol-label\">Solution</span>" +
+        "<div class=\"step\">f&prime;(x) = 0 exactly where the graph has a horizontal tangent line &mdash; at its local max/min, x = " + lo + " and x = " + hi + ".</div>" +
+        "<div class=\"step\">Since f(x) is a cubic, f&prime;(x) is a quadratic &mdash; " + shapeName + ", opening " + (s.shape === "up" ? "upward because f's leading coefficient is positive" : "downward because f's leading coefficient is negative") + ".</div>" +
+        "<div class=\"final\">Answer: f&prime;(x) = 0 at x = " + lo + " and x = " + hi + "; f&prime;(x) is " + shapeName + ".</div>";
+    }
+  });
+
+  // ---------- Group 4: basic derivative rules ----------
+  PARTS.push({
+    id: "4a", group: "4", label: "(a)", points: 4,
+    gen: function () {
+      var n = randInt(2, 6);
+      return { n: n, answer: { type: "number", value: 2 * n + Math.E } };
+    },
+    prompt: function (s) {
+      return "<span class=\"math\">f(x) = x<sup>" + s.n + "</sup> + " + frac(s.n, s.n + 1) + "x<sup>" + (s.n + 1) + "</sup> + e<sup>x</sup></span>" +
+        "<div style=\"margin-top:8px\">Find f&prime;(1). Give a decimal answer.</div>";
+    },
+    inputsHtml: function () {
+      return "<span class=\"field-label\">f&prime;(1) =</span><input type=\"text\" class=\"ans-main\" placeholder=\"e.g. 12.72\">";
+    },
+    readAnswer: function (card) { return { main: parseAnswer(card.querySelector(".ans-main").value) }; },
+    isCorrect: function (ua, s) { return answersMatch(ua.main, s.answer, 0.05); },
+    solutionHtml: function (s) {
+      var n = s.n;
+      var val = (2 * n + Math.E).toFixed(2);
+      return "<span class=\"sol-label\">Solution</span>" +
+        "<div class=\"step\">Power rule: d/dx[x<sup>" + n + "</sup>] = " + n + "x<sup>" + (n - 1) + "</sup>.</div>" +
+        "<div class=\"step\">Power rule again: d/dx[" + frac(n, n + 1) + "x<sup>" + (n + 1) + "</sup>] = " + frac(n, n + 1) + "&middot;(" + (n + 1) + ")x<sup>" + n + "</sup> = " + n + "x<sup>" + n + "</sup> (the " + (n + 1) + "'s cancel).</div>" +
+        "<div class=\"step\">d/dx[e<sup>x</sup>] = e<sup>x</sup>, its own derivative.</div>" +
+        "<div class=\"step\">f&prime;(x) = " + n + "x<sup>" + (n - 1) + "</sup> + " + n + "x<sup>" + n + "</sup> + e<sup>x</sup>. At x=1: " + n + " + " + n + " + e = " + (2 * n) + " + e &asymp; " + val + "</div>" +
+        "<div class=\"final\">Answer: f&prime;(1) &asymp; " + val + "</div>";
+    }
+  });
+
+  PARTS.push({
+    id: "4b", group: "4", label: "(b)", points: 4,
+    gen: function () {
+      var A = randNonZeroInt(-5, 5);
+      var B = randInt(-6, 6);
+      var C = randInt(-6, 6);
+      var k = randNonZeroInt(-3, 3);
+      return { A: A, B: B, C: C, k: k, answer: { type: "number", value: 3 * A * k * k + B } };
+    },
+    prompt: function (s) {
+      var fx = leadTerm(s.A, "x&sup3;") + " " + signedTerm(s.B, "x") + " " + signedTerm(s.C, "");
+      return "<span class=\"math\">f(x) = " + fx + "</span>" +
+        "<div style=\"margin-top:8px\">Find f&prime;(" + s.k + "). <em>(Note this is not merely f&prime;(x).)</em></div>";
+    },
+    inputsHtml: function (s) {
+      return "<span class=\"field-label\">f&prime;(" + s.k + ") =</span><input type=\"text\" class=\"ans-main\" placeholder=\"e.g. 17\">";
+    },
+    readAnswer: function (card) { return { main: parseAnswer(card.querySelector(".ans-main").value) }; },
+    isCorrect: function (ua, s) { return answersMatch(ua.main, s.answer); },
+    solutionHtml: function (s) {
+      var A = s.A, B = s.B, k = s.k;
+      var deriv = 3 * A * k * k + B;
+      return "<span class=\"sol-label\">Solution</span>" +
+        "<div class=\"step\">f&prime;(x) = " + (3 * A) + "x&sup2; " + signedTerm(B, "") + " (the constant " + s.C + " disappears &mdash; its derivative is 0).</div>" +
+        "<div class=\"step\">Now evaluate at x = " + k + ", not before differentiating: f&prime;(" + k + ") = " + (3 * A) + "(" + k + ")&sup2; " + signedTerm(B, "") + " = " + deriv + "</div>" +
+        "<div class=\"final\">Answer: f&prime;(" + k + ") = " + deriv + "</div>";
+    }
+  });
+
+  PARTS.push({
+    id: "4c", group: "4", label: "(c)", points: 4,
+    gen: function () {
+      var D = randNonZeroInt(-6, 6);
+      return { D: D, answer: { type: "number", value: 1 / 3 + 4 * D - Math.cos(1) } };
+    },
+    prompt: function (s) {
+      return "<span class=\"math\">f(x) = " + radical("x", 3) + " " + signedTerm(-s.D, "") + "/x<sup>4</sup> &minus; sin(x)</span>" +
+        "<div style=\"margin-top:8px\">Find f&prime;(1). Give a decimal answer.</div>";
+    },
+    inputsHtml: function () {
+      return "<span class=\"field-label\">f&prime;(1) =</span><input type=\"text\" class=\"ans-main\" placeholder=\"e.g. 8.86\">";
+    },
+    readAnswer: function (card) { return { main: parseAnswer(card.querySelector(".ans-main").value) }; },
+    isCorrect: function (ua, s) { return answersMatch(ua.main, s.answer, 0.05); },
+    solutionHtml: function (s) {
+      var D = s.D;
+      var val = (1 / 3 + 4 * D - Math.cos(1)).toFixed(2);
+      return "<span class=\"sol-label\">Solution</span>" +
+        "<div class=\"step\">Rewrite " + radical("x", 3) + " = x<sup>1/3</sup> and " + signedTerm(-D, "") + "/x<sup>4</sup> = " + signedTerm(-D, "") + "x<sup>&minus;4</sup>.</div>" +
+        "<div class=\"step\">d/dx[x<sup>1/3</sup>] = " + frac(1, 3) + "x<sup>&minus;2/3</sup>. d/dx[" + signedTerm(-D, "") + "x<sup>&minus;4</sup>] = " + (4 * D) + "x<sup>&minus;5</sup>. d/dx[&minus;sin(x)] = &minus;cos(x).</div>" +
+        "<div class=\"step\">f&prime;(x) = " + frac(1, 3) + "x<sup>&minus;2/3</sup> + " + (4 * D) + "x<sup>&minus;5</sup> &minus; cos(x). At x=1: 1/3 + " + (4 * D) + " &minus; cos(1) &asymp; " + val + "</div>" +
+        "<div class=\"final\">Answer: f&prime;(1) &asymp; " + val + "</div>";
+    }
+  });
+
+  PARTS.push({
+    id: "4d", group: "4", label: "(d)", points: 4,
+    gen: function () {
+      var E = randNonZeroInt(-6, 6);
+      return { E: E, answer: { type: "number", value: Math.E - E } };
+    },
+    prompt: function (s) {
+      return "<span class=\"math\">f(x) = x<sup>e</sup> " + signedTerm(-s.E, "") + " ln(x)</span>" +
+        "<div style=\"margin-top:8px\">Find f&prime;(1). Give a decimal answer.</div>";
+    },
+    inputsHtml: function () {
+      return "<span class=\"field-label\">f&prime;(1) =</span><input type=\"text\" class=\"ans-main\" placeholder=\"e.g. -1.28\">";
+    },
+    readAnswer: function (card) { return { main: parseAnswer(card.querySelector(".ans-main").value) }; },
+    isCorrect: function (ua, s) { return answersMatch(ua.main, s.answer, 0.03); },
+    solutionHtml: function (s) {
+      var E = s.E;
+      var val = (Math.E - E).toFixed(2);
+      return "<span class=\"sol-label\">Solution</span>" +
+        "<div class=\"step\">e is just a constant number, so the power rule applies to x<sup>e</sup> exactly like x<sup>2</sup> or x<sup>3</sup>: d/dx[x<sup>e</sup>] = e&middot;x<sup>e&minus;1</sup>.</div>" +
+        "<div class=\"step\">d/dx[" + signedTerm(-E, "") + "ln(x)] = " + signedTerm(-E, "") + "/x.</div>" +
+        "<div class=\"step\">f&prime;(x) = e&middot;x<sup>e&minus;1</sup> " + signedTerm(-E, "") + "/x. At x=1 every power of 1 is just 1: f&prime;(1) = e " + signedTerm(-E, "") + " &asymp; " + val + "</div>" +
+        "<div class=\"final\">Answer: f&prime;(1) &asymp; " + val + "</div>";
+    }
+  });
+
+  // ---------- Group 5: why is f not differentiable here? ----------
+  function computeFeature(type, xC) {
+    if (type === "corner") {
+      var apexY = (randBool() ? 1 : -1) * (randInt(15, 25) / 10);
+      return { type: "corner", x: xC, apexY: apexY };
+    }
+    if (type === "jump") {
+      var yBefore = (randBool() ? 1 : -1) * (randInt(10, 20) / 10);
+      var gap = randInt(15, 25) / 10;
+      var yAfter = yBefore + (randBool() ? 1 : -1) * gap;
+      var openBefore = randBool();
+      return { type: "jump", x: xC, yBefore: yBefore, yAfter: yAfter, openBefore: openBefore };
+    }
+    var w = 1.1, dir = randBool() ? 1 : -1, k = 1.6, yBase = 0;
+    return { type: "vertical", x: xC, w: w, dir: dir, k: k, yBase: yBase };
+  }
+  var NONDIFF_NAMES = { corner: "Corner / kink", jump: "Discontinuity (jump or hole)", vertical: "Vertical tangent / cusp" };
+  var NONDIFF_EXPLAIN = {
+    corner: "the graph is continuous there, but the slope jumps abruptly from one straight value to another &mdash; there's no single well-defined tangent line.",
+    jump: "the function isn't even continuous at that point (it jumps, or a point is missing), and continuity is required before differentiability can even be considered.",
+    vertical: "the graph has a vertical tangent line there (or a sharp cusp) &mdash; the slope isn't just undefined, it shoots off to &plusmn;&infin;."
+  };
+  PARTS.push({
+    id: "5", group: "5", label: "", points: 4, hasGraph: true,
+    gen: function () {
+      var xA = randInt(-3, -1);
+      var xB = xA + 4;
+      var typePool = shuffle(["corner", "jump", "vertical"]);
+      var featA = computeFeature(typePool[0], xA);
+      var featB = computeFeature(typePool[1], xB);
+      var xL = xA - 2.5, xR = xB + 2.5;
+      var vals = [0];
+      [featA, featB].forEach(function (f) {
+        if (f.type === "corner") vals.push(f.apexY);
+        else if (f.type === "jump") { vals.push(f.yBefore); vals.push(f.yAfter); }
+        else { vals.push(f.yBase + f.dir * f.k * Math.cbrt(f.w)); vals.push(f.yBase); }
+      });
+      var yMin = Math.min.apply(null, vals) - 1, yMax = Math.max.apply(null, vals) + 1.6;
+      return { xA: xA, xB: xB, featA: featA, featB: featB, xL: xL, xR: xR, yMin: yMin, yMax: yMax };
+    },
+    prompt: function () {
+      return "The graph of f(x) below fails to be differentiable at the two marked points, A and B. For each one, identify why.";
+    },
+    drawGraph: function (canvas, s) {
+      var g = drawGrid(canvas, s.xL, s.xR, s.yMin, s.yMax);
+      var styles = getComputedStyle(document.documentElement);
+      var colorA = styles.getPropertyValue("--graph-stroke-a").trim();
+      var colorB = styles.getPropertyValue("--graph-stroke-b").trim();
+      var feats = [s.featA, s.featB];
+      var curX = s.xL, curY = 0;
+      var currentPts = [[curX, curY]];
+      feats.forEach(function (f) {
+        if (f.type === "corner") {
+          currentPts.push([f.x, f.apexY]);
+          curY = f.apexY;
+        } else if (f.type === "jump") {
+          currentPts.push([f.x, f.yBefore]);
+          strokePolyline(g, currentPts, colorA);
+          drawCircle(g.ctx, g.toPx, f.x, f.yBefore, colorA, f.openBefore);
+          drawCircle(g.ctx, g.toPx, f.x, f.yAfter, colorB, !f.openBefore);
+          currentPts = [[f.x, f.yAfter]];
+          curY = f.yAfter;
+        } else {
+          currentPts.push([f.x - f.w, f.yBase]);
+          var n = 26;
+          for (var i = 1; i <= n; i++) {
+            var t = -f.w + (2 * f.w) * (i / n);
+            var yy = f.yBase + f.dir * f.k * (Math.cbrt(f.w) - Math.cbrt(Math.abs(t)));
+            currentPts.push([f.x + t, yy]);
+          }
+          curY = f.yBase;
+        }
+      });
+      currentPts.push([s.xR, curY]);
+      strokePolyline(g, currentPts, colorA);
+      feats.forEach(function (f, idx) {
+        drawPointLabel(g, f.x, s.yMax, s.yMin, idx === 0 ? "A" : "B", styles);
+      });
+    },
+    inputsHtml: function (s) {
+      function opts(cls) {
+        return "<select class=\"" + cls + "\"><option value=\"\">choose...</option>" +
+          "<option value=\"corner\">Corner / kink</option>" +
+          "<option value=\"jump\">Discontinuity (jump or hole)</option>" +
+          "<option value=\"vertical\">Vertical tangent / cusp</option></select>";
+      }
+      return "<div class=\"subrow\"><span class=\"field-label\">Point A (x=" + s.xA + "):</span>" + opts("ans-typeA") + "</div>" +
+        "<div class=\"subrow\"><span class=\"field-label\">Point B (x=" + s.xB + "):</span>" + opts("ans-typeB") + "</div>";
+    },
+    readAnswer: function (card) {
+      return { typeA: card.querySelector(".ans-typeA").value, typeB: card.querySelector(".ans-typeB").value };
+    },
+    isCorrect: function (ua, s) { return ua.typeA === s.featA.type && ua.typeB === s.featB.type; },
+    solutionHtml: function (s) {
+      return "<span class=\"sol-label\">Solution</span>" +
+        "<div class=\"step\"><strong>Point A</strong> (x=" + s.xA + "): " + NONDIFF_NAMES[s.featA.type] + " &mdash; " + NONDIFF_EXPLAIN[s.featA.type] + "</div>" +
+        "<div class=\"step\"><strong>Point B</strong> (x=" + s.xB + "): " + NONDIFF_NAMES[s.featB.type] + " &mdash; " + NONDIFF_EXPLAIN[s.featB.type] + "</div>" +
+        "<div class=\"final\">Answer: A &mdash; " + NONDIFF_NAMES[s.featA.type] + "; B &mdash; " + NONDIFF_NAMES[s.featB.type] + "</div>";
+    }
+  });
+
+  // ---------- Group 6: optimization ----------
+  PARTS.push({
+    id: "6", group: "6", label: "", points: 4,
+    gen: function () {
+      var a = -(randInt(1, 4));
+      var b = randInt(1, 6) * 2;
+      var c = randInt(1, 10);
+      var vertexT = -b / (2 * a);
+      var maxVal = (4 * a * c - b * b) / (4 * a);
+      return { a: a, b: b, c: c, vertexT: vertexT, answer: { type: "number", value: maxVal } };
+    },
+    prompt: function (s) {
+      var hx = leadTerm(s.a, "t&sup2;") + " " + signedTerm(s.b, "t") + " " + signedTerm(s.c, "");
+      return "<span class=\"math\">h(t) = " + hx + "</span>" +
+        "<div style=\"margin-top:8px\">The height of a ball (in feet) after t seconds is given by h(t) above. Use calculus to find the ball's maximum height.</div>";
+    },
+    inputsHtml: function () {
+      return "<span class=\"field-label\">Maximum height =</span><input type=\"text\" class=\"ans-main\" placeholder=\"e.g. 13\">";
+    },
+    readAnswer: function (card) { return { main: parseAnswer(card.querySelector(".ans-main").value) }; },
+    isCorrect: function (ua, s) { return answersMatch(ua.main, s.answer, 0.02); },
+    solutionHtml: function (s) {
+      var a = s.a, b = s.b, c = s.c;
+      var tStr = fracStr(-b, 2 * a);
+      var ansStr = fracStr(4 * a * c - b * b, 4 * a);
+      return "<span class=\"sol-label\">Solution</span>" +
+        "<div class=\"step\">h&prime;(t) = " + (2 * a) + "t " + signedTerm(b, "") + ". Set h&prime;(t) = 0: t = " + tStr + " seconds.</div>" +
+        "<div class=\"step\">Since h&Prime;(t) = " + (2 * a) + " &lt; 0, this critical point is a maximum (the parabola opens downward).</div>" +
+        "<div class=\"step\">Plug t = " + tStr + " back into h(t) to get the maximum height: h(" + tStr + ") = " + ansStr + " ft.</div>" +
+        "<div class=\"final\">Answer: maximum height = " + ansStr + " ft</div>";
+    }
+  });
+
+  // ============================================================
+  // Group metadata
+  // ============================================================
+  var GROUP_META = {
+    "1": { num: "1.", desc: "Use the limit definition of the derivative to find each of the following." },
+    "2": { num: "2.", desc: "Find the equation of the tangent line." },
+    "3": { num: "3.", desc: "Read the derivative's behavior off a graph of f(x)." },
+    "4": { num: "4.", desc: "Find the derivative using the basic differentiation rules." },
+    "5": { num: "5.", desc: "Determine where a function is not differentiable, and why." },
+    "6": { num: "6.", desc: "Use calculus to solve an optimization problem." }
+  };
+
+  // ============================================================
+  // Engine: mount cards
+  // ============================================================
+  var scoreMap = {};
+  var TOTAL_POINTS = PARTS.reduce(function (sum, p) { return sum + p.points; }, 0);
+  var scoreNumEl = document.getElementById("scoreNum");
+
+  function updateScore() {
+    var earned = 0;
+    Object.keys(scoreMap).forEach(function (k) { earned += scoreMap[k]; });
+    scoreNumEl.textContent = earned + " / " + TOTAL_POINTS;
+  }
+
+  var examScoreMap = {};
+  var examScoreNumEl = document.getElementById("examScoreNum");
+
+  function updateExamScore() {
+    var earned = 0;
+    Object.keys(examScoreMap).forEach(function (k) { earned += examScoreMap[k]; });
+    examScoreNumEl.textContent = earned + " / " + TOTAL_POINTS;
+  }
+
+  window.__PT_STATE = {};
+
+  function mountCard(part, container) {
+    var card = document.createElement("div");
+    card.className = "qcard";
+    card.setAttribute("data-id", part.id);
+
+    var headHtml = "<div class=\"qcard-head\"><div class=\"qtitle\">" +
+      (part.label ? "<span class=\"qlabel\">" + part.label + "</span>" : "") +
+      "<span class=\"qpoints\">" + part.points + " pt" + (part.points === 1 ? "" : "s") + "</span>" +
+      "<span class=\"exam-badge hidden\"></span></div>" +
+      "<button class=\"icon-btn new-version-btn\" type=\"button\">" +
+      "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M16 3h5v5\"/><path d=\"M4 20 21 3\"/><path d=\"M21 16v5h-5\"/><path d=\"M15 15l6 6\"/><path d=\"M4 4l5 5\"/></svg>" +
+      "New version</button></div>";
+
+    card.innerHTML = headHtml +
+      "<div class=\"qprompt\"></div>" +
+      (part.hasGraph ? "<div class=\"qgraph-wrap" + (part.graphSmall ? " small" : "") + "\"><canvas></canvas></div>" : "") +
+      "<div class=\"qinputs\"></div>" +
+      "<div class=\"qactions\"><button class=\"btn-primary check-btn\" type=\"button\">Check Answer</button><button class=\"btn-secondary solution-btn\" type=\"button\">Show Solution</button></div>" +
+      "<div class=\"qfeedback hidden\"></div>" +
+      "<div class=\"qsolution hidden\"></div>";
+
+    container.appendChild(card);
+
+    var promptEl = card.querySelector(".qprompt");
+    var inputsEl = card.querySelector(".qinputs");
+    var feedbackEl = card.querySelector(".qfeedback");
+    var solutionEl = card.querySelector(".qsolution");
+    var examBadgeEl = card.querySelector(".exam-badge");
+    var canvasEl = part.hasGraph ? card.querySelector("canvas") : null;
+
+    var state;
+    var examAttempted = false;
+
+    function lockExam(pts, note) {
+      if (examAttempted) return;
+      examAttempted = true;
+      examScoreMap[part.id] = pts;
+      examBadgeEl.className = "exam-badge " + (pts >= part.points ? "exam-good" : "exam-bad");
+      examBadgeEl.innerHTML = "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"4\" y=\"10\" width=\"16\" height=\"10\" rx=\"2\"/><path d=\"M8 10V7a4 4 0 0 1 8 0v3\"/></svg> Exam: " + pts + "/" + part.points + (note ? " (" + note + ")" : "");
+      updateExamScore();
+    }
+
+    function render() {
+      state = part.gen();
+      window.__PT_STATE[part.id] = state;
+      promptEl.innerHTML = part.prompt(state);
+      inputsEl.innerHTML = part.inputsHtml(state, part.id);
+      feedbackEl.classList.add("hidden");
+      feedbackEl.innerHTML = "";
+      solutionEl.classList.add("hidden");
+      solutionEl.innerHTML = "";
+      scoreMap[part.id] = 0;
+      updateScore();
+      if (part.afterRender) part.afterRender(card);
+      if (part.hasGraph) part.drawGraph(canvasEl, state);
+    }
+
+    card.querySelector(".new-version-btn").addEventListener("click", render);
+    card.querySelector(".check-btn").addEventListener("click", function () {
+      var ua = part.readAnswer(card);
+      var correct = part.isCorrect(ua, state);
+      feedbackEl.classList.remove("hidden");
+      if (correct) {
+        feedbackEl.className = "qfeedback good";
+        feedbackEl.innerHTML = "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M20 6 9 17l-5-5\"/></svg> Correct!";
+        scoreMap[part.id] = part.points;
+      } else {
+        feedbackEl.className = "qfeedback bad";
+        feedbackEl.innerHTML = "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\"><circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M15 9l-6 6M9 9l6 6\"/></svg> Not quite — check the solution below.";
+        scoreMap[part.id] = 0;
+      }
+      updateScore();
+      lockExam(correct ? part.points : 0);
+    });
+    card.querySelector(".solution-btn").addEventListener("click", function () {
+      solutionEl.innerHTML = part.solutionHtml(state);
+      solutionEl.classList.remove("hidden");
+      lockExam(0, "viewed solution");
+    });
+
+    if (part.hasGraph) {
+      window.addEventListener("resize", function () { if (state) part.drawGraph(canvasEl, state); });
+    }
+
+    render();
+  }
+
+  function buildAll() {
+    var groupsEl = document.getElementById("groups");
+    groupsEl.innerHTML = "";
+    scoreMap = {};
+    examScoreMap = {};
+    var seenGroups = {};
+    var currentContainer = null;
+    PARTS.forEach(function (part) {
+      if (!seenGroups[part.group]) {
+        seenGroups[part.group] = true;
+        var meta = GROUP_META[part.group];
+        var gh = document.createElement("div");
+        gh.className = "group-head";
+        gh.innerHTML = "<div class=\"gnum\">" + meta.num + "</div><div class=\"gdesc\">" + meta.desc + "</div>";
+        groupsEl.appendChild(gh);
+        currentContainer = document.createElement("div");
+        groupsEl.appendChild(currentContainer);
+      }
+      mountCard(part, currentContainer);
+    });
+    updateScore();
+    updateExamScore();
+  }
+
+  document.getElementById("newTestBtn").addEventListener("click", buildAll);
+
+  buildAll();
+})();
+</script>
