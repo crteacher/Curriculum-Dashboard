@@ -121,6 +121,19 @@
   .score-box { display: flex; align-items: baseline; gap: 8px; }
   .score-num { font-family: "JetBrains Mono", monospace; font-size: 1.3rem; font-weight: 700; color: var(--accent-strong); font-variant-numeric: tabular-nums; }
   .score-label { font-size: 0.78rem; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.06em; }
+  .score-group { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .score-divider { width: 1px; align-self: stretch; min-height: 24px; background: var(--card-border); }
+  .exam-score-box .score-num { color: var(--ink); }
+  .exam-score-box .score-label { display: flex; align-items: center; gap: 5px; }
+  .exam-score-box .score-label svg { width: 11px; height: 11px; flex-shrink: 0; }
+
+  .exam-badge {
+    display: inline-flex; align-items: center; gap: 5px; font-size: 0.68rem; font-weight: 700;
+    padding: 3px 9px; border-radius: 20px; letter-spacing: 0.02em; white-space: nowrap;
+  }
+  .exam-badge svg { width: 11px; height: 11px; flex-shrink: 0; }
+  .exam-badge.exam-good { background: var(--good-soft); color: var(--good); }
+  .exam-badge.exam-bad { background: var(--bad-soft); color: var(--bad); }
 
   button { font-family: inherit; cursor: pointer; }
   button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
@@ -234,17 +247,27 @@
   <header>
     <div class="eyebrow">Calc 1 &middot; Limits &amp; Continuity</div>
     <h1>Limits Practice Test</h1>
-    <p>Every part regenerates its own random version — work it out on paper, type your answer, and check yourself. Click "New version" on any part as many times as you want to drill it again with different numbers.</p>
+    <p>Every part regenerates its own random version — work it out on paper, type your answer, and check yourself. Click "New version" on any part as many times as you want to drill it again with different numbers. Your <strong>Exam Score</strong> locks in the first time you check each part (or peek its solution) — everything after that is just practice. Use "Reset exam" any time for a brand-new attempt.</p>
   </header>
 
   <div class="toolbar">
-    <div class="score-box">
-      <span class="score-num" id="scoreNum">0 / 0</span>
-      <span class="score-label">points checked correct</span>
+    <div class="score-group">
+      <div class="score-box">
+        <span class="score-num" id="scoreNum">0 / 0</span>
+        <span class="score-label">points checked correct</span>
+      </div>
+      <div class="score-divider"></div>
+      <div class="score-box exam-score-box">
+        <span class="score-num" id="examScoreNum">0 / 0</span>
+        <span class="score-label">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+          exam score
+        </span>
+      </div>
     </div>
     <button class="icon-btn" id="newTestBtn" type="button">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3h5v5"/><path d="M4 20 21 3"/><path d="M21 16v5h-5"/><path d="M15 15l6 6"/><path d="M4 4l5 5"/></svg>
-      New full test
+      Reset exam
     </button>
   </div>
 
@@ -1062,6 +1085,15 @@
     scoreNumEl.textContent = earned + " / " + TOTAL_POINTS;
   }
 
+  var examScoreMap = {};
+  var examScoreNumEl = document.getElementById("examScoreNum");
+
+  function updateExamScore() {
+    var earned = 0;
+    Object.keys(examScoreMap).forEach(function (k) { earned += examScoreMap[k]; });
+    examScoreNumEl.textContent = earned + " / " + TOTAL_POINTS;
+  }
+
   window.__PT_STATE = {};
 
   function mountCard(part, container) {
@@ -1071,7 +1103,8 @@
 
     var headHtml = "<div class=\"qcard-head\"><div class=\"qtitle\">" +
       (part.label ? "<span class=\"qlabel\">" + part.label + "</span>" : "") +
-      "<span class=\"qpoints\">" + part.points + " pt" + (part.points === 1 ? "" : "s") + "</span></div>" +
+      "<span class=\"qpoints\">" + part.points + " pt" + (part.points === 1 ? "" : "s") + "</span>" +
+      "<span class=\"exam-badge hidden\"></span></div>" +
       "<button class=\"icon-btn new-version-btn\" type=\"button\">" +
       "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M16 3h5v5\"/><path d=\"M4 20 21 3\"/><path d=\"M21 16v5h-5\"/><path d=\"M15 15l6 6\"/><path d=\"M4 4l5 5\"/></svg>" +
       "New version</button></div>";
@@ -1090,9 +1123,20 @@
     var inputsEl = card.querySelector(".qinputs");
     var feedbackEl = card.querySelector(".qfeedback");
     var solutionEl = card.querySelector(".qsolution");
+    var examBadgeEl = card.querySelector(".exam-badge");
     var canvasEl = part.hasGraph ? card.querySelector("canvas") : null;
 
     var state;
+    var examAttempted = false;
+
+    function lockExam(pts, note) {
+      if (examAttempted) return;
+      examAttempted = true;
+      examScoreMap[part.id] = pts;
+      examBadgeEl.className = "exam-badge " + (pts >= part.points ? "exam-good" : "exam-bad");
+      examBadgeEl.innerHTML = "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"4\" y=\"10\" width=\"16\" height=\"10\" rx=\"2\"/><path d=\"M8 10V7a4 4 0 0 1 8 0v3\"/></svg> Exam: " + pts + "/" + part.points + (note ? " (" + note + ")" : "");
+      updateExamScore();
+    }
 
     function render() {
       state = part.gen();
@@ -1124,10 +1168,12 @@
         scoreMap[part.id] = 0;
       }
       updateScore();
+      lockExam(correct ? part.points : 0);
     });
     card.querySelector(".solution-btn").addEventListener("click", function () {
       solutionEl.innerHTML = part.solutionHtml(state);
       solutionEl.classList.remove("hidden");
+      lockExam(0, "viewed solution");
     });
 
     if (part.hasGraph) {
@@ -1141,6 +1187,7 @@
     var groupsEl = document.getElementById("groups");
     groupsEl.innerHTML = "";
     scoreMap = {};
+    examScoreMap = {};
     var seenGroups = {};
     var currentContainer = null;
     PARTS.forEach(function (part) {
@@ -1157,6 +1204,7 @@
       mountCard(part, currentContainer);
     });
     updateScore();
+    updateExamScore();
   }
 
   document.getElementById("newTestBtn").addEventListener("click", buildAll);
