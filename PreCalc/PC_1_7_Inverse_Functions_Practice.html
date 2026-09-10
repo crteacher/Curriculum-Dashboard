@@ -176,8 +176,9 @@ function gen3(){
   const t=choose(tables);
   const i=rInt(t.xs.length);
   const target=t.ys[i];
+  const table=`\\begin{array}{c|${'c'.repeat(t.xs.length)}}x & ${t.xs.join(' & ')}\\\\\\hline f(x) & ${t.ys.join(' & ')}\\end{array}`;
   return{
-    latex:`\\text{Table: }x=${t.xs.join(',')};\\;f(x)=${t.ys.join(',')}.\\quad f^{-1}(${target})=`,
+    latex:`${table}\\\\[8pt]f^{-1}(${target})=`,
     answer:[String(t.xs[i])],
     hint:'If f inverse reverses f, which x-row pairs with the given output?',
     step:`f(${t.xs[i]})=${target},\\text{ so }f^{-1}(${target})=${t.xs[i]}`
