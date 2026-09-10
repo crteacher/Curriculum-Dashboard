@@ -172,13 +172,13 @@
 
   .qprompt { font-size: 1rem; line-height: 1.7; margin-bottom: 14px; }
   .qprompt .math { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 1.02rem; }
-  .qprompt .frac { display: inline-flex; flex-direction: column; vertical-align: middle; text-align: center; margin: 0 3px; line-height: 1.15; }
-  .qprompt .frac .num { border-bottom: 1.3px solid currentColor; padding: 0 3px 1px; }
-  .qprompt .frac .den { padding: 1px 3px 0; }
-  .qprompt .radical { display: inline-flex; align-items: flex-start; margin: 0 2px; }
-  .qprompt .radical .idx { font-size: 0.62em; margin-right: -0.35em; margin-top: -0.3em; }
-  .qprompt .radical .rsym { font-size: 1.1em; }
-  .qprompt .radical .rad-inner { border-top: 1.3px solid currentColor; padding: 0 3px; margin-left: 1px; }
+  .qprompt .frac, .qsolution .frac { display: inline-flex; flex-direction: column; vertical-align: middle; text-align: center; margin: 0 3px; line-height: 1.15; }
+  .qprompt .frac .num, .qsolution .frac .num { border-bottom: 1.3px solid currentColor; padding: 0 3px 1px; }
+  .qprompt .frac .den, .qsolution .frac .den { padding: 1px 3px 0; }
+  .qprompt .radical, .qsolution .radical { display: inline-flex; align-items: flex-start; margin: 0 2px; }
+  .qprompt .radical .idx, .qsolution .radical .idx { font-size: 0.62em; margin-right: -0.35em; margin-top: -0.3em; }
+  .qprompt .radical .rsym, .qsolution .radical .rsym { font-size: 1.1em; }
+  .qprompt .radical .rad-inner, .qsolution .radical .rad-inner { border-top: 1.3px solid currentColor; padding: 0 3px; margin-left: 1px; }
 
   .qgraph-wrap { display: flex; justify-content: center; margin: 10px 0 16px; }
   .qgraph-wrap canvas { width: 100%; max-width: 380px; height: 230px; display: block; }
@@ -661,14 +661,44 @@
   });
 
   // ---------- Group 4: basic derivative rules ----------
+  // Shared pool of "extra term" flavors — shuffled in wherever a transcendental
+  // function slot appears below, so the same sub-question can come back as a
+  // sine, cosine, exponential, or log term (each with a random sign and a
+  // small random coefficient) instead of always being the same function.
+  var TRANS_INFO = {
+    sin: { fn: "sin(x)", deriv: "cos(x)", derivAt1: Math.cos(1) },
+    cos: { fn: "cos(x)", deriv: "&minus;sin(x)", derivAt1: -Math.sin(1) },
+    exp: { fn: "e<sup>x</sup>", deriv: "e<sup>x</sup>", derivAt1: Math.E },
+    ln: { fn: "ln(x)", deriv: "1/x", derivAt1: 1 }
+  };
+  function randTransTerm(pool, coefMax) {
+    var kind = randChoice(pool);
+    var sign = randBool() ? 1 : -1;
+    var coef = coefMax ? randInt(1, coefMax) : 1;
+    var info = TRANS_INFO[kind];
+    var coefStr = coef === 1 ? "" : String(coef);
+    return {
+      kind: kind, sign: sign, coef: coef, info: info,
+      displayTerm: function () { return (sign < 0 ? "&minus; " : "+ ") + coefStr + info.fn; },
+      derivDisplayTerm: function () { return (sign < 0 ? "&minus; " : "+ ") + coefStr + info.deriv; },
+      derivValueAt1: sign * coef * info.derivAt1
+    };
+  }
+  function powLabel(exp) {
+    if (exp === 0) return "";
+    if (exp === 1) return "x";
+    return "x<sup>" + exp + "</sup>";
+  }
+
   PARTS.push({
     id: "4a", group: "4", label: "(a)", points: 4,
     gen: function () {
       var n = randInt(2, 6);
-      return { n: n, answer: { type: "number", value: 2 * n + Math.E } };
+      var T = randTransTerm(["sin", "cos", "exp", "ln"], 2);
+      return { n: n, T: T, answer: { type: "number", value: 2 * n + T.derivValueAt1 } };
     },
     prompt: function (s) {
-      return "<span class=\"math\">f(x) = x<sup>" + s.n + "</sup> + " + frac(s.n, s.n + 1) + "x<sup>" + (s.n + 1) + "</sup> + e<sup>x</sup></span>" +
+      return "<span class=\"math\">f(x) = x<sup>" + s.n + "</sup> + " + frac(s.n, s.n + 1) + "x<sup>" + (s.n + 1) + "</sup> " + s.T.displayTerm() + "</span>" +
         "<div style=\"margin-top:8px\">Find f&prime;(1). Give a decimal answer.</div>";
     },
     inputsHtml: function () {
@@ -677,13 +707,13 @@
     readAnswer: function (card) { return { main: parseAnswer(card.querySelector(".ans-main").value) }; },
     isCorrect: function (ua, s) { return answersMatch(ua.main, s.answer, 0.05); },
     solutionHtml: function (s) {
-      var n = s.n;
-      var val = (2 * n + Math.E).toFixed(2);
+      var n = s.n, T = s.T;
+      var val = (2 * n + T.derivValueAt1).toFixed(2);
       return "<span class=\"sol-label\">Solution</span>" +
         "<div class=\"step\">Power rule: d/dx[x<sup>" + n + "</sup>] = " + n + "x<sup>" + (n - 1) + "</sup>.</div>" +
         "<div class=\"step\">Power rule again: d/dx[" + frac(n, n + 1) + "x<sup>" + (n + 1) + "</sup>] = " + frac(n, n + 1) + "&middot;(" + (n + 1) + ")x<sup>" + n + "</sup> = " + n + "x<sup>" + n + "</sup> (the " + (n + 1) + "'s cancel).</div>" +
-        "<div class=\"step\">d/dx[e<sup>x</sup>] = e<sup>x</sup>, its own derivative.</div>" +
-        "<div class=\"step\">f&prime;(x) = " + n + "x<sup>" + (n - 1) + "</sup> + " + n + "x<sup>" + n + "</sup> + e<sup>x</sup>. At x=1: " + n + " + " + n + " + e = " + (2 * n) + " + e &asymp; " + val + "</div>" +
+        "<div class=\"step\">d/dx[" + T.info.fn + "] = " + T.info.deriv + ".</div>" +
+        "<div class=\"step\">f&prime;(x) = " + n + "x<sup>" + (n - 1) + "</sup> + " + n + "x<sup>" + n + "</sup> " + T.derivDisplayTerm() + ". At x=1: " + n + " + " + n + " " + T.derivDisplayTerm() + " &asymp; " + val + "</div>" +
         "<div class=\"final\">Answer: f&prime;(1) &asymp; " + val + "</div>";
     }
   });
@@ -691,14 +721,16 @@
   PARTS.push({
     id: "4b", group: "4", label: "(b)", points: 4,
     gen: function () {
+      var deg = randChoice([2, 3, 4]);
       var A = randNonZeroInt(-5, 5);
       var B = randInt(-6, 6);
       var C = randInt(-6, 6);
       var k = randNonZeroInt(-3, 3);
-      return { A: A, B: B, C: C, k: k, answer: { type: "number", value: 3 * A * k * k + B } };
+      var deriv = deg * A * Math.pow(k, deg - 1) + B;
+      return { deg: deg, A: A, B: B, C: C, k: k, answer: { type: "number", value: deriv } };
     },
     prompt: function (s) {
-      var fx = leadTerm(s.A, "x&sup3;") + " " + signedTerm(s.B, "x") + " " + signedTerm(s.C, "");
+      var fx = leadTerm(s.A, powLabel(s.deg)) + " " + signedTerm(s.B, "x") + " " + signedTerm(s.C, "");
       return "<span class=\"math\">f(x) = " + fx + "</span>" +
         "<div style=\"margin-top:8px\">Find f&prime;(" + s.k + "). <em>(Note this is not merely f&prime;(x).)</em></div>";
     },
@@ -708,11 +740,12 @@
     readAnswer: function (card) { return { main: parseAnswer(card.querySelector(".ans-main").value) }; },
     isCorrect: function (ua, s) { return answersMatch(ua.main, s.answer); },
     solutionHtml: function (s) {
-      var A = s.A, B = s.B, k = s.k;
-      var deriv = 3 * A * k * k + B;
+      var A = s.A, B = s.B, k = s.k, deg = s.deg;
+      var lead = deg * A;
+      var deriv = lead * Math.pow(k, deg - 1) + B;
       return "<span class=\"sol-label\">Solution</span>" +
-        "<div class=\"step\">f&prime;(x) = " + (3 * A) + "x&sup2; " + signedTerm(B, "") + " (the constant " + s.C + " disappears &mdash; its derivative is 0).</div>" +
-        "<div class=\"step\">Now evaluate at x = " + k + ", not before differentiating: f&prime;(" + k + ") = " + (3 * A) + "(" + k + ")&sup2; " + signedTerm(B, "") + " = " + deriv + "</div>" +
+        "<div class=\"step\">f&prime;(x) = " + leadTerm(lead, powLabel(deg - 1)) + " " + signedTerm(B, "") + " (the constant " + s.C + " disappears &mdash; its derivative is 0).</div>" +
+        "<div class=\"step\">Now evaluate at x = " + k + ", not before differentiating: f&prime;(" + k + ") = " + lead + "(" + k + ")<sup>" + (deg - 1) + "</sup> " + signedTerm(B, "") + " = " + deriv + "</div>" +
         "<div class=\"final\">Answer: f&prime;(" + k + ") = " + deriv + "</div>";
     }
   });
@@ -720,11 +753,16 @@
   PARTS.push({
     id: "4c", group: "4", label: "(c)", points: 4,
     gen: function () {
+      var m = randChoice([2, 3, 4, 5]);
+      var p = randInt(2, 6);
       var D = randNonZeroInt(-6, 6);
-      return { D: D, answer: { type: "number", value: 1 / 3 + 4 * D - Math.cos(1) } };
+      var T = randTransTerm(["sin", "cos", "exp", "ln"], 2);
+      var val = 1 / m + p * D + T.derivValueAt1;
+      return { m: m, p: p, D: D, T: T, answer: { type: "number", value: val } };
     },
     prompt: function (s) {
-      return "<span class=\"math\">f(x) = " + radical("x", 3) + " " + signedTerm(-s.D, "") + "/x<sup>4</sup> &minus; sin(x)</span>" +
+      var rootHtml = radical("x", s.m === 2 ? null : s.m);
+      return "<span class=\"math\">f(x) = " + rootHtml + " " + signedTerm(-s.D, "") + "/x<sup>" + s.p + "</sup> " + s.T.displayTerm() + "</span>" +
         "<div style=\"margin-top:8px\">Find f&prime;(1). Give a decimal answer.</div>";
     },
     inputsHtml: function () {
@@ -733,12 +771,14 @@
     readAnswer: function (card) { return { main: parseAnswer(card.querySelector(".ans-main").value) }; },
     isCorrect: function (ua, s) { return answersMatch(ua.main, s.answer, 0.05); },
     solutionHtml: function (s) {
-      var D = s.D;
-      var val = (1 / 3 + 4 * D - Math.cos(1)).toFixed(2);
+      var m = s.m, p = s.p, D = s.D, T = s.T;
+      var val = (1 / m + p * D + T.derivValueAt1).toFixed(2);
+      var rootHtml = radical("x", m === 2 ? null : m);
       return "<span class=\"sol-label\">Solution</span>" +
-        "<div class=\"step\">Rewrite " + radical("x", 3) + " = x<sup>1/3</sup> and " + signedTerm(-D, "") + "/x<sup>4</sup> = " + signedTerm(-D, "") + "x<sup>&minus;4</sup>.</div>" +
-        "<div class=\"step\">d/dx[x<sup>1/3</sup>] = " + frac(1, 3) + "x<sup>&minus;2/3</sup>. d/dx[" + signedTerm(-D, "") + "x<sup>&minus;4</sup>] = " + (4 * D) + "x<sup>&minus;5</sup>. d/dx[&minus;sin(x)] = &minus;cos(x).</div>" +
-        "<div class=\"step\">f&prime;(x) = " + frac(1, 3) + "x<sup>&minus;2/3</sup> + " + (4 * D) + "x<sup>&minus;5</sup> &minus; cos(x). At x=1: 1/3 + " + (4 * D) + " &minus; cos(1) &asymp; " + val + "</div>" +
+        "<div class=\"step\">Rewrite " + rootHtml + " = x<sup>1/" + m + "</sup> and " + signedTerm(-D, "") + "/x<sup>" + p + "</sup> = " + signedTerm(-D, "") + "x<sup>&minus;" + p + "</sup>.</div>" +
+        "<div class=\"step\">d/dx[x<sup>1/" + m + "</sup>] = " + frac(1, m) + "x<sup>&minus;" + (m - 1) + "/" + m + "</sup>, which is exactly 1/" + m + " at x=1. d/dx[" + signedTerm(-D, "") + "x<sup>&minus;" + p + "</sup>] = " + (p * D) + "x<sup>&minus;" + (p + 1) + "</sup>, which is " + (p * D) + " at x=1.</div>" +
+        "<div class=\"step\">d/dx[" + T.info.fn + "] term: " + T.derivDisplayTerm() + ", which is " + T.derivValueAt1.toFixed(3) + " at x=1.</div>" +
+        "<div class=\"step\">f&prime;(1) = 1/" + m + " + " + (p * D) + " " + T.derivDisplayTerm() + " &asymp; " + val + "</div>" +
         "<div class=\"final\">Answer: f&prime;(1) &asymp; " + val + "</div>";
     }
   });
@@ -746,11 +786,11 @@
   PARTS.push({
     id: "4d", group: "4", label: "(d)", points: 4,
     gen: function () {
-      var E = randNonZeroInt(-6, 6);
-      return { E: E, answer: { type: "number", value: Math.E - E } };
+      var T = randTransTerm(["sin", "cos", "exp", "ln"], 2);
+      return { T: T, answer: { type: "number", value: Math.E + T.derivValueAt1 } };
     },
     prompt: function (s) {
-      return "<span class=\"math\">f(x) = x<sup>e</sup> " + signedTerm(-s.E, "") + " ln(x)</span>" +
+      return "<span class=\"math\">f(x) = x<sup>e</sup> " + s.T.displayTerm() + "</span>" +
         "<div style=\"margin-top:8px\">Find f&prime;(1). Give a decimal answer.</div>";
     },
     inputsHtml: function () {
@@ -759,12 +799,12 @@
     readAnswer: function (card) { return { main: parseAnswer(card.querySelector(".ans-main").value) }; },
     isCorrect: function (ua, s) { return answersMatch(ua.main, s.answer, 0.03); },
     solutionHtml: function (s) {
-      var E = s.E;
-      var val = (Math.E - E).toFixed(2);
+      var T = s.T;
+      var val = (Math.E + T.derivValueAt1).toFixed(2);
       return "<span class=\"sol-label\">Solution</span>" +
         "<div class=\"step\">e is just a constant number, so the power rule applies to x<sup>e</sup> exactly like x<sup>2</sup> or x<sup>3</sup>: d/dx[x<sup>e</sup>] = e&middot;x<sup>e&minus;1</sup>.</div>" +
-        "<div class=\"step\">d/dx[" + signedTerm(-E, "") + "ln(x)] = " + signedTerm(-E, "") + "/x.</div>" +
-        "<div class=\"step\">f&prime;(x) = e&middot;x<sup>e&minus;1</sup> " + signedTerm(-E, "") + "/x. At x=1 every power of 1 is just 1: f&prime;(1) = e " + signedTerm(-E, "") + " &asymp; " + val + "</div>" +
+        "<div class=\"step\">d/dx[" + T.info.fn + "] term: " + T.derivDisplayTerm() + ".</div>" +
+        "<div class=\"step\">f&prime;(x) = e&middot;x<sup>e&minus;1</sup> " + T.derivDisplayTerm() + ". At x=1 every power of 1 is just 1: f&prime;(1) = e " + T.derivDisplayTerm() + " &asymp; " + val + "</div>" +
         "<div class=\"final\">Answer: f&prime;(1) &asymp; " + val + "</div>";
     }
   });

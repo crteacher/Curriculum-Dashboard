@@ -172,13 +172,13 @@
 
   .qprompt { font-size: 1rem; line-height: 1.7; margin-bottom: 14px; }
   .qprompt .math { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 1.02rem; }
-  .qprompt .frac { display: inline-flex; flex-direction: column; vertical-align: middle; text-align: center; margin: 0 3px; line-height: 1.15; }
-  .qprompt .frac .num { border-bottom: 1.3px solid currentColor; padding: 0 3px 1px; }
-  .qprompt .frac .den { padding: 1px 3px 0; }
-  .qprompt .radical { display: inline-flex; align-items: flex-start; margin: 0 2px; }
-  .qprompt .radical .idx { font-size: 0.62em; margin-right: -0.35em; margin-top: -0.3em; }
-  .qprompt .radical .rsym { font-size: 1.1em; }
-  .qprompt .radical .rad-inner { border-top: 1.3px solid currentColor; padding: 0 3px; margin-left: 1px; }
+  .qprompt .frac, .qsolution .frac { display: inline-flex; flex-direction: column; vertical-align: middle; text-align: center; margin: 0 3px; line-height: 1.15; }
+  .qprompt .frac .num, .qsolution .frac .num { border-bottom: 1.3px solid currentColor; padding: 0 3px 1px; }
+  .qprompt .frac .den, .qsolution .frac .den { padding: 1px 3px 0; }
+  .qprompt .radical, .qsolution .radical { display: inline-flex; align-items: flex-start; margin: 0 2px; }
+  .qprompt .radical .idx, .qsolution .radical .idx { font-size: 0.62em; margin-right: -0.35em; margin-top: -0.3em; }
+  .qprompt .radical .rsym, .qsolution .radical .rsym { font-size: 1.1em; }
+  .qprompt .radical .rad-inner, .qsolution .radical .rad-inner { border-top: 1.3px solid currentColor; padding: 0 3px; margin-left: 1px; }
 
   .qgraph-wrap { display: flex; justify-content: center; margin: 10px 0 16px; }
   .qgraph-wrap canvas { width: 100%; max-width: 380px; height: 230px; display: block; }
