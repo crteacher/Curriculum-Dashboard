@@ -239,7 +239,7 @@ function gen8() {
   return {
     latex:  `\\text{Is }y=${k}\\text{ in the range of }f(x)=x^2+${b}\\text{?}`,
     answer: [ans],
-    hint:   `The minimum output of x\u00b2 + ${b} is ${b} (when x = 0). Is ${k} \u2265 ${b}?`,
+    hint:   `A parabola x\u00b2 + b has a minimum output, reached at x = 0. What is that minimum in terms of b, and how does the target value compare to it?`,
     step:   isIn
       ? `\\text{Range: }[${b},\\infty).\\quad ${k}\\geq ${b}\\quad\\text{\u2192 yes}`
       : `\\text{Range: }[${b},\\infty).\\quad ${k}<${b}\\quad\\text{\u2192 no}`

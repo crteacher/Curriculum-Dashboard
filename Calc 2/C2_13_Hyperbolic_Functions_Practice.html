@@ -193,14 +193,16 @@ function gen6(){
   const data=[
     {f:'x\\sinh x',df:'\\sinh x+x\\cosh x',hint:'Apply the product rule, then the hyperbolic derivative rule.'},
     {f:'x^2\\cosh x',df:'2x\\cosh x+x^2\\sinh x',hint:'Apply the product rule, then the hyperbolic derivative rule.'},
-    {f:'e^x\\sinh x',df:'e^x\\sinh x+e^x\\cosh x=e^x(\\sinh x+\\cosh x)',hint:'Both factors need differentiation — which rule applies to a product of two functions?'}
+    {f:'e^x\\sinh x',df:'e^x\\sinh x+e^x\\cosh x',extra:'e^x(\\sinh x+\\cosh x)',hint:'Both factors need differentiation — which rule applies to a product of two functions?'}
   ];
   const d=choose(data);
+  const answers=[d.df.replace(/\\/g,'')];
+  if(d.extra) answers.push(d.extra.replace(/\\/g,''));
   return {
     latex:`\\text{Find }\\dfrac{d}{dx}\\left[${d.f}\\right].`,
-    answer:[d.df.replace(/\\/g,'')],
+    answer:answers,
     hint:d.hint,
-    step:`\\frac{d}{dx}\\left[${d.f}\\right]=${d.df}`
+    step:`\\frac{d}{dx}\\left[${d.f}\\right]=${d.df}${d.extra?'='+d.extra:''}`
   };
 }
 
