@@ -159,6 +159,7 @@ const DAY1_LINKS = {
 // Practice tests & flashcard decks — open in new tab.
 const RESOURCES = {
   ca: {
+    walkthroughs: [{ label: 'Solving Equations: A Guided Walkthrough', href: './resources/equation-solving-walkthrough.html' }],
     tests:      [{ label: 'Inequalities &amp; Equations', href: './resources/college-algebra-inequalities-practice-test.html' }],
     flashcards: [{ label: 'Factoring Patterns',           href: './resources/factoring-patterns.html' },
                  { label: 'Exponent &amp; Radical Rules', href: './resources/exponent-radical-rules.html' }]
@@ -185,9 +186,13 @@ const RESOURCES = {
 
 function resourcesHtml(cls) {
   const res = RESOURCES[_currentCourse] || {};
-  const tests = res.tests || [], cards = res.flashcards || [];
-  if (!tests.length && !cards.length) return '';
+  const walkthroughs = res.walkthroughs || [], tests = res.tests || [], cards = res.flashcards || [];
+  if (!walkthroughs.length && !tests.length && !cards.length) return '';
   const items = [
+    ...walkthroughs.map(w => `<div class="sec-card res-card ${cls}" onclick="window.open('${w.href}','_blank')">
+        <div class="sec-card-num">📖 Walkthrough</div>
+        <div class="sec-card-title">${w.label}</div>
+        <div class="sec-card-count">Always available — opens in new tab</div></div>`),
     ...tests.map(t => `<div class="sec-card res-card ${cls}" onclick="window.open('${t.href}','_blank')">
         <div class="sec-card-num">📝 Practice Test</div>
         <div class="sec-card-title">${t.label}</div>

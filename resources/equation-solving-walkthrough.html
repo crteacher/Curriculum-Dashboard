@@ -1,0 +1,1064 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found]){display:none!important}</style></head><body>
+<title>Solving Equations Walkthrough</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=JetBrains+Mono:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #f7f1e2;
+    --paper-line: rgba(74, 58, 26, 0.12);
+    --paper-line-strong: rgba(74, 58, 26, 0.24);
+    --ink: #332a17;
+    --ink-soft: #7a6a48;
+    --card-bg: #fffdf6;
+    --card-border: #ddcda3;
+    --accent: #b8791f;
+    --accent-strong: #8a5913;
+    --accent-soft: rgba(184, 121, 31, 0.14);
+    --accent-ink: #fff8ec;
+    --good: #3f7a52;
+    --good-soft: rgba(63, 122, 82, 0.14);
+    --bad: #b3413a;
+    --bad-soft: rgba(179, 65, 58, 0.12);
+    --shadow: rgba(51, 42, 23, 0.16);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #221c12;
+      --paper-line: rgba(240, 230, 210, 0.07);
+      --paper-line-strong: rgba(240, 230, 210, 0.15);
+      --ink: #f3ecdd;
+      --ink-soft: #c2b394;
+      --card-bg: #2d2517;
+      --card-border: #4a3c22;
+      --accent: #e3a94a;
+      --accent-strong: #f0c274;
+      --accent-soft: rgba(227, 169, 74, 0.16);
+      --accent-ink: #2e1c04;
+      --good: #7bc794;
+      --good-soft: rgba(123, 199, 148, 0.16);
+      --bad: #ff9a90;
+      --bad-soft: rgba(255, 154, 144, 0.14);
+      --shadow: rgba(0, 0, 0, 0.5);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #221c12;
+    --paper-line: rgba(240, 230, 210, 0.07);
+    --paper-line-strong: rgba(240, 230, 210, 0.15);
+    --ink: #f3ecdd;
+    --ink-soft: #c2b394;
+    --card-bg: #2d2517;
+    --card-border: #4a3c22;
+    --accent: #e3a94a;
+    --accent-strong: #f0c274;
+    --accent-soft: rgba(227, 169, 74, 0.16);
+    --accent-ink: #2e1c04;
+    --good: #7bc794;
+    --good-soft: rgba(123, 199, 148, 0.16);
+    --bad: #ff9a90;
+    --bad-soft: rgba(255, 154, 144, 0.14);
+    --shadow: rgba(0, 0, 0, 0.5);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background:
+      repeating-linear-gradient(0deg, var(--paper-line) 0, var(--paper-line) 1px, transparent 1px, transparent 32px),
+      repeating-linear-gradient(90deg, var(--paper-line) 0, var(--paper-line) 1px, transparent 1px, transparent 32px),
+      var(--paper);
+    color: var(--ink);
+    font-family: "Source Sans 3", ui-sans-serif, system-ui, sans-serif;
+    display: flex;
+    justify-content: center;
+    padding: clamp(20px, 4vw, 56px) 18px 80px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+  }
+
+  .wrap { width: 100%; max-width: 900px; }
+  header { text-align: center; margin-bottom: 18px; }
+
+  .eyebrow {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--accent); font-weight: 600;
+  }
+
+  h1 {
+    font-family: "Fraunces", Georgia, serif; font-weight: 600;
+    font-size: clamp(1.8rem, 5vw, 2.5rem); margin: 6px 0 8px; text-wrap: balance;
+  }
+
+  header p { color: var(--ink-soft); font-size: 1rem; max-width: 62ch; margin: 0 auto; line-height: 1.55; }
+
+  .howto {
+    background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 14px;
+    box-shadow: 0 10px 26px -18px var(--shadow); padding: 16px 20px; margin: 22px 0 26px;
+    font-size: 0.92rem; line-height: 1.65; color: var(--ink);
+  }
+  .howto strong { color: var(--accent-strong); }
+
+  .stage-nav {
+    position: sticky; top: 12px; z-index: 5;
+    display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 28px; padding: 12px 14px;
+    background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 14px;
+    box-shadow: 0 10px 26px -16px var(--shadow);
+  }
+  .stage-pill {
+    display: inline-flex; align-items: center; gap: 6px; font-size: 0.76rem; font-weight: 600;
+    padding: 6px 11px; border-radius: 20px; background: var(--paper-line); color: var(--ink-soft);
+    border: 1px solid transparent; transition: all 0.2s ease;
+  }
+  .stage-pill .dot {
+    width: 7px; height: 7px; border-radius: 50%; background: var(--ink-soft); flex-shrink: 0; transition: background 0.2s ease;
+  }
+  .stage-pill.done { background: var(--good-soft); color: var(--good); border-color: var(--good-soft); }
+  .stage-pill.done .dot { background: var(--good); }
+
+  button { font-family: inherit; cursor: pointer; }
+  button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .icon-btn {
+    display: inline-flex; align-items: center; gap: 7px; background: var(--card-bg);
+    border: 1px solid var(--card-border); color: var(--ink); padding: 9px 14px;
+    border-radius: 9px; font-size: 0.86rem; font-weight: 600; text-decoration: none;
+    transition: border-color 0.15s ease, transform 0.1s ease;
+  }
+  .icon-btn:hover { border-color: var(--accent); }
+  .icon-btn:active { transform: translateY(1px); }
+  .icon-btn svg { width: 14px; height: 14px; flex-shrink: 0; }
+  .video-btn { color: var(--accent-strong); border-color: var(--accent-soft); background: var(--accent-soft); }
+  .video-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+
+  .group-head {
+    margin: 34px 0 16px; padding-bottom: 14px; border-bottom: 1.5px solid var(--paper-line-strong);
+  }
+  .group-head .gnum {
+    font-family: "JetBrains Mono", monospace; font-size: 0.74rem; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--accent); font-weight: 700;
+  }
+  .group-head .gtitle {
+    font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 1.4rem; color: var(--ink); margin: 2px 0 6px;
+  }
+  .group-head .gdesc { font-size: 0.94rem; color: var(--ink-soft); line-height: 1.6; max-width: 68ch; }
+
+  .exam-toolbar {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+    margin-top: 14px; padding: 12px 16px; background: var(--card-bg); border: 1px solid var(--card-border);
+    border-radius: 12px;
+  }
+  .exam-toolbar .score-group { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .score-box { display: flex; align-items: baseline; gap: 8px; }
+  .score-num { font-family: "JetBrains Mono", monospace; font-size: 1.2rem; font-weight: 700; color: var(--accent-strong); font-variant-numeric: tabular-nums; }
+  .score-label { font-size: 0.76rem; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.06em; }
+  .score-divider { width: 1px; align-self: stretch; min-height: 22px; background: var(--card-border); }
+  .exam-score-box .score-num { color: var(--ink); }
+
+  .exam-badge {
+    display: inline-flex; align-items: center; gap: 5px; font-size: 0.68rem; font-weight: 700;
+    padding: 3px 9px; border-radius: 20px; letter-spacing: 0.02em; white-space: nowrap;
+  }
+  .exam-badge svg { width: 11px; height: 11px; flex-shrink: 0; }
+  .exam-badge.exam-good { background: var(--good-soft); color: var(--good); }
+  .exam-badge.exam-bad { background: var(--bad-soft); color: var(--bad); }
+
+  .qcard {
+    background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px;
+    box-shadow: 0 14px 32px -22px var(--shadow), 0 2px 8px -2px var(--shadow);
+    padding: clamp(16px, 3vw, 24px); margin-bottom: 18px;
+  }
+
+  .qcard-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
+  .qcard-head .qtitle { display: flex; align-items: center; gap: 10px; }
+  .qlabel { font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 1.05rem; }
+  .qpoints {
+    font-family: "JetBrains Mono", monospace; font-size: 0.66rem; letter-spacing: 0.05em;
+    color: var(--ink-soft); background: var(--paper-line); padding: 2px 8px; border-radius: 20px;
+  }
+
+  .qprompt { font-size: 1rem; line-height: 1.7; margin-bottom: 14px; }
+  .qprompt .math { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 1.04rem; }
+  .qsolution .math { font-family: "JetBrains Mono", ui-monospace, monospace; }
+
+  .qinputs { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin-bottom: 14px; }
+  .qinputs .field-label { font-size: 0.86rem; color: var(--ink-soft); font-weight: 600; }
+  .qinputs input[type="text"] {
+    font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 0.95rem;
+    background: var(--paper); border: 1.5px solid var(--card-border); border-radius: 8px;
+    padding: 8px 10px; color: var(--ink); min-width: 92px;
+  }
+  .qinputs input:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .step-pair { display: flex; align-items: center; flex-wrap: wrap; gap: 10px 14px; }
+  .step-pair .arrow { color: var(--ink-soft); font-size: 1.1rem; }
+  .mc-row { display: flex; flex-direction: column; gap: 8px; }
+  .mc-opt {
+    border: 1.5px solid var(--card-border); border-radius: 9px; padding: 10px 13px; text-align: left;
+    font-size: 0.9rem; background: var(--card-bg); color: var(--ink); font-weight: 500; line-height: 1.45;
+    transition: border-color 0.15s ease, background 0.15s ease;
+  }
+  .mc-opt:hover { border-color: var(--accent); }
+  .mc-opt.selected { border-color: var(--accent); background: var(--accent-soft); color: var(--accent-strong); font-weight: 600; }
+
+  .qactions { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; }
+  .btn-primary {
+    background: var(--accent); color: var(--accent-ink); border: none; padding: 10px 20px;
+    border-radius: 10px; font-size: 0.92rem; font-weight: 700;
+    box-shadow: 0 8px 16px -8px var(--accent-strong); transition: transform 0.1s ease;
+  }
+  .btn-primary:active { transform: translateY(1px); }
+  .btn-secondary {
+    background: transparent; border: 1.5px solid var(--card-border); color: var(--ink);
+    padding: 9px 18px; border-radius: 10px; font-size: 0.92rem; font-weight: 700;
+    transition: border-color 0.15s ease;
+  }
+  .btn-secondary:hover { border-color: var(--accent); }
+
+  .qfeedback {
+    font-size: 0.9rem; font-weight: 700; padding: 9px 13px; border-radius: 9px; margin-bottom: 10px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .qfeedback.good { background: var(--good-soft); color: var(--good); }
+  .qfeedback.bad { background: var(--bad-soft); color: var(--bad); }
+  .qfeedback svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+  .qsolution {
+    background: var(--accent-soft); border: 1px solid var(--card-border); border-left: 4px solid var(--accent);
+    border-radius: 0 12px 12px 0; padding: 14px 16px; font-size: 0.92rem; line-height: 1.7;
+  }
+  .qsolution .sol-label {
+    font-family: "JetBrains Mono", monospace; font-size: 0.68rem; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--accent-strong); font-weight: 700; display: block; margin-bottom: 6px;
+  }
+  .qsolution .step { margin: 3px 0; }
+  .qsolution .final { margin-top: 8px; font-weight: 700; font-family: "JetBrains Mono", monospace; }
+
+  /* ---- worked-step "whiteboard" solution layout ---- */
+  .worksheet { margin-top: 2px; }
+  .ws-row {
+    display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; column-gap: 12px;
+    font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 1rem;
+  }
+  .ws-row .ws-expr { text-align: right; white-space: nowrap; }
+  .ws-row .ws-expr:last-child { text-align: left; }
+  .ws-row .ws-eq { color: var(--ink-soft); font-weight: 600; }
+  .ws-op-row { font-size: 0.88rem; color: var(--accent-strong); font-weight: 600; padding-top: 4px; }
+  .ws-op-row .ws-op { text-align: right; min-height: 1.2em; }
+  .ws-op-row .ws-op:last-child { text-align: left; }
+  .ws-note {
+    font-family: "Source Sans 3", sans-serif; font-size: 0.78rem; font-weight: 500;
+    color: var(--ink-soft); text-align: center; margin: 2px 0; font-style: italic;
+  }
+  .ws-rule { border: none; border-top: 1.5px solid var(--card-border); margin: 4px 0 9px; }
+  .ws-row.ws-final { margin-top: 3px; font-weight: 700; }
+  .ws-row.ws-final .ws-expr { color: var(--accent-strong); font-size: 1.06rem; }
+  @media (max-width: 480px) {
+    .ws-row, .ws-op-row { column-gap: 7px; font-size: 0.9rem; }
+  }
+
+  .hidden { display: none !important; }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">College Algebra &middot; Equation-Solving Foundations</div>
+    <h1>Solving Equations: A Guided Walkthrough</h1>
+    <p>Rebuilds the skills underneath "2x &minus; 9 = 3x + 8" &mdash; combining like terms, doing the same thing to both sides, and keeping x-terms straight when they show up on both sides of the equals sign.</p>
+  </header>
+
+  <div class="howto">
+    Work through the stages <strong>in order</strong> &mdash; each one builds on the last. In every stage: watch the short video if a concept feels shaky, try the "What went wrong?" checks first (they're built around the exact mistakes that trip people up), then drill the practice problem &mdash; click <strong>New version</strong> to redo it with new numbers as many times as you want. Stage 6 is a short practice exam to confirm it's sticking.
+  </div>
+
+  <div class="stage-nav" id="stageNav"></div>
+
+  <div id="groups"></div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  // ============================================================
+  // Utilities
+  // ============================================================
+  function randInt(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+  function randNonZeroInt(min, max) { var v; do { v = randInt(min, max); } while (v === 0); return v; }
+  function randIntExcluding(exclude, min, max) {
+    var v, tries = 0;
+    do { v = randInt(min, max); tries++; } while (exclude.indexOf(v) !== -1 && tries < 200);
+    return v;
+  }
+  function randChoice(arr) { return arr[randInt(0, arr.length - 1)]; }
+  function shuffle(arr) {
+    var a = arr.slice();
+    for (var i = a.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    return a;
+  }
+  function signedTerm(coef, label) {
+    if (coef === 0) return "";
+    var abs = Math.abs(coef);
+    var coefStr = (abs === 1 && label) ? "" : String(abs);
+    return (coef < 0 ? "&minus;" : "+") + " " + coefStr + label;
+  }
+  function leadTerm(coef, label) {
+    var abs = Math.abs(coef);
+    var coefStr = (abs === 1 && label) ? "" : String(abs);
+    return (coef < 0 ? "&minus;" : "") + coefStr + label;
+  }
+  function eqnOneSideRaw(a, b, c) { return leadTerm(a, "x") + " " + signedTerm(b, "") + " = " + c; }
+  function eqnOneSideHtml(a, b, c) { return "<span class=\"math\">" + eqnOneSideRaw(a, b, c) + "</span>"; }
+  function eqnBothSidesRaw(a, b, c, d) { return leadTerm(a, "x") + " " + signedTerm(b, "") + " = " + leadTerm(c, "x") + " " + signedTerm(d, ""); }
+  function eqnBothSidesHtml(a, b, c, d) { return "<span class=\"math\">" + eqnBothSidesRaw(a, b, c, d) + "</span>"; }
+  function eqnThreeTermRaw(p, q, b, c) { return leadTerm(p, "x") + " " + signedTerm(q, "x") + " " + signedTerm(b, "") + " = " + c; }
+  function eqnThreeTermHtml(p, q, b, c) { return "<span class=\"math\">" + eqnThreeTermRaw(p, q, b, c) + "</span>"; }
+  function parseSimpleNum(raw) {
+    if (raw === null || raw === undefined) return null;
+    var s = String(raw).trim();
+    if (s === "") return null;
+    var v = parseFloat(s.replace(/,/g, ""));
+    return isNaN(v) ? null : v;
+  }
+  function numEq(a, b, tol) {
+    tol = tol === undefined ? 0.01 : tol;
+    return a !== null && b !== null && Math.abs(a - b) < tol;
+  }
+
+  // ---- multiple-choice "spot the mistake" helpers ----
+  function mcOptsHtml(opts) {
+    return "<div class=\"mc-row\">" + opts.map(function (o, i) {
+      return "<button type=\"button\" class=\"mc-opt\" data-val=\"" + i + "\">" + o.text + "</button>";
+    }).join("") + "</div>";
+  }
+  function mcAfterRender(card) {
+    var opts = card.querySelectorAll(".mc-opt");
+    opts.forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        opts.forEach(function (b) { b.classList.remove("selected"); });
+        btn.classList.add("selected");
+      });
+    });
+  }
+  function mcReadAnswer(card) {
+    var sel = card.querySelector(".mc-opt.selected");
+    return { idx: sel ? parseInt(sel.getAttribute("data-val"), 10) : -1 };
+  }
+  function buildMcOptions(correctText, wrongTexts) {
+    var opts = shuffle([{ text: correctText, correct: true }].concat(wrongTexts.map(function (t) { return { text: t, correct: false }; })));
+    var correctIdx = opts.findIndex(function (o) { return o.correct; });
+    return { opts: opts, correctIdx: correctIdx };
+  }
+
+  // ---- pooled "spot the mistake" diagnostics ----
+  // Each pool is an array of { reason, build() -> {orig, result, correctFullStep} }. On every
+  // render, one archetype is picked at random (which may be the "valid, nothing's wrong" one) and
+  // its reason becomes the correct option; the other archetypes' reasons become the wrong options.
+  // This means the same option text isn't always right or always wrong, and a mistake doesn't show
+  // up every single time -- both by design, so a student can't answer by pattern-matching the
+  // previous attempt instead of actually checking the algebra.
+  function pickDiagnostic(pool) {
+    var chosenIdx = randInt(0, pool.length - 1);
+    var inst = pool[chosenIdx].build();
+    var reasons = pool.map(function (a) { return a.reason; });
+    var m = buildMcOptions(reasons[chosenIdx], reasons.filter(function (_, i) { return i !== chosenIdx; }));
+    return { orig: inst.orig, result: inst.result, correctFullStep: inst.correctFullStep, opts: m.opts, correctIdx: m.correctIdx };
+  }
+  function diagPromptHtml(s) {
+    return "<div class=\"step-pair\"><span class=\"math\">" + s.orig + "</span><span class=\"arrow\">&rarr;</span><span class=\"math\">" + s.result + "</span></div>" +
+      "<div style=\"margin-top:10px\">A student wrote this. Is the step valid? If not, what went wrong?</div>";
+  }
+  function diagSolutionHtml(s) {
+    var correctText = s.opts[s.correctIdx].text;
+    return "<span class=\"sol-label\">Solution</span>" +
+      "<div class=\"step\">" + correctText + "</div>" +
+      (s.correctFullStep ? "<div class=\"final\">Correct step: " + s.correctFullStep + "</div>" : "");
+  }
+  var diagInputsHtml = function (s) { return mcOptsHtml(s.opts); };
+  var diagIsCorrect = function (ua, s) { return ua.idx === s.correctIdx; };
+
+  // ---- worked-step "whiteboard" solution renderer ----
+  // Renders a solve-for-x solution as a stack of equation lines with the operation applied to
+  // both sides written out beneath a rule, the way a teacher works it down a whiteboard --
+  // rather than a prose sentence describing the step.
+  function divOpStr(a) { return "&divide; " + (a < 0 ? "(" + a + ")" : a); }
+  function wsEqnRow(left, right, isFinal) {
+    return "<div class=\"ws-row" + (isFinal ? " ws-final" : "") + "\"><span class=\"ws-expr\">" + left + "</span><span class=\"ws-eq\">=</span><span class=\"ws-expr\">" + right + "</span></div>";
+  }
+  function wsOpRow(left, right, note) {
+    return "<div class=\"ws-row ws-op-row\"><span class=\"ws-op\">" + (left || "&nbsp;") + "</span><span class=\"ws-eq\">&nbsp;</span><span class=\"ws-op\">" + (right || "&nbsp;") + "</span></div>" +
+      (note ? "<div class=\"ws-note\">" + note + "</div>" : "") +
+      "<hr class=\"ws-rule\">";
+  }
+  function wsNoteRow(note) {
+    return "<div class=\"ws-note\">" + note + "</div><hr class=\"ws-rule\">";
+  }
+  function addSubNote(k, verb) {
+    // k is the signed value being cleared from one side; describes the inverse operation.
+    return (k < 0 ? "Add " + (-k) + " to both sides." : "Subtract " + k + " from both sides.");
+  }
+  function renderWorksheet(rows) {
+    return "<span class=\"sol-label\">Solution</span><div class=\"worksheet\">" + rows.join("") + "</div>";
+  }
+
+  function solutionOneStepAddSub(s) {
+    var rows = [];
+    rows.push(wsEqnRow(leadTerm(1, "x") + " " + signedTerm(s.a, ""), String(s.b)));
+    rows.push(wsOpRow(signedTerm(-s.a, ""), signedTerm(-s.a, ""), addSubNote(s.a)));
+    rows.push(wsEqnRow("x", String(s.x0), true));
+    return renderWorksheet(rows);
+  }
+  function solutionOneStepMult(s) {
+    var rows = [];
+    rows.push(wsEqnRow(leadTerm(s.m, "x"), String(s.b)));
+    rows.push(wsOpRow(divOpStr(s.m), divOpStr(s.m), "Divide both sides by " + s.m + "."));
+    rows.push(wsEqnRow("x", String(s.x0), true));
+    return renderWorksheet(rows);
+  }
+  function solutionOneStepEqn(s) {
+    return s.type === "addsub" ? solutionOneStepAddSub(s) : solutionOneStepMult(s);
+  }
+
+  // ---- icons ----
+  var SVG_REFRESH = "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M16 3h5v5\"/><path d=\"M4 20 21 3\"/><path d=\"M21 16v5h-5\"/><path d=\"M15 15l6 6\"/><path d=\"M4 4l5 5\"/></svg>";
+  var SVG_CHECK = "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M20 6 9 17l-5-5\"/></svg>";
+  var SVG_X = "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\"><circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M15 9l-6 6M9 9l6 6\"/></svg>";
+  var SVG_PLAY = "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M10 8.5 16 12l-6 3.5z\" fill=\"currentColor\" stroke=\"none\"/></svg>";
+  var SVG_LOCK = "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"4\" y=\"10\" width=\"16\" height=\"10\" rx=\"2\"/><path d=\"M8 10V7a4 4 0 0 1 8 0v3\"/></svg>";
+
+  // ============================================================
+  // Question part definitions
+  // ============================================================
+  var PARTS = [];
+
+  // ---------- Stage A: Combining Like Terms ----------
+  var POOL_A = [
+    {
+      reason: "Yes, this step is valid &mdash; these are like terms, combined correctly.",
+      build: function () {
+        var p = randNonZeroInt(1, 9) * randChoice([1, -1]), q = randNonZeroInt(1, 9) * randChoice([1, -1]);
+        var orig = leadTerm(p, "x") + " " + signedTerm(q, "x"), result = leadTerm(p + q, "x");
+        return { orig: orig, result: result, correctFullStep: result };
+      }
+    },
+    {
+      reason: "No &mdash; these terms aren't alike (one has a variable, one doesn't), so they can't be merged into a single term.",
+      build: function () {
+        var p = randInt(2, 9), c = randInt(2, 9);
+        var orig = leadTerm(p, "x") + " " + signedTerm(c, ""), result = leadTerm(p + c, "x");
+        return { orig: orig, result: result, correctFullStep: orig + " (already fully simplified)" };
+      }
+    },
+    {
+      reason: "No &mdash; combining like x-terms still leaves an x-term. The variable shouldn't disappear.",
+      build: function () {
+        var p = randInt(4, 9), q = randInt(1, p - 1);
+        var orig = leadTerm(p, "x") + " " + signedTerm(-q, "x"), result = String(p - q);
+        return { orig: orig, result: result, correctFullStep: leadTerm(p - q, "x") };
+      }
+    },
+    {
+      reason: "No &mdash; a negative sign was dropped. A subtracted term stays negative when you combine it.",
+      build: function () {
+        var p = randInt(2, 9), q = randIntExcluding([0], 2, 9);
+        var orig = leadTerm(p, "x") + " " + signedTerm(-q, "x"), result = leadTerm(p + q, "x");
+        return { orig: orig, result: result, correctFullStep: leadTerm(p - q, "x") };
+      }
+    }
+  ];
+  PARTS.push({
+    id: "a-d1", group: "A", points: 2,
+    gen: function () { return pickDiagnostic(POOL_A); },
+    prompt: diagPromptHtml, inputsHtml: diagInputsHtml, afterRender: mcAfterRender,
+    readAnswer: mcReadAnswer, isCorrect: diagIsCorrect, solutionHtml: diagSolutionHtml
+  });
+  PARTS.push({
+    id: "a-d2", group: "A", points: 2,
+    gen: function () { return pickDiagnostic(POOL_A); },
+    prompt: diagPromptHtml, inputsHtml: diagInputsHtml, afterRender: mcAfterRender,
+    readAnswer: mcReadAnswer, isCorrect: diagIsCorrect, solutionHtml: diagSolutionHtml
+  });
+
+  PARTS.push({
+    id: "a-practice", group: "A", points: 3, isPracticeGoal: true,
+    gen: function () {
+      var p = randNonZeroInt(1, 9) * randChoice([1, -1]);
+      var q = randNonZeroInt(1, 9) * randChoice([1, -1]);
+      var c1 = randInt(-12, 12), c2 = randInt(-12, 12);
+      var terms = shuffle([{ kind: "x", val: p }, { kind: "x", val: q }, { kind: "c", val: c1 }, { kind: "c", val: c2 }]);
+      return { p: p, q: q, c1: c1, c2: c2, terms: terms, totalX: p + q, totalC: c1 + c2 };
+    },
+    prompt: function (s) {
+      var parts = s.terms.map(function (t, i) {
+        var label = t.kind === "x" ? "x" : "";
+        return i === 0 ? leadTerm(t.val, label) : signedTerm(t.val, label);
+      });
+      return "<span class=\"math\">" + parts.join(" ") + "</span>" +
+        "<div style=\"margin-top:8px\">Combine like terms. Write the simplified expression as (coefficient)x + (constant).</div>";
+    },
+    inputsHtml: function () {
+      return "<span class=\"field-label\">Coefficient of x:</span><input type=\"text\" class=\"ans-coefx\" placeholder=\"e.g. -2\">" +
+        "<span class=\"field-label\">Constant term:</span><input type=\"text\" class=\"ans-const\" placeholder=\"e.g. 9\">";
+    },
+    readAnswer: function (card) { return { coefx: parseSimpleNum(card.querySelector(".ans-coefx").value), constant: parseSimpleNum(card.querySelector(".ans-const").value) }; },
+    isCorrect: function (ua, s) { return numEq(ua.coefx, s.totalX) && numEq(ua.constant, s.totalC); },
+    solutionHtml: function (s) {
+      return "<span class=\"sol-label\">Solution</span>" +
+        "<div class=\"step\">x-terms: " + leadTerm(s.p, "x") + " " + signedTerm(s.q, "x") + " = " + leadTerm(s.totalX, "x") + "</div>" +
+        "<div class=\"step\">constants: " + leadTerm(s.c1, "") + " " + signedTerm(s.c2, "") + " = " + s.totalC + "</div>" +
+        "<div class=\"final\">Answer: " + leadTerm(s.totalX, "x") + " " + signedTerm(s.totalC, "") + "</div>";
+    }
+  });
+
+  // ---------- Stage B: One-Step Equations ----------
+  var R_B_VALID = "Yes, this step is valid.";
+  var R_B_ONESIDE = "No &mdash; the operation was only applied to one side. Whatever you do to one side, you must do to the other.";
+  var R_B_WRONGOP = "No &mdash; this undoes the wrong operation. Addition/subtraction is undone with subtraction/addition; multiplication is undone with division.";
+  var R_B_SIGNERR = "No &mdash; the right operation was used, but a sign was dropped along the way.";
+  var POOL_B_ADDSUB = [
+    { reason: R_B_VALID, build: function () { var sign = randChoice([1, -1]), a = randInt(1, 12), x0 = randInt(-9, 9), k = sign * a, b = x0 + k; var orig = eqnOneSideRaw(1, k, b), result = "x = " + x0; return { orig: orig, result: result, correctFullStep: result }; } },
+    { reason: R_B_ONESIDE, build: function () { var sign = randChoice([1, -1]), a = randInt(1, 12), x0 = randInt(-9, 9), k = sign * a, b = x0 + k; var orig = eqnOneSideRaw(1, k, b), result = "x = " + b; return { orig: orig, result: result, correctFullStep: "x = " + x0 }; } },
+    { reason: R_B_WRONGOP, build: function () { var sign = randChoice([1, -1]), a = randInt(1, 12), x0 = randInt(-9, 9), k = sign * a, b = x0 + k; var orig = eqnOneSideRaw(1, k, b), result = "x = " + (b + k); return { orig: orig, result: result, correctFullStep: "x = " + x0 }; } },
+    { reason: R_B_SIGNERR, build: function () { var sign = randChoice([1, -1]), a = randInt(1, 12), x0 = randInt(-9, 9), k = sign * a, b = x0 + k; var orig = eqnOneSideRaw(1, k, b), result = "x = " + (-(b - k)); return { orig: orig, result: result, correctFullStep: "x = " + x0 }; } }
+  ];
+  var POOL_B_MULT = [
+    { reason: R_B_VALID, build: function () { var m0 = randNonZeroInt(2, 9) * randChoice([1, -1]), x0 = randInt(-9, 9), b = m0 * x0; var orig = eqnOneSideRaw(m0, 0, b), result = "x = " + x0; return { orig: orig, result: result, correctFullStep: result }; } },
+    { reason: R_B_WRONGOP, build: function () { var m0 = randNonZeroInt(2, 9) * randChoice([1, -1]), x0 = randInt(-9, 9), b = m0 * x0; var orig = eqnOneSideRaw(m0, 0, b), result = "x = " + (b + m0); return { orig: orig, result: result, correctFullStep: "x = " + x0 }; } },
+    { reason: R_B_SIGNERR, build: function () { var m0 = randNonZeroInt(2, 9) * randChoice([1, -1]), x0 = randInt(-9, 9), b = m0 * x0; var orig = eqnOneSideRaw(m0, 0, b), result = "x = " + (-x0); return { orig: orig, result: result, correctFullStep: "x = " + x0 }; } }
+  ];
+  function genDiagB() { return pickDiagnostic(randChoice([true, false]) ? POOL_B_ADDSUB : POOL_B_MULT); }
+  PARTS.push({
+    id: "b-d1", group: "B", points: 2,
+    gen: genDiagB, prompt: diagPromptHtml, inputsHtml: diagInputsHtml, afterRender: mcAfterRender,
+    readAnswer: mcReadAnswer, isCorrect: diagIsCorrect, solutionHtml: diagSolutionHtml
+  });
+  PARTS.push({
+    id: "b-d2", group: "B", points: 2,
+    gen: genDiagB, prompt: diagPromptHtml, inputsHtml: diagInputsHtml, afterRender: mcAfterRender,
+    readAnswer: mcReadAnswer, isCorrect: diagIsCorrect, solutionHtml: diagSolutionHtml
+  });
+
+  PARTS.push({
+    id: "b-practice", group: "B", points: 3, isPracticeGoal: true,
+    gen: function () {
+      var type = randChoice(["addsub", "mult"]);
+      if (type === "addsub") {
+        var sign = randChoice([1, -1]), a = randInt(1, 12), x0 = randInt(-9, 9);
+        return { type: type, a: sign * a, x0: x0, b: x0 + sign * a };
+      }
+      var m0 = randNonZeroInt(2, 9) * randChoice([1, -1]), x02 = randInt(-9, 9);
+      return { type: type, m: m0, x0: x02, b: m0 * x02 };
+    },
+    prompt: function (s) {
+      var eqn = s.type === "addsub" ? eqnOneSideHtml(1, s.a, s.b) : eqnOneSideHtml(s.m, 0, s.b);
+      return eqn + "<div style=\"margin-top:8px\">Solve for x.</div>";
+    },
+    inputsHtml: function () { return "<span class=\"field-label\">x =</span><input type=\"text\" class=\"ans-x\" placeholder=\"a number\">"; },
+    readAnswer: function (card) { return { x: parseSimpleNum(card.querySelector(".ans-x").value) }; },
+    isCorrect: function (ua, s) { return numEq(ua.x, s.x0); },
+    solutionHtml: solutionOneStepEqn
+  });
+
+  // ---------- Stage C: Two-Step Equations ----------
+  function genTwoStep() {
+    var a = randNonZeroInt(2, 9) * randChoice([1, -1]), b = randInt(-15, 15), x0 = randInt(-9, 9);
+    return { a: a, b: b, x0: x0, c: a * x0 + b };
+  }
+  function promptTwoStep(s) { return eqnOneSideHtml(s.a, s.b, s.c) + "<div style=\"margin-top:8px\">Solve for x.</div>"; }
+  function inputsTwoStep() { return "<span class=\"field-label\">x =</span><input type=\"text\" class=\"ans-x\" placeholder=\"a number\">"; }
+  function readTwoStep(card) { return { x: parseSimpleNum(card.querySelector(".ans-x").value) }; }
+  function isCorrectTwoStep(ua, s) { return numEq(ua.x, s.x0); }
+  function solutionTwoStep(s) {
+    var rows = [];
+    rows.push(wsEqnRow(leadTerm(s.a, "x") + " " + signedTerm(s.b, ""), String(s.c)));
+    rows.push(wsOpRow(signedTerm(-s.b, ""), signedTerm(-s.b, ""), addSubNote(s.b)));
+    rows.push(wsEqnRow(leadTerm(s.a, "x"), String(s.c - s.b)));
+    rows.push(wsOpRow(divOpStr(s.a), divOpStr(s.a), "Divide both sides by " + s.a + "."));
+    rows.push(wsEqnRow("x", String(s.x0), true));
+    return renderWorksheet(rows);
+  }
+
+  var POOL_C = [
+    {
+      reason: "Yes, this step is valid.",
+      build: function () {
+        var a = randNonZeroInt(2, 9) * randChoice([1, -1]), b = randInt(-15, 15), x0 = randInt(-9, 9), c = a * x0 + b;
+        var orig = eqnOneSideRaw(a, b, c), result = eqnOneSideRaw(a, 0, c - b);
+        return { orig: orig, result: result, correctFullStep: result };
+      }
+    },
+    {
+      reason: "No &mdash; dividing (or multiplying) an entire side means every term on it must be divided/multiplied &mdash; one term was left out.",
+      build: function () {
+        var a = randChoice([2, 3, 4, 5]), x0 = randInt(-6, 6), b = randNonZeroInt(1, 9) * randChoice([1, -1]), c = a * x0 + b;
+        var orig = eqnOneSideRaw(a, b, c), result = "x " + signedTerm(b, "") + " = " + c + "/" + a;
+        return { orig: orig, result: result, correctFullStep: eqnOneSideRaw(a, 0, c - b) };
+      }
+    },
+    {
+      reason: "No &mdash; the operation was applied to the left side but not the right side.",
+      build: function () {
+        var a = randNonZeroInt(2, 9), b = randNonZeroInt(1, 15) * randChoice([1, -1]), x0 = randInt(-9, 9), c = a * x0 + b;
+        var orig = eqnOneSideRaw(a, b, c), result = leadTerm(a, "x") + " = " + c;
+        return { orig: orig, result: result, correctFullStep: eqnOneSideRaw(a, 0, c - b) };
+      }
+    },
+    {
+      reason: "No &mdash; the right operation was used, but a sign was dropped along the way.",
+      build: function () {
+        var a = randNonZeroInt(2, 9) * randChoice([1, -1]), b = randInt(-15, 15), x0 = randInt(-9, 9), c = a * x0 + b;
+        var orig = eqnOneSideRaw(a, b, c), result = eqnOneSideRaw(a, 0, -(c - b));
+        return { orig: orig, result: result, correctFullStep: eqnOneSideRaw(a, 0, c - b) };
+      }
+    }
+  ];
+  PARTS.push({
+    id: "c-d1", group: "C", points: 2,
+    gen: function () { return pickDiagnostic(POOL_C); },
+    prompt: diagPromptHtml, inputsHtml: diagInputsHtml, afterRender: mcAfterRender,
+    readAnswer: mcReadAnswer, isCorrect: diagIsCorrect, solutionHtml: diagSolutionHtml
+  });
+  PARTS.push({
+    id: "c-d2", group: "C", points: 2,
+    gen: function () { return pickDiagnostic(POOL_C); },
+    prompt: diagPromptHtml, inputsHtml: diagInputsHtml, afterRender: mcAfterRender,
+    readAnswer: mcReadAnswer, isCorrect: diagIsCorrect, solutionHtml: diagSolutionHtml
+  });
+
+  PARTS.push({
+    id: "c-practice", group: "C", points: 3, isPracticeGoal: true,
+    gen: genTwoStep, prompt: promptTwoStep, inputsHtml: inputsTwoStep,
+    readAnswer: readTwoStep, isCorrect: isCorrectTwoStep, solutionHtml: solutionTwoStep
+  });
+
+  // ---------- Stage D: Combining Like Terms in an Equation ----------
+  var POOL_D = [
+    {
+      reason: "Yes, this step is valid.",
+      build: function () {
+        var p = randInt(1, 9), q = randNonZeroInt(1, 9) * randChoice([1, -1]), c = randInt(-12, 12);
+        var orig = leadTerm(p, "x") + " " + signedTerm(q, "x") + " " + signedTerm(c, ""), result = leadTerm(p + q, "x") + " " + signedTerm(c, "");
+        return { orig: orig, result: result, correctFullStep: result };
+      }
+    },
+    {
+      reason: "No &mdash; a negative sign was dropped when combining the x-terms.",
+      build: function () {
+        var p = randInt(2, 9), q = randInt(2, 9), c = randInt(-12, 12);
+        var orig = leadTerm(p, "x") + " " + signedTerm(-q, "x") + " " + signedTerm(c, ""), result = leadTerm(p + q, "x") + " " + signedTerm(c, "");
+        return { orig: orig, result: result, correctFullStep: leadTerm(p - q, "x") + " " + signedTerm(c, "") };
+      }
+    },
+    {
+      reason: "No &mdash; the constant term is separate from the x-terms. It doesn't disappear when you combine like terms.",
+      build: function () {
+        var p = randInt(2, 9), q = randInt(2, 9), c = randNonZeroInt(1, 12);
+        var orig = leadTerm(p, "x") + " " + signedTerm(q, "x") + " " + signedTerm(c, ""), result = leadTerm(p + q, "x");
+        return { orig: orig, result: result, correctFullStep: leadTerm(p + q, "x") + " " + signedTerm(c, "") };
+      }
+    },
+    {
+      reason: "No &mdash; the constant got merged into the x-coefficient, but a plain number and a variable term aren't like terms.",
+      build: function () {
+        var p = randInt(2, 9), q = randInt(2, 9), c = randNonZeroInt(1, 12);
+        var orig = leadTerm(p, "x") + " " + signedTerm(q, "x") + " " + signedTerm(c, ""), result = leadTerm(p + q + c, "x");
+        return { orig: orig, result: result, correctFullStep: leadTerm(p + q, "x") + " " + signedTerm(c, "") };
+      }
+    }
+  ];
+  PARTS.push({
+    id: "d-d1", group: "D", points: 2,
+    gen: function () { return pickDiagnostic(POOL_D); },
+    prompt: diagPromptHtml, inputsHtml: diagInputsHtml, afterRender: mcAfterRender,
+    readAnswer: mcReadAnswer, isCorrect: diagIsCorrect, solutionHtml: diagSolutionHtml
+  });
+  PARTS.push({
+    id: "d-d2", group: "D", points: 2,
+    gen: function () { return pickDiagnostic(POOL_D); },
+    prompt: diagPromptHtml, inputsHtml: diagInputsHtml, afterRender: mcAfterRender,
+    readAnswer: mcReadAnswer, isCorrect: diagIsCorrect, solutionHtml: diagSolutionHtml
+  });
+
+  function genCombineFirst() {
+    var p = randInt(1, 6), q = randInt(1, 6), b = randInt(-12, 12), x0 = randInt(-9, 9);
+    return { p: p, q: q, b: b, x0: x0, c: (p + q) * x0 + b };
+  }
+  PARTS.push({
+    id: "d-practice", group: "D", points: 3, isPracticeGoal: true,
+    gen: genCombineFirst,
+    prompt: function (s) { return eqnThreeTermHtml(s.p, s.q, s.b, s.c) + "<div style=\"margin-top:8px\">Solve for x. (Hint: combine the two x-terms first.)</div>"; },
+    inputsHtml: function () { return "<span class=\"field-label\">x =</span><input type=\"text\" class=\"ans-x\" placeholder=\"a number\">"; },
+    readAnswer: function (card) { return { x: parseSimpleNum(card.querySelector(".ans-x").value) }; },
+    isCorrect: function (ua, s) { return numEq(ua.x, s.x0); },
+    solutionHtml: function (s) {
+      var pq = s.p + s.q;
+      var rows = [];
+      rows.push(wsEqnRow(leadTerm(s.p, "x") + " " + signedTerm(s.q, "x") + " " + signedTerm(s.b, ""), String(s.c)));
+      rows.push(wsNoteRow("Combine the like x-terms on the left: " + leadTerm(s.p, "x") + " " + signedTerm(s.q, "x") + " = " + leadTerm(pq, "x") + "."));
+      rows.push(wsEqnRow(leadTerm(pq, "x") + " " + signedTerm(s.b, ""), String(s.c)));
+      rows.push(wsOpRow(signedTerm(-s.b, ""), signedTerm(-s.b, ""), addSubNote(s.b)));
+      rows.push(wsEqnRow(leadTerm(pq, "x"), String(s.c - s.b)));
+      rows.push(wsOpRow(divOpStr(pq), divOpStr(pq), "Divide both sides by " + pq + "."));
+      rows.push(wsEqnRow("x", String(s.x0), true));
+      return renderWorksheet(rows);
+    }
+  });
+
+  // ---------- Stage E: Variables on Both Sides ----------
+  function genBothSides() {
+    var x0 = randIntExcluding([0], -9, 9);
+    var a = randNonZeroInt(-9, 9);
+    var c = randIntExcluding([a, 0], -9, 9);
+    var b = randInt(-15, 15);
+    var d = (a - c) * x0 + b;
+    return { a: a, b: b, c: c, d: d, x0: x0 };
+  }
+  var POOL_E = [
+    {
+      reason: "Yes, this step is valid.",
+      build: function () {
+        var s = genBothSides();
+        var orig = eqnBothSidesRaw(s.a, s.b, s.c, s.d), result = eqnOneSideRaw(s.a - s.c, s.b, s.d);
+        return { orig: orig, result: result, correctFullStep: result };
+      }
+    },
+    {
+      reason: "No &mdash; moving an x-term only affects terms that already have an x. The constants shouldn't change.",
+      build: function () {
+        var s = genBothSides();
+        var orig = eqnBothSidesRaw(s.a, s.b, s.c, s.d), result = eqnOneSideRaw(s.a - s.c, s.b - s.c, s.d - s.c);
+        return { orig: orig, result: result, correctFullStep: eqnOneSideRaw(s.a - s.c, s.b, s.d) };
+      }
+    },
+    {
+      reason: "No &mdash; the same operation has to happen exactly once on each entire side, not twice on one side and zero times on the other.",
+      build: function () {
+        var s = genBothSides();
+        var orig = eqnBothSidesRaw(s.a, s.b, s.c, s.d), result = leadTerm(s.a, "x") + " " + signedTerm(-s.b, "") + " = " + leadTerm(s.c, "x") + " " + signedTerm(s.d, "");
+        return { orig: orig, result: result, correctFullStep: eqnBothSidesRaw(s.a, 0, s.c, s.d - s.b) };
+      }
+    },
+    {
+      reason: "No &mdash; terms on opposite sides of the equals sign can't be combined directly. Move one over first (which flips its sign), then combine.",
+      build: function () {
+        var s = genBothSides();
+        var orig = eqnBothSidesRaw(s.a, s.b, s.c, s.d), result = leadTerm(s.a + s.c, "x") + " " + signedTerm(s.b, "") + " = " + s.d;
+        return { orig: orig, result: result, correctFullStep: eqnOneSideRaw(s.a - s.c, s.b, s.d) };
+      }
+    }
+  ];
+  PARTS.push({
+    id: "e-d1", group: "E", points: 2,
+    gen: function () { return pickDiagnostic(POOL_E); },
+    prompt: diagPromptHtml, inputsHtml: diagInputsHtml, afterRender: mcAfterRender,
+    readAnswer: mcReadAnswer, isCorrect: diagIsCorrect, solutionHtml: diagSolutionHtml
+  });
+  PARTS.push({
+    id: "e-d2", group: "E", points: 2,
+    gen: function () { return pickDiagnostic(POOL_E); },
+    prompt: diagPromptHtml, inputsHtml: diagInputsHtml, afterRender: mcAfterRender,
+    readAnswer: mcReadAnswer, isCorrect: diagIsCorrect, solutionHtml: diagSolutionHtml
+  });
+  PARTS.push({
+    id: "e-d3", group: "E", points: 2,
+    gen: function () { return pickDiagnostic(POOL_E); },
+    prompt: diagPromptHtml, inputsHtml: diagInputsHtml, afterRender: mcAfterRender,
+    readAnswer: mcReadAnswer, isCorrect: diagIsCorrect, solutionHtml: diagSolutionHtml
+  });
+
+  function promptBothSides(s) { return eqnBothSidesHtml(s.a, s.b, s.c, s.d) + "<div style=\"margin-top:8px\">Solve for x.</div>"; }
+  function inputsBothSides() { return "<span class=\"field-label\">x =</span><input type=\"text\" class=\"ans-x\" placeholder=\"a number\">"; }
+  function readBothSides(card) { return { x: parseSimpleNum(card.querySelector(".ans-x").value) }; }
+  function isCorrectBothSides(ua, s) { return numEq(ua.x, s.x0); }
+  function solutionBothSides(s) {
+    var ac = s.a - s.c;
+    var moveNote = s.c < 0 ? "Add " + leadTerm(-s.c, "x") + " to both sides." : "Subtract " + leadTerm(s.c, "x") + " from both sides.";
+    var rows = [];
+    rows.push(wsEqnRow(leadTerm(s.a, "x") + " " + signedTerm(s.b, ""), leadTerm(s.c, "x") + " " + signedTerm(s.d, "")));
+    rows.push(wsOpRow(signedTerm(-s.c, "x"), signedTerm(-s.c, "x"), moveNote));
+    rows.push(wsEqnRow(leadTerm(ac, "x") + " " + signedTerm(s.b, ""), String(s.d)));
+    rows.push(wsOpRow(signedTerm(-s.b, ""), signedTerm(-s.b, ""), addSubNote(s.b)));
+    rows.push(wsEqnRow(leadTerm(ac, "x"), String(s.d - s.b)));
+    rows.push(wsOpRow(divOpStr(ac), divOpStr(ac), "Divide both sides by " + ac + "."));
+    rows.push(wsEqnRow("x", String(s.x0), true));
+    return renderWorksheet(rows);
+  }
+  PARTS.push({
+    id: "e-practice", group: "E", points: 3, isPracticeGoal: true,
+    gen: genBothSides, prompt: promptBothSides, inputsHtml: inputsBothSides,
+    readAnswer: readBothSides, isCorrect: isCorrectBothSides, solutionHtml: solutionBothSides
+  });
+
+  // ---------- Stage F: Mixed Practice Exam ----------
+  for (var fi = 1; fi <= 6; fi++) {
+    (function (n) {
+      var isBoth = n % 2 === 0;
+      PARTS.push({
+        id: "f" + n, group: "F", points: 4,
+        gen: isBoth ? genBothSides : genTwoStep,
+        prompt: isBoth ? promptBothSides : promptTwoStep,
+        inputsHtml: isBoth ? inputsBothSides : inputsTwoStep,
+        readAnswer: isBoth ? readBothSides : readTwoStep,
+        isCorrect: isBoth ? isCorrectBothSides : isCorrectTwoStep,
+        solutionHtml: isBoth ? solutionBothSides : solutionTwoStep
+      });
+    })(fi);
+  }
+
+  // ============================================================
+  // Stage metadata
+  // ============================================================
+  var STAGES = [
+    { key: "A", label: "1. Like Terms" },
+    { key: "B", label: "2. One-Step" },
+    { key: "C", label: "3. Two-Step" },
+    { key: "D", label: "4. Combine & Solve" },
+    { key: "E", label: "5. Both Sides" },
+    { key: "F", label: "6. Practice Exam" }
+  ];
+
+  var GROUP_META = {
+    A: {
+      num: "Stage 1", title: "Combining Like Terms",
+      desc: "\"Like terms\" have the exact same variable part &mdash; you can only add or subtract terms that match. A variable term and a plain number are never like terms, no matter what.",
+      videos: [{ url: "https://www.khanacademy.org/math/algebra/x2f8bb11595b61c86:foundation-algebra/x2f8bb11595b61c86:combine-like-terms/v/combining-like-terms", label: "Combining like terms" }]
+    },
+    B: {
+      num: "Stage 2", title: "One-Step Equations",
+      desc: "To solve for x, undo whatever is being done to it by doing the exact same thing to <em>both entire sides</em> &mdash; not just the side x is on.",
+      videos: [{ url: "https://www.khanacademy.org/math/get-ready-for-8th-grade/x465f0793a1788a3f:get-ready-for-solving-equations-and-systems-of-equations/x465f0793a1788a3f:one-step-addition-and-subtraction-equations/v/adding-and-subtracting-the-same-thing-from-both-sides", label: "Same thing to both sides" }]
+    },
+    C: {
+      num: "Stage 3", title: "Two-Step Equations",
+      desc: "Undo addition/subtraction first, then multiplication/division. Dividing an entire side means dividing <em>every term</em> on it &mdash; that's exactly why we clear the constant first.",
+      videos: [{ url: "https://www.khanacademy.org/math/algebra-basics/alg-basics-linear-equations-and-inequalities/alg-basics-two-steps-equations-intro/v/why-we-do-the-same-thing-to-both-sides-two-step-equations", label: "Why the same thing to both sides" }]
+    },
+    D: {
+      num: "Stage 4", title: "Combining Like Terms in an Equation",
+      desc: "The same combining-like-terms skill from Stage 1, now inside an equation. Only combine terms that are already on the <em>same side</em> &mdash; nothing crosses the equals sign yet.",
+      videos: []
+    },
+    E: {
+      num: "Stage 5", title: "Variables on Both Sides",
+      desc: "The main event. Move all the x-terms to one side and all the plain numbers to the other, by doing the same thing to both entire sides &mdash; once, not twice, and not to every number in sight.",
+      videos: [
+        { url: "https://www.khanacademy.org/math/algebra/x2f8bb11595b61c86:solve-equations-inequalities/x2f8bb11595b61c86:linear-equations-variables-both-sides/v/equations-3", label: "Intro: variables on both sides" },
+        { url: "https://www.khanacademy.org/math/algebra/x2f8bb11595b61c86:solve-equations-inequalities/x2f8bb11595b61c86:linear-equations-variables-both-sides/v/solving-equations-2", label: "Worked example" }
+      ]
+    },
+    F: {
+      num: "Stage 6", title: "Practice Exam",
+      desc: "A mix of two-step and variables-on-both-sides problems. Your exam score locks in on the first check of each question (or if you peek the solution first) &mdash; everything after that is just practice. Use \"Reset exam\" for a fresh attempt.",
+      videos: []
+    }
+  };
+
+  // ============================================================
+  // Stage progress nav
+  // ============================================================
+  function buildStageNav() {
+    var nav = document.getElementById("stageNav");
+    nav.innerHTML = STAGES.map(function (s) {
+      return "<span class=\"stage-pill\" id=\"pill-" + s.key + "\"><span class=\"dot\"></span>" + s.label + "</span>";
+    }).join("");
+  }
+  function markStageDone(key) {
+    var pill = document.getElementById("pill-" + key);
+    if (pill) pill.classList.add("done");
+  }
+
+  function groupHeadHtml(meta) {
+    var videoHtml = meta.videos.length ? "<div class=\"video-row\">" + meta.videos.map(function (v) {
+      return "<a class=\"icon-btn video-btn\" href=\"" + v.url + "\" target=\"_blank\" rel=\"noopener\">" + SVG_PLAY + "Watch: " + v.label + "</a>";
+    }).join("") + "</div>" : "";
+    return "<div class=\"gnum\">" + meta.num + "</div><div class=\"gtitle\">" + meta.title + "</div><div class=\"gdesc\">" + meta.desc + "</div>" + videoHtml;
+  }
+
+  // ============================================================
+  // Engine: practice cards (Stages A&ndash;E)
+  // ============================================================
+  function mountPracticeCard(part, container) {
+    var card = document.createElement("div");
+    card.className = "qcard";
+    card.setAttribute("data-id", part.id);
+    card.innerHTML =
+      "<div class=\"qcard-head\"><div class=\"qtitle\"></div>" +
+      "<button class=\"icon-btn new-version-btn\" type=\"button\">" + SVG_REFRESH + "New version</button></div>" +
+      "<div class=\"qprompt\"></div>" +
+      "<div class=\"qinputs\"></div>" +
+      "<div class=\"qactions\"><button class=\"btn-primary check-btn\" type=\"button\">Check Answer</button><button class=\"btn-secondary solution-btn\" type=\"button\">Show Solution</button></div>" +
+      "<div class=\"qfeedback hidden\"></div>" +
+      "<div class=\"qsolution hidden\"></div>";
+    container.appendChild(card);
+
+    var promptEl = card.querySelector(".qprompt"), inputsEl = card.querySelector(".qinputs"),
+      feedbackEl = card.querySelector(".qfeedback"), solutionEl = card.querySelector(".qsolution");
+    var state;
+
+    function render() {
+      state = part.gen();
+      promptEl.innerHTML = part.prompt(state);
+      inputsEl.innerHTML = part.inputsHtml(state);
+      feedbackEl.classList.add("hidden"); feedbackEl.innerHTML = "";
+      solutionEl.classList.add("hidden"); solutionEl.innerHTML = "";
+      if (part.afterRender) part.afterRender(card);
+    }
+    card.querySelector(".new-version-btn").addEventListener("click", render);
+    card.querySelector(".check-btn").addEventListener("click", function () {
+      var ua = part.readAnswer(card);
+      var correct = part.isCorrect(ua, state);
+      feedbackEl.classList.remove("hidden");
+      if (correct) {
+        feedbackEl.className = "qfeedback good";
+        feedbackEl.innerHTML = SVG_CHECK + " Correct!";
+        if (part.isPracticeGoal) markStageDone(part.group);
+      } else {
+        feedbackEl.className = "qfeedback bad";
+        feedbackEl.innerHTML = SVG_X + " Not quite &mdash; check the solution below.";
+      }
+    });
+    card.querySelector(".solution-btn").addEventListener("click", function () {
+      solutionEl.innerHTML = part.solutionHtml(state);
+      solutionEl.classList.remove("hidden");
+    });
+    render();
+  }
+
+  // ============================================================
+  // Engine: exam cards (Stage F)
+  // ============================================================
+  var examScoreMap = {}, practiceScoreMap = {}, examCardRenders = [];
+  var FPARTS = PARTS.filter(function (p) { return p.group === "F"; });
+  var F_TOTAL = FPARTS.reduce(function (sum, p) { return sum + p.points; }, 0);
+
+  function updateFScores() {
+    var earnedPractice = 0; Object.keys(practiceScoreMap).forEach(function (k) { earnedPractice += practiceScoreMap[k]; });
+    var earnedExam = 0; Object.keys(examScoreMap).forEach(function (k) { earnedExam += examScoreMap[k]; });
+    var pEl = document.getElementById("fScoreNum"), eEl = document.getElementById("fExamScoreNum");
+    if (pEl) pEl.textContent = earnedPractice + " / " + F_TOTAL;
+    if (eEl) eEl.textContent = earnedExam + " / " + F_TOTAL;
+  }
+
+  function mountExamCard(part, container) {
+    var card = document.createElement("div");
+    card.className = "qcard";
+    card.setAttribute("data-id", part.id);
+    card.innerHTML =
+      "<div class=\"qcard-head\"><div class=\"qtitle\"><span class=\"qpoints\">" + part.points + " pts</span><span class=\"exam-badge hidden\"></span></div>" +
+      "<button class=\"icon-btn new-version-btn\" type=\"button\">" + SVG_REFRESH + "New version</button></div>" +
+      "<div class=\"qprompt\"></div>" +
+      "<div class=\"qinputs\"></div>" +
+      "<div class=\"qactions\"><button class=\"btn-primary check-btn\" type=\"button\">Check Answer</button><button class=\"btn-secondary solution-btn\" type=\"button\">Show Solution</button></div>" +
+      "<div class=\"qfeedback hidden\"></div>" +
+      "<div class=\"qsolution hidden\"></div>";
+    container.appendChild(card);
+
+    var promptEl = card.querySelector(".qprompt"), inputsEl = card.querySelector(".qinputs"),
+      feedbackEl = card.querySelector(".qfeedback"), solutionEl = card.querySelector(".qsolution"),
+      examBadgeEl = card.querySelector(".exam-badge");
+    var state, examAttempted = false;
+
+    function lockExam(pts, note) {
+      if (examAttempted) return;
+      examAttempted = true;
+      examScoreMap[part.id] = pts;
+      examBadgeEl.className = "exam-badge " + (pts >= part.points ? "exam-good" : "exam-bad");
+      examBadgeEl.innerHTML = SVG_LOCK + " Exam: " + pts + "/" + part.points + (note ? " (" + note + ")" : "");
+      updateFScores();
+      markStageDone("F");
+    }
+    function render() {
+      state = part.gen();
+      promptEl.innerHTML = part.prompt(state);
+      inputsEl.innerHTML = part.inputsHtml(state);
+      feedbackEl.classList.add("hidden"); feedbackEl.innerHTML = "";
+      solutionEl.classList.add("hidden"); solutionEl.innerHTML = "";
+      practiceScoreMap[part.id] = 0;
+      updateFScores();
+    }
+    examCardRenders.push(function () { examAttempted = false; examBadgeEl.className = "exam-badge hidden"; examBadgeEl.innerHTML = ""; render(); });
+
+    card.querySelector(".new-version-btn").addEventListener("click", render);
+    card.querySelector(".check-btn").addEventListener("click", function () {
+      var ua = part.readAnswer(card);
+      var correct = part.isCorrect(ua, state);
+      feedbackEl.classList.remove("hidden");
+      if (correct) {
+        feedbackEl.className = "qfeedback good";
+        feedbackEl.innerHTML = SVG_CHECK + " Correct!";
+        practiceScoreMap[part.id] = part.points;
+      } else {
+        feedbackEl.className = "qfeedback bad";
+        feedbackEl.innerHTML = SVG_X + " Not quite &mdash; check the solution below.";
+        practiceScoreMap[part.id] = 0;
+      }
+      updateFScores();
+      lockExam(correct ? part.points : 0);
+    });
+    card.querySelector(".solution-btn").addEventListener("click", function () {
+      solutionEl.innerHTML = part.solutionHtml(state);
+      solutionEl.classList.remove("hidden");
+      lockExam(0, "viewed solution");
+    });
+    render();
+  }
+
+  function wireExamToolbar(gh) {
+    var bar = document.createElement("div");
+    bar.className = "exam-toolbar";
+    bar.innerHTML =
+      "<div class=\"score-group\">" +
+      "<div class=\"score-box\"><span class=\"score-num\" id=\"fScoreNum\">0 / " + F_TOTAL + "</span><span class=\"score-label\">points checked correct</span></div>" +
+      "<div class=\"score-divider\"></div>" +
+      "<div class=\"score-box exam-score-box\"><span class=\"score-num\" id=\"fExamScoreNum\">0 / " + F_TOTAL + "</span><span class=\"score-label\">exam score</span></div>" +
+      "</div>" +
+      "<button class=\"icon-btn\" id=\"resetExamBtn\" type=\"button\">" + SVG_REFRESH + "Reset exam</button>";
+    gh.appendChild(bar);
+    document.getElementById("resetExamBtn").addEventListener("click", function () {
+      examScoreMap = {}; practiceScoreMap = {};
+      examCardRenders.forEach(function (r) { r(); });
+      updateFScores();
+    });
+  }
+
+  // ============================================================
+  // Build page
+  // ============================================================
+  function buildAll() {
+    buildStageNav();
+    var groupsEl = document.getElementById("groups");
+    groupsEl.innerHTML = "";
+    var seen = {}, currentContainer = null;
+    PARTS.forEach(function (part) {
+      if (!seen[part.group]) {
+        seen[part.group] = true;
+        var meta = GROUP_META[part.group];
+        var gh = document.createElement("div");
+        gh.className = "group-head";
+        gh.innerHTML = groupHeadHtml(meta);
+        groupsEl.appendChild(gh);
+        if (part.group === "F") wireExamToolbar(gh);
+        currentContainer = document.createElement("div");
+        groupsEl.appendChild(currentContainer);
+      }
+      if (part.group === "F") mountExamCard(part, currentContainer);
+      else mountPracticeCard(part, currentContainer);
+    });
+  }
+
+  buildAll();
+})();
+</script>
+
+</body></html>
