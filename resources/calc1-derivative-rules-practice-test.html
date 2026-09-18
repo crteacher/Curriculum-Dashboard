@@ -527,7 +527,9 @@
   PARTS.push({
     id: "1a", group: "1", label: "(a)", points: 4,
     gen: function () {
-      var terms = randTwoTransTerms(3);
+      // Exclude ln: its antiderivative (x·ln x − x) requires IBP (Calc 2).
+      var kinds = shuffle(["sin", "cos", "exp"]).slice(0, 2);
+      var terms = [randTransTerm([kinds[0]], 3), randTransTerm([kinds[1]], 3)];
       return { T1: terms[0], T2: terms[1], points: randSamplePoints() };
     },
     prompt: function (s) {
