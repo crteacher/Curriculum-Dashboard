@@ -580,8 +580,9 @@
     }
   });
 
-  // ---------- Q5: compound inequality — sometimes a single inequality, sometimes
-  // an AND (intersection), sometimes an OR (union) ----------
+  // ---------- Q5: compound inequality — always two clauses joined by AND
+  // (intersection) or OR (union); a lone inequality is what Q2 already tests,
+  // so it's never offered here ----------
   function makeCompoundClause(dir) {
     // dir "less": "x - p [<] t"   dir "greater": "r*x - p [>] t"  (t is the threshold once solved)
     var r = dir === "greater" ? randInt(1, 3) : 1;
@@ -604,14 +605,7 @@
   PARTS.push({
     id: "5", group: "5", label: "", points: 4,
     gen: function () {
-      var variant = randChoice(["single", "and", "or"]);
-      if (variant === "single") {
-        var c1 = makeCompoundClause(randChoice(["less", "greater"]));
-        var expected = c1.dir === "less"
-          ? [{ lo: -Infinity, loIncl: false, hi: c1.t, hiIncl: !c1.strict }]
-          : [{ lo: c1.t, loIncl: !c1.strict, hi: Infinity, hiIncl: false }];
-        return { variant: variant, c1: c1, expected: expected };
-      }
+      var variant = randChoice(["and", "or"]);
       var cLess = makeCompoundClause("less");
       var cGreater = makeCompoundClause("greater");
       var expected;
@@ -630,10 +624,6 @@
       return { variant: variant, cLess: cLess, cGreater: cGreater, expected: expected };
     },
     prompt: function (s) {
-      if (s.variant === "single") {
-        return "<span class=\"math\">" + compoundClauseHtml(s.c1) + "</span>" +
-          "<div style=\"margin-top:8px\">Solve for x. Give your answer in interval notation.</div>";
-      }
       var joiner = s.variant === "and" ? "<strong>AND</strong>" : "<strong>OR</strong>";
       return "<span class=\"math\">" + compoundClauseHtml(s.cLess) + " &nbsp;&nbsp;" + joiner + "&nbsp;&nbsp; " + compoundClauseHtml(s.cGreater) + "</span>" +
         "<div style=\"margin-top:8px\">Solve for x. Give your answer in interval notation (use U for union if needed).</div>";
@@ -642,11 +632,6 @@
     readAnswer: readIntervalTextAnswer,
     isCorrect: function (ua, s) { return intervalAnswerCorrect(ua, s.expected); },
     solutionHtml: function (s) {
-      if (s.variant === "single") {
-        return "<span class=\"sol-label\">Solution</span>" +
-          "<div class=\"step\">Solve directly: " + compoundClauseHtml(s.c1) + " &rarr; " + compoundClauseSolvedHtml(s.c1) + ".</div>" +
-          "<div class=\"final\">Answer: " + intervalNotation(s.expected) + "</div>";
-      }
       var lessSolved = compoundClauseSolvedHtml(s.cLess), greaterSolved = compoundClauseSolvedHtml(s.cGreater);
       if (s.variant === "and") {
         var nonempty = s.expected.length > 0;
