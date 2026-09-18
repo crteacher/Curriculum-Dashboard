@@ -240,7 +240,7 @@ function gen7(){
   const a = choose([-2,-1,1,2]);
   const h = choose([-3,-2,-1,0,1,2,3]);
   const n = choose([1,2,3,4]);
-  const k = a > 0 ? -(n * n) : (n * n);   // ensure real zeros: if a>0 need k<0; if a<0 need k>0
+  const k = -a * n * n;   // ensures (x-h)^2 = n^2 exactly, regardless of |a|, so zeros are always h±n
   const hS = h >= 0 ? `-${h}` : `+${-h}`;
   const z1 = h - n, z2 = h + n;
   const kS = k > 0 ? `+${k}` : `${k}`;

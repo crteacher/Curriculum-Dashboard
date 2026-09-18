@@ -1,0 +1,1101 @@
+<title>Derivative Rules Practice Test</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=JetBrains+Mono:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #f6f1e4;
+    --paper-line: rgba(58, 74, 94, 0.14);
+    --paper-line-strong: rgba(58, 74, 94, 0.26);
+    --ink: #26313f;
+    --ink-soft: #5b6b7d;
+    --card-bg: #fffdf7;
+    --card-border: #ddd2b6;
+    --accent: #2f7d6b;
+    --accent-strong: #1f5c4e;
+    --accent-soft: rgba(47, 125, 107, 0.12);
+    --accent-ink: #f5fbf9;
+    --good: #3f7a52;
+    --good-soft: rgba(63, 122, 82, 0.14);
+    --bad: #b3413a;
+    --bad-soft: rgba(179, 65, 58, 0.12);
+    --shadow: rgba(38, 49, 63, 0.16);
+    --graph-grid: rgba(58, 74, 94, 0.14);
+    --graph-axis: rgba(38, 49, 63, 0.55);
+    --graph-stroke-a: #2f7d6b;
+    --graph-stroke-b: #c1483f;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #1b2330;
+      --paper-line: rgba(238, 242, 240, 0.07);
+      --paper-line-strong: rgba(238, 242, 240, 0.15);
+      --ink: #edf1ef;
+      --ink-soft: #a3aebb;
+      --card-bg: #232e3d;
+      --card-border: #3a4a61;
+      --accent: #5fd1b3;
+      --accent-strong: #86e0c8;
+      --accent-soft: rgba(95, 209, 179, 0.16);
+      --accent-ink: #0c2620;
+      --good: #7bc794;
+      --good-soft: rgba(123, 199, 148, 0.16);
+      --bad: #ff9a90;
+      --bad-soft: rgba(255, 154, 144, 0.14);
+      --shadow: rgba(0, 0, 0, 0.5);
+      --graph-grid: rgba(238, 242, 240, 0.10);
+      --graph-axis: rgba(238, 242, 240, 0.55);
+      --graph-stroke-a: #5fd1b3;
+      --graph-stroke-b: #ff9179;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #1b2330;
+    --paper-line: rgba(238, 242, 240, 0.07);
+    --paper-line-strong: rgba(238, 242, 240, 0.15);
+    --ink: #edf1ef;
+    --ink-soft: #a3aebb;
+    --card-bg: #232e3d;
+    --card-border: #3a4a61;
+    --accent: #5fd1b3;
+    --accent-strong: #86e0c8;
+    --accent-soft: rgba(95, 209, 179, 0.16);
+    --accent-ink: #0c2620;
+    --good: #7bc794;
+    --good-soft: rgba(123, 199, 148, 0.16);
+    --bad: #ff9a90;
+    --bad-soft: rgba(255, 154, 144, 0.14);
+    --shadow: rgba(0, 0, 0, 0.5);
+    --graph-grid: rgba(238, 242, 240, 0.10);
+    --graph-axis: rgba(238, 242, 240, 0.55);
+    --graph-stroke-a: #5fd1b3;
+    --graph-stroke-b: #ff9179;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background:
+      repeating-linear-gradient(0deg, var(--paper-line) 0, var(--paper-line) 1px, transparent 1px, transparent 32px),
+      repeating-linear-gradient(90deg, var(--paper-line) 0, var(--paper-line) 1px, transparent 1px, transparent 32px),
+      var(--paper);
+    color: var(--ink);
+    font-family: "Source Sans 3", ui-sans-serif, system-ui, sans-serif;
+    display: flex;
+    justify-content: center;
+    padding: clamp(20px, 4vw, 56px) 18px 80px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+  }
+
+  .wrap { width: 100%; max-width: 900px; }
+  header { text-align: center; margin-bottom: 22px; }
+
+  .eyebrow {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--accent); font-weight: 600;
+  }
+
+  h1 {
+    font-family: "Fraunces", Georgia, serif; font-weight: 600;
+    font-size: clamp(1.9rem, 5vw, 2.6rem); margin: 6px 0 8px; text-wrap: balance;
+  }
+
+  header p { color: var(--ink-soft); font-size: 1rem; max-width: 62ch; margin: 0 auto; line-height: 1.55; }
+
+  .toolbar {
+    position: sticky; top: 12px; z-index: 5;
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    margin: 22px 0 26px; padding: 12px 16px; flex-wrap: wrap;
+    background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 14px;
+    box-shadow: 0 10px 26px -16px var(--shadow);
+  }
+  .score-box { display: flex; align-items: baseline; gap: 8px; }
+  .score-num { font-family: "JetBrains Mono", monospace; font-size: 1.3rem; font-weight: 700; color: var(--accent-strong); font-variant-numeric: tabular-nums; }
+  .score-label { font-size: 0.78rem; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.06em; }
+  .score-group { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .score-divider { width: 1px; align-self: stretch; min-height: 24px; background: var(--card-border); }
+  .exam-score-box .score-num { color: var(--ink); }
+  .exam-score-box .score-label { display: flex; align-items: center; gap: 5px; }
+  .exam-score-box .score-label svg { width: 11px; height: 11px; flex-shrink: 0; }
+
+  .exam-badge {
+    display: inline-flex; align-items: center; gap: 5px; font-size: 0.68rem; font-weight: 700;
+    padding: 3px 9px; border-radius: 20px; letter-spacing: 0.02em; white-space: nowrap;
+  }
+  .exam-badge svg { width: 11px; height: 11px; flex-shrink: 0; }
+  .exam-badge.exam-good { background: var(--good-soft); color: var(--good); }
+  .exam-badge.exam-bad { background: var(--bad-soft); color: var(--bad); }
+
+  button { font-family: inherit; cursor: pointer; }
+  button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .icon-btn {
+    display: inline-flex; align-items: center; gap: 7px; background: var(--card-bg);
+    border: 1px solid var(--card-border); color: var(--ink); padding: 9px 14px;
+    border-radius: 9px; font-size: 0.86rem; font-weight: 600;
+    transition: border-color 0.15s ease, transform 0.1s ease;
+  }
+  .icon-btn:hover { border-color: var(--accent); }
+  .icon-btn:active { transform: translateY(1px); }
+  .icon-btn svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+  .group-head {
+    margin: 34px 0 14px; padding-bottom: 8px; border-bottom: 1.5px solid var(--paper-line-strong);
+  }
+  .group-head .gnum {
+    font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 1.3rem; color: var(--ink);
+  }
+  .group-head .gdesc { font-size: 0.92rem; color: var(--ink-soft); margin-top: 2px; }
+
+  .qcard {
+    background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px;
+    box-shadow: 0 14px 32px -22px var(--shadow), 0 2px 8px -2px var(--shadow);
+    padding: clamp(16px, 3vw, 24px); margin-bottom: 18px;
+  }
+
+  .qcard-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
+  .qcard-head .qtitle { display: flex; align-items: center; gap: 10px; }
+  .qlabel { font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 1.1rem; }
+  .qpoints {
+    font-family: "JetBrains Mono", monospace; font-size: 0.68rem; letter-spacing: 0.05em;
+    color: var(--ink-soft); background: var(--paper-line); padding: 2px 8px; border-radius: 20px;
+  }
+
+  .qprompt { font-size: 1rem; line-height: 1.7; margin-bottom: 14px; }
+  .qprompt .math { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 1.02rem; }
+  .qprompt .frac, .qsolution .frac { display: inline-flex; flex-direction: column; vertical-align: middle; text-align: center; margin: 0 3px; line-height: 1.15; }
+  .qprompt .frac .num, .qsolution .frac .num { border-bottom: 1.3px solid currentColor; padding: 0 3px 1px; }
+  .qprompt .frac .den, .qsolution .frac .den { padding: 1px 3px 0; }
+  .qprompt .radical, .qsolution .radical { display: inline-flex; align-items: flex-start; margin: 0 2px; }
+  .qprompt .radical .idx, .qsolution .radical .idx { font-size: 0.62em; margin-right: -0.35em; margin-top: -0.3em; }
+  .qprompt .radical .rsym, .qsolution .radical .rsym { font-size: 1.1em; }
+  .qprompt .radical .rad-inner, .qsolution .radical .rad-inner { border-top: 1.3px solid currentColor; padding: 0 3px; margin-left: 1px; }
+
+  .qgraph-wrap { display: flex; justify-content: center; margin: 10px 0 16px; }
+  .qgraph-wrap canvas { width: 100%; max-width: 380px; height: 230px; display: block; }
+  .qgraph-wrap.small canvas { max-width: 280px; height: 190px; }
+
+  .qinputs { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin-bottom: 10px; }
+  .qinputs .field-label { font-size: 0.86rem; color: var(--ink-soft); font-weight: 600; }
+  .qinputs input[type="text"], .qinputs select {
+    font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 0.95rem;
+    background: var(--paper); border: 1.5px solid var(--card-border); border-radius: 8px;
+    padding: 8px 10px; color: var(--ink); min-width: 92px;
+  }
+  .qinputs input.ans-wide { min-width: 220px; }
+  .qinputs select { font-family: "Source Sans 3", sans-serif; min-width: 190px; }
+  .qinputs input:focus, .qinputs select:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .qinputs .subrow {
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    padding: 8px 10px; border: 1.5px dashed var(--card-border); border-radius: 10px;
+  }
+  .qinputs .hidden { display: none !important; }
+  .qhint { font-size: 0.8rem; color: var(--ink-soft); margin: -2px 0 14px; line-height: 1.5; }
+  .mc-row { display: flex; flex-wrap: wrap; gap: 8px; }
+  .mc-opt {
+    border: 1.5px solid var(--card-border); border-radius: 9px; padding: 8px 13px;
+    font-size: 0.88rem; background: var(--card-bg); color: var(--ink); font-weight: 600;
+    transition: border-color 0.15s ease, background 0.15s ease;
+  }
+  .mc-opt:hover { border-color: var(--accent); }
+  .mc-opt.selected { border-color: var(--accent); background: var(--accent-soft); color: var(--accent-strong); }
+
+  .qtable-wrap { overflow-x: auto; margin: 4px 0 16px; }
+  .qtable { border-collapse: collapse; font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 0.85rem; }
+  .qtable th, .qtable td { border: 1px solid var(--card-border); padding: 5px 11px; text-align: center; }
+  .qtable th { background: var(--paper-line); font-weight: 700; }
+  .qtable td.rowlabel { font-weight: 700; text-align: left; background: var(--paper-line); }
+
+  .qactions { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; }
+  .btn-primary {
+    background: var(--accent); color: var(--accent-ink); border: none; padding: 10px 20px;
+    border-radius: 10px; font-size: 0.92rem; font-weight: 700;
+    box-shadow: 0 8px 16px -8px var(--accent-strong); transition: transform 0.1s ease;
+  }
+  .btn-primary:active { transform: translateY(1px); }
+  .btn-secondary {
+    background: transparent; border: 1.5px solid var(--card-border); color: var(--ink);
+    padding: 9px 18px; border-radius: 10px; font-size: 0.92rem; font-weight: 700;
+    transition: border-color 0.15s ease;
+  }
+  .btn-secondary:hover { border-color: var(--accent); }
+
+  .qfeedback {
+    font-size: 0.9rem; font-weight: 700; padding: 9px 13px; border-radius: 9px; margin-bottom: 10px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .qfeedback.good { background: var(--good-soft); color: var(--good); }
+  .qfeedback.bad { background: var(--bad-soft); color: var(--bad); }
+  .qfeedback svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+  .qsolution {
+    background: var(--accent-soft); border: 1px solid var(--card-border); border-left: 4px solid var(--accent);
+    border-radius: 0 12px 12px 0; padding: 14px 16px; font-size: 0.92rem; line-height: 1.7;
+  }
+  .qsolution .sol-label {
+    font-family: "JetBrains Mono", monospace; font-size: 0.68rem; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--accent-strong); font-weight: 700; display: block; margin-bottom: 6px;
+  }
+  .qsolution .step { margin: 3px 0; }
+  .qsolution .final { margin-top: 8px; font-weight: 700; font-family: "JetBrains Mono", monospace; }
+
+  .hidden { display: none !important; }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Calc 1 &middot; Derivative Rules</div>
+    <h1>Derivative Rules Practice Test</h1>
+    <p>Every part regenerates its own random version — work it out on paper, type your answer, and check yourself. In Group 1, type <em>any</em> valid function of x that works — we grade it by differentiating your answer, not by matching one specific form, so there's no need to add "+C". Click "New version" on any part as many times as you want to drill it again with different numbers. Your <strong>Exam Score</strong> locks in the first time you check each part (or peek its solution) — everything after that is just practice. Use "Reset exam" any time for a brand-new attempt.</p>
+  </header>
+
+  <div class="toolbar">
+    <div class="score-group">
+      <div class="score-box">
+        <span class="score-num" id="scoreNum">0 / 0</span>
+        <span class="score-label">points checked correct</span>
+      </div>
+      <div class="score-divider"></div>
+      <div class="score-box exam-score-box">
+        <span class="score-num" id="examScoreNum">0 / 0</span>
+        <span class="score-label">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+          exam score
+        </span>
+      </div>
+    </div>
+    <button class="icon-btn" id="newTestBtn" type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3h5v5"/><path d="M4 20 21 3"/><path d="M21 16v5h-5"/><path d="M15 15l6 6"/><path d="M4 4l5 5"/></svg>
+      Reset exam
+    </button>
+  </div>
+
+  <div id="groups"></div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  // ============================================================
+  // Utilities
+  // ============================================================
+  function randInt(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+  function randNonZeroInt(min, max) { var v; do { v = randInt(min, max); } while (v === 0); return v; }
+  function randIntExcluding(exclude, min, max) {
+    var v, tries = 0;
+    do { v = randInt(min, max); tries++; } while (exclude.indexOf(v) !== -1 && tries < 200);
+    return v;
+  }
+  function randChoice(arr) { return arr[randInt(0, arr.length - 1)]; }
+  function randBool() { return Math.random() < 0.5; }
+  function shuffle(arr) {
+    var a = arr.slice();
+    for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; }
+    return a;
+  }
+  function gcdInt(a, b) { a = Math.abs(a); b = Math.abs(b); while (b) { var t = b; b = a % b; a = t; } return a || 1; }
+  function fracLabel(p, q) {
+    var g = gcdInt(p, q);
+    p = p / g; q = q / g;
+    if (q < 0) { p = -p; q = -q; }
+    return { p: p, q: q };
+  }
+  function fracStr(p, q) {
+    var fr = fracLabel(p, q);
+    return fr.q === 1 ? String(fr.p) : (fr.p + "/" + fr.q);
+  }
+
+  function frac(numHtml, denHtml) {
+    return "<span class=\"frac\"><span class=\"num\">" + numHtml + "</span><span class=\"den\">" + denHtml + "</span></span>";
+  }
+  function radical(innerHtml, index) {
+    var idx = index ? "<span class=\"idx\">" + index + "</span>" : "";
+    return "<span class=\"radical\">" + idx + "<span class=\"rsym\">&radic;</span><span class=\"rad-inner\">" + innerHtml + "</span></span>";
+  }
+  function signedTerm(coef, label) {
+    if (coef === 0) return "";
+    var abs = Math.abs(coef);
+    var coefStr = (abs === 1 && label) ? "" : String(abs);
+    return (coef < 0 ? "&minus;" : "+") + " " + coefStr + label;
+  }
+  function leadTerm(coef, label) {
+    if (coef === 0) return "0";
+    var abs = Math.abs(coef);
+    var coefStr = (abs === 1 && label) ? "" : String(abs);
+    return (coef < 0 ? "&minus;" : "") + coefStr + label;
+  }
+  function powLabel(exp) {
+    if (exp === 0) return "";
+    if (exp === 1) return "x";
+    return "x<sup>" + exp + "</sup>";
+  }
+  // Render (num/den)*label as a coefficient (fraction when needed) times a power/label.
+  function coefPowerHtml(num, den, label) {
+    var fr = fracLabel(num, den);
+    if (fr.q === 1) return leadTerm(fr.p, label);
+    var sign = fr.p < 0 ? "&minus;" : "";
+    return sign + frac(Math.abs(fr.p), fr.q) + label;
+  }
+  // A coefficient times a label when it appears as a FACTOR right after a middle
+  // dot (leadTerm's bare leading minus sign would collide with the dot: "&middot;&minus;2e" looks
+  // like a typo). Parenthesizes negative coefficients instead: "&middot;(&minus;2)e^{...}".
+  function coefFactorHtml(coef, label) {
+    if (coef < 0) return "(&minus;" + Math.abs(coef) + ")" + label;
+    if (coef === 1) return label;
+    return coef + label;
+  }
+
+  // ---- answer parsing / checking ----
+  function parseAnswer(raw) {
+    if (raw === null || raw === undefined) return { type: "invalid" };
+    var str = String(raw).trim().toLowerCase();
+    if (str === "") return { type: "invalid" };
+    if (["dne", "does not exist", "no limit", "undefined", "not defined"].indexOf(str) !== -1) return { type: "dne" };
+    if (["inf", "infinity", "+inf", "+infinity", "∞", "+∞"].indexOf(str) !== -1) return { type: "inf", sign: 1 };
+    if (["-inf", "-infinity", "-∞"].indexOf(str) !== -1) return { type: "inf", sign: -1 };
+    var fracMatch = str.match(/^(-?\d+(\.\d+)?)\s*\/\s*(-?\d+(\.\d+)?)$/);
+    if (fracMatch) {
+      var p = parseFloat(fracMatch[1]), q = parseFloat(fracMatch[3]);
+      if (q !== 0) return { type: "number", value: p / q };
+    }
+    var cleaned = str.replace(/,/g, "");
+    if (/^-?\d*\.?\d+$/.test(cleaned)) return { type: "number", value: parseFloat(cleaned) };
+    return { type: "invalid" };
+  }
+  function answersMatch(user, correct, tol) {
+    tol = tol === undefined ? 0.01 : tol;
+    if (user.type === "invalid") return false;
+    if (correct.type === "dne") return user.type === "dne";
+    if (correct.type === "inf") return user.type === "inf" && user.sign === correct.sign;
+    if (correct.type === "number") return user.type === "number" && Math.abs(user.value - correct.value) < tol;
+    return false;
+  }
+
+  // ---- Group 1: safe expression compiler + numeric antiderivative check ----
+  // Students type their answer as a plain function of x (e.g. "-cos(x) + e^x").
+  // Rather than trying to parse and compare symbolic forms (which would reject
+  // any correct answer written in an unexpected but equivalent shape, and can
+  // never account for an arbitrary "+C"), we compile it into a real JS function
+  // and check that ITS derivative (via a numeric difference quotient) matches
+  // the target derivative at several sample points. Any valid antiderivative
+  // passes; a constant offset is automatically irrelevant since we differentiate.
+  var EXPR_ALLOWED_WORDS = { sin: 1, cos: 1, tan: 1, exp: 1, sqrt: 1, abs: 1, ln: 1, log: 1, pi: 1, e: 1, x: 1 };
+  function exprIsSafe(str) {
+    var words = str.match(/[a-zA-Z]+/g) || [];
+    for (var i = 0; i < words.length; i++) { if (!EXPR_ALLOWED_WORDS[words[i].toLowerCase()]) return false; }
+    return /^[0-9a-zA-Z+\-*/^().,\s]*$/.test(str);
+  }
+  function compileUserFunction(raw) {
+    var str = String(raw === null || raw === undefined ? "" : raw).trim().toLowerCase();
+    if (!str) return null;
+    if (!exprIsSafe(str)) return null;
+    var expr = str.replace(/\^/g, "**");
+    // implicit multiplication, inserted BEFORE function names are substituted so
+    // "2sin(x)", "3ln(x)", "2e^x" etc. all work (not just "2x"):
+    // digit immediately followed by a letter ("2x", "2sin", "3ln") or "(" ("3(x+1)");
+    // "x" or ")" immediately followed by a digit or "(" ("x(2)", ")(", ")2").
+    expr = expr.replace(/(\d)([a-zA-Z])/g, "$1*$2");
+    expr = expr.replace(/(\d)(\()/g, "$1*$2");
+    expr = expr.replace(/(x)(\d)/gi, "$1*$2");
+    expr = expr.replace(/(x)(\()/gi, "$1*$2");
+    expr = expr.replace(/(\))([a-zA-Z0-9(])/g, "$1*$2");
+    expr = expr.replace(/\bexp\b/gi, "Math.exp");
+    expr = expr.replace(/\bsin\b/gi, "Math.sin");
+    expr = expr.replace(/\bcos\b/gi, "Math.cos");
+    expr = expr.replace(/\btan\b/gi, "Math.tan");
+    expr = expr.replace(/\bsqrt\b/gi, "Math.sqrt");
+    expr = expr.replace(/\babs\b/gi, "Math.abs");
+    expr = expr.replace(/\blog\b/gi, "Math.log10");
+    expr = expr.replace(/\bln\b/gi, "Math.log");
+    expr = expr.replace(/\bpi\b/gi, "Math.PI");
+    expr = expr.replace(/\be\b/gi, "Math.E");
+    try {
+      var fn = new Function("x", "return (" + expr + ");");
+      var probe = fn(1.234);
+      if (typeof probe !== "number") return null;
+      return fn;
+    } catch (err) {
+      return null;
+    }
+  }
+  function checkAntiderivative(fn, targetDerivFn, points) {
+    var h = 1e-4;
+    for (var i = 0; i < points.length; i++) {
+      var x = points[i], yp, ym;
+      try { yp = fn(x + h); ym = fn(x - h); } catch (err) { return false; }
+      if (typeof yp !== "number" || typeof ym !== "number" || !isFinite(yp) || !isFinite(ym)) return false;
+      var approx = (yp - ym) / (2 * h);
+      var target = targetDerivFn(x);
+      if (!isFinite(target)) return false;
+      var tol = Math.max(0.03, Math.abs(target) * 0.02);
+      if (Math.abs(approx - target) > tol) return false;
+    }
+    return true;
+  }
+  function randSamplePoints() {
+    return [0.6 + Math.random() * 0.3, 1.3 + Math.random() * 0.4, 2.1 + Math.random() * 0.5];
+  }
+
+  // ---- shared trig/exp/log term pool (Group 1) ----
+  // Four kinds so regenerating a part doesn't always land on the same flavor
+  // (e.g. always e^x) -- sin/cos/exp/ln all get a turn.
+  var TRANS_INFO = {
+    sin: { fn: "sin(x)", deriv: "cos(x)" },
+    cos: { fn: "cos(x)", deriv: "&minus;sin(x)" },
+    exp: { fn: "e<sup>x</sup>", deriv: "e<sup>x</sup>" },
+    ln: { fn: "ln(x)", deriv: "1/x" }
+  };
+  function randTransTerm(pool, coefMax) {
+    var kind = randChoice(pool);
+    var sign = randBool() ? 1 : -1;
+    var coef = coefMax ? randInt(1, coefMax) : 1;
+    var info = TRANS_INFO[kind];
+    var coefStr = coef === 1 ? "" : String(coef);
+    return {
+      kind: kind, sign: sign, coef: coef, info: info,
+      displayTerm: function () { return (sign < 0 ? "&minus; " : "+ ") + coefStr + info.fn; },
+      valueAt: function (x) {
+        var base = kind === "sin" ? Math.sin(x) : (kind === "cos" ? Math.cos(x) : (kind === "exp" ? Math.exp(x) : Math.log(x)));
+        return sign * coef * base;
+      }
+    };
+  }
+  // Two distinct kinds drawn from the full sin/cos/exp/ln pool, for parts that
+  // want two independent transcendental terms that are never the same flavor.
+  function randTwoTransTerms(coefMax) {
+    var kinds = shuffle(["sin", "cos", "exp", "ln"]).slice(0, 2);
+    return [randTransTerm([kinds[0]], coefMax), randTransTerm([kinds[1]], coefMax)];
+  }
+  // Antiderivative of a randTransTerm, for display in the sample solution only.
+  // (ln's antiderivative needs integration by parts: &int;ln(x)dx = x&middot;ln(x) &minus; x.)
+  function antiderivOfTransTerm(T) {
+    var coefStr = T.coef === 1 ? "" : String(T.coef);
+    if (T.kind === "sin") { var s = -T.sign; return (s < 0 ? "&minus; " : "+ ") + coefStr + "cos(x)"; }
+    if (T.kind === "cos") { return (T.sign < 0 ? "&minus; " : "+ ") + coefStr + "sin(x)"; }
+    if (T.kind === "exp") { return (T.sign < 0 ? "&minus; " : "+ ") + coefStr + "e<sup>x</sup>"; }
+    var coefFactor = T.coef === 1 ? "" : T.coef + "&middot;";
+    return (T.sign < 0 ? "&minus; " : "+ ") + coefFactor + "(x&middot;ln(x) &minus; x)";
+  }
+  function stripLeadingPlus(str) { return str.replace(/^\+ /, ""); }
+
+  // ---- small-fraction "table cell" helper (Groups 2d, 4a, 4b) ----
+  function randTableCell(min, max) {
+    var den = randChoice([1, 1, 1, 2, 3]);
+    var num = randNonZeroInt(min, max);
+    var fr = fracLabel(num, den);
+    return { p: fr.p, q: fr.q, value: fr.p / fr.q };
+  }
+  function cellHtml(cell) {
+    if (cell.q === 1) return String(cell.p);
+    var sign = cell.p < 0 ? "&minus;" : "";
+    return sign + frac(Math.abs(cell.p), cell.q);
+  }
+  // Parenthesize a negative value when it's about to sit right next to a middle
+  // dot or another sign in a written-out product/difference, so it never reads
+  // as a stray double sign like "&middot;&minus;4" or "&minus; &minus;3".
+  function cellFactorHtml(cell) { return cell.p < 0 ? "(" + cellHtml(cell) + ")" : cellHtml(cell); }
+  function numFactorHtml(n) { return n < 0 ? "(" + n + ")" : String(n); }
+  function buildTable(rowLabels, colHeaders, cellsMatrix) {
+    var html = "<div class=\"qtable-wrap\"><table class=\"qtable\"><tr><th></th>";
+    colHeaders.forEach(function (h) { html += "<th>" + h + "</th>"; });
+    html += "</tr>";
+    rowLabels.forEach(function (rl, i) {
+      html += "<tr><td class=\"rowlabel\">" + rl + "</td>";
+      cellsMatrix[i].forEach(function (c) { html += "<td>" + c + "</td>"; });
+      html += "</tr>";
+    });
+    html += "</table></div>";
+    return html;
+  }
+
+  // ============================================================
+  // Question part definitions
+  // ============================================================
+  var PARTS = [];
+
+  // ---------- Group 1: give an example ----------
+  PARTS.push({
+    id: "1a", group: "1", label: "(a)", points: 4,
+    gen: function () {
+      var terms = randTwoTransTerms(3);
+      return { T1: terms[0], T2: terms[1], points: randSamplePoints() };
+    },
+    prompt: function (s) {
+      return "<div>A function with derivative:</div>" +
+        "<span class=\"math\">f&prime;(x) = " + stripLeadingPlus(s.T1.displayTerm()) + " " + s.T2.displayTerm() + "</span>";
+    },
+    inputsHtml: function () {
+      return "<span class=\"field-label\">f(x) =</span><input type=\"text\" class=\"ans-main ans-wide\" placeholder=\"e.g. -cos(x) + e^x\">";
+    },
+    readAnswer: function (card) { return { main: card.querySelector(".ans-main").value }; },
+    isCorrect: function (ua, s) {
+      var fn = compileUserFunction(ua.main);
+      if (!fn) return false;
+      var target = function (x) { return s.T1.valueAt(x) + s.T2.valueAt(x); };
+      return checkAntiderivative(fn, target, s.points);
+    },
+    solutionHtml: function (s) {
+      var sample = stripLeadingPlus(antiderivOfTransTerm(s.T1)) + " " + antiderivOfTransTerm(s.T2);
+      var REMINDER = {
+        sin: "d/dx[&minus;cos(x)] = sin(x)",
+        cos: "d/dx[sin(x)] = cos(x)",
+        exp: "d/dx[e<sup>x</sup>] = e<sup>x</sup>",
+        ln: "d/dx[x&middot;ln(x) &minus; x] = ln(x)"
+      };
+      var kinds = [s.T1.kind, s.T2.kind].filter(function (k, i, arr) { return arr.indexOf(k) === i; });
+      var reminders = kinds.map(function (k) { return REMINDER[k]; }).join(", and ") + ".";
+      return "<span class=\"sol-label\">Solution</span>" +
+        "<div class=\"step\">Work backwards one term at a time: what function has derivative " + s.T1.info.fn + " (up to sign/coefficient), and what function has derivative " + s.T2.info.fn + "?</div>" +
+        "<div class=\"step\">" + reminders + " — so match each target term to its antiderivative and keep the same sign/coefficient.</div>" +
+        "<div class=\"final\">Example answer: f(x) = " + sample + " &nbsp; (any function differing by a constant also works — that's why \"+C\" never matters here)</div>";
+    }
+  });
+
+  PARTS.push({
+    id: "1b", group: "1", label: "(b)", points: 4,
+    gen: function () {
+      var A = randNonZeroInt(-4, 4);
+      var n = randInt(2, 7);
+      return { A: A, n: n, points: randSamplePoints() };
+    },
+    prompt: function (s) {
+      return "<div>A function with derivative:</div>" +
+        "<span class=\"math\">f&prime;(x) = " + leadTerm(s.A, powLabel(s.n)) + "</span>";
+    },
+    inputsHtml: function () {
+      return "<span class=\"field-label\">f(x) =</span><input type=\"text\" class=\"ans-main ans-wide\" placeholder=\"e.g. x^6/6\">";
+    },
+    readAnswer: function (card) { return { main: card.querySelector(".ans-main").value }; },
+    isCorrect: function (ua, s) {
+      var fn = compileUserFunction(ua.main);
+      if (!fn) return false;
+      var target = function (x) { return s.A * Math.pow(x, s.n); };
+      return checkAntiderivative(fn, target, s.points);
+    },
+    solutionHtml: function (s) {
+      var sample = coefPowerHtml(s.A, s.n + 1, powLabel(s.n + 1));
+      return "<span class=\"sol-label\">Solution</span>" +
+        "<div class=\"step\">Reverse the power rule: raise the exponent by 1 (to " + (s.n + 1) + ") and divide by that new exponent.</div>" +
+        "<div class=\"final\">Example answer: f(x) = " + sample + " &nbsp; (check: differentiating this brings the exponent back down to " + s.n + " and cancels the " + (s.n + 1) + ")</div>";
+    }
+  });
+
+  PARTS.push({
+    id: "1c", group: "1", label: "(c)", points: 4,
+    gen: function () {
+      var m = randNonZeroInt(-6, 6);
+      var b = randInt(-8, 8);
+      return { m: m, b: b, points: randSamplePoints() };
+    },
+    prompt: function (s) {
+      return "<div>A function with derivative:</div>" +
+        "<span class=\"math\">f&prime;(x) = " + leadTerm(s.m, "x") + " " + signedTerm(s.b, "") + "</span>";
+    },
+    inputsHtml: function () {
+      return "<span class=\"field-label\">f(x) =</span><input type=\"text\" class=\"ans-main ans-wide\" placeholder=\"e.g. 0.5x^2 + 2x\">";
+    },
+    readAnswer: function (card) { return { main: card.querySelector(".ans-main").value }; },
+    isCorrect: function (ua, s) {
+      var fn = compileUserFunction(ua.main);
+      if (!fn) return false;
+      var target = function (x) { return s.m * x + s.b; };
+      return checkAntiderivative(fn, target, s.points);
+    },
+    solutionHtml: function (s) {
+      var sample = coefPowerHtml(s.m, 2, "x<sup>2</sup>") + " " + signedTerm(s.b, "x");
+      return "<span class=\"sol-label\">Solution</span>" +
+        "<div class=\"step\">Reverse the power rule on each term separately: " + s.m + "x comes from " + coefPowerHtml(s.m, 2, "x<sup>2</sup>") + ", and the constant " + s.b + " comes from " + s.b + "x.</div>" +
+        "<div class=\"final\">Example answer: f(x) = " + sample + "</div>";
+    }
+  });
+
+  // ---------- Group 2: differentiation rules ----------
+  PARTS.push({
+    id: "2a", group: "2", label: "(a)", points: 4,
+    gen: function () {
+      var A = randInt(1, 6);
+      var B = randNonZeroInt(-4, 4);
+      var C = randInt(-6, 6);
+      var p;
+      do { p = randNonZeroInt(-3, 3); } while (B * p + C === 0);
+      var denomAtP = B * p + C;
+      var val = (2 * A * p * denomAtP - A * p * p * B) / (denomAtP * denomAtP);
+      return { A: A, B: B, C: C, p: p, answer: { type: "number", value: val } };
+    },
+    prompt: function (s) {
+      var denom = leadTerm(s.B, "x") + " " + signedTerm(s.C, "");
+      return "<span class=\"math\">f(x) = " + frac(leadTerm(s.A, "x<sup>2</sup>"), denom) + "</span>" +
+        "<div style=\"margin-top:8px\">Find f&prime;(" + s.p + "). Give a decimal answer.</div>";
+    },
+    inputsHtml: function (s) { return "<span class=\"field-label\">f&prime;(" + s.p + ") =</span><input type=\"text\" class=\"ans-main\" placeholder=\"e.g. 1.75\">"; },
+    readAnswer: function (card) { return { main: parseAnswer(card.querySelector(".ans-main").value) }; },
+    isCorrect: function (ua, s) { return answersMatch(ua.main, s.answer, 0.02); },
+    solutionHtml: function (s) {
+      var denom = leadTerm(s.B, "x") + " " + signedTerm(s.C, "");
+      var denomAtP = s.B * s.p + s.C;
+      var val = s.answer.value.toFixed(3);
+      return "<span class=\"sol-label\">Solution</span>" +
+        "<div class=\"step\">Quotient rule: f&prime;(x) = [(2" + (s.A === 1 ? "" : s.A) + "x)(" + denom + ") &minus; (" + leadTerm(s.A, "x<sup>2</sup>") + ")(" + s.B + ")] / (" + denom + ")<sup>2</sup></div>" +
+        "<div class=\"step\">At x=" + s.p + ": denominator = " + denomAtP + ", numerator = " + (2 * s.A * s.p * denomAtP - s.A * s.p * s.p * s.B).toFixed(3) + "</div>" +
+        "<div class=\"final\">Answer: f&prime;(" + s.p + ") &asymp; " + val + "</div>";
+    }
+  });
+
+  PARTS.push({
+    id: "2b", group: "2", label: "(b)", points: 4,
+    gen: function () {
+      var base = randInt(2, 5);
+      var p = randInt(1, 4);
+      var val = Math.pow(base, p) * Math.log(base) * Math.log(p) + Math.pow(base, p) * (1 / p);
+      return { base: base, p: p, answer: { type: "number", value: val } };
+    },
+    prompt: function (s) {
+      return "<span class=\"math\">f(x) = " + s.base + "<sup>x</sup>&middot;ln(x)</span>" +
+        "<div style=\"margin-top:8px\">Find f&prime;(" + s.p + "). Give a decimal answer.</div>";
+    },
+    inputsHtml: function (s) { return "<span class=\"field-label\">f&prime;(" + s.p + ") =</span><input type=\"text\" class=\"ans-main\" placeholder=\"e.g. 8.5\">"; },
+    readAnswer: function (card) { return { main: parseAnswer(card.querySelector(".ans-main").value) }; },
+    isCorrect: function (ua, s) { return answersMatch(ua.main, s.answer, 0.05); },
+    solutionHtml: function (s) {
+      var val = s.answer.value.toFixed(3);
+      return "<span class=\"sol-label\">Solution</span>" +
+        "<div class=\"step\">Product rule: f&prime;(x) = " + s.base + "<sup>x</sup>&middot;ln(" + s.base + ")&middot;ln(x) + " + s.base + "<sup>x</sup>&middot;(1/x)</div>" +
+        "<div class=\"step\">At x=" + s.p + ": " + s.base + "<sup>" + s.p + "</sup> = " + Math.pow(s.base, s.p).toFixed(3) + ", ln(" + s.base + ") &asymp; " + Math.log(s.base).toFixed(4) + ", ln(" + s.p + ") &asymp; " + Math.log(s.p).toFixed(4) + "</div>" +
+        "<div class=\"final\">Answer: f&prime;(" + s.p + ") &asymp; " + val + "</div>";
+    }
+  });
+
+  // Outer wrapper functions used to vary Group 2c/5c beyond always being e^{...}
+  var CHAIN_OUTER = {
+    exp: { val: function (u) { return Math.exp(u); }, dval: function (u) { return Math.exp(u); } },
+    sin: { val: function (u) { return Math.sin(u); }, dval: function (u) { return Math.cos(u); } },
+    cos: { val: function (u) { return Math.cos(u); }, dval: function (u) { return -Math.sin(u); } }
+  };
+  function chainOuterDisplay(kind, innerHtml) {
+    return kind === "exp" ? "e<sup>" + innerHtml + "</sup>" : kind + "(" + innerHtml + ")";
+  }
+
+  PARTS.push({
+    id: "2c", group: "2", label: "(c)", points: 4,
+    gen: function () {
+      var outer = randChoice(["exp", "sin", "cos"]);
+      var k = randNonZeroInt(-3, 3);
+      var p = randChoice([0, 0.5, -0.5, 1, -1]);
+      var u = k * Math.tan(p);
+      var uPrime = k / Math.pow(Math.cos(p), 2);
+      var val = CHAIN_OUTER[outer].dval(u) * uPrime;
+      return { outer: outer, k: k, p: p, answer: { type: "number", value: val } };
+    },
+    prompt: function (s) {
+      return "<span class=\"math\">f(x) = " + chainOuterDisplay(s.outer, leadTerm(s.k, "tan(x)")) + "</span>" +
+        "<div style=\"margin-top:8px\">Find f&prime;(" + s.p + "). Give a decimal answer.</div>";
+    },
+    inputsHtml: function (s) { return "<span class=\"field-label\">f&prime;(" + s.p + ") =</span><input type=\"text\" class=\"ans-main\" placeholder=\"e.g. 3.2\">"; },
+    readAnswer: function (card) { return { main: parseAnswer(card.querySelector(".ans-main").value) }; },
+    isCorrect: function (ua, s) { return answersMatch(ua.main, s.answer, 0.05); },
+    solutionHtml: function (s) {
+      var val = s.answer.value.toFixed(3);
+      var innerDeriv = leadTerm(s.k, "sec<sup>2</sup>(x)");
+      var outerDerivLabel = s.outer === "exp" ? chainOuterDisplay("exp", leadTerm(s.k, "tan(x)")) : (s.outer === "sin" ? "cos(" + leadTerm(s.k, "tan(x)") + ")" : "&minus;sin(" + leadTerm(s.k, "tan(x)") + ")");
+      return "<span class=\"sol-label\">Solution</span>" +
+        "<div class=\"step\">Chain rule: f&prime;(x) = " + outerDerivLabel + "&middot;" + innerDeriv + "</div>" +
+        "<div class=\"step\">At x=" + s.p + ": tan(" + s.p + ") &asymp; " + Math.tan(s.p).toFixed(4) + ", sec<sup>2</sup>(" + s.p + ") &asymp; " + (1 / Math.pow(Math.cos(s.p), 2)).toFixed(4) + "</div>" +
+        "<div class=\"final\">Answer: f&prime;(" + s.p + ") &asymp; " + val + "</div>";
+    }
+  });
+
+  PARTS.push({
+    id: "2d", group: "2", label: "(d)", points: 4,
+    gen: function () {
+      var xs = [0, 1, 2, 3, 4];
+      var f = xs.map(function () { return randTableCell(-4, 4); });
+      var g = xs.map(function () { return randTableCell(-4, 4); });
+      var fp = xs.map(function () { return randTableCell(-4, 4); });
+      var gp = xs.map(function () { return randTableCell(-4, 4); });
+      var x0 = randInt(1, 3);
+      var val = fp[x0].value * g[x0].value + f[x0].value * gp[x0].value;
+      return { xs: xs, f: f, g: g, fp: fp, gp: gp, x0: x0, answer: { type: "number", value: val } };
+    },
+    prompt: function (s) {
+      var t = buildTable(
+        ["f(x)", "g(x)", "f&prime;(x)", "g&prime;(x)"],
+        s.xs.map(String),
+        [s.f.map(cellHtml), s.g.map(cellHtml), s.fp.map(cellHtml), s.gp.map(cellHtml)]
+      );
+      return "<div>d/dx[f(x)&middot;g(x)] at x = " + s.x0 + ", given:</div>" + t;
+    },
+    inputsHtml: function (s) { return "<span class=\"field-label\">(f&middot;g)&prime;(" + s.x0 + ") =</span><input type=\"text\" class=\"ans-main\" placeholder=\"e.g. -1.5\">"; },
+    readAnswer: function (card) { return { main: parseAnswer(card.querySelector(".ans-main").value) }; },
+    isCorrect: function (ua, s) { return answersMatch(ua.main, s.answer, 0.02); },
+    solutionHtml: function (s) {
+      var x0 = s.x0;
+      return "<span class=\"sol-label\">Solution</span>" +
+        "<div class=\"step\">Product rule: (f&middot;g)&prime;(" + x0 + ") = f&prime;(" + x0 + ")&middot;g(" + x0 + ") + f(" + x0 + ")&middot;g&prime;(" + x0 + ")</div>" +
+        "<div class=\"step\">= " + cellFactorHtml(s.fp[x0]) + "&middot;" + cellFactorHtml(s.g[x0]) + " + " + cellFactorHtml(s.f[x0]) + "&middot;" + cellFactorHtml(s.gp[x0]) + "</div>" +
+        "<div class=\"final\">Answer: (f&middot;g)&prime;(" + x0 + ") = " + fracStr(Math.round(s.answer.value * 5040), 5040) + " &asymp; " + s.answer.value.toFixed(3) + "</div>";
+    }
+  });
+
+  // ---------- Group 3: tangent line ----------
+  PARTS.push({
+    id: "3", group: "3", label: "", points: 4,
+    gen: function () {
+      var a = randInt(-2, 2);
+      var A = randNonZeroInt(-5, 5);
+      var B = randNonZeroInt(-2, 2);
+      var T = randChoice(["exp", "sin", "cos"]);
+      var g = CHAIN_OUTER[T].val(B * a);
+      var gPrimeAtA = B * CHAIN_OUTER[T].dval(B * a);
+      var fa = A * a + g;
+      var slope = A + gPrimeAtA;
+      var intercept = fa - slope * a;
+      return { a: a, A: A, B: B, T: T, fa: fa, answerSlope: { type: "number", value: slope }, answerIntercept: { type: "number", value: intercept } };
+    },
+    prompt: function (s) {
+      return "<span class=\"math\">f(x) = " + leadTerm(s.A, "x") + " + " + chainOuterDisplay(s.T, leadTerm(s.B, "x")) + "</span>" +
+        "<div style=\"margin-top:8px\">Find the tangent line to f(x) at x = " + s.a + ". Give it in slope-intercept form, y = mx + b, as decimals.</div>";
+    },
+    inputsHtml: function () {
+      return "<span class=\"field-label\">slope (m) =</span><input type=\"text\" class=\"ans-slope\" placeholder=\"e.g. 4.39\">" +
+        "<span class=\"field-label\">y-intercept (b) =</span><input type=\"text\" class=\"ans-intercept\" placeholder=\"e.g. -1.28\">";
+    },
+    readAnswer: function (card) {
+      return { slope: parseAnswer(card.querySelector(".ans-slope").value), intercept: parseAnswer(card.querySelector(".ans-intercept").value) };
+    },
+    isCorrect: function (ua, s) { return answersMatch(ua.slope, s.answerSlope, 0.02) && answersMatch(ua.intercept, s.answerIntercept, 0.02); },
+    solutionHtml: function (s) {
+      var a = s.a, slope = s.answerSlope.value, intercept = s.answerIntercept.value;
+      var derivTermLabel = s.T === "exp" ? chainOuterDisplay("exp", leadTerm(s.B, "x")) : (s.T === "sin" ? "cos(" + leadTerm(s.B, "x") + ")" : "sin(" + leadTerm(s.B, "x") + ")");
+      var derivTermCoef = s.T === "cos" ? -s.B : s.B;
+      return "<span class=\"sol-label\">Solution</span>" +
+        "<div class=\"step\">f&prime;(x) = " + s.A + " " + signedTerm(derivTermCoef, derivTermLabel) + ", so the slope at x=" + a + " is f&prime;(" + a + ") &asymp; " + slope.toFixed(3) + ".</div>" +
+        "<div class=\"step\">The point of tangency is (" + a + ", f(" + a + ")) = (" + a + ", " + s.fa.toFixed(3) + ").</div>" +
+        "<div class=\"step\">Point-slope form: y &minus; " + s.fa.toFixed(3) + " = " + slope.toFixed(3) + "(x &minus; " + a + "). Solving for y gives the intercept " + intercept.toFixed(3) + ".</div>" +
+        "<div class=\"final\">Answer: y = " + slope.toFixed(2) + "x " + (intercept < 0 ? "&minus; " + Math.abs(intercept).toFixed(2) : "+ " + intercept.toFixed(2)) + "</div>";
+    }
+  });
+
+  // ---------- Group 4: chain rule + quotient rule with tables ----------
+  PARTS.push({
+    id: "4a", group: "4", label: "(a)", points: 4,
+    gen: function () {
+      var xs = [0, 1, 2, 3];
+      var kVal = shuffle(xs), hVal = shuffle(xs), gVal = shuffle(xs), fVal = shuffle(xs);
+      var kD = xs.map(function () { return randTableCell(-3, 3); });
+      var hD = xs.map(function () { return randTableCell(-3, 3); });
+      var gD = xs.map(function () { return randTableCell(-3, 3); });
+      var fD = xs.map(function () { return randTableCell(-3, 3); });
+      var x0 = randInt(0, 3);
+      var u = kVal[x0], v = hVal[u], w = gVal[v];
+      var val = fD[w].value * gD[v].value * hD[u].value * kD[x0].value;
+      return { xs: xs, kVal: kVal, hVal: hVal, gVal: gVal, fVal: fVal, kD: kD, hD: hD, gD: gD, fD: fD, x0: x0, u: u, v: v, w: w, answer: { type: "number", value: val } };
+    },
+    prompt: function (s) {
+      var t = buildTable(
+        ["k(x)", "k&prime;(x)", "h(x)", "h&prime;(x)", "g(x)", "g&prime;(x)", "f(x)", "f&prime;(x)"],
+        s.xs.map(String),
+        [s.kVal, s.kD.map(cellHtml), s.hVal, s.hD.map(cellHtml), s.gVal, s.gD.map(cellHtml), s.fVal, s.fD.map(cellHtml)]
+      );
+      return "<div>Given the table of values below (f, g, h, k are all differentiable), find d/dx[f(g(h(k(x))))] at x = " + s.x0 + ".</div>" + t;
+    },
+    inputsHtml: function (s) { return "<span class=\"field-label\">Derivative at x=" + s.x0 + " =</span><input type=\"text\" class=\"ans-main\" placeholder=\"e.g. 2.5\">"; },
+    readAnswer: function (card) { return { main: parseAnswer(card.querySelector(".ans-main").value) }; },
+    isCorrect: function (ua, s) { return answersMatch(ua.main, s.answer, 0.02); },
+    solutionHtml: function (s) {
+      return "<span class=\"sol-label\">Solution</span>" +
+        "<div class=\"step\">Chain rule (four layers deep): d/dx[f(g(h(k(x))))] = f&prime;(g(h(k(x)))) &middot; g&prime;(h(k(x))) &middot; h&prime;(k(x)) &middot; k&prime;(x)</div>" +
+        "<div class=\"step\">At x=" + s.x0 + ": k(" + s.x0 + ")=" + s.u + ", so h(" + s.u + ")=" + s.v + ", so g(" + s.v + ")=" + s.w + ".</div>" +
+        "<div class=\"step\">Multiply the derivatives read off the table at those nested inputs: f&prime;(" + s.w + ")&middot;g&prime;(" + s.v + ")&middot;h&prime;(" + s.u + ")&middot;k&prime;(" + s.x0 + ") = " + cellFactorHtml(s.fD[s.w]) + "&middot;" + cellFactorHtml(s.gD[s.v]) + "&middot;" + cellFactorHtml(s.hD[s.u]) + "&middot;" + cellFactorHtml(s.kD[s.x0]) + "</div>" +
+        "<div class=\"final\">Answer &asymp; " + s.answer.value.toFixed(3) + "</div>";
+    }
+  });
+
+  PARTS.push({
+    id: "4b", group: "4", label: "(b)", points: 4,
+    gen: function () {
+      var xs = [0, 1, 2, 3];
+      var h = xs.map(function () { return randNonZeroInt(-3, 3); });
+      var q = xs.map(function () { return randInt(-3, 3); });
+      var g = xs.map(function (x, i) { return h[i] * q[i]; });
+      var gD = xs.map(function () { return randTableCell(-3, 3); });
+      var hD = xs.map(function () { return randTableCell(-3, 3); });
+      var uVals = q.slice().sort(function (a, b) { return a - b; }).filter(function (v, i, arr) { return arr.indexOf(v) === i; });
+      var fTable = {};
+      uVals.forEach(function (u) { fTable[u] = { f: randTableCell(-4, 4), fp: randTableCell(-4, 4) }; });
+      var x0 = randInt(0, 3);
+      var u0 = q[x0];
+      var quotientDeriv = (gD[x0].value * h[x0] - g[x0] * hD[x0].value) / (h[x0] * h[x0]);
+      var val = fTable[u0].fp.value * quotientDeriv;
+      return { xs: xs, h: h, g: g, gD: gD, hD: hD, uVals: uVals, fTable: fTable, x0: x0, u0: u0, quotientDeriv: quotientDeriv, answer: { type: "number", value: val } };
+    },
+    prompt: function (s) {
+      var t1 = buildTable(
+        ["g(x)", "g&prime;(x)", "h(x)", "h&prime;(x)"],
+        s.xs.map(String),
+        [s.g.map(String), s.gD.map(cellHtml), s.h.map(String), s.hD.map(cellHtml)]
+      );
+      var t2 = buildTable(
+        ["f(u)", "f&prime;(u)"],
+        s.uVals.map(String),
+        [s.uVals.map(function (u) { return cellHtml(s.fTable[u].f); }), s.uVals.map(function (u) { return cellHtml(s.fTable[u].fp); })]
+      );
+      return "<div>Let u = g(x)/h(x). Given the tables below (f, g, h are all differentiable), find d/dx[f(g(x)/h(x))] at x = " + s.x0 + ".</div>" + t1 +
+        "<div style=\"margin-top:4px\">And separately, f as a function of u:</div>" + t2;
+    },
+    inputsHtml: function (s) { return "<span class=\"field-label\">Derivative at x=" + s.x0 + " =</span><input type=\"text\" class=\"ans-main\" placeholder=\"e.g. -0.8\">"; },
+    readAnswer: function (card) { return { main: parseAnswer(card.querySelector(".ans-main").value) }; },
+    isCorrect: function (ua, s) { return answersMatch(ua.main, s.answer, 0.02); },
+    solutionHtml: function (s) {
+      var x0 = s.x0;
+      return "<span class=\"sol-label\">Solution</span>" +
+        "<div class=\"step\">Chain rule: d/dx[f(g(x)/h(x))] = f&prime;(u) &middot; d/dx[g(x)/h(x)], where u = g(" + x0 + ")/h(" + x0 + ") = " + s.g[x0] + "/" + s.h[x0] + " = " + s.u0 + ".</div>" +
+        "<div class=\"step\">Quotient rule: d/dx[g/h] at x=" + x0 + " = [g&prime;(" + x0 + ")h(" + x0 + ") &minus; g(" + x0 + ")h&prime;(" + x0 + ")] / h(" + x0 + ")<sup>2</sup> = [" + cellFactorHtml(s.gD[x0]) + "&middot;" + numFactorHtml(s.h[x0]) + " &minus; " + numFactorHtml(s.g[x0]) + "&middot;" + cellFactorHtml(s.hD[x0]) + "] / " + (s.h[x0] * s.h[x0]) + " &asymp; " + s.quotientDeriv.toFixed(3) + "</div>" +
+        "<div class=\"step\">Multiply by f&prime;(" + s.u0 + ") = " + cellHtml(s.fTable[s.u0].fp) + " from the second table.</div>" +
+        "<div class=\"final\">Answer &asymp; " + s.answer.value.toFixed(3) + "</div>";
+    }
+  });
+
+  // ---------- Group 5: more differentiation rules ----------
+  PARTS.push({
+    id: "5a", group: "5", label: "(a)", points: 4,
+    gen: function () {
+      var A = randNonZeroInt(-4, 4);
+      var p = randChoice([1, 2, 0.5, 1.5, 2.5]);
+      var val = (A * (Math.log(p) + 1) * Math.sin(p) - A * p * Math.log(p) * Math.cos(p)) / Math.pow(Math.sin(p), 2);
+      return { A: A, p: p, answer: { type: "number", value: val } };
+    },
+    prompt: function (s) {
+      return "<span class=\"math\">f(x) = " + frac(leadTerm(s.A, "x&middot;ln(x)"), "sin(x)") + "</span>" +
+        "<div style=\"margin-top:8px\">Find f&prime;(" + s.p + "). Give a decimal answer.</div>";
+    },
+    inputsHtml: function (s) { return "<span class=\"field-label\">f&prime;(" + s.p + ") =</span><input type=\"text\" class=\"ans-main\" placeholder=\"e.g. -2.1\">"; },
+    readAnswer: function (card) { return { main: parseAnswer(card.querySelector(".ans-main").value) }; },
+    isCorrect: function (ua, s) { return answersMatch(ua.main, s.answer, 0.05); },
+    solutionHtml: function (s) {
+      return "<span class=\"sol-label\">Solution</span>" +
+        "<div class=\"step\">Numerator needs the product rule first: d/dx[" + leadTerm(s.A, "x&middot;ln(x)") + "] = " + leadTerm(s.A, "(ln(x) + 1)") + ".</div>" +
+        "<div class=\"step\">Then the quotient rule: f&prime;(x) = [" + leadTerm(s.A, "(ln(x)+1)") + "&middot;sin(x) &minus; " + leadTerm(s.A, "x&middot;ln(x)") + "&middot;cos(x)] / sin<sup>2</sup>(x)</div>" +
+        "<div class=\"final\">Answer: f&prime;(" + s.p + ") &asymp; " + s.answer.value.toFixed(3) + "</div>";
+    }
+  });
+
+  PARTS.push({
+    id: "5b", group: "5", label: "(b)", points: 4,
+    gen: function () {
+      var trig = randChoice(["sin", "cos"]);
+      var b = randChoice([2, 3, 4, 5]);
+      var p = randChoice([1, 2, 3, 4, 5]);
+      var u = Math.log(p) / Math.log(b);
+      var trigVal = trig === "sin" ? Math.sin(u) : Math.cos(u);
+      var trigDeriv = trig === "sin" ? Math.cos(u) : -Math.sin(u);
+      var val = 3 * trigVal * trigVal * trigDeriv / (p * Math.log(b));
+      return { trig: trig, b: b, p: p, answer: { type: "number", value: val } };
+    },
+    prompt: function (s) {
+      return "<span class=\"math\">f(x) = " + s.trig + "<sup>3</sup>(log<sub>" + s.b + "</sub>(x))</span>" +
+        "<div style=\"margin-top:8px\">Find f&prime;(" + s.p + "). Give a decimal answer.</div>";
+    },
+    inputsHtml: function (s) { return "<span class=\"field-label\">f&prime;(" + s.p + ") =</span><input type=\"text\" class=\"ans-main\" placeholder=\"e.g. 0.15\">"; },
+    readAnswer: function (card) { return { main: parseAnswer(card.querySelector(".ans-main").value) }; },
+    isCorrect: function (ua, s) { return answersMatch(ua.main, s.answer, 0.05); },
+    solutionHtml: function (s) {
+      var u = (Math.log(s.p) / Math.log(s.b)).toFixed(4);
+      var innerDerivLabel = s.trig === "sin" ? "cos(u)" : "&minus;sin(u)";
+      return "<span class=\"sol-label\">Solution</span>" +
+        "<div class=\"step\">Let u = log<sub>" + s.b + "</sub>(x) = ln(x)/ln(" + s.b + "), so u&prime; = 1/(x&middot;ln(" + s.b + ")).</div>" +
+        "<div class=\"step\">f = " + s.trig + "<sup>3</sup>(u), so by the chain rule (twice): f&prime; = 3" + s.trig + "<sup>2</sup>(u)&middot;" + innerDerivLabel + "&middot;u&prime;.</div>" +
+        "<div class=\"step\">At x=" + s.p + ": u &asymp; " + u + ", u&prime; &asymp; " + (1 / (s.p * Math.log(s.b))).toFixed(4) + "</div>" +
+        "<div class=\"final\">Answer: f&prime;(" + s.p + ") &asymp; " + s.answer.value.toFixed(3) + "</div>";
+    }
+  });
+
+  PARTS.push({
+    id: "5c", group: "5", label: "(c)", points: 4,
+    gen: function () {
+      var A = randNonZeroInt(-3, 3);
+      var B = randNonZeroInt(-3, 3);
+      var G = randChoice(["exp", "sin", "cos"]);
+      var p = randChoice([-1.5, -1, -0.5, 0.5, 1, 1.5]);
+      var gVal = CHAIN_OUTER[G].val(B * p);
+      var gDeriv = B * CHAIN_OUTER[G].dval(B * p);
+      var val = (-2 * A * p * Math.sin(A * p * p)) * gVal + Math.cos(A * p * p) * gDeriv;
+      return { A: A, B: B, G: G, p: p, answer: { type: "number", value: val } };
+    },
+    prompt: function (s) {
+      return "<span class=\"math\">f(x) = cos(" + leadTerm(s.A, "x<sup>2</sup>") + ")&middot;" + chainOuterDisplay(s.G, leadTerm(s.B, "x")) + "</span>" +
+        "<div style=\"margin-top:8px\">Find f&prime;(" + s.p + "). Give a decimal answer.</div>";
+    },
+    inputsHtml: function (s) { return "<span class=\"field-label\">f&prime;(" + s.p + ") =</span><input type=\"text\" class=\"ans-main\" placeholder=\"e.g. 4.6\">"; },
+    readAnswer: function (card) { return { main: parseAnswer(card.querySelector(".ans-main").value) }; },
+    isCorrect: function (ua, s) { return answersMatch(ua.main, s.answer, 0.05); },
+    solutionHtml: function (s) {
+      var secondFactorDisplay = chainOuterDisplay(s.G, leadTerm(s.B, "x"));
+      var secondFactorDerivLabel = s.G === "exp" ? chainOuterDisplay("exp", leadTerm(s.B, "x")) : (s.G === "sin" ? "cos(" + leadTerm(s.B, "x") + ")" : "sin(" + leadTerm(s.B, "x") + ")");
+      var secondFactorDerivCoef = s.G === "cos" ? -s.B : s.B;
+      return "<span class=\"sol-label\">Solution</span>" +
+        "<div class=\"step\">Product rule (with the chain rule inside each factor): f&prime;(x) = " + leadTerm(-2 * s.A, "x&middot;sin(" + leadTerm(s.A, "x<sup>2</sup>") + ")") + "&middot;" + secondFactorDisplay + " + cos(" + leadTerm(s.A, "x<sup>2</sup>") + ")&middot;" + coefFactorHtml(secondFactorDerivCoef, secondFactorDerivLabel) + "</div>" +
+        "<div class=\"final\">Answer: f&prime;(" + s.p + ") &asymp; " + s.answer.value.toFixed(3) + "</div>";
+    }
+  });
+
+  // ============================================================
+  // Group metadata
+  // ============================================================
+  var GROUP_META = {
+    "1": { num: "1.", desc: "Give an example of a function with the stated derivative. Type any valid answer as a function of x — it's graded by differentiating your answer, not by matching one specific form." },
+    "2": { num: "2.", desc: "Find the derivative using the differentiation rules." },
+    "3": { num: "3.", desc: "Find the equation of the tangent line." },
+    "4": { num: "4.", desc: "Use the chain rule (and quotient rule) together, reading function values and derivatives off a table." },
+    "5": { num: "5.", desc: "Find the derivative using the differentiation rules." }
+  };
+
+  // ============================================================
+  // Engine: mount cards
+  // ============================================================
+  var scoreMap = {};
+  var TOTAL_POINTS = PARTS.reduce(function (sum, p) { return sum + p.points; }, 0);
+  var scoreNumEl = document.getElementById("scoreNum");
+
+  function updateScore() {
+    var earned = 0;
+    Object.keys(scoreMap).forEach(function (k) { earned += scoreMap[k]; });
+    scoreNumEl.textContent = earned + " / " + TOTAL_POINTS;
+  }
+
+  var examScoreMap = {};
+  var examScoreNumEl = document.getElementById("examScoreNum");
+
+  function updateExamScore() {
+    var earned = 0;
+    Object.keys(examScoreMap).forEach(function (k) { earned += examScoreMap[k]; });
+    examScoreNumEl.textContent = earned + " / " + TOTAL_POINTS;
+  }
+
+  window.__PT_STATE = {};
+
+  function mountCard(part, container) {
+    var card = document.createElement("div");
+    card.className = "qcard";
+    card.setAttribute("data-id", part.id);
+
+    var headHtml = "<div class=\"qcard-head\"><div class=\"qtitle\">" +
+      (part.label ? "<span class=\"qlabel\">" + part.label + "</span>" : "") +
+      "<span class=\"qpoints\">" + part.points + " pt" + (part.points === 1 ? "" : "s") + "</span>" +
+      "<span class=\"exam-badge hidden\"></span></div>" +
+      "<button class=\"icon-btn new-version-btn\" type=\"button\">" +
+      "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M16 3h5v5\"/><path d=\"M4 20 21 3\"/><path d=\"M21 16v5h-5\"/><path d=\"M15 15l6 6\"/><path d=\"M4 4l5 5\"/></svg>" +
+      "New version</button></div>";
+
+    card.innerHTML = headHtml +
+      "<div class=\"qprompt\"></div>" +
+      (part.hasGraph ? "<div class=\"qgraph-wrap" + (part.graphSmall ? " small" : "") + "\"><canvas></canvas></div>" : "") +
+      "<div class=\"qinputs\"></div>" +
+      "<div class=\"qactions\"><button class=\"btn-primary check-btn\" type=\"button\">Check Answer</button><button class=\"btn-secondary solution-btn\" type=\"button\">Show Solution</button></div>" +
+      "<div class=\"qfeedback hidden\"></div>" +
+      "<div class=\"qsolution hidden\"></div>";
+
+    container.appendChild(card);
+
+    var promptEl = card.querySelector(".qprompt");
+    var inputsEl = card.querySelector(".qinputs");
+    var feedbackEl = card.querySelector(".qfeedback");
+    var solutionEl = card.querySelector(".qsolution");
+    var examBadgeEl = card.querySelector(".exam-badge");
+    var canvasEl = part.hasGraph ? card.querySelector("canvas") : null;
+
+    var state;
+    var examAttempted = false;
+
+    function lockExam(pts, note) {
+      if (examAttempted) return;
+      examAttempted = true;
+      examScoreMap[part.id] = pts;
+      examBadgeEl.className = "exam-badge " + (pts >= part.points ? "exam-good" : "exam-bad");
+      examBadgeEl.innerHTML = "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"4\" y=\"10\" width=\"16\" height=\"10\" rx=\"2\"/><path d=\"M8 10V7a4 4 0 0 1 8 0v3\"/></svg> Exam: " + pts + "/" + part.points + (note ? " (" + note + ")" : "");
+      updateExamScore();
+    }
+
+    function render() {
+      state = part.gen();
+      window.__PT_STATE[part.id] = state;
+      promptEl.innerHTML = part.prompt(state);
+      inputsEl.innerHTML = part.inputsHtml(state, part.id);
+      feedbackEl.classList.add("hidden");
+      feedbackEl.innerHTML = "";
+      solutionEl.classList.add("hidden");
+      solutionEl.innerHTML = "";
+      scoreMap[part.id] = 0;
+      updateScore();
+      if (part.afterRender) part.afterRender(card);
+      if (part.hasGraph) part.drawGraph(canvasEl, state);
+    }
+
+    card.querySelector(".new-version-btn").addEventListener("click", render);
+    card.querySelector(".check-btn").addEventListener("click", function () {
+      var ua = part.readAnswer(card);
+      var correct = part.isCorrect(ua, state);
+      feedbackEl.classList.remove("hidden");
+      if (correct) {
+        feedbackEl.className = "qfeedback good";
+        feedbackEl.innerHTML = "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M20 6 9 17l-5-5\"/></svg> Correct!";
+        scoreMap[part.id] = part.points;
+      } else {
+        feedbackEl.className = "qfeedback bad";
+        feedbackEl.innerHTML = "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\"><circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M15 9l-6 6M9 9l6 6\"/></svg> Not quite — check the solution below.";
+        scoreMap[part.id] = 0;
+      }
+      updateScore();
+      lockExam(correct ? part.points : 0);
+    });
+    card.querySelector(".solution-btn").addEventListener("click", function () {
+      solutionEl.innerHTML = part.solutionHtml(state);
+      solutionEl.classList.remove("hidden");
+      lockExam(0, "viewed solution");
+    });
+
+    if (part.hasGraph) {
+      window.addEventListener("resize", function () { if (state) part.drawGraph(canvasEl, state); });
+    }
+
+    render();
+  }
+
+  function buildAll() {
+    var groupsEl = document.getElementById("groups");
+    groupsEl.innerHTML = "";
+    scoreMap = {};
+    examScoreMap = {};
+    var seenGroups = {};
+    var currentContainer = null;
+    PARTS.forEach(function (part) {
+      if (!seenGroups[part.group]) {
+        seenGroups[part.group] = true;
+        var meta = GROUP_META[part.group];
+        var gh = document.createElement("div");
+        gh.className = "group-head";
+        gh.innerHTML = "<div class=\"gnum\">" + meta.num + "</div><div class=\"gdesc\">" + meta.desc + "</div>";
+        groupsEl.appendChild(gh);
+        currentContainer = document.createElement("div");
+        groupsEl.appendChild(currentContainer);
+      }
+      mountCard(part, currentContainer);
+    });
+    updateScore();
+    updateExamScore();
+  }
+
+  document.getElementById("newTestBtn").addEventListener("click", buildAll);
+
+  buildAll();
+})();
+</script>
