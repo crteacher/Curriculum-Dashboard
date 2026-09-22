@@ -34,6 +34,8 @@
   .card-body{padding:14px 16px}
   .card-meta{font-family:sans-serif;font-size:12px;color:#888;margin-bottom:4px}
   .card-expr{font-size:17px;margin-bottom:12px;line-height:2.2;overflow-x:auto}
+  .card-expr svg{max-width:100%;height:auto}
+  .card-question{font-family:sans-serif;font-size:14px;font-weight:700;color:#1e3a5c;margin-bottom:10px}
   .katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}
   .input-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
   .ans-input{font-family:'Courier New',monospace;font-size:14px;border:1px solid #ccc;
@@ -57,9 +59,6 @@
   .revealed-answer{display:none;margin-top:8px;font-family:sans-serif;font-size:13px;
     color:#444;background:#f5f3ef;border-radius:6px;padding:8px 11px;line-height:1.8;overflow-x:auto}
   code{font-family:'Courier New',monospace;background:#f0ede7;padding:1px 5px;border-radius:3px;font-size:12px}
-
-
-.hint{display:none!important}
 </style>
 </head>
 <body>
@@ -83,9 +82,9 @@
     <br>Both intercepts are written as <em>ordered pairs</em>, e.g. $(0,5)$ or $(-3,0)$.
   </div>
   <div class="concept">
-    <span class="concept-label">Standard form</span>
-    $Ax + By = C$ &nbsp;→&nbsp; rewrite as $y = -\dfrac{A}{B}x + \dfrac{C}{B}$ to read off slope and y-intercept.
-    <br>For the x-intercept, set $y=0$: &nbsp; $x = \dfrac{C}{A}$.
+    <span class="concept-label">Special lines &amp; intersections</span>
+    $x=a$ is vertical (undefined slope); $y=b$ is horizontal (slope $0$).
+    <br>Two lines <strong>intersect</strong> at the one point that lies on both — parallel lines never meet; perpendicular lines cross at $90°$.
   </div>
 
   </div>
@@ -93,7 +92,7 @@
   <div class="section">
     <div class="section-title">Practice Problems</div>
     <p style="font-family:sans-serif;font-size:13px;color:#666;margin-bottom:1rem;">
-      Enter intercepts as ordered pairs, e.g. <code>(0,5)</code> or <code>(-3,0)</code>; slopes as integers; parallel as <code>yes</code>/<code>no</code>.
+      Read each graph and enter your answer. Intercepts and the intersection point are ordered pairs, e.g. <code>(0,5)</code>; equations of horizontal/vertical lines look like <code>y=4</code> or <code>x=-2</code>; slopes are integers; yes/no questions take <code>yes</code> or <code>no</code>.
       Press <strong>Check</strong> or hit Enter.
     </p>
     <div class="score-bar">
@@ -139,162 +138,336 @@ function addT(n, v) {
 
 // ── Problem generators (section-specific, injected below) ─────────────────────
 
+// Shared graph-drawing helper. f: JS function of x. Draws a numbered coordinate
+// grid + curve from actual sampled values, so the picture and the computed
+// answer always agree. No points are labeled on the graph -- read values
+// straight off the grid, the way you would on paper.
+// opts.yRange: [yMin,yMax] to force a fixed vertical range instead of
+// auto-fitting to the sampled curve (needed for flat/steep special cases
+// like horizontal lines, where auto-fit would squash the grid).
+function graphSVG(f,xMin,xMax,opts){
+  opts=opts||{};
+  xMin=Math.floor(xMin); xMax=Math.ceil(xMax);
+  const W=480,H=300,padL=32,padR=14,padT=14,padB=26;
+  const plotW=W-padL-padR, plotH=H-padT-padB, n=60;
+  const pts=[]; let yMin=Infinity,yMax=-Infinity;
+  for(let i=0;i<=n;i++){
+    const x=xMin+(xMax-xMin)*i/n, y=f(x);
+    pts.push([x,y]);
+    if(y<yMin)yMin=y; if(y>yMax)yMax=y;
+  }
+  if(opts.yRange){
+    yMin=opts.yRange[0]; yMax=opts.yRange[1];
+  } else {
+    const yPad=Math.max((yMax-yMin)*0.15,0.8);
+    yMin=Math.floor(yMin-yPad); yMax=Math.ceil(yMax+yPad);
+  }
+  const sx=plotW/(xMax-xMin), sy=plotH/(yMax-yMin);
+  const px=x=>padL+(x-xMin)*sx, py=y=>padT+(yMax-y)*sy;
+  const axisY=Math.max(padT,Math.min(H-padB,py(0)));
+  const axisX=Math.max(padL,Math.min(W-padR,px(0)));
+  function niceStep(range){ if(range<=12) return 1; if(range<=24) return 2; return 5; }
+  const xStep=niceStep(xMax-xMin), yStep=niceStep(yMax-yMin);
+
+  let svg=`<svg width="480" height="300" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">`;
+  svg+=`<rect width="${W}" height="${H}" fill="#fcfcfb" rx="6"/>`;
+  for(let gx=Math.ceil(xMin/xStep)*xStep; gx<=xMax; gx+=xStep){
+    const X=px(gx).toFixed(1);
+    svg+=`<line x1="${X}" y1="${padT}" x2="${X}" y2="${H-padB}" stroke="#ececea" stroke-width="1"/>`;
+  }
+  for(let gy=Math.ceil(yMin/yStep)*yStep; gy<=yMax; gy+=yStep){
+    const Y=py(gy).toFixed(1);
+    svg+=`<line x1="${padL}" y1="${Y}" x2="${W-padR}" y2="${Y}" stroke="#ececea" stroke-width="1"/>`;
+  }
+  svg+=`<line x1="${padL}" y1="${axisY}" x2="${W-padR}" y2="${axisY}" stroke="#999" stroke-width="1.3"/>`;
+  svg+=`<line x1="${axisX}" y1="${padT}" x2="${axisX}" y2="${H-padB}" stroke="#999" stroke-width="1.3"/>`;
+  for(let gx=Math.ceil(xMin/xStep)*xStep; gx<=xMax; gx+=xStep){
+    if(gx===0) continue;
+    const X=px(gx).toFixed(1);
+    svg+=`<text x="${X}" y="${H-padB+11}" font-size="9" font-family="sans-serif" fill="#999" text-anchor="middle">${gx}</text>`;
+  }
+  for(let gy=Math.ceil(yMin/yStep)*yStep; gy<=yMax; gy+=yStep){
+    if(gy===0) continue;
+    const Y=py(gy).toFixed(1);
+    svg+=`<text x="${padL-5}" y="${(parseFloat(Y)+3).toFixed(1)}" font-size="9" font-family="sans-serif" fill="#999" text-anchor="end">${gy}</text>`;
+  }
+  if(opts.title){
+    svg+=`<text x="${padL}" y="11" font-size="10.5" font-family="sans-serif" fill="#555" font-weight="bold">${opts.title}</text>`;
+  }
+  const poly=pts.map(p=>px(p[0]).toFixed(1)+','+py(p[1]).toFixed(1)).join(' ');
+  svg+=`<polyline points="${poly}" fill="none" stroke="#1e3a5c" stroke-width="2.4" stroke-linejoin="round"/>`;
+  svg+='</svg>';
+  return svg;
+}
+
+// Vertical line x = h (graphSVG can't represent this -- it only plots y=f(x)).
+function vertGraphSVG(h,opts){
+  opts=opts||{};
+  const xMin=h-4, xMax=h+4, yMin=-4, yMax=4;
+  const W=480,H=300,padL=32,padR=14,padT=14,padB=26;
+  const plotW=W-padL-padR, plotH=H-padT-padB;
+  const sx=plotW/(xMax-xMin), sy=plotH/(yMax-yMin);
+  const px=x=>padL+(x-xMin)*sx, py=y=>padT+(yMax-y)*sy;
+  const axisY=Math.max(padT,Math.min(H-padB,py(0)));
+  const axisX=Math.max(padL,Math.min(W-padR,px(0)));
+  const xStep=1, yStep=1;
+  let svg=`<svg width="480" height="300" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">`;
+  svg+=`<rect width="${W}" height="${H}" fill="#fcfcfb" rx="6"/>`;
+  for(let gx=Math.ceil(xMin/xStep)*xStep; gx<=xMax; gx+=xStep){
+    const X=px(gx).toFixed(1);
+    svg+=`<line x1="${X}" y1="${padT}" x2="${X}" y2="${H-padB}" stroke="#ececea" stroke-width="1"/>`;
+  }
+  for(let gy=Math.ceil(yMin/yStep)*yStep; gy<=yMax; gy+=yStep){
+    const Y=py(gy).toFixed(1);
+    svg+=`<line x1="${padL}" y1="${Y}" x2="${W-padR}" y2="${Y}" stroke="#ececea" stroke-width="1"/>`;
+  }
+  svg+=`<line x1="${padL}" y1="${axisY}" x2="${W-padR}" y2="${axisY}" stroke="#999" stroke-width="1.3"/>`;
+  svg+=`<line x1="${axisX}" y1="${padT}" x2="${axisX}" y2="${H-padB}" stroke="#999" stroke-width="1.3"/>`;
+  for(let gx=Math.ceil(xMin/xStep)*xStep; gx<=xMax; gx+=xStep){
+    if(gx===0) continue;
+    const X=px(gx).toFixed(1);
+    svg+=`<text x="${X}" y="${H-padB+11}" font-size="9" font-family="sans-serif" fill="#999" text-anchor="middle">${gx}</text>`;
+  }
+  for(let gy=Math.ceil(yMin/yStep)*yStep; gy<=yMax; gy+=yStep){
+    if(gy===0) continue;
+    const Y=py(gy).toFixed(1);
+    svg+=`<text x="${padL-5}" y="${(parseFloat(Y)+3).toFixed(1)}" font-size="9" font-family="sans-serif" fill="#999" text-anchor="end">${gy}</text>`;
+  }
+  if(opts.title){
+    svg+=`<text x="${padL}" y="11" font-size="10.5" font-family="sans-serif" fill="#555" font-weight="bold">${opts.title}</text>`;
+  }
+  const X=px(h).toFixed(1);
+  svg+=`<line x1="${X}" y1="${padT}" x2="${X}" y2="${H-padB}" stroke="#1e3a5c" stroke-width="2.4" stroke-linejoin="round"/>`;
+  svg+='</svg>';
+  return svg;
+}
+
+// Two lines on one grid (navy + gold, matching the course palette) -- for
+// parallel/perpendicular reads and for reading an intersection point.
+function twoLineGraphSVG(f1,f2,xMin,xMax,opts){
+  opts=opts||{};
+  xMin=Math.floor(xMin); xMax=Math.ceil(xMax);
+  const W=480,H=300,padL=32,padR=14,padT=14,padB=26;
+  const plotW=W-padL-padR, plotH=H-padT-padB, n=60;
+  const pts1=[],pts2=[]; let yMin=Infinity,yMax=-Infinity;
+  for(let i=0;i<=n;i++){
+    const x=xMin+(xMax-xMin)*i/n;
+    const y1=f1(x), y2=f2(x);
+    pts1.push([x,y1]); pts2.push([x,y2]);
+    if(y1<yMin)yMin=y1; if(y1>yMax)yMax=y1;
+    if(y2<yMin)yMin=y2; if(y2>yMax)yMax=y2;
+  }
+  const yPad=Math.max((yMax-yMin)*0.15,0.8);
+  yMin=Math.floor(yMin-yPad); yMax=Math.ceil(yMax+yPad);
+  const sx=plotW/(xMax-xMin), sy=plotH/(yMax-yMin);
+  const px=x=>padL+(x-xMin)*sx, py=y=>padT+(yMax-y)*sy;
+  const axisY=Math.max(padT,Math.min(H-padB,py(0)));
+  const axisX=Math.max(padL,Math.min(W-padR,px(0)));
+  function niceStep(range){ if(range<=12) return 1; if(range<=24) return 2; return 5; }
+  const xStep=niceStep(xMax-xMin), yStep=niceStep(yMax-yMin);
+
+  let svg=`<svg width="480" height="300" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">`;
+  svg+=`<rect width="${W}" height="${H}" fill="#fcfcfb" rx="6"/>`;
+  for(let gx=Math.ceil(xMin/xStep)*xStep; gx<=xMax; gx+=xStep){
+    const X=px(gx).toFixed(1);
+    svg+=`<line x1="${X}" y1="${padT}" x2="${X}" y2="${H-padB}" stroke="#ececea" stroke-width="1"/>`;
+  }
+  for(let gy=Math.ceil(yMin/yStep)*yStep; gy<=yMax; gy+=yStep){
+    const Y=py(gy).toFixed(1);
+    svg+=`<line x1="${padL}" y1="${Y}" x2="${W-padR}" y2="${Y}" stroke="#ececea" stroke-width="1"/>`;
+  }
+  svg+=`<line x1="${padL}" y1="${axisY}" x2="${W-padR}" y2="${axisY}" stroke="#999" stroke-width="1.3"/>`;
+  svg+=`<line x1="${axisX}" y1="${padT}" x2="${axisX}" y2="${H-padB}" stroke="#999" stroke-width="1.3"/>`;
+  for(let gx=Math.ceil(xMin/xStep)*xStep; gx<=xMax; gx+=xStep){
+    if(gx===0) continue;
+    const X=px(gx).toFixed(1);
+    svg+=`<text x="${X}" y="${H-padB+11}" font-size="9" font-family="sans-serif" fill="#999" text-anchor="middle">${gx}</text>`;
+  }
+  for(let gy=Math.ceil(yMin/yStep)*yStep; gy<=yMax; gy+=yStep){
+    if(gy===0) continue;
+    const Y=py(gy).toFixed(1);
+    svg+=`<text x="${padL-5}" y="${(parseFloat(Y)+3).toFixed(1)}" font-size="9" font-family="sans-serif" fill="#999" text-anchor="end">${gy}</text>`;
+  }
+  if(opts.title){
+    svg+=`<text x="${padL}" y="11" font-size="10.5" font-family="sans-serif" fill="#555" font-weight="bold">${opts.title}</text>`;
+  }
+  const poly1=pts1.map(p=>px(p[0]).toFixed(1)+','+py(p[1]).toFixed(1)).join(' ');
+  const poly2=pts2.map(p=>px(p[0]).toFixed(1)+','+py(p[1]).toFixed(1)).join(' ');
+  svg+=`<polyline points="${poly1}" fill="none" stroke="#1e3a5c" stroke-width="2.4" stroke-linejoin="round"/>`;
+  svg+=`<polyline points="${poly2}" fill="none" stroke="#7a5c1e" stroke-width="2.4" stroke-linejoin="round"/>`;
+  svg+='</svg>';
+  return svg;
+}
+
 function gen1(){
-  // Read slope from y = mx + b
-  const m = choose([-4,-3,-2,-1,1,2,3,4]);
-  const b = choose([-5,-4,-3,-2,-1,0,1,2,3,4,5]);
-  const bS = b !== 0 ? (b > 0 ? `+${b}` : `${b}`) : '';
-  return {
-    latex: `y=${fc(m)}x${bS}.\\quad\\text{Slope }m=`,
-    answer: [String(m)],
-    hint: 'In slope-intercept form, which symbol represents the steepness of the line?',
-    step: `\\text{Slope-intercept form }y=mx+b:\\quad m=${m}`
+  // Read slope from a graphed line.
+  const m=choose([-4,-3,-2,-1,1,2,3,4]);
+  const b=choose([-5,-4,-3,-2,-1,0,1,2,3,4,5]);
+  const f=x=>m*x+b;
+  const svg=graphSVG(f,-5,5);
+  return{
+    svg:svg,
+    q:'What is the slope of this line?',
+    answer:[String(m)],
+    hint:'Pick two grid points the line passes through — what ratio of rise to run connects them?',
+    step:`\\text{Two grid points on the line give }m=\\dfrac{\\text{rise}}{\\text{run}}=${m}`
   };
 }
 
 function gen2(){
-  // y-intercept as ordered pair (0, b) from y = mx + b
-  const m = choose([-3,-2,-1,1,2,3]);
-  const b = choose([-5,-4,-3,-2,-1,0,1,2,3,4,5]);
-  const bS = b !== 0 ? (b > 0 ? `+${b}` : `${b}`) : '';
-  return {
-    latex: `y=${fc(m)}x${bS}.\\quad\\text{y-intercept}=`,
-    answer: [`(0,${b})`, `(0, ${b})`],
-    hint: 'What coordinates describe any point on the y-axis?',
-    step: `\\text{Set }x=0:\\quad y=${b}.\\quad\\text{y-intercept}=(0,${b})`
+  // Read y-intercept as an ordered pair.
+  const m=choose([-3,-2,-1,1,2,3]);
+  const b=choose([-5,-4,-3,-2,-1,0,1,2,3,4,5]);
+  const f=x=>m*x+b;
+  const svg=graphSVG(f,-5,5);
+  return{
+    svg:svg,
+    q:'What is the y-intercept of this line? Give it as an ordered pair.',
+    answer:[`(0,${b})`,`(0, ${b})`],
+    hint:'Where does the line cross the vertical axis on the grid?',
+    step:`\\text{The line crosses the y-axis at }y=${b}\\Rightarrow(0,${b})`
   };
 }
 
 function gen3(){
-  // x-intercept as ordered pair (a, 0) from y = mx + b
-  // Guarantee integer: pick m and k (the x-intercept), then b = -m*k
-  const m = choose([-3,-2,-1,1,2,3]);
-  const k = choose([-4,-3,-2,-1,1,2,3,4]); // x-intercept (avoid 0 so it's interesting)
-  const b = -m * k;
-  const bS = b !== 0 ? (b > 0 ? `+${b}` : `${b}`) : '';
-  return {
-    latex: `y=${fc(m)}x${bS}.\\quad\\text{x-intercept}=`,
-    answer: [`(${k},0)`, `(${k}, 0)`],
-    hint: 'What coordinates does every point on the x-axis share?',
-    step: `\\text{Set }y=0:\\quad 0=${m}x${bS},\\quad x=${k}.\\quad\\text{x-intercept}=(${k},0)`
+  // Read x-intercept as an ordered pair. Choose m and k (the x-intercept)
+  // so b works out to an integer and the point sits cleanly on the grid.
+  const m=choose([-3,-2,-1,1,2,3]);
+  const k=choose([-4,-3,-2,-1,1,2,3,4]);
+  const b=-m*k;
+  const f=x=>m*x+b;
+  const svg=graphSVG(f,Math.min(-5,k-3),Math.max(5,k+3));
+  return{
+    svg:svg,
+    q:'What is the x-intercept of this line? Give it as an ordered pair.',
+    answer:[`(${k},0)`,`(${k}, 0)`],
+    hint:'Where does the line cross the horizontal axis on the grid?',
+    step:`\\text{The line crosses the x-axis at }x=${k}\\Rightarrow(${k},0)`
   };
 }
 
 function gen4(){
-  // Evaluate y = mx + b at x = a — basic point-on-line check
-  const m = choose([-3,-2,-1,1,2,3]);
-  const b = choose([-5,-4,-3,-2,-1,0,1,2,3,4,5]);
-  const a = choose([-3,-2,-1,0,1,2,3]);
-  const y = m * a + b;
-  const bS = b !== 0 ? (b > 0 ? `+${b}` : `${b}`) : '';
-  return {
-    latex: `y=${fc(m)}x${bS}.\\quad\\text{Find }y\\text{ when }x=${a}.`,
-    answer: [String(y)],
-    hint: 'What does a linear equation output when you know the value of x?',
-    step: `y=${m}(${a})${b !== 0 ? addT(b,'') : ''}=${y}`
+  // Evaluate y at a given x, read straight off the plotted line.
+  const m=choose([-3,-2,-1,1,2,3]);
+  const b=choose([-4,-3,-2,-1,0,1,2,3,4]);
+  const a=choose([-3,-2,-1,1,2,3]);
+  const y=m*a+b;
+  const f=x=>m*x+b;
+  const svg=graphSVG(f,-5,5,{title:`Find y when x = ${a}`});
+  return{
+    svg:svg,
+    q:`What is y when x = ${a}?`,
+    answer:[String(y)],
+    hint:'Trace up or down from that x-value on the grid until you hit the line — what height do you land on?',
+    step:`\\text{At }x=${a}\\text{, the line has height }y=${y}`
   };
 }
 
 function gen5(){
-  // Standard form Ax + By = C → slope (integer)
-  const m = choose([-3,-2,-1,1,2,3]);
-  const b = choose([-5,-4,-3,-1,0,1,3,5]);
-  let latex_eq;
-  if (m > 0) {
-    const Aterm = m === 1 ? 'x' : `${m}x`;
-    latex_eq = `${Aterm} - y = ${-b}`;
-  } else {
-    const A = -m;
-    const Aterm = A === 1 ? 'x' : `${A}x`;
-    latex_eq = `${Aterm} + y = ${b}`;
-  }
-  const bS = b !== 0 ? addT(b,'') : '';
-  return {
-    latex: `\\text{Find slope: }${latex_eq}`,
-    answer: [String(m)],
-    hint: 'Which form of a line equation makes slope easiest to read directly?',
-    step: `y=${fc(m)}x${bS},\\quad m=${m}`
+  // Horizontal line -> equation.
+  const k=choose([-4,-3,-2,-1,1,2,3,4]);
+  const svg=graphSVG(x=>k,-5,5,{yRange:[-5,5]});
+  return{
+    svg:svg,
+    q:'What is the equation of this horizontal line?',
+    answer:[`y=${k}`],
+    hint:'A horizontal line has the same height everywhere — what single y-value does this one sit at?',
+    step:`\\text{Every point on this line has }y=${k}\\Rightarrow y=${k}`
   };
 }
 
 function gen6(){
-  // y-intercept as ordered pair from standard form Ax + By = C
-  // Use B=1: -mx + y = b → y-intercept is (0, b)
-  const m = choose([-3,-2,-1,1,2,3]);
-  const b = choose([-5,-4,-3,-2,-1,0,1,2,3,4,5]);
-  let latex_eq;
-  if (m > 0) {
-    const Aterm = m === 1 ? 'x' : `${m}x`;
-    latex_eq = `${Aterm} - y = ${-b}`;
-  } else {
-    const A = -m;
-    const Aterm = A === 1 ? 'x' : `${A}x`;
-    latex_eq = `${Aterm} + y = ${b}`;
-  }
-  return {
-    latex: `\\text{y-intercept of }${latex_eq}\\text{ ?}`,
-    answer: [`(0,${b})`, `(0, ${b})`],
-    hint: 'What coordinates describe the point where a line crosses the y-axis?',
-    step: `y=${fc(m)}x${b !== 0 ? addT(b,'') : ''},\\text{ so y-intercept}=(0,${b})`
+  // Vertical line -> equation.
+  const h=choose([-4,-3,-2,-1,1,2,3,4]);
+  const svg=vertGraphSVG(h,{});
+  return{
+    svg:svg,
+    q:'What is the equation of this vertical line?',
+    answer:[`x=${h}`],
+    hint:'A vertical line has the same x-value everywhere — what single x-value does this one sit at?',
+    step:`\\text{Every point on this line has }x=${h}\\Rightarrow x=${h}`
   };
 }
 
 function gen7(){
-  // x-intercept as ordered pair from standard form
-  // y=mx+b → x-int at k where b=-m*k, so equation has nice x-intercept
-  const m = choose([-3,-2,-1,1,2,3]);
-  const k = choose([-4,-3,-2,-1,1,2,3,4]);
-  const b = -m * k;
-  let latex_eq;
-  if (m > 0) {
-    const Aterm = m === 1 ? 'x' : `${m}x`;
-    latex_eq = `${Aterm} - y = ${-b}`;
+  // Two graphed lines -- parallel? (yes/no)
+  const m1=choose([-3,-2,-1,1,2,3]);
+  const b1=choose([-4,-3,-2,-1,0,1,2,3,4]);
+  const isParallel=choose([true,false]);
+  let m2,b2;
+  if(isParallel){
+    m2=m1;
+    b2=b1+choose([-4,-3,-2,-1,1,2,3,4]);
   } else {
-    const A = -m;
-    const Aterm = A === 1 ? 'x' : `${A}x`;
-    latex_eq = `${Aterm} + y = ${b}`;
+    const others=[-3,-2,-1,1,2,3].filter(v=>v!==m1);
+    m2=choose(others);
+    b2=choose([-4,-3,-2,-1,0,1,2,3,4]);
   }
-  return {
-    latex: `\\text{x-intercept of }${latex_eq}\\text{ ?}`,
-    answer: [`(${k},0)`, `(${k}, 0)`],
-    hint: 'What coordinates does every point on the x-axis share?',
-    step: `y=${fc(m)}x${b !== 0 ? addT(b,'') : ''},\\text{ set }y=0:\\;x=${k}.\\;\\text{x-intercept}=(${k},0)`
+  const f1=x=>m1*x+b1, f2=x=>m2*x+b2;
+  const svg=twoLineGraphSVG(f1,f2,-5,5);
+  const ans=isParallel?'yes':'no';
+  return{
+    svg:svg,
+    q:'Do these two lines look parallel? (yes/no)',
+    answer:[ans],
+    hint:'What visual relationship must two parallel lines maintain across the whole grid?',
+    step:isParallel
+      ?`\\text{Both lines have the same slope}\\Rightarrow\\text{parallel}`
+      :`\\text{The lines have different slopes}\\Rightarrow\\text{not parallel}`
   };
 }
 
 function gen8(){
-  // Are two lines parallel? yes/no
-  // 50% chance they are parallel (same slope, different intercept)
-  const m1 = choose([-3,-2,-1,1,2,3]);
-  const b1 = choose([-5,-4,-3,-2,-1,0,1,2,3,4,5]);
-  const isParallel = choose([true, false]);
-  let m2, b2;
-  if (isParallel) {
-    m2 = m1;
-    // Different intercept
-    const offsets = [-4,-3,-2,-1,1,2,3,4];
-    b2 = b1 + choose(offsets);
+  // Two graphed lines -- perpendicular? (yes/no)
+  const m1=choose([-3,-2,-1,1,2,3]);
+  const b1=choose([-4,-3,-2,-1,0,1,2,3,4]);
+  const b2=choose([-4,-3,-2,-1,0,1,2,3,4]);
+  const isPerp=choose([true,false]);
+  const perpM2=-1/m1;
+  let m2;
+  if(isPerp){
+    m2=perpM2;
   } else {
-    // Different slope
-    const others = [-3,-2,-1,1,2,3].filter(v => v !== m1);
-    m2 = choose(others);
-    b2 = choose([-5,-4,-3,-2,-1,0,1,2,3,4,5]);
+    const others=[-3,-2,-1,1,2,3].filter(v=>v!==m1 && v!==perpM2);
+    m2=choose(others);
   }
-  const m1S = m1 !== 0 ? (m1 > 0 ? `+${m1}` : `${m1}`) : '';
-  const b1S = b1 !== 0 ? (b1 > 0 ? `+${b1}` : `${b1}`) : '';
-  const b2S = b2 !== 0 ? (b2 > 0 ? `+${b2}` : `${b2}`) : '';
-  const ans = isParallel ? 'yes' : 'no';
-  return {
-    latex: `y=${fc(m1)}x${b1S}\\text{ and }y=${fc(m2)}x${b2S}.\\text{ Parallel? (yes/no)}`,
-    answer: [ans],
-    hint: 'What slope relationship must parallel lines always share?',
-    step: isParallel
-      ? `\\text{Both lines have slope }${m1},\\text{ so they are parallel.}`
-      : `\\text{Slopes }${m1}\\neq ${m2},\\text{ so not parallel.}`
+  const f1=x=>m1*x+b1, f2=x=>m2*x+b2;
+  const svg=twoLineGraphSVG(f1,f2,-5,5);
+  const ans=isPerp?'yes':'no';
+  const m2Latex=isPerp?`-\\dfrac{1}{${m1}}`:String(m2);
+  return{
+    svg:svg,
+    q:'Do these two lines look perpendicular, crossing at a right angle? (yes/no)',
+    answer:[ans],
+    hint:'What must be true about two slopes for their lines to cross at a right angle?',
+    step:isPerp
+      ?`${m1}\\cdot\\left(${m2Latex}\\right)=-1\\Rightarrow\\text{perpendicular}`
+      :`${m1}\\cdot(${m2})=${m1*m2}\\neq-1\\Rightarrow\\text{not perpendicular}`
   };
 }
 
-const GENERATORS = [gen1, gen2, gen3, gen4, gen5, gen6, gen7, gen8];
+function gen9(){
+  // Two graphed lines with different slopes, constructed to cross at a
+  // chosen lattice point -- read the intersection straight off the grid.
+  const ix=choose([-3,-2,-1,0,1,2,3]);
+  const iy=choose([-3,-2,-1,0,1,2,3]);
+  const slopes=[-3,-2,-1,1,2,3];
+  const m1=choose(slopes);
+  const others=slopes.filter(v=>v!==m1);
+  const m2=choose(others);
+  const b1=iy-m1*ix, b2=iy-m2*ix;
+  const f1=x=>m1*x+b1, f2=x=>m2*x+b2;
+  const svg=twoLineGraphSVG(f1,f2,Math.min(-5,ix-3),Math.max(5,ix+3));
+  return{
+    svg:svg,
+    q:'At what point do these two lines intersect? Give your answer as an ordered pair.',
+    answer:[`(${ix},${iy})`,`(${ix}, ${iy})`],
+    hint:'Which single point lies on both lines at once — where do the two graphs actually cross?',
+    step:`\\text{Both lines pass through }(${ix},${iy})\\text{, the one point common to both}\\Rightarrow(${ix},${iy})`
+  };
+}
+
+const GENERATORS=[gen1,gen2,gen3,gen4,gen5,gen6,gen7,gen8,gen9];
 
 
 // ── State ─────────────────────────────────────────────────────────────────────
@@ -323,10 +496,12 @@ function buildCards() {
   ACTIVE.forEach((p, i) => {
     const div = document.createElement('div');
     div.className = 'card'; div.id = 'card-' + i;
+    const qLine = p.q ? `<div class="card-question">${p.q}</div>` : '';
     div.innerHTML =
       `<div class="card-body">
         <div class="card-meta">Problem ${i + 1}</div>
         <div class="card-expr" id="expr-${i}"></div>
+        ${qLine}
         <div class="input-row">
           <input class="ans-input" id="ai-${i}" placeholder="answer" />
           <button class="check-btn" id="chk-${i}" onclick="check(${i})">Check</button>
