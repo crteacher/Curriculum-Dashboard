@@ -787,60 +787,146 @@
     }
   });
 
-  // ---------- Group 4: chain rule + quotient rule with tables ----------
+  // ---------- Group 4: chain rule + quotient/product rule with tables ----------
+  // 4a rotates among four "shapes" so it's not always a straight 4-deep chain:
+  //   chain4:    f(g(h(k(x))))         (straight chain, 4 layers)
+  //   chain3:    f(g(h(x)))            (straight chain, 3 layers)
+  //   chainSum:  f(g(x) + h(x))        (chain rule wrapped around a sum)
+  //   chainProd: f(g(x)&middot;h(x))   (chain rule wrapped around a product)
   PARTS.push({
     id: "4a", group: "4", label: "(a)", points: 4,
     gen: function () {
       var xs = [0, 1, 2, 3];
-      var kVal = shuffle(xs), hVal = shuffle(xs), gVal = shuffle(xs), fVal = shuffle(xs);
-      var kD = xs.map(function () { return randTableCell(-3, 3); });
-      var hD = xs.map(function () { return randTableCell(-3, 3); });
-      var gD = xs.map(function () { return randTableCell(-3, 3); });
+      var shape = randChoice(["chain4", "chain3", "chainSum", "chainProd"]);
       var fD = xs.map(function () { return randTableCell(-3, 3); });
       var x0 = randInt(0, 3);
-      var u = kVal[x0], v = hVal[u], w = gVal[v];
-      var val = fD[w].value * gD[v].value * hD[u].value * kD[x0].value;
-      return { xs: xs, kVal: kVal, hVal: hVal, gVal: gVal, fVal: fVal, kD: kD, hD: hD, gD: gD, fD: fD, x0: x0, u: u, v: v, w: w, answer: { type: "number", value: val } };
+
+      if (shape === "chain4" || shape === "chain3") {
+        var kVal = shuffle(xs), hVal = shuffle(xs), gVal = shuffle(xs);
+        var kD = xs.map(function () { return randTableCell(-3, 3); });
+        var hD = xs.map(function () { return randTableCell(-3, 3); });
+        var gD = xs.map(function () { return randTableCell(-3, 3); });
+        if (shape === "chain4") {
+          var u = kVal[x0], v = hVal[u], w = gVal[v];
+          var val = fD[w].value * gD[v].value * hD[u].value * kD[x0].value;
+          return { shape: shape, xs: xs, kVal: kVal, hVal: hVal, gVal: gVal, kD: kD, hD: hD, gD: gD, fD: fD, x0: x0, u: u, v: v, w: w, answer: { type: "number", value: val } };
+        }
+        var v3 = hVal[x0], w3 = gVal[v3];
+        var val3 = fD[w3].value * gD[v3].value * hD[x0].value;
+        return { shape: shape, xs: xs, hVal: hVal, gVal: gVal, hD: hD, gD: gD, fD: fD, x0: x0, v: v3, w: w3, answer: { type: "number", value: val3 } };
+      }
+
+      // chainSum / chainProd: f(g(x) [+ or &middot;] h(x)) — g, h have small
+      // integer outputs so f's table only needs the u-values actually hit.
+      var gVal2 = xs.map(function () { return randInt(0, 3); });
+      var hVal2 = xs.map(function () { return randInt(0, 3); });
+      var gD2 = xs.map(function () { return randTableCell(-3, 3); });
+      var hD2 = xs.map(function () { return randTableCell(-3, 3); });
+      var combine = shape === "chainSum" ? function (a, b) { return a + b; } : function (a, b) { return a * b; };
+      var uOfX = xs.map(function (x) { return combine(gVal2[x], hVal2[x]); });
+      var distinctU = uOfX.filter(function (v, i, arr) { return arr.indexOf(v) === i; }).sort(function (a, b) { return a - b; });
+      var fTable = {};
+      distinctU.forEach(function (u) { fTable[u] = { f: randTableCell(-4, 4), fp: randTableCell(-4, 4) }; });
+      var u0 = uOfX[x0];
+      var innerDeriv = shape === "chainSum"
+        ? (gD2[x0].value + hD2[x0].value)
+        : (gD2[x0].value * hVal2[x0] + gVal2[x0] * hD2[x0].value);
+      var valSP = fTable[u0].fp.value * innerDeriv;
+      return { shape: shape, xs: xs, gVal2: gVal2, hVal2: hVal2, gD2: gD2, hD2: hD2, distinctU: distinctU, fTable: fTable, x0: x0, u0: u0, innerDeriv: innerDeriv, answer: { type: "number", value: valSP } };
     },
     prompt: function (s) {
-      var t = buildTable(
-        ["k(x)", "k&prime;(x)", "h(x)", "h&prime;(x)", "g(x)", "g&prime;(x)", "f(x)", "f&prime;(x)"],
+      if (s.shape === "chain4") {
+        var t = buildTable(
+          ["k(x)", "k&prime;(x)", "h(x)", "h&prime;(x)", "g(x)", "g&prime;(x)", "f&prime;(x)"],
+          s.xs.map(String),
+          [s.kVal, s.kD.map(cellHtml), s.hVal, s.hD.map(cellHtml), s.gVal, s.gD.map(cellHtml), s.fD.map(cellHtml)]
+        );
+        return "<div>Given the table of values below (f, g, h, k are all differentiable), find d/dx[f(g(h(k(x))))] at x = " + s.x0 + ".</div>" + t;
+      }
+      if (s.shape === "chain3") {
+        var t3 = buildTable(
+          ["h(x)", "h&prime;(x)", "g(x)", "g&prime;(x)", "f&prime;(x)"],
+          s.xs.map(String),
+          [s.hVal, s.hD.map(cellHtml), s.gVal, s.gD.map(cellHtml), s.fD.map(cellHtml)]
+        );
+        return "<div>Given the table of values below (f, g, h are all differentiable), find d/dx[f(g(h(x)))] at x = " + s.x0 + ".</div>" + t3;
+      }
+      var op = s.shape === "chainSum" ? "+" : "&middot;";
+      var t1 = buildTable(
+        ["g(x)", "g&prime;(x)", "h(x)", "h&prime;(x)"],
         s.xs.map(String),
-        [s.kVal, s.kD.map(cellHtml), s.hVal, s.hD.map(cellHtml), s.gVal, s.gD.map(cellHtml), s.fVal, s.fD.map(cellHtml)]
+        [s.gVal2, s.gD2.map(cellHtml), s.hVal2, s.hD2.map(cellHtml)]
       );
-      return "<div>Given the table of values below (f, g, h, k are all differentiable), find d/dx[f(g(h(k(x))))] at x = " + s.x0 + ".</div>" + t;
+      var t2 = buildTable(
+        ["f(u)", "f&prime;(u)"],
+        s.distinctU.map(String),
+        [s.distinctU.map(function (u) { return cellHtml(s.fTable[u].f); }), s.distinctU.map(function (u) { return cellHtml(s.fTable[u].fp); })]
+      );
+      return "<div>Let u = g(x) " + op + " h(x). Given the tables below (f, g, h are all differentiable), find d/dx[f(g(x) " + op + " h(x))] at x = " + s.x0 + ".</div>" + t1 +
+        "<div style=\"margin-top:4px\">And separately, f as a function of u:</div>" + t2;
     },
     inputsHtml: function (s) { return "<span class=\"field-label\">Derivative at x=" + s.x0 + " =</span><input type=\"text\" class=\"ans-main\" placeholder=\"e.g. 2.5\">"; },
     readAnswer: function (card) { return { main: parseAnswer(card.querySelector(".ans-main").value) }; },
     isCorrect: function (ua, s) { return answersMatch(ua.main, s.answer, 0.02); },
     solutionHtml: function (s) {
+      if (s.shape === "chain4") {
+        return "<span class=\"sol-label\">Solution</span>" +
+          "<div class=\"step\">Chain rule (four layers deep): d/dx[f(g(h(k(x))))] = f&prime;(g(h(k(x)))) &middot; g&prime;(h(k(x))) &middot; h&prime;(k(x)) &middot; k&prime;(x)</div>" +
+          "<div class=\"step\">At x=" + s.x0 + ": k(" + s.x0 + ")=" + s.u + ", so h(" + s.u + ")=" + s.v + ", so g(" + s.v + ")=" + s.w + ".</div>" +
+          "<div class=\"step\">Multiply the derivatives read off the table at those nested inputs: f&prime;(" + s.w + ")&middot;g&prime;(" + s.v + ")&middot;h&prime;(" + s.u + ")&middot;k&prime;(" + s.x0 + ") = " + cellFactorHtml(s.fD[s.w]) + "&middot;" + cellFactorHtml(s.gD[s.v]) + "&middot;" + cellFactorHtml(s.hD[s.u]) + "&middot;" + cellFactorHtml(s.kD[s.x0]) + "</div>" +
+          "<div class=\"final\">Answer &asymp; " + s.answer.value.toFixed(3) + "</div>";
+      }
+      if (s.shape === "chain3") {
+        return "<span class=\"sol-label\">Solution</span>" +
+          "<div class=\"step\">Chain rule (three layers deep): d/dx[f(g(h(x)))] = f&prime;(g(h(x))) &middot; g&prime;(h(x)) &middot; h&prime;(x)</div>" +
+          "<div class=\"step\">At x=" + s.x0 + ": h(" + s.x0 + ")=" + s.v + ", so g(" + s.v + ")=" + s.w + ".</div>" +
+          "<div class=\"step\">Multiply the derivatives read off the table at those nested inputs: f&prime;(" + s.w + ")&middot;g&prime;(" + s.v + ")&middot;h&prime;(" + s.x0 + ") = " + cellFactorHtml(s.fD[s.w]) + "&middot;" + cellFactorHtml(s.gD[s.v]) + "&middot;" + cellFactorHtml(s.hD[s.x0]) + "</div>" +
+          "<div class=\"final\">Answer &asymp; " + s.answer.value.toFixed(3) + "</div>";
+      }
+      var op = s.shape === "chainSum" ? "+" : "&middot;";
+      var ruleLine = s.shape === "chainSum"
+        ? "d/dx[g(x) + h(x)] = g&prime;(x) + h&prime;(x) = " + cellFactorHtml(s.gD2[s.x0]) + " + " + cellFactorHtml(s.hD2[s.x0])
+        : "Product rule: d/dx[g(x)&middot;h(x)] = g&prime;(x)h(x) + g(x)h&prime;(x) = " + cellFactorHtml(s.gD2[s.x0]) + "&middot;" + numFactorHtml(s.hVal2[s.x0]) + " + " + numFactorHtml(s.gVal2[s.x0]) + "&middot;" + cellFactorHtml(s.hD2[s.x0]);
       return "<span class=\"sol-label\">Solution</span>" +
-        "<div class=\"step\">Chain rule (four layers deep): d/dx[f(g(h(k(x))))] = f&prime;(g(h(k(x)))) &middot; g&prime;(h(k(x))) &middot; h&prime;(k(x)) &middot; k&prime;(x)</div>" +
-        "<div class=\"step\">At x=" + s.x0 + ": k(" + s.x0 + ")=" + s.u + ", so h(" + s.u + ")=" + s.v + ", so g(" + s.v + ")=" + s.w + ".</div>" +
-        "<div class=\"step\">Multiply the derivatives read off the table at those nested inputs: f&prime;(" + s.w + ")&middot;g&prime;(" + s.v + ")&middot;h&prime;(" + s.u + ")&middot;k&prime;(" + s.x0 + ") = " + cellFactorHtml(s.fD[s.w]) + "&middot;" + cellFactorHtml(s.gD[s.v]) + "&middot;" + cellFactorHtml(s.hD[s.u]) + "&middot;" + cellFactorHtml(s.kD[s.x0]) + "</div>" +
+        "<div class=\"step\">Chain rule: d/dx[f(g(x) " + op + " h(x))] = f&prime;(u) &middot; d/dx[g(x) " + op + " h(x)], where u = g(" + s.x0 + ") " + op + " h(" + s.x0 + ") = " + s.gVal2[s.x0] + " " + op + " " + s.hVal2[s.x0] + " = " + s.u0 + ".</div>" +
+        "<div class=\"step\">" + ruleLine + " &asymp; " + s.innerDeriv.toFixed(3) + "</div>" +
+        "<div class=\"step\">Multiply by f&prime;(" + s.u0 + ") = " + cellHtml(s.fTable[s.u0].fp) + " from the second table.</div>" +
         "<div class=\"final\">Answer &asymp; " + s.answer.value.toFixed(3) + "</div>";
     }
   });
 
+  // 4b rotates between quotient-inside-chain (original) and product-inside-chain.
   PARTS.push({
     id: "4b", group: "4", label: "(b)", points: 4,
     gen: function () {
       var xs = [0, 1, 2, 3];
-      var h = xs.map(function () { return randNonZeroInt(-3, 3); });
-      var q = xs.map(function () { return randInt(-3, 3); });
-      var g = xs.map(function (x, i) { return h[i] * q[i]; });
+      var shape = randChoice(["quotient", "product"]);
       var gD = xs.map(function () { return randTableCell(-3, 3); });
       var hD = xs.map(function () { return randTableCell(-3, 3); });
-      var uVals = q.slice().sort(function (a, b) { return a - b; }).filter(function (v, i, arr) { return arr.indexOf(v) === i; });
+      var g, h, uOfX;
+      if (shape === "quotient") {
+        h = xs.map(function () { return randNonZeroInt(-3, 3); });
+        var q = xs.map(function () { return randInt(-3, 3); });
+        g = xs.map(function (x, i) { return h[i] * q[i]; });
+        uOfX = q;
+      } else {
+        g = xs.map(function () { return randInt(-3, 3); });
+        h = xs.map(function () { return randInt(-3, 3); });
+        uOfX = xs.map(function (x) { return g[x] * h[x]; });
+      }
+      var distinctU = uOfX.slice().filter(function (v, i, arr) { return arr.indexOf(v) === i; }).sort(function (a, b) { return a - b; });
       var fTable = {};
-      uVals.forEach(function (u) { fTable[u] = { f: randTableCell(-4, 4), fp: randTableCell(-4, 4) }; });
+      distinctU.forEach(function (u) { fTable[u] = { f: randTableCell(-4, 4), fp: randTableCell(-4, 4) }; });
       var x0 = randInt(0, 3);
-      var u0 = q[x0];
-      var quotientDeriv = (gD[x0].value * h[x0] - g[x0] * hD[x0].value) / (h[x0] * h[x0]);
-      var val = fTable[u0].fp.value * quotientDeriv;
-      return { xs: xs, h: h, g: g, gD: gD, hD: hD, uVals: uVals, fTable: fTable, x0: x0, u0: u0, quotientDeriv: quotientDeriv, answer: { type: "number", value: val } };
+      var u0 = uOfX[x0];
+      var innerDeriv = shape === "quotient"
+        ? (gD[x0].value * h[x0] - g[x0] * hD[x0].value) / (h[x0] * h[x0])
+        : (gD[x0].value * h[x0] + g[x0] * hD[x0].value);
+      var val = fTable[u0].fp.value * innerDeriv;
+      return { shape: shape, xs: xs, g: g, h: h, gD: gD, hD: hD, distinctU: distinctU, fTable: fTable, x0: x0, u0: u0, innerDeriv: innerDeriv, answer: { type: "number", value: val } };
     },
     prompt: function (s) {
+      var op = s.shape === "quotient" ? "/" : "&middot;";
       var t1 = buildTable(
         ["g(x)", "g&prime;(x)", "h(x)", "h&prime;(x)"],
         s.xs.map(String),
@@ -848,10 +934,10 @@
       );
       var t2 = buildTable(
         ["f(u)", "f&prime;(u)"],
-        s.uVals.map(String),
-        [s.uVals.map(function (u) { return cellHtml(s.fTable[u].f); }), s.uVals.map(function (u) { return cellHtml(s.fTable[u].fp); })]
+        s.distinctU.map(String),
+        [s.distinctU.map(function (u) { return cellHtml(s.fTable[u].f); }), s.distinctU.map(function (u) { return cellHtml(s.fTable[u].fp); })]
       );
-      return "<div>Let u = g(x)/h(x). Given the tables below (f, g, h are all differentiable), find d/dx[f(g(x)/h(x))] at x = " + s.x0 + ".</div>" + t1 +
+      return "<div>Let u = g(x) " + op + " h(x). Given the tables below (f, g, h are all differentiable), find d/dx[f(g(x) " + op + " h(x))] at x = " + s.x0 + ".</div>" + t1 +
         "<div style=\"margin-top:4px\">And separately, f as a function of u:</div>" + t2;
     },
     inputsHtml: function (s) { return "<span class=\"field-label\">Derivative at x=" + s.x0 + " =</span><input type=\"text\" class=\"ans-main\" placeholder=\"e.g. -0.8\">"; },
@@ -859,9 +945,16 @@
     isCorrect: function (ua, s) { return answersMatch(ua.main, s.answer, 0.02); },
     solutionHtml: function (s) {
       var x0 = s.x0;
+      if (s.shape === "quotient") {
+        return "<span class=\"sol-label\">Solution</span>" +
+          "<div class=\"step\">Chain rule: d/dx[f(g(x)/h(x))] = f&prime;(u) &middot; d/dx[g(x)/h(x)], where u = g(" + x0 + ")/h(" + x0 + ") = " + s.g[x0] + "/" + s.h[x0] + " = " + s.u0 + ".</div>" +
+          "<div class=\"step\">Quotient rule: d/dx[g/h] at x=" + x0 + " = [g&prime;(" + x0 + ")h(" + x0 + ") &minus; g(" + x0 + ")h&prime;(" + x0 + ")] / h(" + x0 + ")<sup>2</sup> = [" + cellFactorHtml(s.gD[x0]) + "&middot;" + numFactorHtml(s.h[x0]) + " &minus; " + numFactorHtml(s.g[x0]) + "&middot;" + cellFactorHtml(s.hD[x0]) + "] / " + (s.h[x0] * s.h[x0]) + " &asymp; " + s.innerDeriv.toFixed(3) + "</div>" +
+          "<div class=\"step\">Multiply by f&prime;(" + s.u0 + ") = " + cellHtml(s.fTable[s.u0].fp) + " from the second table.</div>" +
+          "<div class=\"final\">Answer &asymp; " + s.answer.value.toFixed(3) + "</div>";
+      }
       return "<span class=\"sol-label\">Solution</span>" +
-        "<div class=\"step\">Chain rule: d/dx[f(g(x)/h(x))] = f&prime;(u) &middot; d/dx[g(x)/h(x)], where u = g(" + x0 + ")/h(" + x0 + ") = " + s.g[x0] + "/" + s.h[x0] + " = " + s.u0 + ".</div>" +
-        "<div class=\"step\">Quotient rule: d/dx[g/h] at x=" + x0 + " = [g&prime;(" + x0 + ")h(" + x0 + ") &minus; g(" + x0 + ")h&prime;(" + x0 + ")] / h(" + x0 + ")<sup>2</sup> = [" + cellFactorHtml(s.gD[x0]) + "&middot;" + numFactorHtml(s.h[x0]) + " &minus; " + numFactorHtml(s.g[x0]) + "&middot;" + cellFactorHtml(s.hD[x0]) + "] / " + (s.h[x0] * s.h[x0]) + " &asymp; " + s.quotientDeriv.toFixed(3) + "</div>" +
+        "<div class=\"step\">Chain rule: d/dx[f(g(x)&middot;h(x))] = f&prime;(u) &middot; d/dx[g(x)&middot;h(x)], where u = g(" + x0 + ")&middot;h(" + x0 + ") = " + s.g[x0] + "&middot;" + s.h[x0] + " = " + s.u0 + ".</div>" +
+        "<div class=\"step\">Product rule: d/dx[g&middot;h] at x=" + x0 + " = g&prime;(" + x0 + ")h(" + x0 + ") + g(" + x0 + ")h&prime;(" + x0 + ") = " + cellFactorHtml(s.gD[x0]) + "&middot;" + numFactorHtml(s.h[x0]) + " + " + numFactorHtml(s.g[x0]) + "&middot;" + cellFactorHtml(s.hD[x0]) + " &asymp; " + s.innerDeriv.toFixed(3) + "</div>" +
         "<div class=\"step\">Multiply by f&prime;(" + s.u0 + ") = " + cellHtml(s.fTable[s.u0].fp) + " from the second table.</div>" +
         "<div class=\"final\">Answer &asymp; " + s.answer.value.toFixed(3) + "</div>";
     }
@@ -957,7 +1050,7 @@
     "1": { num: "1.", desc: "Give an example of a function with the stated derivative. Type any valid answer as a function of x — it's graded by differentiating your answer, not by matching one specific form." },
     "2": { num: "2.", desc: "Find the derivative using the differentiation rules." },
     "3": { num: "3.", desc: "Find the equation of the tangent line." },
-    "4": { num: "4.", desc: "Use the chain rule (and quotient rule) together, reading function values and derivatives off a table." },
+    "4": { num: "4.", desc: "Use the chain rule together with the sum, product, or quotient rule, reading function values and derivatives off a table." },
     "5": { num: "5.", desc: "Find the derivative using the differentiation rules." }
   };
 
