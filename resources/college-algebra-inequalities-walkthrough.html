@@ -297,6 +297,11 @@
   .nline-inf-btn { flex-shrink: 0; font-family: "JetBrains Mono", monospace; padding: 8px 11px; }
   .nline-pt-input { cursor: pointer; }
   .nline-hit { cursor: pointer; }
+  .nline-svg-input .nline-tick,
+  .nline-svg-input .nline-label,
+  .nline-svg-input .nline-seg,
+  .nline-svg-input .nline-seg-arrow,
+  .nline-svg-input .nline-axis { pointer-events: none; }
   .nline-input-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
   .nline-input-readout { margin-top: 10px; font-size: 0.86rem; color: var(--ink-soft); }
   .nline-readout-text { font-family: "JetBrains Mono", monospace; font-weight: 700; color: var(--accent-strong); }
@@ -595,6 +600,7 @@
     function renderSvg() {
       var svg = "<svg viewBox=\"0 0 " + W + " " + H + "\" class=\"nline-svg nline-svg-input\">";
       svg += "<line x1=\"" + xLeft + "\" y1=\"" + axisY + "\" x2=\"" + xRight + "\" y2=\"" + axisY + "\" class=\"nline-axis\"/>";
+      svg += "<rect x=\"" + xLeft + "\" y=\"" + (axisY - 22) + "\" width=\"" + (xRight - xLeft) + "\" height=\"44\" fill=\"transparent\" pointer-events=\"all\" class=\"nline-hit\"/>";
       for (var t = range.min; t <= range.max + 1e-9; t += range.step) {
         var x = xOf(t);
         svg += "<line x1=\"" + x + "\" y1=\"" + (axisY - 5) + "\" x2=\"" + x + "\" y2=\"" + (axisY + 5) + "\" class=\"nline-tick\"/>";
@@ -619,7 +625,6 @@
           }
         });
       });
-      svg += "<rect x=\"" + xLeft + "\" y=\"" + (axisY - 22) + "\" width=\"" + (xRight - xLeft) + "\" height=\"44\" fill=\"transparent\" pointer-events=\"all\" class=\"nline-hit\"/>";
       svg += "</svg>";
       slot.innerHTML = svg;
 
