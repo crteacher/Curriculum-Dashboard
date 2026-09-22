@@ -180,7 +180,11 @@
   .qgraph-wrap canvas { width: 100%; max-width: 380px; height: 380px; display: block; }
   .qgraph-wrap.small canvas { max-width: 280px; height: 190px; }
 
+  .qgraph-tools { display: flex; align-items: center; justify-content: center; gap: 12px; margin: -6px 0 16px; flex-wrap: wrap; }
+  .qgraph-caption { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 0.78rem; color: var(--ink-soft); }
+
   .qinputs { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin-bottom: 14px; }
+  .qinputs:empty { margin-bottom: 0; }
   .qinputs .field-label { font-size: 0.86rem; color: var(--ink-soft); font-weight: 600; }
   .qinputs input[type="text"], .qinputs select {
     font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 0.95rem;
@@ -233,7 +237,7 @@
   <header>
     <div class="eyebrow">College Algebra &middot; Linear Equations</div>
     <h1>Linear Equations Practice Test</h1>
-    <p>Every part regenerates its own random version — work it out on paper, type your answer, and check yourself. Click "New version" on any part as many times as you want to drill it again with different numbers. Group 3 asks you to graph a line by hand; since a drawing can't be auto-graded, check yourself by entering the slope and y-intercept your graph should show. Group 5 flips that around — read the slope-intercept equation directly off a graphed line. Your <strong>Exam Score</strong> locks in the first time you check each part (or peek its solution) — everything after that is just practice. Use "Reset exam" any time for a brand-new attempt.</p>
+    <p>Every part regenerates its own random version — work it out on paper, type your answer, and check yourself. Click "New version" on any part as many times as you want to drill it again with different numbers. Group 3 asks you to graph a line by hand; since a drawing can't be auto-graded, check yourself by entering the slope and y-intercept your graph should show. Group 5 is interactive — click two points on the grid to graph the line yourself, and it's graded automatically. Your <strong>Exam Score</strong> locks in the first time you check each part (or peek its solution) — everything after that is just practice. Use "Reset exam" any time for a brand-new attempt.</p>
   </header>
 
   <div class="toolbar">
@@ -416,6 +420,23 @@
     ctx.strokeStyle = color; ctx.lineWidth = width || 2.4; ctx.lineCap = "round";
     var p0 = toPx(x0, y0), p1 = toPx(x1, y1);
     ctx.beginPath(); ctx.moveTo(p0[0], p0[1]); ctx.lineTo(p1[0], p1[1]); ctx.stroke();
+  }
+  // Inverse of makeMapper — converts a pixel coordinate back to graph (x, y).
+  // Used to translate a student's click into the nearest grid point.
+  function makeInvMapper(cssW, cssH, xMin, xMax, yMin, yMax, pad) {
+    pad = pad || 24;
+    var w = cssW - pad * 1.4, h = cssH - pad * 1.6;
+    var sx = w / (xMax - xMin), sy = h / (yMax - yMin);
+    var ox = pad, oy = cssH - pad * 0.9;
+    return function (px, py) { return [(px - ox) / sx + xMin, yMin + (oy - py) / sy]; };
+  }
+  // Given a slope/intercept, clip the infinite line to a viewing box — same
+  // logic genGraphLine uses for the target line, reused for a student's line.
+  function clipLineToBox(m, b, xMin, xMax, yMin, yMax) {
+    var xAtYLo = (yMin - b) / m, xAtYHi = (yMax - b) / m;
+    var xBoundLo = Math.min(xAtYLo, xAtYHi), xBoundHi = Math.max(xAtYLo, xAtYHi);
+    var xLo = Math.max(xMin, xBoundLo), xHi = Math.min(xMax, xBoundHi);
+    return { x1: xLo, y1: m * xLo + b, x2: xHi, y2: m * xHi + b };
   }
 
   var PARTS = [];
@@ -683,26 +704,117 @@
     var y1 = m * xLo + b, y2 = m * xHi + b;
     return { mFr: mFr, m: m, b: b, x1: xLo, y1: y1, x2: xHi, y2: y2 };
   }
+  // ---- shared helpers for the interactive click-to-graph card ----
+  function draw5Caption(card) {
+    var capEl = card.querySelector(".qgraph-caption");
+    if (!capEl) return;
+    var pts = card.querySelector("canvas")._userPoints || [];
+    if (pts.length === 0) capEl.textContent = "Click two points on the grid above.";
+    else if (pts.length === 1) capEl.textContent = "Point 1: (" + pts[0][0] + ", " + pts[0][1] + ") — click a second point.";
+    else capEl.textContent = "Point 1: (" + pts[0][0] + ", " + pts[0][1] + ")   Point 2: (" + pts[1][0] + ", " + pts[1][1] + ")";
+  }
+  function draw5Graph(canvas, s) {
+    var styles = getComputedStyle(document.documentElement);
+    var colorUser = styles.getPropertyValue("--graph-stroke-a").trim();
+    var colorCorrect = styles.getPropertyValue("--graph-stroke-b").trim();
+    var g = drawGrid(canvas, -10, 10, -10, 10);
+    if (canvas._showSolution) {
+      drawSegment(g.ctx, g.toPx, s.x1, s.y1, s.x2, s.y2, colorCorrect, 2.6);
+    }
+    var pts = canvas._userPoints || [];
+    if (pts.length === 2 && (pts[0][0] !== pts[1][0] || pts[0][1] !== pts[1][1])) {
+      var ext;
+      if (pts[0][0] === pts[1][0]) {
+        ext = { x1: pts[0][0], y1: -10, x2: pts[0][0], y2: 10 };
+      } else {
+        var m = (pts[1][1] - pts[0][1]) / (pts[1][0] - pts[0][0]);
+        var b = pts[0][1] - m * pts[0][0];
+        ext = clipLineToBox(m, b, -10, 10, -10, 10);
+      }
+      drawSegment(g.ctx, g.toPx, ext.x1, ext.y1, ext.x2, ext.y2, colorUser, 2.4);
+    }
+    pts.forEach(function (p) {
+      var px = g.toPx(p[0], p[1]);
+      g.ctx.beginPath();
+      g.ctx.arc(px[0], px[1], 5, 0, Math.PI * 2);
+      g.ctx.fillStyle = colorUser;
+      g.ctx.fill();
+    });
+  }
+
   PARTS.push({
-    id: "5", group: "5", label: "", points: 4, hasGraph: true,
+    id: "5", group: "5", label: "", points: 4, hasGraph: true, interactive: true,
     gen: genGraphLine,
-    prompt: function () { return "Find the slope-intercept form of the line graphed below."; },
-    inputsHtml: slopeInterceptOnlyInputsHtml,
-    readAnswer: readSlopeInterceptOnly,
-    isCorrect: function (ua, s) { return answersMatch(ua.m, numAns(s.m), 0.02) && answersMatch(ua.b, numAns(s.b), 0.02); },
-    drawGraph: function (canvas, s) {
-      var styles = getComputedStyle(document.documentElement);
-      var colorA = styles.getPropertyValue("--graph-stroke-a").trim();
-      var g = drawGrid(canvas, -10, 10, -10, 10);
-      drawSegment(g.ctx, g.toPx, s.x1, s.y1, s.x2, s.y2, colorA);
+    prompt: function (s) {
+      var slopeHtml = s.mFr.q === 1 ? leadTerm(s.mFr.p, "x") : (s.mFr.p < 0 ? "&minus;" : "") + frac(String(Math.abs(s.mFr.p)), String(s.mFr.q)) + "x";
+      return "Click two points on the grid below to graph <span class=\"math\">y = " + slopeHtml + " " + signedTerm(s.b, "") + "</span>, then check your answer.";
+    },
+    inputsHtml: function () { return ""; },
+    readAnswer: function (card) {
+      return { points: (card.querySelector("canvas")._userPoints || []).slice() };
+    },
+    isCorrect: function (ua, s) {
+      var pts = ua.points;
+      if (!pts || pts.length < 2) return false;
+      var p1 = pts[0], p2 = pts[1];
+      if (p1[0] === p2[0] && p1[1] === p2[1]) return false;
+      function onLine(p) { return Math.abs(p[1] - (s.m * p[0] + s.b)) < 0.05; }
+      return onLine(p1) && onLine(p2);
+    },
+    drawGraph: draw5Graph,
+    afterRender: function (card) {
+      var canvas = card.querySelector("canvas");
+      canvas._userPoints = [];
+      canvas._showSolution = false;
+      draw5Caption(card);
+      if (!canvas._wired5) {
+        canvas._wired5 = true;
+        canvas.style.cursor = "pointer";
+        canvas.addEventListener("click", function (evt) {
+          var s = window.__PT_STATE["5"];
+          if (!s) return;
+          var rect = canvas.getBoundingClientRect();
+          var cssW = canvas.clientWidth, cssH = canvas.clientHeight;
+          var scaleX = rect.width ? (cssW / rect.width) : 1, scaleY = rect.height ? (cssH / rect.height) : 1;
+          var localX = (evt.clientX - rect.left) * scaleX;
+          var localY = (evt.clientY - rect.top) * scaleY;
+          var inv = makeInvMapper(cssW, cssH, -10, 10, -10, 10);
+          var gp = inv(localX, localY);
+          var gx = Math.max(-10, Math.min(10, Math.round(gp[0])));
+          var gy = Math.max(-10, Math.min(10, Math.round(gp[1])));
+          if (canvas._userPoints.length >= 2) canvas._userPoints = [];
+          canvas._userPoints.push([gx, gy]);
+          draw5Graph(canvas, s);
+          draw5Caption(card);
+        });
+      }
+      var clearBtn = card.querySelector(".clear-points-btn");
+      if (clearBtn && !clearBtn._wired5) {
+        clearBtn._wired5 = true;
+        clearBtn.addEventListener("click", function () {
+          canvas._userPoints = [];
+          var s = window.__PT_STATE["5"];
+          if (s) draw5Graph(canvas, s);
+          draw5Caption(card);
+        });
+      }
+      var solBtn = card.querySelector(".solution-btn");
+      if (solBtn && !solBtn._wired5) {
+        solBtn._wired5 = true;
+        solBtn.addEventListener("click", function () {
+          canvas._showSolution = true;
+          var s = window.__PT_STATE["5"];
+          if (s) draw5Graph(canvas, s);
+        });
+      }
     },
     solutionHtml: function (s) {
       var mStr = fracOrNum(s.mFr.p, s.mFr.q);
-      var runStr = s.mFr.q, riseStr = s.mFr.p;
+      var slopeHtml = s.mFr.q === 1 ? leadTerm(s.mFr.p, "x") : (s.mFr.p < 0 ? "&minus;" : "") + frac(String(Math.abs(s.mFr.p)), String(s.mFr.q)) + "x";
       return "<span class=\"sol-label\">Solution</span>" +
-        "<div class=\"step\">Find where the line crosses the y-axis &mdash; that's the y-intercept: b = " + s.b + ".</div>" +
-        "<div class=\"step\">From that point, count to the next clear lattice point on the line: run " + runStr + ", rise " + riseStr + " &rarr; slope m = rise/run = " + mStr + ".</div>" +
-        "<div class=\"final\">Answer: y = " + mStr + "x " + (s.b >= 0 ? "+ " + s.b : "&minus; " + Math.abs(s.b)) + "</div>";
+        "<div class=\"step\">Start at the y-intercept (0, " + s.b + ") &mdash; that's always the fastest point to plot.</div>" +
+        "<div class=\"step\">From there, use the slope to find a second clean lattice point: run " + s.mFr.q + ", rise " + s.mFr.p + ".</div>" +
+        "<div class=\"final\">Answer: y = " + slopeHtml + " " + signedTerm(s.b, "") + " &mdash; shown in teal above, next to your points in gold. (slope = " + mStr + ")</div>";
     }
   });
 
@@ -714,7 +826,7 @@
     "2": { num: "2.", desc: "Give equations for the following lines in any form." },
     "3": { num: "3.", desc: "Graph the following (check yourself with slope and y-intercept)." },
     "4": { num: "4.", desc: "Find the perpendicular line through the given point." },
-    "5": { num: "5.", desc: "Find the slope-intercept form of the line graphed below." }
+    "5": { num: "5.", desc: "Graph the following by clicking two points on the grid." }
   };
 
   // ============================================================
@@ -757,6 +869,7 @@
     card.innerHTML = headHtml +
       "<div class=\"qprompt\"></div>" +
       (part.hasGraph ? "<div class=\"qgraph-wrap" + (part.graphSmall ? " small" : "") + "\"><canvas></canvas></div>" : "") +
+      (part.interactive ? "<div class=\"qgraph-tools\"><span class=\"qgraph-caption\"></span><button class=\"btn-secondary clear-points-btn\" type=\"button\">Clear points</button></div>" : "") +
       "<div class=\"qinputs\"></div>" +
       "<div class=\"qactions\"><button class=\"btn-primary check-btn\" type=\"button\">Check Answer</button><button class=\"btn-secondary solution-btn\" type=\"button\">Show Solution</button></div>" +
       "<div class=\"qfeedback hidden\"></div>" +
