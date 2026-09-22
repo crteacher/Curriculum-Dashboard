@@ -91,7 +91,7 @@
   <div class="section">
     <div class="section-title">Practice Problems</div>
     <p style="font-family:sans-serif;font-size:13px;color:#666;margin-bottom:1rem;">
-      Graph problems: read the value directly from the grid and enter an integer. Text problems: most answers are integers; <code>yes</code> or <code>no</code> for true/false.
+      Every problem is read from its graph. Slope: enter an integer. Intercepts: an ordered pair, e.g. <code>(0,3)</code>. Full equations: enter in the form <code>y=2x+3</code>. Horizontal/vertical lines: enter <code>y=4</code> or <code>x=-2</code>. Point-on-line questions: <code>yes</code> or <code>no</code>.
       Press <strong>Check</strong> or hit Enter.
     </p>
     <div class="score-bar">
@@ -138,7 +138,7 @@ function addT(n, v) {
 // ── Problem generators (section-specific, injected below) ─────────────────────
 
 // ── SVG graph helper ─────────────────────────────────────────────────────────
-function makeGraph(m, b, question) {
+function gridAxesSVG() {
   const W = 220, H = 220, cx = 110, cy = 110, sc = 20;
   let g = '';
   // grid lines
@@ -163,12 +163,41 @@ function makeGraph(m, b, question) {
     g += `<text x="${cx-8}" y="${py+4}" text-anchor="end" font-size="10" fill="#777" font-family="sans-serif">${i}</text>`;
   }
   g += `<text x="${cx-7}" y="${cy+15}" text-anchor="end" font-size="10" fill="#777" font-family="sans-serif">0</text>`;
+  return g;
+}
+
+function svgWrap(inner, question) {
+  const qHtml = `<p style="font-family:sans-serif;font-size:13px;text-align:center;margin-top:6px;color:#1a1a1a">${question}</p>`;
+  return `<svg width="220" height="220" viewBox="0 0 220 220" style="display:block;margin:0 auto;background:#fafaf8;border-radius:4px">${inner}</svg>${qHtml}`;
+}
+
+function markPoint(px, py, label) {
+  const cx = 110, cy = 110, sc = 20;
+  const sx = cx + px*sc, sy = cy - py*sc;
+  let s = `<circle cx="${sx}" cy="${sy}" r="4.2" fill="#1e3a5c"/>`;
+  if (label) s += `<text x="${sx+7}" y="${sy-7}" font-size="10" fill="#1e3a5c" font-family="sans-serif">${label}</text>`;
+  return s;
+}
+
+// makeGraph(m, b, question, marks) — marks: optional array of [x, y, label] to circle
+function makeGraph(m, b, question, marks) {
+  const cx = 110, cy = 110, sc = 20;
+  let g = gridAxesSVG();
   // the line, clipped to x ∈ [-5.5, 5.5]
   const lx1 = -5.5, lx2 = 5.5;
   const ly1 = m*lx1 + b, ly2 = m*lx2 + b;
   g += `<line x1="${cx+lx1*sc}" y1="${cy-ly1*sc}" x2="${cx+lx2*sc}" y2="${cy-ly2*sc}" stroke="#1e3a5c" stroke-width="2.5" stroke-linecap="round"/>`;
-  const qHtml = `<p style="font-family:sans-serif;font-size:13px;text-align:center;margin-top:6px;color:#1a1a1a">${question}</p>`;
-  return `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" style="display:block;margin:0 auto;background:#fafaf8;border-radius:4px">${g}</svg>${qHtml}`;
+  if (marks) marks.forEach(pt => { g += markPoint(pt[0], pt[1], pt[2]); });
+  return svgWrap(g, question);
+}
+
+// makeVerticalGraph(h, question, marks) — for x = h lines, which makeGraph can't represent
+function makeVerticalGraph(h, question, marks) {
+  const cx = 110, cy = 110, sc = 20;
+  let g = gridAxesSVG();
+  g += `<line x1="${cx+h*sc}" y1="10" x2="${cx+h*sc}" y2="210" stroke="#1e3a5c" stroke-width="2.5" stroke-linecap="round"/>`;
+  if (marks) marks.forEach(pt => { g += markPoint(pt[0], pt[1], pt[2]); });
+  return svgWrap(g, question);
 }
 
 // gen1: graph → find slope
@@ -183,108 +212,110 @@ function gen1() {
   };
 }
 
-// gen2: graph → find y-intercept
+// gen2: graph → find y-intercept (ordered pair)
 function gen2() {
   const m = choose([-2,-1,1,2]);
   const b = rInt(9) - 4;
   return {
-    svg:    makeGraph(m, b, 'What is the y-intercept of this line?'),
-    answer: [String(b)],
-    hint:   'Where does the line cross the y-axis? Read that y-value directly.',
-    step:   `\\text{y-intercept} = ${b}`
+    svg:    makeGraph(m, b, 'What is the y-intercept of this line? Give an ordered pair.'),
+    answer: [`(0,${b})`],
+    hint:   'The y-intercept is where the line meets the y-axis — give its coordinates as an ordered pair.',
+    step:   `\\text{y-intercept} = (0,${b})`
   };
 }
 
-// gen3: graph → find x-intercept
+// gen3: graph → find x-intercept (ordered pair)
 function gen3() {
   const m = choose([-2,-1,1,2]);
   const k = choose([-2,-1,1,2]);
   const b = -m * k;
   return {
-    svg:    makeGraph(m, b, 'At what x-value does this line cross the x-axis?'),
-    answer: [String(k)],
-    hint:   'Where does the line cross the x-axis? Read that x-value directly.',
-    step:   `\\text{x-intercept} = ${k}`
+    svg:    makeGraph(m, b, 'What is the x-intercept of this line? Give an ordered pair.'),
+    answer: [`(${k},0)`],
+    hint:   'The x-intercept is where the line meets the x-axis — give that crossing point as an ordered pair.',
+    step:   `\\text{x-intercept} = (${k},0)`
   };
 }
 
-// gen4: find y-intercept from two general points
+// gen4: graph, y-intercept marked → write the full equation
 function gen4() {
-  const m  = rInt(4) - 2;
-  const adjM = m === 0 ? 2 : m;
-  const b  = rInt(6) - 2;
-  const adjB = b === 0 ? 3 : b;
-  const x1 = rInt(3) + 1;
-  const x2 = x1 + rInt(3) + 1;
-  const y1 = adjM * x1 + adjB;
-  const y2 = adjM * x2 + adjB;
+  const m = choose([-3,-2,-1,1,2,3]);
+  const b = rInt(7) - 3;
+  const mPart = m === 1 ? 'x' : m === -1 ? '-x' : `${m}x`;
+  const bPart = b === 0 ? '' : b > 0 ? `+${b}` : `${b}`;
   return {
-    latex:  `\\text{Find the y-intercept of the line through }(${x1},\\,${y1})\\text{ and }(${x2},\\,${y2}).`,
-    answer: [String(adjB)],
-    hint:   `Find the slope first, then substitute either point into y = mx + b to solve for b.`,
-    step:   `m=${adjM},\\quad b=${adjB}`
+    svg:    makeGraph(m, b, 'Write the equation of this line.', [[0, b, `(0,${b})`]]),
+    answer: [`y=${mPart}${bPart}`, `${mPart}${bPart}`],
+    hint:   'The y-intercept is marked on the graph — what slope connects it to another point on the line?',
+    step:   `y=${mPart}${bPart}`
   };
 }
 
-// gen5: horizontal line — what is the equation? (enter y-value)
+// gen5: graph, two marked points (y-intercept not shown) → write the full equation
 function gen5() {
-  const k  = rInt(8) - 4;
-  const adjK = k === 0 ? 3 : k;
-  const x  = rInt(5) + 1;
+  const m  = choose([-2,-1,1,2]);
+  const x1 = choose([-2,-1,1,2]);
+  const y1 = rInt(5) - 2;
+  const b  = y1 - m * x1;
+  const dirs = shuffle([1,-1,2,-2]);
+  let x2 = x1 + 1, y2 = m*(x1+1) + b;
+  for (const d of dirs) {
+    const cx2 = x1 + d, cy2 = m*cx2 + b;
+    if (cx2 !== x1 && cx2 !== 0 && Math.abs(cx2) <= 4 && Math.abs(cy2) <= 4) { x2 = cx2; y2 = cy2; break; }
+  }
+  const mPart  = m === 1 ? 'x' : m === -1 ? '-x' : `${m}x`;
+  const bPart  = b === 0 ? '' : b > 0 ? `+${b}` : `${b}`;
+  const x1Term = x1 >= 0 ? `x-${x1}` : `x+${-x1}`;
+  const y1Term = y1 >= 0 ? `y-${y1}` : `y+${-y1}`;
   return {
-    latex:  `\\text{A horizontal line passes through }(${x},\\,${adjK}).\\text{ What is the y-value of every point on this line?}`,
-    answer: [String(adjK)],
-    hint:   `A horizontal line has the same y-value everywhere. What is that value here?`,
-    step:   `y=${adjK}\\text{ for all points on this line}`
+    svg:    makeGraph(m, b, 'Write the equation of this line using the two marked points.',
+                       [[x1, y1, `(${x1},${y1})`], [x2, y2, `(${x2},${y2})`]]),
+    answer: [`y=${mPart}${bPart}`, `${mPart}${bPart}`],
+    hint:   'Two points are marked on the line — what slope do they determine, and where does that place the y-intercept?',
+    step:   `m=${m},\\quad ${y1Term}=${m}(${x1Term})\\Rightarrow y=${mPart}${bPart}`
   };
 }
 
-// gen6: vertical line — what is the x-value?
+// gen6: horizontal-line graph → write the equation
 function gen6() {
-  const h  = rInt(8) - 4;
-  const adjH = h === 0 ? 3 : h;
-  const y  = rInt(5) + 1;
+  const k = rInt(9) - 4;
+  const adjK = k === 0 ? 3 : k;
+  const x = choose([-3,-2,-1,1,2,3]);
   return {
-    latex:  `\\text{A vertical line passes through }(${adjH},\\,${y}).\\text{ What is the x-value of every point on this line?}`,
-    answer: [String(adjH)],
-    hint:   `A vertical line has the same x-value everywhere. What is that value here?`,
-    step:   `x=${adjH}\\text{ for all points on this line}`
+    svg:    makeGraph(0, adjK, 'Write the equation of this horizontal line.', [[x, adjK, `(${x},${adjK})`]]),
+    answer: [`y=${adjK}`],
+    hint:   'A horizontal line on this graph has one y-value everywhere — what is it?',
+    step:   `y=${adjK}\\text{ for every point on this line}`
   };
 }
 
-// gen7: find slope — does a point lie on the line y = mx + b? (yes/no)
+// gen7: vertical-line graph → write the equation
 function gen7() {
-  const m  = rInt(4) - 1;
-  const adjM = m === 0 ? 2 : m;
-  const b  = rInt(5) - 2;
-  const adjB = b === 0 ? 1 : b;
-  const x1 = rInt(4) + 1;
-  const trueY = adjM * x1 + adjB;
-  const isOn = rInt(2) === 0;
-  const testY = isOn ? trueY : trueY + 1;
-  const ans = isOn ? 'yes' : 'no';
-  const bStr = adjB < 0 ? `- ${Math.abs(adjB)}` : `+ ${adjB}`;
+  const h = rInt(9) - 4;
+  const adjH = h === 0 ? 3 : h;
+  const y = choose([-3,-2,-1,1,2,3]);
   return {
-    latex:  `\\text{Does }(${x1},\\,${testY})\\text{ lie on the line }y=${adjM}x${bStr}\\text{?}`,
-    answer: [ans],
-    hint:   `Substitute x = ${x1} into the equation. Does the result equal ${testY}?`,
-    step:   `y=${adjM}(${x1})${bStr}=${trueY}\\;${isOn?'=':'\\neq'}\\;${testY}\\quad\\text{→ ${ans}}`
+    svg:    makeVerticalGraph(adjH, 'Write the equation of this vertical line.', [[adjH, y, `(${adjH},${y})`]]),
+    answer: [`x=${adjH}`],
+    hint:   'A vertical line on this graph has one x-value everywhere — what is it?',
+    step:   `x=${adjH}\\text{ for every point on this line}`
   };
 }
 
-// gen8: find b from two points where x1=0 is NOT given — harder version
+// gen8: graph with a marked test point → does it lie on the line?
 function gen8() {
-  const m  = rInt(3) + 1;           // positive slope
-  const b  = -(rInt(4) + 1);        // negative y-intercept for variety
-  const x1 = rInt(3) + 1;
-  const x2 = x1 + rInt(3) + 2;
-  const y1 = m * x1 + b;
-  const y2 = m * x2 + b;
+  const m = choose([-2,-1,1,2]);
+  const x0 = choose([-3,-2,-1,1,2,3]);
+  const trueY = rInt(7) - 3;
+  const b = trueY - m * x0;
+  const isOn = rInt(2) === 0;
+  const testY = isOn ? trueY : trueY + choose([1,-1]);
+  const ans = isOn ? 'yes' : 'no';
   return {
-    latex:  `\\text{Find the y-intercept of the line through }(${x1},\\,${y1})\\text{ and }(${x2},\\,${y2}).`,
-    answer: [String(b)],
-    hint:   `Find the slope from the two points, then substitute one point into y = mx + b.`,
-    step:   `m=${m},\\quad ${y1}=${m}(${x1})+b\\Rightarrow b=${b}`
+    svg:    makeGraph(m, b, 'Does the marked point P lie on this line?', [[x0, testY, 'P']]),
+    answer: [ans],
+    hint:   'Trace the line at that x-value — does the marked point sit on it or off it?',
+    step:   `\\text{At }x=${x0}\\text{, the line has }y=${trueY}.\\quad P=(${x0},${testY})\\;${isOn?'\\text{is on the line.}':'\\text{is not on the line.}'}`
   };
 }
 

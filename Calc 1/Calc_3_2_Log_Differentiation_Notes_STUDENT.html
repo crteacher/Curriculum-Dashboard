@@ -174,9 +174,9 @@ details[open]>.mistake-toggle{color:#1e3a5c}
 <p class="page-sub">Calculus I &nbsp;&middot;&nbsp; &sect;3.2 &nbsp;&middot;&nbsp; Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026 &nbsp;&middot;&nbsp; <strong>STUDENT</strong></p>
 <div class="opening-q">You know $\dfrac{d}{dx}[x^5]=5x^4$ (power rule) and $\dfrac{d}{dx}[2^x]=2^x\ln 2$ (exponential rule). But what about $y=x^x$? The exponent isn't constant, so the power rule fails. The base isn't constant, so the exponential rule fails. How do you differentiate something like this?</div>
 <div class="two-col">
-<div class="col"><div class="section-head">General Logarithm Derivative</div>
-<div class="accent-box"><p>Recall $\dfrac{d}{dx}[\ln x]=\dfrac{1}{x}$. For any base $b>0,\,b\neq 1$, use the change-of-base formula $\log_b x=\dfrac{\ln x}{\ln b}$:</p>$$\frac{d}{dx}[\log_b x]=\frac{1}{x\ln b}$$<p>With the chain rule (inner function $u$):</p>$$\frac{d}{dx}[\log_b u]=\frac{u'}{u\ln b}$$<p><strong>Note:</strong> when $b=e$, $\ln e=1$ and the formula reduces to $\dfrac{1}{x}$, as expected.</p></div>
-<p class="body-text"><strong>Quick examples:</strong><br>$\dfrac{d}{dx}[\log_2 x]=\dfrac{1}{x\ln 2}$<br><br>$\dfrac{d}{dx}[\log_3(x^2+1)]=\dfrac{2x}{(x^2+1)\ln 3}$</p>
+<div class="col"><div class="section-head">General Log &amp; Exponential Derivatives</div>
+<div class="accent-box"><p>Recall $\dfrac{d}{dx}[\ln x]=\dfrac{1}{x}$. For any base $b>0,\,b\neq 1$, use the change-of-base formula $\log_b x=\dfrac{\ln x}{\ln b}$:</p>$$\frac{d}{dx}[\log_b x]=\frac{1}{x\ln b}$$<p>With the chain rule (inner function $u$):</p>$$\frac{d}{dx}[\log_b u]=\frac{u'}{u\ln b}$$<p><strong>Note:</strong> when $b=e$, $\ln e=1$ and the formula reduces to $\dfrac{1}{x}$, as expected.</p><p><strong>General exponential derivative:</strong> write $b^x=e^{x\ln b}$ (since $e^{\ln b}=b$), then apply the chain rule with $u=x\ln b$, $u'=\ln b$:</p>$$\frac{d}{dx}[b^x]=e^{x\ln b}\cdot\ln b=b^x\ln b$$<p>With the chain rule (inner function $u$):</p>$$\frac{d}{dx}[b^u]=b^u\ln b\cdot u'$$<p><strong>Note:</strong> when $b=e$, $\ln e=1$ and the formula reduces to $\dfrac{d}{dx}[e^x]=e^x$, as expected.</p></div>
+<p class="body-text"><strong>Quick examples:</strong><br>$\dfrac{d}{dx}[\log_2 x]=\dfrac{1}{x\ln 2}$<br><br>$\dfrac{d}{dx}[\log_3(x^2+1)]=\dfrac{2x}{(x^2+1)\ln 3}$<br><br>$\dfrac{d}{dx}[5\cdot 3^x]=5\cdot 3^x\ln 3$<br><br>$\dfrac{d}{dx}[2^{x^2}]=2x\cdot 2^{x^2}\ln 2$</p>
 </div>
 <div class="col"><div class="section-head">Logarithmic Differentiation</div>
 <div class="accent-box"><p>Use when $y=f(x)$ is a complicated product/quotient or has a <em>variable exponent</em> (like $x^x$).</p><ol style="margin:.4rem 0 .4rem 1.2rem;padding:0"><li>Take $\ln$ of both sides: $\ln y=\ln f(x)$</li><li>Use log rules to expand the right side</li><li>Differentiate both sides — left side gives $\dfrac{y'}{y}$ (chain rule on $\ln y$)</li><li>Solve for $y'=y\cdot[\cdots]$</li><li>Substitute back $y=f(x)$</li></ol></div>
@@ -204,6 +204,11 @@ details[open]>.mistake-toggle{color:#1e3a5c}
   <div class="ex-label">Example 4 &nbsp;&mdash;&nbsp; Logarithmic differentiation — messy product</div>
   <div class="ex-body">Find $\dfrac{dy}{dx}$ for $y=\dfrac{(x+1)^2(2x-1)^3}{\sqrt{x^2+1}}$.</div>
   <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">Take $\ln$: $\ln y=2\ln(x+1)+3\ln(2x-1)-\tfrac{1}{2}\ln(x^2+1)$<br>Differentiate: $\dfrac{y'}{y}=\dfrac{2}{x+1}+\dfrac{6}{2x-1}-\dfrac{x}{x^2+1}$<br>$$\frac{dy}{dx}=\frac{(x+1)^2(2x-1)^3}{\sqrt{x^2+1}}\left(\frac{2}{x+1}+\frac{6}{2x-1}-\frac{x}{x^2+1}\right)$$</div></div>
+</div>
+<div class="ex-block">
+  <div class="ex-label">Example 5 &nbsp;&mdash;&nbsp; Chain rule with exponential base $b$</div>
+  <div class="ex-body">Differentiate $f(x)=3^{x^2-1}$.</div>
+  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">Use $\dfrac{d}{dx}[b^u]=b^u\ln b\cdot u'$ with $u=x^2-1$, $u'=2x$:<br>$$f'(x)=2x\cdot 3^{x^2-1}\ln 3$$</div></div>
 </div>
 </div>
 <div class="section-head">Practice Problems</div>
@@ -237,6 +242,11 @@ details[open]>.mistake-toggle{color:#1e3a5c}
   <div class="pr-num">6.</div>
   <div class="pr-prob">Find $\dfrac{dy}{dx}$ for $y=\dfrac{x^2(x+1)^3}{x-1}$.</div>
   <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$\ln y=2\ln x+3\ln(x+1)-\ln(x-1)$<br>$\dfrac{y'}{y}=\dfrac{2}{x}+\dfrac{3}{x+1}-\dfrac{1}{x-1}$<br>$y'=\dfrac{x^2(x+1)^3}{x-1}\!\left(\dfrac{2}{x}+\dfrac{3}{x+1}-\dfrac{1}{x-1}\right)$</div></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">7.</div>
+  <div class="pr-prob">Find $\dfrac{d}{dx}[4^x]$.</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$4^x\ln 4$</div></div>
 </div>
 </div>
 
