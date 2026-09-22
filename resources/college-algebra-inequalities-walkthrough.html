@@ -490,6 +490,17 @@
     var hiBrk = iv.hi === Infinity ? ")" : (iv.hiIncl ? "]" : ")");
     return loBrk + loStr + ", " + hiStr + hiBrk;
   }
+  // Like oneIntervalNotation, but renders brackets literally as given -- including an
+  // (incorrect) bracket next to +/-infinity -- instead of always correcting it to a
+  // parenthesis. Used only to *display* a deliberately wrong example in a diagnostic
+  // (e.g. "a student wrote [-infinity, k)"), never for a genuinely correct answer.
+  function rawIntervalNotation(iv) {
+    var loStr = iv.lo === -Infinity ? "&minus;&infin;" : String(iv.lo);
+    var hiStr = iv.hi === Infinity ? "&infin;" : String(iv.hi);
+    var loBrk = iv.loIncl ? "[" : "(";
+    var hiBrk = iv.hiIncl ? "]" : ")";
+    return loBrk + loStr + ", " + hiStr + hiBrk;
+  }
   function intervalNotation(expected) {
     if (expected.length === 0) return "&empty; (no solution)";
     return expected.slice().sort(function (a, b) { return ivSortKey(a) - ivSortKey(b); }).map(oneIntervalNotation).join(" &cup; ");
@@ -811,7 +822,7 @@
         var op = lessDir ? (incl ? "<=" : "<") : (incl ? ">=" : ">");
         var correctIv = lessDir ? { lo: -Infinity, hi: k, loIncl: false, hiIncl: incl } : { lo: k, hi: Infinity, loIncl: incl, hiIncl: false };
         var badIv = lessDir ? { lo: -Infinity, hi: k, loIncl: true, hiIncl: incl } : { lo: k, hi: Infinity, loIncl: incl, hiIncl: true };
-        var orig = "x " + OPHTML[op] + " " + k, result = oneIntervalNotation(badIv);
+        var orig = "x " + OPHTML[op] + " " + k, result = rawIntervalNotation(badIv);
         return { orig: orig, result: result, correctFullStep: oneIntervalNotation(correctIv) };
       }
     },
