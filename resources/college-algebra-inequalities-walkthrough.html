@@ -1,0 +1,1367 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found]){display:none!important}</style></head><body>
+<title>Inequalities Walkthrough</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=JetBrains+Mono:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #f6f1e4;
+    --paper-line: rgba(58, 74, 94, 0.14);
+    --paper-line-strong: rgba(58, 74, 94, 0.26);
+    --ink: #26313f;
+    --ink-soft: #5b6b7d;
+    --card-bg: #fffdf7;
+    --card-border: #ddd2b6;
+    --accent: #b5790a;
+    --accent-strong: #8f5f06;
+    --accent-soft: rgba(181, 121, 10, 0.12);
+    --accent-ink: #fffaf0;
+    --good: #3f7a52;
+    --good-soft: rgba(63, 122, 82, 0.14);
+    --bad: #b3413a;
+    --bad-soft: rgba(179, 65, 58, 0.12);
+    --shadow: rgba(38, 49, 63, 0.16);
+    --graph-grid: rgba(58, 74, 94, 0.14);
+    --graph-axis: rgba(38, 49, 63, 0.55);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #1b2330;
+      --paper-line: rgba(238, 242, 240, 0.07);
+      --paper-line-strong: rgba(238, 242, 240, 0.15);
+      --ink: #edf1ef;
+      --ink-soft: #a3aebb;
+      --card-bg: #232e3d;
+      --card-border: #3a4a61;
+      --accent: #e8b04f;
+      --accent-strong: #f2c675;
+      --accent-soft: rgba(232, 176, 79, 0.16);
+      --accent-ink: #2b1e05;
+      --good: #7bc794;
+      --good-soft: rgba(123, 199, 148, 0.16);
+      --bad: #ff9a90;
+      --bad-soft: rgba(255, 154, 144, 0.14);
+      --shadow: rgba(0, 0, 0, 0.5);
+      --graph-grid: rgba(238, 242, 240, 0.10);
+      --graph-axis: rgba(238, 242, 240, 0.55);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #1b2330;
+    --paper-line: rgba(238, 242, 240, 0.07);
+    --paper-line-strong: rgba(238, 242, 240, 0.15);
+    --ink: #edf1ef;
+    --ink-soft: #a3aebb;
+    --card-bg: #232e3d;
+    --card-border: #3a4a61;
+    --accent: #e8b04f;
+    --accent-strong: #f2c675;
+    --accent-soft: rgba(232, 176, 79, 0.16);
+    --accent-ink: #2b1e05;
+    --good: #7bc794;
+    --good-soft: rgba(123, 199, 148, 0.16);
+    --bad: #ff9a90;
+    --bad-soft: rgba(255, 154, 144, 0.14);
+    --shadow: rgba(0, 0, 0, 0.5);
+    --graph-grid: rgba(238, 242, 240, 0.10);
+    --graph-axis: rgba(238, 242, 240, 0.55);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background:
+      repeating-linear-gradient(0deg, var(--paper-line) 0, var(--paper-line) 1px, transparent 1px, transparent 32px),
+      repeating-linear-gradient(90deg, var(--paper-line) 0, var(--paper-line) 1px, transparent 1px, transparent 32px),
+      var(--paper);
+    color: var(--ink);
+    font-family: "Source Sans 3", ui-sans-serif, system-ui, sans-serif;
+    display: flex;
+    justify-content: center;
+    padding: clamp(20px, 4vw, 56px) 18px 80px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+  }
+
+  .wrap { width: 100%; max-width: 900px; }
+  header { text-align: center; margin-bottom: 18px; }
+
+  .eyebrow {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--accent); font-weight: 600;
+  }
+
+  h1 {
+    font-family: "Fraunces", Georgia, serif; font-weight: 600;
+    font-size: clamp(1.8rem, 5vw, 2.5rem); margin: 6px 0 8px; text-wrap: balance;
+  }
+
+  header p { color: var(--ink-soft); font-size: 1rem; max-width: 62ch; margin: 0 auto; line-height: 1.55; }
+
+  .howto {
+    background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 14px;
+    box-shadow: 0 10px 26px -18px var(--shadow); padding: 16px 20px; margin: 22px 0 26px;
+    font-size: 0.92rem; line-height: 1.65; color: var(--ink);
+  }
+  .howto strong { color: var(--accent-strong); }
+
+  .stage-nav {
+    position: sticky; top: 12px; z-index: 5;
+    display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 28px; padding: 12px 14px;
+    background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 14px;
+    box-shadow: 0 10px 26px -16px var(--shadow);
+  }
+  .stage-pill {
+    display: inline-flex; align-items: center; gap: 6px; font-size: 0.76rem; font-weight: 600;
+    padding: 6px 11px; border-radius: 20px; background: var(--paper-line); color: var(--ink-soft);
+    border: 1px solid transparent; transition: all 0.2s ease;
+  }
+  .stage-pill .dot {
+    width: 7px; height: 7px; border-radius: 50%; background: var(--ink-soft); flex-shrink: 0; transition: background 0.2s ease;
+  }
+  .stage-pill.done { background: var(--good-soft); color: var(--good); border-color: var(--good-soft); }
+  .stage-pill.done .dot { background: var(--good); }
+
+  button { font-family: inherit; cursor: pointer; }
+  button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .icon-btn {
+    display: inline-flex; align-items: center; gap: 7px; background: var(--card-bg);
+    border: 1px solid var(--card-border); color: var(--ink); padding: 9px 14px;
+    border-radius: 9px; font-size: 0.86rem; font-weight: 600; text-decoration: none;
+    transition: border-color 0.15s ease, transform 0.1s ease;
+  }
+  .icon-btn:hover { border-color: var(--accent); }
+  .icon-btn:active { transform: translateY(1px); }
+  .icon-btn svg { width: 14px; height: 14px; flex-shrink: 0; }
+  .video-btn { color: var(--accent-strong); border-color: var(--accent-soft); background: var(--accent-soft); }
+  .video-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+
+  .group-head {
+    margin: 34px 0 16px; padding-bottom: 14px; border-bottom: 1.5px solid var(--paper-line-strong);
+  }
+  .group-head .gnum {
+    font-family: "JetBrains Mono", monospace; font-size: 0.74rem; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--accent); font-weight: 700;
+  }
+  .group-head .gtitle {
+    font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 1.4rem; color: var(--ink); margin: 2px 0 6px;
+  }
+  .group-head .gdesc { font-size: 0.94rem; color: var(--ink-soft); line-height: 1.6; max-width: 68ch; }
+
+  .exam-toolbar {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+    margin-top: 14px; padding: 12px 16px; background: var(--card-bg); border: 1px solid var(--card-border);
+    border-radius: 12px;
+  }
+  .exam-toolbar .score-group { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .score-box { display: flex; align-items: baseline; gap: 8px; }
+  .score-num { font-family: "JetBrains Mono", monospace; font-size: 1.2rem; font-weight: 700; color: var(--accent-strong); font-variant-numeric: tabular-nums; }
+  .score-label { font-size: 0.76rem; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.06em; }
+  .score-divider { width: 1px; align-self: stretch; min-height: 22px; background: var(--card-border); }
+  .exam-score-box .score-num { color: var(--ink); }
+
+  .exam-badge {
+    display: inline-flex; align-items: center; gap: 5px; font-size: 0.68rem; font-weight: 700;
+    padding: 3px 9px; border-radius: 20px; letter-spacing: 0.02em; white-space: nowrap;
+  }
+  .exam-badge svg { width: 11px; height: 11px; flex-shrink: 0; }
+  .exam-badge.exam-good { background: var(--good-soft); color: var(--good); }
+  .exam-badge.exam-bad { background: var(--bad-soft); color: var(--bad); }
+
+  .qcard {
+    background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px;
+    box-shadow: 0 14px 32px -22px var(--shadow), 0 2px 8px -2px var(--shadow);
+    padding: clamp(16px, 3vw, 24px); margin-bottom: 18px;
+  }
+
+  .qcard-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
+  .qcard-head .qtitle { display: flex; align-items: center; gap: 10px; }
+  .qlabel { font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 1.05rem; }
+  .qpoints {
+    font-family: "JetBrains Mono", monospace; font-size: 0.66rem; letter-spacing: 0.05em;
+    color: var(--ink-soft); background: var(--paper-line); padding: 2px 8px; border-radius: 20px;
+  }
+
+  .qprompt { font-size: 1rem; line-height: 1.7; margin-bottom: 14px; }
+  .qprompt .math { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 1.04rem; }
+  .qsolution .math { font-family: "JetBrains Mono", ui-monospace, monospace; }
+
+  .qinputs { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin-bottom: 14px; }
+  .qinputs .field-label { font-size: 0.86rem; color: var(--ink-soft); font-weight: 600; }
+  .qinputs input[type="text"] {
+    font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 0.95rem;
+    background: var(--paper); border: 1.5px solid var(--card-border); border-radius: 8px;
+    padding: 8px 10px; color: var(--ink); min-width: 92px;
+  }
+  .qinputs select {
+    font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 0.95rem;
+    background: var(--paper); border: 1.5px solid var(--card-border); border-radius: 8px;
+    padding: 8px 10px; color: var(--ink);
+  }
+  .qinputs input:focus, .qinputs select:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .step-pair { display: flex; align-items: center; flex-wrap: wrap; gap: 10px 14px; }
+  .step-pair .arrow { color: var(--ink-soft); font-size: 1.1rem; }
+  .mc-row { display: flex; flex-direction: column; gap: 8px; }
+  .mc-opt {
+    border: 1.5px solid var(--card-border); border-radius: 9px; padding: 10px 13px; text-align: left;
+    font-size: 0.9rem; background: var(--card-bg); color: var(--ink); font-weight: 500; line-height: 1.45;
+    transition: border-color 0.15s ease, background 0.15s ease;
+  }
+  .mc-opt:hover { border-color: var(--accent); }
+  .mc-opt.selected { border-color: var(--accent); background: var(--accent-soft); color: var(--accent-strong); font-weight: 600; }
+
+  .qactions { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; }
+  .btn-primary {
+    background: var(--accent); color: var(--accent-ink); border: none; padding: 10px 20px;
+    border-radius: 10px; font-size: 0.92rem; font-weight: 700;
+    box-shadow: 0 8px 16px -8px var(--accent-strong); transition: transform 0.1s ease;
+  }
+  .btn-primary:active { transform: translateY(1px); }
+  .btn-secondary {
+    background: transparent; border: 1.5px solid var(--card-border); color: var(--ink);
+    padding: 9px 18px; border-radius: 10px; font-size: 0.92rem; font-weight: 700;
+    transition: border-color 0.15s ease;
+  }
+  .btn-secondary:hover { border-color: var(--accent); }
+
+  .qfeedback {
+    font-size: 0.9rem; font-weight: 700; padding: 9px 13px; border-radius: 9px; margin-bottom: 10px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .qfeedback.good { background: var(--good-soft); color: var(--good); }
+  .qfeedback.bad { background: var(--bad-soft); color: var(--bad); }
+  .qfeedback svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+  .qsolution {
+    background: var(--accent-soft); border: 1px solid var(--card-border); border-left: 4px solid var(--accent);
+    border-radius: 0 12px 12px 0; padding: 14px 16px; font-size: 0.92rem; line-height: 1.7;
+  }
+  .qsolution .sol-label {
+    font-family: "JetBrains Mono", monospace; font-size: 0.68rem; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--accent-strong); font-weight: 700; display: block; margin-bottom: 6px;
+  }
+  .qsolution .step { margin: 3px 0; }
+  .qsolution .final { margin-top: 8px; font-weight: 700; font-family: "JetBrains Mono", monospace; }
+
+  /* ---- worked-step "whiteboard" solution layout ---- */
+  .worksheet { margin-top: 2px; }
+  .ws-row {
+    display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; column-gap: 12px;
+    font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 1rem;
+  }
+  .ws-row .ws-expr { text-align: right; white-space: nowrap; }
+  .ws-row .ws-expr:last-child { text-align: left; }
+  .ws-row .ws-eq { color: var(--ink-soft); font-weight: 600; }
+  .ws-op-row { font-size: 0.88rem; color: var(--accent-strong); font-weight: 600; padding-top: 4px; }
+  .ws-op-row .ws-op { text-align: right; min-height: 1.2em; }
+  .ws-op-row .ws-op:last-child { text-align: left; }
+  .ws-note {
+    font-family: "Source Sans 3", sans-serif; font-size: 0.78rem; font-weight: 500;
+    color: var(--ink-soft); text-align: center; margin: 2px 0; font-style: italic;
+  }
+  .ws-rule { border: none; border-top: 1.5px solid var(--card-border); margin: 4px 0 9px; }
+  .ws-row.ws-final { margin-top: 3px; font-weight: 700; }
+  .ws-row.ws-final .ws-expr { color: var(--accent-strong); font-size: 1.06rem; }
+  @media (max-width: 480px) {
+    .ws-row, .ws-op-row { column-gap: 7px; font-size: 0.9rem; }
+  }
+
+  /* ---- number line: static display (in solutions) ---- */
+  .nline-wrap { display: flex; justify-content: center; margin: 10px 0 4px; }
+  .nline-svg { width: 100%; max-width: 460px; height: auto; display: block; }
+  .nline-axis { stroke: var(--graph-axis); stroke-width: 2; }
+  .nline-tick { stroke: var(--graph-axis); stroke-width: 1.5; }
+  .nline-label { font-family: "JetBrains Mono", monospace; font-size: 11px; fill: var(--ink-soft); }
+  .nline-seg { stroke: var(--accent); stroke-width: 6; stroke-linecap: round; }
+  .nline-seg-arrow { fill: var(--accent); }
+  .nline-pt { stroke-width: 2.6; }
+  .nline-pt.nline-closed { fill: var(--accent); stroke: var(--accent); }
+  .nline-pt.nline-open { fill: var(--card-bg); stroke: var(--accent); }
+  .nline-empty { font-size: 0.9rem; color: var(--ink-soft); font-style: italic; padding: 8px 0; }
+
+  /* ---- number line: interactive answer widget ---- */
+  .nline-input-wrap { margin: 4px 0 16px; padding: 14px 16px; background: var(--paper); border: 1.5px dashed var(--card-border); border-radius: 12px; }
+  .nline-input-help { font-size: 0.8rem; color: var(--ink-soft); line-height: 1.5; margin-bottom: 8px; }
+  .nline-input-row { display: flex; align-items: center; gap: 8px; }
+  .nline-svg-slot { flex: 1 1 auto; min-width: 0; }
+  .nline-inf-btn { flex-shrink: 0; font-family: "JetBrains Mono", monospace; padding: 8px 11px; }
+  .nline-pt-input { cursor: pointer; }
+  .nline-hit { cursor: pointer; }
+  .nline-svg-input .nline-tick,
+  .nline-svg-input .nline-label,
+  .nline-svg-input .nline-seg,
+  .nline-svg-input .nline-seg-arrow,
+  .nline-svg-input .nline-axis { pointer-events: none; }
+  .nline-input-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+  .nline-input-readout { margin-top: 10px; font-size: 0.86rem; color: var(--ink-soft); }
+  .nline-readout-text { font-family: "JetBrains Mono", monospace; font-weight: 700; color: var(--accent-strong); }
+
+  .hidden { display: none !important; }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">College Algebra &middot; Inequality Foundations</div>
+    <h1>Inequalities &amp; Interval Notation: A Guided Walkthrough</h1>
+    <p>Builds up the skills behind problems like "&minus;2 &lt; 3x + 1 &le; 10" and "x &lt; 3 or x &gt; 7" &mdash; solving inequalities (and knowing when to flip the sign), writing the answer in interval notation, and combining two conditions with AND or OR.</p>
+  </header>
+
+  <div class="howto">
+    Work through the stages <strong>in order</strong> &mdash; each one builds on the last. In every stage: watch the short video if a concept feels shaky, try the "What went wrong?" checks first (they're built around the exact mistakes that trip people up), then drill the practice problem &mdash; click <strong>New version</strong> to redo it with new numbers as many times as you want. Starting in Stage 2, you build your answer by <strong>tapping directly on a number line</strong> instead of typing notation by hand. Stage 5 is a short practice exam to confirm it's sticking.
+  </div>
+
+  <div class="stage-nav" id="stageNav"></div>
+
+  <div id="groups"></div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  // ============================================================
+  // Utilities
+  // ============================================================
+  function randInt(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+  function randNonZeroInt(min, max) { var v; do { v = randInt(min, max); } while (v === 0); return v; }
+  function randChoice(arr) { return arr[randInt(0, arr.length - 1)]; }
+  function randBool() { return Math.random() < 0.5; }
+  function shuffle(arr) {
+    var a = arr.slice();
+    for (var i = a.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    return a;
+  }
+  function signedTerm(coef, label) {
+    if (coef === 0) return "";
+    var abs = Math.abs(coef);
+    var coefStr = (abs === 1 && label) ? "" : String(abs);
+    return (coef < 0 ? "&minus;" : "+") + " " + coefStr + label;
+  }
+  function leadTerm(coef, label) {
+    if (coef === 0) return "0";
+    var abs = Math.abs(coef);
+    var coefStr = (abs === 1 && label) ? "" : String(abs);
+    return (coef < 0 ? "&minus;" : "") + coefStr + label;
+  }
+  function parseSimpleNum(raw) {
+    if (raw === null || raw === undefined) return null;
+    var s = String(raw).trim();
+    if (s === "") return null;
+    var v = parseFloat(s.replace(/,/g, ""));
+    return isNaN(v) ? null : v;
+  }
+  function numEq(a, b, tol) {
+    tol = tol === undefined ? 0.01 : tol;
+    return a !== null && b !== null && Math.abs(a - b) < tol;
+  }
+
+  var OPHTML = { "<": "&lt;", ">": "&gt;", "<=": "&le;", ">=": "&ge;" };
+  var FLIP = { "<": ">", ">": "<", "<=": ">=", ">=": "<=" };
+
+  // ---- shared "x [op] value" answer input (select + number field) ----
+  function opValInputsHtml() {
+    return "<span class=\"field-label\">x</span>" +
+      "<select class=\"ans-op\">" +
+      "<option value=\"<\">&lt;</option>" +
+      "<option value=\">\">&gt;</option>" +
+      "<option value=\"<=\">&le;</option>" +
+      "<option value=\">=\">&ge;</option>" +
+      "</select>" +
+      "<input type=\"text\" class=\"ans-val\" placeholder=\"a number\">";
+  }
+  function readOpValAnswer(card) {
+    return { op: card.querySelector(".ans-op").value, val: parseSimpleNum(card.querySelector(".ans-val").value) };
+  }
+
+  // ---- multiple-choice "spot the mistake" helpers ----
+  function mcOptsHtml(opts) {
+    return "<div class=\"mc-row\">" + opts.map(function (o, i) {
+      return "<button type=\"button\" class=\"mc-opt\" data-val=\"" + i + "\">" + o.text + "</button>";
+    }).join("") + "</div>";
+  }
+  function mcAfterRender(card) {
+    var opts = card.querySelectorAll(".mc-opt");
+    opts.forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        opts.forEach(function (b) { b.classList.remove("selected"); });
+        btn.classList.add("selected");
+      });
+    });
+  }
+  function mcReadAnswer(card) {
+    var sel = card.querySelector(".mc-opt.selected");
+    return { idx: sel ? parseInt(sel.getAttribute("data-val"), 10) : -1 };
+  }
+  function buildMcOptions(correctText, wrongTexts) {
+    var opts = shuffle([{ text: correctText, correct: true }].concat(wrongTexts.map(function (t) { return { text: t, correct: false }; })));
+    var correctIdx = opts.findIndex(function (o) { return o.correct; });
+    return { opts: opts, correctIdx: correctIdx };
+  }
+
+  // ---- pooled "spot the mistake" diagnostics ----
+  // Each pool is an array of { reason, build() -> {orig, result, correctFullStep} }. On every
+  // render, one archetype is picked at random (which may be the "valid, nothing's wrong" one) and
+  // its reason becomes the correct option; the other archetypes' reasons become the wrong options.
+  function pickDiagnostic(pool) {
+    var chosenIdx = randInt(0, pool.length - 1);
+    var inst = pool[chosenIdx].build();
+    var reasons = pool.map(function (a) { return a.reason; });
+    var m = buildMcOptions(reasons[chosenIdx], reasons.filter(function (_, i) { return i !== chosenIdx; }));
+    return { orig: inst.orig, result: inst.result, correctFullStep: inst.correctFullStep, opts: m.opts, correctIdx: m.correctIdx };
+  }
+  function diagPromptHtml(s) {
+    return "<div class=\"step-pair\"><span class=\"math\">" + s.orig + "</span><span class=\"arrow\">&rarr;</span><span class=\"math\">" + s.result + "</span></div>" +
+      "<div style=\"margin-top:10px\">A student wrote this. Is it correct? If not, what went wrong?</div>";
+  }
+  function diagSolutionHtml(s) {
+    var correctText = s.opts[s.correctIdx].text;
+    return "<span class=\"sol-label\">Solution</span>" +
+      "<div class=\"step\">" + correctText + "</div>" +
+      (s.correctFullStep ? "<div class=\"final\">Correct answer: " + s.correctFullStep + "</div>" : "");
+  }
+  var diagInputsHtml = function (s) { return mcOptsHtml(s.opts); };
+  var diagIsCorrect = function (ua, s) { return ua.idx === s.correctIdx; };
+
+  // ---- worked-step "whiteboard" solution renderer ----
+  function divOpStr(a) { return "&divide; " + (a < 0 ? "(" + a + ")" : a); }
+  function wsIneqRow(left, opHtml, right, isFinal) {
+    return "<div class=\"ws-row" + (isFinal ? " ws-final" : "") + "\"><span class=\"ws-expr\">" + left + "</span><span class=\"ws-eq\">" + opHtml + "</span><span class=\"ws-expr\">" + right + "</span></div>";
+  }
+  function wsOpRow(left, right, note) {
+    return "<div class=\"ws-row ws-op-row\"><span class=\"ws-op\">" + (left || "&nbsp;") + "</span><span class=\"ws-eq\">&nbsp;</span><span class=\"ws-op\">" + (right || "&nbsp;") + "</span></div>" +
+      (note ? "<div class=\"ws-note\">" + note + "</div>" : "") +
+      "<hr class=\"ws-rule\">";
+  }
+  function addSubNote(k) {
+    return (k < 0 ? "Add " + (-k) + " to both sides." : "Subtract " + k + " from both sides.");
+  }
+  function divOpNoteIneq(a) {
+    var base = "Divide both sides by " + a + ".";
+    return a < 0 ? base + " Dividing by a <strong>negative</strong> number flips the inequality sign." : base;
+  }
+  function renderWorksheet(rows) {
+    return "<span class=\"sol-label\">Solution</span><div class=\"worksheet\">" + rows.join("") + "</div>";
+  }
+
+  // ---- icons ----
+  var SVG_REFRESH = "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M16 3h5v5\"/><path d=\"M4 20 21 3\"/><path d=\"M21 16v5h-5\"/><path d=\"M15 15l6 6\"/><path d=\"M4 4l5 5\"/></svg>";
+  var SVG_CHECK = "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M20 6 9 17l-5-5\"/></svg>";
+  var SVG_X = "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\"><circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M15 9l-6 6M9 9l6 6\"/></svg>";
+  var SVG_PLAY = "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M10 8.5 16 12l-6 3.5z\" fill=\"currentColor\" stroke=\"none\"/></svg>";
+  var SVG_LOCK = "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"4\" y=\"10\" width=\"16\" height=\"10\" rx=\"2\"/><path d=\"M8 10V7a4 4 0 0 1 8 0v3\"/></svg>";
+
+  // ============================================================
+  // Interval helpers: comparing, formatting, and drawing intervals
+  // (an interval is {lo, loIncl, hi, hiIncl}; -Infinity/Infinity are valid bounds)
+  // ============================================================
+  function boundEqual(uv, uIncl, ev, eIncl) {
+    if (ev === -Infinity || ev === Infinity) return uv === ev;
+    return uv !== -Infinity && uv !== Infinity && Math.abs(uv - ev) < 0.01 && uIncl === eIncl;
+  }
+  function ivSortKey(iv) { return iv.lo === -Infinity ? -1e18 : iv.lo; }
+  // expected/given: arrays of {lo,loIncl,hi,hiIncl} -- an empty array means "no solution"
+  function intervalAnswerCorrect(given, expected) {
+    if (given.length !== expected.length) return false;
+    var us = given.slice().sort(function (a, b) { return ivSortKey(a) - ivSortKey(b); });
+    var es = expected.slice().sort(function (a, b) { return ivSortKey(a) - ivSortKey(b); });
+    for (var i = 0; i < us.length; i++) {
+      if (!boundEqual(us[i].lo, us[i].loIncl, es[i].lo, es[i].loIncl)) return false;
+      if (!boundEqual(us[i].hi, us[i].hiIncl, es[i].hi, es[i].hiIncl)) return false;
+    }
+    return true;
+  }
+  function oneIntervalNotation(iv) {
+    var loStr = iv.lo === -Infinity ? "&minus;&infin;" : String(iv.lo);
+    var hiStr = iv.hi === Infinity ? "&infin;" : String(iv.hi);
+    var loBrk = iv.lo === -Infinity ? "(" : (iv.loIncl ? "[" : "(");
+    var hiBrk = iv.hi === Infinity ? ")" : (iv.hiIncl ? "]" : ")");
+    return loBrk + loStr + ", " + hiStr + hiBrk;
+  }
+  // Like oneIntervalNotation, but renders brackets literally as given -- including an
+  // (incorrect) bracket next to +/-infinity -- instead of always correcting it to a
+  // parenthesis. Used only to *display* a deliberately wrong example in a diagnostic
+  // (e.g. "a student wrote [-infinity, k)"), never for a genuinely correct answer.
+  function rawIntervalNotation(iv) {
+    var loStr = iv.lo === -Infinity ? "&minus;&infin;" : String(iv.lo);
+    var hiStr = iv.hi === Infinity ? "&infin;" : String(iv.hi);
+    var loBrk = iv.loIncl ? "[" : "(";
+    var hiBrk = iv.hiIncl ? "]" : ")";
+    return loBrk + loStr + ", " + hiStr + hiBrk;
+  }
+  function intervalNotation(expected) {
+    if (expected.length === 0) return "&empty; (no solution)";
+    return expected.slice().sort(function (a, b) { return ivSortKey(a) - ivSortKey(b); }).map(oneIntervalNotation).join(" &cup; ");
+  }
+
+  // ---- axis range: pick clean tick spacing that comfortably frames an interval set ----
+  function niceStep(range) {
+    var candidates = [1, 2, 5, 10, 20, 25];
+    for (var i = 0; i < candidates.length; i++) { if (range / candidates[i] <= 9) return candidates[i]; }
+    return 50;
+  }
+  function computeAxisRange(intervals) {
+    var finite = [];
+    intervals.forEach(function (iv) {
+      if (isFinite(iv.lo)) finite.push(iv.lo);
+      if (isFinite(iv.hi)) finite.push(iv.hi);
+    });
+    if (finite.length === 0) return { min: -6, max: 6, step: 2 };
+    var lo = Math.min.apply(null, finite), hi = Math.max.apply(null, finite);
+    var span = Math.max(hi - lo, 4);
+    var pad = Math.max(2, Math.round(span * 0.4));
+    var min = lo - pad, max = hi + pad;
+    var step = niceStep(max - min);
+    min = Math.floor(min / step) * step;
+    max = Math.ceil(max / step) * step;
+    if (max - min < step) max += step;
+    return { min: min, max: max, step: step };
+  }
+
+  // ---- static number-line picture, shown inside a worked solution ----
+  function numberLineSvg(intervals) {
+    if (intervals.length === 0) {
+      return "<div class=\"nline-empty\">&empty; No solution &mdash; nothing is shaded, because no x satisfies it.</div>";
+    }
+    var range = computeAxisRange(intervals);
+    var W = 640, H = 96, padX = 30, axisY = 50, xLeft = padX, xRight = W - padX;
+    function xOf(v) {
+      if (v === -Infinity) return xLeft;
+      if (v === Infinity) return xRight;
+      return xLeft + (v - range.min) / (range.max - range.min) * (xRight - xLeft);
+    }
+    var svg = "<svg viewBox=\"0 0 " + W + " " + H + "\" class=\"nline-svg\" role=\"img\" aria-label=\"number line showing the solution\">";
+    svg += "<line x1=\"" + xLeft + "\" y1=\"" + axisY + "\" x2=\"" + xRight + "\" y2=\"" + axisY + "\" class=\"nline-axis\"/>";
+    for (var t = range.min; t <= range.max + 1e-9; t += range.step) {
+      var x = xOf(t);
+      svg += "<line x1=\"" + x + "\" y1=\"" + (axisY - 5) + "\" x2=\"" + x + "\" y2=\"" + (axisY + 5) + "\" class=\"nline-tick\"/>";
+      svg += "<text x=\"" + x + "\" y=\"" + (axisY + 20) + "\" class=\"nline-label\" text-anchor=\"middle\">" + Math.round(t) + "</text>";
+    }
+    intervals.forEach(function (iv) {
+      var x1 = xOf(iv.lo), x2 = xOf(iv.hi);
+      svg += "<line x1=\"" + x1 + "\" y1=\"" + axisY + "\" x2=\"" + x2 + "\" y2=\"" + axisY + "\" class=\"nline-seg\"/>";
+      if (isFinite(iv.lo)) svg += "<circle cx=\"" + x1 + "\" cy=\"" + axisY + "\" r=\"7\" class=\"nline-pt " + (iv.loIncl ? "nline-closed" : "nline-open") + "\"/>";
+      else svg += "<path d=\"M" + x1 + "," + axisY + " l10,-6 l0,12 z\" class=\"nline-seg-arrow\"/>";
+      if (isFinite(iv.hi)) svg += "<circle cx=\"" + x2 + "\" cy=\"" + axisY + "\" r=\"7\" class=\"nline-pt " + (iv.hiIncl ? "nline-closed" : "nline-open") + "\"/>";
+      else svg += "<path d=\"M" + x2 + "," + axisY + " l-10,-6 l0,12 z\" class=\"nline-seg-arrow\"/>";
+    });
+    svg += "</svg>";
+    return "<div class=\"nline-wrap\">" + svg + "</div>";
+  }
+
+  // ============================================================
+  // Interactive number-line answer widget (Stages 2-5)
+  // Students build their answer by tapping the line -- no notation typing needed.
+  // State lives on the wrapper element itself (wrap.__nline) so afterRender's
+  // click handlers and readAnswer() share one source of truth.
+  // ============================================================
+  var MINUS_INF = "&minus;&infin;", PLUS_INF = "&infin;";
+  function nlineInputsHtml(s) {
+    return "<div class=\"nline-input-wrap\">" +
+      "<div class=\"nline-input-help\">Tap the line to place each endpoint (tap a dot again to switch it open/closed). Use the " + MINUS_INF + " / " + PLUS_INF + " buttons for an unbounded side.</div>" +
+      "<div class=\"nline-input-row\">" +
+      "<button type=\"button\" class=\"icon-btn nline-inf-btn\" data-side=\"lo\">" + MINUS_INF + "</button>" +
+      "<div class=\"nline-svg-slot\"></div>" +
+      "<button type=\"button\" class=\"icon-btn nline-inf-btn\" data-side=\"hi\">" + PLUS_INF + "</button>" +
+      "</div>" +
+      "<div class=\"nline-input-actions\">" +
+      (s.allowUnion ? "<button type=\"button\" class=\"icon-btn nline-add-btn\">+ Add another piece</button>" : "") +
+      "<button type=\"button\" class=\"icon-btn nline-empty-btn\">No solution</button>" +
+      "<button type=\"button\" class=\"icon-btn nline-reset-btn\">" + SVG_REFRESH + "Clear</button>" +
+      "</div>" +
+      "<div class=\"nline-input-readout\">Your answer: <span class=\"nline-readout-text\">&mdash;</span></div>" +
+      "</div>";
+  }
+  function nlineAfterRender(card, s) {
+    var wrap = card.querySelector(".nline-input-wrap");
+    var slot = wrap.querySelector(".nline-svg-slot");
+    var readoutEl = wrap.querySelector(".nline-readout-text");
+    var range = computeAxisRange(s.expected);
+    var nstate = { segments: [{ lo: null, hi: null, loIncl: null, hiIncl: null }], noSolution: false };
+    wrap.__nline = nstate;
+
+    function activeSeg() { return nstate.segments[nstate.segments.length - 1]; }
+
+    function renderReadout() {
+      if (nstate.noSolution) { readoutEl.textContent = "No solution"; return; }
+      var complete = nstate.segments.filter(function (sg) { return sg.lo !== null && sg.hi !== null; });
+      if (complete.length === 0) { readoutEl.textContent = "—"; return; }
+      readoutEl.innerHTML = intervalNotation(complete);
+    }
+
+    var W = 640, H = 100, padX = 30, axisY = 50, xLeft = padX, xRight = W - padX;
+    function xOf(v) {
+      if (v === -Infinity) return xLeft;
+      if (v === Infinity) return xRight;
+      return xLeft + (v - range.min) / (range.max - range.min) * (xRight - xLeft);
+    }
+
+    function renderSvg() {
+      var svg = "<svg viewBox=\"0 0 " + W + " " + H + "\" class=\"nline-svg nline-svg-input\">";
+      svg += "<line x1=\"" + xLeft + "\" y1=\"" + axisY + "\" x2=\"" + xRight + "\" y2=\"" + axisY + "\" class=\"nline-axis\"/>";
+      svg += "<rect x=\"" + xLeft + "\" y=\"" + (axisY - 22) + "\" width=\"" + (xRight - xLeft) + "\" height=\"44\" fill=\"transparent\" pointer-events=\"all\" class=\"nline-hit\"/>";
+      for (var t = range.min; t <= range.max + 1e-9; t += range.step) {
+        var x = xOf(t);
+        svg += "<line x1=\"" + x + "\" y1=\"" + (axisY - 5) + "\" x2=\"" + x + "\" y2=\"" + (axisY + 5) + "\" class=\"nline-tick\"/>";
+        svg += "<text x=\"" + x + "\" y=\"" + (axisY + 20) + "\" class=\"nline-label\" text-anchor=\"middle\">" + Math.round(t) + "</text>";
+      }
+      nstate.segments.forEach(function (sg) {
+        if (sg.lo !== null && sg.hi !== null) {
+          var x1 = xOf(sg.lo), x2 = xOf(sg.hi);
+          svg += "<line x1=\"" + x1 + "\" y1=\"" + axisY + "\" x2=\"" + x2 + "\" y2=\"" + axisY + "\" class=\"nline-seg\"/>";
+        }
+      });
+      nstate.segments.forEach(function (sg, si) {
+        [["lo", sg.lo, sg.loIncl], ["hi", sg.hi, sg.hiIncl]].forEach(function (pair) {
+          var end = pair[0], v = pair[1], incl = pair[2];
+          if (v === null) return;
+          var x = xOf(v);
+          if (v === -Infinity || v === Infinity) {
+            var dir = v === -Infinity ? 1 : -1;
+            svg += "<path d=\"M" + x + "," + axisY + " l" + (10 * dir) + ",-6 l0,12 z\" class=\"nline-seg-arrow\"/>";
+          } else {
+            svg += "<circle cx=\"" + x + "\" cy=\"" + axisY + "\" r=\"8\" class=\"nline-pt nline-pt-input " + (incl ? "nline-closed" : "nline-open") + "\" data-seg=\"" + si + "\" data-end=\"" + end + "\"/>";
+          }
+        });
+      });
+      svg += "</svg>";
+      slot.innerHTML = svg;
+
+      var svgEl = slot.querySelector("svg");
+      svgEl.querySelector(".nline-hit").addEventListener("click", function (evt) {
+        var rect = svgEl.getBoundingClientRect();
+        var vb = svgEl.viewBox.baseVal;
+        var ux = vb.x + (evt.clientX - rect.left) / rect.width * vb.width;
+        var frac = (ux - xLeft) / (xRight - xLeft);
+        var raw = range.min + frac * (range.max - range.min);
+        var val = Math.round(raw / range.step) * range.step;
+        if (val < range.min) val = range.min;
+        if (val > range.max) val = range.max;
+        placeTick(val);
+      });
+      svgEl.querySelectorAll(".nline-pt-input").forEach(function (c) {
+        c.addEventListener("click", function (evt) {
+          evt.stopPropagation();
+          var si = parseInt(c.getAttribute("data-seg"), 10), end = c.getAttribute("data-end");
+          var sg = nstate.segments[si];
+          if (end === "lo") sg.loIncl = !sg.loIncl; else sg.hiIncl = !sg.hiIncl;
+          renderSvg(); renderReadout();
+        });
+      });
+    }
+
+    function placeTick(val) {
+      nstate.noSolution = false;
+      var sg = activeSeg();
+      if (sg.lo === null) { sg.lo = val; sg.loIncl = true; }
+      else if (sg.hi === null) {
+        if (sg.lo !== -Infinity && val < sg.lo) { sg.hi = sg.lo; sg.hiIncl = sg.loIncl; sg.lo = val; sg.loIncl = true; }
+        else { sg.hi = val; sg.hiIncl = true; }
+      }
+      renderSvg(); renderReadout();
+    }
+
+    wrap.querySelectorAll(".nline-inf-btn").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        nstate.noSolution = false;
+        var side = btn.getAttribute("data-side"), sg = activeSeg();
+        if (side === "lo") { sg.lo = -Infinity; sg.loIncl = false; }
+        else { sg.hi = Infinity; sg.hiIncl = false; }
+        renderSvg(); renderReadout();
+      });
+    });
+    var addBtn = wrap.querySelector(".nline-add-btn");
+    if (addBtn) {
+      addBtn.addEventListener("click", function () {
+        var sg = activeSeg();
+        if (sg.lo === null || sg.hi === null) return;
+        nstate.segments.push({ lo: null, hi: null, loIncl: null, hiIncl: null });
+        renderSvg(); renderReadout();
+      });
+    }
+    wrap.querySelector(".nline-empty-btn").addEventListener("click", function () {
+      nstate.noSolution = true;
+      nstate.segments = [{ lo: null, hi: null, loIncl: null, hiIncl: null }];
+      renderSvg(); renderReadout();
+    });
+    wrap.querySelector(".nline-reset-btn").addEventListener("click", function () {
+      nstate.noSolution = false;
+      nstate.segments = [{ lo: null, hi: null, loIncl: null, hiIncl: null }];
+      renderSvg(); renderReadout();
+    });
+
+    renderSvg(); renderReadout();
+  }
+  function nlineReadAnswer(card) {
+    var wrap = card.querySelector(".nline-input-wrap");
+    var nstate = wrap.__nline;
+    var segs = nstate.segments.filter(function (sg) { return sg.lo !== null && sg.hi !== null; });
+    return { noSolution: nstate.noSolution, segments: segs };
+  }
+  function nlineIsCorrect(ua, s) {
+    if (s.expected.length === 0) return ua.noSolution === true;
+    if (ua.noSolution) return false;
+    return intervalAnswerCorrect(ua.segments, s.expected);
+  }
+
+  // ============================================================
+  // Question part definitions
+  // ============================================================
+  var PARTS = [];
+
+  // ---------- Stage 1: Solving Inequalities & Flipping the Sign ----------
+  function ineqDivStepRaw(a, op, k) { return leadTerm(a, "x") + " " + OPHTML[op] + " " + k; }
+  var POOL_1 = [
+    {
+      reason: "Yes, this step is valid &mdash; dividing by a <em>positive</em> number, so the inequality direction stays the same.",
+      build: function () {
+        var a = randInt(2, 9), x0 = randInt(-9, 9), k = a * x0;
+        var op = randChoice(["<", ">", "<=", ">="]);
+        var orig = ineqDivStepRaw(a, op, k), result = "x " + OPHTML[op] + " " + x0;
+        return { orig: orig, result: result, correctFullStep: result };
+      }
+    },
+    {
+      reason: "Yes, this step is valid &mdash; dividing by a <em>negative</em> number flips the inequality direction, and it was flipped correctly here.",
+      build: function () {
+        var a = randNonZeroInt(-9, -2), x0 = randInt(-9, 9), k = a * x0;
+        var op = randChoice(["<", ">", "<=", ">="]);
+        var orig = ineqDivStepRaw(a, op, k), result = "x " + OPHTML[FLIP[op]] + " " + x0;
+        return { orig: orig, result: result, correctFullStep: result };
+      }
+    },
+    {
+      reason: "No &mdash; dividing by a <em>negative</em> number flips the inequality direction, and that didn't happen here.",
+      build: function () {
+        var a = randNonZeroInt(-9, -2), x0 = randInt(-9, 9), k = a * x0;
+        var op = randChoice(["<", ">", "<=", ">="]);
+        var orig = ineqDivStepRaw(a, op, k), result = "x " + OPHTML[op] + " " + x0;
+        return { orig: orig, result: result, correctFullStep: "x " + OPHTML[FLIP[op]] + " " + x0 };
+      }
+    },
+    {
+      reason: "No &mdash; dividing by a <em>positive</em> number does NOT flip the inequality direction, but it got flipped here anyway.",
+      build: function () {
+        var a = randInt(2, 9), x0 = randInt(-9, 9), k = a * x0;
+        var op = randChoice(["<", ">", "<=", ">="]);
+        var orig = ineqDivStepRaw(a, op, k), result = "x " + OPHTML[FLIP[op]] + " " + x0;
+        return { orig: orig, result: result, correctFullStep: "x " + OPHTML[op] + " " + x0 };
+      }
+    }
+  ];
+  PARTS.push({
+    id: "1-d1", group: "1", points: 2,
+    gen: function () { return pickDiagnostic(POOL_1); },
+    prompt: diagPromptHtml, inputsHtml: diagInputsHtml, afterRender: mcAfterRender,
+    readAnswer: mcReadAnswer, isCorrect: diagIsCorrect, solutionHtml: diagSolutionHtml
+  });
+  PARTS.push({
+    id: "1-d2", group: "1", points: 2,
+    gen: function () { return pickDiagnostic(POOL_1); },
+    prompt: diagPromptHtml, inputsHtml: diagInputsHtml, afterRender: mcAfterRender,
+    readAnswer: mcReadAnswer, isCorrect: diagIsCorrect, solutionHtml: diagSolutionHtml
+  });
+
+  function genIneqBasic() {
+    var a = randNonZeroInt(-6, 6);
+    var x0 = randInt(-9, 9);
+    var b = randInt(-10, 10);
+    var c = a * x0 + b;
+    var op = randChoice(["<", ">", "<=", ">="]);
+    var finalOp = a > 0 ? op : FLIP[op];
+    return { a: a, b: b, c: c, op: op, x0: x0, finalOp: finalOp };
+  }
+  function promptIneqBasic(s) {
+    return "<span class=\"math\">" + leadTerm(s.a, "x") + " " + signedTerm(s.b, "") + " " + OPHTML[s.op] + " " + s.c + "</span>" +
+      "<div style=\"margin-top:8px\">Solve for x.</div>";
+  }
+  function isCorrectOpVal(ua, s) { return ua.op === s.finalOp && numEq(ua.val, s.x0); }
+  function solutionIneqBasic(s) {
+    var rows = [];
+    rows.push(wsIneqRow(leadTerm(s.a, "x") + " " + signedTerm(s.b, ""), OPHTML[s.op], String(s.c)));
+    rows.push(wsOpRow(signedTerm(-s.b, ""), signedTerm(-s.b, ""), addSubNote(s.b)));
+    rows.push(wsIneqRow(leadTerm(s.a, "x"), OPHTML[s.op], String(s.c - s.b)));
+    rows.push(wsOpRow(divOpStr(s.a), divOpStr(s.a), divOpNoteIneq(s.a)));
+    rows.push(wsIneqRow("x", OPHTML[s.finalOp], String(s.x0), true));
+    return renderWorksheet(rows);
+  }
+  PARTS.push({
+    id: "1-practice", group: "1", points: 3, isPracticeGoal: true,
+    gen: genIneqBasic, prompt: promptIneqBasic, inputsHtml: opValInputsHtml,
+    readAnswer: readOpValAnswer, isCorrect: isCorrectOpVal, solutionHtml: solutionIneqBasic
+  });
+
+  // ---------- Stage 2: Interval Notation ----------
+  var POOL_2 = [
+    {
+      reason: "Yes, this is correct interval notation for that inequality.",
+      build: function () {
+        var k = randInt(-9, 12), lessDir = randBool(), incl = randBool();
+        var op = lessDir ? (incl ? "<=" : "<") : (incl ? ">=" : ">");
+        var iv = lessDir ? { lo: -Infinity, hi: k, loIncl: false, hiIncl: incl } : { lo: k, hi: Infinity, loIncl: incl, hiIncl: false };
+        var orig = "x " + OPHTML[op] + " " + k, result = oneIntervalNotation(iv);
+        return { orig: orig, result: result, correctFullStep: result };
+      }
+    },
+    {
+      reason: "No &mdash; infinity is never actually reached, so it always gets a parenthesis, never a bracket.",
+      build: function () {
+        var k = randInt(-9, 12), lessDir = randBool(), incl = randBool();
+        var op = lessDir ? (incl ? "<=" : "<") : (incl ? ">=" : ">");
+        var correctIv = lessDir ? { lo: -Infinity, hi: k, loIncl: false, hiIncl: incl } : { lo: k, hi: Infinity, loIncl: incl, hiIncl: false };
+        var badIv = lessDir ? { lo: -Infinity, hi: k, loIncl: true, hiIncl: incl } : { lo: k, hi: Infinity, loIncl: incl, hiIncl: true };
+        var orig = "x " + OPHTML[op] + " " + k, result = rawIntervalNotation(badIv);
+        return { orig: orig, result: result, correctFullStep: oneIntervalNotation(correctIv) };
+      }
+    },
+    {
+      reason: "No &mdash; the bracket/parenthesis doesn't match whether that endpoint is included. Use a bracket for &le;/&ge; and a parenthesis for &lt;/&gt;.",
+      build: function () {
+        var k = randInt(-9, 12), lessDir = randBool(), incl = randBool();
+        var op = lessDir ? (incl ? "<=" : "<") : (incl ? ">=" : ">");
+        var correctIv = lessDir ? { lo: -Infinity, hi: k, loIncl: false, hiIncl: incl } : { lo: k, hi: Infinity, loIncl: incl, hiIncl: false };
+        var badIv = lessDir ? { lo: -Infinity, hi: k, loIncl: false, hiIncl: !incl } : { lo: k, hi: Infinity, loIncl: !incl, hiIncl: false };
+        var orig = "x " + OPHTML[op] + " " + k, result = oneIntervalNotation(badIv);
+        return { orig: orig, result: result, correctFullStep: oneIntervalNotation(correctIv) };
+      }
+    },
+    {
+      reason: "No &mdash; that's the wrong direction. Check which way the inequality points before deciding which way the interval opens.",
+      build: function () {
+        var k = randInt(-9, 12), lessDir = randBool(), incl = randBool();
+        var op = lessDir ? (incl ? "<=" : "<") : (incl ? ">=" : ">");
+        var correctIv = lessDir ? { lo: -Infinity, hi: k, loIncl: false, hiIncl: incl } : { lo: k, hi: Infinity, loIncl: incl, hiIncl: false };
+        var badIv = lessDir ? { lo: k, hi: Infinity, loIncl: incl, hiIncl: false } : { lo: -Infinity, hi: k, loIncl: false, hiIncl: incl };
+        var orig = "x " + OPHTML[op] + " " + k, result = oneIntervalNotation(badIv);
+        return { orig: orig, result: result, correctFullStep: oneIntervalNotation(correctIv) };
+      }
+    }
+  ];
+  PARTS.push({
+    id: "2-d1", group: "2", points: 2,
+    gen: function () { return pickDiagnostic(POOL_2); },
+    prompt: diagPromptHtml, inputsHtml: diagInputsHtml, afterRender: mcAfterRender,
+    readAnswer: mcReadAnswer, isCorrect: diagIsCorrect, solutionHtml: diagSolutionHtml
+  });
+  PARTS.push({
+    id: "2-d2", group: "2", points: 2,
+    gen: function () { return pickDiagnostic(POOL_2); },
+    prompt: diagPromptHtml, inputsHtml: diagInputsHtml, afterRender: mcAfterRender,
+    readAnswer: mcReadAnswer, isCorrect: diagIsCorrect, solutionHtml: diagSolutionHtml
+  });
+
+  function genToInterval() {
+    var k = randInt(-9, 12);
+    var op = randChoice(["<", ">", "<=", ">="]);
+    var lessDir = op === "<" || op === "<=";
+    var strict = op === "<" || op === ">";
+    var expected = lessDir
+      ? [{ lo: -Infinity, loIncl: false, hi: k, hiIncl: !strict }]
+      : [{ lo: k, loIncl: !strict, hi: Infinity, hiIncl: false }];
+    return { k: k, op: op, expected: expected, allowUnion: false };
+  }
+  function promptToInterval(s) {
+    return "<span class=\"math\">x " + OPHTML[s.op] + " " + s.k + "</span>" +
+      "<div style=\"margin-top:8px\">Write this in interval notation. Tap the number line to build your answer.</div>";
+  }
+  function solutionToInterval(s) {
+    var lessDir = s.op === "<" || s.op === "<=";
+    var strict = s.op === "<" || s.op === ">";
+    return "<span class=\"sol-label\">Solution</span>" +
+      "<div class=\"step\">" + (lessDir ? "The values go down toward &minus;&infin;, so the left end is &minus;&infin; with a parenthesis (never a bracket)." : "The values go up toward &infin;, so the right end is &infin; with a parenthesis (never a bracket).") + "</div>" +
+      "<div class=\"step\">At " + s.k + ": " + (strict ? "&lt;/&gt; means " + s.k + " is <em>not</em> included, so use a parenthesis." : "&le;/&ge; means " + s.k + " <em>is</em> included, so use a bracket.") + "</div>" +
+      "<div class=\"final\">Answer: " + intervalNotation(s.expected) + "</div>" + numberLineSvg(s.expected);
+  }
+  PARTS.push({
+    id: "2-practice-to", group: "2", points: 3, isPracticeGoal: true,
+    gen: genToInterval, prompt: promptToInterval, inputsHtml: nlineInputsHtml, afterRender: nlineAfterRender,
+    readAnswer: nlineReadAnswer, isCorrect: nlineIsCorrect, solutionHtml: solutionToInterval
+  });
+
+  function genFromInterval() {
+    var k = randInt(-9, 12), lessDir = randBool(), incl = randBool();
+    var op = lessDir ? (incl ? "<=" : "<") : (incl ? ">=" : ">");
+    var iv = lessDir ? { lo: -Infinity, loIncl: false, hi: k, hiIncl: incl } : { lo: k, loIncl: incl, hi: Infinity, hiIncl: false };
+    return { k: k, op: op, iv: iv, x0: k };
+  }
+  function promptFromInterval(s) {
+    return "<div>" + oneIntervalNotation(s.iv) + "</div>" + numberLineSvg([s.iv]) +
+      "<div style=\"margin-top:8px\">Write this as an inequality.</div>";
+  }
+  function isCorrectFromInterval(ua, s) { return ua.op === s.op && numEq(ua.val, s.x0); }
+  function solutionFromInterval(s) {
+    return "<span class=\"sol-label\">Solution</span>" +
+      "<div class=\"step\">A parenthesis next to a number means it's not included (strict: &lt; or &gt;). A bracket means it is included (&le; or &ge;). A parenthesis next to &plusmn;&infin; is just how unbounded ends are always written.</div>" +
+      "<div class=\"final\">Answer: x " + OPHTML[s.op] + " " + s.k + "</div>";
+  }
+  PARTS.push({
+    id: "2-practice-from", group: "2", points: 3, isPracticeGoal: true,
+    gen: genFromInterval, prompt: promptFromInterval, inputsHtml: opValInputsHtml,
+    readAnswer: readOpValAnswer, isCorrect: isCorrectFromInterval, solutionHtml: solutionFromInterval
+  });
+
+  // ---------- Stage 3: Compound Inequalities: AND ----------
+  function genAndClausePair() {
+    var strict1 = randBool(), strict2 = randBool();
+    var t1 = randInt(-6, 10);
+    var t2 = randInt(t1 - 12, t1 - 1);
+    var op1 = strict1 ? "<" : "<=", op2 = strict2 ? ">" : ">=";
+    return { t1: t1, t2: t2, op1: op1, op2: op2, strict1: strict1, strict2: strict2 };
+  }
+  var POOL_3 = [
+    {
+      reason: "Yes &mdash; that's the correct intersection (the overlap of both clauses).",
+      build: function () {
+        var c = genAndClausePair();
+        var correctIv = { lo: c.t2, loIncl: !c.strict2, hi: c.t1, hiIncl: !c.strict1 };
+        var orig = "x " + OPHTML[c.op1] + " " + c.t1 + " &nbsp;<strong>AND</strong>&nbsp; x " + OPHTML[c.op2] + " " + c.t2;
+        var result = oneIntervalNotation(correctIv);
+        return { orig: orig, result: result, correctFullStep: result };
+      }
+    },
+    {
+      reason: "No &mdash; that's the <em>union</em> (either clause), not the intersection. AND means both must be true at the same time, so the answer has to be the overlap.",
+      build: function () {
+        var c = genAndClausePair();
+        var correctIv = { lo: c.t2, loIncl: !c.strict2, hi: c.t1, hiIncl: !c.strict1 };
+        var badResult = oneIntervalNotation({ lo: -Infinity, loIncl: false, hi: c.t1, hiIncl: !c.strict1 }) + " &cup; " + oneIntervalNotation({ lo: c.t2, loIncl: !c.strict2, hi: Infinity, hiIncl: false });
+        var orig = "x " + OPHTML[c.op1] + " " + c.t1 + " &nbsp;<strong>AND</strong>&nbsp; x " + OPHTML[c.op2] + " " + c.t2;
+        return { orig: orig, result: badResult, correctFullStep: oneIntervalNotation(correctIv) };
+      }
+    },
+    {
+      reason: "No &mdash; only one of the two clauses was used. AND means both bounds have to show up in the answer.",
+      build: function () {
+        var c = genAndClausePair();
+        var correctIv = { lo: c.t2, loIncl: !c.strict2, hi: c.t1, hiIncl: !c.strict1 };
+        var badIv = { lo: -Infinity, loIncl: false, hi: c.t1, hiIncl: !c.strict1 };
+        var orig = "x " + OPHTML[c.op1] + " " + c.t1 + " &nbsp;<strong>AND</strong>&nbsp; x " + OPHTML[c.op2] + " " + c.t2;
+        return { orig: orig, result: oneIntervalNotation(badIv), correctFullStep: oneIntervalNotation(correctIv) };
+      }
+    },
+    {
+      reason: "No &mdash; the numbers are right, but a bracket and parenthesis got swapped. Match each end to whether that clause was strict (&lt;/&gt;) or not (&le;/&ge;).",
+      build: function () {
+        var c;
+        do { c = genAndClausePair(); } while (c.strict1 === c.strict2);
+        var correctIv = { lo: c.t2, loIncl: !c.strict2, hi: c.t1, hiIncl: !c.strict1 };
+        var badIv = { lo: c.t2, loIncl: c.strict2, hi: c.t1, hiIncl: c.strict1 };
+        var orig = "x " + OPHTML[c.op1] + " " + c.t1 + " &nbsp;<strong>AND</strong>&nbsp; x " + OPHTML[c.op2] + " " + c.t2;
+        return { orig: orig, result: oneIntervalNotation(badIv), correctFullStep: oneIntervalNotation(correctIv) };
+      }
+    }
+  ];
+  PARTS.push({
+    id: "3-d1", group: "3", points: 2,
+    gen: function () { return pickDiagnostic(POOL_3); },
+    prompt: diagPromptHtml, inputsHtml: diagInputsHtml, afterRender: mcAfterRender,
+    readAnswer: mcReadAnswer, isCorrect: diagIsCorrect, solutionHtml: diagSolutionHtml
+  });
+  PARTS.push({
+    id: "3-d2", group: "3", points: 2,
+    gen: function () { return pickDiagnostic(POOL_3); },
+    prompt: diagPromptHtml, inputsHtml: diagInputsHtml, afterRender: mcAfterRender,
+    readAnswer: mcReadAnswer, isCorrect: diagIsCorrect, solutionHtml: diagSolutionHtml
+  });
+
+  function genCompoundAnd() {
+    var b = randInt(-6, 6);
+    var lo0 = randInt(-8, 4);
+    var hi0 = randInt(lo0 + 3, lo0 + 14);
+    var loStrict = randBool(), hiStrict = randBool();
+    var xLo = lo0 - b, xHi = hi0 - b;
+    var expected = [{ lo: xLo, loIncl: !loStrict, hi: xHi, hiIncl: !hiStrict }];
+    return { b: b, lo0: lo0, hi0: hi0, loStrict: loStrict, hiStrict: hiStrict, expected: expected, allowUnion: false };
+  }
+  function promptCompoundAnd(s) {
+    var loOp = s.loStrict ? "&lt;" : "&le;", hiOp = s.hiStrict ? "&lt;" : "&le;";
+    return "<span class=\"math\">" + s.lo0 + " " + loOp + " x " + signedTerm(s.b, "") + " " + hiOp + " " + s.hi0 + "</span>" +
+      "<div style=\"margin-top:8px\">Solve for x, then plot the solution on the number line below.</div>";
+  }
+  function solutionCompoundAnd(s) {
+    var loOp = s.loStrict ? "&lt;" : "&le;", hiOp = s.hiStrict ? "&lt;" : "&le;";
+    return "<span class=\"sol-label\">Solution</span>" +
+      "<div class=\"step\">Do the same thing to all three parts at once. Subtract " + s.b + " from all three parts: " + (s.lo0 - s.b) + " " + loOp + " x " + hiOp + " " + (s.hi0 - s.b) + "</div>" +
+      "<div class=\"final\">Answer: " + intervalNotation(s.expected) + "</div>" + numberLineSvg(s.expected);
+  }
+  PARTS.push({
+    id: "3-practice", group: "3", points: 3, isPracticeGoal: true,
+    gen: genCompoundAnd, prompt: promptCompoundAnd, inputsHtml: nlineInputsHtml, afterRender: nlineAfterRender,
+    readAnswer: nlineReadAnswer, isCorrect: nlineIsCorrect, solutionHtml: solutionCompoundAnd
+  });
+
+  // ---------- Stage 4: Compound Inequalities: OR ----------
+  function genOrClausePair() {
+    var strict1 = randBool(), strict2 = randBool();
+    var overlapPick = randBool();
+    var t2 = randInt(-4, 10);
+    var t1 = overlapPick ? randInt(t2 + 1, t2 + 8) : randInt(t2 - 10, t2 - 1);
+    var op1 = strict1 ? "<" : "<=", op2 = strict2 ? ">" : ">=";
+    return { t1: t1, t2: t2, op1: op1, op2: op2, strict1: strict1, strict2: strict2, overlap: t1 > t2 };
+  }
+  function orExpected(c) {
+    if (c.overlap) return [{ lo: -Infinity, loIncl: false, hi: Infinity, hiIncl: false }];
+    return [{ lo: -Infinity, loIncl: false, hi: c.t1, hiIncl: !c.strict1 }, { lo: c.t2, loIncl: !c.strict2, hi: Infinity, hiIncl: false }];
+  }
+  function orResultText(expected) { return expected.map(oneIntervalNotation).join(" &cup; "); }
+  var POOL_4 = [
+    {
+      reason: "Yes &mdash; that's the correct union of the two rays.",
+      build: function () {
+        var c = genOrClausePair();
+        var expected = orExpected(c);
+        var orig = "x " + OPHTML[c.op1] + " " + c.t1 + " &nbsp;<strong>OR</strong>&nbsp; x " + OPHTML[c.op2] + " " + c.t2;
+        var result = orResultText(expected);
+        return { orig: orig, result: result, correctFullStep: result };
+      }
+    },
+    {
+      reason: "No &mdash; that's the <em>intersection</em> (both at once), not the union. OR only needs one clause to be true, so the pieces don't get narrowed down to their overlap.",
+      build: function () {
+        var c;
+        do { c = genOrClausePair(); } while (c.overlap);
+        var expected = orExpected(c);
+        var orig = "x " + OPHTML[c.op1] + " " + c.t1 + " &nbsp;<strong>OR</strong>&nbsp; x " + OPHTML[c.op2] + " " + c.t2;
+        var badResult = oneIntervalNotation({ lo: c.t2, loIncl: !c.strict2, hi: c.t1, hiIncl: !c.strict1 });
+        return { orig: orig, result: badResult, correctFullStep: orResultText(expected) };
+      }
+    },
+    {
+      reason: "No &mdash; the two rays got merged into one bounded piece. They only merge into a single ray when they actually overlap; two rays pointing away from each other stay as two separate pieces.",
+      build: function () {
+        var c;
+        do { c = genOrClausePair(); } while (c.overlap);
+        var expected = orExpected(c);
+        var orig = "x " + OPHTML[c.op1] + " " + c.t1 + " &nbsp;<strong>OR</strong>&nbsp; x " + OPHTML[c.op2] + " " + c.t2;
+        var badResult = oneIntervalNotation({ lo: c.t1, loIncl: !c.strict1, hi: c.t2, hiIncl: !c.strict2 });
+        return { orig: orig, result: badResult, correctFullStep: orResultText(expected) };
+      }
+    },
+    {
+      reason: "No &mdash; only one clause was used. OR means the answer has to include everything from <em>either</em> clause.",
+      build: function () {
+        var c;
+        do { c = genOrClausePair(); } while (c.overlap);
+        var expected = orExpected(c);
+        var orig = "x " + OPHTML[c.op1] + " " + c.t1 + " &nbsp;<strong>OR</strong>&nbsp; x " + OPHTML[c.op2] + " " + c.t2;
+        var badResult = oneIntervalNotation({ lo: -Infinity, loIncl: false, hi: c.t1, hiIncl: !c.strict1 });
+        return { orig: orig, result: badResult, correctFullStep: orResultText(expected) };
+      }
+    }
+  ];
+  PARTS.push({
+    id: "4-d1", group: "4", points: 2,
+    gen: function () { return pickDiagnostic(POOL_4); },
+    prompt: diagPromptHtml, inputsHtml: diagInputsHtml, afterRender: mcAfterRender,
+    readAnswer: mcReadAnswer, isCorrect: diagIsCorrect, solutionHtml: diagSolutionHtml
+  });
+  PARTS.push({
+    id: "4-d2", group: "4", points: 2,
+    gen: function () { return pickDiagnostic(POOL_4); },
+    prompt: diagPromptHtml, inputsHtml: diagInputsHtml, afterRender: mcAfterRender,
+    readAnswer: mcReadAnswer, isCorrect: diagIsCorrect, solutionHtml: diagSolutionHtml
+  });
+
+  function genCompoundOr() {
+    var p1 = randInt(1, 6), k1 = randInt(-6, 4), strict1 = randBool();
+    var p2 = randInt(1, 6), k2 = randInt(-4, 8), strict2 = randBool();
+    var t1 = k1 - p1, t2 = k2 + p2;
+    var overlap = t1 > t2;
+    var expected = overlap
+      ? [{ lo: -Infinity, loIncl: false, hi: Infinity, hiIncl: false }]
+      : [{ lo: -Infinity, loIncl: false, hi: t1, hiIncl: !strict1 }, { lo: t2, loIncl: !strict2, hi: Infinity, hiIncl: false }];
+    return { p1: p1, k1: k1, strict1: strict1, p2: p2, k2: k2, strict2: strict2, t1: t1, t2: t2, overlap: overlap, expected: expected, allowUnion: true };
+  }
+  function promptCompoundOr(s) {
+    var op1 = s.strict1 ? "&lt;" : "&le;", op2 = s.strict2 ? "&gt;" : "&ge;";
+    return "<span class=\"math\">x " + signedTerm(s.p1, "") + " " + op1 + " " + s.k1 + " &nbsp;&nbsp;<strong>OR</strong>&nbsp;&nbsp; x " + signedTerm(-s.p2, "") + " " + op2 + " " + s.k2 + "</span>" +
+      "<div style=\"margin-top:8px\">Solve for x, then plot the solution on the number line below.</div>";
+  }
+  function solutionCompoundOr(s) {
+    var op1 = s.strict1 ? "&lt;" : "&le;", op2 = s.strict2 ? "&gt;" : "&ge;";
+    var tail = s.overlap
+      ? "Since " + s.t1 + " is greater than " + s.t2 + ", the two rays overlap and cover the <em>entire</em> number line."
+      : "Since " + s.t1 + " is not greater than " + s.t2 + ", the two rays point away from each other and stay separate.";
+    return "<span class=\"sol-label\">Solution</span>" +
+      "<div class=\"step\">First clause: x " + signedTerm(s.p1, "") + " " + op1 + " " + s.k1 + " &rarr; x " + op1 + " " + s.t1 + ".</div>" +
+      "<div class=\"step\">Second clause: x " + signedTerm(-s.p2, "") + " " + op2 + " " + s.k2 + " &rarr; x " + op2 + " " + s.t2 + ".</div>" +
+      "<div class=\"step\">OR means either one can hold. " + tail + "</div>" +
+      "<div class=\"final\">Answer: " + intervalNotation(s.expected) + "</div>" + numberLineSvg(s.expected);
+  }
+  PARTS.push({
+    id: "4-practice", group: "4", points: 3, isPracticeGoal: true,
+    gen: genCompoundOr, prompt: promptCompoundOr, inputsHtml: nlineInputsHtml, afterRender: nlineAfterRender,
+    readAnswer: nlineReadAnswer, isCorrect: nlineIsCorrect, solutionHtml: solutionCompoundOr
+  });
+
+  // ---------- Stage 5: Mixed Practice Exam ----------
+  var EXAM_TYPES = [
+    { gen: genIneqBasic, prompt: promptIneqBasic, inputsHtml: opValInputsHtml, readAnswer: readOpValAnswer, isCorrect: isCorrectOpVal, solutionHtml: solutionIneqBasic },
+    { gen: genToInterval, prompt: promptToInterval, inputsHtml: nlineInputsHtml, afterRender: nlineAfterRender, readAnswer: nlineReadAnswer, isCorrect: nlineIsCorrect, solutionHtml: solutionToInterval },
+    { gen: genCompoundAnd, prompt: promptCompoundAnd, inputsHtml: nlineInputsHtml, afterRender: nlineAfterRender, readAnswer: nlineReadAnswer, isCorrect: nlineIsCorrect, solutionHtml: solutionCompoundAnd },
+    { gen: genCompoundOr, prompt: promptCompoundOr, inputsHtml: nlineInputsHtml, afterRender: nlineAfterRender, readAnswer: nlineReadAnswer, isCorrect: nlineIsCorrect, solutionHtml: solutionCompoundOr }
+  ];
+  for (var ei = 0; ei < 8; ei++) {
+    (function (n) {
+      var t = EXAM_TYPES[n % 4];
+      PARTS.push({
+        id: "5-" + (n + 1), group: "5", points: 4,
+        gen: t.gen, prompt: t.prompt, inputsHtml: t.inputsHtml, afterRender: t.afterRender,
+        readAnswer: t.readAnswer, isCorrect: t.isCorrect, solutionHtml: t.solutionHtml
+      });
+    })(ei);
+  }
+
+  // ============================================================
+  // Stage metadata
+  // ============================================================
+  var STAGES = [
+    { key: "1", label: "1. Basics & Flipping" },
+    { key: "2", label: "2. Interval Notation" },
+    { key: "3", label: "3. AND (Between)" },
+    { key: "4", label: "4. OR (Either)" },
+    { key: "5", label: "5. Practice Exam" }
+  ];
+
+  var GROUP_META = {
+    "1": {
+      num: "Stage 1", title: "Solving Inequalities & Flipping the Sign",
+      desc: "Solve an inequality exactly like an equation &mdash; <em>except</em> for one rule: multiplying or dividing both sides by a <strong>negative</strong> number flips the direction of the inequality. Forgetting that flip is the single most common inequality mistake.",
+      videos: [
+        { url: "https://www.khanacademy.org/math/algebra-basics/alg-basics-linear-equations-and-inequalities/alg-basics-one-step-inequalities/v/one-step-inequalities-2", label: "Dividing by a negative" },
+        { url: "https://www.khanacademy.org/math/algebra-basics/alg-basics-linear-equations-and-inequalities/alg-basics-two-step-inequalities/v/solving-inequalities", label: "Two-step inequalities" }
+      ]
+    },
+    "2": {
+      num: "Stage 2", title: "Interval Notation",
+      desc: "Interval notation describes a whole range of solutions using brackets and parentheses: a <strong>bracket</strong> [ ] means that endpoint is included; a <strong>parenthesis</strong> ( ) means it isn't. &plusmn;&infin; is never actually reached, so it always gets a parenthesis.",
+      videos: [{ url: "https://www.khanacademy.org/math/algebra/x2f8bb11595b61c86:functions/x2f8bb11595b61c86:introduction-to-the-domain-and-range-of-a-function/v/introduction-to-interval-notation", label: "Intervals and interval notation" }]
+    },
+    "3": {
+      num: "Stage 3", title: "Compound Inequalities: AND",
+      desc: "An AND compound inequality (often written as one inequality squeezed between two numbers) needs <strong>both</strong> conditions true at once. The solution is the overlap &mdash; where the two pieces intersect.",
+      videos: [{ url: "https://www.khanacademy.org/math/college-algebra/xa5dd2923c88e7aa8:linear-equations-and-inequalities/xa5dd2923c88e7aa8:compound-inequalities/v/compund-inequalities-2", label: "Compound inequalities: AND" }]
+    },
+    "4": {
+      num: "Stage 4", title: "Compound Inequalities: OR",
+      desc: "An OR compound inequality only needs <strong>one</strong> of the two conditions to be true. The solution is everything covered by either piece &mdash; usually two separate rays, unless they overlap so much they cover the whole number line.",
+      videos: [{ url: "https://www.khanacademy.org/math/college-algebra/xa5dd2923c88e7aa8:linear-equations-and-inequalities/xa5dd2923c88e7aa8:compound-inequalities/v/compund-inequalities", label: "Compound inequalities: OR" }]
+    },
+    "5": {
+      num: "Stage 5", title: "Practice Exam",
+      desc: "A mix of all four skills: solving, interval notation, AND, and OR. Your exam score locks in on the first check of each question (or if you peek the solution first) &mdash; everything after that is just practice. Use \"Reset exam\" for a fresh attempt.",
+      videos: []
+    }
+  };
+
+  // ============================================================
+  // Stage progress nav
+  // ============================================================
+  function buildStageNav() {
+    var nav = document.getElementById("stageNav");
+    nav.innerHTML = STAGES.map(function (s) {
+      return "<span class=\"stage-pill\" id=\"pill-" + s.key + "\"><span class=\"dot\"></span>" + s.label + "</span>";
+    }).join("");
+  }
+  function markStageDone(key) {
+    var pill = document.getElementById("pill-" + key);
+    if (pill) pill.classList.add("done");
+  }
+
+  function groupHeadHtml(meta) {
+    var videoHtml = meta.videos.length ? "<div class=\"video-row\">" + meta.videos.map(function (v) {
+      return "<a class=\"icon-btn video-btn\" href=\"" + v.url + "\" target=\"_blank\" rel=\"noopener\">" + SVG_PLAY + "Watch: " + v.label + "</a>";
+    }).join("") + "</div>" : "";
+    return "<div class=\"gnum\">" + meta.num + "</div><div class=\"gtitle\">" + meta.title + "</div><div class=\"gdesc\">" + meta.desc + "</div>" + videoHtml;
+  }
+
+  // ============================================================
+  // Engine: practice cards (Stages 1-4)
+  // ============================================================
+  function mountPracticeCard(part, container) {
+    var card = document.createElement("div");
+    card.className = "qcard";
+    card.setAttribute("data-id", part.id);
+    card.innerHTML =
+      "<div class=\"qcard-head\"><div class=\"qtitle\"></div>" +
+      "<button class=\"icon-btn new-version-btn\" type=\"button\">" + SVG_REFRESH + "New version</button></div>" +
+      "<div class=\"qprompt\"></div>" +
+      "<div class=\"qinputs\"></div>" +
+      "<div class=\"qactions\"><button class=\"btn-primary check-btn\" type=\"button\">Check Answer</button><button class=\"btn-secondary solution-btn\" type=\"button\">Show Solution</button></div>" +
+      "<div class=\"qfeedback hidden\"></div>" +
+      "<div class=\"qsolution hidden\"></div>";
+    container.appendChild(card);
+
+    var promptEl = card.querySelector(".qprompt"), inputsEl = card.querySelector(".qinputs"),
+      feedbackEl = card.querySelector(".qfeedback"), solutionEl = card.querySelector(".qsolution");
+    var state;
+
+    function render() {
+      state = part.gen();
+      promptEl.innerHTML = part.prompt(state);
+      inputsEl.innerHTML = part.inputsHtml(state);
+      feedbackEl.classList.add("hidden"); feedbackEl.innerHTML = "";
+      solutionEl.classList.add("hidden"); solutionEl.innerHTML = "";
+      if (part.afterRender) part.afterRender(card, state);
+    }
+    card.querySelector(".new-version-btn").addEventListener("click", render);
+    card.querySelector(".check-btn").addEventListener("click", function () {
+      var ua = part.readAnswer(card);
+      var correct = part.isCorrect(ua, state);
+      feedbackEl.classList.remove("hidden");
+      if (correct) {
+        feedbackEl.className = "qfeedback good";
+        feedbackEl.innerHTML = SVG_CHECK + " Correct!";
+        if (part.isPracticeGoal) markStageDone(part.group);
+      } else {
+        feedbackEl.className = "qfeedback bad";
+        feedbackEl.innerHTML = SVG_X + " Not quite &mdash; check the solution below.";
+      }
+    });
+    card.querySelector(".solution-btn").addEventListener("click", function () {
+      solutionEl.innerHTML = part.solutionHtml(state);
+      solutionEl.classList.remove("hidden");
+    });
+    render();
+  }
+
+  // ============================================================
+  // Engine: exam cards (Stage 5)
+  // ============================================================
+  var examScoreMap = {}, practiceScoreMap = {}, examCardRenders = [];
+  var EXAM_PARTS = PARTS.filter(function (p) { return p.group === "5"; });
+  var EXAM_TOTAL = EXAM_PARTS.reduce(function (sum, p) { return sum + p.points; }, 0);
+
+  function updateExamScores() {
+    var earnedPractice = 0; Object.keys(practiceScoreMap).forEach(function (k) { earnedPractice += practiceScoreMap[k]; });
+    var earnedExam = 0; Object.keys(examScoreMap).forEach(function (k) { earnedExam += examScoreMap[k]; });
+    var pEl = document.getElementById("examScoreNum"), eEl = document.getElementById("examExamScoreNum");
+    if (pEl) pEl.textContent = earnedPractice + " / " + EXAM_TOTAL;
+    if (eEl) eEl.textContent = earnedExam + " / " + EXAM_TOTAL;
+  }
+
+  function mountExamCard(part, container) {
+    var card = document.createElement("div");
+    card.className = "qcard";
+    card.setAttribute("data-id", part.id);
+    card.innerHTML =
+      "<div class=\"qcard-head\"><div class=\"qtitle\"><span class=\"qpoints\">" + part.points + " pts</span><span class=\"exam-badge hidden\"></span></div>" +
+      "<button class=\"icon-btn new-version-btn\" type=\"button\">" + SVG_REFRESH + "New version</button></div>" +
+      "<div class=\"qprompt\"></div>" +
+      "<div class=\"qinputs\"></div>" +
+      "<div class=\"qactions\"><button class=\"btn-primary check-btn\" type=\"button\">Check Answer</button><button class=\"btn-secondary solution-btn\" type=\"button\">Show Solution</button></div>" +
+      "<div class=\"qfeedback hidden\"></div>" +
+      "<div class=\"qsolution hidden\"></div>";
+    container.appendChild(card);
+
+    var promptEl = card.querySelector(".qprompt"), inputsEl = card.querySelector(".qinputs"),
+      feedbackEl = card.querySelector(".qfeedback"), solutionEl = card.querySelector(".qsolution"),
+      examBadgeEl = card.querySelector(".exam-badge");
+    var state, examAttempted = false;
+
+    function lockExam(pts, note) {
+      if (examAttempted) return;
+      examAttempted = true;
+      examScoreMap[part.id] = pts;
+      examBadgeEl.className = "exam-badge " + (pts >= part.points ? "exam-good" : "exam-bad");
+      examBadgeEl.innerHTML = SVG_LOCK + " Exam: " + pts + "/" + part.points + (note ? " (" + note + ")" : "");
+      updateExamScores();
+      markStageDone("5");
+    }
+    function render() {
+      state = part.gen();
+      promptEl.innerHTML = part.prompt(state);
+      inputsEl.innerHTML = part.inputsHtml(state);
+      feedbackEl.classList.add("hidden"); feedbackEl.innerHTML = "";
+      solutionEl.classList.add("hidden"); solutionEl.innerHTML = "";
+      if (part.afterRender) part.afterRender(card, state);
+      practiceScoreMap[part.id] = 0;
+      updateExamScores();
+    }
+    examCardRenders.push(function () { examAttempted = false; examBadgeEl.className = "exam-badge hidden"; examBadgeEl.innerHTML = ""; render(); });
+
+    card.querySelector(".new-version-btn").addEventListener("click", render);
+    card.querySelector(".check-btn").addEventListener("click", function () {
+      var ua = part.readAnswer(card);
+      var correct = part.isCorrect(ua, state);
+      feedbackEl.classList.remove("hidden");
+      if (correct) {
+        feedbackEl.className = "qfeedback good";
+        feedbackEl.innerHTML = SVG_CHECK + " Correct!";
+        practiceScoreMap[part.id] = part.points;
+      } else {
+        feedbackEl.className = "qfeedback bad";
+        feedbackEl.innerHTML = SVG_X + " Not quite &mdash; check the solution below.";
+        practiceScoreMap[part.id] = 0;
+      }
+      updateExamScores();
+      lockExam(correct ? part.points : 0);
+    });
+    card.querySelector(".solution-btn").addEventListener("click", function () {
+      solutionEl.innerHTML = part.solutionHtml(state);
+      solutionEl.classList.remove("hidden");
+      lockExam(0, "viewed solution");
+    });
+    render();
+  }
+
+  function wireExamToolbar(gh) {
+    var bar = document.createElement("div");
+    bar.className = "exam-toolbar";
+    bar.innerHTML =
+      "<div class=\"score-group\">" +
+      "<div class=\"score-box\"><span class=\"score-num\" id=\"examScoreNum\">0 / " + EXAM_TOTAL + "</span><span class=\"score-label\">points checked correct</span></div>" +
+      "<div class=\"score-divider\"></div>" +
+      "<div class=\"score-box exam-score-box\"><span class=\"score-num\" id=\"examExamScoreNum\">0 / " + EXAM_TOTAL + "</span><span class=\"score-label\">exam score</span></div>" +
+      "</div>" +
+      "<button class=\"icon-btn\" id=\"resetExamBtn\" type=\"button\">" + SVG_REFRESH + "Reset exam</button>";
+    gh.appendChild(bar);
+    document.getElementById("resetExamBtn").addEventListener("click", function () {
+      examScoreMap = {}; practiceScoreMap = {};
+      examCardRenders.forEach(function (r) { r(); });
+      updateExamScores();
+    });
+  }
+
+  // ============================================================
+  // Build page
+  // ============================================================
+  function buildAll() {
+    buildStageNav();
+    var groupsEl = document.getElementById("groups");
+    groupsEl.innerHTML = "";
+    var seen = {}, currentContainer = null;
+    PARTS.forEach(function (part) {
+      if (!seen[part.group]) {
+        seen[part.group] = true;
+        var meta = GROUP_META[part.group];
+        var gh = document.createElement("div");
+        gh.className = "group-head";
+        gh.innerHTML = groupHeadHtml(meta);
+        groupsEl.appendChild(gh);
+        if (part.group === "5") wireExamToolbar(gh);
+        currentContainer = document.createElement("div");
+        groupsEl.appendChild(currentContainer);
+      }
+      if (part.group === "5") mountExamCard(part, currentContainer);
+      else mountPracticeCard(part, currentContainer);
+    });
+  }
+
+  buildAll();
+})();
+</script>
+
+</body></html>
