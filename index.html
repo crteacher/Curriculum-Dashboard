@@ -10,30 +10,81 @@ body{font-family:Georgia,serif;background:#f0eff0;color:#111;min-height:100vh}
 
 /* ── Header ───────────────────────────────────────────────── */
 header{background:#6b1a26;color:#fff;padding:.9rem 2rem;
-  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.75rem}
-.hd-left h1{font-family:Georgia,serif;font-size:18px;font-weight:700;letter-spacing:.01em}
-.hd-left p{font-family:sans-serif;font-size:10.5px;color:rgba(255,255,255,.6);
+  display:flex;align-items:center;gap:1.25rem;flex-wrap:wrap}
+.hd-back{font-family:sans-serif;font-size:12px;color:rgba(255,255,255,.75);
+  text-decoration:none;white-space:nowrap;padding:.3rem .65rem;
+  border:1px solid rgba(255,255,255,.35);border-radius:16px;
+  transition:background .15s;display:none}
+.hd-back:hover{background:rgba(255,255,255,.15)}
+.hd-back.visible{display:inline-block}
+.hd-text h1{font-family:Georgia,serif;font-size:18px;font-weight:700}
+.hd-text p{font-family:sans-serif;font-size:10.5px;color:rgba(255,255,255,.6);
   letter-spacing:.05em;text-transform:uppercase;margin-top:2px}
-.hd-actions{display:flex;gap:.5rem;flex-wrap:wrap}
-.hd-btn{font-family:sans-serif;font-size:11.5px;font-weight:700;padding:.35rem .9rem;
-  border-radius:20px;border:1.5px solid rgba(255,255,255,.45);color:#fff;
-  text-decoration:none;white-space:nowrap;transition:background .15s,border-color .15s}
-.hd-btn:hover{background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.8)}
 
-/* ── Course grid ──────────────────────────────────────────── */
-.course-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;
-  padding:1.5rem 1.5rem;max-width:1500px;margin:0 auto}
-.course-box{background:#fff;border-radius:10px;border:1px solid #ddd;
-  overflow:hidden;display:flex;flex-direction:column}
-.course-hd{color:#fff;padding:.7rem 1.1rem;display:flex;
-  align-items:baseline;justify-content:space-between;gap:.5rem}
-.course-hd-name{font-family:Georgia,serif;font-size:15px;font-weight:700}
-.course-cnt{font-family:sans-serif;font-size:10px;font-weight:700;
-  letter-spacing:.06em;text-transform:uppercase;opacity:.8}
-.course-rows{padding:.3rem .75rem .75rem;flex:1}
+/* ── Landing: course cards ────────────────────────────────── */
+#landing{padding:2rem 1.5rem 3rem;max-width:900px;margin:0 auto}
+.landing-intro{font-family:sans-serif;font-size:.8rem;color:#666;margin-bottom:1.25rem}
+.course-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.course-card{border:none;border-radius:12px;padding:1.6rem 1.5rem;
+  cursor:pointer;text-align:left;color:#fff;
+  display:flex;flex-direction:column;gap:.4rem;
+  transition:transform .15s,box-shadow .15s;
+  box-shadow:0 2px 8px rgba(0,0,0,.12)}
+.course-card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.18)}
+.cc-name{font-family:Georgia,serif;font-size:1.25rem;font-weight:700}
+.cc-cnt{font-family:sans-serif;font-size:.7rem;font-weight:700;
+  letter-spacing:.08em;text-transform:uppercase;opacity:.75;margin-top:.1rem}
+.cc-hint{font-family:sans-serif;font-size:.75rem;opacity:.65;margin-top:.5rem}
 
-/* ── Section rows ─────────────────────────────────────────── */
-.row{display:grid;grid-template-columns:12px 1fr auto;align-items:center;
+/* ── Utility row on landing ───────────────────────────────── */
+.util-divider{font-family:sans-serif;font-size:.7rem;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;color:#999;
+  margin:1.75rem 0 .65rem}
+.util-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:.65rem}
+.util-card{display:flex;flex-direction:column;gap:.2rem;padding:.9rem;
+  border-radius:8px;border:1px solid #e0e0e0;background:#fff;
+  text-decoration:none;color:#111;transition:border-color .18s,box-shadow .18s}
+.util-card:hover{border-color:#6b1a26;box-shadow:0 2px 8px rgba(107,26,38,.07)}
+.u-name{font-family:Georgia,serif;font-size:13.5px;font-weight:700}
+.u-desc{font-family:sans-serif;font-size:11px;color:#555;line-height:1.45;flex:1}
+.u-badge{font-family:sans-serif;font-size:.55rem;font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;padding:.13rem .42rem;border-radius:999px;
+  margin-top:.3rem;align-self:flex-start}
+
+/* ── Course view (split layout) ───────────────────────────── */
+#course-view{display:none;height:calc(100vh - 54px)}
+#course-view.visible{display:flex;flex-direction:column}
+.cv-banner{padding:.55rem 1.5rem;color:#fff;
+  display:flex;align-items:baseline;justify-content:space-between}
+.cv-banner-name{font-family:Georgia,serif;font-size:15px;font-weight:700}
+.cv-banner-cnt{font-family:sans-serif;font-size:.65rem;font-weight:700;
+  letter-spacing:.07em;text-transform:uppercase;opacity:.8}
+.cv-body{display:flex;flex:1;overflow:hidden}
+
+/* Left: section list */
+.cv-sections{flex:1;overflow-y:auto;padding:.5rem 1.25rem 2rem;background:#fff}
+.cv-sections-inner{max-width:720px}
+
+/* Right: tools sidebar */
+.cv-sidebar{width:210px;flex-shrink:0;padding:1rem .9rem;
+  background:#f7f5f2;border-left:1px solid #e0e0e0;overflow-y:auto;
+  display:flex;flex-direction:column;gap:.55rem}
+.sb-label{font-family:sans-serif;font-size:.65rem;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;color:#888}
+.sb-btn{display:block;padding:.7rem 1rem;border-radius:8px;
+  text-decoration:none;font-family:sans-serif;font-size:13px;font-weight:700;
+  border:1.5px solid;transition:background .15s,color .15s;text-align:center}
+.sb-btn.crimson{color:#6b1a26;border-color:#6b1a26}
+.sb-btn.crimson:hover{background:#6b1a26;color:#fff}
+.sb-btn.gold{color:#7a5c1e;border-color:#7a5c1e}
+.sb-btn.gold:hover{background:#7a5c1e;color:#fff}
+.sb-divider{border:none;border-top:1px solid #e0e0e0;margin:.1rem 0}
+.sb-link{font-family:sans-serif;font-size:12px;color:#6b1a26;text-decoration:none;
+  padding:.35rem .5rem;display:block;border-radius:5px;transition:background .12s}
+.sb-link:hover{background:#f0ede7}
+
+/* ── Section rows (shared) ────────────────────────────────── */
+.row{display:grid;grid-template-columns:11px 1fr auto;align-items:center;
   gap:.5rem;padding:.38rem 0;border-bottom:1px solid #ece8e0}
 .row:last-child{border-bottom:none}
 .dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
@@ -45,61 +96,131 @@ header{background:#6b1a26;color:#fff;padding:.9rem 2rem;
 .pill.missing{background:#e8e4da;color:#999}
 .pill.na{background:#f0ede7;color:#bbb}
 
-/* ── Utility tools ────────────────────────────────────────── */
-.util-section{padding:0 1.5rem 2rem;max-width:1500px;margin:0 auto}
-.util-label{font-family:sans-serif;font-size:10px;font-weight:700;
-  letter-spacing:.1em;text-transform:uppercase;color:#888;
-  margin-bottom:.6rem;padding-top:.25rem}
-.util-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:.75rem}
-.util-card{display:flex;flex-direction:column;gap:.25rem;padding:1rem 1rem;
-  border-radius:8px;border:1px solid #e0e0e0;background:#fff;
-  text-decoration:none;color:#111;transition:border-color .18s,box-shadow .18s}
-.util-card:hover{border-color:#6b1a26;box-shadow:0 2px 8px rgba(107,26,38,.07)}
-.u-name{font-family:Georgia,serif;font-size:14px;font-weight:700}
-.u-desc{font-family:sans-serif;font-size:11px;color:#555;line-height:1.5;flex:1}
-.u-badge{font-family:sans-serif;font-size:.55rem;font-weight:700;letter-spacing:.1em;
-  text-transform:uppercase;padding:.14rem .45rem;border-radius:999px;
-  margin-top:.35rem;align-self:flex-start}
-
-@media(max-width:900px){
+@media(max-width:700px){
   .course-grid{grid-template-columns:1fr}
-}
-@media(max-width:600px){
+  #course-view{height:auto}
+  .cv-body{flex-direction:column}
+  .cv-sidebar{width:100%;border-left:none;border-top:1px solid #e0e0e0;
+    flex-direction:row;flex-wrap:wrap;gap:.5rem;padding:.75rem 1rem}
+  .cv-sections{overflow-y:visible}
   .row{grid-template-columns:10px 1fr;gap:.35rem}
   .pills{grid-column:2;justify-content:flex-start}
-  header{padding:.75rem 1rem}
-  .course-grid,.util-section{padding-left:1rem;padding-right:1rem}
 }
 @media print{
-  .hd-actions,.util-section{display:none}
-  .course-grid{grid-template-columns:1fr;gap:1rem}
+  #landing{display:none}
+  .cv-sidebar,.hd-back{display:none}
+  #course-view{height:auto;display:block!important}
+  .cv-body{display:block}
+  .cv-sections{overflow:visible}
 }
 </style>
 </head>
 <body>
 
 <header>
-  <div class="hd-left">
+  <a class="hd-back" id="hdBack" href="#" onclick="closeCourse();return false">&#8592; All Courses</a>
+  <div class="hd-text">
     <h1>Dr. Halverson</h1>
     <p>Cardinal Ritter College Prep &nbsp;&middot;&nbsp; Calculus &middot; College Algebra &middot; PreCalculus</p>
   </div>
-  <div class="hd-actions">
-    <a class="hd-btn" href="./donow.html">Do Now</a>
-    <a class="hd-btn" href="./exit-ticket.html">Exit Ticket</a>
-    <a class="hd-btn" href="./review.html">Section Review</a>
-    <a class="hd-btn" href="./lesson-plan.html">This Week&#8217;s Plan</a>
-  </div>
 </header>
 
-<div class="course-grid">
+<!-- ── Landing ─────────────────────────────────────────────── -->
+<div id="landing">
+  <p class="landing-intro">Select your course to see notes and practice materials.</p>
+  <div class="course-grid">
+    <button class="course-card" style="background:#1e3a5c" onclick="openCourse('calc1')">
+      <span class="cc-name">Calculus I</span>
+      <span class="cc-cnt">30 sections</span>
+      <span class="cc-hint">Tap to browse notes &amp; practice &rarr;</span>
+    </button>
+    <button class="course-card" style="background:#7a1a1a" onclick="openCourse('calc2')">
+      <span class="cc-name">Calculus II</span>
+      <span class="cc-cnt">29 sections</span>
+      <span class="cc-hint">Tap to browse notes &amp; practice &rarr;</span>
+    </button>
+    <button class="course-card" style="background:#8b3a8b" onclick="openCourse('precalc')">
+      <span class="cc-name">PreCalculus</span>
+      <span class="cc-cnt">43 sections</span>
+      <span class="cc-hint">Tap to browse notes &amp; practice &rarr;</span>
+    </button>
+    <button class="course-card" style="background:#1a7a3a" onclick="openCourse('ca')">
+      <span class="cc-name">College Algebra</span>
+      <span class="cc-cnt">38 sections</span>
+      <span class="cc-hint">Tap to browse notes &amp; practice &rarr;</span>
+    </button>
+  </div>
 
-  <!-- Calculus I -->
-  <div class="course-box">
-    <div class="course-hd" style="background:#1e3a5c">
-      <span class="course-hd-name">Calculus I</span>
-      <span class="course-cnt">30 sections</span>
+  <div class="util-divider">More Tools</div>
+  <div class="util-grid">
+    <a class="util-card" href="./donow.html">
+      <span class="u-name">Do Now</span>
+      <span class="u-desc">Auto-graded warm-up problems &mdash; new numbers every refresh.</span>
+      <span class="u-badge" style="background:#d8efe1;color:#2e5339">Graded</span>
+    </a>
+    <a class="util-card" href="./exit-ticket.html">
+      <span class="u-name">Exit Ticket</span>
+      <span class="u-desc">Today&rsquo;s question plus yesterday&rsquo;s answer.</span>
+      <span class="u-badge" style="background:#ede8f5;color:#5a3a8a">Daily</span>
+    </a>
+    <a class="util-card" href="./review.html">
+      <span class="u-name">Section Review</span>
+      <span class="u-desc">Practice problems by section &mdash; pick a topic, get a fresh set.</span>
+      <span class="u-badge" style="background:#f0ede7;color:#555">Practice</span>
+    </a>
+    <a class="util-card" href="./lesson-plan.html">
+      <span class="u-name">This Week&#8217;s Plan</span>
+      <span class="u-desc">Topics, objectives, and practice links for the next 5 days.</span>
+      <span class="u-badge" style="background:#d8efe1;color:#2e5339">Weekly</span>
+    </a>
+    <a class="util-card" href="./puzzle.html">
+      <span class="u-name">Puzzle of the Week</span>
+      <span class="u-desc">A new challenge every week. Sit with it.</span>
+      <span class="u-badge" style="background:#f5edd8;color:#8a5a1a">Weekly</span>
+    </a>
+    <a class="util-card" href="./mathmap.html">
+      <span class="u-name">Math Map</span>
+      <span class="u-desc">Visual roadmap of the full curriculum.</span>
+      <span class="u-badge" style="background:#ede8f5;color:#5a3a8a">Reference</span>
+    </a>
+    <a class="util-card" href="./voting.html">
+      <span class="u-name">Voting Theory</span>
+      <span class="u-desc">What makes an election fair?</span>
+      <span class="u-badge" style="background:#d8eff0;color:#1a5a5c">Explore</span>
+    </a>
+    <a class="util-card" href="./gerry.html">
+      <span class="u-name">Gerrymandering</span>
+      <span class="u-desc">The math behind drawing district lines.</span>
+      <span class="u-badge" style="background:#f5d8d8;color:#7a1a1a">Explore</span>
+    </a>
+  </div>
+</div>
+
+<!-- ── Course view (shown after clicking a card) ───────────── -->
+<div id="course-view">
+  <div class="cv-banner" id="cvBanner">
+    <span class="cv-banner-name" id="cvName"></span>
+    <span class="cv-banner-cnt" id="cvCnt"></span>
+  </div>
+  <div class="cv-body">
+    <div class="cv-sections">
+      <div class="cv-sections-inner" id="cvRows"></div>
     </div>
-    <div class="course-rows">
+    <div class="cv-sidebar">
+      <div class="sb-label">Quick Access</div>
+      <a class="sb-btn crimson" href="./donow.html" target="_blank">Do Now</a>
+      <a class="sb-btn crimson" href="./exit-ticket.html" target="_blank">Exit Ticket</a>
+      <a class="sb-btn gold" href="./review.html" target="_blank">Section Review</a>
+      <hr class="sb-divider">
+      <a class="sb-link" href="./lesson-plan.html" target="_blank">This Week&#8217;s Plan</a>
+      <a class="sb-link" href="./puzzle.html" target="_blank">Puzzle of the Week</a>
+      <a class="sb-link" href="./mathmap.html" target="_blank">Math Map</a>
+    </div>
+  </div>
+</div>
+
+<!-- ── Hidden section-row pools ────────────────────────────── -->
+<div id="pool-calc1" data-name="Calculus I" data-cnt="30 sections" data-color="#1e3a5c" hidden>
 <div class="row">  <span class="dot" style="background:#1e3a5c"></span>  <span class="label">Limits</span>  <span class="pills"><a class="pill" target="_blank" href="./Calc 1/Calc_1_1_Limits_Notes_INSTRUCTOR.html" style="background:#1e3a5c;color:#fff" title="./Calc 1/Calc_1_1_Limits_Notes_INSTRUCTOR.html">Notes&nbsp;I</a><a class="pill" target="_blank" href="./Calc 1/Calc_1_1_Limits_Notes_STUDENT.html" style="background:#1e3a5c;color:#fff" title="./Calc 1/Calc_1_1_Limits_Notes_STUDENT.html">Notes&nbsp;S</a><a class="pill" target="_blank" href="./Calc 1/Calc_1_1_Limits_Practice.html" style="background:#7a5c1e;color:#fff" title="./Calc 1/Calc_1_1_Limits_Practice.html">Practice</a></span></div>
 <div class="row">  <span class="dot" style="background:#1e3a5c"></span>  <span class="label">One-Sided Limits</span>  <span class="pills"><a class="pill" target="_blank" href="./Calc 1/Calc_1_1_5_One_Sided_Limits_Notes_INSTRUCTOR.html" style="background:#1e3a5c;color:#fff" title="./Calc 1/Calc_1_1_5_One_Sided_Limits_Notes_INSTRUCTOR.html">Notes&nbsp;I</a><a class="pill" target="_blank" href="./Calc 1/Calc_1_1_5_One_Sided_Limits_Notes_STUDENT.html" style="background:#1e3a5c;color:#fff" title="./Calc 1/Calc_1_1_5_One_Sided_Limits_Notes_STUDENT.html">Notes&nbsp;S</a><a class="pill" target="_blank" href="./Calc 1/Calc_1_1_5_One_Sided_Limits_Practice.html" style="background:#7a5c1e;color:#fff" title="./Calc 1/Calc_1_1_5_One_Sided_Limits_Practice.html">Practice</a></span></div>
 <div class="row">  <span class="dot" style="background:#1e3a5c"></span>  <span class="label">Limit Rules &amp; Algebraic Techniques</span>  <span class="pills"><a class="pill" target="_blank" href="./Calc 1/Calc_1_2_Limit_Rules_Notes_INSTRUCTOR.html" style="background:#1e3a5c;color:#fff" title="./Calc 1/Calc_1_2_Limit_Rules_Notes_INSTRUCTOR.html">Notes&nbsp;I</a><a class="pill" target="_blank" href="./Calc 1/Calc_1_2_Limit_Rules_Notes_STUDENT.html" style="background:#1e3a5c;color:#fff" title="./Calc 1/Calc_1_2_Limit_Rules_Notes_STUDENT.html">Notes&nbsp;S</a><a class="pill" target="_blank" href="./Calc 1/Calc_1_2_Limit_Rules_Practice.html" style="background:#7a5c1e;color:#fff" title="./Calc 1/Calc_1_2_Limit_Rules_Practice.html">Practice</a></span></div>
@@ -130,16 +251,8 @@ header{background:#6b1a26;color:#fff;padding:.9rem 2rem;
 <div class="row">  <span class="dot" style="background:#1e3a5c"></span>  <span class="label">Antiderivatives &amp; Initial Value Problems</span>  <span class="pills"><a class="pill" target="_blank" href="./Calc 1/Calc_4_5_Antiderivatives_Notes_INSTRUCTOR.html" style="background:#1e3a5c;color:#fff" title="./Calc 1/Calc_4_5_Antiderivatives_Notes_INSTRUCTOR.html">Notes&nbsp;I</a><a class="pill" target="_blank" href="./Calc 1/Calc_4_5_Antiderivatives_Notes_STUDENT.html" style="background:#1e3a5c;color:#fff" title="./Calc 1/Calc_4_5_Antiderivatives_Notes_STUDENT.html">Notes&nbsp;S</a><a class="pill" target="_blank" href="./Calc 1/Calc_4_5_Antiderivatives_Practice.html" style="background:#7a5c1e;color:#fff" title="./Calc 1/Calc_4_5_Antiderivatives_Practice.html">Practice</a></span></div>
 <div class="row">  <span class="dot" style="background:#1e3a5c"></span>  <span class="label">Displacement, Velocity &amp; Acceleration</span>  <span class="pills"><a class="pill" target="_blank" href="./Calc 1/Calc_4_6_Displacement_Velocity_Acceleration_Notes_INSTRUCTOR.html" style="background:#1e3a5c;color:#fff" title="./Calc 1/Calc_4_6_Displacement_Velocity_Acceleration_Notes_INSTRUCTOR.html">Notes&nbsp;I</a><a class="pill" target="_blank" href="./Calc 1/Calc_4_6_Displacement_Velocity_Acceleration_Notes_STUDENT.html" style="background:#1e3a5c;color:#fff" title="./Calc 1/Calc_4_6_Displacement_Velocity_Acceleration_Notes_STUDENT.html">Notes&nbsp;S</a><a class="pill" target="_blank" href="./Calc 1/Calc_4_6_Displacement_Velocity_Acceleration_Practice.html" style="background:#7a5c1e;color:#fff" title="./Calc 1/Calc_4_6_Displacement_Velocity_Acceleration_Practice.html">Practice</a></span></div>
 <div class="row">  <span class="dot" style="background:#1e3a5c"></span>  <span class="label">FTC Part 1 — The Accumulation Function</span>  <span class="pills"><a class="pill" target="_blank" href="./Calc 1/Calc_4_7_1_FTC_Part1_Notes_INSTRUCTOR.html" style="background:#1e3a5c;color:#fff" title="./Calc 1/Calc_4_7_1_FTC_Part1_Notes_INSTRUCTOR.html">Notes&nbsp;I</a><a class="pill" target="_blank" href="./Calc 1/Calc_4_7_1_FTC_Part1_Notes_STUDENT.html" style="background:#1e3a5c;color:#fff" title="./Calc 1/Calc_4_7_1_FTC_Part1_Notes_STUDENT.html">Notes&nbsp;S</a><a class="pill" target="_blank" href="./Calc 1/Calc_4_7_1_FTC_Part1_Practice.html" style="background:#7a5c1e;color:#fff" title="./Calc 1/Calc_4_7_1_FTC_Part1_Practice.html">Practice</a></span>
-    </div>
-  </div>
-
-  <!-- Calculus II -->
-  <div class="course-box">
-    <div class="course-hd" style="background:#7a1a1a">
-      <span class="course-hd-name">Calculus II</span>
-      <span class="course-cnt">29 sections</span>
-    </div>
-    <div class="course-rows">
+</div>
+<div id="pool-calc2" data-name="Calculus II" data-cnt="29 sections" data-color="#7a1a1a" hidden>
 <div class="row">  <span class="dot" style="background:#7a1a1a"></span>  <span class="label">U-Substitution</span>  <span class="pills"><a class="pill" target="_blank" href="./Calc 2/C2_01_U_Substitution_Notes_INSTRUCTOR.html" style="background:#7a1a1a;color:#fff" title="./Calc 2/C2_01_U_Substitution_Notes_INSTRUCTOR.html">Notes&nbsp;I</a><a class="pill" target="_blank" href="./Calc 2/C2_01_U_Substitution_Notes_STUDENT.html" style="background:#7a1a1a;color:#fff" title="./Calc 2/C2_01_U_Substitution_Notes_STUDENT.html">Notes&nbsp;S</a><a class="pill" target="_blank" href="./Calc 2/C2_01_U_Substitution_Practice.html" style="background:#7a5c1e;color:#fff" title="./Calc 2/C2_01_U_Substitution_Practice.html">Practice</a></span></div>
 <div class="row">  <span class="dot" style="background:#7a1a1a"></span>  <span class="label">U-Substitution — Continued</span>  <span class="pills"><a class="pill" target="_blank" href="./Calc 2/C2_02_U_Sub_Advanced_Notes_INSTRUCTOR.html" style="background:#7a1a1a;color:#fff" title="./Calc 2/C2_02_U_Sub_Advanced_Notes_INSTRUCTOR.html">Notes&nbsp;I</a><a class="pill" target="_blank" href="./Calc 2/C2_02_U_Sub_Advanced_Notes_STUDENT.html" style="background:#7a1a1a;color:#fff" title="./Calc 2/C2_02_U_Sub_Advanced_Notes_STUDENT.html">Notes&nbsp;S</a><a class="pill" target="_blank" href="./Calc 2/C2_02_U_Sub_Advanced_Practice.html" style="background:#7a5c1e;color:#fff" title="./Calc 2/C2_02_U_Sub_Advanced_Practice.html">Practice</a></span></div>
 <div class="row">  <span class="dot" style="background:#7a1a1a"></span>  <span class="label">U-Sub with Trig &amp; Power Reduction</span>  <span class="pills"><a class="pill" target="_blank" href="./Calc 2/C2_03_Trig_Power_Reduction_Notes_INSTRUCTOR.html" style="background:#7a1a1a;color:#fff" title="./Calc 2/C2_03_Trig_Power_Reduction_Notes_INSTRUCTOR.html">Notes&nbsp;I</a><a class="pill" target="_blank" href="./Calc 2/C2_03_Trig_Power_Reduction_Notes_STUDENT.html" style="background:#7a1a1a;color:#fff" title="./Calc 2/C2_03_Trig_Power_Reduction_Notes_STUDENT.html">Notes&nbsp;S</a><a class="pill" target="_blank" href="./Calc 2/C2_03_Trig_Power_Reduction_Practice.html" style="background:#7a5c1e;color:#fff" title="./Calc 2/C2_03_Trig_Power_Reduction_Practice.html">Practice</a></span></div>
@@ -169,16 +282,8 @@ header{background:#6b1a26;color:#fff;padding:.9rem 2rem;
 <div class="row">  <span class="dot" style="background:#7a1a1a"></span>  <span class="label">Ratio and Root Tests</span>  <span class="pills"><a class="pill" target="_blank" href="./Calc 2/C2_27_Ratio_and_Root_Tests_Notes_INSTRUCTOR.html" style="background:#7a1a1a;color:#fff" title="./Calc 2/C2_27_Ratio_and_Root_Tests_Notes_INSTRUCTOR.html">Notes&nbsp;I</a><a class="pill" target="_blank" href="./Calc 2/C2_27_Ratio_and_Root_Tests_Notes_STUDENT.html" style="background:#7a1a1a;color:#fff" title="./Calc 2/C2_27_Ratio_and_Root_Tests_Notes_STUDENT.html">Notes&nbsp;S</a><a class="pill" target="_blank" href="./Calc 2/C2_27_Ratio_Root_Tests_Practice.html" style="background:#7a5c1e;color:#fff" title="./Calc 2/C2_27_Ratio_Root_Tests_Practice.html">Practice</a></span></div>
 <div class="row">  <span class="dot" style="background:#7a1a1a"></span>  <span class="label">Power Series</span>  <span class="pills"><a class="pill" target="_blank" href="./Calc 2/C2_28_Power_Series_Notes_INSTRUCTOR.html" style="background:#7a1a1a;color:#fff" title="./Calc 2/C2_28_Power_Series_Notes_INSTRUCTOR.html">Notes&nbsp;I</a><a class="pill" target="_blank" href="./Calc 2/C2_28_Power_Series_Notes_STUDENT.html" style="background:#7a1a1a;color:#fff" title="./Calc 2/C2_28_Power_Series_Notes_STUDENT.html">Notes&nbsp;S</a><a class="pill" target="_blank" href="./Calc 2/C2_28_Power_Series_Practice.html" style="background:#7a5c1e;color:#fff" title="./Calc 2/C2_28_Power_Series_Practice.html">Practice</a></span></div>
 <div class="row">  <span class="dot" style="background:#7a1a1a"></span>  <span class="label">Taylor Series</span>  <span class="pills"><a class="pill" target="_blank" href="./Calc 2/C2_29_Taylor_Series_Notes_INSTRUCTOR.html" style="background:#7a1a1a;color:#fff" title="./Calc 2/C2_29_Taylor_Series_Notes_INSTRUCTOR.html">Notes&nbsp;I</a><a class="pill" target="_blank" href="./Calc 2/C2_29_Taylor_Series_Notes_STUDENT.html" style="background:#7a1a1a;color:#fff" title="./Calc 2/C2_29_Taylor_Series_Notes_STUDENT.html">Notes&nbsp;S</a><a class="pill" target="_blank" href="./Calc 2/C2_29_Taylor_Series_Practice.html" style="background:#7a5c1e;color:#fff" title="./Calc 2/C2_29_Taylor_Series_Practice.html">Practice</a></span>
-    </div>
-  </div>
-
-  <!-- PreCalculus -->
-  <div class="course-box">
-    <div class="course-hd" style="background:#8b3a8b">
-      <span class="course-hd-name">PreCalculus</span>
-      <span class="course-cnt">43 sections</span>
-    </div>
-    <div class="course-rows">
+</div>
+<div id="pool-precalc" data-name="PreCalculus" data-cnt="43 sections" data-color="#8b3a8b" hidden>
 <div class="row">  <span class="dot" style="background:#7a5c1e"></span>  <span class="label">Functions</span>  <span class="pills"><a class="pill" target="_blank" href="./PreCalc/PC_1_1_Functions_Notes_INSTRUCTOR.html" style="background:#8b3a8b;color:#fff" title="./PreCalc/PC_1_1_Functions_Notes_INSTRUCTOR.html">Notes&nbsp;I</a><a class="pill" target="_blank" href="./PreCalc/PC_1_1_Functions_Notes_STUDENT.html" style="background:#8b3a8b;color:#fff" title="./PreCalc/PC_1_1_Functions_Notes_STUDENT.html">Notes&nbsp;S</a><a class="pill" target="_blank" href="./PreCalc/PC_1_1_Functions_Practice.html" style="background:#7a5c1e;color:#fff" title="./PreCalc/PC_1_1_Functions_Practice.html">Practice</a></span></div>
 <div class="row">  <span class="dot" style="background:#7a5c1e"></span>  <span class="label">Library of Functions &amp; One-to-One</span>  <span class="pills"><a class="pill" target="_blank" href="./PreCalc/PC_1_1b_Library_of_Functions_and_One-to-One_Notes_INSTRUCTOR.html" style="background:#8b3a8b;color:#fff" title="./PreCalc/PC_1_1b_Library_of_Functions_and_One-to-One_Notes_INSTRUCTOR.html">Notes&nbsp;I</a><a class="pill" target="_blank" href="./PreCalc/PC_1_1b_Library_of_Functions_and_One-to-One_Notes_STUDENT.html" style="background:#8b3a8b;color:#fff" title="./PreCalc/PC_1_1b_Library_of_Functions_and_One-to-One_Notes_STUDENT.html">Notes&nbsp;S</a><a class="pill" target="_blank" href="./PreCalc/PC_1_1b_Library_1to1_Practice.html" style="background:#7a5c1e;color:#fff" title="./PreCalc/PC_1_1b_Library_1to1_Practice.html">Practice</a></span></div>
 <div class="row">  <span class="dot" style="background:#7a5c1e"></span>  <span class="label">Domain and Interval Notation</span>  <span class="pills"><a class="pill" target="_blank" href="./PreCalc/PC_1_2a_Domain_and_Interval_Notation_Notes_INSTRUCTOR.html" style="background:#8b3a8b;color:#fff" title="./PreCalc/PC_1_2a_Domain_and_Interval_Notation_Notes_INSTRUCTOR.html">Notes&nbsp;I</a><a class="pill" target="_blank" href="./PreCalc/PC_1_2a_Domain_and_Interval_Notation_Notes_STUDENT.html" style="background:#8b3a8b;color:#fff" title="./PreCalc/PC_1_2a_Domain_and_Interval_Notation_Notes_STUDENT.html">Notes&nbsp;S</a><a class="pill" target="_blank" href="./PreCalc/PC_1_2a_Domain_Range_Practice.html" style="background:#7a5c1e;color:#fff" title="./PreCalc/PC_1_2a_Domain_Range_Practice.html">Practice</a></span></div>
@@ -222,16 +327,8 @@ header{background:#6b1a26;color:#fff;padding:.9rem 2rem;
 <div class="row">  <span class="dot" style="background:#7a5c1e"></span>  <span class="label">Polar Coordinate Graphs</span>  <span class="pills"><a class="pill" target="_blank" href="./PreCalc/PC_8_4_Polar_Coordinate_Graphs_Notes_INSTRUCTOR.html" style="background:#8b3a8b;color:#fff" title="./PreCalc/PC_8_4_Polar_Coordinate_Graphs_Notes_INSTRUCTOR.html">Notes&nbsp;I</a><a class="pill" target="_blank" href="./PreCalc/PC_8_4_Polar_Coordinate_Graphs_Notes_STUDENT.html" style="background:#8b3a8b;color:#fff" title="./PreCalc/PC_8_4_Polar_Coordinate_Graphs_Notes_STUDENT.html">Notes&nbsp;S</a><a class="pill" target="_blank" href="./PreCalc/PC_8_4_Polar_Coordinate_Graphs_Practice.html" style="background:#7a5c1e;color:#fff">Practice</a></span></div>
 <div class="row">  <span class="dot" style="background:#7a5c1e"></span>  <span class="label">Conic Sections</span>  <span class="pills"><a class="pill" target="_blank" href="./PreCalc/PC_8_5_Conic_Sections_Notes_INSTRUCTOR.html" style="background:#8b3a8b;color:#fff" title="./PreCalc/PC_8_5_Conic_Sections_Notes_INSTRUCTOR.html">Notes&nbsp;I</a><a class="pill" target="_blank" href="./PreCalc/PC_8_5_Conic_Sections_Notes_STUDENT.html" style="background:#8b3a8b;color:#fff" title="./PreCalc/PC_8_5_Conic_Sections_Notes_STUDENT.html">Notes&nbsp;S</a><a class="pill" target="_blank" href="./PreCalc/PC_8_5_Conic_Sections_Practice.html" style="background:#7a5c1e;color:#fff">Practice</a></span></div>
 <div class="row">  <span class="dot" style="background:#7a5c1e"></span>  <span class="label">Parametric Equations</span>  <span class="pills"><a class="pill" target="_blank" href="./PreCalc/PC_8_6_Parametric_Equations_Notes_INSTRUCTOR.html" style="background:#8b3a8b;color:#fff" title="./PreCalc/PC_8_6_Parametric_Equations_Notes_INSTRUCTOR.html">Notes&nbsp;I</a><a class="pill" target="_blank" href="./PreCalc/PC_8_6_Parametric_Equations_Notes_STUDENT.html" style="background:#8b3a8b;color:#fff" title="./PreCalc/PC_8_6_Parametric_Equations_Notes_STUDENT.html">Notes&nbsp;S</a><a class="pill" target="_blank" href="./PreCalc/PC_8_6_Parametric_Equations_Practice.html" style="background:#7a5c1e;color:#fff">Practice</a></span>
-    </div>
-  </div>
-
-  <!-- College Algebra -->
-  <div class="course-box">
-    <div class="course-hd" style="background:#1a7a3a">
-      <span class="course-hd-name">College Algebra</span>
-      <span class="course-cnt">38 sections</span>
-    </div>
-    <div class="course-rows">
+</div>
+<div id="pool-ca" data-name="College Algebra" data-cnt="38 sections" data-color="#1a7a3a" hidden>
 <div class="row" style="background:rgba(26,122,58,.06);border-radius:8px"><span class="dot" style="background:#1a7a3a"></span><span class="label">Foundations Review (always available)</span><span class="pills"><a class="pill" target="_blank" href="./College Algebra/OrderOfOperations_Practice.html" style="background:#7a5c1e;color:#fff" target="_blank" rel="noopener">Order of Ops</a><a class="pill" target="_blank" href="./College Algebra/FractionArithmetic_Practice.html" style="background:#7a5c1e;color:#fff" target="_blank" rel="noopener">Fractions</a><a class="pill" target="_blank" href="./College Algebra/SystemsOfEquations_Practice.html" style="background:#7a5c1e;color:#fff" target="_blank" rel="noopener">Systems of Eq.</a></span></div><div class="row">  <span class="dot" style="background:#1a7a3a"></span>  <span class="label">Solving Equations with One Unknown</span>  <span class="pills"><a class="pill" target="_blank" href="./College Algebra/CA_1_1_Solving_Equations_Notes_INSTRUCTOR.html" style="background:#1a7a3a;color:#fff" title="./College Algebra/CA_1_1_Solving_Equations_Notes_INSTRUCTOR.html">Notes&nbsp;I</a><a class="pill" target="_blank" href="./College Algebra/CA_1_1_Solving_Equations_Notes_STUDENT.html" style="background:#1a7a3a;color:#fff" title="./College Algebra/CA_1_1_Solving_Equations_Notes_STUDENT.html">Notes&nbsp;S</a><a class="pill" target="_blank" href="./College Algebra/CA_1_1_Solving_Equations_Practice.html" style="background:#7a5c1e;color:#fff" title="./College Algebra/CA_1_1_Solving_Equations_Practice.html">Practice</a></span></div>
 <div class="row">  <span class="dot" style="background:#1a7a3a"></span>  <span class="label">Solutions to Linear Equations</span>  <span class="pills"><a class="pill" target="_blank" href="./College Algebra/CA_1_2_Solutions_Linear_Equations_Notes_INSTRUCTOR.html" style="background:#1a7a3a;color:#fff" title="./College Algebra/CA_1_2_Solutions_Linear_Equations_Notes_INSTRUCTOR.html">Notes&nbsp;I</a><a class="pill" target="_blank" href="./College Algebra/CA_1_2_Solutions_Linear_Equations_Notes_STUDENT.html" style="background:#1a7a3a;color:#fff" title="./College Algebra/CA_1_2_Solutions_Linear_Equations_Notes_STUDENT.html">Notes&nbsp;S</a><a class="pill" target="_blank" href="./College Algebra/CA_1_2_Solutions_Linear_Equations_Practice.html" style="background:#7a5c1e;color:#fff" title="./College Algebra/CA_1_2_Solutions_Linear_Equations_Practice.html">Practice</a></span></div>
 <div class="row">  <span class="dot" style="background:#1a7a3a"></span>  <span class="label">Interval Notation and Inequalities</span>  <span class="pills"><a class="pill" target="_blank" href="./College Algebra/CA_1_3_Interval_Notation_Inequalities_Notes_INSTRUCTOR.html" style="background:#1a7a3a;color:#fff" title="./College Algebra/CA_1_3_Interval_Notation_Inequalities_Notes_INSTRUCTOR.html">Notes&nbsp;I</a><a class="pill" target="_blank" href="./College Algebra/CA_1_3_Interval_Notation_Inequalities_Notes_STUDENT.html" style="background:#1a7a3a;color:#fff" title="./College Algebra/CA_1_3_Interval_Notation_Inequalities_Notes_STUDENT.html">Notes&nbsp;S</a><a class="pill" target="_blank" href="./College Algebra/CA_1_3_Interval_Notation_Inequalities_Practice.html" style="background:#7a5c1e;color:#fff" title="./College Algebra/CA_1_3_Interval_Notation_Inequalities_Practice.html">Practice</a></span></div>
@@ -272,40 +369,31 @@ header{background:#6b1a26;color:#fff;padding:.9rem 2rem;
 <div class="row">  <span class="dot" style="background:#1a7a3a"></span>  <span class="label">Probability with Permutations &amp; Combinations</span>  <span class="pills"><a class="pill" target="_blank" href="./College Algebra/CA_S_11_Probability_Permutations_Combinations_Notes_INSTRUCTOR.html" style="background:#1a7a3a;color:#fff" title="./College Algebra/CA_S_11_Probability_Permutations_Combinations_Notes_INSTRUCTOR.html">Notes&nbsp;I</a><a class="pill" target="_blank" href="./College Algebra/CA_S_11_Probability_Permutations_Combinations_Notes_STUDENT.html" style="background:#1a7a3a;color:#fff" title="./College Algebra/CA_S_11_Probability_Permutations_Combinations_Notes_STUDENT.html">Notes&nbsp;S</a><a class="pill" target="_blank" href="./College Algebra/CA_S_11_Probability_with_Permutations_and_Combinations_Practice.html" style="background:#7a5c1e;color:#fff" title="./College Algebra/CA_S_11_Probability_with_Permutations_and_Combinations_Practice.html">Practice</a></span></div>
 <div class="row" style="background:rgba(26,122,58,.06);border-radius:8px">  <span class="dot" style="background:#1a7a3a"></span>  <span class="label">Sets, Counting &amp; Probability — Unit Review</span>  <span class="pills"><a class="pill" target="_blank" href="./College Algebra/CA_S_Unit_Review_Practice.html" style="background:#7a5c1e;color:#fff" title="./College Algebra/CA_S_Unit_Review_Practice.html">Review</a></span>
     </div>
-  </div>
-
-</div><!-- /course-grid -->
-
-<div class="util-section">
-  <div class="util-label">More Tools</div>
-  <div class="util-grid">
-
-    <a class="util-card" href="./puzzle.html">
-      <span class="u-name">Puzzle of the Week</span>
-      <span class="u-desc">A new challenge every week. Sit with it. Bring your best thinking to class.</span>
-      <span class="u-badge" style="background:#f5edd8;color:#8a5a1a">Weekly</span>
-    </a>
-
-    <a class="util-card" href="./mathmap.html">
-      <span class="u-name">Math Map</span>
-      <span class="u-desc">Visual roadmap of the full curriculum &mdash; see the big picture.</span>
-      <span class="u-badge" style="background:#ede8f5;color:#5a3a8a">Reference</span>
-    </a>
-
-    <a class="util-card" href="./voting.html">
-      <span class="u-name">Voting Theory</span>
-      <span class="u-desc">What makes an election fair? Mathematicians have spent centuries trying to answer that.</span>
-      <span class="u-badge" style="background:#d8eff0;color:#1a5a5c">Explore</span>
-    </a>
-
-    <a class="util-card" href="./gerry.html">
-      <span class="u-name">Gerrymandering</span>
-      <span class="u-desc">The math behind drawing district lines &mdash; and the math that exposes manipulation.</span>
-      <span class="u-badge" style="background:#f5d8d8;color:#7a1a1a">Explore</span>
-    </a>
-
-  </div>
 </div>
 
+<script>
+function openCourse(id) {
+  var pool   = document.getElementById('pool-' + id);
+  var cv     = document.getElementById('course-view');
+  var land   = document.getElementById('landing');
+  var banner = document.getElementById('cvBanner');
+
+  document.getElementById('cvRows').innerHTML = pool.innerHTML;
+  document.getElementById('cvName').textContent = pool.dataset.name;
+  document.getElementById('cvCnt').textContent  = pool.dataset.cnt;
+  banner.style.background = pool.dataset.color;
+
+  land.style.display = 'none';
+  cv.classList.add('visible');
+  document.getElementById('hdBack').classList.add('visible');
+  window.scrollTo(0, 0);
+}
+
+function closeCourse() {
+  document.getElementById('course-view').classList.remove('visible');
+  document.getElementById('landing').style.display = '';
+  document.getElementById('hdBack').classList.remove('visible');
+}
+</script>
 </body>
 </html>
