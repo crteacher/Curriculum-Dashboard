@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Classrooms — Dr. Halverson</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.17.0/katex.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.17.0/katex.min.js"></script>
+  <script src="./Calc 1/calc1-spiral-generators.js"></script>
+  <style>
+    :root {
+      --bg: #f4f4f4;
+      --card: #ffffff;
+      --text: #111111;
+      --muted: #555555;
+      --border: #dde2e8;
+      --navy:   #1e3a5c;
+      --crimson:#6b1a26;
+      --gold:   #c8a951;
+      --c2:     #7a1a1a;
+      --pc:     #8b3a8b;
+      --ca:     #1a7a3a;
+      --green:  #15803d;
+      --red:    #b91c1c;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg); color: var(--text);
+      min-height: 100vh; padding: 0 0 3rem;
+    }
+
+    /* ── Nav ─────────────────────────────────────────────── */
+    .site-nav { background: var(--crimson); padding: .65rem 1.5rem; }
+    .site-nav a { color: rgba(255,255,255,.9); text-decoration: none;
+                  font-size: .85rem; font-family: Georgia, serif; }
+    .site-nav a:hover { color: #fff; }
+
+    /* ── Page header ─────────────────────────────────────── */
+    .page-header { text-align: center; padding: 1.8rem 1rem 1rem; }
+    .page-header h1 { font-size: 2rem; font-weight: 700; color: var(--crimson); }
+    .page-header p { font-size: .9rem; color: var(--muted); margin-top: .35rem; }
+
+    /* ── Course tabs ─────────────────────────────────────── */
+    .tab-bar {
+      display: flex; gap: 0; max-width: 900px; margin: 0 auto 0;
+      border-bottom: 2px solid var(--border); padding: 0 1.5rem;
+    }
+    .tab-btn {
+      padding: .65rem 1.4rem; font-size: .88rem; font-weight: 600;
+      border: none; background: none; cursor: pointer; color: var(--muted);
+      border-bottom: 3px solid transparent; margin-bottom: -2px;
+      transition: color .15s, border-color .15s;
+    }
+    .tab-btn.active-navy   { color: var(--navy);   border-color: var(--navy); }
+    .tab-btn.active-c2     { color: var(--c2);     border-color: var(--c2); }
+    .tab-btn.active-pc     { color: var(--pc);     border-color: var(--pc); }
+    .tab-btn.active-ca     { color: var(--ca);     border-color: var(--ca); }
+    .tab-btn:hover:not(.active-navy):not(.active-c2):not(.active-pc):not(.active-ca) {
+      color: var(--text);
+    }
+
+    /* ── Panes ───────────────────────────────────────────── */
+    .pane { display: none; max-width: 900px; margin: 0 auto; padding: 1.5rem; }
+    .pane.active { display: block; }
+
+    /* ── Session header ──────────────────────────────────── */
+    .session-hdr {
+      display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+    }
+    .session-hdr h2 { font-size: 1.2rem; font-weight: 700; color: var(--navy); flex: 1; }
+    .score-pill {
+      background: var(--navy); color: #fff; font-size: .85rem; font-weight: 700;
+      padding: .3rem .9rem; border-radius: 999px;
+    }
+    .new-set-btn {
+      background: none; border: 1.5px solid var(--navy); color: var(--navy);
+      font-size: .85rem; font-weight: 600; padding: .35rem .9rem;
+      border-radius: 8px; cursor: pointer; transition: background .15s, color .15s;
+    }
+    .new-set-btn:hover { background: var(--navy); color: #fff; }
+
+    /* ── Problem card ────────────────────────────────────── */
+    .prob-card {
+      background: var(--card); border: 1.5px solid var(--border);
+      border-radius: 14px; padding: 1.4rem 1.5rem; margin-bottom: 1.2rem;
+      box-shadow: 0 1px 4px rgba(0,0,0,.06);
+    }
+    .prob-card-num {
+      font-size: .7rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .1em; color: var(--navy); margin-bottom: .5rem;
+    }
+    .section-badge {
+      display: inline-block; font-size: .67rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .07em;
+      padding: .18rem .6rem; border-radius: 999px;
+      background: #e8edf4; color: var(--navy); margin-bottom: .75rem;
+    }
+    .prob-question {
+      font-size: 1rem; margin-bottom: 1rem; overflow-x: auto;
+    }
+    .prob-question svg { max-width: 100%; }
+    .prob-question .katex-display { margin: .4rem 0; }
+
+    /* answer row */
+    .ans-row { display: flex; gap: .6rem; align-items: center; flex-wrap: wrap; }
+    .ans-input {
+      border: 1.5px solid var(--border); border-radius: 8px;
+      padding: .45rem .8rem; font-size: .95rem; width: 180px;
+      outline: none; transition: border-color .15s;
+    }
+    .ans-input:focus { border-color: var(--navy); }
+    .ans-input.correct { border-color: var(--green); background: #f0fdf4; }
+    .ans-input.wrong   { border-color: var(--red);   background: #fef2f2; }
+    .check-btn {
+      background: var(--navy); color: #fff; border: none;
+      padding: .45rem 1rem; border-radius: 8px; font-size: .88rem;
+      font-weight: 600; cursor: pointer; transition: opacity .15s;
+    }
+    .check-btn:hover { opacity: .88; }
+    .check-btn:disabled { opacity: .45; cursor: default; }
+    .feedback { font-size: .85rem; font-weight: 600; margin-left: .25rem; }
+    .feedback.ok  { color: var(--green); }
+    .feedback.err { color: var(--red); }
+
+    /* hint + solution */
+    .hint-text {
+      font-size: .82rem; color: var(--muted); font-style: italic;
+      margin: .7rem 0 .4rem; line-height: 1.5;
+    }
+    .reveal-btn {
+      background: none; border: 1.5px solid var(--gold); color: #7a5c1e;
+      font-size: .8rem; font-weight: 600; padding: .3rem .8rem;
+      border-radius: 8px; cursor: pointer; margin-top: .6rem;
+      transition: background .15s;
+    }
+    .reveal-btn:hover { background: #fdf6e3; }
+    .reveal-btn:disabled { opacity: .45; cursor: default; }
+    .solution-box {
+      display: none; margin-top: .75rem;
+      border-top: 1.5px solid var(--border); padding-top: .75rem;
+    }
+    .solution-label { font-size: .72rem; font-weight: 700; color: var(--muted);
+                      text-transform: uppercase; letter-spacing: .08em; margin-bottom: .4rem; }
+    .solution-math { overflow-x: auto; }
+    .solution-math .katex-display { margin: .2rem 0; }
+
+    /* ── Status / placeholder ────────────────────────────── */
+    .status-msg { text-align: center; color: var(--muted); padding: 2rem; font-size: .95rem; }
+    .placeholder-msg { text-align: center; padding: 3rem 1rem; color: var(--muted); }
+    .placeholder-msg h3 { font-size: 1.1rem; margin-bottom: .5rem; }
+  </style>
+</head>
+<body>
+
+<nav class="site-nav"><a href="./index.html">← Dashboard</a></nav>
+
+<div class="page-header">
+  <h1>Classrooms</h1>
+  <p>Spiral Do Now — pulls from sections already covered, 2+ sections back</p>
+</div>
+
+<div class="tab-bar">
+  <button class="tab-btn active-navy" id="tab-calc1" onclick="switchTab('calc1')">Calc I</button>
+  <button class="tab-btn" id="tab-calc2" onclick="switchTab('calc2')">Calc II</button>
+  <button class="tab-btn" id="tab-precalc" onclick="switchTab('precalc')">PreCalc</button>
+  <button class="tab-btn" id="tab-ca" onclick="switchTab('ca')">College Algebra</button>
+</div>
+
+<!-- ── Calc I pane ──────────────────────────────────────── -->
+<div class="pane active" id="pane-calc1">
+  <div class="session-hdr">
+    <h2>Spiral Do Now — Calculus I</h2>
+    <span class="score-pill" id="c1-score">Score: 0 / 3</span>
+    <button class="new-set-btn" onclick="calc1NewSet()">&#8635; New Set</button>
+  </div>
+  <div id="c1-problems"><div class="status-msg">Loading…</div></div>
+</div>
+
+<!-- ── Placeholder panes ───────────────────────────────── -->
+<div class="pane" id="pane-calc2">
+  <div class="placeholder-msg">
+    <h3>Calc II — Coming soon</h3>
+    <p>Spiral Do Now for Calc II will be added once generators are available.</p>
+  </div>
+</div>
+<div class="pane" id="pane-precalc">
+  <div class="placeholder-msg">
+    <h3>PreCalc — Coming soon</h3>
+    <p>Spiral Do Now for PreCalc will be added once generators are available.</p>
+  </div>
+</div>
+<div class="pane" id="pane-ca">
+  <div class="placeholder-msg">
+    <h3>College Algebra — Coming soon</h3>
+    <p>Spiral Do Now for College Algebra will be added once generators are available.</p>
+  </div>
+</div>
+
+<script>
+// ── Tab switching ─────────────────────────────────────────────────────────────
+const TAB_COLORS = { calc1:'active-navy', calc2:'active-c2', precalc:'active-pc', ca:'active-ca' };
+function switchTab(id) {
+  document.querySelectorAll('.tab-btn').forEach(b => {
+    b.className = 'tab-btn';
+  });
+  document.getElementById('tab-' + id).classList.add(TAB_COLORS[id]);
+  document.querySelectorAll('.pane').forEach(p => p.classList.remove('active'));
+  document.getElementById('pane-' + id).classList.add('active');
+}
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
+function norm(s) {
+  return String(s).replace(/−/g, '-').replace(/\s+/g, '').toLowerCase();
+}
+function rfShuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+function rk(tex, el, display) {
+  try { katex.render(tex, el, { throwOnError: false, displayMode: !!display }); }
+  catch(e) { el.textContent = tex; }
+}
+
+// ── Calc I session state ──────────────────────────────────────────────────────
+let C1 = { items: [], flags: [], attempted: [], peeked: [] };
+
+function calc1NewSet() {
+  if (!window.CALC1_SPIRAL) {
+    document.getElementById('c1-problems').innerHTML =
+      '<div class="status-msg">Generator bundle not loaded. Check calc1-spiral-generators.js.</div>';
+    return;
+  }
+  // Build eligible pool from completedSections or all sections with index <= current-2
+  const pool = buildPool();
+  if (pool.length === 0) {
+    document.getElementById('c1-problems').innerHTML =
+      '<div class="status-msg">Not enough completed sections yet for a spiral review.</div>';
+    return;
+  }
+
+  // Deduplicate by generator identity (sections sharing a practice file share generators)
+  const seen = new Set();
+  const unique = pool.filter(entry => {
+    const key = entry.generators[0].toString().slice(20, 80);
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+
+  const chosen = rfShuffle(unique).slice(0, Math.min(3, unique.length));
+  C1.items = chosen.map(entry => {
+    const gen = entry.generators[Math.floor(Math.random() * entry.generators.length)];
+    return { title: entry.title, problem: gen() };
+  });
+  C1.flags    = C1.items.map(() => false);
+  C1.attempted= C1.items.map(() => false);
+  C1.peeked   = C1.items.map(() => false);
+
+  renderC1();
+  updateC1Score();
+}
+
+function buildPool() {
+  // Uses window._calc1Completed (set after state.json fetch)
+  // Falls back to all sections if state unavailable
+  const spiral = window.CALC1_SPIRAL;
+  const completed = window._calc1Completed || null;
+  if (completed && completed.length > 0) {
+    return completed
+      .filter(id => spiral[id])
+      .map(id => spiral[id]);
+  }
+  // Fallback: use all sections (for instructor preview)
+  return Object.values(spiral);
+}
+
+function renderC1() {
+  const wrap = document.getElementById('c1-problems');
+  wrap.innerHTML = '';
+  C1.items.forEach((item, i) => {
+    const p = item.problem;
+    const card = document.createElement('div');
+    card.className = 'prob-card';
+    card.id = `c1-card-${i}`;
+
+    // Badge + label
+    const badge = document.createElement('div');
+    badge.className = 'section-badge';
+    badge.textContent = item.title;
+    card.appendChild(badge);
+
+    const num = document.createElement('div');
+    num.className = 'prob-card-num';
+    num.textContent = `Problem ${i + 1}`;
+    card.insertBefore(num, badge);
+
+    // Question
+    const qDiv = document.createElement('div');
+    qDiv.className = 'prob-question';
+    if (p.svg) {
+      qDiv.innerHTML = p.svg;
+    } else if (p.latex) {
+      rk(p.latex, qDiv, true);
+    }
+    card.appendChild(qDiv);
+
+    // Hint
+    if (p.hint) {
+      const hDiv = document.createElement('div');
+      hDiv.className = 'hint-text';
+      hDiv.textContent = '💡 ' + p.hint;
+      card.appendChild(hDiv);
+    }
+
+    // Answer row
+    const row = document.createElement('div');
+    row.className = 'ans-row';
+    const inp = document.createElement('input');
+    inp.type = 'text'; inp.className = 'ans-input';
+    inp.id = `c1-inp-${i}`; inp.placeholder = 'Your answer…';
+    inp.addEventListener('keydown', e => { if (e.key === 'Enter') checkC1(i); });
+    const btn = document.createElement('button');
+    btn.className = 'check-btn'; btn.id = `c1-chk-${i}`;
+    btn.textContent = 'Check';
+    btn.addEventListener('click', () => checkC1(i));
+    const fb = document.createElement('span');
+    fb.className = 'feedback'; fb.id = `c1-fb-${i}`;
+    row.appendChild(inp); row.appendChild(btn); row.appendChild(fb);
+    card.appendChild(row);
+
+    // Reveal solution button
+    const revBtn = document.createElement('button');
+    revBtn.className = 'reveal-btn'; revBtn.id = `c1-rev-${i}`;
+    revBtn.textContent = 'Show Solution';
+    revBtn.addEventListener('click', () => revealC1(i));
+    card.appendChild(revBtn);
+
+    // Solution box
+    const sol = document.createElement('div');
+    sol.className = 'solution-box'; sol.id = `c1-sol-${i}`;
+    const solLabel = document.createElement('div');
+    solLabel.className = 'solution-label'; solLabel.textContent = 'Solution';
+    const solMath = document.createElement('div');
+    solMath.className = 'solution-math'; solMath.id = `c1-sol-math-${i}`;
+    sol.appendChild(solLabel); sol.appendChild(solMath);
+    card.appendChild(sol);
+
+    wrap.appendChild(card);
+  });
+}
+
+function checkC1(i) {
+  if (C1.attempted[i]) return;
+  const inp = document.getElementById(`c1-inp-${i}`);
+  const fb  = document.getElementById(`c1-fb-${i}`);
+  const btn = document.getElementById(`c1-chk-${i}`);
+  const val = inp.value.trim();
+  if (!val) return;
+
+  const p = C1.items[i].problem;
+  const correct = p.answer.some(a => norm(val) === norm(a));
+  C1.attempted[i] = true;
+  if (correct && !C1.peeked[i]) C1.flags[i] = true;
+
+  inp.classList.add(correct ? 'correct' : 'wrong');
+  fb.textContent  = correct ? '✓ Correct!' : '✗ Try again — see solution below';
+  fb.className    = 'feedback ' + (correct ? 'ok' : 'err');
+  btn.disabled    = true;
+  updateC1Score();
+}
+
+function revealC1(i) {
+  C1.peeked[i] = true;
+  const sol    = document.getElementById(`c1-sol-${i}`);
+  const math   = document.getElementById(`c1-sol-math-${i}`);
+  const revBtn = document.getElementById(`c1-rev-${i}`);
+  const p      = C1.items[i].problem;
+  sol.style.display = 'block';
+  revBtn.disabled   = true;
+  if (p.step) rk(p.step, math, true);
+  else math.textContent = p.answer[0];
+
+  // Mark attempted if they peeked before checking
+  if (!C1.attempted[i]) {
+    C1.attempted[i] = true;
+    const btn = document.getElementById(`c1-chk-${i}`);
+    if (btn) btn.disabled = true;
+  }
+  updateC1Score();
+}
+
+function updateC1Score() {
+  const correct = C1.flags.filter(Boolean).length;
+  const total   = C1.items.length;
+  document.getElementById('c1-score').textContent = `Score: ${correct} / ${total}`;
+}
+
+// ── Boot ──────────────────────────────────────────────────────────────────────
+fetch('./state.json')
+  .then(r => r.json())
+  .then(state => {
+    window._calc1Completed = (state?.courses?.calc1?.completedSections) || [];
+    calc1NewSet();
+  })
+  .catch(() => {
+    // State unavailable — use all sections (instructor preview mode)
+    window._calc1Completed = null;
+    calc1NewSet();
+  });
+</script>
+</body>
+</html>
