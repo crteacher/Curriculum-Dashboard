@@ -454,7 +454,98 @@
     title: "Arc Length",
     index: 8,
     generators: (function() {
+      function gen1(){
+        const triples=[{a:3,b:4,c:5},{a:5,b:12,c:13},{a:8,b:15,c:17}];
+        const t=choose(triples);
+        return {
+          latex:`\\text{Find the arc length of }y=\\tfrac{${t.b}}{${t.a}}x\\text{ from }x=0\\text{ to }x=${t.a}.`,
+          answer:[String(t.c)],
+          hint:'For a straight line, how does the arc length formula reduce to a familiar distance calculation?',
+          step:`f'=\\tfrac{${t.b}}{${t.a}},\\quad 1+(f')^2=1+\\tfrac{${t.b*t.b}}{${t.a*t.a}}=\\tfrac{${t.c*t.c}}{${t.a*t.a}}\\\\L=\\sqrt{\\tfrac{${t.c*t.c}}{${t.a*t.a}}}\\cdot${t.a}=\\tfrac{${t.c}}{${t.a}}\\cdot${t.a}=${t.c}`
+        };
+      }
 
+      // gen2: y=(2/3)x^(3/2) on [0,a], a∈{3,8,15}: L=2(1+a)^(3/2)/3 - 2/3
+      function gen2(){
+        const data=[{a:3,ans:'14/3',lans:'\\\\tfrac{14}{3}'},{a:8,ans:'52/3',lans:'\\\\tfrac{52}{3}'},{a:15,ans:'42',lans:'42'}];
+        const d=choose(data);
+        return {
+          latex:`\\text{Find the arc length of }y=\\tfrac{2}{3}x^{3/2}\\text{ from }x=0\\text{ to }x=${d.a}.`,
+          answer:[d.ans],
+          hint:"After differentiating y=(2/3)x^(3/2), what is 1+[f'(x)]^2, and does it simplify under the radical?",
+          step:`f'=\\sqrt{x},\\quad 1+(f')^2=1+x\\\\L=\\int_0^{${d.a}}\\sqrt{1+x}\\,dx=\\left[\\tfrac{2(1+x)^{3/2}}{3}\\right]_0^{${d.a}}=\\tfrac{2\\cdot${(1+d.a)}^{3/2}}{3}-\\tfrac{2}{3}=${d.lans}`
+        };
+      }
+
+      // gen3: y=(1/3)x^(3/2) on [0,a], a∈{5,12}: L=(4+a)^(3/2)/3 - 8/3
+      function gen3(){
+        const data=[{a:5,ans:'19/3',pow:'27',lans:'\\\\tfrac{19}{3}'},{a:12,ans:'56/3',pow:'64',lans:'\\\\tfrac{56}{3}'}];
+        const d=choose(data);
+        return {
+          latex:`\\text{Find the arc length of }y=\\tfrac{1}{3}x^{3/2}\\text{ from }x=0\\text{ to }x=${d.a}.`,
+          answer:[d.ans],
+          hint:"After differentiating, look at 1+[f'(x)]^2 — can you factor out a constant to make the integral cleaner?",
+          step:`f'=\\tfrac{\\sqrt{x}}{2},\\quad 1+(f')^2=\\tfrac{4+x}{4}\\\\L=\\int_0^{${d.a}}\\tfrac{\\sqrt{4+x}}{2}\\,dx=\\left[\\tfrac{(4+x)^{3/2}}{3}\\right]_0^{${d.a}}=\\tfrac{${d.pow}-8}{3}=${d.lans}`
+        };
+      }
+
+      // gen4: y=(x^2+2)^(3/2)/3 on [0,n], n∈{1,2}: 1+(f')^2=(x^2+1)^2, L=n^3/3+n
+      function gen4(){
+        const data=[{n:1,ans:'4/3',lans:'\\\\tfrac{4}{3}'},{n:2,ans:'14/3',lans:'\\\\tfrac{14}{3}'}];
+        const d=choose(data);
+        return {
+          latex:`\\text{Find }L\\text{ for }y=\\tfrac{(x^2+2)^{3/2}}{3}\\text{ on }[0,${d.n}].`,
+          answer:[d.ans],
+          hint:'When 1+[f\'(x)]^2 turns out to be a perfect square, the radical disappears — can you spot that pattern here?',
+          step:`f'=x\\sqrt{x^2+2},\\quad 1+(f')^2=x^2(x^2+2)+1=(x^2+1)^2\\\\L=\\int_0^{${d.n}}(x^2+1)\\,dx=\\left[\\tfrac{x^3}{3}+x\\right]_0^{${d.n}}=${d.lans}`
+        };
+      }
+
+      // gen5: y=x^3/6+1/(2x) on [1,3]: L=14/3 (classic perfect-square trick)
+      function gen5(){
+        return {
+          latex:`\\text{Find the arc length of }y=\\tfrac{x^3}{6}+\\tfrac{1}{2x}\\text{ on }[1,3].`,
+          answer:['14/3'],
+          hint:"This integrand is engineered so 1+[f'(x)]^2 is a perfect square — what does differentiating give you?",
+          step:`f'=\\tfrac{x^2}{2}-\\tfrac{1}{2x^2},\\quad 1+(f')^2=\\left(\\tfrac{x^2}{2}+\\tfrac{1}{2x^2}\\right)^2\\\\L=\\int_1^3\\left(\\tfrac{x^2}{2}+\\tfrac{1}{2x^2}\\right)dx=\\left[\\tfrac{x^3}{6}-\\tfrac{1}{2x}\\right]_1^3=\\tfrac{26}{6}+\\tfrac{2}{6}=\\tfrac{14}{3}`
+        };
+      }
+
+      // gen6: y=(3/4)x on [0,a], a∈{4,8,12}: L=5a/4
+      function gen6(){
+        const a=choose([4,8,12]);
+        const ans=String(5*a/4);
+        return {
+          latex:`\\text{Find the arc length of }y=\\tfrac{3}{4}x\\text{ from }x=0\\text{ to }x=${a}.`,
+          answer:[ans],
+          hint:'For a line with a slope that comes from a Pythagorean triple, the expression under the radical becomes a perfect square.',
+          step:`f'=\\tfrac{3}{4},\\quad 1+(f')^2=\\tfrac{25}{16}\\\\L=\\int_0^{${a}}\\tfrac{5}{4}\\,dx=\\tfrac{5}{4}\\cdot${a}=${ans}`
+        };
+      }
+
+      // gen7: y=(12/5)x on [0,a], a∈{5,10}: L=13a/5
+      function gen7(){
+        const a=choose([5,10]);
+        const ans=String(13*a/5);
+        return {
+          latex:`\\text{Find the arc length of }y=\\tfrac{12}{5}x\\text{ from }x=0\\text{ to }x=${a}.`,
+          answer:[ans],
+          hint:'For a straight line, the arc length formula simplifies to a product of the slope hypotenuse and the run.',
+          step:`f'=\\tfrac{12}{5},\\quad 1+(f')^2=\\tfrac{169}{25}\\\\L=\\int_0^{${a}}\\tfrac{13}{5}\\,dx=\\tfrac{13}{5}\\cdot${a}=${ans}`
+        };
+      }
+
+      // gen8: y=(24/7)x on [0,a*7], a∈{1,2}: L=25a
+      function gen8(){
+        const a=choose([1,2]);
+        const len=7*a, ans=String(25*a);
+        return {
+          latex:`\\text{Find the arc length of }y=\\tfrac{24}{7}x\\text{ from }x=0\\text{ to }x=${len}.`,
+          answer:[ans],
+          hint:'The slope 24/7 is part of the Pythagorean triple (7, 24, 25) — how does that affect the hypotenuse factor?',
+          step:`f'=\\tfrac{24}{7},\\quad 1+(f')^2=\\tfrac{576+49}{49}=\\tfrac{625}{49}\\\\L=\\int_0^{${len}}\\tfrac{25}{7}\\,dx=\\tfrac{25}{7}\\cdot${len}=${ans}`
+        };
+      }
       return [gen1, gen2, gen3, gen4, gen5, gen6, gen7, gen8];
     })()
   };
@@ -464,7 +555,109 @@
     title: "Surface Area",
     index: 9,
     generators: (function() {
+      function gen1(){
+        const r=choose([2,3,4]);
+        const ans=String(4*r*r)+'pi';
+        return {
+          latex:`\\text{Rotate }y=\\sqrt{${r*r}-x^2}\\text{ (semicircle, radius }${r}\\text{) about the }x\\text{-axis.}\\\\\\text{Find the surface area (sphere formula check).}`,
+          answer:[ans,String(4*r*r)+'*pi'],
+          hint:"What is the radius of rotation for each band, and how does the derivative of a semicircle simplify 1+(f')^2?",
+          step:`f'=\\frac{-x}{\\sqrt{${r*r}-x^2}},\\quad 1+(f')^2=\\frac{${r*r}}{${r*r}-x^2}\\\\S=2\\pi\\int_{-${r}}^{${r}}\\sqrt{${r*r}-x^2}\\cdot\\frac{${r}}{\\sqrt{${r*r}-x^2}}\\,dx=2\\pi\\cdot${r}\\cdot 2${r}=${ans}`
+        };
+      }
 
+      // gen2: Rotate y=x^3 about x-axis on [0,1]: S=pi(10sqrt(10)-1)/27
+      function gen2(){
+        return {
+          latex:`\\text{Rotate }y=x^3\\text{ about the }x\\text{-axis on }[0,1].\\text{ Find the surface area.}`,
+          answer:['pi(10sqrt(10)-1)/27','pi*(10sqrt10-1)/27'],
+          hint:"After finding f', what substitution cleans up the 1+9x^4 expression under the radical?",
+          step:`f'=3x^2,\\quad S=2\\pi\\int_0^1 x^3\\sqrt{1+9x^4}\\,dx\\\\u=1+9x^4,\\;du=36x^3\\,dx:\\quad S=\\frac{2\\pi}{36}\\cdot\\frac{2}{3}\\left[u^{3/2}\\right]_1^{10}=\\frac{\\pi(10\\sqrt{10}-1)}{27}`
+        };
+      }
+
+      // gen3: Cone check: rotate y=r/h * x on [0,h], rand (r,h) from Pythagorean pairs
+      // (r,h,ell): (3,4,5),(4,3,5),(5,12,13),(12,5,13)
+      function gen3(){
+        const data=[{r:3,h:4,ell:5},{r:4,h:3,ell:5},{r:5,h:12,ell:13},{r:12,h:5,ell:13}];
+        const d=choose(data);
+        const ans=String(d.r*d.ell)+'pi';
+        return {
+          latex:`\\text{Rotate }y=\\tfrac{${d.r}}{${d.h}}x\\text{ about the }x\\text{-axis on }[0,${d.h}].\\\\\\text{Find }S\\text{ (should equal }\\pi r\\ell\\text{ for a cone).}`,
+          answer:[ans],
+          hint:'The lateral surface area of a cone is pi times radius times slant height — does the integral give the same result?',
+          step:`f'=\\tfrac{${d.r}}{${d.h}},\\quad \\sqrt{1+(f')^2}=\\tfrac{${d.ell}}{${d.h}}\\\\S=2\\pi\\int_0^{${d.h}}\\tfrac{${d.r}}{${d.h}}x\\cdot\\tfrac{${d.ell}}{${d.h}}\\,dx=\\tfrac{2\\pi\\cdot${d.r}\\cdot${d.ell}}{${d.h*d.h}}\\cdot\\tfrac{${d.h*d.h}}{2}=${ans}\\;\\checkmark`
+        };
+      }
+
+      // gen4: Rotate y=x^2 about y-axis on [0,2]: S=pi(17sqrt17-1)/6
+      function gen4(){
+        return {
+          latex:`\\text{Rotate }y=x^2\\text{ about the }y\\text{-axis on }[0,2].\\text{ Find }S.`,
+          answer:['pi(17sqrt17-1)/6','pi*(17sqrt17-1)/6'],
+          hint:'When rotating about the y-axis, what factor replaces f(x) as the radius of each swept band?',
+          step:`S=2\\pi\\int_0^2 x\\sqrt{1+4x^2}\\,dx\\\\u=1+4x^2,\\;du=8x\\,dx:\\quad S=\\frac{2\\pi}{8}\\cdot\\frac{2}{3}\\left[u^{3/2}\\right]_1^{17}=\\frac{\\pi(17\\sqrt{17}-1)}{6}`
+        };
+      }
+
+      // gen5: Rotate y=sqrt(x) about x-axis on [0,a], a∈{1,4}: set-up + u-sub
+      // a=1: S=pi(5sqrt5-1)/6; a=4: S=pi(17sqrt17-1)/6 wait that's the same as gen4 with different function
+      // Let's use a=1: S=2pi ∫0^1 sqrt(x)*sqrt(1+1/(4x)) dx = 2pi ∫0^1 sqrt(x+1/4) dx
+      // = 2pi [2/3(x+1/4)^(3/2)]_0^1 = 2pi(2/3)[(5/4)^(3/2)-(1/4)^(3/2)]
+      // = (4pi/3)[5sqrt5/8 - 1/8] = pi(5sqrt5-1)/6
+      function gen5(){
+        return {
+          latex:`\\text{Rotate }y=\\sqrt{x}\\text{ about the }x\\text{-axis on }[0,1].\\text{ Find }S.`,
+          answer:['pi(5sqrt5-1)/6'],
+          hint:'After computing f\', look for a way to combine the f(x) and the sqrt(1+(f\')^2) factors into one cleaner expression.',
+          step:`f'=\\frac{1}{2\\sqrt{x}},\\quad f(x)\\sqrt{1+(f')^2}=\\sqrt{x}\\cdot\\sqrt{1+\\frac{1}{4x}}=\\sqrt{x+\\tfrac{1}{4}}\\\\S=2\\pi\\int_0^1\\sqrt{x+\\tfrac{1}{4}}\\,dx=2\\pi\\left[\\tfrac{2}{3}(x+\\tfrac{1}{4})^{3/2}\\right]_0^1=\\frac{\\pi(5\\sqrt{5}-1)}{6}`
+        };
+      }
+
+      // gen6: Sphere radius r∈{1,3,5}: S=4pi*r^2
+      function gen6(){
+        const r=choose([1,3,5]);
+        const ans=String(4*r*r)+'pi';
+        return {
+          latex:`\\text{A sphere has radius }${r}.\\text{ State its surface area (derive from the rotation formula).}`,
+          answer:[ans,String(4*r*r)+'\\pi'],
+          hint:'A sphere is obtained by rotating a semicircle about the x-axis — what does the standard surface-area integral give?',
+          step:`S=4\\pi r^2=4\\pi(${r})^2=${ans}`
+        };
+      }
+
+      // gen7: Rotate y=2x about x-axis on [0,3]: cone, r=6,h=3,ell=3sqrt5
+      // S=2pi*int_0^3 2x*sqrt(5) dx = 2pi*sqrt5*[x^2]_0^3 = 18pi*sqrt5
+      function gen7(){
+        return {
+          latex:`\\text{Rotate }y=2x\\text{ about the }x\\text{-axis on }[0,3].\\text{ Find }S.`,
+          answer:['18pisqrt5','18pi*sqrt5','18sqrt5*pi'],
+          hint:'The function y=2x is a line through the origin — what shape does its rotation produce, and what is the slant height?',
+          step:`f'=2,\\quad\\sqrt{1+4}=\\sqrt{5}\\\\S=2\\pi\\int_0^3 2x\\sqrt{5}\\,dx=4\\pi\\sqrt{5}\\left[\\frac{x^2}{2}\\right]_0^3=4\\pi\\sqrt{5}\\cdot\\frac{9}{2}=18\\pi\\sqrt{5}`
+        };
+      }
+
+      // gen8: Setup: rotate y=e^x about x-axis on [0,1]: S=2pi*int_0^1 e^x sqrt(1+e^(2x)) dx
+      // No closed form — just set up. Answer: 'setup' is hard. Instead: 
+      // rotate y=1/x about x-axis on [1,a], a∈{2,3}: set up only... 
+      // Actually let's just give a cone problem with different (r,h):
+      // (r,h,ell): (3,4,5): S=15pi (r*ell=3*5=15)
+      // We already have gen3 for cones. Let gen8 be about y-axis rotation of y=sqrt(x):
+      // Rotate y=sqrt(x) about y-axis on [0,4]:
+      // S=2pi ∫0^4 x*sqrt(1+1/(4x)) dx = 2pi ∫0^4 sqrt(x^2+x/4) dx
+      // = 2pi ∫0^4 sqrt(x)*sqrt(x+1/4) dx ... messy
+      // Let's do: rotate y=x^(1/2) about x-axis on [0,4]:
+      // 2pi ∫0^4 sqrt(x)*sqrt(1+1/(4x)) dx = 2pi ∫0^4 sqrt(x+1/4) dx
+      // = 2pi[2/3(x+1/4)^(3/2)]_0^4 = (4pi/3)[(17/4)^(3/2)-(1/4)^(3/2)]
+      // = (4pi/3)[17sqrt17/8 - 1/8] = pi(17sqrt17-1)/6
+      function gen8(){
+        return {
+          latex:`\\text{Rotate }y=\\sqrt{x}\\text{ about the }x\\text{-axis on }[0,4].\\text{ Find }S.`,
+          answer:['pi(17sqrt17-1)/6'],
+          hint:'Combine f(x) with the arc-length factor into a single square root, then recognize the resulting integral type.',
+          step:`f(x)\\sqrt{1+(f')^2}=\\sqrt{x}\\cdot\\sqrt{1+\\frac{1}{4x}}=\\sqrt{x+\\tfrac{1}{4}}\\\\S=2\\pi\\int_0^4\\sqrt{x+\\tfrac{1}{4}}\\,dx=2\\pi\\left[\\tfrac{2}{3}(x+\\tfrac{1}{4})^{3/2}\\right]_0^4=\\frac{\\pi(17\\sqrt{17}-1)}{6}`
+        };
+      }
       return [gen1, gen2, gen3, gen4, gen5, gen6, gen7, gen8];
     })()
   };
@@ -474,7 +667,122 @@
     title: "Physical Applications",
     index: 10,
     generators: (function() {
+      function gen1(){
+        const data=[
+          {F:10,sc:5,fc:0,tc:10,k:200},
+          {F:20,sc:4,fc:0,tc:8,k:500},
+          {F:15,sc:6,fc:0,tc:12,k:250}
+        ];
+        const d=choose(data);
+        const fm=d.fc/100, tm=d.tc/100;
+        const W=d.k*tm*tm/2 - d.k*fm*fm/2;
+        return {
+          latex:`\\text{A spring: ${d.F} N stretches it ${d.sc} cm. Find work (J) to stretch from ${d.fc} to ${d.tc} cm.}`,
+          answer:[String(W)],
+          hint:'Use the given force and stretch to find the spring constant, then integrate over the displacement interval.',
+          step:`k=\\frac{${d.F}}{${d.sc/100}}=${d.k}\\text{ N/m}\\\\W=\\int_{${fm}}^{${tm}}${d.k}x\\,dx=${d.k}\\left[\\frac{x^2}{2}\\right]_{${fm}}^{${tm}}=${W}\\text{ J}`
+        };
+      }
 
+      // gen2: Spring compress/stretch, rand k and displacement
+      function gen2(){
+        const ks=[100,200,400];
+        const ds_cm=[5,10,20];
+        const k=choose(ks), d_cm=choose(ds_cm);
+        const d=d_cm/100;
+        const W=k*d*d/2;
+        return {
+          latex:`\\text{Spring constant }k=${k}\\text{ N/m. Find the work (J) to stretch it }${d_cm}\\text{ cm from natural length.}`,
+          answer:[String(W)],
+          hint:'For a spring with constant k, what is the work integral when stretching from x=0 to x=d?',
+          step:`W=\\int_0^{${d}}${k}x\\,dx=${k}\\left[\\frac{x^2}{2}\\right]_0^{${d}}=${W}\\text{ J}`
+        };
+      }
+
+      // gen3: Lift entire cable, rand (length_m, total_N)
+      function gen3(){
+        const data=[{L:10,W_tot:50,w:5},{L:8,W_tot:40,w:5},{L:6,W_tot:30,w:5},{L:10,W_tot:60,w:6}];
+        const d=choose(data);
+        const ans=d.w*d.L*d.L/2;
+        return {
+          latex:`\\text{A ${d.L}-m cable weighs ${d.W_tot} N total. Find work (J) to lift the entire cable.}`,
+          answer:[String(ans)],
+          hint:'As the cable is raised, the hanging weight decreases — what is the weight still hanging when x meters have been lifted?',
+          step:`w=${d.w}\\text{ N/m},\\quad W=\\int_0^{${d.L}}${d.w}(${d.L}-x)\\,dx=${d.w}\\left[${d.L}x-\\frac{x^2}{2}\\right]_0^{${d.L}}=${ans}\\text{ J}`
+        };
+      }
+
+      // gen4: Lift half of cable out of well
+      function gen4(){
+        const data=[{L:10,w:5,halfL:5},{L:8,w:4,halfL:4}];
+        const d=choose(data);
+        // Raise top half (x=0..L/2 lifted): W = ∫0^{L/2} w*(L-x) dx
+        const ans = d.w*(d.L*d.halfL - d.halfL*d.halfL/2);
+        return {
+          latex:`\\text{A ${d.L}-m cable has density ${d.w} N/m. Find work (J) to raise the top half out of a well.}`,
+          answer:[String(ans)],
+          hint:'For lifting only part of a hanging cable, what are the limits of integration and how does the hanging length vary?',
+          step:`W=\\int_0^{${d.halfL}}${d.w}(${d.L}-x)\\,dx=${d.w}\\left[${d.L}x-\\frac{x^2}{2}\\right]_0^{${d.halfL}}=${ans}\\text{ J}`
+        };
+      }
+
+      // gen5: Variable force F(x)=ax^2+b
+      function gen5(){
+        const data=[{a:3,b:2,x1:0,x2:4,ans:72},{a:2,b:3,x1:0,x2:3,ans:27},{a:1,b:4,x1:0,x2:3,ans:21}];
+        const d=choose(data);
+        return {
+          latex:`\\text{Force }F(x)=${d.a}x^2+${d.b}\\text{ N acts from }x=${d.x1}\\text{ to }x=${d.x2}\\text{ m. Find work (J).}`,
+          answer:[String(d.ans)],
+          hint:'When force varies with position, work is the integral of F(x) over the displacement interval.',
+          step:`W=\\int_{${d.x1}}^{${d.x2}}(${d.a}x^2+${d.b})\\,dx=\\left[\\frac{${d.a}x^3}{3}+${d.b}x\\right]_0^{${d.x2}}=${d.ans}\\text{ J}`
+        };
+      }
+
+      // gen6: Rod mass with linear density rho=a+bx
+      function gen6(){
+        const data=[{a:2,b:1,L:3,ans:'10.5'},{a:3,b:2,L:2,ans:'10'},{a:1,b:3,L:4,ans:'28'}];
+        const d=choose(data);
+        return {
+          latex:`\\text{A rod of length }${d.L}\\text{ m has density }\\rho(x)=${d.a}+${d.b}x\\text{ kg/m. Find its mass (kg).}`,
+          answer:[d.ans],
+          hint:'Mass of a rod equals the integral of the density function over its length.',
+          step:`m=\\int_0^{${d.L}}(${d.a}+${d.b}x)\\,dx=\\left[${d.a}x+\\frac{${d.b}x^2}{2}\\right]_0^{${d.L}}=${d.ans}\\text{ kg}`
+        };
+      }
+
+      // gen7: Pumping water from cylindrical tank (radius r, height H, pump to top)
+      // W = rho*g * pi*r^2 * ∫0^H (H-y) dy = rho*g * pi*r^2 * H^2/2
+      // Use rho*g = 9800 N/m^3, rand (r,H)
+      function gen7(){
+        const data=[{r:2,H:5,ans:'490000pi'},{r:1,H:4,ans:'78400pi'},{r:2,H:3,ans:'176400pi'}];
+        const d=choose(data);
+        return {
+          latex:`\\text{Cylindrical tank: radius }${d.r}\\text{ m, height }${d.H}\\text{ m, full of water }(\\rho g=9800\\text{ N/m}^3).\\\\\\text{Find work (J) to pump water to the top.}`,
+          answer:[d.ans,d.ans.replace('pi','\\pi')],
+          hint:'Slice the tank horizontally at height y — what weight does each slice have, and how far must it be lifted?',
+          step:`\\text{Slice at }y:\\; dW=9800\\cdot\\pi(${d.r})^2(${d.H}-y)\\,dy\\\\W=9800\\cdot${d.r*d.r}\\pi\\int_0^{${d.H}}(${d.H}-y)\\,dy=9800\\cdot${d.r*d.r}\\pi\\cdot\\frac{${d.H}^2}{2}=${d.ans}\\text{ J}`
+        };
+      }
+
+      // gen8: Lift a box over a wall with a rope
+      // Box mass m kg lifted h m, rope length h m, density w_r N/m: 
+      // W_box = m*g*h (constant force)
+      // W_rope = ∫0^h w_r*(h-x) dx = w_r*h^2/2
+      // Total W
+      function gen8(){
+        const data=[
+          {m:50,g:10,h:20,wr:5,W_box:10000,W_rope:1000,ans:11000},
+          {m:100,g:10,h:10,wr:4,W_box:10000,W_rope:200,ans:10200},
+          {m:20,g:10,h:5,wr:2,W_box:1000,W_rope:25,ans:1025}
+        ];
+        const d=choose(data);
+        return {
+          latex:`\\text{Lift a }${d.m}\\text{-kg box }${d.h}\\text{ m using a rope (density }${d.wr}\\text{ N/m, }g=${d.g}\\text{ m/s}^2).\\\\\\text{Find total work (J) including the rope.}`,
+          answer:[String(d.ans)],
+          hint:'The box requires constant-force work; the rope requires an integral because less of it hangs as you lift.',
+          step:`W_{\\text{box}}=${d.m}\\cdot${d.g}\\cdot${d.h}=${d.W_box}\\text{ J}\\\\W_{\\text{rope}}=\\int_0^{${d.h}}${d.wr}(${d.h}-x)\\,dx=${d.wr}\\cdot\\frac{${d.h}^2}{2}=${d.W_rope}\\text{ J}\\\\W_{\\text{total}}=${d.ans}\\text{ J}`
+        };
+      }
       return [gen1, gen2, gen3, gen4, gen5, gen6, gen7, gen8];
     })()
   };
@@ -555,7 +863,131 @@
     title: "Hyperbolic Functions",
     index: 12,
     generators: (function() {
+      function gen1(){
+        const data=[
+          {n:2,f:'sinh',ans:'3/4',step:'\\sinh(\\ln 2)=\\frac{2-1/2}{2}=\\frac{3}{4}'},
+          {n:3,f:'cosh',ans:'5/3',step:'\\cosh(\\ln 3)=\\frac{3+1/3}{2}=\\frac{10/3}{2}=\\frac{5}{3}'},
+          {n:2,f:'cosh',ans:'5/4',step:'\\cosh(\\ln 2)=\\frac{2+1/2}{2}=\\frac{5}{4}'},
+          {n:3,f:'sinh',ans:'4/3',step:'\\sinh(\\ln 3)=\\frac{3-1/3}{2}=\\frac{8/3}{2}=\\frac{4}{3}'},
+          {n:4,f:'cosh',ans:'17/8',step:'\\cosh(\\ln 4)=\\frac{4+1/4}{2}=\\frac{17/4}{2}=\\frac{17}{8}'}
+        ];
+        const d=choose(data);
+        return {
+          latex:`\\text{Compute }\\${d.f}(\\ln ${d.n})\\text{ using the exponential definition.}`,
+          answer:[d.ans],
+          hint:'Replace the argument with its exponential form using e^(ln n) = n and e^(-ln n) = 1/n.',
+          step:d.step
+        };
+      }
 
+      // gen2: Derivative using chain rule, rand function
+      function gen2(){
+        const data=[
+          {f:'sinh(3x)',df:'3cosh(3x)',latex:'\\sinh(3x)',dlat:'3\\cosh(3x)'},
+          {f:'cosh(x^2)',df:'2x*sinh(x^2)',latex:'\\cosh(x^2)',dlat:'2x\\sinh(x^2)'},
+          {f:'tanh(5x)',df:'5sech^2(5x)',latex:'\\tanh(5x)',dlat:'5\\,\\text{sech}^2(5x)'},
+          {f:'sinh(e^x)',df:'e^x*cosh(e^x)',latex:'\\sinh(e^x)',dlat:'e^x\\cosh(e^x)'}
+        ];
+        const d=choose(data);
+        return {
+          latex:`\\text{Find }\\dfrac{d}{dx}\\left[${d.latex}\\right].`,
+          answer:[d.df],
+          hint:'Apply the hyperbolic derivative rule to the outer function, then multiply by the derivative of the inner function.',
+          step:`\\frac{d}{dx}\\left[${d.latex}\\right]=${d.dlat}`
+        };
+      }
+
+      // gen3: Verify identity cosh^2 - sinh^2 = 1 algebraically (MC-style: answer 'yes')
+      function gen3(){
+        const x=choose([2,3,4,'x']);
+        return {
+          latex:`\\text{True or false: }\\cosh^2(${x})-\\sinh^2(${x})=1.\\text{ Answer yes or no.}`,
+          answer:['yes'],
+          hint:'Substitute the exponential definitions of cosh and sinh and expand — what cancels?',
+          step:`\\cosh^2-\\sinh^2=\\frac{(e^x+e^{-x})^2-(e^x-e^{-x})^2}{4}=\\frac{4}{4}=1\\quad\\checkmark`
+        };
+      }
+
+      // gen4: Definite integral of sinh or cosh
+      function gen4(){
+        const data=[
+          {f:'\\cosh x',F:'\\sinh x',a:0,b:1,ans:'sinh(1)',step:'[\\sinh x]_0^1=\\sinh(1)-0=\\sinh(1)'},
+          {f:'\\sinh x',F:'\\cosh x',a:0,b:1,ans:'cosh(1)-1',step:'[\\cosh x]_0^1=\\cosh(1)-1'},
+          {f:'\\cosh(2x)',F:'\\frac{1}{2}\\sinh(2x)',a:0,b:1,ans:'sinh(2)/2',step:'\\left[\\frac{\\sinh(2x)}{2}\\right]_0^1=\\frac{\\sinh 2}{2}'}
+        ];
+        const d=choose(data);
+        return {
+          latex:`\\text{Evaluate }\\displaystyle\\int_0^1 ${d.f}\\,dx.`,
+          answer:[d.ans],
+          hint:'The antiderivative of cosh is sinh and vice versa — apply the fundamental theorem directly.',
+          step:d.step
+        };
+      }
+
+      // gen5: Arc length of y=cosh(x) on [a,b], rand (a,b)
+      function gen5(){
+        const data=[
+          {a:'-1',b:'1',ans:'2sinh(1)',step:'L=\\int_{-1}^{1}\\cosh x\\,dx=[\\sinh x]_{-1}^1=\\sinh(1)-\\sinh(-1)=2\\sinh(1)'},
+          {a:'0',b:'1',ans:'sinh(1)',step:'L=\\int_0^1\\cosh x\\,dx=[\\sinh x]_0^1=\\sinh(1)'},
+          {a:'0',b:'2',ans:'sinh(2)',step:'L=\\int_0^2\\cosh x\\,dx=[\\sinh x]_0^2=\\sinh(2)'}
+        ];
+        const d=choose(data);
+        return {
+          latex:`\\text{Find the arc length of }y=\\cosh x\\text{ on }[${d.a},${d.b}].`,
+          answer:[d.ans],
+          hint:'For arc length, compute 1+[sinh x]^2 using the Pythagorean identity for hyperbolic functions.',
+          step:d.step
+        };
+      }
+
+      // gen6: Chain rule with product, e.g. d/dx[x*sinh(x)]
+      function gen6(){
+        const data=[
+          {f:'x\\sinh x',df:'\\sinh x+x\\cosh x',hint:'Apply the product rule, then the hyperbolic derivative rule.'},
+          {f:'x^2\\cosh x',df:'2x\\cosh x+x^2\\sinh x',hint:'Apply the product rule, then the hyperbolic derivative rule.'},
+          {f:'e^x\\sinh x',df:'e^x\\sinh x+e^x\\cosh x',extra:'e^x(\\sinh x+\\cosh x)',hint:'Both factors need differentiation — which rule applies to a product of two functions?'}
+        ];
+        const d=choose(data);
+        const answers=[d.df.replace(/\\/g,'')];
+        if(d.extra) answers.push(d.extra.replace(/\\/g,''));
+        return {
+          latex:`\\text{Find }\\dfrac{d}{dx}\\left[${d.f}\\right].`,
+          answer:answers,
+          hint:d.hint,
+          step:`\\frac{d}{dx}\\left[${d.f}\\right]=${d.df}${d.extra?'='+d.extra:''}`
+        };
+      }
+
+      // gen7: sinh(0)=0, cosh(0)=1 quick facts + tanh(0)=0
+      function gen7(){
+        const data=[
+          {q:'\\sinh(0)',ans:'0',step:'\\sinh(0)=\\frac{e^0-e^0}{2}=0'},
+          {q:'\\cosh(0)',ans:'1',step:'\\cosh(0)=\\frac{1+1}{2}=1'},
+          {q:'\\tanh(0)',ans:'0',step:'\\tanh(0)=\\frac{\\sinh 0}{\\cosh 0}=\\frac{0}{1}=0'}
+        ];
+        const d=choose(data);
+        return {
+          latex:`\\text{Evaluate }${d.q}.`,
+          answer:[d.ans],
+          hint:'Use the exponential definitions and evaluate at x=0, where e^0=1.',
+          step:d.step
+        };
+      }
+
+      // gen8: Verify d/dx[cosh x] = sinh x from definition
+      function gen8(){
+        const data=[
+          {f:'\\cosh x',df:'\\sinh x',step:'\\frac{d}{dx}\\cosh x=\\frac{e^x-e^{-x}}{2}=\\sinh x'},
+          {f:'\\sinh x',df:'\\cosh x',step:'\\frac{d}{dx}\\sinh x=\\frac{e^x+e^{-x}}{2}=\\cosh x'}
+        ];
+        const d=choose(data);
+        return {
+          latex:`\\text{Use the exponential definition to show }\\dfrac{d}{dx}\\left[${d.f}\\right]=${d.df}.\\quad\\text{What is the derivative? Enter it.}`,
+          answer:[d.df.replace(/\\/g,'').replace('{','').replace('}','')],
+          hint:'Differentiate the exponential definition term-by-term — the result should match another hyperbolic function.',
+          step:d.step
+        };
+      }
       return [gen1, gen2, gen3, gen4, gen5, gen6, gen7, gen8];
     })()
   };
