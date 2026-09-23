@@ -171,9 +171,9 @@
 <!-- ── Calc I pane ──────────────────────────────────────── -->
 <div class="pane active" id="pane-calc1">
   <div class="session-hdr">
-    <h2>Spiral Do Now — Calculus I</h2>
+    <h2>Spiral Do Now — Calculus I <span id="c1-date" style="font-size:.8rem;font-weight:400;color:var(--muted);margin-left:.5rem;"></span></h2>
     <span class="score-pill" id="c1-score">Score: 0 / 3</span>
-    <button class="new-set-btn" onclick="calc1NewSet()">&#8635; New Set</button>
+    <button class="new-set-btn" onclick="calc1NewSet()">&#8635; New Numbers</button>
   </div>
   <div id="c1-problems"><div class="status-msg">Loading…</div></div>
 </div>
@@ -227,34 +227,59 @@ function rk(tex, el, display) {
   catch(e) { el.textContent = tex; }
 }
 
-// ── Calc I session state ──────────────────────────────────────────────────────
-let C1 = { items: [], flags: [], attempted: [], peeked: [] };
+// ── Date-seeded RNG (deterministic section picks, same for all students each day) ──
+function dailySeed() {
+  const d = new Date().toISOString().slice(0, 10); // "YYYY-MM-DD"
+  let h = 2166136261;
+  for (let i = 0; i < d.length; i++) h = Math.imul(h ^ d.charCodeAt(i), 16777619) >>> 0;
+  return h;
+}
+function makeLCG(seed) {
+  let s = seed >>> 0;
+  return () => { s = (Math.imul(s, 1664525) + 1013904223) >>> 0; return s / 4294967296; };
+}
+function seededShuffle(arr, seed) {
+  const a = [...arr], rand = makeLCG(seed);
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(rand() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
 
+// ── Calc I session state ──────────────────────────────────────────────────────
+let C1 = { items: [], flags: [], attempted: [], peeked: [], dailyEntries: [] };
+
+// Pick today's 3 sections (seeded by date — same for every student)
+function calc1PickDaily() {
+  if (!window.CALC1_SPIRAL) return [];
+  const pool = buildPool();
+  if (pool.length === 0) return [];
+  // Deduplicate by generator fingerprint (sections sharing a practice file)
+  const seen = new Set();
+  const unique = pool.filter(e => {
+    const key = e.generators[0].toString().slice(20, 80);
+    if (seen.has(key)) return false;
+    seen.add(key); return true;
+  });
+  return seededShuffle(unique, dailySeed()).slice(0, Math.min(3, unique.length));
+}
+
+// Generate new random numbers for today's fixed sections
 function calc1NewSet() {
   if (!window.CALC1_SPIRAL) {
     document.getElementById('c1-problems').innerHTML =
       '<div class="status-msg">Generator bundle not loaded. Check calc1-spiral-generators.js.</div>';
     return;
   }
-  // Build eligible pool from completedSections or all sections with index <= current-2
-  const pool = buildPool();
-  if (pool.length === 0) {
+  if (C1.dailyEntries.length === 0) C1.dailyEntries = calc1PickDaily();
+  if (C1.dailyEntries.length === 0) {
     document.getElementById('c1-problems').innerHTML =
       '<div class="status-msg">Not enough completed sections yet for a spiral review.</div>';
     return;
   }
-
-  // Deduplicate by generator identity (sections sharing a practice file share generators)
-  const seen = new Set();
-  const unique = pool.filter(entry => {
-    const key = entry.generators[0].toString().slice(20, 80);
-    if (seen.has(key)) return false;
-    seen.add(key);
-    return true;
-  });
-
-  const chosen = rfShuffle(unique).slice(0, Math.min(3, unique.length));
-  C1.items = chosen.map(entry => {
+  // Same sections every time (fixed for the day); new random numbers each call
+  C1.items = C1.dailyEntries.map(entry => {
     const gen = entry.generators[Math.floor(Math.random() * entry.generators.length)];
     return { title: entry.title, problem: gen() };
   });
@@ -267,17 +292,12 @@ function calc1NewSet() {
 }
 
 function buildPool() {
-  // Uses window._calc1Completed (set after state.json fetch)
-  // Falls back to all sections if state unavailable
   const spiral = window.CALC1_SPIRAL;
   const completed = window._calc1Completed || null;
   if (completed && completed.length > 0) {
-    return completed
-      .filter(id => spiral[id])
-      .map(id => spiral[id]);
+    return completed.filter(id => spiral[id]).map(id => spiral[id]);
   }
-  // Fallback: use all sections (for instructor preview)
-  return Object.values(spiral);
+  return Object.values(spiral); // instructor preview: all sections eligible
 }
 
 function renderC1() {
@@ -402,6 +422,10 @@ function updateC1Score() {
 }
 
 // ── Boot ──────────────────────────────────────────────────────────────────────
+// Show today's date in header
+const _dl = document.getElementById('c1-date');
+if (_dl) _dl.textContent = new Date().toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
+
 fetch('./state.json')
   .then(r => r.json())
   .then(state => {
