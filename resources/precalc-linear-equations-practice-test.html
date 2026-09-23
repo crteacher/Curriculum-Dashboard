@@ -1,0 +1,1143 @@
+<title>Linear Equations Practice Test</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=JetBrains+Mono:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #f6f1e4;
+    --paper-line: rgba(58, 74, 94, 0.14);
+    --paper-line-strong: rgba(58, 74, 94, 0.26);
+    --ink: #26313f;
+    --ink-soft: #5b6b7d;
+    --card-bg: #fffdf7;
+    --card-border: #ddd2b6;
+    --accent: #c1483f;
+    --accent-strong: #8f342d;
+    --accent-soft: rgba(193, 72, 63, 0.12);
+    --accent-ink: #fff6f4;
+    --good: #3f7a52;
+    --good-soft: rgba(63, 122, 82, 0.14);
+    --bad: #b3413a;
+    --bad-soft: rgba(179, 65, 58, 0.12);
+    --shadow: rgba(38, 49, 63, 0.16);
+    --graph-grid: rgba(58, 74, 94, 0.14);
+    --graph-axis: rgba(38, 49, 63, 0.55);
+    --graph-stroke-a: #c1483f;
+    --graph-stroke-b: #2f7d6b;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #1b2330;
+      --paper-line: rgba(238, 242, 240, 0.07);
+      --paper-line-strong: rgba(238, 242, 240, 0.15);
+      --ink: #edf1ef;
+      --ink-soft: #a3aebb;
+      --card-bg: #232e3d;
+      --card-border: #3a4a61;
+      --accent: #ff9179;
+      --accent-strong: #ffb3a0;
+      --accent-soft: rgba(255, 145, 121, 0.16);
+      --accent-ink: #2e0f09;
+      --good: #7bc794;
+      --good-soft: rgba(123, 199, 148, 0.16);
+      --bad: #ff9a90;
+      --bad-soft: rgba(255, 154, 144, 0.14);
+      --shadow: rgba(0, 0, 0, 0.5);
+      --graph-grid: rgba(238, 242, 240, 0.10);
+      --graph-axis: rgba(238, 242, 240, 0.55);
+      --graph-stroke-a: #ff9179;
+      --graph-stroke-b: #5fd1b3;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #1b2330;
+    --paper-line: rgba(238, 242, 240, 0.07);
+    --paper-line-strong: rgba(238, 242, 240, 0.15);
+    --ink: #edf1ef;
+    --ink-soft: #a3aebb;
+    --card-bg: #232e3d;
+    --card-border: #3a4a61;
+    --accent: #ff9179;
+    --accent-strong: #ffb3a0;
+    --accent-soft: rgba(255, 145, 121, 0.16);
+    --accent-ink: #2e0f09;
+    --good: #7bc794;
+    --good-soft: rgba(123, 199, 148, 0.16);
+    --bad: #ff9a90;
+    --bad-soft: rgba(255, 154, 144, 0.14);
+    --shadow: rgba(0, 0, 0, 0.5);
+    --graph-grid: rgba(238, 242, 240, 0.10);
+    --graph-axis: rgba(238, 242, 240, 0.55);
+    --graph-stroke-a: #ff9179;
+    --graph-stroke-b: #5fd1b3;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background:
+      repeating-linear-gradient(0deg, var(--paper-line) 0, var(--paper-line) 1px, transparent 1px, transparent 32px),
+      repeating-linear-gradient(90deg, var(--paper-line) 0, var(--paper-line) 1px, transparent 1px, transparent 32px),
+      var(--paper);
+    color: var(--ink);
+    font-family: "Source Sans 3", ui-sans-serif, system-ui, sans-serif;
+    display: flex;
+    justify-content: center;
+    padding: clamp(20px, 4vw, 56px) 18px 80px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+  }
+
+  .wrap { width: 100%; max-width: 900px; }
+  header { text-align: center; margin-bottom: 22px; }
+
+  .eyebrow {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--accent); font-weight: 600;
+  }
+
+  h1 {
+    font-family: "Fraunces", Georgia, serif; font-weight: 600;
+    font-size: clamp(1.9rem, 5vw, 2.6rem); margin: 6px 0 8px; text-wrap: balance;
+  }
+
+  header p { color: var(--ink-soft); font-size: 1rem; max-width: 60ch; margin: 0 auto; line-height: 1.55; }
+
+  .toolbar {
+    position: sticky; top: 12px; z-index: 5;
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    margin: 22px 0 26px; padding: 12px 16px; flex-wrap: wrap;
+    background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 14px;
+    box-shadow: 0 10px 26px -16px var(--shadow);
+  }
+  .score-box { display: flex; align-items: baseline; gap: 8px; }
+  .score-num { font-family: "JetBrains Mono", monospace; font-size: 1.3rem; font-weight: 700; color: var(--accent-strong); font-variant-numeric: tabular-nums; }
+  .score-label { font-size: 0.78rem; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.06em; }
+  .score-group { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .score-divider { width: 1px; align-self: stretch; min-height: 24px; background: var(--card-border); }
+  .exam-score-box .score-num { color: var(--ink); }
+  .exam-score-box .score-label { display: flex; align-items: center; gap: 5px; }
+  .exam-score-box .score-label svg { width: 11px; height: 11px; flex-shrink: 0; }
+
+  .exam-badge {
+    display: inline-flex; align-items: center; gap: 5px; font-size: 0.68rem; font-weight: 700;
+    padding: 3px 9px; border-radius: 20px; letter-spacing: 0.02em; white-space: nowrap;
+  }
+  .exam-badge svg { width: 11px; height: 11px; flex-shrink: 0; }
+  .exam-badge.exam-good { background: var(--good-soft); color: var(--good); }
+  .exam-badge.exam-bad { background: var(--bad-soft); color: var(--bad); }
+
+  button { font-family: inherit; cursor: pointer; }
+  button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .icon-btn {
+    display: inline-flex; align-items: center; gap: 7px; background: var(--card-bg);
+    border: 1px solid var(--card-border); color: var(--ink); padding: 9px 14px;
+    border-radius: 9px; font-size: 0.86rem; font-weight: 600;
+    transition: border-color 0.15s ease, transform 0.1s ease;
+  }
+  .icon-btn:hover { border-color: var(--accent); }
+  .icon-btn:active { transform: translateY(1px); }
+  .icon-btn svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+  .group-head {
+    margin: 34px 0 14px; padding-bottom: 8px; border-bottom: 1.5px solid var(--paper-line-strong);
+  }
+  .group-head .gnum {
+    font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 1.3rem; color: var(--ink);
+  }
+  .group-head .gdesc { font-size: 0.92rem; color: var(--ink-soft); margin-top: 2px; }
+
+  .qcard {
+    background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px;
+    box-shadow: 0 14px 32px -22px var(--shadow), 0 2px 8px -2px var(--shadow);
+    padding: clamp(16px, 3vw, 24px); margin-bottom: 18px;
+  }
+
+  .qcard-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
+  .qcard-head .qtitle { display: flex; align-items: center; gap: 10px; }
+  .qlabel { font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 1.1rem; }
+  .qpoints {
+    font-family: "JetBrains Mono", monospace; font-size: 0.68rem; letter-spacing: 0.05em;
+    color: var(--ink-soft); background: var(--paper-line); padding: 2px 8px; border-radius: 20px;
+  }
+
+  .qprompt { font-size: 1rem; line-height: 1.7; margin-bottom: 14px; }
+  .qprompt .math { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 1.02rem; }
+  .qprompt .frac, .qsolution .frac { display: inline-flex; flex-direction: column; vertical-align: middle; text-align: center; margin: 0 3px; line-height: 1.15; }
+  .qprompt .frac .num, .qsolution .frac .num { border-bottom: 1.3px solid currentColor; padding: 0 3px 1px; }
+  .qprompt .frac .den, .qsolution .frac .den { padding: 1px 3px 0; }
+  .qprompt .radical, .qsolution .radical { display: inline-flex; align-items: flex-start; margin: 0 2px; }
+  .qprompt .radical .idx, .qsolution .radical .idx { font-size: 0.62em; margin-right: -0.35em; margin-top: -0.3em; }
+  .qprompt .radical .rsym, .qsolution .radical .rsym { font-size: 1.1em; }
+  .qprompt .radical .rad-inner, .qsolution .radical .rad-inner { border-top: 1.3px solid currentColor; padding: 0 3px; margin-left: 1px; }
+
+  .qgraph-wrap { display: flex; justify-content: center; margin: 10px 0 16px; }
+  .qgraph-wrap canvas { width: 100%; max-width: 380px; height: 380px; display: block; }
+  .qgraph-wrap.small canvas { max-width: 280px; height: 190px; }
+
+  .qgraph-tools { display: flex; align-items: center; justify-content: center; gap: 12px; margin: -6px 0 16px; flex-wrap: wrap; }
+  .qgraph-caption { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 0.78rem; color: var(--ink-soft); }
+
+  .qtable-wrap { overflow-x: auto; margin: 10px 0 16px; display: flex; justify-content: center; }
+  .qtable { border-collapse: collapse; font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 0.92rem; }
+  .qtable th, .qtable td {
+    border: 1.3px solid var(--card-border); padding: 7px 16px; text-align: center;
+  }
+  .qtable th { background: var(--paper-line); color: var(--ink); font-weight: 700; }
+  .qtable td { background: var(--card-bg); }
+
+  .qinputs { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin-bottom: 14px; }
+  .qinputs:empty { margin-bottom: 0; }
+  .qinputs .field-label { font-size: 0.86rem; color: var(--ink-soft); font-weight: 600; }
+  .qinputs input[type="text"], .qinputs select {
+    font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 0.95rem;
+    background: var(--paper); border: 1.5px solid var(--card-border); border-radius: 8px;
+    padding: 8px 10px; color: var(--ink); min-width: 92px;
+  }
+  .qinputs select { font-family: "Source Sans 3", sans-serif; min-width: 190px; }
+  .qinputs input:focus, .qinputs select:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .qinputs .subrow {
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    padding: 8px 10px; border: 1.5px dashed var(--card-border); border-radius: 10px;
+  }
+  .qinputs .hidden { display: none !important; }
+  .mc-row { display: flex; flex-wrap: wrap; gap: 8px; }
+  .mc-opt {
+    border: 1.5px solid var(--card-border); border-radius: 9px; padding: 8px 13px;
+    font-size: 0.88rem; background: var(--card-bg); color: var(--ink); font-weight: 600;
+    transition: border-color 0.15s ease, background 0.15s ease;
+  }
+  .mc-opt:hover { border-color: var(--accent); }
+  .mc-opt.selected { border-color: var(--accent); background: var(--accent-soft); color: var(--accent-strong); }
+
+  .qactions { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; }
+  .btn-primary {
+    background: var(--accent); color: var(--accent-ink); border: none; padding: 10px 20px;
+    border-radius: 10px; font-size: 0.92rem; font-weight: 700;
+    box-shadow: 0 8px 16px -8px var(--accent-strong); transition: transform 0.1s ease;
+  }
+  .btn-primary:active { transform: translateY(1px); }
+  .btn-secondary {
+    background: transparent; border: 1.5px solid var(--card-border); color: var(--ink);
+    padding: 9px 18px; border-radius: 10px; font-size: 0.92rem; font-weight: 700;
+    transition: border-color 0.15s ease;
+  }
+  .btn-secondary:hover { border-color: var(--accent); }
+
+  .qfeedback {
+    font-size: 0.9rem; font-weight: 700; padding: 9px 13px; border-radius: 9px; margin-bottom: 10px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .qfeedback.good { background: var(--good-soft); color: var(--good); }
+  .qfeedback.bad { background: var(--bad-soft); color: var(--bad); }
+  .qfeedback svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+  .qsolution {
+    background: var(--accent-soft); border: 1px solid var(--card-border); border-left: 4px solid var(--accent);
+    border-radius: 0 12px 12px 0; padding: 14px 16px; font-size: 0.92rem; line-height: 1.7;
+  }
+  .qsolution .sol-label {
+    font-family: "JetBrains Mono", monospace; font-size: 0.68rem; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--accent-strong); font-weight: 700; display: block; margin-bottom: 6px;
+  }
+  .qsolution .step { margin: 3px 0; }
+  .qsolution .final { margin-top: 8px; font-weight: 700; font-family: "JetBrains Mono", monospace; }
+
+  .hidden { display: none !important; }
+</style>
+
+<style>
+  .site-nav { background: #8b3a8b; padding: .55rem 1.25rem; font-family: Georgia, serif;
+              font-size: .82rem; display: flex; gap: 1.2rem; }
+  .site-nav a { color: rgba(255,255,255,.9); text-decoration: none; }
+  .site-nav a:hover { color: #fff; }
+</style>
+<nav class="site-nav">
+  <a href="../index.html">← Dashboard</a>
+  <a href="../classrooms.html">↩ Spiral Do Now</a>
+</nav>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">PreCalc &middot; &sect;2.1&ndash;2.2 &middot; Linear Equations</div>
+    <h1>Linear Equations Practice Test</h1>
+    <p>Every part regenerates its own random version — work it out on paper, type your answer, and check yourself. Click "New version" on any part as many times as you want to drill it again with different numbers. Q1 asks you to judge whether a table is even linear before finding its equation — read carefully, some tables are traps. Q3 is interactive — click two points on the grid to graph the line yourself, and it's graded automatically. Your <strong>Exam Score</strong> locks in the first time you check each part (or peek its solution) — everything after that is just practice. Use "Reset exam" any time for a brand-new attempt.</p>
+  </header>
+
+  <div class="toolbar">
+    <div class="score-group">
+      <div class="score-box">
+        <span class="score-num" id="scoreNum">0 / 0</span>
+        <span class="score-label">points checked correct</span>
+      </div>
+      <div class="score-divider"></div>
+      <div class="score-box exam-score-box">
+        <span class="score-num" id="examScoreNum">0 / 0</span>
+        <span class="score-label">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+          exam score
+        </span>
+      </div>
+    </div>
+    <button class="icon-btn" id="newTestBtn" type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3h5v5"/><path d="M4 20 21 3"/><path d="M21 16v5h-5"/><path d="M15 15l6 6"/><path d="M4 4l5 5"/></svg>
+      Reset exam
+    </button>
+  </div>
+
+  <div id="groups"></div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  // ============================================================
+  // Utilities (shared with the rest of the practice-test family)
+  // ============================================================
+  function randInt(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+  function randNonZeroInt(min, max) { var v; do { v = randInt(min, max); } while (v === 0); return v; }
+  function randIntExcluding(exclude, min, max) {
+    var v, tries = 0;
+    do { v = randInt(min, max); tries++; } while (exclude.indexOf(v) !== -1 && tries < 200);
+    return v;
+  }
+  function randChoice(arr) { return arr[randInt(0, arr.length - 1)]; }
+  function randBool() { return Math.random() < 0.5; }
+  function gcdInt(a, b) { a = Math.abs(a); b = Math.abs(b); while (b) { var t = b; b = a % b; a = t; } return a || 1; }
+  function fracLabel(p, q) {
+    var g = gcdInt(p, q);
+    p = p / g; q = q / g;
+    if (q < 0) { p = -p; q = -q; }
+    return { p: p, q: q };
+  }
+  function frac(numHtml, denHtml) {
+    return "<span class=\"frac\"><span class=\"num\">" + numHtml + "</span><span class=\"den\">" + denHtml + "</span></span>";
+  }
+  function signedTerm(coef, label) {
+    if (coef === 0) return "";
+    var abs = Math.abs(coef);
+    var coefStr = (abs === 1 && label) ? "" : String(abs);
+    return (coef < 0 ? "&minus;" : "+") + " " + coefStr + label;
+  }
+  function leadTerm(coef, label) {
+    var abs = Math.abs(coef);
+    var coefStr = (abs === 1 && label) ? "" : String(abs);
+    return (coef < 0 ? "&minus;" : "") + coefStr + label;
+  }
+  function fracOrNum(p, q) {
+    var fr = fracLabel(p, q);
+    return fr.q === 1 ? String(fr.p) : (fr.p + "/" + fr.q);
+  }
+  function moneyStr(v) {
+    var sign = v < 0 ? "&minus;" : "";
+    var abs = Math.abs(Math.round(v * 100) / 100);
+    var s = abs.toFixed(abs % 1 === 0 ? 0 : 2);
+    var parts = s.split(".");
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return sign + "$" + parts.join(".");
+  }
+
+  // ---- answer parsing / checking ----
+  function parseAnswer(raw) {
+    if (raw === null || raw === undefined) return { type: "invalid" };
+    var str = String(raw).trim().toLowerCase();
+    if (str === "") return { type: "invalid" };
+    var fracMatch = str.match(/^(-?\d+(\.\d+)?)\s*\/\s*(-?\d+(\.\d+)?)$/);
+    if (fracMatch) {
+      var p = parseFloat(fracMatch[1]), q = parseFloat(fracMatch[3]);
+      if (q !== 0) return { type: "number", value: p / q };
+    }
+    var cleaned = str.replace(/[,$]/g, "");
+    if (/^-?\d*\.?\d+$/.test(cleaned)) return { type: "number", value: parseFloat(cleaned) };
+    return { type: "invalid" };
+  }
+  function answersMatch(user, correct, tol) {
+    tol = tol === undefined ? 0.01 : tol;
+    if (user.type === "invalid") return false;
+    if (correct.type === "number") return user.type === "number" && Math.abs(user.value - correct.value) < tol;
+    return false;
+  }
+  function numAns(v) { return { type: "number", value: v }; }
+
+  // ============================================================
+  // Canvas graph helper (shared with the rest of the practice-test family)
+  // ============================================================
+  function setupCanvas(canvas) {
+    var cssW = canvas.clientWidth || 300, cssH = canvas.clientHeight || 300;
+    var dpr = window.devicePixelRatio || 1;
+    canvas.width = cssW * dpr;
+    canvas.height = cssH * dpr;
+    var ctx = canvas.getContext("2d");
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, cssW, cssH);
+    return { ctx: ctx, w: cssW, h: cssH };
+  }
+  function makeMapper(cssW, cssH, xMin, xMax, yMin, yMax, pad) {
+    pad = pad || 24;
+    var w = cssW - pad * 1.4, h = cssH - pad * 1.6;
+    var sx = w / (xMax - xMin), sy = h / (yMax - yMin);
+    var ox = pad, oy = cssH - pad * 0.9;
+    return function (x, y) { return [ox + (x - xMin) * sx, oy - (y - yMin) * sy]; };
+  }
+  // Inverse of makeMapper — converts a pixel coordinate back to graph (x, y).
+  // Used to translate a student's click into the nearest grid point.
+  function makeInvMapper(cssW, cssH, xMin, xMax, yMin, yMax, pad) {
+    pad = pad || 24;
+    var w = cssW - pad * 1.4, h = cssH - pad * 1.6;
+    var sx = w / (xMax - xMin), sy = h / (yMax - yMin);
+    var ox = pad, oy = cssH - pad * 0.9;
+    return function (px, py) { return [(px - ox) / sx + xMin, yMin + (oy - py) / sy]; };
+  }
+  function drawGrid(canvas, xMin, xMax, yMin, yMax) {
+    var setup = setupCanvas(canvas), ctx = setup.ctx, cssW = setup.w, cssH = setup.h;
+    var toPx = makeMapper(cssW, cssH, xMin, xMax, yMin, yMax);
+    var styles = getComputedStyle(document.documentElement);
+    var gridColor = styles.getPropertyValue("--graph-grid").trim();
+    var axisColor = styles.getPropertyValue("--graph-axis").trim();
+    var labelColor = styles.getPropertyValue("--ink-soft").trim();
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = gridColor;
+    ctx.beginPath();
+    for (var gx = Math.ceil(xMin); gx <= Math.floor(xMax); gx++) {
+      var p0 = toPx(gx, yMin), p1 = toPx(gx, yMax);
+      ctx.moveTo(p0[0], p0[1]); ctx.lineTo(p1[0], p1[1]);
+    }
+    for (var gy = Math.ceil(yMin); gy <= Math.floor(yMax); gy++) {
+      var q0 = toPx(xMin, gy), q1 = toPx(xMax, gy);
+      ctx.moveTo(q0[0], q0[1]); ctx.lineTo(q1[0], q1[1]);
+    }
+    ctx.stroke();
+    ctx.lineWidth = 1.6;
+    ctx.strokeStyle = axisColor;
+    ctx.beginPath();
+    if (xMin <= 0 && xMax >= 0) { var a0 = toPx(0, yMin), a1 = toPx(0, yMax); ctx.moveTo(a0[0], a0[1]); ctx.lineTo(a1[0], a1[1]); }
+    if (yMin <= 0 && yMax >= 0) { var b0 = toPx(xMin, 0), b1 = toPx(xMax, 0); ctx.moveTo(b0[0], b0[1]); ctx.lineTo(b1[0], b1[1]); }
+    ctx.stroke();
+    ctx.fillStyle = labelColor;
+    ctx.font = "10px 'JetBrains Mono', ui-monospace, monospace";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "top";
+    var xStep = (xMax - xMin) > 16 ? 5 : 1;
+    for (var lx = Math.ceil(xMin / xStep) * xStep; lx <= Math.floor(xMax); lx += xStep) {
+      var lp = toPx(lx, yMin);
+      ctx.fillText(String(lx), Math.min(Math.max(lp[0], 12), cssW - 12), cssH - 13);
+    }
+    ctx.textAlign = "left";
+    ctx.textBaseline = "middle";
+    var yStep = (yMax - yMin) > 16 ? 5 : 1;
+    for (var ly = Math.ceil(yMin / yStep) * yStep; ly <= Math.floor(yMax); ly += yStep) {
+      var lq = toPx(xMin, ly);
+      ctx.fillText(String(ly), 4, Math.min(Math.max(lq[1], 10), cssH - 16));
+    }
+    return { ctx: ctx, toPx: toPx };
+  }
+  function drawSegment(ctx, toPx, x0, y0, x1, y1, color, width) {
+    ctx.strokeStyle = color; ctx.lineWidth = width || 2.4; ctx.lineCap = "round";
+    var p0 = toPx(x0, y0), p1 = toPx(x1, y1);
+    ctx.beginPath(); ctx.moveTo(p0[0], p0[1]); ctx.lineTo(p1[0], p1[1]); ctx.stroke();
+  }
+  // Given a slope/intercept, clip the infinite line to a viewing box.
+  function clipLineToBox(m, b, xMin, xMax, yMin, yMax) {
+    var xAtYLo = (yMin - b) / m, xAtYHi = (yMax - b) / m;
+    var xBoundLo = Math.min(xAtYLo, xAtYHi), xBoundHi = Math.max(xAtYLo, xAtYHi);
+    var xLo = Math.max(xMin, xBoundLo), xHi = Math.min(xMax, xBoundHi);
+    return { x1: xLo, y1: m * xLo + b, x2: xHi, y2: m * xHi + b };
+  }
+
+  // ============================================================
+  // Interactive click-two-points graph — used by any part with
+  // hasGraph + interactive. Student clicks two grid points; grading
+  // accepts any two distinct points that legitimately lie on the
+  // target line y = s.m*x + s.b.
+  // ============================================================
+  function graphCaption(card) {
+    var capEl = card.querySelector(".qgraph-caption");
+    if (!capEl) return;
+    var pts = card.querySelector("canvas")._userPoints || [];
+    if (pts.length === 0) capEl.textContent = "Click two points on the grid above.";
+    else if (pts.length === 1) capEl.textContent = "Point 1: (" + pts[0][0] + ", " + pts[0][1] + ") — click a second point.";
+    else capEl.textContent = "Point 1: (" + pts[0][0] + ", " + pts[0][1] + ")   Point 2: (" + pts[1][0] + ", " + pts[1][1] + ")";
+  }
+  function drawInteractiveGraph(canvas, s) {
+    var styles = getComputedStyle(document.documentElement);
+    var colorUser = styles.getPropertyValue("--graph-stroke-a").trim();
+    var colorCorrect = styles.getPropertyValue("--graph-stroke-b").trim();
+    var g = drawGrid(canvas, -10, 10, -10, 10);
+    if (canvas._showSolution) {
+      var sol = clipLineToBox(s.m, s.b, -10, 10, -10, 10);
+      drawSegment(g.ctx, g.toPx, sol.x1, sol.y1, sol.x2, sol.y2, colorCorrect, 2.6);
+    }
+    var pts = canvas._userPoints || [];
+    if (pts.length === 2 && (pts[0][0] !== pts[1][0] || pts[0][1] !== pts[1][1])) {
+      var ext;
+      if (pts[0][0] === pts[1][0]) {
+        ext = { x1: pts[0][0], y1: -10, x2: pts[0][0], y2: 10 };
+      } else {
+        var mm = (pts[1][1] - pts[0][1]) / (pts[1][0] - pts[0][0]);
+        var bb = pts[0][1] - mm * pts[0][0];
+        ext = clipLineToBox(mm, bb, -10, 10, -10, 10);
+      }
+      drawSegment(g.ctx, g.toPx, ext.x1, ext.y1, ext.x2, ext.y2, colorUser, 2.4);
+    }
+    pts.forEach(function (p) {
+      var px = g.toPx(p[0], p[1]);
+      g.ctx.beginPath();
+      g.ctx.arc(px[0], px[1], 5, 0, Math.PI * 2);
+      g.ctx.fillStyle = colorUser;
+      g.ctx.fill();
+    });
+  }
+  function wireInteractiveGraph(card, partId) {
+    var canvas = card.querySelector("canvas");
+    canvas._userPoints = [];
+    canvas._showSolution = false;
+    graphCaption(card);
+    if (!canvas._wiredInteractive) {
+      canvas._wiredInteractive = true;
+      canvas.style.cursor = "pointer";
+      canvas.addEventListener("click", function (evt) {
+        var s = window.__PT_STATE[partId];
+        if (!s) return;
+        var rect = canvas.getBoundingClientRect();
+        var cssW = canvas.clientWidth, cssH = canvas.clientHeight;
+        var scaleX = rect.width ? (cssW / rect.width) : 1, scaleY = rect.height ? (cssH / rect.height) : 1;
+        var localX = (evt.clientX - rect.left) * scaleX;
+        var localY = (evt.clientY - rect.top) * scaleY;
+        var inv = makeInvMapper(cssW, cssH, -10, 10, -10, 10);
+        var gp = inv(localX, localY);
+        var gx = Math.max(-10, Math.min(10, Math.round(gp[0])));
+        var gy = Math.max(-10, Math.min(10, Math.round(gp[1])));
+        if (canvas._userPoints.length >= 2) canvas._userPoints = [];
+        canvas._userPoints.push([gx, gy]);
+        drawInteractiveGraph(canvas, s);
+        graphCaption(card);
+      });
+    }
+    var clearBtn = card.querySelector(".clear-points-btn");
+    if (clearBtn && !clearBtn._wiredInteractive) {
+      clearBtn._wiredInteractive = true;
+      clearBtn.addEventListener("click", function () {
+        canvas._userPoints = [];
+        var s = window.__PT_STATE[partId];
+        if (s) drawInteractiveGraph(canvas, s);
+        graphCaption(card);
+      });
+    }
+    var solBtn = card.querySelector(".solution-btn");
+    if (solBtn && !solBtn._wiredInteractive) {
+      solBtn._wiredInteractive = true;
+      solBtn.addEventListener("click", function () {
+        canvas._showSolution = true;
+        var s = window.__PT_STATE[partId];
+        if (s) drawInteractiveGraph(canvas, s);
+      });
+    }
+  }
+  function interactiveGraphReadAnswer(card) {
+    return { points: (card.querySelector("canvas")._userPoints || []).slice() };
+  }
+  function interactiveGraphIsCorrect(ua, s) {
+    var pts = ua.points;
+    if (!pts || pts.length < 2) return false;
+    var p1 = pts[0], p2 = pts[1];
+    if (p1[0] === p2[0] && p1[1] === p2[1]) return false;
+    function onLine(p) { return Math.abs(p[1] - (s.m * p[0] + s.b)) < 0.05; }
+    return onLine(p1) && onLine(p2);
+  }
+
+  // ============================================================
+  // Shared "linear? + slope/intercept" input block, used by
+  // Groups 1, 3, and 4 — a Yes/No (or just slope+intercept) toggle
+  // plus two number fields.
+  // ============================================================
+  function mcRowHtml(opts) {
+    return "<div class=\"mc-row\">" + opts.map(function (o) {
+      return "<button type=\"button\" class=\"mc-opt\" data-val=\"" + o[0] + "\">" + o[1] + "</button>";
+    }).join("") + "</div>";
+  }
+  function mcAfterRender(card) {
+    var opts = card.querySelectorAll(".mc-opt");
+    opts.forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        opts.forEach(function (b) { b.classList.remove("selected"); });
+        btn.classList.add("selected");
+      });
+    });
+  }
+  function mcSelected(card) {
+    var sel = card.querySelector(".mc-opt.selected");
+    return sel ? sel.getAttribute("data-val") : null;
+  }
+  var LINEAR_OPTS = [["yes", "Linear"], ["no", "Not Linear"]];
+  var SENSE_OPTS = [["yes", "Makes sense"], ["no", "Doesn't make sense"]];
+
+  function slopeInterceptInputsHtml() {
+    return mcRowHtml(LINEAR_OPTS) +
+      "<div class=\"subrow\">" +
+      "<span class=\"field-label\">slope (m):</span><input type=\"text\" class=\"ans-slope\" placeholder=\"e.g. -3/2\">" +
+      "<span class=\"field-label\">y-intercept (b):</span><input type=\"text\" class=\"ans-intercept\" placeholder=\"e.g. 4\">" +
+      "</div>";
+  }
+  function slopeInterceptOnlyInputsHtml() {
+    return "<div class=\"subrow\">" +
+      "<span class=\"field-label\">slope (m):</span><input type=\"text\" class=\"ans-slope\" placeholder=\"e.g. -3/2\">" +
+      "<span class=\"field-label\">y-intercept (b):</span><input type=\"text\" class=\"ans-intercept\" placeholder=\"e.g. 4\">" +
+      "</div>";
+  }
+  function readSlopeIntercept(card) {
+    return {
+      lin: mcSelected(card),
+      m: parseAnswer(card.querySelector(".ans-slope").value),
+      b: parseAnswer(card.querySelector(".ans-intercept").value)
+    };
+  }
+  function readSlopeInterceptOnly(card) {
+    return {
+      m: parseAnswer(card.querySelector(".ans-slope").value),
+      b: parseAnswer(card.querySelector(".ans-intercept").value)
+    };
+  }
+
+  var PARTS = [];
+
+  // ============================================================
+  // Group 1: is the table linear? If so, give slope-intercept form.
+  // ============================================================
+  var TABLE_FLAVORS = [
+    { x: "Miles Traveled", y: "Cost", unit: "$" },
+    { x: "Units Sold", y: "Revenue", unit: "$" },
+    { x: "Hours Worked", y: "Pay", unit: "$" },
+    { x: "Items Produced", y: "Cost", unit: "$" },
+    { x: "Minutes Elapsed", y: "Distance", unit: "mi" },
+    { x: "Units Ordered", y: "Total Cost", unit: "$" }
+  ];
+  function fmtVal(v, unit) {
+    var rounded = Math.round(v * 100) / 100;
+    var neg = rounded < 0;
+    var abs = Math.abs(rounded);
+    var str = (Math.abs(abs % 1) < 1e-9) ? String(abs) : abs.toFixed(2).replace(/0$/, "");
+    var withUnit = unit === "$" ? "$" + str : str;
+    return (neg ? "&minus;" : "") + withUnit;
+  }
+  function genLinearTable() {
+    var result, tries = 0;
+    do {
+      var isLinear = Math.random() < 0.6;
+      var flavor = randChoice(TABLE_FLAVORS);
+      var x0 = randInt(1, 8);
+      var g1 = randInt(1, 5), g2 = randInt(1, 5), g3 = randInt(1, 5);
+      var xs = [x0, x0 + g1, x0 + g1 + g2, x0 + g1 + g2 + g3];
+      var y0 = randInt(4, 24);
+      var ys, m = null, b = null;
+      if (isLinear) {
+        var scale = randChoice([1, 1, 2]);
+        m = randNonZeroInt(-6, 6) / scale;
+        b = y0 - m * x0;
+        ys = xs.map(function (x) { return m * x + b; });
+      } else {
+        var s1 = randNonZeroInt(2, 12), s2 = randIntExcluding([s1], 2, 12), s3 = randIntExcluding([s1, s2], 2, 12);
+        var signFlip = randChoice([1, 1, -1]);
+        var y1 = y0 + signFlip * s1 * g1, y2 = y1 + signFlip * s2 * g2, y3 = y2 + signFlip * s3 * g3;
+        ys = [y0, y1, y2, y3];
+      }
+      result = { isLinear: isLinear, flavor: flavor, xs: xs, ys: ys, m: m, b: b };
+      tries++;
+    } while (ys.some(function (y) { return y < 0; }) && tries < 40);
+    return result;
+  }
+  function tableHtml(s) {
+    return "<div class=\"qtable-wrap\"><table class=\"qtable\"><tr><th>" + s.flavor.x + "</th><th>" + s.flavor.y + "</th></tr>" +
+      s.xs.map(function (x, i) { return "<tr><td>" + x + "</td><td>" + fmtVal(s.ys[i], s.flavor.unit) + "</td></tr>"; }).join("") +
+      "</table></div>";
+  }
+  function tableIsCorrect(ua, s) {
+    var truth = s.isLinear ? "yes" : "no";
+    if (ua.lin !== truth) return false;
+    if (!s.isLinear) return true;
+    return answersMatch(ua.m, numAns(s.m), 0.05) && answersMatch(ua.b, numAns(s.b), 0.05);
+  }
+  function tableSolutionHtml(s) {
+    if (!s.isLinear) {
+      var slopes = [];
+      for (var i = 0; i < s.xs.length - 1; i++) {
+        slopes.push((s.ys[i + 1] - s.ys[i]) / (s.xs[i + 1] - s.xs[i]));
+      }
+      return "<span class=\"sol-label\">Solution</span>" +
+        "<div class=\"step\">Check the rate of change between each pair of consecutive rows: " +
+        slopes.map(function (sl) { return fracOrNum(Math.round(sl * 1000), Math.round(1000)); }).join(", ") +
+        " &mdash; these aren't all the same, so " + s.flavor.y + " doesn't change at a constant rate per " + s.flavor.x + ".</div>" +
+        "<div class=\"final\">Answer: Not linear</div>";
+    }
+    var mStr = fracOrNum(Math.round(s.m * 1000), 1000);
+    var bStr = fracOrNum(Math.round(s.b * 1000), 1000);
+    var bAbsStr = fracOrNum(Math.round(Math.abs(s.b) * 1000), 1000);
+    return "<span class=\"sol-label\">Solution</span>" +
+      "<div class=\"step\">Every consecutive pair of rows changes by the same rate: slope m = " + mStr + ".</div>" +
+      "<div class=\"step\">Using the point (" + s.xs[0] + ", " + s.ys[0] + ") and y = mx + b: " + s.ys[0] + " = " + mStr + "(" + s.xs[0] + ") + b, so b = " + bStr + ".</div>" +
+      "<div class=\"final\">Answer: Linear, y = " + mStr + "x " + (s.b >= 0 ? "+ " + bAbsStr : "&minus; " + bAbsStr) + "</div>";
+  }
+  ["a", "b", "c"].forEach(function (letter) {
+    PARTS.push({
+      id: "1" + letter, group: "1", label: "(" + letter + ")", points: 4,
+      gen: genLinearTable,
+      prompt: function (s) {
+        return "Determine whether " + s.flavor.y.toLowerCase() + " is a linear function of " + s.flavor.x.toLowerCase() + ". If it is, give the equation in slope-intercept form (using x and y)." + tableHtml(s);
+      },
+      inputsHtml: slopeInterceptInputsHtml,
+      afterRender: mcAfterRender,
+      readAnswer: readSlopeIntercept,
+      isCorrect: tableIsCorrect,
+      solutionHtml: tableSolutionHtml
+    });
+  });
+
+  // ============================================================
+  // Group 2: linear equation word problems
+  // ============================================================
+
+  // ---- 2a: depreciating asset ----
+  PARTS.push({
+    id: "2a", group: "2", label: "(a)", points: 4,
+    gen: function () {
+      var V0 = randInt(15, 40) * 1000;
+      var centsPerMile = randInt(8, 25);
+      var miles, value, tries = 0;
+      do {
+        miles = randInt(5, 35) * 1000;
+        value = V0 - (centsPerMile / 100) * miles;
+        tries++;
+      } while (value < V0 * 0.1 && tries < 40);
+      return { V0: V0, centsPerMile: centsPerMile, miles: miles, answer: numAns(value) };
+    },
+    prompt: function (s) {
+      return "It costs " + moneyStr(s.V0) + " to buy a car, and the car loses value at " + s.centsPerMile + " cents per mile driven. What is the value of the car after it has been driven " + s.miles.toLocaleString() + " miles?";
+    },
+    inputsHtml: function () { return "<span class=\"field-label\">Value =</span><input type=\"text\" class=\"ans-main\" placeholder=\"e.g. 12000\">"; },
+    readAnswer: function (card) { return { main: parseAnswer(card.querySelector(".ans-main").value) }; },
+    isCorrect: function (ua, s) { return answersMatch(ua.main, s.answer, 1); },
+    solutionHtml: function (s) {
+      var rate = s.centsPerMile / 100;
+      return "<span class=\"sol-label\">Solution</span>" +
+        "<div class=\"step\">Value as a function of miles driven x: V(x) = " + moneyStr(s.V0) + " &minus; " + rate + "x.</div>" +
+        "<div class=\"step\">V(" + s.miles.toLocaleString() + ") = " + moneyStr(s.V0) + " &minus; " + rate + "(" + s.miles.toLocaleString() + ") = " + moneyStr(s.answer.value) + ".</div>" +
+        "<div class=\"final\">Answer: " + moneyStr(s.answer.value) + "</div>";
+    }
+  });
+
+  // ---- 2b: rocket / satellite moving away from a starting point ----
+  PARTS.push({
+    id: "2b", group: "2", label: "(b)", points: 4,
+    gen: function () {
+      var D0 = randInt(500, 5000);
+      var rate = randInt(2, 10); // miles per second
+      var minutes = randInt(1, 5);
+      var seconds = minutes * 60;
+      var answer = D0 + rate * seconds;
+      return { D0: D0, rate: rate, minutes: minutes, seconds: seconds, answer: numAns(answer) };
+    },
+    prompt: function (s) {
+      return "A rocket starts off " + s.D0.toLocaleString() + " miles from earth and travels away from the earth at a rate of " + s.rate + " miles per second. How far from earth is the rocket in " + s.minutes + " minute" + (s.minutes === 1 ? "" : "s") + "?";
+    },
+    inputsHtml: function () { return "<span class=\"field-label\">Distance =</span><input type=\"text\" class=\"ans-main\" placeholder=\"e.g. 4000\">"; },
+    readAnswer: function (card) { return { main: parseAnswer(card.querySelector(".ans-main").value) }; },
+    isCorrect: function (ua, s) { return answersMatch(ua.main, s.answer, 1); },
+    solutionHtml: function (s) {
+      return "<span class=\"sol-label\">Solution</span>" +
+        "<div class=\"step\">" + s.minutes + " minute" + (s.minutes === 1 ? "" : "s") + " = " + s.seconds + " seconds, and the rate is given per second, so convert first.</div>" +
+        "<div class=\"step\">Distance as a function of time t (seconds): D(t) = " + s.D0.toLocaleString() + " + " + s.rate + "t.</div>" +
+        "<div class=\"step\">D(" + s.seconds + ") = " + s.D0.toLocaleString() + " + " + s.rate + "(" + s.seconds + ") = " + s.answer.value.toLocaleString() + " miles.</div>" +
+        "<div class=\"final\">Answer: " + s.answer.value.toLocaleString() + " miles</div>";
+    }
+  });
+
+  // ---- 2c: appreciating/depreciating asset, extrapolate to a time before purchase ----
+  PARTS.push({
+    id: "2c", group: "2", label: "(c)", points: 4,
+    gen: function () {
+      var V0 = randInt(100, 300) * 1000;
+      var years = randInt(5, 15);
+      var changeUp = randBool();
+      var change = randInt(5, 80) * 1000 * (changeUp ? 1 : -1);
+      var V1 = V0 + change;
+      var slope = change / years;
+      var back = (randInt(15, 65) / 10); // 1.5 to 6.5 years before purchase
+      var answer = V0 - slope * back;
+      return { V0: V0, V1: V1, years: years, back: back, slope: slope, answer: numAns(answer) };
+    },
+    prompt: function (s) {
+      return "A house is worth " + moneyStr(s.V0) + " when you bought it and is worth " + moneyStr(s.V1) + " " + s.years + " years later. How much was the house worth " + s.back + " years before you purchased it? (Assume the value changes at a constant rate.)";
+    },
+    inputsHtml: function () { return "<span class=\"field-label\">Value =</span><input type=\"text\" class=\"ans-main\" placeholder=\"e.g. 130000\">"; },
+    readAnswer: function (card) { return { main: parseAnswer(card.querySelector(".ans-main").value) }; },
+    isCorrect: function (ua, s) { return answersMatch(ua.main, s.answer, 1); },
+    solutionHtml: function (s) {
+      return "<span class=\"sol-label\">Solution</span>" +
+        "<div class=\"step\">Slope (rate of change per year): m = (" + moneyStr(s.V1) + " &minus; " + moneyStr(s.V0) + ") / " + s.years + " = " + moneyStr(s.slope) + " per year.</div>" +
+        "<div class=\"step\">Let t = 0 be the year you bought the house: V(t) = " + moneyStr(s.V0) + " + (" + moneyStr(s.slope) + ")t. " + s.back + " years <em>before</em> purchase is t = &minus;" + s.back + ".</div>" +
+        "<div class=\"step\">V(&minus;" + s.back + ") = " + moneyStr(s.V0) + " + (" + moneyStr(s.slope) + ")(&minus;" + s.back + ") = " + moneyStr(s.answer.value) + ".</div>" +
+        "<div class=\"final\">Answer: " + moneyStr(s.answer.value) + "</div>";
+    }
+  });
+
+  // ---- 2d: demand vs. price — designed so the requested price breaks the model (negative demand) ----
+  PARTS.push({
+    id: "2d", group: "2", label: "(d)", points: 4,
+    gen: function () {
+      var D0 = randInt(80, 200);
+      var P0 = randInt(40, 90);
+      var inc = randInt(10, 40); // extra units demanded per $1 drop in price
+      var deltaNeeded = Math.ceil(D0 / inc) + randInt(1, 4);
+      var P1 = P0 + deltaNeeded;
+      var answer = D0 - inc * deltaNeeded;
+      return { D0: D0, P0: P0, inc: inc, P1: P1, delta: deltaNeeded, answer: numAns(answer) };
+    },
+    prompt: function (s) {
+      return "There is demand for " + s.D0 + " products at a price of " + moneyStr(s.P0) + ", and demand increases by " + s.inc + " for every $1 drop in price. What is demand as a function of price? What is demand at " + moneyStr(s.P1) + "? Does your answer make sense?";
+    },
+    inputsHtml: function (s) {
+      return "<span class=\"field-label\">Demand at " + moneyStr(s.P1) + " =</span><input type=\"text\" class=\"ans-main\" placeholder=\"e.g. -40\">" +
+        "<div class=\"subrow\"><span class=\"field-label\">Does this answer make sense?</span>" + mcRowHtml(SENSE_OPTS) + "</div>";
+    },
+    afterRender: mcAfterRender,
+    readAnswer: function (card) { return { main: parseAnswer(card.querySelector(".ans-main").value), sense: mcSelected(card) }; },
+    isCorrect: function (ua, s) {
+      var truth = s.answer.value >= 0 ? "yes" : "no";
+      return answersMatch(ua.main, s.answer, 0.5) && ua.sense === truth;
+    },
+    solutionHtml: function (s) {
+      return "<span class=\"sol-label\">Solution</span>" +
+        "<div class=\"step\">Demand increases " + s.inc + " for every $1 the price <em>drops</em>, so demand goes <strong>down</strong> " + s.inc + " for every $1 the price rises: slope = &minus;" + s.inc + ".</div>" +
+        "<div class=\"step\">Demand as a function of price p: D(p) = " + s.D0 + " &minus; " + s.inc + "(p &minus; " + s.P0 + ").</div>" +
+        "<div class=\"step\">D(" + s.P1 + ") = " + s.D0 + " &minus; " + s.inc + "(" + s.delta + ") = " + s.answer.value + ".</div>" +
+        "<div class=\"step\"><strong>Does it make sense?</strong> No &mdash; demand can't be negative. This linear model only holds over a limited price range; " + moneyStr(s.P1) + " is high enough to fall outside where the model is realistic.</div>" +
+        "<div class=\"final\">Answer: " + s.answer.value + " (doesn't make sense)</div>";
+    }
+  });
+
+  // ---- 2e: demand vs. price — sensible case, requested price is a drop ----
+  PARTS.push({
+    id: "2e", group: "2", label: "(e)", points: 4,
+    gen: function () {
+      var D0 = randInt(200, 500);
+      var P0 = randInt(30, 80);
+      var inc = randInt(1, 5);
+      var dropCents = randChoice([10, 20, 25, 50]);
+      var perDollar = inc / (dropCents / 100);
+      var deltaDollars = randChoice([1, 1.5, 2, 2.5, 3]);
+      var P1 = P0 - deltaDollars;
+      var answer = D0 + perDollar * deltaDollars;
+      return { D0: D0, P0: P0, inc: inc, dropCents: dropCents, perDollar: perDollar, P1: P1, deltaDollars: deltaDollars, answer: numAns(answer) };
+    },
+    prompt: function (s) {
+      return "There is demand for " + s.D0 + " products at a price of " + moneyStr(s.P0) + ", and demand increases by " + s.inc + " for every " + s.dropCents + " cent drop in price. What is demand as a function of price? What is demand at " + moneyStr(s.P1) + "? Does your answer make sense?";
+    },
+    inputsHtml: function (s) {
+      return "<span class=\"field-label\">Demand at " + moneyStr(s.P1) + " =</span><input type=\"text\" class=\"ans-main\" placeholder=\"e.g. 520\">" +
+        "<div class=\"subrow\"><span class=\"field-label\">Does this answer make sense?</span>" + mcRowHtml(SENSE_OPTS) + "</div>";
+    },
+    afterRender: mcAfterRender,
+    readAnswer: function (card) { return { main: parseAnswer(card.querySelector(".ans-main").value), sense: mcSelected(card) }; },
+    isCorrect: function (ua, s) {
+      var truth = s.answer.value >= 0 ? "yes" : "no";
+      return answersMatch(ua.main, s.answer, 0.5) && ua.sense === truth;
+    },
+    solutionHtml: function (s) {
+      var perDollarStr = fracOrNum(Math.round(s.perDollar * 1000), 1000);
+      return "<span class=\"sol-label\">Solution</span>" +
+        "<div class=\"step\">" + s.inc + " extra units per " + s.dropCents + " cents = " + perDollarStr + " extra units per $1 drop, so the slope with respect to price is &minus;" + perDollarStr + ".</div>" +
+        "<div class=\"step\">Demand as a function of price p: D(p) = " + s.D0 + " &minus; " + perDollarStr + "(p &minus; " + s.P0 + ").</div>" +
+        "<div class=\"step\">D(" + s.P1 + ") = " + s.D0 + " &minus; " + perDollarStr + "(" + s.P1 + " &minus; " + s.P0 + ") = " + s.D0 + " + " + perDollarStr + "(" + s.deltaDollars + ") = " + s.answer.value + ".</div>" +
+        "<div class=\"step\"><strong>Does it make sense?</strong> Yes &mdash; the price dropped, so demand going up to a reasonable, positive number checks out.</div>" +
+        "<div class=\"final\">Answer: " + s.answer.value + " (makes sense)</div>";
+    }
+  });
+
+  // ============================================================
+  // Group 3: graph the line (checked via slope + y-intercept)
+  // ============================================================
+  PARTS.push({
+    id: "3a", group: "3", label: "(a)", points: 4, hasGraph: true, interactive: true,
+    gen: function () {
+      var p = randNonZeroInt(-5, 5);
+      var q = randInt(2, 4);
+      var fr = fracLabel(p, q);
+      var b = randNonZeroInt(-6, 6);
+      return { p: fr.p, q: fr.q, b: b, m: fr.p / fr.q };
+    },
+    prompt: function (s) {
+      var slopeHtml = s.q === 1 ? leadTerm(s.p, "x") : (s.p < 0 ? "&minus;" : "") + frac(String(Math.abs(s.p)), String(s.q)) + "x";
+      return "Click two points on the grid below to graph <span class=\"math\">f(x) = " + slopeHtml + " " + signedTerm(s.b, "") + "</span>, then check your answer.";
+    },
+    inputsHtml: function () { return ""; },
+    afterRender: function (card) { wireInteractiveGraph(card, "3a"); },
+    readAnswer: interactiveGraphReadAnswer,
+    isCorrect: interactiveGraphIsCorrect,
+    drawGraph: drawInteractiveGraph,
+    solutionHtml: function (s) {
+      var slopeHtml = s.q === 1 ? leadTerm(s.p, "x") : (s.p < 0 ? "&minus;" : "") + frac(String(Math.abs(s.p)), String(s.q)) + "x";
+      return "<span class=\"sol-label\">Solution</span>" +
+        "<div class=\"step\">The equation is already in slope-intercept form y = mx + b, so just read it off: slope m = " + fracOrNum(s.p, s.q) + ", y-intercept b = " + s.b + ".</div>" +
+        "<div class=\"step\">Plot the point (0, " + s.b + "), then use the slope to find a second clean lattice point.</div>" +
+        "<div class=\"final\">Answer: f(x) = " + slopeHtml + " " + signedTerm(s.b, "") + " &mdash; shown in teal above, next to your points in gold.</div>";
+    }
+  });
+
+  PARTS.push({
+    id: "3b", group: "3", label: "(b)", points: 4, hasGraph: true, interactive: true,
+    gen: function () {
+      var A = randNonZeroInt(-6, 6);
+      var B = randChoice([-3, -2, -1, 1, 2, 3]);
+      // Pick the y-intercept directly as a clean integer (like every other
+      // graph part), then derive C = b*B — otherwise C/B is often a
+      // non-integer intercept, and the line never passes through a single
+      // grid lattice point, making it impossible to click a correct answer.
+      var b = randNonZeroInt(-6, 6);
+      var C = b * B;
+      var m = -A / B;
+      return { A: A, B: B, C: C, m: m, b: b };
+    },
+    prompt: function (s) {
+      var leftA = leadTerm(s.A, "x");
+      var leftB = signedTerm(s.B, "y");
+      return "Rearrange into slope-intercept form, then click two points on the grid below to graph it: <span class=\"math\">" + leftA + " " + leftB + " = " + s.C + "</span>";
+    },
+    inputsHtml: function () { return ""; },
+    afterRender: function (card) { wireInteractiveGraph(card, "3b"); },
+    readAnswer: interactiveGraphReadAnswer,
+    isCorrect: interactiveGraphIsCorrect,
+    drawGraph: drawInteractiveGraph,
+    solutionHtml: function (s) {
+      return "<span class=\"sol-label\">Solution</span>" +
+        "<div class=\"step\">Solve for y: " + s.B + "y = " + s.C + " " + signedTerm(-s.A, "x") + ", so y = " + fracOrNum(-s.A, s.B) + "x + " + fracOrNum(s.C, s.B) + ".</div>" +
+        "<div class=\"step\">So slope m = " + fracOrNum(-s.A, s.B) + " and y-intercept b = " + fracOrNum(s.C, s.B) + ".</div>" +
+        "<div class=\"final\">Answer: slope = " + fracOrNum(-s.A, s.B) + ", y-intercept = " + fracOrNum(s.C, s.B) + " &mdash; shown in teal above, next to your points in gold.</div>";
+    }
+  });
+
+  // ============================================================
+  // Group 4: perpendicular line through a point
+  // ============================================================
+  PARTS.push({
+    id: "4", group: "4", label: "", points: 4,
+    gen: function () {
+      var p = randNonZeroInt(-5, 5);
+      var q = randInt(2, 4);
+      var fr = fracLabel(p, q);
+      var b = randNonZeroInt(-6, 6);
+      var x0 = randNonZeroInt(-6, 6);
+      var y0 = randInt(-6, 6);
+      var m = fr.p / fr.q;
+      var perpM = -1 / m;
+      // exact fraction: perpB = y0 - perpM*x0 = y0 + (q*x0)/p = (y0*p + q*x0) / p
+      var perpBFr = fracLabel(y0 * fr.p + fr.q * x0, fr.p);
+      var perpB = perpBFr.p / perpBFr.q;
+      return { p: fr.p, q: fr.q, b: b, x0: x0, y0: y0, m: m, perpM: perpM, perpBFr: perpBFr, perpB: perpB };
+    },
+    prompt: function (s) {
+      var slopeHtml = s.q === 1 ? leadTerm(s.p, "x") : (s.p < 0 ? "&minus;" : "") + frac(String(Math.abs(s.p)), String(s.q)) + "x";
+      return "Find the line perpendicular to <span class=\"math\">f(x) = " + slopeHtml + " " + signedTerm(s.b, "") + "</span> containing the point (" + s.x0 + ", " + s.y0 + ").";
+    },
+    inputsHtml: slopeInterceptOnlyInputsHtml,
+    readAnswer: readSlopeInterceptOnly,
+    isCorrect: function (ua, s) { return answersMatch(ua.m, numAns(s.perpM), 0.02) && answersMatch(ua.b, numAns(s.perpB), 0.02); },
+    solutionHtml: function (s) {
+      var mStr = fracOrNum(s.p, s.q);
+      var perpMStr = fracOrNum(-s.q, s.p);
+      var perpBStr = fracOrNum(s.perpBFr.p, s.perpBFr.q);
+      return "<span class=\"sol-label\">Solution</span>" +
+        "<div class=\"step\">f has slope " + mStr + ". A perpendicular line has the negative reciprocal slope: m = " + perpMStr + ".</div>" +
+        "<div class=\"step\">Use point-slope form with (" + s.x0 + ", " + s.y0 + "): y &minus; " + s.y0 + " = " + perpMStr + "(x &minus; " + s.x0 + "), then solve for b: b = " + s.y0 + " &minus; (" + perpMStr + ")(" + s.x0 + ") = " + perpBStr + ".</div>" +
+        "<div class=\"final\">Answer: slope = " + perpMStr + ", y-intercept = " + perpBStr + "</div>";
+    }
+  });
+
+  // ============================================================
+  // Group 5: two linear functions, find when they're equal
+  // ============================================================
+  PARTS.push({
+    id: "5", group: "5", label: "", points: 4,
+    gen: function () {
+      var S1 = randInt(30, 55) * 1000;
+      var r1 = randInt(4, 10) * 50;
+      var r2 = randIntExcluding([r1 / 50], 2, r1 / 50 - 1) * 50;
+      var S2gap = randInt(2, 15) * 1000;
+      var S2 = S1 + S2gap;
+      var t = (S2 - S1) / (r1 - r2);
+      return { S1: S1, r1: r1, S2: S2, r2: r2, answer: numAns(t) };
+    },
+    prompt: function (s) {
+      return "If I make " + moneyStr(s.S1) + " a year and receive a " + moneyStr(s.r1) + " raise each year, and you make " + moneyStr(s.S2) + " and receive a " + moneyStr(s.r2) + " raise each year, in how many years would we be making the same amount of money?";
+    },
+    inputsHtml: function () { return "<span class=\"field-label\">Years =</span><input type=\"text\" class=\"ans-main\" placeholder=\"e.g. 12.5\">"; },
+    readAnswer: function (card) { return { main: parseAnswer(card.querySelector(".ans-main").value) }; },
+    isCorrect: function (ua, s) { return answersMatch(ua.main, s.answer, 0.05); },
+    solutionHtml: function (s) {
+      return "<span class=\"sol-label\">Solution</span>" +
+        "<div class=\"step\">My salary after t years: " + moneyStr(s.S1) + " + " + moneyStr(s.r1) + "t. Your salary after t years: " + moneyStr(s.S2) + " + " + moneyStr(s.r2) + "t.</div>" +
+        "<div class=\"step\">Set them equal: " + moneyStr(s.S1) + " + " + moneyStr(s.r1) + "t = " + moneyStr(s.S2) + " + " + moneyStr(s.r2) + "t &nbsp;&rarr;&nbsp; (" + moneyStr(s.r1) + " &minus; " + moneyStr(s.r2) + ")t = " + moneyStr(s.S2 - s.S1) + ".</div>" +
+        "<div class=\"step\">t = " + moneyStr(s.S2 - s.S1) + " / " + moneyStr(s.r1 - s.r2) + " = " + (Math.round(s.answer.value * 100) / 100) + " years.</div>" +
+        "<div class=\"final\">Answer: " + (Math.round(s.answer.value * 100) / 100) + " years</div>";
+    }
+  });
+
+  // ============================================================
+  // Group metadata
+  // ============================================================
+  var GROUP_META = {
+    "1": { num: "1.", desc: "Determine if the following are linear. If they are, give the equation in slope-intercept form." },
+    "2": { num: "2.", desc: "Answer the following linear equation word problems." },
+    "3": { num: "3.", desc: "Graph the following by clicking two points on the grid." },
+    "4": { num: "4.", desc: "Find the perpendicular line through the given point." },
+    "5": { num: "5.", desc: "Set two linear functions equal to each other." }
+  };
+
+  // ============================================================
+  // Engine: mount cards
+  // ============================================================
+  var scoreMap = {};
+  var TOTAL_POINTS = PARTS.reduce(function (sum, p) { return sum + p.points; }, 0);
+  var scoreNumEl = document.getElementById("scoreNum");
+
+  function updateScore() {
+    var earned = 0;
+    Object.keys(scoreMap).forEach(function (k) { earned += scoreMap[k]; });
+    scoreNumEl.textContent = earned + " / " + TOTAL_POINTS;
+  }
+
+  var examScoreMap = {};
+  var examScoreNumEl = document.getElementById("examScoreNum");
+
+  function updateExamScore() {
+    var earned = 0;
+    Object.keys(examScoreMap).forEach(function (k) { earned += examScoreMap[k]; });
+    examScoreNumEl.textContent = earned + " / " + TOTAL_POINTS;
+  }
+
+  window.__PT_STATE = {};
+
+  function mountCard(part, container) {
+    var card = document.createElement("div");
+    card.className = "qcard";
+    card.setAttribute("data-id", part.id);
+
+    var headHtml = "<div class=\"qcard-head\"><div class=\"qtitle\">" +
+      (part.label ? "<span class=\"qlabel\">" + part.label + "</span>" : "") +
+      "<span class=\"qpoints\">" + part.points + " pt" + (part.points === 1 ? "" : "s") + "</span>" +
+      "<span class=\"exam-badge hidden\"></span></div>" +
+      "<button class=\"icon-btn new-version-btn\" type=\"button\">" +
+      "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M16 3h5v5\"/><path d=\"M4 20 21 3\"/><path d=\"M21 16v5h-5\"/><path d=\"M15 15l6 6\"/><path d=\"M4 4l5 5\"/></svg>" +
+      "New version</button></div>";
+
+    card.innerHTML = headHtml +
+      "<div class=\"qprompt\"></div>" +
+      (part.hasGraph ? "<div class=\"qgraph-wrap" + (part.graphSmall ? " small" : "") + "\"><canvas></canvas></div>" : "") +
+      (part.interactive ? "<div class=\"qgraph-tools\"><span class=\"qgraph-caption\"></span><button class=\"btn-secondary clear-points-btn\" type=\"button\">Clear points</button></div>" : "") +
+      "<div class=\"qinputs\"></div>" +
+      "<div class=\"qactions\"><button class=\"btn-primary check-btn\" type=\"button\">Check Answer</button><button class=\"btn-secondary solution-btn\" type=\"button\">Show Solution</button></div>" +
+      "<div class=\"qfeedback hidden\"></div>" +
+      "<div class=\"qsolution hidden\"></div>";
+
+    container.appendChild(card);
+
+    var promptEl = card.querySelector(".qprompt");
+    var inputsEl = card.querySelector(".qinputs");
+    var feedbackEl = card.querySelector(".qfeedback");
+    var solutionEl = card.querySelector(".qsolution");
+    var examBadgeEl = card.querySelector(".exam-badge");
+    var canvasEl = part.hasGraph ? card.querySelector("canvas") : null;
+
+    var state;
+    var examAttempted = false;
+
+    function lockExam(pts, note) {
+      if (examAttempted) return;
+      examAttempted = true;
+      examScoreMap[part.id] = pts;
+      examBadgeEl.className = "exam-badge " + (pts >= part.points ? "exam-good" : "exam-bad");
+      examBadgeEl.innerHTML = "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"4\" y=\"10\" width=\"16\" height=\"10\" rx=\"2\"/><path d=\"M8 10V7a4 4 0 0 1 8 0v3\"/></svg> Exam: " + pts + "/" + part.points + (note ? " (" + note + ")" : "");
+      updateExamScore();
+    }
+
+    function render() {
+      state = part.gen();
+      window.__PT_STATE[part.id] = state;
+      promptEl.innerHTML = part.prompt(state);
+      inputsEl.innerHTML = part.inputsHtml(state, part.id);
+      feedbackEl.classList.add("hidden");
+      feedbackEl.innerHTML = "";
+      solutionEl.classList.add("hidden");
+      solutionEl.innerHTML = "";
+      scoreMap[part.id] = 0;
+      updateScore();
+      if (part.afterRender) part.afterRender(card);
+      if (part.hasGraph) part.drawGraph(canvasEl, state);
+    }
+
+    card.querySelector(".new-version-btn").addEventListener("click", render);
+    card.querySelector(".check-btn").addEventListener("click", function () {
+      var ua = part.readAnswer(card);
+      var correct = part.isCorrect(ua, state);
+      feedbackEl.classList.remove("hidden");
+      if (correct) {
+        feedbackEl.className = "qfeedback good";
+        feedbackEl.innerHTML = "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M20 6 9 17l-5-5\"/></svg> Correct!";
+        scoreMap[part.id] = part.points;
+      } else {
+        feedbackEl.className = "qfeedback bad";
+        feedbackEl.innerHTML = "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\"><circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M15 9l-6 6M9 9l6 6\"/></svg> Not quite — check the solution below.";
+        scoreMap[part.id] = 0;
+      }
+      updateScore();
+      lockExam(correct ? part.points : 0);
+    });
+    card.querySelector(".solution-btn").addEventListener("click", function () {
+      solutionEl.innerHTML = part.solutionHtml(state);
+      solutionEl.classList.remove("hidden");
+      lockExam(0, "viewed solution");
+    });
+
+    if (part.hasGraph) {
+      window.addEventListener("resize", function () { if (state) part.drawGraph(canvasEl, state); });
+    }
+
+    render();
+  }
+
+  function buildAll() {
+    var groupsEl = document.getElementById("groups");
+    groupsEl.innerHTML = "";
+    scoreMap = {};
+    examScoreMap = {};
+    var seenGroups = {};
+    var currentContainer = null;
+    PARTS.forEach(function (part) {
+      if (!seenGroups[part.group]) {
+        seenGroups[part.group] = true;
+        var meta = GROUP_META[part.group];
+        var gh = document.createElement("div");
+        gh.className = "group-head";
+        gh.innerHTML = "<div class=\"gnum\">" + meta.num + "</div><div class=\"gdesc\">" + meta.desc + "</div>";
+        groupsEl.appendChild(gh);
+        currentContainer = document.createElement("div");
+        groupsEl.appendChild(currentContainer);
+      }
+      mountCard(part, currentContainer);
+    });
+    updateScore();
+    updateExamScore();
+  }
+
+  document.getElementById("newTestBtn").addEventListener("click", buildAll);
+
+  buildAll();
+})();
+</script>

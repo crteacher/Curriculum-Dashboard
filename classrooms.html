@@ -278,6 +278,7 @@ function renderProblems(courseId) {
     qDiv.className = 'prob-question';
     if (p.svg)        { qDiv.innerHTML = p.svg; }
     else if (p.latex) { rk(p.latex, qDiv, true); }
+    else              { qDiv.textContent = '[Question unavailable — try New Numbers]'; }
     card.appendChild(qDiv);
 
     if (p.hint) {
