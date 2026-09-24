@@ -256,6 +256,16 @@
   .recipe-text { font-size: 0.94rem; line-height: 1.6; padding-top: 2px; }
   .recipe-text strong { color: var(--ink); }
 
+  /* ---- static labeled triangle (inside a derivation reveal) ---- */
+  .tri-wrap { display: flex; justify-content: center; margin: 4px 0 16px; }
+  .tri-svg { width: 100%; max-width: 240px; height: auto; display: block; }
+  .tri-axis { stroke: var(--paper-line-strong); stroke-width: 2; }
+  .tri-rightangle { fill: none; stroke: var(--ink-soft); stroke-width: 1.4; }
+  .tri-hyp { stroke: var(--accent); stroke-width: 4; stroke-linecap: round; }
+  .tri-pt { fill: var(--accent); }
+  .tri-label { font-family: "JetBrains Mono", monospace; font-size: 11px; fill: var(--ink); }
+  .tri-label-accent { fill: var(--accent-strong); font-weight: 700; }
+
   /* ---- animated live-diagram widget ---- */
   .anim-widget { margin: 6px 0 6px; }
   .anim-canvas-wrap {
@@ -373,8 +383,17 @@
   }
 
   // ---- pooled "spot the mistake" diagnostics ----
+  // Tracks the last couple of archetypes shown *per pool* (on the pool array itself),
+  // so that whenever two diagnostic cards draw from the same pool (e.g. Stage 1's
+  // 1-d1/1-d2) they don't land on the same archetype back-to-back, and repeated
+  // "New version" clicks cycle through the mistake types instead of repeating one.
   function pickDiagnostic(pool) {
-    var chosenIdx = randInt(0, pool.length - 1);
+    var idxs = pool.map(function (_, i) { return i; });
+    var recent = pool.__recentIdxs || [];
+    var choices = idxs.filter(function (i) { return recent.indexOf(i) === -1; });
+    if (choices.length === 0) choices = idxs;
+    var chosenIdx = choices[randInt(0, choices.length - 1)];
+    pool.__recentIdxs = [chosenIdx].concat(recent).slice(0, 2);
     var inst = pool[chosenIdx].build();
     var reasons = pool.map(function (a) { return a.reason; });
     var m = buildMcOptions(reasons[chosenIdx], reasons.filter(function (_, i) { return i !== chosenIdx; }));
@@ -461,6 +480,32 @@
   function ladderReadout(s) {
     return animChip("x", s.x.toFixed(2) + " ft") + animChip("y", s.y.toFixed(2) + " ft") +
       animChip("dx/dt", "+" + s.dxdt.toFixed(1) + " ft/s (given)") + animChip("dy/dt", s.dydt.toFixed(2) + " ft/s", true);
+  }
+
+  // ---- static labeled right-triangle diagram, used inside the ladder derivation ----
+  function staticRightTriangleSvg(x, y, L, xLabel, yLabel, hypLabel) {
+    var W = 240, H = 190, pad = 28;
+    var scale = Math.min((W - pad * 1.9) / L, (H - pad * 1.9) / L);
+    var originX = pad, originY = H - pad;
+    var bx = originX + x * scale, by = originY;
+    var tx = originX, ty = originY - y * scale;
+    var midx = (bx + tx) / 2, midy = (by + ty) / 2;
+    var dx = tx - bx, dy = ty - by, len = Math.sqrt(dx * dx + dy * dy) || 1;
+    var nx = -dy / len, ny = dx / len, off = 15;
+    var lx = midx + nx * off, ly = midy + ny * off;
+    var svg = "<svg viewBox=\"0 0 " + W + " " + H + "\" class=\"tri-svg\" role=\"img\" aria-label=\"labeled right triangle\">";
+    svg += "<line x1=\"" + originX + "\" y1=\"" + originY + "\" x2=\"" + (originX + (x + 2) * scale) + "\" y2=\"" + originY + "\" class=\"tri-axis\"/>";
+    svg += "<line x1=\"" + originX + "\" y1=\"" + originY + "\" x2=\"" + originX + "\" y2=\"" + (originY - (y + 2) * scale) + "\" class=\"tri-axis\"/>";
+    svg += "<rect x=\"" + originX + "\" y=\"" + (originY - 11) + "\" width=\"11\" height=\"11\" class=\"tri-rightangle\"/>";
+    svg += "<line x1=\"" + bx + "\" y1=\"" + by + "\" x2=\"" + tx + "\" y2=\"" + ty + "\" class=\"tri-hyp\"/>";
+    svg += "<circle cx=\"" + bx + "\" cy=\"" + by + "\" r=\"4\" class=\"tri-pt\"/>";
+    svg += "<circle cx=\"" + tx + "\" cy=\"" + ty + "\" r=\"4\" class=\"tri-pt\"/>";
+    var yLabelX = originX - 12, yLabelY = (originY + ty) / 2;
+    svg += "<text x=\"" + ((originX + bx) / 2) + "\" y=\"" + (originY + 18) + "\" class=\"tri-label\" text-anchor=\"middle\">" + xLabel + "</text>";
+    svg += "<text x=\"" + yLabelX + "\" y=\"" + yLabelY + "\" class=\"tri-label\" text-anchor=\"middle\" transform=\"rotate(-90 " + yLabelX + " " + yLabelY + ")\">" + yLabel + "</text>";
+    svg += "<text x=\"" + lx + "\" y=\"" + ly + "\" class=\"tri-label tri-label-accent\" text-anchor=\"middle\">" + hypLabel + "</text>";
+    svg += "</svg>";
+    return "<div class=\"tri-wrap\">" + svg + "</div>";
   }
 
   function drawShadowScene(canvas, s) {
@@ -789,11 +834,16 @@
     readAnswer: readNumAnswer, isCorrect: function (ua, s) { return numEq(ua.v, s.dydt, 0.02); }, solutionHtml: solutionLadderPractice
   });
 
-  var ladderDerivRows = [
+  var ladderDerivRows = staticRightTriangleSvg(5, 12, 13, "x = 5 ft", "y = 12 ft", "L = 13 ft") + [
     wsRow("x&sup2; + y&sup2;", "=", "L&sup2;"),
-    wsNote("Differentiate both sides with respect to t. Both x and y depend on t, so the chain rule attaches a rate to each; L is constant, so L&sup2; differentiates to 0:"),
+    wsNote("Differentiate both sides with respect to t &mdash; term by term. Recall from Stage 2: d/dt[u&#8319;] = n&middot;u&#8319;&#8315;&sup1;&middot;(du/dt). Here x, y, and L are all functions of t:"),
+    wsRow("d/dt[x&sup2;]", "=", "2x &middot; (dx/dt)"),
+    wsRow("d/dt[y&sup2;]", "=", "2y &middot; (dy/dt)"),
+    wsRow("d/dt[L&sup2;]", "=", "0 &nbsp;&mdash;&nbsp; L never changes, it's a constant"),
+    wsNote("Look closely at “2x&middot;(dx/dt)” &mdash; it's a <strong>product</strong> of two separate pieces, not one term: 2x comes from the power rule (bring the exponent down, drop it by one), and (dx/dt) comes from the chain rule (because x itself is secretly a function of t). Keep both factors; don't collapse it back down to just “2x”."),
+    wsNote("Put the three differentiated pieces back into the equation:"),
     wsRow("2x(dx/dt) + 2y(dy/dt)", "=", "0"),
-    wsNote("Plug in the snapshot: x=5 ft, y=12 ft (with L=13), dx/dt=2 ft/s, then solve for dy/dt:"),
+    wsNote("Now plug in the snapshot: x=5 ft, y=12 ft (with L=13), dx/dt=2 ft/s, then solve for dy/dt:"),
     wsRow("2(5)(2) + 2(12)(dy/dt)", "=", "0"),
     wsRow("20 + 24(dy/dt)", "=", "0"),
     wsRow("dy/dt", "=", "&minus;20/24 = &minus;5/6 &asymp; &minus;0.83 ft/s", true)
