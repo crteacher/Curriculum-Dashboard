@@ -1,0 +1,1212 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found]){display:none!important}</style></head><body>
+<title>Implicit Differentiation &amp; Related Rates Walkthrough</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=JetBrains+Mono:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #f6f1e4;
+    --paper-line: rgba(58, 74, 94, 0.14);
+    --paper-line-strong: rgba(58, 74, 94, 0.26);
+    --ink: #26313f;
+    --ink-soft: #5b6b7d;
+    --card-bg: #fffdf7;
+    --card-border: #ddd2b6;
+    --accent: #b5790a;
+    --accent-strong: #8f5f06;
+    --accent-soft: rgba(181, 121, 10, 0.12);
+    --accent-ink: #fffaf0;
+    --good: #3f7a52;
+    --good-soft: rgba(63, 122, 82, 0.14);
+    --bad: #b3413a;
+    --bad-soft: rgba(179, 65, 58, 0.12);
+    --shadow: rgba(38, 49, 63, 0.16);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #1b2330;
+      --paper-line: rgba(238, 242, 240, 0.07);
+      --paper-line-strong: rgba(238, 242, 240, 0.15);
+      --ink: #edf1ef;
+      --ink-soft: #a3aebb;
+      --card-bg: #232e3d;
+      --card-border: #3a4a61;
+      --accent: #e8b04f;
+      --accent-strong: #f2c675;
+      --accent-soft: rgba(232, 176, 79, 0.16);
+      --accent-ink: #2b1e05;
+      --good: #7bc794;
+      --good-soft: rgba(123, 199, 148, 0.16);
+      --bad: #ff9a90;
+      --bad-soft: rgba(255, 154, 144, 0.14);
+      --shadow: rgba(0, 0, 0, 0.5);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #1b2330;
+    --paper-line: rgba(238, 242, 240, 0.07);
+    --paper-line-strong: rgba(238, 242, 240, 0.15);
+    --ink: #edf1ef;
+    --ink-soft: #a3aebb;
+    --card-bg: #232e3d;
+    --card-border: #3a4a61;
+    --accent: #e8b04f;
+    --accent-strong: #f2c675;
+    --accent-soft: rgba(232, 176, 79, 0.16);
+    --accent-ink: #2b1e05;
+    --good: #7bc794;
+    --good-soft: rgba(123, 199, 148, 0.16);
+    --bad: #ff9a90;
+    --bad-soft: rgba(255, 154, 144, 0.14);
+    --shadow: rgba(0, 0, 0, 0.5);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background:
+      repeating-linear-gradient(0deg, var(--paper-line) 0, var(--paper-line) 1px, transparent 1px, transparent 32px),
+      repeating-linear-gradient(90deg, var(--paper-line) 0, var(--paper-line) 1px, transparent 1px, transparent 32px),
+      var(--paper);
+    color: var(--ink);
+    font-family: "Source Sans 3", ui-sans-serif, system-ui, sans-serif;
+    display: flex;
+    justify-content: center;
+    padding: clamp(20px, 4vw, 56px) 18px 80px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+  }
+
+  .wrap { width: 100%; max-width: 900px; }
+  header { text-align: center; margin-bottom: 18px; }
+
+  .eyebrow {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--accent); font-weight: 600;
+  }
+
+  h1 {
+    font-family: "Fraunces", Georgia, serif; font-weight: 600;
+    font-size: clamp(1.8rem, 5vw, 2.5rem); margin: 6px 0 8px; text-wrap: balance;
+  }
+
+  header p { color: var(--ink-soft); font-size: 1rem; max-width: 66ch; margin: 0 auto; line-height: 1.55; }
+
+  .howto {
+    background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 14px;
+    box-shadow: 0 10px 26px -18px var(--shadow); padding: 16px 20px; margin: 22px 0 26px;
+    font-size: 0.92rem; line-height: 1.65; color: var(--ink);
+  }
+  .howto strong { color: var(--accent-strong); }
+
+  .stage-nav {
+    position: sticky; top: 12px; z-index: 5;
+    display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 28px; padding: 12px 14px;
+    background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 14px;
+    box-shadow: 0 10px 26px -16px var(--shadow);
+  }
+  .stage-pill {
+    display: inline-flex; align-items: center; gap: 6px; font-size: 0.76rem; font-weight: 600;
+    padding: 6px 11px; border-radius: 20px; background: var(--paper-line); color: var(--ink-soft);
+    border: 1px solid transparent; transition: all 0.2s ease;
+  }
+  .stage-pill .dot {
+    width: 7px; height: 7px; border-radius: 50%; background: var(--ink-soft); flex-shrink: 0; transition: background 0.2s ease;
+  }
+  .stage-pill.done { background: var(--good-soft); color: var(--good); border-color: var(--good-soft); }
+  .stage-pill.done .dot { background: var(--good); }
+
+  button { font-family: inherit; cursor: pointer; }
+  button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  input[type="range"] { accent-color: var(--accent); }
+
+  .icon-btn {
+    display: inline-flex; align-items: center; gap: 7px; background: var(--card-bg);
+    border: 1px solid var(--card-border); color: var(--ink); padding: 9px 14px;
+    border-radius: 9px; font-size: 0.86rem; font-weight: 600; text-decoration: none;
+    transition: border-color 0.15s ease, transform 0.1s ease;
+  }
+  .icon-btn:hover { border-color: var(--accent); }
+  .icon-btn:active { transform: translateY(1px); }
+  .icon-btn svg { width: 14px; height: 14px; flex-shrink: 0; }
+  .video-btn { color: var(--accent-strong); border-color: var(--accent-soft); background: var(--accent-soft); }
+  .video-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+
+  .group-head {
+    margin: 34px 0 16px; padding-bottom: 14px; border-bottom: 1.5px solid var(--paper-line-strong);
+  }
+  .group-head .gnum {
+    font-family: "JetBrains Mono", monospace; font-size: 0.74rem; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--accent); font-weight: 700;
+  }
+  .group-head .gtitle {
+    font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 1.4rem; color: var(--ink); margin: 2px 0 6px;
+  }
+  .group-head .gdesc { font-size: 0.94rem; color: var(--ink-soft); line-height: 1.65; max-width: 70ch; }
+  .group-head .gdesc strong { color: var(--ink); }
+
+  .qcard {
+    background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px;
+    box-shadow: 0 14px 32px -22px var(--shadow), 0 2px 8px -2px var(--shadow);
+    padding: clamp(16px, 3vw, 24px); margin-bottom: 18px;
+  }
+  .qcard.hit-card { border-color: var(--accent-soft); }
+
+  .qcard-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
+  .qcard-head .qtitle { display: flex; align-items: center; gap: 10px; }
+  .qlabel { font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 1.05rem; }
+  .qtag {
+    font-family: "JetBrains Mono", monospace; font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--accent); font-weight: 700; display: block; margin-bottom: 8px;
+  }
+
+  .qprompt { font-size: 1rem; line-height: 1.7; margin-bottom: 14px; }
+  .qprompt .math { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 1.04rem; }
+  .qsolution .math { font-family: "JetBrains Mono", ui-monospace, monospace; }
+
+  .qinputs { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin-bottom: 14px; }
+  .qinputs .field-label { font-size: 0.86rem; color: var(--ink-soft); font-weight: 600; }
+  .qinputs input[type="text"] {
+    font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 0.95rem;
+    background: var(--paper); border: 1.5px solid var(--card-border); border-radius: 8px;
+    padding: 8px 10px; color: var(--ink); min-width: 120px;
+  }
+  .qinputs input:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .mc-row { display: flex; flex-direction: column; gap: 8px; }
+  .mc-opt {
+    border: 1.5px solid var(--card-border); border-radius: 9px; padding: 10px 13px; text-align: left;
+    font-size: 0.9rem; background: var(--card-bg); color: var(--ink); font-weight: 500; line-height: 1.45;
+    transition: border-color 0.15s ease, background 0.15s ease;
+  }
+  .mc-opt:hover { border-color: var(--accent); }
+  .mc-opt.selected { border-color: var(--accent); background: var(--accent-soft); color: var(--accent-strong); font-weight: 600; }
+  .step-pair { display: flex; align-items: center; flex-wrap: wrap; gap: 10px 14px; }
+  .step-pair .arrow { color: var(--ink-soft); font-size: 1.1rem; }
+
+  .qactions { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; }
+  .btn-primary {
+    background: var(--accent); color: var(--accent-ink); border: none; padding: 10px 20px;
+    border-radius: 10px; font-size: 0.92rem; font-weight: 700;
+    box-shadow: 0 8px 16px -8px var(--accent-strong); transition: transform 0.1s ease;
+  }
+  .btn-primary:active { transform: translateY(1px); }
+  .btn-secondary {
+    background: transparent; border: 1.5px solid var(--card-border); color: var(--ink);
+    padding: 9px 18px; border-radius: 10px; font-size: 0.92rem; font-weight: 700;
+    transition: border-color 0.15s ease;
+  }
+  .btn-secondary:hover { border-color: var(--accent); }
+
+  .qfeedback {
+    font-size: 0.9rem; font-weight: 700; padding: 9px 13px; border-radius: 9px; margin-bottom: 10px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .qfeedback.good { background: var(--good-soft); color: var(--good); }
+  .qfeedback.bad { background: var(--bad-soft); color: var(--bad); }
+  .qfeedback svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+  .qsolution {
+    background: var(--accent-soft); border: 1px solid var(--card-border); border-left: 4px solid var(--accent);
+    border-radius: 0 12px 12px 0; padding: 14px 16px; font-size: 0.92rem; line-height: 1.7;
+  }
+  .qsolution .sol-label {
+    font-family: "JetBrains Mono", monospace; font-size: 0.68rem; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--accent-strong); font-weight: 700; display: block; margin-bottom: 6px;
+  }
+  .qsolution .step { margin: 3px 0; }
+  .qsolution .final { margin-top: 8px; font-weight: 700; font-family: "JetBrains Mono", monospace; }
+
+  /* ---- worked-step "whiteboard" solution layout ---- */
+  .worksheet { margin-top: 2px; }
+  .ws-row {
+    display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; column-gap: 12px;
+    font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 1rem; margin: 5px 0;
+  }
+  .ws-row .ws-expr { text-align: right; white-space: nowrap; }
+  .ws-row .ws-expr:last-child { text-align: left; white-space: normal; }
+  .ws-row .ws-eq { color: var(--ink-soft); font-weight: 600; }
+  .ws-note {
+    font-family: "Source Sans 3", sans-serif; font-size: 0.83rem; font-weight: 500;
+    color: var(--ink-soft); text-align: left; margin: 8px 0; font-style: italic; line-height: 1.5;
+  }
+  .ws-row.ws-final { margin-top: 7px; font-weight: 700; padding-top: 7px; border-top: 1.5px solid var(--card-border); }
+  .ws-row.ws-final .ws-expr { color: var(--accent-strong); font-size: 1.06rem; }
+  @media (max-width: 480px) {
+    .ws-row { column-gap: 7px; font-size: 0.88rem; grid-template-columns: auto auto 1fr; }
+  }
+
+  /* ---- recipe steps ---- */
+  .recipe { display: flex; flex-direction: column; gap: 12px; margin: 6px 0 4px; }
+  .recipe-step { display: flex; gap: 13px; align-items: flex-start; }
+  .recipe-num {
+    flex-shrink: 0; width: 26px; height: 26px; border-radius: 50%; margin-top: 1px;
+    background: var(--accent-soft); color: var(--accent-strong); font-weight: 700;
+    font-family: "JetBrains Mono", monospace; font-size: 0.8rem;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .recipe-text { font-size: 0.94rem; line-height: 1.6; padding-top: 2px; }
+  .recipe-text strong { color: var(--ink); }
+
+  /* ---- animated live-diagram widget ---- */
+  .anim-widget { margin: 6px 0 6px; }
+  .anim-canvas-wrap {
+    width: 100%; height: 230px; background: var(--paper); border: 1.5px dashed var(--card-border);
+    border-radius: 12px; overflow: hidden;
+  }
+  .anim-canvas { display: block; width: 100%; height: 100%; }
+  .anim-controls { display: flex; align-items: center; gap: 12px; margin-top: 12px; }
+  .anim-play-btn { flex-shrink: 0; }
+  .anim-slider { flex: 1 1 auto; min-width: 0; }
+  .anim-readout {
+    display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 12px; padding: 10px 14px;
+    background: var(--paper); border: 1px solid var(--card-border); border-radius: 10px;
+    font-family: "JetBrains Mono", monospace; font-size: 0.86rem;
+  }
+  .anim-chip { display: inline-flex; gap: 7px; align-items: baseline; }
+  .anim-chip .k { color: var(--ink-soft); }
+  .anim-chip .v { color: var(--accent-strong); font-weight: 700; font-variant-numeric: tabular-nums; }
+  .anim-chip .v.warn { color: var(--bad); }
+
+  .hidden { display: none !important; }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Calculus 1 &middot; Implicit Differentiation &amp; Related Rates</div>
+    <h1>Implicit Differentiation &amp; Related Rates: A Guided Walkthrough</h1>
+    <p>Builds the bridge from implicit differentiation to related rates, then drills the three problems that show up on almost every exam: the sliding ladder, the growing shadow, and two boats racing away from a dock &mdash; plus the other common types (a filling cone, a spreading ripple, an angle of elevation) so you've seen the whole family.</p>
+  </header>
+
+  <div class="howto">
+    Work through the stages <strong>in order</strong> &mdash; Stages 2&ndash;6 all lean on the implicit-differentiation skill from Stage 1. In every stage: watch the video if a concept feels shaky, try the &ldquo;What went wrong?&rdquo; checks first, then work the practice problem &mdash; click <strong>New version</strong> for new numbers as many times as you want. Stages 3&ndash;5 are the three &ldquo;greatest hits&rdquo; of related rates, each with a <strong>live diagram</strong> &mdash; drag its slider or hit Play to watch the picture actually move before you dig into the algebra.
+  </div>
+
+  <div class="stage-nav" id="stageNav"></div>
+
+  <div id="groups"></div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  // ============================================================
+  // Utilities
+  // ============================================================
+  function randInt(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+  function randChoice(arr) { return arr[randInt(0, arr.length - 1)]; }
+  function randBool() { return Math.random() < 0.5; }
+  function round2(v) { return Math.round(v * 100) / 100; }
+  function round4(v) { return Math.round(v * 10000) / 10000; }
+  function parseFracOrNum(raw) {
+    if (raw === null || raw === undefined) return null;
+    var s = String(raw).trim();
+    if (s === "") return null;
+    var neg = false;
+    if (s[0] === "-") { neg = true; s = s.slice(1).trim(); }
+    else if (s[0] === "+") { s = s.slice(1).trim(); }
+    var parts = s.split("/");
+    var val;
+    if (parts.length === 2) {
+      var n = parseFloat(parts[0]), d = parseFloat(parts[1]);
+      if (isNaN(n) || isNaN(d) || d === 0) return null;
+      val = n / d;
+    } else {
+      val = parseFloat(s.replace(/,/g, ""));
+    }
+    if (isNaN(val)) return null;
+    return neg ? -val : val;
+  }
+  function numEq(a, b, tol) {
+    tol = tol === undefined ? 0.01 : tol;
+    return a !== null && b !== null && a !== undefined && b !== undefined && Math.abs(a - b) < tol;
+  }
+  var TRIPLES = [[3, 4, 5], [5, 12, 13], [8, 15, 17], [7, 24, 25], [9, 40, 41], [20, 21, 29], [6, 8, 10], [12, 16, 20], [10, 24, 26]];
+  function randTriple() { return randChoice(TRIPLES); }
+
+  // ---- single numeric-answer input ----
+  function numInputHtml(placeholder) {
+    return "<span class=\"field-label\">Answer:</span><input type=\"text\" class=\"ans-main\" placeholder=\"" + (placeholder || "a number") + "\">";
+  }
+  function readNumAnswer(card) { return { v: parseFracOrNum(card.querySelector(".ans-main").value) }; }
+
+  // ---- multiple-choice "spot the mistake" helpers ----
+  function mcOptsHtml(opts) {
+    return "<div class=\"mc-row\">" + opts.map(function (o, i) {
+      return "<button type=\"button\" class=\"mc-opt\" data-val=\"" + i + "\">" + o.text + "</button>";
+    }).join("") + "</div>";
+  }
+  function mcAfterRender(card) {
+    var opts = card.querySelectorAll(".mc-opt");
+    opts.forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        opts.forEach(function (b) { b.classList.remove("selected"); });
+        btn.classList.add("selected");
+      });
+    });
+  }
+  function mcReadAnswer(card) {
+    var sel = card.querySelector(".mc-opt.selected");
+    return { idx: sel ? parseInt(sel.getAttribute("data-val"), 10) : -1 };
+  }
+  function shuffle(arr) {
+    var a = arr.slice();
+    for (var i = a.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    return a;
+  }
+  function buildMcOptions(correctText, wrongTexts) {
+    var opts = shuffle([{ text: correctText, correct: true }].concat(wrongTexts.map(function (t) { return { text: t, correct: false }; })));
+    var correctIdx = opts.findIndex(function (o) { return o.correct; });
+    return { opts: opts, correctIdx: correctIdx };
+  }
+
+  // ---- pooled "spot the mistake" diagnostics ----
+  function pickDiagnostic(pool) {
+    var chosenIdx = randInt(0, pool.length - 1);
+    var inst = pool[chosenIdx].build();
+    var reasons = pool.map(function (a) { return a.reason; });
+    var m = buildMcOptions(reasons[chosenIdx], reasons.filter(function (_, i) { return i !== chosenIdx; }));
+    return { orig: inst.orig, result: inst.result, correctFullStep: inst.correctFullStep, opts: m.opts, correctIdx: m.correctIdx };
+  }
+  function diagPromptHtml(s) {
+    return "<div class=\"step-pair\"><span class=\"math\">" + s.orig + "</span><span class=\"arrow\">&rarr;</span><span class=\"math\">" + s.result + "</span></div>" +
+      "<div style=\"margin-top:10px\">A student wrote this. Is it correct? If not, what went wrong?</div>";
+  }
+  function diagSolutionHtml(s) {
+    var correctText = s.opts[s.correctIdx].text;
+    return "<span class=\"sol-label\">Solution</span>" +
+      "<div class=\"step\">" + correctText + "</div>" +
+      (s.correctFullStep ? "<div class=\"final\">Correct: " + s.correctFullStep + "</div>" : "");
+  }
+  var diagInputsHtml = function (s) { return mcOptsHtml(s.opts); };
+  var diagIsCorrect = function (ua, s) { return ua.idx === s.correctIdx; };
+
+  // ---- worked-step "whiteboard" solution renderer ----
+  function wsRow(left, opHtml, right, isFinal) {
+    return "<div class=\"ws-row" + (isFinal ? " ws-final" : "") + "\"><span class=\"ws-expr\">" + left + "</span><span class=\"ws-eq\">" + opHtml + "</span><span class=\"ws-expr\">" + right + "</span></div>";
+  }
+  function wsNote(text) { return "<div class=\"ws-note\">" + text + "</div>"; }
+  function renderWorksheet(rows) {
+    return "<span class=\"sol-label\">Solution</span><div class=\"worksheet\">" + rows.join("") + "</div>";
+  }
+
+  // ---- icons ----
+  var SVG_REFRESH = "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M16 3h5v5\"/><path d=\"M4 20 21 3\"/><path d=\"M21 16v5h-5\"/><path d=\"M15 15l6 6\"/><path d=\"M4 4l5 5\"/></svg>";
+  var SVG_CHECK = "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M20 6 9 17l-5-5\"/></svg>";
+  var SVG_X = "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\"><circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M15 9l-6 6M9 9l6 6\"/></svg>";
+  var SVG_PLAY = "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M10 8.5 16 12l-6 3.5z\" fill=\"currentColor\" stroke=\"none\"/></svg>";
+  var SVG_PAUSE = "<svg viewBox=\"0 0 24 24\" fill=\"currentColor\" stroke=\"none\"><rect x=\"6\" y=\"5\" width=\"4\" height=\"14\" rx=\"1\"/><rect x=\"14\" y=\"5\" width=\"4\" height=\"14\" rx=\"1\"/></svg>";
+
+  // ============================================================
+  // Canvas helpers for the animated live diagrams
+  // ============================================================
+  function resizeCanvasForDPR(canvas) {
+    var dpr = window.devicePixelRatio || 1;
+    var rect = canvas.getBoundingClientRect();
+    var w = Math.max(1, rect.width), h = Math.max(1, rect.height);
+    if (canvas.__cssW !== w || canvas.__cssH !== h || canvas.__dpr !== dpr) {
+      canvas.width = Math.round(w * dpr);
+      canvas.height = Math.round(h * dpr);
+      canvas.__cssW = w; canvas.__cssH = h; canvas.__dpr = dpr;
+    }
+    var ctx = canvas.getContext("2d");
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    return { ctx: ctx, w: w, h: h };
+  }
+  function cssVar(name) {
+    return getComputedStyle(document.documentElement).getPropertyValue(name).trim() || "#888";
+  }
+  function animChip(k, v, warn) {
+    return "<span class=\"anim-chip\"><span class=\"k\">" + k + "</span><span class=\"v" + (warn ? " warn" : "") + "\">" + v + "</span></span>";
+  }
+
+  function drawLadderScene(canvas, s) {
+    var r = resizeCanvasForDPR(canvas);
+    var ctx = r.ctx, w = r.w, h = r.h;
+    ctx.clearRect(0, 0, w, h);
+    var pad = 32;
+    var avail = Math.max(40, Math.min(w - pad * 1.6, h - pad * 1.7));
+    var scale = avail / s.L;
+    var originX = pad, originY = h - pad * 1.15;
+    var ink = cssVar("--ink"), soft = cssVar("--ink-soft"), accent = cssVar("--accent"), line = cssVar("--paper-line-strong");
+    ctx.strokeStyle = line; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(originX - 6, originY); ctx.lineTo(originX + s.L * scale + 20, originY); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(originX, originY + 6); ctx.lineTo(originX, originY - s.L * scale - 14); ctx.stroke();
+    ctx.strokeStyle = soft; ctx.lineWidth = 1.4;
+    ctx.strokeRect(originX, originY - 10, 10, 10);
+    var bx = originX + s.x * scale, by = originY;
+    var tx = originX, ty = originY - s.y * scale;
+    ctx.strokeStyle = accent; ctx.lineWidth = 5; ctx.lineCap = "round";
+    ctx.beginPath(); ctx.moveTo(bx, by); ctx.lineTo(tx, ty); ctx.stroke();
+    ctx.fillStyle = accent;
+    ctx.beginPath(); ctx.arc(bx, by, 5.5, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(tx, ty, 5.5, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = ink; ctx.font = "600 12px \"JetBrains Mono\", monospace"; ctx.textAlign = "center";
+    ctx.fillText("x = " + s.x.toFixed(2), (originX + bx) / 2, by + 18);
+    ctx.save(); ctx.translate(originX - 18, (originY + ty) / 2); ctx.rotate(-Math.PI / 2);
+    ctx.fillText("y = " + s.y.toFixed(2), 0, 0); ctx.restore();
+  }
+  function ladderReadout(s) {
+    return animChip("x", s.x.toFixed(2) + " ft") + animChip("y", s.y.toFixed(2) + " ft") +
+      animChip("dx/dt", "+" + s.dxdt.toFixed(1) + " ft/s (given)") + animChip("dy/dt", s.dydt.toFixed(2) + " ft/s", true);
+  }
+
+  function drawShadowScene(canvas, s) {
+    var r = resizeCanvasForDPR(canvas);
+    var ctx = r.ctx, w = r.w, h = r.h;
+    ctx.clearRect(0, 0, w, h);
+    var pad = 26;
+    var groundY = h - pad;
+    var scaleX = (w - pad * 2) / s.zMax;
+    var scaleY = (groundY - 16) / s.H;
+    var scale = Math.min(scaleX, scaleY);
+    var ink = cssVar("--ink"), soft = cssVar("--ink-soft"), accent = cssVar("--accent"), line = cssVar("--paper-line-strong");
+    ctx.strokeStyle = line; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(pad * 0.3, groundY); ctx.lineTo(w - pad * 0.3, groundY); ctx.stroke();
+    var poleX = pad;
+    var poleTopY = groundY - s.H * scale;
+    ctx.strokeStyle = soft; ctx.lineWidth = 4;
+    ctx.beginPath(); ctx.moveTo(poleX, groundY); ctx.lineTo(poleX, poleTopY); ctx.stroke();
+    var personX = poleX + s.x * scale;
+    var personTopY = groundY - s.h * scale;
+    ctx.strokeStyle = ink; ctx.lineWidth = 4;
+    ctx.beginPath(); ctx.moveTo(personX, groundY); ctx.lineTo(personX, personTopY); ctx.stroke();
+    ctx.fillStyle = ink; ctx.beginPath(); ctx.arc(personX, personTopY - 6, 5, 0, Math.PI * 2); ctx.fill();
+    var tipX = poleX + s.z * scale;
+    ctx.strokeStyle = soft; ctx.setLineDash([4, 4]); ctx.lineWidth = 1.6;
+    ctx.beginPath(); ctx.moveTo(poleX, poleTopY); ctx.lineTo(tipX, groundY); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.strokeStyle = accent; ctx.lineWidth = 5; ctx.lineCap = "round";
+    ctx.beginPath(); ctx.moveTo(personX, groundY); ctx.lineTo(tipX, groundY); ctx.stroke();
+    ctx.fillStyle = accent; ctx.beginPath(); ctx.arc(tipX, groundY, 4.5, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = ink; ctx.font = "600 11px \"JetBrains Mono\", monospace"; ctx.textAlign = "center";
+    ctx.fillText("x=" + s.x.toFixed(1), (poleX + personX) / 2, groundY + 17);
+    ctx.fillStyle = accent;
+    ctx.fillText("s=" + s.sLen.toFixed(1), (personX + tipX) / 2, groundY + 17);
+  }
+  function shadowReadout(s) {
+    return animChip("x", s.x.toFixed(2) + " ft") + animChip("s", s.sLen.toFixed(2) + " ft") +
+      animChip("dx/dt", "+" + s.dxdt.toFixed(1) + " ft/s (given)") + animChip("ds/dt", "+" + s.dsdt.toFixed(2) + " ft/s");
+  }
+
+  function drawBoatsScene(canvas, s) {
+    var r = resizeCanvasForDPR(canvas);
+    var ctx = r.ctx, w = r.w, h = r.h;
+    ctx.clearRect(0, 0, w, h);
+    var pad = 32;
+    var scale = Math.min((w - pad * 1.8) / s.xMax, (h - pad * 1.8) / s.yMax);
+    var originX = pad, originY = h - pad;
+    var ink = cssVar("--ink"), soft = cssVar("--ink-soft"), accent = cssVar("--accent"), line = cssVar("--paper-line-strong");
+    ctx.strokeStyle = line; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(originX, originY); ctx.lineTo(originX + s.xMax * scale + 16, originY); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(originX, originY); ctx.lineTo(originX, originY - s.yMax * scale - 16); ctx.stroke();
+    var ax = originX + s.x * scale, ay = originY;
+    var bx = originX, by = originY - s.y * scale;
+    ctx.strokeStyle = soft; ctx.setLineDash([5, 5]); ctx.lineWidth = 1.8;
+    ctx.beginPath(); ctx.moveTo(ax, ay); ctx.lineTo(bx, by); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = ink; ctx.beginPath(); ctx.arc(originX, originY, 5, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = accent;
+    ctx.beginPath(); ctx.arc(ax, ay, 6, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(bx, by, 6, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = ink; ctx.font = "600 11px \"JetBrains Mono\", monospace"; ctx.textAlign = "left";
+    ctx.fillText("A: x=" + s.x.toFixed(1), ax + 8, ay - 8);
+    ctx.fillText("B: y=" + s.y.toFixed(1), bx + 8, by - 8 > 14 ? by - 8 : 14);
+  }
+  function boatsReadout(s) {
+    return animChip("x", s.x.toFixed(2) + " mi") + animChip("y", s.y.toFixed(2) + " mi") +
+      animChip("z", s.z.toFixed(2) + " mi") + animChip("dz/dt", "+" + s.dzdt.toFixed(2) + " mph");
+  }
+
+  // ---- generic play/scrub widget ----
+  function mountAnimWidget(container, cfg) {
+    var wrap = document.createElement("div");
+    wrap.className = "anim-widget";
+    wrap.innerHTML =
+      "<div class=\"anim-canvas-wrap\"><canvas class=\"anim-canvas\"></canvas></div>" +
+      "<div class=\"anim-controls\">" +
+      "<button type=\"button\" class=\"icon-btn anim-play-btn\">" + SVG_PLAY + "Play</button>" +
+      "<input type=\"range\" class=\"anim-slider\" min=\"" + cfg.tMin + "\" max=\"" + cfg.tMax + "\" step=\"0.02\" value=\"" + cfg.tInit + "\">" +
+      "</div>" +
+      "<div class=\"anim-readout\"></div>";
+    container.appendChild(wrap);
+    var canvas = wrap.querySelector(".anim-canvas");
+    var slider = wrap.querySelector(".anim-slider");
+    var playBtn = wrap.querySelector(".anim-play-btn");
+    var readoutEl = wrap.querySelector(".anim-readout");
+    var playing = false, lastTs = null;
+
+    function renderAt(t) {
+      var state = cfg.computeState(t);
+      cfg.draw(canvas, state);
+      readoutEl.innerHTML = cfg.readout(state);
+    }
+    function stopPlaying() { playing = false; playBtn.innerHTML = SVG_PLAY + "Play"; }
+    function step(ts) {
+      if (!playing) return;
+      if (lastTs === null) lastTs = ts;
+      var dt = (ts - lastTs) / 1000; lastTs = ts;
+      var t = parseFloat(slider.value) + dt * ((cfg.tMax - cfg.tMin) / cfg.playDuration);
+      if (t >= cfg.tMax) { t = cfg.tMax; slider.value = t; renderAt(t); stopPlaying(); return; }
+      slider.value = t;
+      renderAt(t);
+      requestAnimationFrame(step);
+    }
+    playBtn.addEventListener("click", function () {
+      if (playing) { stopPlaying(); return; }
+      if (parseFloat(slider.value) >= cfg.tMax - 0.001) slider.value = cfg.tMin;
+      var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (reduceMotion) { slider.value = cfg.tMax; renderAt(cfg.tMax); return; }
+      playing = true; lastTs = null; playBtn.innerHTML = SVG_PAUSE + "Pause";
+      requestAnimationFrame(step);
+    });
+    slider.addEventListener("input", function () { stopPlaying(); renderAt(parseFloat(slider.value)); });
+    window.addEventListener("resize", function () { renderAt(parseFloat(slider.value)); });
+    renderAt(cfg.tInit);
+  }
+
+  function mountGreatestHitCard(cfg, container) {
+    var card = document.createElement("div");
+    card.className = "qcard hit-card";
+    card.innerHTML =
+      "<span class=\"qtag\">Live diagram &mdash; drag the slider or press Play</span>" +
+      "<div class=\"qprompt\">" + cfg.setupHtml + "</div>" +
+      "<div class=\"anim-host\"></div>" +
+      "<div class=\"qactions\" style=\"margin-top:14px\"><button type=\"button\" class=\"btn-secondary reveal-deriv-btn\">Show the full derivation</button></div>" +
+      "<div class=\"qsolution hidden deriv-block\">" + cfg.derivationHtml + "</div>";
+    container.appendChild(card);
+    mountAnimWidget(card.querySelector(".anim-host"), cfg.animCfg);
+    var btn = card.querySelector(".reveal-deriv-btn");
+    var block = card.querySelector(".deriv-block");
+    btn.addEventListener("click", function () {
+      block.classList.toggle("hidden");
+      btn.textContent = block.classList.contains("hidden") ? "Show the full derivation" : "Hide the full derivation";
+    });
+  }
+
+  function mountRecipeCard(container) {
+    var steps = [
+      "<strong>Draw a picture</strong> and label every quantity that changes with a variable (x, y, r, h &hellip;).",
+      "<strong>Write down what's given</strong> as rates (dx/dt, dr/dt &hellip;) and what's being asked for &mdash; also a rate.",
+      "<strong>Find an equation</strong> connecting the variables &mdash; usually geometry: the Pythagorean theorem, similar triangles, or an area/volume formula.",
+      "<strong>Differentiate both sides with respect to t</strong> &mdash; implicitly. Every variable that depends on time picks up a rate factor via the chain rule.",
+      "<strong>Plug in the numbers for that instant</strong> &mdash; but only <em>after</em> differentiating. Plugging in too early is the single most common related-rates mistake.",
+      "<strong>Solve for the unknown rate</strong>, then sanity-check the sign: positive means increasing, negative means decreasing."
+    ];
+    var card = document.createElement("div");
+    card.className = "qcard";
+    card.innerHTML = "<span class=\"qtag\">The related-rates recipe</span><div class=\"recipe\">" +
+      steps.map(function (t, i) { return "<div class=\"recipe-step\"><div class=\"recipe-num\">" + (i + 1) + "</div><div class=\"recipe-text\">" + t + "</div></div>"; }).join("") +
+      "</div>";
+    container.appendChild(card);
+  }
+
+  // ============================================================
+  // Question part definitions
+  // ============================================================
+  var PARTS = [];
+
+  // ---------- Stage 1: Implicit Differentiation Refresher ----------
+  var CIRCLE_KS = [9, 16, 25, 36, 49, 64, 81, 100, 169];
+  var POOL_IMPLICIT = [
+    {
+      reason: "Yes &mdash; this is correct. The y&sup2; term needs the chain rule (it becomes 2y&middot;(dy/dx)), and the constant's derivative is 0.",
+      build: function () {
+        var k = randChoice(CIRCLE_KS);
+        return { orig: "x&sup2; + y&sup2; = " + k, result: "2x + 2y&middot;(dy/dx) = 0", correctFullStep: "2x + 2y&middot;(dy/dx) = 0" };
+      }
+    },
+    {
+      reason: "No &mdash; the y&sup2; term needs the chain rule. Its derivative with respect to x is 2y&middot;(dy/dx), not just 2y.",
+      build: function () {
+        var k = randChoice(CIRCLE_KS);
+        return { orig: "x&sup2; + y&sup2; = " + k, result: "2x + 2y = 0", correctFullStep: "2x + 2y&middot;(dy/dx) = 0" };
+      }
+    },
+    {
+      reason: "No &mdash; the constant on the right differentiates to 0. It doesn't stay in the equation.",
+      build: function () {
+        var k = randChoice(CIRCLE_KS);
+        return { orig: "x&sup2; + y&sup2; = " + k, result: "2x + 2y&middot;(dy/dx) = " + k, correctFullStep: "2x + 2y&middot;(dy/dx) = 0" };
+      }
+    },
+    {
+      reason: "No &mdash; x&sup2; differentiates to 2x, not just x. Don't drop the coefficient from the power rule.",
+      build: function () {
+        var k = randChoice(CIRCLE_KS);
+        return { orig: "x&sup2; + y&sup2; = " + k, result: "x + 2y&middot;(dy/dx) = 0", correctFullStep: "2x + 2y&middot;(dy/dx) = 0" };
+      }
+    }
+  ];
+  PARTS.push({
+    id: "1-d1", group: "1", points: 2,
+    gen: function () { return pickDiagnostic(POOL_IMPLICIT); },
+    prompt: diagPromptHtml, inputsHtml: diagInputsHtml, afterRender: mcAfterRender,
+    readAnswer: mcReadAnswer, isCorrect: diagIsCorrect, solutionHtml: diagSolutionHtml
+  });
+  PARTS.push({
+    id: "1-d2", group: "1", points: 2,
+    gen: function () { return pickDiagnostic(POOL_IMPLICIT); },
+    prompt: diagPromptHtml, inputsHtml: diagInputsHtml, afterRender: mcAfterRender,
+    readAnswer: mcReadAnswer, isCorrect: diagIsCorrect, solutionHtml: diagSolutionHtml
+  });
+
+  function genImplicitCircle() {
+    var t = randTriple();
+    var flip = randBool();
+    var x0 = flip ? t[1] : t[0], y0 = flip ? t[0] : t[1];
+    var r2 = t[2] * t[2];
+    return { x0: x0, y0: y0, r2: r2, dydx: -x0 / y0 };
+  }
+  function promptImplicitCircle(s) {
+    return "<span class=\"math\">x&sup2; + y&sup2; = " + s.r2 + "</span>" +
+      "<div style=\"margin-top:8px\">Find dy/dx at the point (" + s.x0 + ", " + s.y0 + ").</div>";
+  }
+  function solutionImplicitCircle(s) {
+    var rows = [];
+    rows.push(wsRow("x&sup2; + y&sup2;", "=", String(s.r2)));
+    rows.push(wsNote("Differentiate both sides with respect to x. The y&sup2; term needs the chain rule &mdash; d/dx[y&sup2;] = 2y&middot;(dy/dx). The constant's derivative is 0."));
+    rows.push(wsRow("2x + 2y&middot;(dy/dx)", "=", "0"));
+    rows.push(wsRow("dy/dx", "=", "&minus;x/y", true));
+    return renderWorksheet(rows) + "<div class=\"step\" style=\"margin-top:8px\">At (" + s.x0 + ", " + s.y0 + "): dy/dx = &minus;" + s.x0 + "/" + s.y0 + " = " + round2(s.dydx) + "</div>";
+  }
+  PARTS.push({
+    id: "1-practice", group: "1", points: 3, isPracticeGoal: true,
+    gen: genImplicitCircle, prompt: promptImplicitCircle, inputsHtml: function () { return numInputHtml("e.g. -3/4"); },
+    readAnswer: readNumAnswer, isCorrect: function (ua, s) { return numEq(ua.v, s.dydx, 0.02); }, solutionHtml: solutionImplicitCircle
+  });
+
+  // ---------- Stage 2: Related Rates = Implicit Differentiation in Time ----------
+  var POOL_CUBE = [
+    {
+      reason: "Yes &mdash; that's the correct derivative with respect to t. The chain rule multiplies by (ds/dt).",
+      build: function () { return { orig: "V = s&sup3;", result: "dV/dt = 3s&sup2;&middot;(ds/dt)", correctFullStep: "dV/dt = 3s&sup2;&middot;(ds/dt)" }; }
+    },
+    {
+      reason: "No &mdash; s depends on t, so its derivative needs a rate factor. Don't drop the (ds/dt).",
+      build: function () { return { orig: "V = s&sup3;", result: "dV/dt = 3s&sup2;", correctFullStep: "dV/dt = 3s&sup2;&middot;(ds/dt)" }; }
+    },
+    {
+      reason: "No &mdash; the power rule reduces the exponent by 1 (s&sup3; &rarr; 3s&sup2;); it doesn't stay s&sup3;.",
+      build: function () { return { orig: "V = s&sup3;", result: "dV/dt = 3s&sup3;&middot;(ds/dt)", correctFullStep: "dV/dt = 3s&sup2;&middot;(ds/dt)" }; }
+    },
+    {
+      reason: "No &mdash; the coefficient from the power rule (the 3, from s&sup3;) got dropped.",
+      build: function () { return { orig: "V = s&sup3;", result: "dV/dt = s&sup2;&middot;(ds/dt)", correctFullStep: "dV/dt = 3s&sup2;&middot;(ds/dt)" }; }
+    }
+  ];
+  PARTS.push({
+    id: "2-d1", group: "2", points: 2,
+    gen: function () { return pickDiagnostic(POOL_CUBE); },
+    prompt: diagPromptHtml, inputsHtml: diagInputsHtml, afterRender: mcAfterRender,
+    readAnswer: mcReadAnswer, isCorrect: diagIsCorrect, solutionHtml: diagSolutionHtml
+  });
+
+  function genSphereRate() {
+    var r = randChoice([2, 3, 4, 5, 6]);
+    var drdt = randChoice([1, 2, 3]);
+    var coeff = 4 * r * r * drdt;
+    return { r: r, drdt: drdt, coeff: coeff };
+  }
+  function promptSphereRate(s) {
+    return "<span class=\"math\">V = (4/3)&pi;r&sup3;</span>" +
+      "<div style=\"margin-top:8px\">A sphere's radius is r = " + s.r + " cm and growing at dr/dt = " + s.drdt + " cm/s. Find dV/dt. Give your answer as a multiple of &pi; (just the coefficient).</div>";
+  }
+  function solutionSphereRate(s) {
+    var rows = [];
+    rows.push(wsRow("V", "=", "(4/3)&pi;r&sup3;"));
+    rows.push(wsNote("Differentiate both sides with respect to t &mdash; the chain rule attaches (dr/dt), and the exponent 3 comes down and cancels the 4/3, leaving a clean 4:"));
+    rows.push(wsRow("dV/dt", "=", "4&pi;r&sup2;&middot;(dr/dt)"));
+    rows.push(wsRow("dV/dt", "=", "4&pi;(" + s.r + ")&sup2;(" + s.drdt + ") = " + s.coeff + "&pi;", true));
+    return renderWorksheet(rows);
+  }
+  PARTS.push({
+    id: "2-practice", group: "2", points: 3, isPracticeGoal: true,
+    gen: genSphereRate, prompt: promptSphereRate, inputsHtml: function () { return numInputHtml("just the number"); },
+    readAnswer: readNumAnswer, isCorrect: function (ua, s) { return numEq(ua.v, s.coeff, 0.01); }, solutionHtml: solutionSphereRate
+  });
+
+  // ---------- Stage 3: Greatest Hit #1 - The Sliding Ladder ----------
+  var POOL_LADDER = [
+    {
+      reason: "Yes &mdash; both x and y depend on t, so both terms pick up a rate factor, and L&sup2; (constant) differentiates to 0.",
+      build: function () { var t = randTriple(); return { orig: "x&sup2; + y&sup2; = " + (t[2] * t[2]), result: "2x(dx/dt) + 2y(dy/dt) = 0", correctFullStep: "2x(dx/dt) + 2y(dy/dt) = 0" }; }
+    },
+    {
+      reason: "No &mdash; the y&sup2; term needs a rate factor too. Its derivative with respect to t is 2y(dy/dt), not just 2y.",
+      build: function () { var t = randTriple(); return { orig: "x&sup2; + y&sup2; = " + (t[2] * t[2]), result: "2x(dx/dt) + 2y = 0", correctFullStep: "2x(dx/dt) + 2y(dy/dt) = 0" }; }
+    },
+    {
+      reason: "No &mdash; the x&sup2; term needs a rate factor too. Its derivative with respect to t is 2x(dx/dt), not just 2x.",
+      build: function () { var t = randTriple(); return { orig: "x&sup2; + y&sup2; = " + (t[2] * t[2]), result: "2x + 2y(dy/dt) = 0", correctFullStep: "2x(dx/dt) + 2y(dy/dt) = 0" }; }
+    },
+    {
+      reason: "No &mdash; L&sup2; is a constant (the ladder's length never changes), so it differentiates to 0, not L&sup2; itself.",
+      build: function () { var t = randTriple(); var k = t[2] * t[2]; return { orig: "x&sup2; + y&sup2; = " + k, result: "2x(dx/dt) + 2y(dy/dt) = " + k, correctFullStep: "2x(dx/dt) + 2y(dy/dt) = 0" }; }
+    }
+  ];
+  PARTS.push({
+    id: "3-d1", group: "3", points: 2,
+    gen: function () { return pickDiagnostic(POOL_LADDER); },
+    prompt: diagPromptHtml, inputsHtml: diagInputsHtml, afterRender: mcAfterRender,
+    readAnswer: mcReadAnswer, isCorrect: diagIsCorrect, solutionHtml: diagSolutionHtml
+  });
+
+  function genLadderPractice() {
+    var t = randTriple();
+    var dxdt = randChoice([1, 2, 3, 4]);
+    var dydt = -(t[0] / t[1]) * dxdt;
+    return { x: t[0], y: t[1], L: t[2], dxdt: dxdt, dydt: dydt };
+  }
+  function promptLadderPractice(s) {
+    return "<div>A " + s.L + "-ft ladder leans against a wall. The base is being pulled away from the wall at " + s.dxdt + " ft/s.</div>" +
+      "<div style=\"margin-top:8px\">At the instant the base is " + s.x + " ft from the wall (so the top is " + s.y + " ft up the wall), how fast is the top sliding down? <em>(Answer should be negative, since it's decreasing.)</em></div>";
+  }
+  function solutionLadderPractice(s) {
+    var rows = [];
+    rows.push(wsRow("x&sup2; + y&sup2;", "=", "L&sup2;"));
+    rows.push(wsNote("Differentiate with respect to t, then plug in x=" + s.x + ", y=" + s.y + ", dx/dt=" + s.dxdt + ":"));
+    rows.push(wsRow("2x(dx/dt) + 2y(dy/dt)", "=", "0"));
+    rows.push(wsRow("2(" + s.x + ")(" + s.dxdt + ") + 2(" + s.y + ")(dy/dt)", "=", "0"));
+    rows.push(wsRow("dy/dt", "=", round2(s.dydt) + " ft/s", true));
+    return renderWorksheet(rows);
+  }
+  PARTS.push({
+    id: "3-practice", group: "3", points: 4, isPracticeGoal: true,
+    gen: genLadderPractice, prompt: promptLadderPractice, inputsHtml: function () { return numInputHtml("e.g. -0.83"); },
+    readAnswer: readNumAnswer, isCorrect: function (ua, s) { return numEq(ua.v, s.dydt, 0.02); }, solutionHtml: solutionLadderPractice
+  });
+
+  var ladderDerivRows = [
+    wsRow("x&sup2; + y&sup2;", "=", "L&sup2;"),
+    wsNote("Differentiate both sides with respect to t. Both x and y depend on t, so the chain rule attaches a rate to each; L is constant, so L&sup2; differentiates to 0:"),
+    wsRow("2x(dx/dt) + 2y(dy/dt)", "=", "0"),
+    wsNote("Plug in the snapshot: x=5 ft, y=12 ft (with L=13), dx/dt=2 ft/s, then solve for dy/dt:"),
+    wsRow("2(5)(2) + 2(12)(dy/dt)", "=", "0"),
+    wsRow("20 + 24(dy/dt)", "=", "0"),
+    wsRow("dy/dt", "=", "&minus;20/24 = &minus;5/6 &asymp; &minus;0.83 ft/s", true)
+  ].join("") + "<div class=\"step\" style=\"margin-top:8px\">The negative sign means the top is sliding <strong>down</strong> at 5/6 ft/s at that instant &mdash; and notice dy/dt keeps changing as x and y change, even though dx/dt stays a constant 2 ft/s the whole time.</div>";
+
+  // ---------- Stage 4: Greatest Hit #2 - The Shadow ----------
+  var POOL_SHADOW = [
+    {
+      reason: "Yes &mdash; H and h (the pole's and person's heights) are constants, so only s and x pick up rate terms.",
+      build: function () { return { orig: "(H &minus; h)&middot;s = h&middot;x", result: "(H &minus; h)&middot;(ds/dt) = h&middot;(dx/dt)", correctFullStep: "(H &minus; h)&middot;(ds/dt) = h&middot;(dx/dt)" }; }
+    },
+    {
+      reason: "No &mdash; s needs a rate factor. Its derivative with respect to t is (ds/dt), not just s.",
+      build: function () { return { orig: "(H &minus; h)&middot;s = h&middot;x", result: "(H &minus; h)&middot;s = h&middot;(dx/dt)", correctFullStep: "(H &minus; h)&middot;(ds/dt) = h&middot;(dx/dt)" }; }
+    },
+    {
+      reason: "No &mdash; x needs a rate factor. Its derivative with respect to t is (dx/dt), not just x.",
+      build: function () { return { orig: "(H &minus; h)&middot;s = h&middot;x", result: "(H &minus; h)&middot;(ds/dt) = h&middot;x", correctFullStep: "(H &minus; h)&middot;(ds/dt) = h&middot;(dx/dt)" }; }
+    },
+    {
+      reason: "No &mdash; H and h are the streetlight's and person's heights. They never change, so they stay put as plain constants &mdash; they don't get rate terms of their own.",
+      build: function () { return { orig: "(H &minus; h)&middot;s = h&middot;x", result: "(dH/dt &minus; dh/dt)&middot;s + (H &minus; h)&middot;(ds/dt) = h&middot;(dx/dt) + x&middot;(dh/dt)", correctFullStep: "(H &minus; h)&middot;(ds/dt) = h&middot;(dx/dt)" }; }
+    }
+  ];
+  PARTS.push({
+    id: "4-d1", group: "4", points: 2,
+    gen: function () { return pickDiagnostic(POOL_SHADOW); },
+    prompt: diagPromptHtml, inputsHtml: diagInputsHtml, afterRender: mcAfterRender,
+    readAnswer: mcReadAnswer, isCorrect: diagIsCorrect, solutionHtml: diagSolutionHtml
+  });
+
+  var SHADOW_SCENES = [
+    { H: 15, h: 5, dxdts: [2, 4, 6] },
+    { H: 15, h: 6, dxdts: [3, 6, 9] },
+    { H: 12, h: 8, dxdts: [1, 2, 3] },
+    { H: 18, h: 6, dxdts: [2, 4, 6] },
+    { H: 20, h: 8, dxdts: [3, 6, 9] },
+    { H: 9, h: 6, dxdts: [1, 2, 3] }
+  ];
+  function genShadowPractice() {
+    var sc = randChoice(SHADOW_SCENES);
+    var k = sc.h / (sc.H - sc.h);
+    var dxdt = randChoice(sc.dxdts);
+    var dsdt = k * dxdt;
+    var x0 = randInt(5, 15);
+    return { H: sc.H, h: sc.h, dxdt: dxdt, dsdt: dsdt, x0: x0 };
+  }
+  function promptShadowPractice(s) {
+    return "<div>A streetlight is " + s.H + " ft tall. A person " + s.h + " ft tall walks away from its base at a constant " + s.dxdt + " ft/s. Right now they're " + s.x0 + " ft from the pole.</div>" +
+      "<div style=\"margin-top:8px\">How fast is the length of their shadow changing (ds/dt)? <em>(Hint: does the answer actually depend on how far they've already walked?)</em></div>";
+  }
+  function solutionShadowPractice(s) {
+    var rows = [];
+    rows.push(wsRow("(H &minus; h)&middot;s", "=", "h&middot;x &nbsp; (similar triangles)"));
+    rows.push(wsNote("Differentiate with respect to t, then plug in H=" + s.H + ", h=" + s.h + ", dx/dt=" + s.dxdt + ":"));
+    rows.push(wsRow("(H &minus; h)&middot;(ds/dt)", "=", "h&middot;(dx/dt)"));
+    rows.push(wsRow("(" + (s.H - s.h) + ")&middot;(ds/dt)", "=", "(" + s.h + ")(" + s.dxdt + ")"));
+    rows.push(wsRow("ds/dt", "=", round2(s.dsdt) + " ft/s", true));
+    return renderWorksheet(rows) + "<div class=\"step\" style=\"margin-top:8px\">The distance x0=" + s.x0 + " ft never appears in the answer &mdash; the shadow grows at a <strong>constant</strong> rate no matter how far the person has already walked.</div>";
+  }
+  PARTS.push({
+    id: "4-practice", group: "4", points: 4, isPracticeGoal: true,
+    gen: genShadowPractice, prompt: promptShadowPractice, inputsHtml: function () { return numInputHtml("e.g. 2"); },
+    readAnswer: readNumAnswer, isCorrect: function (ua, s) { return numEq(ua.v, s.dsdt, 0.02); }, solutionHtml: solutionShadowPractice
+  });
+
+  var shadowDerivRows = [
+    wsRow("H&middot;s", "=", "h&middot;(x + s) &nbsp; (similar triangles)"),
+    wsRow("(H &minus; h)&middot;s", "=", "h&middot;x"),
+    wsNote("Differentiate both sides with respect to t. H and h (the pole's and person's heights) never change, so they stay put as constants:"),
+    wsRow("(H &minus; h)&middot;(ds/dt)", "=", "h&middot;(dx/dt)"),
+    wsNote("Plug in H=15 ft, h=6 ft, dx/dt=3 ft/s:"),
+    wsRow("9&middot;(ds/dt)", "=", "6&middot;(3)"),
+    wsRow("ds/dt", "=", "18/9 = 2 ft/s", true)
+  ].join("") + "<div class=\"step\" style=\"margin-top:8px\">x never showed up in the final answer &mdash; the shadow's <em>length</em> grows at a constant 2 ft/s no matter where the person is. (The shadow's <em>tip</em> &mdash; its distance from the pole, z = x + s &mdash; moves at a constant 5 ft/s, also independent of position.)</div>";
+
+  // ---------- Stage 5: Greatest Hit #3 - Two Boats From a Dock ----------
+  var POOL_BOATS = [
+    {
+      reason: "Yes &mdash; all three variables depend on t, so all three pick up a rate factor.",
+      build: function () { return { orig: "x&sup2; + y&sup2; = z&sup2;", result: "2x(dx/dt) + 2y(dy/dt) = 2z(dz/dt)", correctFullStep: "2x(dx/dt) + 2y(dy/dt) = 2z(dz/dt)" }; }
+    },
+    {
+      reason: "No &mdash; z needs a rate factor too. Its derivative with respect to t is 2z(dz/dt), not just 2z.",
+      build: function () { return { orig: "x&sup2; + y&sup2; = z&sup2;", result: "2x(dx/dt) + 2y(dy/dt) = 2z", correctFullStep: "2x(dx/dt) + 2y(dy/dt) = 2z(dz/dt)" }; }
+    },
+    {
+      reason: "No &mdash; y needs a rate factor too. Its derivative with respect to t is 2y(dy/dt), not just 2y.",
+      build: function () { return { orig: "x&sup2; + y&sup2; = z&sup2;", result: "2x(dx/dt) + 2y = 2z(dz/dt)", correctFullStep: "2x(dx/dt) + 2y(dy/dt) = 2z(dz/dt)" }; }
+    },
+    {
+      reason: "No &mdash; solving for dz/dt means isolating it algebraically, not leaving it multiplied by 2z on the wrong side.",
+      build: function () { return { orig: "2x(dx/dt) + 2y(dy/dt) = 2z(dz/dt)", result: "dz/dt = 2z &minus; x(dx/dt) &minus; y(dy/dt)", correctFullStep: "dz/dt = [x(dx/dt) + y(dy/dt)] / z" }; }
+    }
+  ];
+  PARTS.push({
+    id: "5-d1", group: "5", points: 2,
+    gen: function () { return pickDiagnostic(POOL_BOATS); },
+    prompt: diagPromptHtml, inputsHtml: diagInputsHtml, afterRender: mcAfterRender,
+    readAnswer: mcReadAnswer, isCorrect: diagIsCorrect, solutionHtml: diagSolutionHtml
+  });
+
+  function genBoatsPractice() {
+    var t = randTriple();
+    var scale = randChoice([1, 2]);
+    var x = t[0] * scale, y = t[1] * scale, z = t[2] * scale;
+    var dxdt = randChoice([2, 3, 4, 5]);
+    var dydt = randChoice([2, 3, 4, 5]);
+    var dzdt = (x * dxdt + y * dydt) / z;
+    return { x: x, y: y, z: z, dxdt: dxdt, dydt: dydt, dzdt: dzdt };
+  }
+  function promptBoatsPractice(s) {
+    return "<div>Two boats leave a dock at the same time &mdash; one heading due east at " + s.dxdt + " mph, the other due north at " + s.dydt + " mph.</div>" +
+      "<div style=\"margin-top:8px\">At the moment the east boat is " + s.x + " mi out and the north boat is " + s.y + " mi out, how fast is the distance between them changing (dz/dt)? Round to 2 decimal places.</div>";
+  }
+  function solutionBoatsPractice(s) {
+    var rows = [];
+    rows.push(wsRow("x&sup2; + y&sup2;", "=", "z&sup2;"));
+    rows.push(wsNote("Differentiate with respect to t and solve for dz/dt:"));
+    rows.push(wsRow("dz/dt", "=", "[x(dx/dt) + y(dy/dt)] / z"));
+    rows.push(wsRow("dz/dt", "=", "[(" + s.x + ")(" + s.dxdt + ") + (" + s.y + ")(" + s.dydt + ")] / " + s.z));
+    rows.push(wsRow("dz/dt", "=", round2(s.dzdt) + " mph", true));
+    return renderWorksheet(rows);
+  }
+  PARTS.push({
+    id: "5-practice", group: "5", points: 4, isPracticeGoal: true,
+    gen: genBoatsPractice, prompt: promptBoatsPractice, inputsHtml: function () { return numInputHtml("e.g. 8.60"); },
+    readAnswer: readNumAnswer, isCorrect: function (ua, s) { return numEq(ua.v, s.dzdt, 0.02); }, solutionHtml: solutionBoatsPractice
+  });
+
+  var boatsDerivRows = [
+    wsRow("x&sup2; + y&sup2;", "=", "z&sup2;"),
+    wsNote("Differentiate both sides with respect to t &mdash; all three variables depend on t:"),
+    wsRow("2x(dx/dt) + 2y(dy/dt)", "=", "2z(dz/dt)"),
+    wsRow("dz/dt", "=", "[x(dx/dt) + y(dy/dt)] / z"),
+    wsNote("Both boats left the dock together at 12 mph east and 5 mph north, so at every moment x=12t, y=5t, and z=&radic;(12&sup2;+5&sup2;)&middot;t = 13t (a 5-12-13 triangle at every instant):"),
+    wsRow("dz/dt", "=", "(12t&middot;12 + 5t&middot;5)/(13t) = 169t/13t = 13 mph", true)
+  ].join("") + "<div class=\"step\" style=\"margin-top:8px\">Because both speeds are constant <em>and</em> the boats started at the same point, the gap between them also grows at a constant rate the whole time. That won't happen in general &mdash; try the practice problem below, where the two distances aren't proportional.</div>";
+
+  // ---------- Stage 6: Other Related-Rates Types ----------
+  var CONE_SCENES = [{ R: 3, H: 9 }, { R: 4, H: 8 }, { R: 2, H: 6 }, { R: 5, H: 10 }];
+  function genConePractice() {
+    var sc = randChoice(CONE_SCENES);
+    var ratio = sc.R / sc.H;
+    var hOpts = [sc.H / 3, sc.H * 2 / 3, sc.H].filter(function (hh) { return Math.abs(ratio * hh - Math.round(ratio * hh)) < 1e-9; });
+    var h = randChoice(hOpts.length ? hOpts : [sc.H]);
+    var r = Math.round(ratio * h);
+    var dhdt = randChoice([1, 2, 3]);
+    var K = r * r * dhdt;
+    return { R: sc.R, H: sc.H, h: h, r: r, K: K, dhdt: dhdt };
+  }
+  function promptConePractice(s) {
+    return "<div>Water pours into a conical tank (point down) with top radius " + s.R + " ft and height " + s.H + " ft, at a rate of " + s.K + "&pi; ft&sup3;/min.</div>" +
+      "<div style=\"margin-top:8px\">When the water is " + s.h + " ft deep, how fast is the depth rising (dh/dt)? <em>(Hint: use similar triangles to relate the water's surface radius to its depth.)</em></div>";
+  }
+  function solutionConePractice(s) {
+    var rows = [];
+    rows.push(wsRow("r/h", "=", "R/H &nbsp; (similar triangles) &rarr; r = (R/H)h"));
+    rows.push(wsNote("Substitute r = (R/H)h into V = (1/3)&pi;r&sup2;h so V is in terms of h alone, then differentiate with respect to t:"));
+    rows.push(wsRow("dV/dt", "=", "&pi;(R/H)&sup2;h&sup2;&middot;(dh/dt)"));
+    rows.push(wsNote("At h=" + s.h + " ft, the surface radius is r=(R/H)h=" + s.r + " ft, and dV/dt=" + s.K + "&pi; ft&sup3;/min:"));
+    rows.push(wsRow(s.K + "&pi;", "=", "&pi;(" + s.r + ")&sup2;&middot;(dh/dt)"));
+    rows.push(wsRow("dh/dt", "=", s.K + "/" + (s.r * s.r) + " = " + s.dhdt + " ft/min", true));
+    return renderWorksheet(rows);
+  }
+  PARTS.push({
+    id: "6-cone", group: "6", points: 4, isPracticeGoal: true,
+    gen: genConePractice, prompt: promptConePractice, inputsHtml: function () { return numInputHtml("e.g. 2"); },
+    readAnswer: readNumAnswer, isCorrect: function (ua, s) { return numEq(ua.v, s.dhdt, 0.02); }, solutionHtml: solutionConePractice
+  });
+
+  function genRipplePractice() {
+    var r = randChoice([2, 3, 4, 5, 6, 7]);
+    var drdt = randChoice([1, 2, 3]);
+    var coeff = 2 * r * drdt;
+    return { r: r, drdt: drdt, coeff: coeff };
+  }
+  function promptRipplePractice(s) {
+    return "<span class=\"math\">A = &pi;r&sup2;</span>" +
+      "<div style=\"margin-top:8px\">A circular ripple spreads out on a pond so its radius grows at " + s.drdt + " cm/s. Find dA/dt at the instant r = " + s.r + " cm. Give your answer as a multiple of &pi;.</div>";
+  }
+  function solutionRipplePractice(s) {
+    var rows = [];
+    rows.push(wsRow("A", "=", "&pi;r&sup2;"));
+    rows.push(wsNote("Differentiate both sides with respect to t:"));
+    rows.push(wsRow("dA/dt", "=", "2&pi;r&middot;(dr/dt)"));
+    rows.push(wsRow("dA/dt", "=", "2&pi;(" + s.r + ")(" + s.drdt + ") = " + s.coeff + "&pi;", true));
+    return renderWorksheet(rows);
+  }
+  PARTS.push({
+    id: "6-ripple", group: "6", points: 3, isPracticeGoal: true,
+    gen: genRipplePractice, prompt: promptRipplePractice, inputsHtml: function () { return numInputHtml("just the number"); },
+    readAnswer: readNumAnswer, isCorrect: function (ua, s) { return numEq(ua.v, s.coeff, 0.01); }, solutionHtml: solutionRipplePractice
+  });
+
+  var BALLOON_SCENES = [{ D: 60, h: 25, dhdt: 8 }, { D: 50, h: 20, dhdt: 5 }, { D: 40, h: 30, dhdt: 10 }, { D: 100, h: 40, dhdt: 12 }];
+  function genBalloonPractice() {
+    var sc = randChoice(BALLOON_SCENES);
+    var hyp = Math.sqrt(sc.D * sc.D + sc.h * sc.h);
+    var cos2 = (sc.D * sc.D) / (hyp * hyp);
+    var dthetadt = sc.dhdt * cos2 / sc.D;
+    return { D: sc.D, h: sc.h, dhdt: sc.dhdt, hyp: hyp, cos2: cos2, dthetadt: dthetadt };
+  }
+  function promptBalloonPractice(s) {
+    return "<div>A balloon rises at " + s.dhdt + " ft/s from a point on the ground " + s.D + " ft from an observer.</div>" +
+      "<div style=\"margin-top:8px\">Find the rate of change of the angle of elevation, d&theta;/dt, at the instant the balloon is " + s.h + " ft up. Round to 3 decimal places (radians/second).</div>";
+  }
+  function solutionBalloonPractice(s) {
+    var rows = [];
+    rows.push(wsRow("tan&theta;", "=", "h/D &nbsp; (D is fixed)"));
+    rows.push(wsNote("Differentiate both sides with respect to t (chain rule on the left: d/dt[tan&theta;] = sec&sup2;&theta;&middot;(d&theta;/dt)):"));
+    rows.push(wsRow("sec&sup2;&theta;&middot;(d&theta;/dt)", "=", "(1/D)&middot;(dh/dt)"));
+    rows.push(wsRow("d&theta;/dt", "=", "(dh/dt)&middot;cos&sup2;&theta; / D"));
+    rows.push(wsNote("At D=" + s.D + " ft, h=" + s.h + " ft: hypotenuse = &radic;(" + s.D + "&sup2;+" + s.h + "&sup2;) = " + round2(s.hyp) + " ft, so cos&sup2;&theta; = (D/hyp)&sup2; = " + round4(s.cos2) + ":"));
+    rows.push(wsRow("d&theta;/dt", "=", s.dhdt + "(" + round4(s.cos2) + ")/" + s.D + " &asymp; " + round4(s.dthetadt) + " rad/s", true));
+    return renderWorksheet(rows);
+  }
+  PARTS.push({
+    id: "6-balloon", group: "6", points: 4, isPracticeGoal: true,
+    gen: genBalloonPractice, prompt: promptBalloonPractice, inputsHtml: function () { return numInputHtml("e.g. 0.114"); },
+    readAnswer: readNumAnswer, isCorrect: function (ua, s) { return numEq(ua.v, s.dthetadt, 0.001); }, solutionHtml: solutionBalloonPractice
+  });
+
+  // ============================================================
+  // Stage metadata
+  // ============================================================
+  var STAGES = [
+    { key: "1", label: "1. Implicit Diff" },
+    { key: "2", label: "2. The Bridge" },
+    { key: "3", label: "3. Ladder" },
+    { key: "4", label: "4. Shadow" },
+    { key: "5", label: "5. Boats" },
+    { key: "6", label: "6. Other Types" }
+  ];
+
+  var GROUP_META = {
+    "1": {
+      num: "Stage 1", title: "Implicit Differentiation Refresher",
+      desc: "When y isn't isolated (like x&sup2; + y&sup2; = 25), you can still find dy/dx: differentiate <strong>both sides</strong> with respect to x, treating y as a hidden function of x. Every time you differentiate a y-term, the chain rule tacks on a (dy/dx) &mdash; that little factor is the whole trick, and forgetting it is the single most common mistake.",
+      videos: [
+        { url: "https://www.khanacademy.org/math/differential-calculus/dc-chain/dc-implicit-diff/v/implicit-differentiation-1", label: "Implicit differentiation: example walkthrough" },
+        { url: "https://www.khanacademy.org/math/differential-calculus/dc-chain/dc-implicit-diff-advanced/v/implicit-derivative-of-e-xy-2-x-y", label: "Implicit differentiation: advanced example" }
+      ]
+    },
+    "2": {
+      num: "Stage 2", title: "Related Rates = Implicit Differentiation in Time",
+      desc: "Here's the big idea of this whole topic: a related-rates problem hands you an equation connecting two or more quantities, and every one of those quantities is secretly a function of time. Finding how fast they're changing is <strong>exactly implicit differentiation</strong> &mdash; just with respect to t instead of x. The chain rule now applies to <em>every</em> variable, not just y: d/dt[x&#8319;] = n&middot;x&#8319;&#8315;&sup1;&middot;(dx/dt). Below is the step-by-step recipe every related-rates problem follows.",
+      videos: [{ url: "https://www.khanacademy.org/math/differential-calculus/dc-context-app/dc-related-rates-intro/v/rates-of-change-between-radius-and-area-of-circle", label: "Introducing related rates" }]
+    },
+    "3": {
+      num: "Stage 3 &middot; Greatest Hit #1", title: "The Sliding Ladder",
+      desc: "A ladder of length L leans against a wall: x&sup2; + y&sup2; = L&sup2;. Pull the base away from the wall at a steady rate, and the top slides down &mdash; but <strong>not</strong> at a steady rate. This is the single most-tested related-rates setup there is.",
+      videos: [
+        { url: "https://www.khanacademy.org/math/ap-calculus-ab/ab-diff-contextual-applications-new/ab-4-5/v/falling-ladder-related-rates", label: "Related rates: falling ladder" },
+        { url: "https://www.khanacademy.org/math/ap-calculus-ab/ab-diff-contextual-applications-new/ab-4-4/v/related-rates-example-with-trigonometry", label: "Analyzing related rates: an equation with trig" }
+      ]
+    },
+    "4": {
+      num: "Stage 4 &middot; Greatest Hit #2", title: "The Shadow Problem",
+      desc: "A light source of fixed height shines on someone walking away from it, and similar triangles connect their distance from the light to the length of their shadow. Same recipe, new geometry.",
+      videos: [{ url: "https://www.khanacademy.org/math/ap-calculus-ab/ab-diff-contextual-applications-new/ab-4-5/v/speed-of-shadow-of-diving-bird", label: "Related rates: shadow (similar triangles)" }]
+    },
+    "5": {
+      num: "Stage 5 &middot; Greatest Hit #3", title: "Two Boats From a Dock",
+      desc: "Two objects move away from a common point along perpendicular paths &mdash; the Pythagorean theorem connects the two legs to the distance between them: x&sup2; + y&sup2; = z&sup2;. (The same setup shows up as two cars near a right-angle intersection, or two hikers on perpendicular trails.)",
+      videos: [{ url: "https://www.khanacademy.org/math/calculus-1/cs1-applications-of-derivatives/cs1-solving-related-rates-problems/v/rate-of-change-of-distance-between-approaching-cars", label: "Related rates: distance between two cars" }]
+    },
+    "6": {
+      num: "Stage 6", title: "Other Related-Rates Types",
+      desc: "The same recipe drives every related-rates problem, no matter the picture. Here are three more classics &mdash; a filling cone, a spreading ripple, and an angle of elevation &mdash; each worked all the way through.",
+      videos: [
+        { url: "https://www.khanacademy.org/math/ap-calculus-ab/ab-applications-derivatives/ab-related-rates/v/related-rates-of-water-pouring-into-cone", label: "Related rates: water pouring into a cone" },
+        { url: "https://www.khanacademy.org/math/ap-calculus-ab/ab-applications-derivatives/ab-related-rates/v/rate-of-change-of-balloon-height", label: "Related rates: angle of elevation to a balloon" }
+      ]
+    }
+  };
+
+  // ============================================================
+  // Stage progress nav
+  // ============================================================
+  function buildStageNav() {
+    var nav = document.getElementById("stageNav");
+    nav.innerHTML = STAGES.map(function (s) {
+      return "<span class=\"stage-pill\" id=\"pill-" + s.key + "\"><span class=\"dot\"></span>" + s.label + "</span>";
+    }).join("");
+  }
+  function markStageDone(key) {
+    var pill = document.getElementById("pill-" + key);
+    if (pill) pill.classList.add("done");
+  }
+
+  function groupHeadHtml(meta) {
+    var videoHtml = meta.videos.length ? "<div class=\"video-row\">" + meta.videos.map(function (v) {
+      return "<a class=\"icon-btn video-btn\" href=\"" + v.url + "\" target=\"_blank\" rel=\"noopener\">" + SVG_PLAY + "Watch: " + v.label + "</a>";
+    }).join("") + "</div>" : "";
+    return "<div class=\"gnum\">" + meta.num + "</div><div class=\"gtitle\">" + meta.title + "</div><div class=\"gdesc\">" + meta.desc + "</div>" + videoHtml;
+  }
+
+  // ============================================================
+  // Engine: practice cards
+  // ============================================================
+  function mountPracticeCard(part, container) {
+    var card = document.createElement("div");
+    card.className = "qcard";
+    card.setAttribute("data-id", part.id);
+    card.innerHTML =
+      "<div class=\"qcard-head\"><div class=\"qtitle\"></div>" +
+      "<button class=\"icon-btn new-version-btn\" type=\"button\">" + SVG_REFRESH + "New version</button></div>" +
+      "<div class=\"qprompt\"></div>" +
+      "<div class=\"qinputs\"></div>" +
+      "<div class=\"qactions\"><button class=\"btn-primary check-btn\" type=\"button\">Check Answer</button><button class=\"btn-secondary solution-btn\" type=\"button\">Show Solution</button></div>" +
+      "<div class=\"qfeedback hidden\"></div>" +
+      "<div class=\"qsolution hidden\"></div>";
+    container.appendChild(card);
+
+    var promptEl = card.querySelector(".qprompt"), inputsEl = card.querySelector(".qinputs"),
+      feedbackEl = card.querySelector(".qfeedback"), solutionEl = card.querySelector(".qsolution");
+    var state;
+
+    function render() {
+      state = part.gen();
+      promptEl.innerHTML = part.prompt(state);
+      inputsEl.innerHTML = part.inputsHtml(state);
+      feedbackEl.classList.add("hidden"); feedbackEl.innerHTML = "";
+      solutionEl.classList.add("hidden"); solutionEl.innerHTML = "";
+      if (part.afterRender) part.afterRender(card, state);
+    }
+    card.querySelector(".new-version-btn").addEventListener("click", render);
+    card.querySelector(".check-btn").addEventListener("click", function () {
+      var ua = part.readAnswer(card);
+      var correct = part.isCorrect(ua, state);
+      feedbackEl.classList.remove("hidden");
+      if (correct) {
+        feedbackEl.className = "qfeedback good";
+        feedbackEl.innerHTML = SVG_CHECK + " Correct!";
+        if (part.isPracticeGoal) markStageDone(part.group);
+      } else {
+        feedbackEl.className = "qfeedback bad";
+        feedbackEl.innerHTML = SVG_X + " Not quite &mdash; check the solution below.";
+      }
+    });
+    card.querySelector(".solution-btn").addEventListener("click", function () {
+      solutionEl.innerHTML = part.solutionHtml(state);
+      solutionEl.classList.remove("hidden");
+    });
+    render();
+  }
+
+  // ============================================================
+  // Build the page
+  // ============================================================
+  var GREATEST_HITS = {
+    "3": {
+      setupHtml: "A 13-ft ladder leans against a vertical wall. Someone pulls the base away from the wall at a constant 2 ft/s. Watch how the top's speed keeps changing, even though the base's speed never does.",
+      derivationHtml: ladderDerivRows,
+      animCfg: {
+        tMin: 0, tMax: 5.6, tInit: 2, playDuration: 7,
+        computeState: function (t) {
+          var L = 13, dxdt = 2, x = 1 + dxdt * t, y = Math.sqrt(L * L - x * x), dydt = -(x / y) * dxdt;
+          return { x: x, y: y, L: L, dxdt: dxdt, dydt: dydt };
+        },
+        draw: drawLadderScene, readout: ladderReadout
+      }
+    },
+    "4": {
+      setupHtml: "A 15-ft streetlight shines on a 6-ft-tall person walking away from it at a constant 3 ft/s. Their shadow stretches out longer and longer. Play the animation and watch the tip of the shadow race ahead of them.",
+      derivationHtml: shadowDerivRows,
+      animCfg: {
+        tMin: 0, tMax: 3, tInit: 1.5, playDuration: 6,
+        computeState: function (t) {
+          var H = 15, h = 6, dxdt = 3, x = 1 + dxdt * t;
+          var k = h / (H - h);
+          var sLen = k * x, z = x + sLen;
+          return { H: H, h: h, x: x, sLen: sLen, z: z, zMax: 17, dxdt: dxdt, dsdt: k * dxdt, dzdt: (H / (H - h)) * dxdt };
+        },
+        draw: drawShadowScene, readout: shadowReadout
+      }
+    },
+    "5": {
+      setupHtml: "Two boats leave the same dock at the same moment &mdash; one heading due east at 12 mph, the other due north at 5 mph. Watch how fast the gap between them opens up.",
+      derivationHtml: boatsDerivRows,
+      animCfg: {
+        tMin: 0, tMax: 1, tInit: 0.5, playDuration: 6,
+        computeState: function (t) {
+          var dxdt = 12, dydt = 5, x = dxdt * t, y = dydt * t, z = Math.sqrt(x * x + y * y);
+          var dzdt = z > 0.0001 ? (x * dxdt + y * dydt) / z : 13;
+          return { x: x, y: y, z: z, xMax: 12, yMax: 5, dxdt: dxdt, dydt: dydt, dzdt: dzdt };
+        },
+        draw: drawBoatsScene, readout: boatsReadout
+      }
+    }
+  };
+
+  function buildAll() {
+    buildStageNav();
+    var root = document.getElementById("groups");
+    STAGES.forEach(function (st) {
+      var meta = GROUP_META[st.key];
+      var headDiv = document.createElement("div");
+      headDiv.className = "group-head";
+      headDiv.innerHTML = groupHeadHtml(meta);
+      root.appendChild(headDiv);
+      var cardsHost = document.createElement("div");
+      root.appendChild(cardsHost);
+      if (st.key === "2") mountRecipeCard(cardsHost);
+      if (GREATEST_HITS[st.key]) mountGreatestHitCard(GREATEST_HITS[st.key], cardsHost);
+      PARTS.filter(function (p) { return p.group === st.key; }).forEach(function (part) {
+        mountPracticeCard(part, cardsHost);
+      });
+    });
+  }
+
+  buildAll();
+})();
+</script>
+</body></html>
