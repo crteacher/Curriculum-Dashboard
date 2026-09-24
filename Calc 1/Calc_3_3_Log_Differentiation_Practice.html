@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Equations from Graphs &mdash; Practice</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.css">
+<title>Logarithmic Differentiation &mdash; Practice</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
 <style>
   *{box-sizing:border-box;margin:0;padding:0}
   body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.7}
@@ -14,17 +14,17 @@
   .section{margin-bottom:2.5rem}
   .section-title{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;
     color:#777;font-family:sans-serif;margin-bottom:1rem;border-bottom:1px solid #ddd;padding-bottom:6px}
-  .concept{background:#d9e8f5;border-left:4px solid #1e3a5c;border-radius:0 8px 8px 0;
+  .concept{background:#d9e8f5;border-left:4px solid #185fa5;border-radius:0 8px 8px 0;
     padding:.85rem 1.1rem;font-size:15px;margin-bottom:1rem}
   .concept-label{font-family:sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;
-    letter-spacing:.07em;color:#1e3a5c;display:block;margin-bottom:.35rem}
+    letter-spacing:.07em;color:#185fa5;display:block;margin-bottom:.35rem}
   .score-bar{display:flex;align-items:center;gap:12px;margin-bottom:1.25rem;
     font-family:sans-serif;font-size:14px;flex-wrap:wrap}
   .score-display{font-weight:700;font-size:18px;min-width:60px}
   .score-label{color:#777;font-size:13px}
   .score-note{font-size:12px;color:#999;font-style:italic}
   .progress{flex:1;min-width:80px;height:6px;background:#e5e1d8;border-radius:3px;overflow:hidden}
-  .progress-fill{height:100%;background:#1e3a5c;border-radius:3px;transition:width .4s}
+  .progress-fill{height:100%;background:#185fa5;border-radius:3px;transition:width .4s}
   .reset-btn{font-size:12px;background:none;border:1px solid #bbb;border-radius:5px;
     padding:4px 10px;cursor:pointer;color:#666;font-family:sans-serif;white-space:nowrap}
   .reset-btn:hover{background:#eee}
@@ -39,7 +39,7 @@
   .ans-input{font-family:'Courier New',monospace;font-size:14px;border:1px solid #ccc;
     border-radius:6px;padding:7px 10px;flex:1;min-width:120px;background:#fafaf8;
     color:#1a1a1a;outline:none}
-  .ans-input:focus{border-color:#1e3a5c;background:#fff}
+  .ans-input:focus{border-color:#185fa5;background:#fff}
   .ans-input.ok{border-color:#3a7a3a;background:#f0faf0}
   .ans-input.bad{border-color:#b03030;background:#fdf0f0}
   .check-btn{font-family:sans-serif;font-size:13px;background:#1a1a1a;color:#fff;
@@ -56,34 +56,35 @@
   .reveal-link:hover{color:#555}
   .revealed-answer{display:none;margin-top:8px;font-family:sans-serif;font-size:13px;
     color:#444;background:#f5f3ef;border-radius:6px;padding:8px 11px;line-height:1.8;overflow-x:auto}
+  .interval-hint{font-family:sans-serif;font-size:11px;color:#185fa5;margin-top:4px;
+    padding:2px 7px;background:#eef3f9;border-radius:4px;display:inline-block}
   code{font-family:'Courier New',monospace;background:#f0ede7;padding:1px 5px;border-radius:3px;font-size:12px}
-
-
-.hint{display:none!important}
 </style>
 </head>
 <body>
 <div class="container">
-  <h1>Equations from Graphs</h1>
-  <p class="subtitle">College Algebra &nbsp;&middot;&nbsp; &sect;2.3 &nbsp;&middot;&nbsp; Instructor: Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026</p>
+  <h1>Logarithmic Differentiation</h1>
+  <p class="subtitle">Calculus I &nbsp;&middot;&nbsp; &sect;3.3 &nbsp;&middot;&nbsp; Instructor: Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026</p>
 
   <div class="section">
     <div class="section-title">Core Ideas</div>
 
     <div class="concept">
-      <span class="concept-label">Reading the y-intercept</span>
-      If the line visibly crosses the y-axis at an integer, read $b$ directly.
-      Then pick another point to compute $m = \text{rise}/\text{run}$.
+      <span class="concept-label">General Log Derivative</span>
+      $$\frac{d}{dx}[\log_b x] = \frac{1}{x \ln b}$$
+      Derived from change of base: $\log_b x = \dfrac{\ln x}{\ln b}$, so
+      $\dfrac{d}{dx}[\log_b x] = \dfrac{1}{x \ln b}$.
+      With chain rule: $\dfrac{d}{dx}[\log_b u] = \dfrac{u'}{u \ln b}$.
+      When $b = e$: reduces to $\dfrac{1}{x}$ since $\ln e = 1$.
     </div>
     <div class="concept">
-      <span class="concept-label">Two-Point Method</span>
-      Compute $m$ from two points, then use point-slope:
-      $y - y_1 = m(x-x_1)$ and simplify to $y = mx + b$.
-    </div>
-    <div class="concept">
-      <span class="concept-label">Special Lines</span>
-      Horizontal through $(a,k)$: $y = k$. &nbsp;
-      Vertical through $(h,b)$: $x = h$.
+      <span class="concept-label">Logarithmic Differentiation</span>
+      For $y = f(x)$ with a <strong>variable exponent</strong> or messy product/quotient:
+      (1) take $\ln$ of both sides, (2) use log rules to expand,
+      (3) differentiate — left side gives $\dfrac{y'}{y}$,
+      (4) solve $y' = y \cdot[\cdots]$, (5) substitute back.
+      Example: $y = x^x \Rightarrow \ln y = x\ln x \Rightarrow
+      \dfrac{y'}{y} = \ln x + 1 \Rightarrow y' = x^x(\ln x + 1)$.
     </div>
 
   </div>
@@ -91,7 +92,7 @@
   <div class="section">
     <div class="section-title">Practice Problems</div>
     <p style="font-family:sans-serif;font-size:13px;color:#666;margin-bottom:1rem;">
-      Every problem is read from its graph. Slope: enter an integer. Intercepts: an ordered pair, e.g. <code>(0,3)</code>. Full equations: enter in the form <code>y=2x+3</code>. Horizontal/vertical lines: enter <code>y=4</code> or <code>x=-2</code>. Point-on-line questions: <code>yes</code> or <code>no</code>.
+      Groups 1&ndash;4 (symbolic): type the formula, e.g. <code>1/(x*ln(3))</code>, <code>2x/((x^2+1)*ln(5))</code>. Groups 5&ndash;8 (log diff): type an integer.
       Press <strong>Check</strong> or hit Enter.
     </p>
     <div class="score-bar">
@@ -137,185 +138,113 @@ function addT(n, v) {
 
 // ── Problem generators (section-specific, injected below) ─────────────────────
 
-// ── SVG graph helper ─────────────────────────────────────────────────────────
-function gridAxesSVG() {
-  const W = 220, H = 220, cx = 110, cy = 110, sc = 20;
-  let g = '';
-  // grid lines
-  for (let i = -5; i <= 5; i++) {
-    const px = cx + i*sc, py = cy - i*sc;
-    g += `<line x1="${px}" y1="5" x2="${px}" y2="${H-5}" stroke="#e0ddd8" stroke-width="1"/>`;
-    g += `<line x1="5" y1="${py}" x2="${W-5}" y2="${py}" stroke="#e0ddd8" stroke-width="1"/>`;
-  }
-  // axes
-  g += `<line x1="5" y1="${cy}" x2="${W-10}" y2="${cy}" stroke="#555" stroke-width="1.5"/>`;
-  g += `<line x1="${cx}" y1="10" x2="${cx}" y2="${H-5}" stroke="#555" stroke-width="1.5"/>`;
-  // arrowheads
-  g += `<polygon points="${W-5},${cy} ${W-12},${cy-4} ${W-12},${cy+4}" fill="#555"/>`;
-  g += `<polygon points="${cx},5 ${cx-4},12 ${cx+4},12" fill="#555"/>`;
-  // tick marks and labels
-  for (let i = -4; i <= 4; i++) {
-    if (i === 0) continue;
-    const px = cx + i*sc, py = cy - i*sc;
-    g += `<line x1="${px}" y1="${cy-4}" x2="${px}" y2="${cy+4}" stroke="#555" stroke-width="1"/>`;
-    g += `<text x="${px}" y="${cy+16}" text-anchor="middle" font-size="10" fill="#777" font-family="sans-serif">${i}</text>`;
-    g += `<line x1="${cx-4}" y1="${py}" x2="${cx+4}" y2="${py}" stroke="#555" stroke-width="1"/>`;
-    g += `<text x="${cx-8}" y="${py+4}" text-anchor="end" font-size="10" fill="#777" font-family="sans-serif">${i}</text>`;
-  }
-  g += `<text x="${cx-7}" y="${cy+15}" text-anchor="end" font-size="10" fill="#777" font-family="sans-serif">0</text>`;
-  return g;
-}
+// ── Group A: Direct log_b derivatives ────────────────────────────────────────
 
-function svgWrap(inner, question) {
-  const qHtml = `<p style="font-family:sans-serif;font-size:13px;text-align:center;margin-top:6px;color:#1a1a1a">${question}</p>`;
-  return `<svg width="220" height="220" viewBox="0 0 220 220" style="display:block;margin:0 auto;background:#fafaf8;border-radius:4px">${inner}</svg>${qHtml}`;
-}
-
-function markPoint(px, py, label) {
-  const cx = 110, cy = 110, sc = 20;
-  const sx = cx + px*sc, sy = cy - py*sc;
-  let s = `<circle cx="${sx}" cy="${sy}" r="4.2" fill="#1e3a5c"/>`;
-  if (label) s += `<text x="${sx+7}" y="${sy-7}" font-size="10" fill="#1e3a5c" font-family="sans-serif">${label}</text>`;
-  return s;
-}
-
-// makeGraph(m, b, question, marks) — marks: optional array of [x, y, label] to circle
-function makeGraph(m, b, question, marks) {
-  const cx = 110, cy = 110, sc = 20;
-  let g = gridAxesSVG();
-  // the line, clipped to x ∈ [-5.5, 5.5]
-  const lx1 = -5.5, lx2 = 5.5;
-  const ly1 = m*lx1 + b, ly2 = m*lx2 + b;
-  g += `<line x1="${cx+lx1*sc}" y1="${cy-ly1*sc}" x2="${cx+lx2*sc}" y2="${cy-ly2*sc}" stroke="#1e3a5c" stroke-width="2.5" stroke-linecap="round"/>`;
-  if (marks) marks.forEach(pt => { g += markPoint(pt[0], pt[1], pt[2]); });
-  return svgWrap(g, question);
-}
-
-// makeVerticalGraph(h, question, marks) — for x = h lines, which makeGraph can't represent
-function makeVerticalGraph(h, question, marks) {
-  const cx = 110, cy = 110, sc = 20;
-  let g = gridAxesSVG();
-  g += `<line x1="${cx+h*sc}" y1="10" x2="${cx+h*sc}" y2="210" stroke="#1e3a5c" stroke-width="2.5" stroke-linecap="round"/>`;
-  if (marks) marks.forEach(pt => { g += markPoint(pt[0], pt[1], pt[2]); });
-  return svgWrap(g, question);
-}
-
-// gen1: graph → find slope
+// gen1: d/dx[log_b(x)] — just the formula
 function gen1() {
-  const m = choose([-3,-2,-1,1,2,3]);
-  const b = rInt(7) - 3;
+  const bases = [2, 3, 5, 10];
+  const b = bases[rInt(4)];
   return {
-    svg:    makeGraph(m, b, 'What is the slope of this line?'),
-    answer: [String(m)],
-    hint:   'Pick two lattice points the line passes through. What is rise over run between them?',
-    step:   `\\text{slope} = ${m}`
+    latex: `\\dfrac{d}{dx}[\\log_{${b}} x]`,
+    answer: ['1/(x*ln('+b+'))'],
+    hint: 'Recall: d/dx[log_b(x)] = 1/(x·ln b). Identify the base b and apply the formula directly.',
+    step: `\\dfrac{d}{dx}[\\log_{${b}} x]=\\dfrac{1}{x\\ln ${b}}`
   };
 }
 
-// gen2: graph → find y-intercept (ordered pair)
+// gen2: d/dx[log_b(x^n)] — simplify with log rules first, then differentiate
 function gen2() {
-  const m = choose([-2,-1,1,2]);
-  const b = rInt(9) - 4;
+  const bases = [2, 3, 5];
+  const b = bases[rInt(3)];
+  const n = rInt(3)+2;
   return {
-    svg:    makeGraph(m, b, 'What is the y-intercept of this line? Give an ordered pair.'),
-    answer: [`(0,${b})`],
-    hint:   'The y-intercept is where the line meets the y-axis — give its coordinates as an ordered pair.',
-    step:   `\\text{y-intercept} = (0,${b})`
+    latex: `\\dfrac{d}{dx}[\\log_{${b}}(x^{${n}})]`,
+    answer: [''+n+'/(x*ln('+b+'))'],
+    hint: 'Log rule first: log_b(x^n) = n·log_b(x). Then differentiate — you just need the basic formula on n·log_b(x).',
+    step: `\\log_{${b}}(x^{${n}})=${n}\\log_{${b}} x,\\quad\\dfrac{d}{dx}=\\dfrac{${n}}{x\\ln ${b}}`
   };
 }
 
-// gen3: graph → find x-intercept (ordered pair)
+// gen3: d/dx[log_b(ax+c)] — chain rule, linear inside
 function gen3() {
-  const m = choose([-2,-1,1,2]);
-  const k = choose([-2,-1,1,2]);
-  const b = -m * k;
+  const bases = [2, 3, 5];
+  const b = bases[rInt(3)];
+  const a = rInt(3)+2;
+  const c = rInt(4)+1;
   return {
-    svg:    makeGraph(m, b, 'What is the x-intercept of this line? Give an ordered pair.'),
-    answer: [`(${k},0)`],
-    hint:   'The x-intercept is where the line meets the x-axis — give that crossing point as an ordered pair.',
-    step:   `\\text{x-intercept} = (${k},0)`
+    latex: `\\dfrac{d}{dx}[\\log_{${b}}(${a}x+${c})]`,
+    answer: [''+a+'/(('+a+'x+'+c+')*ln('+b+'))'],
+    hint: `Chain rule for log_b: u'/(u·ln b). Here u = ${a}x+${c}, so u' = ${a}.`,
+    step: `\\dfrac{d}{dx}[\\log_{${b}}(${a}x+${c})]=\\dfrac{${a}}{(${a}x+${c})\\ln ${b}}`
   };
 }
 
-// gen4: graph, y-intercept marked → write the full equation
+// gen4: d/dx[log_b(x^2+c)] — chain rule, quadratic inside
 function gen4() {
-  const m = choose([-3,-2,-1,1,2,3]);
-  const b = rInt(7) - 3;
-  const mPart = m === 1 ? 'x' : m === -1 ? '-x' : `${m}x`;
-  const bPart = b === 0 ? '' : b > 0 ? `+${b}` : `${b}`;
+  const bases = [2, 3, 5];
+  const b = bases[rInt(3)];
+  const c = rInt(4)+1;
   return {
-    svg:    makeGraph(m, b, 'Write the equation of this line.', [[0, b, `(0,${b})`]]),
-    answer: [`y=${mPart}${bPart}`, `${mPart}${bPart}`],
-    hint:   'The y-intercept is marked on the graph — what slope connects it to another point on the line?',
-    step:   `y=${mPart}${bPart}`
+    latex: `\\dfrac{d}{dx}[\\log_{${b}}(x^2+${c})]`,
+    answer: ['2x/((x^2+'+c+')*ln('+b+'))'],
+    hint: `Chain rule for log_b: u'/(u·ln b). Here u = x²+${c}, so u' = 2x.`,
+    step: `\\dfrac{d}{dx}[\\log_{${b}}(x^2+${c})]=\\dfrac{2x}{(x^2+${c})\\ln ${b}}`
   };
 }
 
-// gen5: graph, two marked points (y-intercept not shown) → write the full equation
+// ── Group B: Logarithmic differentiation — evaluate at a point ───────────────
+
+// gen5: y = x^(ax), evaluate at x=1 → answer = a
 function gen5() {
-  const m  = choose([-2,-1,1,2]);
-  const x1 = choose([-2,-1,1,2]);
-  const y1 = rInt(5) - 2;
-  const b  = y1 - m * x1;
-  const dirs = shuffle([1,-1,2,-2]);
-  let x2 = x1 + 1, y2 = m*(x1+1) + b;
-  for (const d of dirs) {
-    const cx2 = x1 + d, cy2 = m*cx2 + b;
-    if (cx2 !== x1 && cx2 !== 0 && Math.abs(cx2) <= 4 && Math.abs(cy2) <= 4) { x2 = cx2; y2 = cy2; break; }
-  }
-  const mPart  = m === 1 ? 'x' : m === -1 ? '-x' : `${m}x`;
-  const bPart  = b === 0 ? '' : b > 0 ? `+${b}` : `${b}`;
-  const x1Term = x1 >= 0 ? `x-${x1}` : `x+${-x1}`;
-  const y1Term = y1 >= 0 ? `y-${y1}` : `y+${-y1}`;
+  const a = rInt(4)+2;
   return {
-    svg:    makeGraph(m, b, 'Write the equation of this line using the two marked points.',
-                       [[x1, y1, `(${x1},${y1})`], [x2, y2, `(${x2},${y2})`]]),
-    answer: [`y=${mPart}${bPart}`, `${mPart}${bPart}`],
-    hint:   'Two points are marked on the line — what slope do they determine, and where does that place the y-intercept?',
-    step:   `m=${m},\\quad ${y1Term}=${m}(${x1Term})\\Rightarrow y=${mPart}${bPart}`
+    latex: `\\text{Find }\\tfrac{dy}{dx}\\text{ at }x=1\\text{ for }y=x^{${a}x}`,
+    answer: [String(a)],
+    hint: `Take ln: ln y = ${a}x·ln x. Differentiate implicitly (left gives y'/y), solve for y', substitute x=1.`,
+    step: `\\ln y=${a}x\\ln x,\\;\\tfrac{y'}{y}=${a}(\\ln x+1),\\;y'(1)=1\\cdot${a}(0+1)=${a}`
   };
 }
 
-// gen6: horizontal-line graph → write the equation
+// gen6: y = x^(a + b/x), evaluate at x=1 → answer = a+b
 function gen6() {
-  const k = rInt(9) - 4;
-  const adjK = k === 0 ? 3 : k;
-  const x = choose([-3,-2,-1,1,2,3]);
+  const a = rInt(3)+1;
+  const b = rInt(3)+2;
+  const ans = a+b;
   return {
-    svg:    makeGraph(0, adjK, 'Write the equation of this horizontal line.', [[x, adjK, `(${x},${adjK})`]]),
-    answer: [`y=${adjK}`],
-    hint:   'A horizontal line on this graph has one y-value everywhere — what is it?',
-    step:   `y=${adjK}\\text{ for every point on this line}`
+    latex: `\\text{Find }\\tfrac{dy}{dx}\\text{ at }x=1\\text{ for }y=x^{${a}+${b}/x}`,
+    answer: [String(ans)],
+    hint: `Take ln: ln y = (${a}+${b}/x)·ln x. Use the product rule on the right when differentiating, then substitute x=1.`,
+    step: `\\ln y=\\left(${a}+\\tfrac{${b}}{x}\\right)\\ln x,\\;\\tfrac{y'}{y}=-\\tfrac{${b}\\ln x}{x^2}+\\tfrac{${a}+${b}/x}{x};\\;y'(1)=1\\cdot(${a}+${b})=${ans}`
   };
 }
 
-// gen7: vertical-line graph → write the equation
+// gen7: y = x^a · (x+1)^b (b even so answer is integer), evaluate at x=1
 function gen7() {
-  const h = rInt(9) - 4;
-  const adjH = h === 0 ? 3 : h;
-  const y = choose([-3,-2,-1,1,2,3]);
+  const a = rInt(2)+2;
+  const b = (rInt(2)+1)*2;
+  const yAt1 = Math.pow(2, b);
+  const rate = a + b/2;
+  const ans = yAt1 * rate;
   return {
-    svg:    makeVerticalGraph(adjH, 'Write the equation of this vertical line.', [[adjH, y, `(${adjH},${y})`]]),
-    answer: [`x=${adjH}`],
-    hint:   'A vertical line on this graph has one x-value everywhere — what is it?',
-    step:   `x=${adjH}\\text{ for every point on this line}`
+    latex: `\\text{Find }\\tfrac{dy}{dx}\\text{ at }x=1\\text{ for }y=x^{${a}}(x+1)^{${b}}`,
+    answer: [String(ans)],
+    hint: `Take ln: ln y = ${a}·ln x + ${b}·ln(x+1). Differentiate, evaluate at x=1. Note y(1)=2^${b}=${yAt1}.`,
+    step: `\\tfrac{y'}{y}=\\tfrac{${a}}{x}+\\tfrac{${b}}{x+1};\\;y'(1)=${yAt1}\\cdot\\left(${a}+\\tfrac{${b}}{2}\\right)=${yAt1}\\cdot${rate}=${ans}`
   };
 }
 
-// gen8: graph with a marked test point → does it lie on the line?
+// gen8: y = x^a · (x-1)^b, evaluate at x=2 → 2^a·(a/2+b), always integer
 function gen8() {
-  const m = choose([-2,-1,1,2]);
-  const x0 = choose([-3,-2,-1,1,2,3]);
-  const trueY = rInt(7) - 3;
-  const b = trueY - m * x0;
-  const isOn = rInt(2) === 0;
-  const testY = isOn ? trueY : trueY + choose([1,-1]);
-  const ans = isOn ? 'yes' : 'no';
+  const a = rInt(2)+2;
+  const b = rInt(2)+2;
+  const yAt2 = Math.pow(2, a);
+  const rate = a/2 + b;
+  const ans = yAt2 * rate;
   return {
-    svg:    makeGraph(m, b, 'Does the marked point P lie on this line?', [[x0, testY, 'P']]),
-    answer: [ans],
-    hint:   'Trace the line at that x-value — does the marked point sit on it or off it?',
-    step:   `\\text{At }x=${x0}\\text{, the line has }y=${trueY}.\\quad P=(${x0},${testY})\\;${isOn?'\\text{is on the line.}':'\\text{is not on the line.}'}`
+    latex: `\\text{Find }\\tfrac{dy}{dx}\\text{ at }x=2\\text{ for }y=x^{${a}}(x-1)^{${b}}`,
+    answer: [String(ans)],
+    hint: `Take ln: ln y = ${a}·ln x + ${b}·ln(x-1). At x=2: y(2)=2^${a}=${yAt2} and (x-1)=1.`,
+    step: `\\tfrac{y'}{y}=\\tfrac{${a}}{x}+\\tfrac{${b}}{x-1};\\;y'(2)=${yAt2}\\cdot\\left(\\tfrac{${a}}{2}+${b}\\right)=${ans}`
   };
 }
 
@@ -326,7 +255,13 @@ const GENERATORS = [gen1, gen2, gen3, gen4, gen5, gen6, gen7, gen8];
 let ACTIVE, correct, flags, attempted, peeked;
 
 function norm(s) {
-  return s.trim().toLowerCase().replace(/\s+/g, '').replace(/[−–]/g, '-');
+  return s.trim().toLowerCase()
+    .replace(/\s+/g, '')
+    .replace(/[−–]/g, '-')
+    .replace(/∞/g, 'inf')
+    .replace(/∪/g, 'u')
+    .replace(/infinity/g, 'inf')
+    .replace(/union/g, 'u');
 }
 function ok(user, acc) { return acc.some(a => norm(user) === norm(a)); }
 
@@ -349,10 +284,11 @@ function buildCards() {
         <div class="card-meta">Problem ${i + 1}</div>
         <div class="card-expr" id="expr-${i}"></div>
         <div class="input-row">
-          <input class="ans-input" id="ai-${i}" placeholder="answer" />
+          <input class="ans-input" id="ai-${i}" placeholder="${p.interval ? '[a,b)' : 'answer'}" />
           <button class="check-btn" id="chk-${i}" onclick="check(${i})">Check</button>
         </div>
         <div class="hint">${p.hint}</div>
+        ${p.interval ? '<div class="interval-hint">Use <code>inf</code> for ∞ and <code>u</code> for union &mdash; e.g. <code>[2,inf)</code> or <code>(-inf,0)u(0,inf)</code></div>' : ''}
         <div class="feedback" id="fb-${i}"></div>
         <span class="reveal-link" id="rl-${i}" onclick="reveal(${i})">Show solution</span>
         <div class="revealed-answer" id="ra-${i}"></div>
@@ -417,8 +353,8 @@ function updateScore() {
 function resetAll() { init(); buildCards(); updateScore(); }
 </script>
 
-<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/contrib/auto-render.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
 <script>
   renderMathInElement(document.body, {
     delimiters: [

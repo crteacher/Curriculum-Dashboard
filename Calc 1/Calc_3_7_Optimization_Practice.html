@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Equations from Graphs &mdash; Practice</title>
+<title>Optimization &mdash; Practice</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.css">
 <style>
   *{box-sizing:border-box;margin:0;padding:0}
@@ -56,34 +56,31 @@
   .reveal-link:hover{color:#555}
   .revealed-answer{display:none;margin-top:8px;font-family:sans-serif;font-size:13px;
     color:#444;background:#f5f3ef;border-radius:6px;padding:8px 11px;line-height:1.8;overflow-x:auto}
+  .interval-hint{font-family:sans-serif;font-size:11px;color:#1e3a5c;margin-top:4px;
+    padding:2px 7px;background:#eef3f9;border-radius:4px;display:inline-block}
   code{font-family:'Courier New',monospace;background:#f0ede7;padding:1px 5px;border-radius:3px;font-size:12px}
-
-
-.hint{display:none!important}
 </style>
 </head>
 <body>
 <div class="container">
-  <h1>Equations from Graphs</h1>
-  <p class="subtitle">College Algebra &nbsp;&middot;&nbsp; &sect;2.3 &nbsp;&middot;&nbsp; Instructor: Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026</p>
+  <h1>Optimization</h1>
+  <p class="subtitle">Calculus I &nbsp;&middot;&nbsp; &sect;3.7 &nbsp;&middot;&nbsp; Instructor: Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026</p>
 
   <div class="section">
     <div class="section-title">Core Ideas</div>
 
     <div class="concept">
-      <span class="concept-label">Reading the y-intercept</span>
-      If the line visibly crosses the y-axis at an integer, read $b$ directly.
-      Then pick another point to compute $m = \text{rise}/\text{run}$.
+      <span class="concept-label">Optimization Strategy</span>
+      (1) Write the quantity to optimize as a function of one variable.
+      (2) Use a constraint to eliminate the second variable. (3) Set the derivative
+      to $0$ and solve for critical points. (4) Compare critical points AND
+      endpoints to find the true max/min.
     </div>
     <div class="concept">
-      <span class="concept-label">Two-Point Method</span>
-      Compute $m$ from two points, then use point-slope:
-      $y - y_1 = m(x-x_1)$ and simplify to $y = mx + b$.
-    </div>
-    <div class="concept">
-      <span class="concept-label">Special Lines</span>
-      Horizontal through $(a,k)$: $y = k$. &nbsp;
-      Vertical through $(h,b)$: $x = h$.
+      <span class="concept-label">Watch the Domain</span>
+      Real-world constraints (lengths must be positive, cuts can't exceed half a
+      side, etc.) often restrict the domain to a closed interval. A critical
+      point outside that domain is not a valid candidate.
     </div>
 
   </div>
@@ -91,7 +88,7 @@
   <div class="section">
     <div class="section-title">Practice Problems</div>
     <p style="font-family:sans-serif;font-size:13px;color:#666;margin-bottom:1rem;">
-      Every problem is read from its graph. Slope: enter an integer. Intercepts: an ordered pair, e.g. <code>(0,3)</code>. Full equations: enter in the form <code>y=2x+3</code>. Horizontal/vertical lines: enter <code>y=4</code> or <code>x=-2</code>. Point-on-line questions: <code>yes</code> or <code>no</code>.
+      All answers are positive integers or exact fractions.
       Press <strong>Check</strong> or hit Enter.
     </p>
     <div class="score-bar">
@@ -137,185 +134,99 @@ function addT(n, v) {
 
 // ── Problem generators (section-specific, injected below) ─────────────────────
 
-// ── SVG graph helper ─────────────────────────────────────────────────────────
-function gridAxesSVG() {
-  const W = 220, H = 220, cx = 110, cy = 110, sc = 20;
-  let g = '';
-  // grid lines
-  for (let i = -5; i <= 5; i++) {
-    const px = cx + i*sc, py = cy - i*sc;
-    g += `<line x1="${px}" y1="5" x2="${px}" y2="${H-5}" stroke="#e0ddd8" stroke-width="1"/>`;
-    g += `<line x1="5" y1="${py}" x2="${W-5}" y2="${py}" stroke="#e0ddd8" stroke-width="1"/>`;
-  }
-  // axes
-  g += `<line x1="5" y1="${cy}" x2="${W-10}" y2="${cy}" stroke="#555" stroke-width="1.5"/>`;
-  g += `<line x1="${cx}" y1="10" x2="${cx}" y2="${H-5}" stroke="#555" stroke-width="1.5"/>`;
-  // arrowheads
-  g += `<polygon points="${W-5},${cy} ${W-12},${cy-4} ${W-12},${cy+4}" fill="#555"/>`;
-  g += `<polygon points="${cx},5 ${cx-4},12 ${cx+4},12" fill="#555"/>`;
-  // tick marks and labels
-  for (let i = -4; i <= 4; i++) {
-    if (i === 0) continue;
-    const px = cx + i*sc, py = cy - i*sc;
-    g += `<line x1="${px}" y1="${cy-4}" x2="${px}" y2="${cy+4}" stroke="#555" stroke-width="1"/>`;
-    g += `<text x="${px}" y="${cy+16}" text-anchor="middle" font-size="10" fill="#777" font-family="sans-serif">${i}</text>`;
-    g += `<line x1="${cx-4}" y1="${py}" x2="${cx+4}" y2="${py}" stroke="#555" stroke-width="1"/>`;
-    g += `<text x="${cx-8}" y="${py+4}" text-anchor="end" font-size="10" fill="#777" font-family="sans-serif">${i}</text>`;
-  }
-  g += `<text x="${cx-7}" y="${cy+15}" text-anchor="end" font-size="10" fill="#777" font-family="sans-serif">0</text>`;
-  return g;
-}
-
-function svgWrap(inner, question) {
-  const qHtml = `<p style="font-family:sans-serif;font-size:13px;text-align:center;margin-top:6px;color:#1a1a1a">${question}</p>`;
-  return `<svg width="220" height="220" viewBox="0 0 220 220" style="display:block;margin:0 auto;background:#fafaf8;border-radius:4px">${inner}</svg>${qHtml}`;
-}
-
-function markPoint(px, py, label) {
-  const cx = 110, cy = 110, sc = 20;
-  const sx = cx + px*sc, sy = cy - py*sc;
-  let s = `<circle cx="${sx}" cy="${sy}" r="4.2" fill="#1e3a5c"/>`;
-  if (label) s += `<text x="${sx+7}" y="${sy-7}" font-size="10" fill="#1e3a5c" font-family="sans-serif">${label}</text>`;
-  return s;
-}
-
-// makeGraph(m, b, question, marks) — marks: optional array of [x, y, label] to circle
-function makeGraph(m, b, question, marks) {
-  const cx = 110, cy = 110, sc = 20;
-  let g = gridAxesSVG();
-  // the line, clipped to x ∈ [-5.5, 5.5]
-  const lx1 = -5.5, lx2 = 5.5;
-  const ly1 = m*lx1 + b, ly2 = m*lx2 + b;
-  g += `<line x1="${cx+lx1*sc}" y1="${cy-ly1*sc}" x2="${cx+lx2*sc}" y2="${cy-ly2*sc}" stroke="#1e3a5c" stroke-width="2.5" stroke-linecap="round"/>`;
-  if (marks) marks.forEach(pt => { g += markPoint(pt[0], pt[1], pt[2]); });
-  return svgWrap(g, question);
-}
-
-// makeVerticalGraph(h, question, marks) — for x = h lines, which makeGraph can't represent
-function makeVerticalGraph(h, question, marks) {
-  const cx = 110, cy = 110, sc = 20;
-  let g = gridAxesSVG();
-  g += `<line x1="${cx+h*sc}" y1="10" x2="${cx+h*sc}" y2="210" stroke="#1e3a5c" stroke-width="2.5" stroke-linecap="round"/>`;
-  if (marks) marks.forEach(pt => { g += markPoint(pt[0], pt[1], pt[2]); });
-  return svgWrap(g, question);
-}
-
-// gen1: graph → find slope
+// gen1: two numbers sum to S=2k, maximize product -> k^2
 function gen1() {
-  const m = choose([-3,-2,-1,1,2,3]);
-  const b = rInt(7) - 3;
+  const k = rInt(7)+3;
+  const S = 2*k;
   return {
-    svg:    makeGraph(m, b, 'What is the slope of this line?'),
-    answer: [String(m)],
-    hint:   'Pick two lattice points the line passes through. What is rise over run between them?',
-    step:   `\\text{slope} = ${m}`
+    latex: `\\text{Two positive numbers sum to ${S}. Maximize their product.}`,
+    answer: [String(k*k)],
+    hint: "Let one number be x and the other be S-x. Write the product as a function of x, then maximize.",
+    step: `P(x)=x(${S}-x);\\;P'(x)=${S}-2x=0\\Rightarrow x=${k};\\;P(${k})=${k}\\cdot${k}=${k*k}`
   };
 }
 
-// gen2: graph → find y-intercept (ordered pair)
+// gen2: two numbers have product P=k^2, minimize sum -> 2k
 function gen2() {
-  const m = choose([-2,-1,1,2]);
-  const b = rInt(9) - 4;
+  const k = rInt(7)+3;
+  const P = k*k;
   return {
-    svg:    makeGraph(m, b, 'What is the y-intercept of this line? Give an ordered pair.'),
-    answer: [`(0,${b})`],
-    hint:   'The y-intercept is where the line meets the y-axis — give its coordinates as an ordered pair.',
-    step:   `\\text{y-intercept} = (0,${b})`
+    latex: `\\text{Two positive numbers have a product of ${P}. Minimize their sum.}`,
+    answer: [String(2*k)],
+    hint: "Let the numbers be x and P/x. Write the sum as a function of x, then minimize.",
+    step: `S(x)=x+\\dfrac{${P}}{x};\\;S'(x)=1-\\dfrac{${P}}{x^2}=0\\Rightarrow x=${k};\\;S(${k})=${k}+${k}=${2*k}`
   };
 }
 
-// gen3: graph → find x-intercept (ordered pair)
+// gen3: open box from LxL square, cut x, L=6m, max V=16m^3 at x=m
 function gen3() {
-  const m = choose([-2,-1,1,2]);
-  const k = choose([-2,-1,1,2]);
-  const b = -m * k;
+  const m = rInt(5)+2;
+  const Lval = 6*m;
   return {
-    svg:    makeGraph(m, b, 'What is the x-intercept of this line? Give an ordered pair.'),
-    answer: [`(${k},0)`],
-    hint:   'The x-intercept is where the line meets the x-axis — give that crossing point as an ordered pair.',
-    step:   `\\text{x-intercept} = (${k},0)`
+    latex: `\\text{An open-top box is made by cutting equal squares of side }x\\text{ from each corner of a }${Lval}\\times${Lval}\\text{ in square. Maximize the volume.}`,
+    answer: [String(16*m*m*m)],
+    hint: "Volume is x times the square of (L-2x). Differentiate, set equal to 0, and keep the solution inside the valid domain.",
+    step: `V(x)=x(${Lval}-2x)^2;\\;V'(x)=0\\Rightarrow x=${m}\\;(\\text{in }(0,${Lval/2}));\\;V(${m})=${m}(${Lval-2*m})^2=${16*m*m*m}`
   };
 }
 
-// gen4: graph, y-intercept marked → write the full equation
+// gen4: square base open-top box, V=n^3/2 (n even), min S=3n^2
 function gen4() {
-  const m = choose([-3,-2,-1,1,2,3]);
-  const b = rInt(7) - 3;
-  const mPart = m === 1 ? 'x' : m === -1 ? '-x' : `${m}x`;
-  const bPart = b === 0 ? '' : b > 0 ? `+${b}` : `${b}`;
+  const n = 2*(rInt(4)+1);
+  const V = n*n*n/2;
   return {
-    svg:    makeGraph(m, b, 'Write the equation of this line.', [[0, b, `(0,${b})`]]),
-    answer: [`y=${mPart}${bPart}`, `${mPart}${bPart}`],
-    hint:   'The y-intercept is marked on the graph — what slope connects it to another point on the line?',
-    step:   `y=${mPart}${bPart}`
+    latex: `\\text{An open-top box with a square base has volume ${V}}\\text{ ft}^3\\text{. Minimize the surface area.}`,
+    answer: [String(3*n*n)],
+    hint: "Write height in terms of x using the volume constraint, then minimize S(x)=x^2+4xh.",
+    step: `h=\\dfrac{${V}}{x^2};\\;S(x)=x^2+\\dfrac{${4*V}}{x};\\;S'(x)=2x-\\dfrac{${4*V}}{x^2}=0\\Rightarrow x=${n};\\;S(${n})=${n*n}+${2*n*n}=${3*n*n}`
   };
 }
 
-// gen5: graph, two marked points (y-intercept not shown) → write the full equation
+// gen5: fence against a wall, F=8k, max area=8k^2
 function gen5() {
-  const m  = choose([-2,-1,1,2]);
-  const x1 = choose([-2,-1,1,2]);
-  const y1 = rInt(5) - 2;
-  const b  = y1 - m * x1;
-  const dirs = shuffle([1,-1,2,-2]);
-  let x2 = x1 + 1, y2 = m*(x1+1) + b;
-  for (const d of dirs) {
-    const cx2 = x1 + d, cy2 = m*cx2 + b;
-    if (cx2 !== x1 && cx2 !== 0 && Math.abs(cx2) <= 4 && Math.abs(cy2) <= 4) { x2 = cx2; y2 = cy2; break; }
-  }
-  const mPart  = m === 1 ? 'x' : m === -1 ? '-x' : `${m}x`;
-  const bPart  = b === 0 ? '' : b > 0 ? `+${b}` : `${b}`;
-  const x1Term = x1 >= 0 ? `x-${x1}` : `x+${-x1}`;
-  const y1Term = y1 >= 0 ? `y-${y1}` : `y+${-y1}`;
+  const k = rInt(8)+2;
+  const F = 8*k;
   return {
-    svg:    makeGraph(m, b, 'Write the equation of this line using the two marked points.',
-                       [[x1, y1, `(${x1},${y1})`], [x2, y2, `(${x2},${y2})`]]),
-    answer: [`y=${mPart}${bPart}`, `${mPart}${bPart}`],
-    hint:   'Two points are marked on the line — what slope do they determine, and where does that place the y-intercept?',
-    step:   `m=${m},\\quad ${y1Term}=${m}(${x1Term})\\Rightarrow y=${mPart}${bPart}`
+    latex: `\\text{Using ${F} ft of fencing and a wall as one side, maximize the enclosed rectangular area.}`,
+    answer: [String(8*k*k)],
+    hint: "Let y be each perpendicular side and x the side parallel to the wall (x+2y=F). Write area as a function of y, then maximize.",
+    step: `x=${F}-2y;\\;A(y)=(${F}-2y)y;\\;A'(y)=${F}-4y=0\\Rightarrow y=${2*k},\\;x=${4*k};\\;A=${4*k}\\cdot${2*k}=${8*k*k}`
   };
 }
 
-// gen6: horizontal-line graph → write the equation
+// gen6: two pens shared divider, F=24k, max area=24k^2
 function gen6() {
-  const k = rInt(9) - 4;
-  const adjK = k === 0 ? 3 : k;
-  const x = choose([-3,-2,-1,1,2,3]);
+  const k = rInt(6)+1;
+  const F = 24*k;
   return {
-    svg:    makeGraph(0, adjK, 'Write the equation of this horizontal line.', [[x, adjK, `(${x},${adjK})`]]),
-    answer: [`y=${adjK}`],
-    hint:   'A horizontal line on this graph has one y-value everywhere — what is it?',
-    step:   `y=${adjK}\\text{ for every point on this line}`
+    latex: `\\text{Two adjacent pens share a middle divider; ${F} ft of fencing total (2 lengths + 3 widths). Maximize the total area.}`,
+    answer: [String(24*k*k)],
+    hint: "The constraint is 2x+3y=F. Solve for x, write area as a function of y, then maximize.",
+    step: `x=\\dfrac{${F}-3y}{2};\\;A(y)=xy;\\;A'(y)=0\\Rightarrow y=${4*k},\\;x=${6*k};\\;A=${6*k}\\cdot${4*k}=${24*k*k}`
   };
 }
 
-// gen7: vertical-line graph → write the equation
+// gen7: closest point on y=x to (c,0), c even, answer x-coordinate=c/2
 function gen7() {
-  const h = rInt(9) - 4;
-  const adjH = h === 0 ? 3 : h;
-  const y = choose([-3,-2,-1,1,2,3]);
+  const c = 2*(rInt(9)+1);
   return {
-    svg:    makeVerticalGraph(adjH, 'Write the equation of this vertical line.', [[adjH, y, `(${adjH},${y})`]]),
-    answer: [`x=${adjH}`],
-    hint:   'A vertical line on this graph has one x-value everywhere — what is it?',
-    step:   `x=${adjH}\\text{ for every point on this line}`
+    latex: `\\text{Which point on the graph of }y=x\\text{ is closest to }(${c},0)\\text{? Give the }x\\text{-coordinate.}`,
+    answer: [String(c/2)],
+    hint: "Minimize the squared distance D^2=(x-c)^2+x^2 to avoid an ugly square root, then differentiate.",
+    step: `\\dfrac{d}{dx}\\big[(x-${c})^2+x^2\\big]=2(x-${c})+2x=4x-${2*c}=0\\Rightarrow x=${c/2}`
   };
 }
 
-// gen8: graph with a marked test point → does it lie on the line?
+// gen8: poster margins (2 in sides, 3 in top/bottom), A0=3n^2/2 (n even), min total area
 function gen8() {
-  const m = choose([-2,-1,1,2]);
-  const x0 = choose([-3,-2,-1,1,2,3]);
-  const trueY = rInt(7) - 3;
-  const b = trueY - m * x0;
-  const isOn = rInt(2) === 0;
-  const testY = isOn ? trueY : trueY + choose([1,-1]);
-  const ans = isOn ? 'yes' : 'no';
+  const n = 2*(rInt(5)+2);
+  const A0 = 3*n*n/2;
+  const totalArea = (n+4)*(3*n/2+6);
   return {
-    svg:    makeGraph(m, b, 'Does the marked point P lie on this line?', [[x0, testY, 'P']]),
-    answer: [ans],
-    hint:   'Trace the line at that x-value — does the marked point sit on it or off it?',
-    step:   `\\text{At }x=${x0}\\text{, the line has }y=${trueY}.\\quad P=(${x0},${testY})\\;${isOn?'\\text{is on the line.}':'\\text{is not on the line.}'}`
+    latex: `\\text{A poster needs ${A0}}\\text{ in}^2\\text{ of printed area, with 2-in margins on each side and 3-in margins top and bottom. Minimize the total area.}`,
+    answer: [String(totalArea)],
+    hint: "Write the printed height as A0/x, then total area is (x+4) times (A0/x+6). Differentiate and solve for x.",
+    step: `S(x)=(x+4)\\left(\\dfrac{${A0}}{x}+6\\right);\\;S'(x)=0\\Rightarrow x=${n};\\;S(${n})=(${n+4})\\left(\\dfrac{${A0}}{${n}}+6\\right)=${totalArea}`
   };
 }
 
@@ -326,7 +237,13 @@ const GENERATORS = [gen1, gen2, gen3, gen4, gen5, gen6, gen7, gen8];
 let ACTIVE, correct, flags, attempted, peeked;
 
 function norm(s) {
-  return s.trim().toLowerCase().replace(/\s+/g, '').replace(/[−–]/g, '-');
+  return s.trim().toLowerCase()
+    .replace(/\s+/g, '')
+    .replace(/[−–]/g, '-')
+    .replace(/∞/g, 'inf')
+    .replace(/∪/g, 'u')
+    .replace(/infinity/g, 'inf')
+    .replace(/union/g, 'u');
 }
 function ok(user, acc) { return acc.some(a => norm(user) === norm(a)); }
 
@@ -349,10 +266,11 @@ function buildCards() {
         <div class="card-meta">Problem ${i + 1}</div>
         <div class="card-expr" id="expr-${i}"></div>
         <div class="input-row">
-          <input class="ans-input" id="ai-${i}" placeholder="answer" />
+          <input class="ans-input" id="ai-${i}" placeholder="${p.interval ? '[a,b)' : 'answer'}" />
           <button class="check-btn" id="chk-${i}" onclick="check(${i})">Check</button>
         </div>
         <div class="hint">${p.hint}</div>
+        ${p.interval ? '<div class="interval-hint">Use <code>inf</code> for ∞ and <code>u</code> for union &mdash; e.g. <code>[2,inf)</code> or <code>(-inf,0)u(0,inf)</code></div>' : ''}
         <div class="feedback" id="fb-${i}"></div>
         <span class="reveal-link" id="rl-${i}" onclick="reveal(${i})">Show solution</span>
         <div class="revealed-answer" id="ra-${i}"></div>

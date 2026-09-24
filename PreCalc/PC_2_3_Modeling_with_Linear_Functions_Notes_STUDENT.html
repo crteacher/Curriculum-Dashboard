@@ -87,7 +87,7 @@ details[open]>.mistake-toggle{color:#1e3a5c}
 <p class="page-sub">Pre-Calculus &nbsp;&middot;&nbsp; §2.3 &nbsp;&middot;&nbsp; Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026 &nbsp;&middot;&nbsp; <strong>STUDENT</strong></p>
 <div class="opening-q">If demand for a product drops by 15 units for every \$1 price increase, what kind of function models demand vs. price? What does the slope mean in context?</div>
 <div class="two-col"><div class="col"><div class="section-head">Building Linear Models</div>
-<div class="accent-box"><p>A <strong>linear function</strong> has the form $f(x)=mx+b$.</p><p>$m$ = constant rate of change (slope)<br>$b$ = initial value ($y$-intercept, value when $x=0$)</p><p><strong>Identifying linearity:</strong> if average rate of change is constant across all intervals, the function is linear.</p></div>
+<div class="accent-box"><p>A <strong>linear function</strong> has the form $f(x)=mx+b$.</p><p>$m$ = constant rate of change (slope)<br>$b$ = initial value ($y$-intercept, value when $x=0$)</p><p><strong>Identifying linearity:</strong> if average rate of change is constant across all intervals, the function is linear.</p><p><strong>Canonical example:</strong> A car rental costs \$25/day plus \$0.20 per mile:<br>$$C(m)=0.20m+25$$Here $m=0.20$ is the per-mile rate and $b=25$ is the fixed daily fee (cost at $m=0$).</p></div>
 <div class="panel-row">
 <details class="proof-panel">
 <summary class="proof-toggle">▸ Show Proof</summary>
@@ -112,7 +112,7 @@ details[open]>.mistake-toggle{color:#1e3a5c}
 </div>
 <p class="body-text">Steps to build a model: identify what $x$ and $f(x)$ represent, find $m$ from context, find $b$ from an initial value.</p>
 </div><div class="col"><div class="section-head">Applications and Intersections</div>
-<div class="accent-box"><p><strong>Supply/Demand models</strong> where slope is given:<br>Demand decreasing with price: negative slope.<br>Supply increasing with price: positive slope.</p><p><strong>Finding intersection</strong> of $f(x)=mx+b$ and $g(x)=nx+c$:<br>Set equal: $mx+b=nx+c$, solve for $x$, then find $y$.</p></div>
+<div class="accent-box"><p><strong>Fixed cost</strong> = expense at $x=0$ (rent, equipment — paid even if nothing is produced) → the $b$ in the cost model.<br><strong>Variable cost</strong> = cost per unit produced (materials, labor) → the slope $m$.</p><p>$$C(x)=\underbrace{m}_{\text{variable cost}}\cdot x+\underbrace{b}_{\text{fixed cost}}$$</p><p><strong>Revenue</strong> = price per unit $\times$ units sold; always passes through the origin ($b=0$):$$R(x)=(\text{price per unit})\cdot x$$</p><p><strong>Break-even</strong> = where cost equals revenue. Set $C(x)=R(x)$ and solve.<br><em>Example:</em> Fixed cost $\$500$, variable $\$3$ per unit, selling price $\$8$ per unit:$$C(x)=3x+500 \qquad R(x)=8x$$$$3x+500=8x\Rightarrow 500=5x\Rightarrow x=100\text{ units}$$Fewer than 100 units: loss. More than 100 units: profit.</p></div>
 <details class="mistake-panel">
 <summary class="mistake-toggle">▸ Common Mistake</summary>
 <div class="mistake-body">
@@ -121,6 +121,20 @@ details[open]>.mistake-toggle{color:#1e3a5c}
 </div>
 </details>
 </div></div>
+<div class="section-head">Full Example &#8212; Supply &amp; Demand Equilibrium</div>
+<div class="accent-box">
+<p>A market study records demand and supply for a product at four price levels:</p>
+<table style="border-collapse:collapse;margin:.7rem auto .9rem;font-size:14px;width:auto">
+<thead><tr><th style="border:1px solid #b0c4d8;padding:6px 18px;background:#dce8f5;text-align:center">Price $p$</th><th style="border:1px solid #b0c4d8;padding:6px 18px;background:#dce8f5;text-align:center">Demand $D$ (units)</th><th style="border:1px solid #b0c4d8;padding:6px 18px;background:#dce8f5;text-align:center">Supply $S$ (units)</th></tr></thead>
+<tbody><tr><td style="border:1px solid #b0c4d8;padding:5px 18px;text-align:center">$\$10$</td><td style="border:1px solid #b0c4d8;padding:5px 18px;text-align:center">500</td><td style="border:1px solid #b0c4d8;padding:5px 18px;text-align:center">100</td></tr><tr><td style="border:1px solid #b0c4d8;padding:5px 18px;text-align:center">$\$20$</td><td style="border:1px solid #b0c4d8;padding:5px 18px;text-align:center">400</td><td style="border:1px solid #b0c4d8;padding:5px 18px;text-align:center">200</td></tr><tr style="background:#eef5e8"><td style="border:1px solid #b0c4d8;padding:5px 18px;text-align:center"><strong>$\$30$</strong></td><td style="border:1px solid #b0c4d8;padding:5px 18px;text-align:center"><strong>300</strong></td><td style="border:1px solid #b0c4d8;padding:5px 18px;text-align:center"><strong>300</strong></td></tr><tr><td style="border:1px solid #b0c4d8;padding:5px 18px;text-align:center">$\$40$</td><td style="border:1px solid #b0c4d8;padding:5px 18px;text-align:center">200</td><td style="border:1px solid #b0c4d8;padding:5px 18px;text-align:center">400</td></tr></tbody></table>
+<p><strong>Step 1 &#8212; Check linearity.</strong> Demand drops 100 units per $\$10$ (slope $m_D=-10$ per dollar). Supply rises 100 units per $\$10$ (slope $m_S=+10$ per dollar). Both rates are constant &#8212; both are linear.</p>
+<p><strong>Step 2 &#8212; Build the models</strong> using slope and the $\$10$ row as a reference point:</p>
+$$D(p)=-10(p-10)+500=-10p+600 \qquad S(p)=10(p-10)+100=10p$$
+<p><strong>Step 3 &#8212; Find the equilibrium price</strong> (set $D(p)=S(p)$):</p>
+$$-10p+600=10p \Rightarrow 600=20p \Rightarrow p=30$$
+<p><strong>Step 4 &#8212; Find the equilibrium quantity:</strong> $D(30)=-10(30)+600=300$ units.</p>
+<p>The market clears at <strong>$\$30$ per unit, 300 units traded</strong>. The highlighted row confirms it: at $p=30$, demand equals supply.</p>
+</div>
 <div class="section-head">Worked Examples</div>
 <div class="examples-grid">
 <div class="ex-block"><div class="ex-label">Example 1 &mdash; Car depreciation</div><div class="ex-body">A car costs $\$35{,}000$ and loses $\$1{,}750$ per year. Write $V(t)$ and find when it is worth $\$14{,}000$.</div><div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">$V(t)=35000-1750t$. Set $=14000$: $t=12$ years.</div></div></div>
@@ -132,9 +146,9 @@ details[open]>.mistake-toggle{color:#1e3a5c}
 <div class="practice">
 <div class="pr-row"><div class="pr-num">1.</div><div class="pr-prob">A phone plan costs $\$25$/month plus $\$0.10$ per text. Write $C(n)$ and find $C(200)$.</div><div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$C(n)=25+0.1n$; $C(200)=\$45$.</div></div></div>
 <div class="pr-row"><div class="pr-num">2.</div><div class="pr-prob">Is the data linear? $x$: 0,1,2,3; $f(x)$: 4,7,10,13.</div><div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">Differences are all 3 — yes, linear with slope 3.</div></div></div>
-<div class="pr-row"><div class="pr-num">3.</div><div class="pr-prob">Demand is 500 at $\$14$ and 510 at $\$13$. Write $D(p)$.</div><div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$m=\dfrac{510-500}{13-14}=-10$; $D(p)=-10(p-14)+500=-10p+640$.</div></div></div>
+<div class="pr-row"><div class="pr-num">3.</div><div class="pr-prob">Demand is 500 at $\$14$ and 510 at $\$13$. Write $D(p)$.</div><div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$$m=\frac{510-500}{13-14}=-10$$$$D(p)=-10(p-14)+500=-10p+640$$</div></div></div>
 <div class="pr-row"><div class="pr-num">4.</div><div class="pr-prob">Two lines: $y=3x+1$ and $y=-x+9$. Find their intersection.</div><div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$3x+1=-x+9\Rightarrow x=2, y=7$. Point $(2,7)$.</div></div></div>
-<div class="pr-row"><div class="pr-num">5.</div><div class="pr-prob">A population of 29{,}000 grows by 1{,}700/yr. Write $P(t)$ and find $P$ after 5 yr.</div><div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$P(t)=29000+1700t$; $P(5)=37{,}500$.</div></div></div>
+<div class="pr-row"><div class="pr-num">5.</div><div class="pr-prob">A population of 29,000 grows by 1,700/yr. Write $P(t)$ and find $P$ after 5 yr.</div><div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$P(t)=29000+1700t$; $P(5)=37{,}500$.</div></div></div>
 <div class="pr-row"><div class="pr-num">6.</div><div class="pr-prob">Average rate of change of $f(x)=4x+2$ from $x=1$ to $x=5$.</div><div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">ARC $= m = 4$.</div></div></div>
 </div>
 

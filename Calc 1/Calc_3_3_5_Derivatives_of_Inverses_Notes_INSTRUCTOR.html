@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Derivatives of Inverse Functions &mdash; Notes</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75;font-size:15px}
+.container{max-width:900px;margin:0 auto;padding:2rem 1.5rem 4rem}
+.page-title{font-size:28px;font-weight:700;margin-bottom:4px}
+.page-sub{font-family:sans-serif;font-size:13px;color:#666;margin-bottom:1.6rem}
+.opening-q{background:#eef3f9;border-left:4px solid #1e3a5c;
+  border-radius:0 8px 8px 0;padding:1rem 1.2rem;font-size:15px;
+  margin-bottom:1.5rem;font-style:italic;line-height:1.75}
+.section-head{font-family:sans-serif;font-size:11px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.08em;color:#1e3a5c;
+  margin-top:1.4rem;margin-bottom:.6rem;
+  border-bottom:1px solid #c8d8ec;padding-bottom:4px}
+.accent-box{background:#d9e8f5;border-left:4px solid #1e3a5c;
+  border-radius:0 8px 8px 0;padding:.9rem 1.1rem;font-size:14px;
+  margin-bottom:.85rem;line-height:1.95}
+.accent-box ul{margin-left:1.3rem;margin-top:.3rem}
+.accent-box li{margin-bottom:.15rem}
+.accent-box p{margin-bottom:.4rem}
+.body-text{font-size:14px;line-height:1.75;margin-bottom:.85rem}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:.5rem}
+.col{min-width:0}
+.examples-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem}
+.ex-block{border:1.5px solid #ddd;border-radius:9px;padding:1rem 1.1rem;background:#fff}
+.ex-label{font-family:sans-serif;font-size:11px;font-weight:700;color:#1e3a5c;
+  text-transform:uppercase;letter-spacing:.05em;margin-bottom:.45rem}
+.ex-body{font-size:14px;line-height:1.75;margin-bottom:.5rem}
+.ex-answer.instructor{background:#fef9e7;border-left:3px solid #7a5c1e;
+  border-radius:0 6px 6px 0;padding:.6rem .9rem;font-size:13.5px;
+  color:#5a3e00;line-height:1.85}
+.ex-answer.student{height:4.5rem;border-bottom:1.5px solid #bbb;margin-top:.4rem}
+.practice{margin-bottom:1.5rem}
+.pr-row{display:grid;grid-template-columns:1.6rem 1fr 210px;gap:.75rem;
+  align-items:start;padding:.6rem 0;border-bottom:1px solid #ece8e0}
+.pr-num{font-family:sans-serif;font-weight:700;font-size:14px;color:#1e3a5c;padding-top:2px}
+.pr-prob{font-size:14px;line-height:1.75}
+.pr-ans.instructor{font-size:13px;color:#5a3e00;background:#fef9e7;
+  border-radius:5px;padding:4px 9px;line-height:1.75}
+.pr-ans.student{border-bottom:1.5px solid #bbb;min-height:2.2rem}
+.st-work{width:100%;min-height:3rem;border:1px solid #ccc;border-radius:5px;
+  padding:.35rem .5rem;font-family:Georgia,serif;font-size:13px;resize:vertical;
+  background:#fafafa;display:block;margin-bottom:.3rem}
+.st-work-sm{width:100%;min-height:1.5rem;border:1px solid #ccc;border-radius:4px;
+  padding:.2rem .4rem;font-family:Georgia,serif;font-size:12px;resize:vertical;
+  background:#fafafa;display:block;margin-bottom:.2rem}
+.st-btn{font-family:sans-serif;font-size:10px;font-weight:700;color:#1e3a5c;
+  background:none;border:1.5px solid #1e3a5c;border-radius:4px;
+  padding:2px 9px;cursor:pointer;margin-bottom:.2rem;display:inline-block}
+.st-btn-sm{font-family:sans-serif;font-size:9px;font-weight:700;color:#1e3a5c;
+  background:none;border:1px solid #1e3a5c;border-radius:3px;
+  padding:1px 6px;cursor:pointer;margin-bottom:.15rem;display:inline-block}
+.st-btn:hover,.st-btn-sm:hover{background:#eef3f9}
+.st-ans-hidden{display:none;background:#fef9e7;border-left:3px solid #7a5c1e;
+  border-radius:0 5px 5px 0;padding:.4rem .7rem;font-size:13px;
+  color:#5a3e00;line-height:1.85}
+.st-ans-hidden.visible{display:block}
+.katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}
+@media print{
+  body{background:white;font-size:10pt;line-height:1.5}
+  .container{padding:0;max-width:none}
+  .page-sub{margin-bottom:.8rem}
+  .opening-q{padding:.5rem .8rem;margin-bottom:.8rem;font-size:10pt;line-height:1.5;break-inside:avoid}
+  .section-head{margin-top:.7rem;margin-bottom:.35rem}
+  .accent-box{padding:.5rem .75rem;margin-bottom:.5rem;font-size:10pt;line-height:1.55;
+    background:#e8f0f8 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .accent-box p{margin-bottom:.2rem}
+  .body-text{font-size:10pt;line-height:1.5;margin-bottom:.5rem}
+  .two-col{gap:1rem;margin-bottom:.3rem;break-inside:avoid}
+  .examples-grid{gap:.6rem;margin-bottom:.8rem;break-inside:avoid}
+  .ex-block{padding:.55rem .75rem;border:1px solid #ccc;break-inside:avoid}
+  .ex-label{margin-bottom:.25rem}
+  .ex-body{font-size:10pt;line-height:1.5;margin-bottom:.3rem}
+  .ex-answer.instructor{padding:.35rem .7rem;font-size:9.5pt;line-height:1.55;
+    background:#fef9e7 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .ex-answer.student{height:2.8rem}
+  .practice{margin-bottom:.8rem}
+  .pr-row{padding:.3rem 0;break-inside:avoid}
+  .pr-prob{font-size:10pt;line-height:1.5}
+  .pr-ans.instructor{font-size:9.5pt;padding:2px 7px;line-height:1.55;
+    background:#fef9e7 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .pr-ans.student{min-height:1.6rem}
+  .st-work{background:none;border:none;border-bottom:1.5px solid #bbb;
+    border-radius:0;min-height:2.6rem;resize:none}
+  .st-work-sm{background:none;border:none;border-bottom:1.5px solid #bbb;
+    border-radius:0;min-height:1.3rem;resize:none}
+  .st-btn,.st-btn-sm{display:none}
+  .st-ans-hidden{display:none !important}
+  .opening-q{background:#eef3f9 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+@page{margin:.55in .65in;size:letter}
+.proof-panel{margin:.4rem 0 1.1rem;border-left:3px solid #7a9a6a;border-radius:0 6px 6px 0;background:#f5f7f3}
+.proof-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#5a7a4a;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.proof-toggle::-webkit-details-marker{display:none}
+details[open]>.proof-toggle{color:#1e3a5c}
+.proof-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #c8d8b8}
+.proof-body p{margin-bottom:.45rem}
+.proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
+.mistake-panel{margin:.4rem 0 1.1rem;border-left:3px solid #b8860b;border-radius:0 6px 6px 0;background:#fdf8e8}
+.mistake-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#9a6a00;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.mistake-toggle::-webkit-details-marker{display:none}
+details[open]>.mistake-toggle{color:#1e3a5c}
+.mistake-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #e8d8a8}
+.mistake-body p{margin-bottom:.45rem}
+@media print{.proof-panel{break-inside:avoid}.mistake-panel{break-inside:avoid}details.mistake-panel:not([open]){display:none}}
+.ref-table{width:100%;border-collapse:collapse;font-size:13.5px;margin-top:.4rem}
+.ref-table td{padding:4px 10px 4px 0;border-bottom:1px solid #c8d8ec}
+</style>
+</head>
+<body>
+<div class="container">
+<h1 class="page-title">Derivatives of Inverse Functions</h1>
+<p class="page-sub">Calculus I &nbsp;&middot;&nbsp; &sect;3.3.5 &nbsp;&middot;&nbsp; Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026 &nbsp;&middot;&nbsp; <strong>INSTRUCTOR</strong></p>
+<div class="opening-q">You know that $e^x$ and $\ln x$ are inverses &mdash; mirror images across the line $y=x$. If you already know the slope of $e^x$ at a point, can you find the slope of $\ln x$ at the mirrored point &mdash; without differentiating $\ln x$ from scratch?</div>
+
+<div class="two-col">
+<div class="col"><div class="section-head">The Inverse Function Derivative Rule</div>
+<div class="accent-box"><p>If $f$ is differentiable and invertible near a point, with inverse $g=f^{-1}$, then</p>
+$$g'(x)=\dfrac{1}{f'(g(x))}\qquad\text{provided }f'(g(x))\neq0$$
+<p>In words: the derivative of the inverse, at $x$, is the reciprocal of the derivative of the original function, evaluated at $g(x)$ &mdash; not at $x$ itself.</p></div>
+</div>
+<div class="col"><div class="section-head">Deriving It With the Chain Rule</div>
+<div class="accent-box"><p>Since $f(g(x))=x$ for all $x$ in the domain of $g$, differentiate both sides with respect to $x$:</p>
+$$\dfrac{d}{dx}\big[f(g(x))\big]=\dfrac{d}{dx}[x]$$
+$$f'(g(x))\cdot g'(x)=1\qquad(\text{chain rule})$$
+<p>Solve for $g'(x)$: divide both sides by $f'(g(x))$.</p></div>
+</div>
+</div>
+
+<div class="two-col">
+<div class="col">
+<details class="proof-panel">
+<summary class="proof-toggle">▸ Why the Slopes Are Reciprocals (Geometric View)</summary>
+<div class="proof-body">
+<p>Reflecting a graph across the line $y=x$ swaps every point $(a,b)$ with $(b,a)$ &mdash; and swaps the roles of "rise" and "run" at that point.</p>
+<p>If $f$ has slope $m$ at $(a,b)$ (rise $m$ per unit run), then after reflecting, the same tangent line has slope $\dfrac{1}{m}$ at $(b,a)$ &mdash; rise and run have traded places.</p>
+<p>That reflected tangent line is exactly the tangent to $g=f^{-1}$ at $x=b$. Since $g(b)=a$, this says $g'(b)=\dfrac{1}{f'(a)}=\dfrac{1}{f'(g(b))}$ &mdash; matching the formula derived algebraically at left.</p>
+<div class="proof-qed">&#9633;</div>
+</div>
+</details>
+</div>
+<div class="col">
+<details class="mistake-panel">
+<summary class="mistake-toggle">▸ Common Mistake</summary>
+<div class="mistake-body">
+<p>Students compute $f'(x)$ and then plug in $x$ directly, instead of first finding $g(x)=f^{-1}(x)$ and evaluating $f'$ there.</p>
+<p>The formula needs $f'(g(x))$, not $f'(x)$. Always find $g(x)$ first &mdash; often by solving $f(\text{something})=x$ &mdash; then substitute that something into $f'$.</p>
+</div>
+</details>
+</div>
+</div>
+
+<div class="section-head">Worked Examples</div>
+<div class="examples-grid">
+<div class="ex-block">
+  <div class="ex-label">Example 1 &nbsp;&mdash;&nbsp; Deriving $\ln'(x)=1/x$</div>
+  <div class="ex-body">Use $f(x)=e^x$ (whose inverse is $g(x)=\ln x$) and the inverse derivative rule to find $\dfrac{d}{dx}[\ln x]$.</div>
+  <div class="ex-answer instructor">$f'(x)=e^x$, so $f'(g(x))=e^{\ln x}=x$.<br>$g'(x)=\dfrac{1}{f'(g(x))}=\dfrac{1}{x}$<br>This is exactly the familiar rule $\dfrac{d}{dx}[\ln x]=\dfrac{1}{x}$ &mdash; now justified.</div>
+</div>
+<div class="ex-block">
+  <div class="ex-label">Example 2 &nbsp;&mdash;&nbsp; Evaluating $(f^{-1})'$ at a point</div>
+  <div class="ex-body">Let $f(x)=x^3+2x+1$. Find $(f^{-1})'(4)$.</div>
+  <div class="ex-answer instructor">Find $g(4)$: solve $f(a)=4$. Try $a=1$: $1+2+1=4$ &#10003;. So $g(4)=1$.<br>$f'(x)=3x^2+2$, so $f'(1)=3+2=5$.<br>$(f^{-1})'(4)=\dfrac{1}{f'(1)}=\dfrac{1}{5}$</div>
+</div>
+<div class="ex-block">
+  <div class="ex-label">Example 3 &nbsp;&mdash;&nbsp; Deriving $\arcsin'(x)$</div>
+  <div class="ex-body">Use $f(x)=\sin x$ on $[-\pi/2,\pi/2]$ (inverse $g(x)=\arcsin x$) to derive $\dfrac{d}{dx}[\arcsin x]$.</div>
+  <div class="ex-answer instructor">$f'(x)=\cos x$, so $f'(g(x))=\cos(\arcsin x)$.<br>If $\theta=\arcsin x$, then $\sin\theta=x$, and $\cos\theta=\sqrt{1-x^2}$ (right triangle: opposite $x$, hypotenuse 1).<br>$g'(x)=\dfrac{1}{\cos(\arcsin x)}=\dfrac{1}{\sqrt{1-x^2}}$</div>
+</div>
+<div class="ex-block">
+  <div class="ex-label">Example 4 &nbsp;&mdash;&nbsp; Deriving $\arctan'(x)$</div>
+  <div class="ex-body">Use $f(x)=\tan x$ (inverse $g(x)=\arctan x$) to derive $\dfrac{d}{dx}[\arctan x]$.</div>
+  <div class="ex-answer instructor">$f'(x)=\sec^2x=1+\tan^2x$, so $f'(g(x))=1+\tan^2(\arctan x)=1+x^2$.<br>$g'(x)=\dfrac{1}{f'(g(x))}=\dfrac{1}{1+x^2}$</div>
+</div>
+</div>
+
+<div class="section-head">Reference &mdash; The Six Inverse Trig Derivatives</div>
+<div class="accent-box">
+<table class="ref-table">
+<tr><td>$\dfrac{d}{dx}[\arcsin x]=\dfrac{1}{\sqrt{1-x^2}}$</td><td>$\dfrac{d}{dx}[\text{arccsc }x]=-\dfrac{1}{|x|\sqrt{x^2-1}}$</td></tr>
+<tr><td>$\dfrac{d}{dx}[\arccos x]=-\dfrac{1}{\sqrt{1-x^2}}$</td><td>$\dfrac{d}{dx}[\text{arcsec }x]=\dfrac{1}{|x|\sqrt{x^2-1}}$</td></tr>
+<tr><td>$\dfrac{d}{dx}[\arctan x]=\dfrac{1}{1+x^2}$</td><td>$\dfrac{d}{dx}[\text{arccot }x]=-\dfrac{1}{1+x^2}$</td></tr>
+</table>
+</div>
+
+<div class="section-head">Practice Problems</div>
+<div class="practice">
+<div class="pr-row">
+  <div class="pr-num">1.</div>
+  <div class="pr-prob">Use $f(x)=e^x$ to verify $\dfrac{d}{dx}[\ln x]=\dfrac{1}{x}$ at the specific point $x=e^2$.</div>
+  <div class="pr-ans instructor">$g(e^2)=\ln(e^2)=2$. $f'(2)=e^2$. $g'(e^2)=\dfrac{1}{e^2}$ &mdash; matches $\dfrac{1}{x}$ at $x=e^2$.</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">2.</div>
+  <div class="pr-prob">Let $f(x)=x^3$. Find $(f^{-1})'(8)$.</div>
+  <div class="pr-ans instructor">$g(8)=2$ (since $2^3=8$). $f'(2)=12$. $(f^{-1})'(8)=\dfrac{1}{12}$</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">3.</div>
+  <div class="pr-prob">Let $f(x)=x^5+x$. Find $(f^{-1})'(2)$.</div>
+  <div class="pr-ans instructor">$g(2)=1$ (since $1+1=2$). $f'(x)=5x^4+1$, $f'(1)=6$. $(f^{-1})'(2)=\dfrac{1}{6}$</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">4.</div>
+  <div class="pr-prob">Use $f(x)=\cos x$ (inverse $\arccos x$) to derive $\dfrac{d}{dx}[\arccos x]$.</div>
+  <div class="pr-ans instructor">$f'(x)=-\sin x$; $\sin(\arccos x)=\sqrt{1-x^2}$. $g'(x)=\dfrac{1}{-\sqrt{1-x^2}}=-\dfrac{1}{\sqrt{1-x^2}}$</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">5.</div>
+  <div class="pr-prob">Let $f(x)=2x^3+x-4$. Find $(f^{-1})'(-1)$.</div>
+  <div class="pr-ans instructor">$g(-1)=1$ (since $2+1-4=-1$). $f'(x)=6x^2+1$, $f'(1)=7$. $(f^{-1})'(-1)=\dfrac{1}{7}$</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">6.</div>
+  <div class="pr-prob">Explain why $(f^{-1})'(x)$ is undefined wherever $f'(g(x))=0$. Use $f(x)=x^3$ at $x=0$ as an example.</div>
+  <div class="pr-ans instructor">The formula divides by $f'(g(x))$ &mdash; division by zero is undefined. Geometrically, $f(x)=x^3$ has a horizontal tangent at $x=0$; reflecting a horizontal line across $y=x$ gives a vertical line, so $f^{-1}(x)=\sqrt[3]{x}$ has a vertical (undefined-slope) tangent at $x=0$.</div>
+</div>
+</div>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/contrib/auto-render.min.js"></script>
+<script>
+function toggleAns(btn) {
+  if (!btn.dataset.orig) btn.dataset.orig = btn.textContent;
+  var ans = btn.nextElementSibling;
+  var showing = ans.classList.toggle('visible');
+  btn.textContent = showing ? 'Hide' : btn.dataset.orig;
+}
+renderMathInElement(document.body, {
+  delimiters: [
+    {left: '$$', right: '$$', display: true},
+    {left: '$',  right: '$',  display: false}
+  ],
+  throwOnError: false
+});
+</script>
+</body>
+</html>

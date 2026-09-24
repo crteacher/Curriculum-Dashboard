@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Equations from Graphs &mdash; Practice</title>
+<title>Derivatives of Inverse Functions &mdash; Practice</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.css">
 <style>
   *{box-sizing:border-box;margin:0;padding:0}
@@ -56,34 +56,30 @@
   .reveal-link:hover{color:#555}
   .revealed-answer{display:none;margin-top:8px;font-family:sans-serif;font-size:13px;
     color:#444;background:#f5f3ef;border-radius:6px;padding:8px 11px;line-height:1.8;overflow-x:auto}
+  .interval-hint{font-family:sans-serif;font-size:11px;color:#1e3a5c;margin-top:4px;
+    padding:2px 7px;background:#eef3f9;border-radius:4px;display:inline-block}
   code{font-family:'Courier New',monospace;background:#f0ede7;padding:1px 5px;border-radius:3px;font-size:12px}
-
-
-.hint{display:none!important}
 </style>
 </head>
 <body>
 <div class="container">
-  <h1>Equations from Graphs</h1>
-  <p class="subtitle">College Algebra &nbsp;&middot;&nbsp; &sect;2.3 &nbsp;&middot;&nbsp; Instructor: Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026</p>
+  <h1>Derivatives of Inverse Functions</h1>
+  <p class="subtitle">Calculus I &nbsp;&middot;&nbsp; &sect;3.3.5 &nbsp;&middot;&nbsp; Instructor: Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026</p>
 
   <div class="section">
     <div class="section-title">Core Ideas</div>
 
     <div class="concept">
-      <span class="concept-label">Reading the y-intercept</span>
-      If the line visibly crosses the y-axis at an integer, read $b$ directly.
-      Then pick another point to compute $m = \text{rise}/\text{run}$.
+      <span class="concept-label">Inverse Function Derivative Rule</span>
+      If $g=f^{-1}$, then $g'(x)=\dfrac{1}{f'(g(x))}$ (provided $f'(g(x))\neq0$).
+      Derived from $f(g(x))=x$: differentiate both sides with the chain rule to get
+      $f'(g(x))\cdot g'(x)=1$, then solve for $g'(x)$.
     </div>
     <div class="concept">
-      <span class="concept-label">Two-Point Method</span>
-      Compute $m$ from two points, then use point-slope:
-      $y - y_1 = m(x-x_1)$ and simplify to $y = mx + b$.
-    </div>
-    <div class="concept">
-      <span class="concept-label">Special Lines</span>
-      Horizontal through $(a,k)$: $y = k$. &nbsp;
-      Vertical through $(h,b)$: $x = h$.
+      <span class="concept-label">Using It</span>
+      Find $g(x_0)=a$ (solve $f(a)=x_0$), compute $f'(a)$, then $g'(x_0)=\dfrac{1}{f'(a)}$.
+      This is how $\ln'(x)=\frac{1}{x}$ and the inverse trig derivatives are derived from
+      $e^x$, $\sin x$, $\cos x$, and $\tan x$.
     </div>
 
   </div>
@@ -91,7 +87,7 @@
   <div class="section">
     <div class="section-title">Practice Problems</div>
     <p style="font-family:sans-serif;font-size:13px;color:#666;margin-bottom:1rem;">
-      Every problem is read from its graph. Slope: enter an integer. Intercepts: an ordered pair, e.g. <code>(0,3)</code>. Full equations: enter in the form <code>y=2x+3</code>. Horizontal/vertical lines: enter <code>y=4</code> or <code>x=-2</code>. Point-on-line questions: <code>yes</code> or <code>no</code>.
+      Groups 1&ndash;4 and 6&ndash;8: type your answer as a fraction, e.g. <code>1/12</code> or <code>-5/3</code>. Group 5: type the formula, e.g. <code>1/(x*ln(3))</code>.
       Press <strong>Check</strong> or hit Enter.
     </p>
     <div class="score-bar">
@@ -137,185 +133,105 @@ function addT(n, v) {
 
 // ── Problem generators (section-specific, injected below) ─────────────────────
 
-// ── SVG graph helper ─────────────────────────────────────────────────────────
-function gridAxesSVG() {
-  const W = 220, H = 220, cx = 110, cy = 110, sc = 20;
-  let g = '';
-  // grid lines
-  for (let i = -5; i <= 5; i++) {
-    const px = cx + i*sc, py = cy - i*sc;
-    g += `<line x1="${px}" y1="5" x2="${px}" y2="${H-5}" stroke="#e0ddd8" stroke-width="1"/>`;
-    g += `<line x1="5" y1="${py}" x2="${W-5}" y2="${py}" stroke="#e0ddd8" stroke-width="1"/>`;
-  }
-  // axes
-  g += `<line x1="5" y1="${cy}" x2="${W-10}" y2="${cy}" stroke="#555" stroke-width="1.5"/>`;
-  g += `<line x1="${cx}" y1="10" x2="${cx}" y2="${H-5}" stroke="#555" stroke-width="1.5"/>`;
-  // arrowheads
-  g += `<polygon points="${W-5},${cy} ${W-12},${cy-4} ${W-12},${cy+4}" fill="#555"/>`;
-  g += `<polygon points="${cx},5 ${cx-4},12 ${cx+4},12" fill="#555"/>`;
-  // tick marks and labels
-  for (let i = -4; i <= 4; i++) {
-    if (i === 0) continue;
-    const px = cx + i*sc, py = cy - i*sc;
-    g += `<line x1="${px}" y1="${cy-4}" x2="${px}" y2="${cy+4}" stroke="#555" stroke-width="1"/>`;
-    g += `<text x="${px}" y="${cy+16}" text-anchor="middle" font-size="10" fill="#777" font-family="sans-serif">${i}</text>`;
-    g += `<line x1="${cx-4}" y1="${py}" x2="${cx+4}" y2="${py}" stroke="#555" stroke-width="1"/>`;
-    g += `<text x="${cx-8}" y="${py+4}" text-anchor="end" font-size="10" fill="#777" font-family="sans-serif">${i}</text>`;
-  }
-  g += `<text x="${cx-7}" y="${cy+15}" text-anchor="end" font-size="10" fill="#777" font-family="sans-serif">0</text>`;
-  return g;
-}
+const DI_TRIPLES = [[3,4,5],[5,12,13],[8,15,17],[7,24,25],[20,21,29],[9,40,41]];
 
-function svgWrap(inner, question) {
-  const qHtml = `<p style="font-family:sans-serif;font-size:13px;text-align:center;margin-top:6px;color:#1a1a1a">${question}</p>`;
-  return `<svg width="220" height="220" viewBox="0 0 220 220" style="display:block;margin:0 auto;background:#fafaf8;border-radius:4px">${inner}</svg>${qHtml}`;
-}
-
-function markPoint(px, py, label) {
-  const cx = 110, cy = 110, sc = 20;
-  const sx = cx + px*sc, sy = cy - py*sc;
-  let s = `<circle cx="${sx}" cy="${sy}" r="4.2" fill="#1e3a5c"/>`;
-  if (label) s += `<text x="${sx+7}" y="${sy-7}" font-size="10" fill="#1e3a5c" font-family="sans-serif">${label}</text>`;
-  return s;
-}
-
-// makeGraph(m, b, question, marks) — marks: optional array of [x, y, label] to circle
-function makeGraph(m, b, question, marks) {
-  const cx = 110, cy = 110, sc = 20;
-  let g = gridAxesSVG();
-  // the line, clipped to x ∈ [-5.5, 5.5]
-  const lx1 = -5.5, lx2 = 5.5;
-  const ly1 = m*lx1 + b, ly2 = m*lx2 + b;
-  g += `<line x1="${cx+lx1*sc}" y1="${cy-ly1*sc}" x2="${cx+lx2*sc}" y2="${cy-ly2*sc}" stroke="#1e3a5c" stroke-width="2.5" stroke-linecap="round"/>`;
-  if (marks) marks.forEach(pt => { g += markPoint(pt[0], pt[1], pt[2]); });
-  return svgWrap(g, question);
-}
-
-// makeVerticalGraph(h, question, marks) — for x = h lines, which makeGraph can't represent
-function makeVerticalGraph(h, question, marks) {
-  const cx = 110, cy = 110, sc = 20;
-  let g = gridAxesSVG();
-  g += `<line x1="${cx+h*sc}" y1="10" x2="${cx+h*sc}" y2="210" stroke="#1e3a5c" stroke-width="2.5" stroke-linecap="round"/>`;
-  if (marks) marks.forEach(pt => { g += markPoint(pt[0], pt[1], pt[2]); });
-  return svgWrap(g, question);
-}
-
-// gen1: graph → find slope
+// gen1: f(x)=x^3+c*x, find (f^-1)'(y0) at y0=f(a)
 function gen1() {
-  const m = choose([-3,-2,-1,1,2,3]);
-  const b = rInt(7) - 3;
+  const c = rInt(5)+1, a = rInt(4)+1;
+  const y0 = a*a*a + c*a;
+  const den = 3*a*a + c;
   return {
-    svg:    makeGraph(m, b, 'What is the slope of this line?'),
-    answer: [String(m)],
-    hint:   'Pick two lattice points the line passes through. What is rise over run between them?',
-    step:   `\\text{slope} = ${m}`
+    latex: `\\text{Let }f(x)=x^3+${c}x\\text{. Find }(f^{-1})'(${y0}).`,
+    answer: ['1/'+den],
+    hint: "Find a with f(a) equal to the given value (try small integers), then compute f prime of a and take the reciprocal.",
+    step: `f(${a})=${a}^3+${c}(${a})=${y0}\\text{, so }g(${y0})=${a};\\;\\;f'(x)=3x^2+${c},\\;f'(${a})=${den};\\;\\;(f^{-1})'(${y0})=\\dfrac{1}{${den}}`
   };
 }
 
-// gen2: graph → find y-intercept (ordered pair)
+// gen2: f(x)=x^5+c*x, find (f^-1)'(y0) at y0=f(a)
 function gen2() {
-  const m = choose([-2,-1,1,2]);
-  const b = rInt(9) - 4;
+  const c = rInt(3)+1, a = rInt(3)+1;
+  const y0 = a*a*a*a*a + c*a;
+  const den = 5*a*a*a*a + c;
   return {
-    svg:    makeGraph(m, b, 'What is the y-intercept of this line? Give an ordered pair.'),
-    answer: [`(0,${b})`],
-    hint:   'The y-intercept is where the line meets the y-axis — give its coordinates as an ordered pair.',
-    step:   `\\text{y-intercept} = (0,${b})`
+    latex: `\\text{Let }f(x)=x^5+${c}x\\text{. Find }(f^{-1})'(${y0}).`,
+    answer: ['1/'+den],
+    hint: "Find a with f(a) equal to the given value (try small integers), then compute f prime of a and take the reciprocal.",
+    step: `f(${a})=${a}^5+${c}(${a})=${y0}\\text{, so }g(${y0})=${a};\\;\\;f'(x)=5x^4+${c},\\;f'(${a})=${den};\\;\\;(f^{-1})'(${y0})=\\dfrac{1}{${den}}`
   };
 }
 
-// gen3: graph → find x-intercept (ordered pair)
+// gen3: f(x)=x^3+c (constant shift), find (f^-1)'(y0)
 function gen3() {
-  const m = choose([-2,-1,1,2]);
-  const k = choose([-2,-1,1,2]);
-  const b = -m * k;
+  const c = rInt(9)+1, a = rInt(4)+1;
+  const y0 = a*a*a + c;
+  const den = 3*a*a;
   return {
-    svg:    makeGraph(m, b, 'What is the x-intercept of this line? Give an ordered pair.'),
-    answer: [`(${k},0)`],
-    hint:   'The x-intercept is where the line meets the x-axis — give that crossing point as an ordered pair.',
-    step:   `\\text{x-intercept} = (${k},0)`
+    latex: `\\text{Let }f(x)=x^3+${c}\\text{. Find }(f^{-1})'(${y0}).`,
+    answer: ['1/'+den],
+    hint: "Find a with f(a) equal to the given value, then compute f prime of a (which is 3a^2) and take the reciprocal.",
+    step: `f(${a})=${a}^3+${c}=${y0}\\text{, so }g(${y0})=${a};\\;\\;f'(x)=3x^2,\\;f'(${a})=${den};\\;\\;(f^{-1})'(${y0})=\\dfrac{1}{${den}}`
   };
 }
 
-// gen4: graph, y-intercept marked → write the full equation
+// gen4: f(x)=x^4+c*x on x>0, find (f^-1)'(y0)
 function gen4() {
-  const m = choose([-3,-2,-1,1,2,3]);
-  const b = rInt(7) - 3;
-  const mPart = m === 1 ? 'x' : m === -1 ? '-x' : `${m}x`;
-  const bPart = b === 0 ? '' : b > 0 ? `+${b}` : `${b}`;
+  const c = rInt(3)+1, a = rInt(3)+1;
+  const y0 = a*a*a*a + c*a;
+  const den = 4*a*a*a + c;
   return {
-    svg:    makeGraph(m, b, 'Write the equation of this line.', [[0, b, `(0,${b})`]]),
-    answer: [`y=${mPart}${bPart}`, `${mPart}${bPart}`],
-    hint:   'The y-intercept is marked on the graph — what slope connects it to another point on the line?',
-    step:   `y=${mPart}${bPart}`
+    latex: `\\text{Let }f(x)=x^4+${c}x\\text{ for }x>0\\text{. Find }(f^{-1})'(${y0}).`,
+    answer: ['1/'+den],
+    hint: "Find a>0 with f(a) equal to the given value, then compute f prime of a (which is 4a^3+c) and take the reciprocal.",
+    step: `f(${a})=${a}^4+${c}(${a})=${y0}\\text{, so }g(${y0})=${a};\\;\\;f'(x)=4x^3+${c},\\;f'(${a})=${den};\\;\\;(f^{-1})'(${y0})=\\dfrac{1}{${den}}`
   };
 }
 
-// gen5: graph, two marked points (y-intercept not shown) → write the full equation
+// gen5: f(x)=b^x, find (f^-1)'(x) symbolically (log_b derivative)
 function gen5() {
-  const m  = choose([-2,-1,1,2]);
-  const x1 = choose([-2,-1,1,2]);
-  const y1 = rInt(5) - 2;
-  const b  = y1 - m * x1;
-  const dirs = shuffle([1,-1,2,-2]);
-  let x2 = x1 + 1, y2 = m*(x1+1) + b;
-  for (const d of dirs) {
-    const cx2 = x1 + d, cy2 = m*cx2 + b;
-    if (cx2 !== x1 && cx2 !== 0 && Math.abs(cx2) <= 4 && Math.abs(cy2) <= 4) { x2 = cx2; y2 = cy2; break; }
-  }
-  const mPart  = m === 1 ? 'x' : m === -1 ? '-x' : `${m}x`;
-  const bPart  = b === 0 ? '' : b > 0 ? `+${b}` : `${b}`;
-  const x1Term = x1 >= 0 ? `x-${x1}` : `x+${-x1}`;
-  const y1Term = y1 >= 0 ? `y-${y1}` : `y+${-y1}`;
+  const b = [2,3,5][rInt(3)];
   return {
-    svg:    makeGraph(m, b, 'Write the equation of this line using the two marked points.',
-                       [[x1, y1, `(${x1},${y1})`], [x2, y2, `(${x2},${y2})`]]),
-    answer: [`y=${mPart}${bPart}`, `${mPart}${bPart}`],
-    hint:   'Two points are marked on the line — what slope do they determine, and where does that place the y-intercept?',
-    step:   `m=${m},\\quad ${y1Term}=${m}(${x1Term})\\Rightarrow y=${mPart}${bPart}`
+    latex: `\\text{If }f(x)=${b}^x\\text{, its inverse is }g(x)=\\log_{${b}}x\\text{. Find }g'(x).`,
+    answer: ['1/(x*ln('+b+'))'],
+    hint: "Use the inverse rule with f prime of x equal to b^x times ln(b), and f(g(x))=x.",
+    step: `f'(x)=${b}^x\\ln ${b}\\text{, so }f'(g(x))=x\\ln ${b};\\;\\;g'(x)=\\dfrac{1}{x\\ln ${b}}`
   };
 }
 
-// gen6: horizontal-line graph → write the equation
+// gen6: f(x)=sin(x), f(a)=p/r (Pythagorean triple), find (f^-1)'(p/r) = r/q
 function gen6() {
-  const k = rInt(9) - 4;
-  const adjK = k === 0 ? 3 : k;
-  const x = choose([-3,-2,-1,1,2,3]);
+  const t = DI_TRIPLES[rInt(DI_TRIPLES.length)];
+  const p = t[0], q = t[1], r = t[2];
   return {
-    svg:    makeGraph(0, adjK, 'Write the equation of this horizontal line.', [[x, adjK, `(${x},${adjK})`]]),
-    answer: [`y=${adjK}`],
-    hint:   'A horizontal line on this graph has one y-value everywhere — what is it?',
-    step:   `y=${adjK}\\text{ for every point on this line}`
+    latex: `\\text{If }f(x)=\\sin x\\text{ and }f(a)=\\tfrac{${p}}{${r}}\\text{ for some }a\\in(0,\\pi/2)\\text{, find }(f^{-1})'\\!\\left(\\tfrac{${p}}{${r}}\\right).`,
+    answer: [`${r}/${q}`],
+    hint: "Use the Pythagorean identity to find cos(a) from sin(a), then take the reciprocal of f prime of a, which is cos(a).",
+    step: `\\sin a=\\tfrac{${p}}{${r}}\\Rightarrow\\cos a=\\tfrac{${q}}{${r}}\\text{ (right triangle)};\\;\\;(f^{-1})'\\!\\left(\\tfrac{${p}}{${r}}\\right)=\\dfrac{1}{\\cos a}=\\dfrac{${r}}{${q}}`
   };
 }
 
-// gen7: vertical-line graph → write the equation
+// gen7: f(x)=cos(x), f(a)=q/r, find (f^-1)'(q/r) = -r/p
 function gen7() {
-  const h = rInt(9) - 4;
-  const adjH = h === 0 ? 3 : h;
-  const y = choose([-3,-2,-1,1,2,3]);
+  const t = DI_TRIPLES[rInt(DI_TRIPLES.length)];
+  const p = t[0], q = t[1], r = t[2];
   return {
-    svg:    makeVerticalGraph(adjH, 'Write the equation of this vertical line.', [[adjH, y, `(${adjH},${y})`]]),
-    answer: [`x=${adjH}`],
-    hint:   'A vertical line on this graph has one x-value everywhere — what is it?',
-    step:   `x=${adjH}\\text{ for every point on this line}`
+    latex: `\\text{If }f(x)=\\cos x\\text{ and }f(a)=\\tfrac{${q}}{${r}}\\text{ for some }a\\in(0,\\pi/2)\\text{, find }(f^{-1})'\\!\\left(\\tfrac{${q}}{${r}}\\right).`,
+    answer: [`-${r}/${p}`],
+    hint: "Use the Pythagorean identity to find sin(a) from cos(a). Remember f prime of x is negative sin(x).",
+    step: `\\cos a=\\tfrac{${q}}{${r}}\\Rightarrow\\sin a=\\tfrac{${p}}{${r}};\\;\\;f'(a)=-\\sin a=-\\tfrac{${p}}{${r}};\\;\\;(f^{-1})'\\!\\left(\\tfrac{${q}}{${r}}\\right)=-\\dfrac{${r}}{${p}}`
   };
 }
 
-// gen8: graph with a marked test point → does it lie on the line?
+// gen8: f(x)=tan(x), f(a)=p/q, find (f^-1)'(p/q) = q^2/r^2
 function gen8() {
-  const m = choose([-2,-1,1,2]);
-  const x0 = choose([-3,-2,-1,1,2,3]);
-  const trueY = rInt(7) - 3;
-  const b = trueY - m * x0;
-  const isOn = rInt(2) === 0;
-  const testY = isOn ? trueY : trueY + choose([1,-1]);
-  const ans = isOn ? 'yes' : 'no';
+  const t = DI_TRIPLES[rInt(DI_TRIPLES.length)];
+  const p = t[0], q = t[1], r = t[2];
+  const rr = r*r, qq = q*q;
   return {
-    svg:    makeGraph(m, b, 'Does the marked point P lie on this line?', [[x0, testY, 'P']]),
-    answer: [ans],
-    hint:   'Trace the line at that x-value — does the marked point sit on it or off it?',
-    step:   `\\text{At }x=${x0}\\text{, the line has }y=${trueY}.\\quad P=(${x0},${testY})\\;${isOn?'\\text{is on the line.}':'\\text{is not on the line.}'}`
+    latex: `\\text{If }f(x)=\\tan x\\text{ and }f(a)=\\tfrac{${p}}{${q}}\\text{ for some }a\\in(0,\\pi/2)\\text{, find }(f^{-1})'\\!\\left(\\tfrac{${p}}{${q}}\\right).`,
+    answer: [`${qq}/${rr}`],
+    hint: "Use f prime of x equal to sec^2(x), which is 1+tan^2(x), then take the reciprocal.",
+    step: `\\tan a=\\tfrac{${p}}{${q}}\\Rightarrow\\sec^2a=1+\\left(\\tfrac{${p}}{${q}}\\right)^2=\\tfrac{${rr}}{${qq}};\\;\\;(f^{-1})'\\!\\left(\\tfrac{${p}}{${q}}\\right)=\\dfrac{${qq}}{${rr}}`
   };
 }
 
@@ -326,7 +242,13 @@ const GENERATORS = [gen1, gen2, gen3, gen4, gen5, gen6, gen7, gen8];
 let ACTIVE, correct, flags, attempted, peeked;
 
 function norm(s) {
-  return s.trim().toLowerCase().replace(/\s+/g, '').replace(/[−–]/g, '-');
+  return s.trim().toLowerCase()
+    .replace(/\s+/g, '')
+    .replace(/[−–]/g, '-')
+    .replace(/∞/g, 'inf')
+    .replace(/∪/g, 'u')
+    .replace(/infinity/g, 'inf')
+    .replace(/union/g, 'u');
 }
 function ok(user, acc) { return acc.some(a => norm(user) === norm(a)); }
 
@@ -349,10 +271,11 @@ function buildCards() {
         <div class="card-meta">Problem ${i + 1}</div>
         <div class="card-expr" id="expr-${i}"></div>
         <div class="input-row">
-          <input class="ans-input" id="ai-${i}" placeholder="answer" />
+          <input class="ans-input" id="ai-${i}" placeholder="${p.interval ? '[a,b)' : 'answer'}" />
           <button class="check-btn" id="chk-${i}" onclick="check(${i})">Check</button>
         </div>
         <div class="hint">${p.hint}</div>
+        ${p.interval ? '<div class="interval-hint">Use <code>inf</code> for ∞ and <code>u</code> for union &mdash; e.g. <code>[2,inf)</code> or <code>(-inf,0)u(0,inf)</code></div>' : ''}
         <div class="feedback" id="fb-${i}"></div>
         <span class="reveal-link" id="rl-${i}" onclick="reveal(${i})">Show solution</span>
         <div class="revealed-answer" id="ra-${i}"></div>

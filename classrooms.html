@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Classrooms — Dr. Halverson</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.17.0/katex.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.17.0/katex.min.js"></script>
+  <script src="./Calc 1/calc1-spiral-generators.js"></script>
+  <script src="./Calc 2/calc2-spiral-generators.js"></script>
+  <script src="./PreCalc/precalc-spiral-generators.js"></script>
+  <script src="./College Algebra/ca-spiral-generators.js"></script>
+  <style>
+    :root {
+      --bg: #f4f4f4; --card: #ffffff; --text: #111111; --muted: #555555;
+      --border: #dde2e8; --navy: #1e3a5c; --crimson: #6b1a26;
+      --c2: #7a1a1a; --pc: #8b3a8b; --ca: #1a7a3a;
+      --green: #15803d; --red: #b91c1c; --gold: #c8a951;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg);
+           color: var(--text); min-height: 100vh; }
+    .site-nav { background: var(--crimson); padding: .65rem 1.5rem; }
+    .site-nav a { color: rgba(255,255,255,.9); text-decoration: none;
+                  font-size: .85rem; font-family: Georgia, serif; }
+    .site-nav a:hover { color: #fff; }
+    .page-header { text-align: center; padding: 1.8rem 1rem 1rem; }
+    .page-header h1 { font-size: 2rem; font-weight: 700; color: var(--crimson); }
+    .page-header p { font-size: .9rem; color: var(--muted); margin-top: .35rem; }
+    .tab-bar { display: flex; max-width: 900px; margin: 0 auto;
+               border-bottom: 2px solid var(--border); padding: 0 1.5rem; }
+    .tab-btn { padding: .65rem 1.4rem; font-size: .88rem; font-weight: 600;
+               border: none; background: none; cursor: pointer; color: var(--muted);
+               border-bottom: 3px solid transparent; margin-bottom: -2px;
+               transition: color .15s, border-color .15s; }
+    .tab-calc1.active { color: var(--navy); border-color: var(--navy); }
+    .tab-calc2.active { color: var(--c2);   border-color: var(--c2); }
+    .tab-precalc.active { color: var(--pc); border-color: var(--pc); }
+    .tab-ca.active    { color: var(--ca);   border-color: var(--ca); }
+    .pane { display: none; max-width: 900px; margin: 0 auto; padding: 1.5rem; }
+    .pane.active { display: block; }
+    .session-hdr { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;
+                   margin-bottom: 1.5rem; }
+    .session-hdr h2 { font-size: 1.2rem; font-weight: 700; flex: 1; }
+    .session-hdr h2.navy { color: var(--navy); }
+    .session-hdr h2.c2   { color: var(--c2); }
+    .session-hdr h2.pc   { color: var(--pc); }
+    .session-hdr h2.ca   { color: var(--ca); }
+    .score-pill { color: #fff; font-size: .85rem; font-weight: 700;
+                  padding: .3rem .9rem; border-radius: 999px; }
+    .pill-navy { background: var(--navy); }
+    .pill-c2   { background: var(--c2); }
+    .pill-pc   { background: var(--pc); }
+    .pill-ca   { background: var(--ca); }
+    .new-set-btn { background: none; font-size: .85rem; font-weight: 600;
+                   padding: .35rem .9rem; border-radius: 8px; cursor: pointer;
+                   transition: background .15s, color .15s; }
+    .new-set-btn.navy { border: 1.5px solid var(--navy); color: var(--navy); }
+    .new-set-btn.navy:hover { background: var(--navy); color: #fff; }
+    .new-set-btn.c2   { border: 1.5px solid var(--c2);   color: var(--c2); }
+    .new-set-btn.c2:hover   { background: var(--c2);   color: #fff; }
+    .new-set-btn.pc   { border: 1.5px solid var(--pc);   color: var(--pc); }
+    .new-set-btn.pc:hover   { background: var(--pc);   color: #fff; }
+    .new-set-btn.ca   { border: 1.5px solid var(--ca);   color: var(--ca); }
+    .new-set-btn.ca:hover   { background: var(--ca);   color: #fff; }
+    .prob-card { background: var(--card); border: 1.5px solid var(--border);
+                 border-radius: 14px; padding: 1.4rem 1.5rem; margin-bottom: 1.2rem;
+                 box-shadow: 0 1px 4px rgba(0,0,0,.06); }
+    .prob-card-num { font-size: .7rem; font-weight: 700; text-transform: uppercase;
+                     letter-spacing: .1em; color: var(--muted); margin-bottom: .4rem; }
+    .section-badge { display: inline-block; font-size: .7rem; font-weight: 700;
+                     text-transform: uppercase; letter-spacing: .07em;
+                     padding: .2rem .7rem; border-radius: 999px; margin-bottom: .8rem; }
+    .badge-navy { background: #e8edf4; color: var(--navy); }
+    .badge-c2   { background: #f4e8e8; color: var(--c2); }
+    .badge-pc   { background: #f4eaf4; color: var(--pc); }
+    .badge-ca   { background: #e8f4eb; color: var(--ca); }
+    .prob-question { font-size: 1rem; margin-bottom: 1rem; overflow-x: auto; }
+    .prob-question .katex-display { margin: .4rem 0; }
+    .ans-row { display: flex; gap: .6rem; align-items: center; flex-wrap: wrap; }
+    .ans-input { border: 1.5px solid var(--border); border-radius: 8px;
+                 padding: .45rem .8rem; font-size: .95rem; width: 180px;
+                 outline: none; transition: border-color .15s; }
+    .ans-input:focus { border-color: #999; }
+    .ans-input.correct { border-color: var(--green); background: #f0fdf4; }
+    .ans-input.wrong   { border-color: var(--red);   background: #fef2f2; }
+    .check-btn { color: #fff; border: none; padding: .45rem 1rem; border-radius: 8px;
+                 font-size: .88rem; font-weight: 600; cursor: pointer; opacity: 1;
+                 transition: opacity .15s; }
+    .check-btn:hover { opacity: .88; }
+    .check-btn:disabled { opacity: .4; cursor: default; }
+    .check-btn.navy { background: var(--navy); }
+    .check-btn.c2   { background: var(--c2); }
+    .check-btn.pc   { background: var(--pc); }
+    .check-btn.ca   { background: var(--ca); }
+    .feedback { font-size: .85rem; font-weight: 600; }
+    .feedback.ok  { color: var(--green); }
+    .feedback.err { color: var(--red); }
+    .hint-text { font-size: .82rem; color: var(--muted); font-style: italic;
+                 margin: .7rem 0 .4rem; line-height: 1.5; }
+    .reveal-btn { background: none; border: 1.5px solid var(--gold); color: #7a5c1e;
+                  font-size: .8rem; font-weight: 600; padding: .3rem .8rem;
+                  border-radius: 8px; cursor: pointer; margin-top: .6rem;
+                  transition: background .15s; }
+    .reveal-btn:hover { background: #fdf6e3; }
+    .reveal-btn:disabled { opacity: .4; cursor: default; }
+    .solution-box { display: none; margin-top: .75rem;
+                    border-top: 1.5px solid var(--border); padding-top: .75rem; }
+    .solution-label { font-size: .72rem; font-weight: 700; color: var(--muted);
+                      text-transform: uppercase; letter-spacing: .08em; margin-bottom: .4rem; }
+    .solution-math { overflow-x: auto; }
+    .status-msg { text-align: center; color: var(--muted); padding: 2rem; font-size: .95rem; }
+  </style>
+</head>
+<body>
+<nav class="site-nav"><a href="./index.html">← Dashboard</a></nav>
+<div class="page-header">
+  <h1>Classrooms</h1>
+  <p>Spiral Do Now — today's 3 topics are the same for every student; new numbers each refresh</p>
+</div>
+<div class="tab-bar">
+  <button class="tab-btn tab-calc1 active" onclick="switchTab('calc1')">Calc I</button>
+  <button class="tab-btn tab-calc2"        onclick="switchTab('calc2')">Calc II</button>
+  <button class="tab-btn tab-precalc"      onclick="switchTab('precalc')">PreCalc</button>
+  <button class="tab-btn tab-ca"           onclick="switchTab('ca')">College Algebra</button>
+</div>
+
+<div class="pane active" id="pane-calc1">
+  <div class="session-hdr">
+    <h2 class="navy">Spiral Do Now — Calculus I <span id="date-calc1" style="font-size:.8rem;font-weight:400;color:var(--muted)"></span></h2>
+    <span class="score-pill pill-navy" id="score-calc1">Score: 0 / 3</span>
+    <button class="new-set-btn navy" onclick="newNumbers('calc1')">&#8635; New Numbers</button>
+  </div>
+  <div id="problems-calc1"><div class="status-msg">Loading…</div></div>
+</div>
+<div class="pane" id="pane-calc2">
+  <div class="session-hdr">
+    <h2 class="c2">Spiral Do Now — Calculus II <span id="date-calc2" style="font-size:.8rem;font-weight:400;color:var(--muted)"></span></h2>
+    <span class="score-pill pill-c2" id="score-calc2">Score: 0 / 3</span>
+    <button class="new-set-btn c2" onclick="newNumbers('calc2')">&#8635; New Numbers</button>
+  </div>
+  <div id="problems-calc2"><div class="status-msg">Loading…</div></div>
+</div>
+<div class="pane" id="pane-precalc">
+  <div class="session-hdr">
+    <h2 class="pc">Spiral Do Now — PreCalc <span id="date-precalc" style="font-size:.8rem;font-weight:400;color:var(--muted)"></span></h2>
+    <span class="score-pill pill-pc" id="score-precalc">Score: 0 / 3</span>
+    <button class="new-set-btn pc" onclick="newNumbers('precalc')">&#8635; New Numbers</button>
+  </div>
+  <div id="problems-precalc"><div class="status-msg">Loading…</div></div>
+</div>
+<div class="pane" id="pane-ca">
+  <div class="session-hdr">
+    <h2 class="ca">Spiral Do Now — College Algebra <span id="date-ca" style="font-size:.8rem;font-weight:400;color:var(--muted)"></span></h2>
+    <span class="score-pill pill-ca" id="score-ca">Score: 0 / 3</span>
+    <button class="new-set-btn ca" onclick="newNumbers('ca')">&#8635; New Numbers</button>
+  </div>
+  <div id="problems-ca"><div class="status-msg">Loading…</div></div>
+</div>
+
+<script>
+// ── Course config ─────────────────────────────────────────────────────────────
+const COURSE_CFG = {
+  calc1:   { bundle: 'CALC1_SPIRAL',   stateKey: 'calc1',         cls: 'navy' },
+  calc2:   { bundle: 'CALC2_SPIRAL',   stateKey: 'calc2',         cls: 'c2'   },
+  precalc: { bundle: 'PRECALC_SPIRAL', stateKey: 'preCalc',       cls: 'pc'   },
+  ca:      { bundle: 'CA_SPIRAL',      stateKey: 'collegeAlgebra',cls: 'ca'   },
+};
+
+// ── Tab switching ─────────────────────────────────────────────────────────────
+function switchTab(id) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector('.tab-' + id).classList.add('active');
+  document.querySelectorAll('.pane').forEach(p => p.classList.remove('active'));
+  document.getElementById('pane-' + id).classList.add('active');
+}
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
+function norm(s) { return String(s).replace(/−/g,'-').replace(/\s+/g,'').toLowerCase(); }
+function rk(tex, el, display) {
+  try { katex.render(tex, el, { throwOnError:false, displayMode:!!display }); }
+  catch(e) { el.textContent = tex; }
+}
+
+// ── Date-seeded section picker ────────────────────────────────────────────────
+function dailySeed() {
+  const d = new Date().toISOString().slice(0,10);
+  let h = 2166136261;
+  for (let i = 0; i < d.length; i++) h = Math.imul(h ^ d.charCodeAt(i), 16777619) >>> 0;
+  return h;
+}
+function makeLCG(seed) {
+  let s = seed >>> 0;
+  return () => { s = (Math.imul(s,1664525)+1013904223)>>>0; return s/4294967296; };
+}
+function seededShuffle(arr, seed) {
+  const a = [...arr], rand = makeLCG(seed);
+  for (let i = a.length-1; i > 0; i--) {
+    const j = Math.floor(rand()*(i+1)); [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+
+// ── Session state (per course) ────────────────────────────────────────────────
+const SESSIONS = {};  // courseId → { dailyEntries, items, flags, attempted, peeked }
+
+function pickDailyEntries(courseId) {
+  const cfg    = COURSE_CFG[courseId];
+  const bundle = window[cfg.bundle];
+  if (!bundle) return [];
+  const completed = (window._stateData?.courses?.[cfg.stateKey]?.completedSections) || null;
+  let pool;
+  if (completed && completed.length > 0) {
+    pool = completed.filter(id => bundle[id]).map(id => bundle[id]);
+  } else {
+    pool = Object.values(bundle);
+  }
+  // Deduplicate by generator fingerprint
+  const seen = new Set();
+  const unique = pool.filter(e => {
+    const key = e.generators[0].toString().slice(20,80);
+    if (seen.has(key)) return false; seen.add(key); return true;
+  });
+  // Use date seed for section selection (same for all students each day)
+  // Mix course into seed so each course picks different sections
+  const courseHash = courseId.split('').reduce((h,c) => Math.imul(h^c.charCodeAt(0),16777619)>>>0, 2166136261);
+  return seededShuffle(unique, dailySeed() ^ courseHash).slice(0, Math.min(3, unique.length));
+}
+
+function newNumbers(courseId) {
+  const cfg = COURSE_CFG[courseId];
+  const bundle = window[cfg.bundle];
+  if (!bundle) {
+    document.getElementById('problems-' + courseId).innerHTML =
+      '<div class="status-msg">Generator bundle not loaded for this course.</div>';
+    return;
+  }
+  let sess = SESSIONS[courseId];
+  if (!sess) { SESSIONS[courseId] = sess = { dailyEntries:[], items:[], flags:[], attempted:[], peeked:[] }; }
+  if (sess.dailyEntries.length === 0) sess.dailyEntries = pickDailyEntries(courseId);
+  if (sess.dailyEntries.length === 0) {
+    document.getElementById('problems-' + courseId).innerHTML =
+      '<div class="status-msg">No completed sections yet for this course.</div>';
+    return;
+  }
+  // New random numbers, same today's sections
+  sess.items    = sess.dailyEntries.map(e => {
+    const gen = e.generators[Math.floor(Math.random()*e.generators.length)];
+    return { title: e.title, problem: gen() };
+  });
+  sess.flags    = sess.items.map(()=>false);
+  sess.attempted= sess.items.map(()=>false);
+  sess.peeked   = sess.items.map(()=>false);
+  renderProblems(courseId);
+  updateScore(courseId);
+}
+
+// ── Render ────────────────────────────────────────────────────────────────────
+function renderProblems(courseId) {
+  const cls  = COURSE_CFG[courseId].cls;
+  const sess = SESSIONS[courseId];
+  const wrap = document.getElementById('problems-' + courseId);
+  wrap.innerHTML = '';
+  sess.items.forEach((item, i) => {
+    const p = item.problem;
+    const card = document.createElement('div');
+    card.className = 'prob-card'; card.id = `card-${courseId}-${i}`;
+
+    const num = document.createElement('div');
+    num.className = 'prob-card-num'; num.textContent = `Problem ${i+1}`;
+    card.appendChild(num);
+
+    const badge = document.createElement('div');
+    badge.className = `section-badge badge-${cls}`; badge.textContent = item.title;
+    card.appendChild(badge);
+
+    const qDiv = document.createElement('div');
+    qDiv.className = 'prob-question';
+    if (p.svg && p.latex) {
+      // Graph + text question (e.g. one-sided limits)
+      const svgWrap = document.createElement('div');
+      svgWrap.style.cssText = 'text-align:center;margin-bottom:.6rem';
+      svgWrap.innerHTML = p.svg;
+      qDiv.appendChild(svgWrap);
+      const texEl = document.createElement('div');
+      rk(p.latex, texEl, false);
+      qDiv.appendChild(texEl);
+    } else if (p.svg)   { qDiv.innerHTML = p.svg; }
+    else if (p.latex)   { rk(p.latex, qDiv, true); }
+    else if (p.html)    { qDiv.innerHTML = p.html; }
+    else if (p.text)    { qDiv.textContent = p.text; }
+    else                { qDiv.textContent = '[Question unavailable — try New Numbers]'; }
+    card.appendChild(qDiv);
+
+    if (p.hint) {
+      const hDiv = document.createElement('div');
+      hDiv.className = 'hint-text'; hDiv.textContent = '💡 ' + p.hint;
+      card.appendChild(hDiv);
+    }
+
+    const row = document.createElement('div');
+    row.className = 'ans-row';
+    const inp = document.createElement('input');
+    inp.type = 'text'; inp.className = 'ans-input';
+    inp.id = `inp-${courseId}-${i}`; inp.placeholder = 'Your answer…';
+    inp.addEventListener('keydown', e => { if (e.key==='Enter') checkAnswer(courseId,i); });
+    const btn = document.createElement('button');
+    btn.className = `check-btn ${cls}`; btn.id = `chk-${courseId}-${i}`;
+    btn.textContent = 'Check';
+    btn.addEventListener('click', () => checkAnswer(courseId,i));
+    const fb = document.createElement('span');
+    fb.className = 'feedback'; fb.id = `fb-${courseId}-${i}`;
+    row.appendChild(inp); row.appendChild(btn); row.appendChild(fb);
+    card.appendChild(row);
+
+    const revBtn = document.createElement('button');
+    revBtn.className = 'reveal-btn'; revBtn.id = `rev-${courseId}-${i}`;
+    revBtn.textContent = 'Show Solution';
+    revBtn.addEventListener('click', () => revealSolution(courseId,i));
+    card.appendChild(revBtn);
+
+    const sol = document.createElement('div');
+    sol.className = 'solution-box'; sol.id = `sol-${courseId}-${i}`;
+    const solLabel = document.createElement('div');
+    solLabel.className = 'solution-label'; solLabel.textContent = 'Solution';
+    const solMath = document.createElement('div');
+    solMath.className = 'solution-math'; solMath.id = `solmath-${courseId}-${i}`;
+    sol.appendChild(solLabel); sol.appendChild(solMath);
+    card.appendChild(sol);
+
+    wrap.appendChild(card);
+  });
+}
+
+function checkAnswer(courseId, i) {
+  const sess = SESSIONS[courseId];
+  if (sess.attempted[i]) return;
+  const inp = document.getElementById(`inp-${courseId}-${i}`);
+  const fb  = document.getElementById(`fb-${courseId}-${i}`);
+  const btn = document.getElementById(`chk-${courseId}-${i}`);
+  const val = inp.value.trim();
+  if (!val) return;
+  const p = sess.items[i].problem;
+  const correct = p.answer.some(a => norm(val)===norm(a));
+  sess.attempted[i] = true;
+  if (correct && !sess.peeked[i]) sess.flags[i] = true;
+  inp.classList.add(correct ? 'correct' : 'wrong');
+  fb.textContent = correct ? '✓ Correct!' : '✗ Try again — see solution below';
+  fb.className = 'feedback ' + (correct ? 'ok' : 'err');
+  btn.disabled = true;
+  updateScore(courseId);
+}
+
+function revealSolution(courseId, i) {
+  const sess   = SESSIONS[courseId];
+  const sol    = document.getElementById(`sol-${courseId}-${i}`);
+  const math   = document.getElementById(`solmath-${courseId}-${i}`);
+  const revBtn = document.getElementById(`rev-${courseId}-${i}`);
+  const p      = sess.items[i].problem;
+  sess.peeked[i] = true;
+  sol.style.display = 'block'; revBtn.disabled = true;
+  if (p.stepHtml) math.innerHTML = p.stepHtml;
+  else if (p.step) rk(p.step, math, true);
+  else math.textContent = Array.isArray(p.answer) ? p.answer[0] : p.answer;
+  if (!sess.attempted[i]) {
+    sess.attempted[i] = true;
+    const btn = document.getElementById(`chk-${courseId}-${i}`);
+    if (btn) btn.disabled = true;
+  }
+  updateScore(courseId);
+}
+
+function updateScore(courseId) {
+  const sess = SESSIONS[courseId];
+  const correct = sess.flags.filter(Boolean).length;
+  document.getElementById('score-' + courseId).textContent = `Score: ${correct} / ${sess.items.length}`;
+}
+
+// ── Boot ──────────────────────────────────────────────────────────────────────
+const _todayStr = new Date().toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
+['calc1','calc2','precalc','ca'].forEach(id => {
+  const el = document.getElementById('date-' + id);
+  if (el) el.textContent = _todayStr;
+});
+
+fetch('./state.json')
+  .then(r => r.json())
+  .then(state => {
+    window._stateData = state;
+    ['calc1','calc2','precalc','ca'].forEach(id => newNumbers(id));
+  })
+  .catch(() => {
+    window._stateData = null;
+    ['calc1','calc2','precalc','ca'].forEach(id => newNumbers(id));
+  });
+</script>
+<script>
+// ── Course filter (student links) ─────────────────────────────────────────
+// ?course=calc1 | calc2 | precalc | ca
+// Hides the tab-bar and switches to just that course's pane.
+(function () {
+  const valid = ['calc1','calc2','precalc','ca'];
+  const param = new URLSearchParams(window.location.search).get('course');
+  if (param && valid.includes(param)) {
+    document.querySelector('.tab-bar').style.display = 'none';
+    switchTab(param);
+  }
+})();
+</script>
+</body>
+</html>

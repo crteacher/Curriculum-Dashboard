@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>L'Hopital's Rule &mdash; Notes</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75;font-size:15px}
+.container{max-width:900px;margin:0 auto;padding:2rem 1.5rem 4rem}
+.page-title{font-size:28px;font-weight:700;margin-bottom:4px}
+.page-sub{font-family:sans-serif;font-size:13px;color:#666;margin-bottom:1.6rem}
+.opening-q{background:#eef3f9;border-left:4px solid #1e3a5c;
+  border-radius:0 8px 8px 0;padding:1rem 1.2rem;font-size:15px;
+  margin-bottom:1.5rem;font-style:italic;line-height:1.75}
+.section-head{font-family:sans-serif;font-size:11px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.08em;color:#1e3a5c;
+  margin-top:1.4rem;margin-bottom:.6rem;
+  border-bottom:1px solid #c8d8ec;padding-bottom:4px}
+.accent-box{background:#d9e8f5;border-left:4px solid #1e3a5c;
+  border-radius:0 8px 8px 0;padding:.9rem 1.1rem;font-size:14px;
+  margin-bottom:.85rem;line-height:1.95}
+.accent-box ul{margin-left:1.3rem;margin-top:.3rem}
+.accent-box li{margin-bottom:.15rem}
+.accent-box p{margin-bottom:.4rem}
+.body-text{font-size:14px;line-height:1.75;margin-bottom:.85rem}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:.5rem}
+.col{min-width:0}
+.examples-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem}
+.ex-block{border:1.5px solid #ddd;border-radius:9px;padding:1rem 1.1rem;background:#fff}
+.ex-label{font-family:sans-serif;font-size:11px;font-weight:700;color:#1e3a5c;
+  text-transform:uppercase;letter-spacing:.05em;margin-bottom:.45rem}
+.ex-body{font-size:14px;line-height:1.75;margin-bottom:.5rem}
+.ex-answer.instructor{background:#fef9e7;border-left:3px solid #7a5c1e;
+  border-radius:0 6px 6px 0;padding:.6rem .9rem;font-size:13.5px;
+  color:#5a3e00;line-height:1.85}
+.ex-answer.student{height:4.5rem;border-bottom:1.5px solid #bbb;margin-top:.4rem}
+.practice{margin-bottom:1.5rem}
+.pr-row{display:grid;grid-template-columns:1.6rem 1fr 210px;gap:.75rem;
+  align-items:start;padding:.6rem 0;border-bottom:1px solid #ece8e0}
+.pr-num{font-family:sans-serif;font-weight:700;font-size:14px;color:#1e3a5c;padding-top:2px}
+.pr-prob{font-size:14px;line-height:1.75}
+.pr-ans.instructor{font-size:13px;color:#5a3e00;background:#fef9e7;
+  border-radius:5px;padding:4px 9px;line-height:1.75}
+.pr-ans.student{border-bottom:1.5px solid #bbb;min-height:2.2rem}
+.st-work{width:100%;min-height:3rem;border:1px solid #ccc;border-radius:5px;
+  padding:.35rem .5rem;font-family:Georgia,serif;font-size:13px;resize:vertical;
+  background:#fafafa;display:block;margin-bottom:.3rem}
+.st-work-sm{width:100%;min-height:1.5rem;border:1px solid #ccc;border-radius:4px;
+  padding:.2rem .4rem;font-family:Georgia,serif;font-size:12px;resize:vertical;
+  background:#fafafa;display:block;margin-bottom:.2rem}
+.st-btn{font-family:sans-serif;font-size:10px;font-weight:700;color:#1e3a5c;
+  background:none;border:1.5px solid #1e3a5c;border-radius:4px;
+  padding:2px 9px;cursor:pointer;margin-bottom:.2rem;display:inline-block}
+.st-btn-sm{font-family:sans-serif;font-size:9px;font-weight:700;color:#1e3a5c;
+  background:none;border:1px solid #1e3a5c;border-radius:3px;
+  padding:1px 6px;cursor:pointer;margin-bottom:.15rem;display:inline-block}
+.st-btn:hover,.st-btn-sm:hover{background:#eef3f9}
+.st-ans-hidden{display:none;background:#fef9e7;border-left:3px solid #7a5c1e;
+  border-radius:0 5px 5px 0;padding:.4rem .7rem;font-size:13px;
+  color:#5a3e00;line-height:1.85}
+.st-ans-hidden.visible{display:block}
+.katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}
+@media print{
+  body{background:white;font-size:10pt;line-height:1.5}
+  .container{padding:0;max-width:none}
+  .page-sub{margin-bottom:.8rem}
+  .opening-q{padding:.5rem .8rem;margin-bottom:.8rem;font-size:10pt;line-height:1.5;break-inside:avoid}
+  .section-head{margin-top:.7rem;margin-bottom:.35rem}
+  .accent-box{padding:.5rem .75rem;margin-bottom:.5rem;font-size:10pt;line-height:1.55;
+    background:#e8f0f8 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .accent-box p{margin-bottom:.2rem}
+  .body-text{font-size:10pt;line-height:1.5;margin-bottom:.5rem}
+  .two-col{gap:1rem;margin-bottom:.3rem;break-inside:avoid}
+  .examples-grid{gap:.6rem;margin-bottom:.8rem;break-inside:avoid}
+  .ex-block{padding:.55rem .75rem;border:1px solid #ccc;break-inside:avoid}
+  .ex-label{margin-bottom:.25rem}
+  .ex-body{font-size:10pt;line-height:1.5;margin-bottom:.3rem}
+  .ex-answer.instructor{padding:.35rem .7rem;font-size:9.5pt;line-height:1.55;
+    background:#fef9e7 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .ex-answer.student{height:2.8rem}
+  .practice{margin-bottom:.8rem}
+  .pr-row{padding:.3rem 0;break-inside:avoid}
+  .pr-prob{font-size:10pt;line-height:1.5}
+  .pr-ans.instructor{font-size:9.5pt;padding:2px 7px;line-height:1.55;
+    background:#fef9e7 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .pr-ans.student{min-height:1.6rem}
+  .st-work{background:none;border:none;border-bottom:1.5px solid #bbb;
+    border-radius:0;min-height:2.6rem;resize:none}
+  .st-work-sm{background:none;border:none;border-bottom:1.5px solid #bbb;
+    border-radius:0;min-height:1.3rem;resize:none}
+  .st-btn,.st-btn-sm{display:none}
+  .st-ans-hidden{display:none !important}
+  .opening-q{background:#eef3f9 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+@page{margin:.55in .65in;size:letter}
+.proof-panel{margin:.4rem 0 1.1rem;border-left:3px solid #7a9a6a;border-radius:0 6px 6px 0;background:#f5f7f3}
+.proof-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#5a7a4a;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.proof-toggle::-webkit-details-marker{display:none}
+details[open]>.proof-toggle{color:#1e3a5c}
+.proof-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #c8d8b8}
+.proof-body p{margin-bottom:.45rem}
+.proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
+.mistake-panel{margin:.4rem 0 1.1rem;border-left:3px solid #b8860b;border-radius:0 6px 6px 0;background:#fdf8e8}
+.mistake-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#9a6a00;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.mistake-toggle::-webkit-details-marker{display:none}
+details[open]>.mistake-toggle{color:#1e3a5c}
+.mistake-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #e8d8a8}
+.mistake-body p{margin-bottom:.45rem}
+@media print{.proof-panel{break-inside:avoid}.mistake-panel{break-inside:avoid}details.mistake-panel:not([open]){display:none}}
+</style>
+</head>
+<body>
+<div class="container">
+<h1 class="page-title">L'Hopital's Rule</h1>
+<p class="page-sub">Calculus I &nbsp;&middot;&nbsp; &sect;3.4.5 &nbsp;&middot;&nbsp; Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026 &nbsp;&middot;&nbsp; <strong>STUDENT</strong></p>
+<div class="opening-q">As $x\to1$, both the numerator and denominator of $\dfrac{x^2+2x-3}{x-1}$ approach $0$ &mdash; you get the meaningless $\frac{0}{0}$. But the limit clearly exists (it's a removable hole). Is there one method that finds limits like this without needing a factoring trick every time?</div>
+
+<div class="two-col">
+<div class="col"><div class="section-head">L'Hopital's Rule</div>
+<div class="accent-box"><p>If $f(a)=g(a)=0$ (or both $\to\pm\infty$) and $f,g$ are differentiable near $a$, then</p>
+$$\lim_{x\to a}\dfrac{f(x)}{g(x)}=\lim_{x\to a}\dfrac{f'(x)}{g'(x)}$$
+<p>provided the right-hand limit exists. If the new limit is <em>still</em> $\frac{0}{0}$ or $\frac{\infty}{\infty}$, apply the rule again.</p></div>
+</div>
+<div class="col"><div class="section-head">Recognizing When to Use It</div>
+<div class="accent-box"><p>Only apply L'Hopital's Rule to the indeterminate forms $\dfrac{0}{0}$ or $\dfrac{\infty}{\infty}$. Always check $f(a)$ and $g(a)$ <strong>first</strong>.</p>
+<p>Other indeterminate forms ($0\cdot\infty$, $\infty-\infty$) must first be <strong>rewritten</strong> as a single fraction before the rule applies &mdash; e.g. $f\cdot g=\dfrac{f}{1/g}$.</p></div>
+</div>
+</div>
+
+<div class="two-col">
+<div class="col">
+<details class="proof-panel">
+<summary class="proof-toggle">▸ Why It Works &mdash; Local Linearization</summary>
+<div class="proof-body">
+<p>Near $x=a$, the tangent line approximates each function: $f(x)\approx f(a)+f'(a)(x-a)$. Since $f(a)=0$, this simplifies to $f(x)\approx f'(a)(x-a)$. Likewise $g(x)\approx g'(a)(x-a)$.</p>
+<p>So near $a$: $\dfrac{f(x)}{g(x)}\approx\dfrac{f'(a)(x-a)}{g'(a)(x-a)}=\dfrac{f'(a)}{g'(a)}$ &mdash; the $(x-a)$ factors cancel, leaving exactly the ratio of the tangent-line slopes.</p>
+<p>As $x\to a$, the tangent-line approximation becomes exact, so the limit of $f/g$ really does equal $f'(a)/g'(a)$.</p>
+<div class="proof-qed">&#9633;</div>
+</div>
+</details>
+</div>
+<div class="col">
+<details class="mistake-panel">
+<summary class="mistake-toggle">▸ Common Mistake</summary>
+<div class="mistake-body">
+<p>Students apply the <strong>quotient rule</strong> to $f/g$ instead of differentiating the numerator and denominator <em>separately</em>. L'Hopital's Rule uses $\dfrac{f'(x)}{g'(x)}$, not $\left(\dfrac{f(x)}{g(x)}\right)'$ &mdash; these are very different expressions.</p>
+<p>Also common: applying the rule to a limit that isn't actually indeterminate. If $f(a)$ and $g(a)$ aren't both $0$ (or both $\pm\infty$), just substitute directly.</p>
+</div>
+</details>
+</div>
+</div>
+
+<div class="section-head">Worked Examples</div>
+<div class="examples-grid">
+<div class="ex-block">
+  <div class="ex-label">Example 1 &nbsp;&mdash;&nbsp; Classic $\frac{0}{0}$</div>
+  <div class="ex-body">Find $\displaystyle\lim_{x\to0}\dfrac{\sin x}{x}$.</div>
+  <textarea class="st-work" placeholder="Work it out..."></textarea>
+  <button class="st-btn" onclick="toggleAns(this)">Show answer</button>
+  <div class="st-ans-hidden">Both $\to0$: indeterminate $\frac{0}{0}$.<br>$\displaystyle\lim_{x\to0}\dfrac{\sin x}{x}=\lim_{x\to0}\dfrac{\cos x}{1}=\cos(0)=1$</div>
+</div>
+<div class="ex-block">
+  <div class="ex-label">Example 2 &nbsp;&mdash;&nbsp; Two ways to check</div>
+  <div class="ex-body">Find $\displaystyle\lim_{x\to1}\dfrac{x^2+2x-3}{x-1}$ &mdash; by factoring, and by L'Hopital's.</div>
+  <textarea class="st-work" placeholder="Work it out..."></textarea>
+  <button class="st-btn" onclick="toggleAns(this)">Show answer</button>
+  <div class="st-ans-hidden">Factor: $\dfrac{(x+3)(x-1)}{x-1}=x+3\to4$.<br>L'Hopital: both $\to0$; $\displaystyle\lim_{x\to1}\dfrac{2x+2}{1}=4$. Same answer &mdash; good check!</div>
+</div>
+<div class="ex-block">
+  <div class="ex-label">Example 3 &nbsp;&mdash;&nbsp; The $\frac{\infty}{\infty}$ form</div>
+  <div class="ex-body">Find $\displaystyle\lim_{x\to\infty}\dfrac{3^x}{x}$.</div>
+  <textarea class="st-work" placeholder="Work it out..."></textarea>
+  <button class="st-btn" onclick="toggleAns(this)">Show answer</button>
+  <div class="st-ans-hidden">Both $\to\infty$: indeterminate $\frac{\infty}{\infty}$.<br>$\displaystyle\lim_{x\to\infty}\dfrac{3^x\ln3}{1}=\infty$ &mdash; the exponential still dominates; the limit diverges.</div>
+</div>
+<div class="ex-block">
+  <div class="ex-label">Example 4 &nbsp;&mdash;&nbsp; Applying it twice</div>
+  <div class="ex-body">Find $\displaystyle\lim_{x\to\infty}\dfrac{3^x}{x^2}$.</div>
+  <textarea class="st-work" placeholder="Work it out..."></textarea>
+  <button class="st-btn" onclick="toggleAns(this)">Show answer</button>
+  <div class="st-ans-hidden">Both $\to\infty$. First pass: $\displaystyle\lim_{x\to\infty}\dfrac{3^x\ln3}{2x}$ &mdash; still $\frac{\infty}{\infty}$!<br>Second pass: $\displaystyle\lim_{x\to\infty}\dfrac{3^x(\ln3)^2}{2}=\infty$</div>
+</div>
+</div>
+
+<div class="section-head">Practice Problems</div>
+<div class="practice">
+<div class="pr-row">
+  <div class="pr-num">1.</div>
+  <div class="pr-prob">Find $\displaystyle\lim_{x\to0}\dfrac{e^x-1}{x}$.
+    <textarea class="st-work-sm" placeholder="Work it out..."></textarea>
+    <button class="st-btn-sm" onclick="toggleAns(this)">Show answer</button>
+    <div class="st-ans-hidden">Both $\to0$. $\displaystyle\lim_{x\to0}\dfrac{e^x}{1}=1$</div>
+  </div>
+  <div class="pr-ans student"></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">2.</div>
+  <div class="pr-prob">Find $\displaystyle\lim_{x\to2}\dfrac{x^2-4}{x-2}$.
+    <textarea class="st-work-sm" placeholder="Work it out..."></textarea>
+    <button class="st-btn-sm" onclick="toggleAns(this)">Show answer</button>
+    <div class="st-ans-hidden">Both $\to0$. $\displaystyle\lim_{x\to2}\dfrac{2x}{1}=4$</div>
+  </div>
+  <div class="pr-ans student"></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">3.</div>
+  <div class="pr-prob">Find $\displaystyle\lim_{x\to0}\dfrac{1-\cos x}{x^2}$.
+    <textarea class="st-work-sm" placeholder="Work it out..."></textarea>
+    <button class="st-btn-sm" onclick="toggleAns(this)">Show answer</button>
+    <div class="st-ans-hidden">Both $\to0$. First pass: $\dfrac{\sin x}{2x}$, still $\frac{0}{0}$. Second pass: $\dfrac{\cos x}{2}\to\dfrac{1}{2}$</div>
+  </div>
+  <div class="pr-ans student"></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">4.</div>
+  <div class="pr-prob">Find $\displaystyle\lim_{x\to\infty}\dfrac{\ln x}{x}$.
+    <textarea class="st-work-sm" placeholder="Work it out..."></textarea>
+    <button class="st-btn-sm" onclick="toggleAns(this)">Show answer</button>
+    <div class="st-ans-hidden">Both $\to\infty$. $\displaystyle\lim_{x\to\infty}\dfrac{1/x}{1}=\lim_{x\to\infty}\dfrac{1}{x}=0$</div>
+  </div>
+  <div class="pr-ans student"></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">5.</div>
+  <div class="pr-prob">Find $\displaystyle\lim_{x\to0^+}x\ln x$. (Rewrite the $0\cdot\infty$ form first!)
+    <textarea class="st-work-sm" placeholder="Work it out..."></textarea>
+    <button class="st-btn-sm" onclick="toggleAns(this)">Show answer</button>
+    <div class="st-ans-hidden">Rewrite: $\dfrac{\ln x}{1/x}$, now $\frac{\infty}{\infty}$ (as $x\to0^+$, $\ln x\to-\infty$).<br>$\displaystyle\lim_{x\to0^+}\dfrac{1/x}{-1/x^2}=\lim_{x\to0^+}(-x)=0$</div>
+  </div>
+  <div class="pr-ans student"></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">6.</div>
+  <div class="pr-prob">Find $\displaystyle\lim_{x\to\infty}\dfrac{x^2}{e^x}$.
+    <textarea class="st-work-sm" placeholder="Work it out..."></textarea>
+    <button class="st-btn-sm" onclick="toggleAns(this)">Show answer</button>
+    <div class="st-ans-hidden">Both $\to\infty$. Apply twice: $\dfrac{2x}{e^x}$ (still $\frac{\infty}{\infty}$), then $\dfrac{2}{e^x}\to0$</div>
+  </div>
+  <div class="pr-ans student"></div>
+</div>
+</div>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/contrib/auto-render.min.js"></script>
+<script>
+function toggleAns(btn) {
+  if (!btn.dataset.orig) btn.dataset.orig = btn.textContent;
+  var ans = btn.nextElementSibling;
+  var showing = ans.classList.toggle('visible');
+  btn.textContent = showing ? 'Hide' : btn.dataset.orig;
+}
+renderMathInElement(document.body, {
+  delimiters: [
+    {left: '$$', right: '$$', display: true},
+    {left: '$',  right: '$',  display: false}
+  ],
+  throwOnError: false
+});
+</script>
+</body>
+</html>
