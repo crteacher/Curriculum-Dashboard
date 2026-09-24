@@ -208,7 +208,7 @@ header{background:#6b1a26;color:#fff;padding:.9rem 2rem;
     </div>
     <div class="cv-sidebar">
       <div class="sb-label">Quick Access</div>
-      <a class="sb-btn crimson" href="./classrooms.html" target="_blank">Do Now</a>
+      <a class="sb-btn crimson" id="doNowLink" href="./classrooms.html" target="_blank">Do Now</a>
       <a class="sb-btn crimson" href="./exit-ticket.html" target="_blank">Exit Ticket</a>
       <a class="sb-btn gold" href="./review.html" target="_blank">Section Review</a>
       <hr class="sb-divider">
@@ -386,6 +386,9 @@ function openCourse(id) {
   document.getElementById('cvName').textContent = pool.dataset.name;
   document.getElementById('cvCnt').textContent  = pool.dataset.cnt;
   banner.style.background = pool.dataset.color;
+
+  // Update Do Now link to show only this course's pane
+  document.getElementById('doNowLink').href = './classrooms.html?course=' + id;
 
   land.style.display = 'none';
   cv.classList.add('visible');
