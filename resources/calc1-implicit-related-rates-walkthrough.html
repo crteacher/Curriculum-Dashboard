@@ -313,6 +313,7 @@
   // Utilities
   // ============================================================
   function randInt(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+  function randNonZeroInt(min, max) { var v; do { v = randInt(min, max); } while (v === 0); return v; }
   function randChoice(arr) { return arr[randInt(0, arr.length - 1)]; }
   function randBool() { return Math.random() < 0.5; }
   function round2(v) { return Math.round(v * 100) / 100; }
@@ -733,6 +734,91 @@
     readAnswer: readNumAnswer, isCorrect: function (ua, s) { return numEq(ua.v, s.dydx, 0.02); }, solutionHtml: solutionImplicitCircle
   });
 
+  // ---- not every relation is a circle: the product rule shows up when two variables multiply ----
+  var POOL_PRODUCT = [
+    {
+      reason: "Yes &mdash; xy needs the product rule: d/dx[xy] = x&middot;(dy/dx) + y&middot;1. The constant's derivative is 0.",
+      build: function () { var k = randNonZeroInt(-40, 40); return { orig: "xy = " + k, result: "x&middot;(dy/dx) + y = 0", correctFullStep: "x&middot;(dy/dx) + y = 0" }; }
+    },
+    {
+      reason: "No &mdash; that's only half of the product rule. d/dx[xy] = x&middot;(dy/dx) + y&middot;1 &mdash; the “+ y” piece got dropped.",
+      build: function () { var k = randNonZeroInt(-40, 40); return { orig: "xy = " + k, result: "x&middot;(dy/dx) = 0", correctFullStep: "x&middot;(dy/dx) + y = 0" }; }
+    },
+    {
+      reason: "No &mdash; that's only half of the product rule too. d/dx[xy] = x&middot;(dy/dx) + y&middot;1 &mdash; the “x&middot;(dy/dx)” piece got dropped.",
+      build: function () { var k = randNonZeroInt(-40, 40); return { orig: "xy = " + k, result: "y = 0", correctFullStep: "x&middot;(dy/dx) + y = 0" }; }
+    },
+    {
+      reason: "No &mdash; the constant on the right differentiates to 0. It doesn't stay in the equation.",
+      build: function () { var k = randNonZeroInt(-40, 40); return { orig: "xy = " + k, result: "x&middot;(dy/dx) + y = " + k, correctFullStep: "x&middot;(dy/dx) + y = 0" }; }
+    },
+    {
+      reason: "No &mdash; the product rule gives x&middot;(dy/dx) <strong>+</strong> y, with a plus sign between the two pieces, not a minus.",
+      build: function () { var k = randNonZeroInt(-40, 40); return { orig: "xy = " + k, result: "x&middot;(dy/dx) &minus; y = 0", correctFullStep: "x&middot;(dy/dx) + y = 0" }; }
+    }
+  ];
+  PARTS.push({
+    id: "1-d3", group: "1", points: 2,
+    gen: function () { return pickDiagnostic(POOL_PRODUCT); },
+    prompt: diagPromptHtml, inputsHtml: diagInputsHtml, afterRender: mcAfterRender,
+    readAnswer: mcReadAnswer, isCorrect: diagIsCorrect, solutionHtml: diagSolutionHtml
+  });
+
+  function genImplicitProduct() {
+    var x0 = randNonZeroInt(-9, 9), y0 = randNonZeroInt(-9, 9);
+    var k = x0 * y0;
+    return { x0: x0, y0: y0, k: k, dydx: -y0 / x0 };
+  }
+  function promptImplicitProduct(s) {
+    return "<span class=\"math\">xy = " + s.k + "</span>" +
+      "<div style=\"margin-top:8px\">Find dy/dx at the point (" + s.x0 + ", " + s.y0 + "). <em>(xy is a product of two things that both trace back to x here &mdash; you'll need the product rule.)</em></div>";
+  }
+  function solutionImplicitProduct(s) {
+    var rows = [];
+    rows.push(wsRow("xy", "=", String(s.k)));
+    rows.push(wsNote("xy is a product of x and y (and y is secretly a function of x), so differentiating it needs the product rule: d/dx[xy] = x&middot;(dy/dx) + y&middot;1. The constant's derivative is 0."));
+    rows.push(wsRow("x&middot;(dy/dx) + y", "=", "0"));
+    rows.push(wsRow("dy/dx", "=", "&minus;y/x", true));
+    return renderWorksheet(rows) + "<div class=\"step\" style=\"margin-top:8px\">At (" + s.x0 + ", " + s.y0 + "): dy/dx = &minus;" + s.y0 + "/" + s.x0 + " = " + round2(s.dydx) + "</div>";
+  }
+  PARTS.push({
+    id: "1-practice-product", group: "1", points: 3, isPracticeGoal: true,
+    gen: genImplicitProduct, prompt: promptImplicitProduct, inputsHtml: function () { return numInputHtml("e.g. -2/3"); },
+    readAnswer: readNumAnswer, isCorrect: function (ua, s) { return numEq(ua.v, s.dydx, 0.02); }, solutionHtml: solutionImplicitProduct
+  });
+
+  function genImplicitMulti() {
+    var x0, y0, denom;
+    do {
+      x0 = randNonZeroInt(-7, 7); y0 = randNonZeroInt(-7, 7);
+      denom = x0 + 2 * y0;
+    } while (denom === 0);
+    var k = x0 * x0 + x0 * y0 + y0 * y0;
+    var dydx = -(2 * x0 + y0) / denom;
+    return { x0: x0, y0: y0, k: k, dydx: dydx };
+  }
+  function promptImplicitMulti(s) {
+    return "<span class=\"math\">x&sup2; + xy + y&sup2; = " + s.k + "</span>" +
+      "<div style=\"margin-top:8px\">Find dy/dx at the point (" + s.x0 + ", " + s.y0 + "). <em>(y shows up in more than one term here &mdash; you'll need the product rule on the middle term, and you'll need to gather every dy/dx together before you can isolate it.)</em></div>";
+  }
+  function solutionImplicitMulti(s) {
+    var rows = [];
+    rows.push(wsRow("x&sup2; + xy + y&sup2;", "=", String(s.k)));
+    rows.push(wsNote("Differentiate term by term. The xy term needs the product rule: d/dx[xy] = x&middot;(dy/dx) + y."));
+    rows.push(wsRow("2x + [x&middot;(dy/dx) + y] + 2y&middot;(dy/dx)", "=", "0"));
+    rows.push(wsNote("dy/dx is now scattered across two different terms. Gather every dy/dx term on one side, and everything else on the other:"));
+    rows.push(wsRow("x&middot;(dy/dx) + 2y&middot;(dy/dx)", "=", "&minus;2x &minus; y"));
+    rows.push(wsNote("Both terms on the left share a factor of (dy/dx) &mdash; factor it out, the same way you'd factor a common variable out of 3a + 5a = 8a:"));
+    rows.push(wsRow("(x + 2y)&middot;(dy/dx)", "=", "&minus;2x &minus; y"));
+    rows.push(wsRow("dy/dx", "=", "(&minus;2x &minus; y)/(x + 2y)", true));
+    return renderWorksheet(rows) + "<div class=\"step\" style=\"margin-top:8px\">At (" + s.x0 + ", " + s.y0 + "): dy/dx = (&minus;2(" + s.x0 + ") &minus; " + s.y0 + ")/(" + s.x0 + " + 2(" + s.y0 + ")) = " + round2(s.dydx) + "</div>";
+  }
+  PARTS.push({
+    id: "1-practice-multi", group: "1", points: 4, isPracticeGoal: true,
+    gen: genImplicitMulti, prompt: promptImplicitMulti, inputsHtml: function () { return numInputHtml("e.g. -1.4"); },
+    readAnswer: readNumAnswer, isCorrect: function (ua, s) { return numEq(ua.v, s.dydx, 0.02); }, solutionHtml: solutionImplicitMulti
+  });
+
   // ---------- Stage 2: Related Rates = Implicit Differentiation in Time ----------
   var POOL_CUBE = [
     {
@@ -1082,7 +1168,7 @@
   var GROUP_META = {
     "1": {
       num: "Stage 1", title: "Implicit Differentiation Refresher",
-      desc: "When y isn't isolated (like x&sup2; + y&sup2; = 25), you can still find dy/dx: differentiate <strong>both sides</strong> with respect to x, treating y as a hidden function of x. Every time you differentiate a y-term, the chain rule tacks on a (dy/dx) &mdash; that little factor is the whole trick, and forgetting it is the single most common mistake.",
+      desc: "When y isn't isolated (like x&sup2; + y&sup2; = 25), you can still find dy/dx: differentiate <strong>both sides</strong> with respect to x, treating y as a hidden function of x. Every time you differentiate a y-term, the chain rule tacks on a (dy/dx) &mdash; that little factor is the whole trick, and forgetting it is the single most common mistake. Not every implicit relation looks like a circle, either: when two variables are <strong>multiplied together</strong> (like xy), you'll need the product rule too &mdash; and when dy/dx ends up scattered across more than one term, you'll need to gather them and <strong>factor it out</strong> before you can isolate it.",
       videos: [
         { url: "https://www.khanacademy.org/math/differential-calculus/dc-chain/dc-implicit-diff/v/implicit-differentiation-1", label: "Implicit differentiation: example walkthrough" },
         { url: "https://www.khanacademy.org/math/differential-calculus/dc-chain/dc-implicit-diff-advanced/v/implicit-derivative-of-e-xy-2-x-y", label: "Implicit differentiation: advanced example" }
