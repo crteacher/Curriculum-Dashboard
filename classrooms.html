@@ -394,5 +394,18 @@ fetch('./state.json')
     ['calc1','calc2','precalc','ca'].forEach(id => newNumbers(id));
   });
 </script>
+<script>
+// ── Course filter (student links) ─────────────────────────────────────────
+// ?course=calc1 | calc2 | precalc | ca
+// Hides the tab-bar and switches to just that course's pane.
+(function () {
+  const valid = ['calc1','calc2','precalc','ca'];
+  const param = new URLSearchParams(window.location.search).get('course');
+  if (param && valid.includes(param)) {
+    document.querySelector('.tab-bar').style.display = 'none';
+    switchTab(param);
+  }
+})();
+</script>
 </body>
 </html>
