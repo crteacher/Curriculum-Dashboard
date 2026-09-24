@@ -630,10 +630,12 @@
       return { p: fr.p, q: fr.q, x0: x0, y0: y0, m: fr.p / fr.q, bFr: bFr, b: bFr.p / bFr.q };
     },
     prompt: function (s) {
-      var slopeHtml = s.q === 1 ? leadTerm(s.p, "x") : (s.p < 0 ? "&minus;" : "") + frac(String(Math.abs(s.p)), String(s.q)) + "x";
+      // Coefficient only (no "x" appended) — the x already appears inside xPart below,
+      // unlike the "f(x) = mx + b" style slopeHtml used elsewhere in this file.
+      var coefHtml = s.q === 1 ? leadTerm(s.p, "") : (s.p < 0 ? "&minus;" : "") + frac(String(Math.abs(s.p)), String(s.q));
       var yPart = s.y0 === 0 ? "y" : ("y " + (s.y0 > 0 ? "&minus; " + s.y0 : "+ " + Math.abs(s.y0)));
       var xPart = "(x " + (s.x0 > 0 ? "&minus; " + s.x0 : "+ " + Math.abs(s.x0)) + ")";
-      return "Graph the following on paper, then check yourself below: <span class=\"math\">" + yPart + " = " + slopeHtml + xPart + "</span>";
+      return "Graph the following on paper, then check yourself below: <span class=\"math\">" + yPart + " = " + coefHtml + xPart + "</span>";
     },
     inputsHtml: slopeInterceptOnlyInputsHtml,
     readAnswer: readSlopeInterceptOnly,
