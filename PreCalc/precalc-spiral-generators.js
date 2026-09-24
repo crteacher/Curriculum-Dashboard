@@ -47,6 +47,37 @@
     title: "Library of Functions & One-to-One",
     index: 1,
     generators: (function() {
+      function makeSVG(fn,xMin,xMax,yMin,yMax){
+        const W=200,H=190,ML=22,MR=10,MT=10,MB=22;
+        const pw=W-ML-MR, ph=H-MT-MB;
+        function sx(x){return ML+(x-xMin)/(xMax-xMin)*pw;}
+        function sy(y){return MT+ph-(y-yMin)/(yMax-yMin)*ph;}
+        const ax=sx(0), ay=sy(0);
+        let svg=`<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" class="fn-graph">`;
+        let grid='';
+        for(let x=Math.ceil(xMin);x<=Math.floor(xMax);x++){
+          const px=sx(x).toFixed(1);
+          grid+=`<line x1="${px}" y1="${MT}" x2="${px}" y2="${MT+ph}" stroke="#e8eef5" stroke-width="1"/>`;
+          if(x!==0) grid+=`<text x="${px}" y="${(ay+12).toFixed(1)}" text-anchor="middle" font-size="8" fill="#aaa">${x}</text>`;
+        }
+        for(let y=Math.ceil(yMin);y<=Math.floor(yMax);y++){
+          const py=sy(y).toFixed(1);
+          grid+=`<line x1="${ML}" y1="${py}" x2="${ML+pw}" y2="${py}" stroke="#e8eef5" stroke-width="1"/>`;
+          if(y!==0) grid+=`<text x="${(ax-4).toFixed(1)}" y="${(parseFloat(py)+3).toFixed(1)}" text-anchor="end" font-size="8" fill="#aaa">${y}</text>`;
+        }
+        let axes=`<line x1="${ML}" y1="${ay.toFixed(1)}" x2="${(ML+pw).toFixed(1)}" y2="${ay.toFixed(1)}" stroke="#888" stroke-width="1.2"/>`;
+        axes+=`<line x1="${ax.toFixed(1)}" y1="${MT}" x2="${ax.toFixed(1)}" y2="${(MT+ph).toFixed(1)}" stroke="#888" stroke-width="1.2"/>`;
+        const N=300; let segs=[],cur=[];
+        for(let i=0;i<=N;i++){
+          const x=xMin+(xMax-xMin)*i/N; let y;
+          try{y=fn(x);}catch(e){y=NaN;}
+          if(!isFinite(y)||y<yMin||y>yMax){if(cur.length>1)segs.push(cur);cur=[];}
+          else{cur.push(`${sx(x).toFixed(1)},${sy(y).toFixed(1)}`);}
+        }
+        if(cur.length>1)segs.push(cur);
+        const curves=segs.map(s=>`<polyline points="${s.join(' ')}" fill="none" stroke="#1e3a5c" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>`).join('');
+        svg+=grid+axes+curves+'</svg>'; return svg;
+      }
       function gen1(){
         const fns=[
           {latex:'f(x)=x^2',name:'squaring',step:'\\text{The squaring (quadratic) parent function}'},
@@ -262,6 +293,7 @@
     title: "Domain, Range & Interval Notation",
     index: 2,
     generators: (function() {
+
       // ── Display helpers ───────────────────────────────────────────────────────────
       // Leading coefficient: 1→'', -1→'-', else the number as a string
       function fc(a) { if (a===1) return ''; if (a===-1) return '-'; return String(a); }

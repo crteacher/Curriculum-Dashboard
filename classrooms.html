@@ -276,9 +276,20 @@ function renderProblems(courseId) {
 
     const qDiv = document.createElement('div');
     qDiv.className = 'prob-question';
-    if (p.svg)        { qDiv.innerHTML = p.svg; }
-    else if (p.latex) { rk(p.latex, qDiv, true); }
-    else              { qDiv.textContent = '[Question unavailable — try New Numbers]'; }
+    if (p.svg && p.latex) {
+      // Graph + text question (e.g. one-sided limits)
+      const svgWrap = document.createElement('div');
+      svgWrap.style.cssText = 'text-align:center;margin-bottom:.6rem';
+      svgWrap.innerHTML = p.svg;
+      qDiv.appendChild(svgWrap);
+      const texEl = document.createElement('div');
+      rk(p.latex, texEl, false);
+      qDiv.appendChild(texEl);
+    } else if (p.svg)   { qDiv.innerHTML = p.svg; }
+    else if (p.latex)   { rk(p.latex, qDiv, true); }
+    else if (p.html)    { qDiv.innerHTML = p.html; }
+    else if (p.text)    { qDiv.textContent = p.text; }
+    else                { qDiv.textContent = '[Question unavailable — try New Numbers]'; }
     card.appendChild(qDiv);
 
     if (p.hint) {
@@ -348,7 +359,9 @@ function revealSolution(courseId, i) {
   const p      = sess.items[i].problem;
   sess.peeked[i] = true;
   sol.style.display = 'block'; revBtn.disabled = true;
-  if (p.step) rk(p.step, math, true); else math.textContent = p.answer[0];
+  if (p.stepHtml) math.innerHTML = p.stepHtml;
+  else if (p.step) rk(p.step, math, true);
+  else math.textContent = Array.isArray(p.answer) ? p.answer[0] : p.answer;
   if (!sess.attempted[i]) {
     sess.attempted[i] = true;
     const btn = document.getElementById(`chk-${courseId}-${i}`);
