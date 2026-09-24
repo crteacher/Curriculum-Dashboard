@@ -375,5 +375,15 @@ Promise.all([
   document.getElementById('gridIntro').textContent = 'Could not load section data.';
 });
 </script>
+<script>
+(function () {
+  var valid = { calc1:'calc1', calc2:'c2', precalc:'pc', ca:'ca', pc:'pc', c2:'c2' };
+  var param = new URLSearchParams(window.location.search).get('course');
+  if (param && valid[param]) {
+    document.querySelector('.course-toggle').style.display = 'none';
+    setCourse(valid[param]);
+  }
+})();
+</script>
 </body>
 </html>
