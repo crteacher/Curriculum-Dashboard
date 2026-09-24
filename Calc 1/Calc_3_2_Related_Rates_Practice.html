@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Logarithmic Differentiation &mdash; Practice</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<title>Related Rates &mdash; Practice</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.css">
 <style>
   *{box-sizing:border-box;margin:0;padding:0}
   body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.7}
@@ -14,17 +14,17 @@
   .section{margin-bottom:2.5rem}
   .section-title{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;
     color:#777;font-family:sans-serif;margin-bottom:1rem;border-bottom:1px solid #ddd;padding-bottom:6px}
-  .concept{background:#d9e8f5;border-left:4px solid #185fa5;border-radius:0 8px 8px 0;
+  .concept{background:#d9e8f5;border-left:4px solid #1e3a5c;border-radius:0 8px 8px 0;
     padding:.85rem 1.1rem;font-size:15px;margin-bottom:1rem}
   .concept-label{font-family:sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;
-    letter-spacing:.07em;color:#185fa5;display:block;margin-bottom:.35rem}
+    letter-spacing:.07em;color:#1e3a5c;display:block;margin-bottom:.35rem}
   .score-bar{display:flex;align-items:center;gap:12px;margin-bottom:1.25rem;
     font-family:sans-serif;font-size:14px;flex-wrap:wrap}
   .score-display{font-weight:700;font-size:18px;min-width:60px}
   .score-label{color:#777;font-size:13px}
   .score-note{font-size:12px;color:#999;font-style:italic}
   .progress{flex:1;min-width:80px;height:6px;background:#e5e1d8;border-radius:3px;overflow:hidden}
-  .progress-fill{height:100%;background:#185fa5;border-radius:3px;transition:width .4s}
+  .progress-fill{height:100%;background:#1e3a5c;border-radius:3px;transition:width .4s}
   .reset-btn{font-size:12px;background:none;border:1px solid #bbb;border-radius:5px;
     padding:4px 10px;cursor:pointer;color:#666;font-family:sans-serif;white-space:nowrap}
   .reset-btn:hover{background:#eee}
@@ -39,7 +39,7 @@
   .ans-input{font-family:'Courier New',monospace;font-size:14px;border:1px solid #ccc;
     border-radius:6px;padding:7px 10px;flex:1;min-width:120px;background:#fafaf8;
     color:#1a1a1a;outline:none}
-  .ans-input:focus{border-color:#185fa5;background:#fff}
+  .ans-input:focus{border-color:#1e3a5c;background:#fff}
   .ans-input.ok{border-color:#3a7a3a;background:#f0faf0}
   .ans-input.bad{border-color:#b03030;background:#fdf0f0}
   .check-btn{font-family:sans-serif;font-size:13px;background:#1a1a1a;color:#fff;
@@ -56,35 +56,31 @@
   .reveal-link:hover{color:#555}
   .revealed-answer{display:none;margin-top:8px;font-family:sans-serif;font-size:13px;
     color:#444;background:#f5f3ef;border-radius:6px;padding:8px 11px;line-height:1.8;overflow-x:auto}
-  .interval-hint{font-family:sans-serif;font-size:11px;color:#185fa5;margin-top:4px;
+  .interval-hint{font-family:sans-serif;font-size:11px;color:#1e3a5c;margin-top:4px;
     padding:2px 7px;background:#eef3f9;border-radius:4px;display:inline-block}
   code{font-family:'Courier New',monospace;background:#f0ede7;padding:1px 5px;border-radius:3px;font-size:12px}
 </style>
 </head>
 <body>
 <div class="container">
-  <h1>Logarithmic Differentiation</h1>
+  <h1>Related Rates</h1>
   <p class="subtitle">Calculus I &nbsp;&middot;&nbsp; &sect;3.2 &nbsp;&middot;&nbsp; Instructor: Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026</p>
 
   <div class="section">
     <div class="section-title">Core Ideas</div>
 
     <div class="concept">
-      <span class="concept-label">General Log Derivative</span>
-      $$\frac{d}{dx}[\log_b x] = \frac{1}{x \ln b}$$
-      Derived from change of base: $\log_b x = \dfrac{\ln x}{\ln b}$, so
-      $\dfrac{d}{dx}[\log_b x] = \dfrac{1}{x \ln b}$.
-      With chain rule: $\dfrac{d}{dx}[\log_b u] = \dfrac{u'}{u \ln b}$.
-      When $b = e$: reduces to $\dfrac{1}{x}$ since $\ln e = 1$.
+      <span class="concept-label">Related Rates — Setup</span>
+      Two or more quantities are related by an equation, and all are secretly functions of
+      time $t$. (1) Draw a picture and label variables. (2) Write a relating equation.
+      (3) Differentiate implicitly with respect to $t$ — every variable gets a
+      $\dfrac{d(\cdot)}{dt}$. (4) Substitute known values (after differentiating!) and
+      solve for the missing rate.
     </div>
     <div class="concept">
-      <span class="concept-label">Logarithmic Differentiation</span>
-      For $y = f(x)$ with a <strong>variable exponent</strong> or messy product/quotient:
-      (1) take $\ln$ of both sides, (2) use log rules to expand,
-      (3) differentiate — left side gives $\dfrac{y'}{y}$,
-      (4) solve $y' = y \cdot[\cdots]$, (5) substitute back.
-      Example: $y = x^x \Rightarrow \ln y = x\ln x \Rightarrow
-      \dfrac{y'}{y} = \ln x + 1 \Rightarrow y' = x^x(\ln x + 1)$.
+      <span class="concept-label">Common Relating Equations</span>
+      Right triangle: $x^2+y^2=z^2$. &nbsp; Circle: $A=\pi r^2$, $C=2\pi r$. &nbsp;
+      Sphere: $V=\dfrac{4}{3}\pi r^3$. &nbsp; Cylinder: $V=\pi r^2h$. &nbsp; Cube: $V=s^3$.
     </div>
 
   </div>
@@ -92,7 +88,7 @@
   <div class="section">
     <div class="section-title">Practice Problems</div>
     <p style="font-family:sans-serif;font-size:13px;color:#666;margin-bottom:1rem;">
-      Groups 1&ndash;4 (symbolic): type the formula, e.g. <code>1/(x*ln(3))</code>, <code>2x/((x^2+1)*ln(5))</code>. Groups 5&ndash;8 (log diff): type an integer.
+      All answers are integers (a couple are negative — include the minus sign). When a problem states a rate as a multiple of &pi;, the &pi; is already given to you; your answer is just the coefficient.
       Press <strong>Check</strong> or hit Enter.
     </p>
     <div class="score-bar">
@@ -138,113 +134,115 @@ function addT(n, v) {
 
 // ── Problem generators (section-specific, injected below) ─────────────────────
 
-// ── Group A: Direct log_b derivatives ────────────────────────────────────────
+const RR_TRIPLES  = [[3,4,5],[6,8,10],[5,12,13],[8,15,17],[7,24,25],[9,12,15],[20,21,29],[12,16,20]];
+const RR_PTRIPLES = [[3,4,5],[5,12,13],[8,15,17],[7,24,25],[20,21,29],[9,40,41]];
 
-// gen1: d/dx[log_b(x)] — just the formula
+// gen1: implicit xy=k relation, y pinned to 1, find dx/dt
 function gen1() {
-  const bases = [2, 3, 5, 10];
-  const b = bases[rInt(4)];
+  const k = rInt(8)+2;
+  const m = rInt(7)+2;
+  const ans = -(k*m);
   return {
-    latex: `\\dfrac{d}{dx}[\\log_{${b}} x]`,
-    answer: ['1/(x*ln('+b+'))'],
-    hint: 'Recall: d/dx[log_b(x)] = 1/(x·ln b). Identify the base b and apply the formula directly.',
-    step: `\\dfrac{d}{dx}[\\log_{${b}} x]=\\dfrac{1}{x\\ln ${b}}`
+    latex: `\\text{If }xy=${k}\\text{ and }\\dfrac{dy}{dt}=${m}\\text{, find }\\dfrac{dx}{dt}\\text{ when }y=1.`,
+    answer: [String(ans)],
+    hint: 'Differentiate xy=k implicitly with the product rule, then substitute x, y, and dy/dt.',
+    step: `x\\dfrac{dy}{dt}+y\\dfrac{dx}{dt}=0;\\;\\;x=${k}\\text{ when }y=1;\\;\\;${k}(${m})+(1)\\dfrac{dx}{dt}=0\\Rightarrow\\dfrac{dx}{dt}=${ans}`
   };
 }
 
-// gen2: d/dx[log_b(x^n)] — simplify with log rules first, then differentiate
+// gen2: sphere volume given as Nπ, find dr/dt (clean integer)
 function gen2() {
-  const bases = [2, 3, 5];
-  const b = bases[rInt(3)];
-  const n = rInt(3)+2;
+  const r0 = rInt(4)+2;
+  const k  = rInt(3)+1;
+  const N  = 4*r0*r0*k;
   return {
-    latex: `\\dfrac{d}{dx}[\\log_{${b}}(x^{${n}})]`,
-    answer: [''+n+'/(x*ln('+b+'))'],
-    hint: 'Log rule first: log_b(x^n) = n·log_b(x). Then differentiate — you just need the basic formula on n·log_b(x).',
-    step: `\\log_{${b}}(x^{${n}})=${n}\\log_{${b}} x,\\quad\\dfrac{d}{dx}=\\dfrac{${n}}{x\\ln ${b}}`
+    latex: `\\text{A sphere's volume grows at }${N}\\pi\\text{ m}^3/\\text{s. Find }\\dfrac{dr}{dt}\\text{ when }r=${r0}\\text{ m.}`,
+    answer: [String(k)],
+    hint: 'Differentiate V=(4/3)\\pi r^3 with respect to t, then solve for dr/dt.',
+    step: `\\dfrac{dV}{dt}=4\\pi r^2\\dfrac{dr}{dt};\\;\\;${N}\\pi=4\\pi(${r0*r0})\\dfrac{dr}{dt}=${4*r0*r0}\\pi\\dfrac{dr}{dt}\\Rightarrow\\dfrac{dr}{dt}=${k}`
   };
 }
 
-// gen3: d/dx[log_b(ax+c)] — chain rule, linear inside
+// gen3: ladder sliding, Pythagorean triple, dy/dt=-(x*j), find dx/dt=y*j
 function gen3() {
-  const bases = [2, 3, 5];
-  const b = bases[rInt(3)];
-  const a = rInt(3)+2;
-  const c = rInt(4)+1;
+  const t = RR_TRIPLES[rInt(RR_TRIPLES.length)];
+  const x = t[0], y = t[1], z = t[2];
+  const j = rInt(2)+1;
+  const rate = x*j, ans = y*j;
   return {
-    latex: `\\dfrac{d}{dx}[\\log_{${b}}(${a}x+${c})]`,
-    answer: [''+a+'/(('+a+'x+'+c+')*ln('+b+'))'],
-    hint: `Chain rule for log_b: u'/(u·ln b). Here u = ${a}x+${c}, so u' = ${a}.`,
-    step: `\\dfrac{d}{dx}[\\log_{${b}}(${a}x+${c})]=\\dfrac{${a}}{(${a}x+${c})\\ln ${b}}`
+    latex: `\\text{A ${z}-ft ladder leans on a wall. The top is ${y} ft up (base ${x} ft out) and slides down at ${rate} ft/s. Find }\\dfrac{dx}{dt}.`,
+    answer: [String(ans)],
+    hint: 'Use x^2+y^2=z^2 with z constant. Differentiate implicitly, then substitute x, y, and dy/dt.',
+    step: `2x\\dfrac{dx}{dt}+2y\\dfrac{dy}{dt}=0;\\;\\;2(${x})\\dfrac{dx}{dt}+2(${y})(-${rate})=0\\Rightarrow\\dfrac{dx}{dt}=${ans}`
   };
 }
 
-// gen4: d/dx[log_b(x^2+c)] — chain rule, quadratic inside
+// gen4: cylinder filling, dV/dt=πr²k given, find dh/dt=k
 function gen4() {
-  const bases = [2, 3, 5];
-  const b = bases[rInt(3)];
-  const c = rInt(4)+1;
+  const r = rInt(4)+2;
+  const k = rInt(3)+1;
+  const N = r*r*k;
   return {
-    latex: `\\dfrac{d}{dx}[\\log_{${b}}(x^2+${c})]`,
-    answer: ['2x/((x^2+'+c+')*ln('+b+'))'],
-    hint: `Chain rule for log_b: u'/(u·ln b). Here u = x²+${c}, so u' = 2x.`,
-    step: `\\dfrac{d}{dx}[\\log_{${b}}(x^2+${c})]=\\dfrac{2x}{(x^2+${c})\\ln ${b}}`
+    latex: `\\text{A cylindrical tank of radius ${r} m fills at }${N}\\pi\\text{ m}^3/\\text{min. Find }\\dfrac{dh}{dt}.`,
+    answer: [String(k)],
+    hint: 'Use V=\\pi r^2h with r constant. Differentiate with respect to t and solve for dh/dt.',
+    step: `\\dfrac{dV}{dt}=\\pi r^2\\dfrac{dh}{dt};\\;\\;${N}\\pi=${r*r}\\pi\\dfrac{dh}{dt}\\Rightarrow\\dfrac{dh}{dt}=${k}`
   };
 }
 
-// ── Group B: Logarithmic differentiation — evaluate at a point ───────────────
-
-// gen5: y = x^(ax), evaluate at x=1 → answer = a
+// gen5: circular ripple, dA/dt=2πr0k given, find dr/dt=k
 function gen5() {
-  const a = rInt(4)+2;
+  const r0 = rInt(6)+2;
+  const k  = rInt(4)+1;
+  const N  = 2*r0*k;
   return {
-    latex: `\\text{Find }\\tfrac{dy}{dx}\\text{ at }x=1\\text{ for }y=x^{${a}x}`,
-    answer: [String(a)],
-    hint: `Take ln: ln y = ${a}x·ln x. Differentiate implicitly (left gives y'/y), solve for y', substitute x=1.`,
-    step: `\\ln y=${a}x\\ln x,\\;\\tfrac{y'}{y}=${a}(\\ln x+1),\\;y'(1)=1\\cdot${a}(0+1)=${a}`
+    latex: `\\text{A circular ripple's area grows at }${N}\\pi\\text{ cm}^2/\\text{s when }r=${r0}\\text{ cm. Find }\\dfrac{dr}{dt}.`,
+    answer: [String(k)],
+    hint: 'Use A=\\pi r^2. Differentiate with respect to t, substitute r, and solve for dr/dt.',
+    step: `\\dfrac{dA}{dt}=2\\pi r\\dfrac{dr}{dt};\\;\\;${N}\\pi=2\\pi(${r0})\\dfrac{dr}{dt}=${2*r0}\\pi\\dfrac{dr}{dt}\\Rightarrow\\dfrac{dr}{dt}=${k}`
   };
 }
 
-// gen6: y = x^(a + b/x), evaluate at x=1 → answer = a+b
+// gen6: cube volume, direct chain rule
 function gen6() {
-  const a = rInt(3)+1;
-  const b = rInt(3)+2;
-  const ans = a+b;
+  const s  = rInt(6)+2;
+  const ds = rInt(3)+1;
+  const ans = 3*s*s*ds;
   return {
-    latex: `\\text{Find }\\tfrac{dy}{dx}\\text{ at }x=1\\text{ for }y=x^{${a}+${b}/x}`,
+    latex: `\\text{A cube's side grows at }${ds}\\text{ cm/s. Find }\\dfrac{dV}{dt}\\text{ when }s=${s}\\text{ cm.}`,
     answer: [String(ans)],
-    hint: `Take ln: ln y = (${a}+${b}/x)·ln x. Use the product rule on the right when differentiating, then substitute x=1.`,
-    step: `\\ln y=\\left(${a}+\\tfrac{${b}}{x}\\right)\\ln x,\\;\\tfrac{y'}{y}=-\\tfrac{${b}\\ln x}{x^2}+\\tfrac{${a}+${b}/x}{x};\\;y'(1)=1\\cdot(${a}+${b})=${ans}`
+    hint: 'Differentiate V=s^3 with respect to t using the chain rule, then substitute s and ds/dt.',
+    step: `\\dfrac{dV}{dt}=3s^2\\dfrac{ds}{dt}=3(${s*s})(${ds})=${ans}`
   };
 }
 
-// gen7: y = x^a · (x+1)^b (b even so answer is integer), evaluate at x=1
+// gen7: rope over a pulley, triple (x,h,z), dz/dt=-(x*j), find approach speed = z*j
 function gen7() {
-  const a = rInt(2)+2;
-  const b = (rInt(2)+1)*2;
-  const yAt1 = Math.pow(2, b);
-  const rate = a + b/2;
-  const ans = yAt1 * rate;
+  const t = RR_TRIPLES[rInt(RR_TRIPLES.length)];
+  const x = t[0], h = t[1], z = t[2];
+  const j = rInt(2)+1;
+  const rate = x*j, ans = z*j;
   return {
-    latex: `\\text{Find }\\tfrac{dy}{dx}\\text{ at }x=1\\text{ for }y=x^{${a}}(x+1)^{${b}}`,
+    latex: `\\text{A rope runs over a pulley ${h} ft above a boat's bow through a ring, and is pulled in at ${rate} ft/s. The boat is ${x} ft from the dock (rope length ${z} ft). Find how fast the boat approaches the dock.}`,
     answer: [String(ans)],
-    hint: `Take ln: ln y = ${a}·ln x + ${b}·ln(x+1). Differentiate, evaluate at x=1. Note y(1)=2^${b}=${yAt1}.`,
-    step: `\\tfrac{y'}{y}=\\tfrac{${a}}{x}+\\tfrac{${b}}{x+1};\\;y'(1)=${yAt1}\\cdot\\left(${a}+\\tfrac{${b}}{2}\\right)=${yAt1}\\cdot${rate}=${ans}`
+    hint: 'Use x^2+h^2=z^2 with h constant. Differentiate implicitly, then substitute x, z, and dz/dt.',
+    step: `2x\\dfrac{dx}{dt}=2z\\dfrac{dz}{dt};\\;\\;${x}\\dfrac{dx}{dt}=${z}(-${rate})\\Rightarrow\\dfrac{dx}{dt}=-${ans}\\;(\\text{approaching at }${ans}\\text{ ft/s})`
   };
 }
 
-// gen8: y = x^a · (x-1)^b, evaluate at x=2 → 2^a·(a/2+b), always integer
+// gen8: two cars converging toward an intersection
 function gen8() {
-  const a = rInt(2)+2;
-  const b = rInt(2)+2;
-  const yAt2 = Math.pow(2, a);
-  const rate = a/2 + b;
-  const ans = yAt2 * rate;
+  const t = RR_PTRIPLES[rInt(RR_PTRIPLES.length)];
+  const a = t[0], b = t[1], c = t[2];
+  const k = rInt(3)+1, n = rInt(3)+1;
+  const x = a*k, y = b*k, z = c*k;
+  const pA = a*n, pB = b*n;
+  const ans = n*c;
   return {
-    latex: `\\text{Find }\\tfrac{dy}{dx}\\text{ at }x=2\\text{ for }y=x^{${a}}(x-1)^{${b}}`,
-    answer: [String(ans)],
-    hint: `Take ln: ln y = ${a}·ln x + ${b}·ln(x-1). At x=2: y(2)=2^${a}=${yAt2} and (x-1)=1.`,
-    step: `\\tfrac{y'}{y}=\\tfrac{${a}}{x}+\\tfrac{${b}}{x-1};\\;y'(2)=${yAt2}\\cdot\\left(\\tfrac{${a}}{2}+${b}\\right)=${ans}`
+    latex: `\\text{Car A is ${x} mi from an intersection, approaching at ${pA} mph. Car B is ${y} mi from the same intersection on a perpendicular road, approaching at ${pB} mph. Find how fast the distance between them is changing.}`,
+    answer: [String(-ans)],
+    hint: 'Use x^2+y^2=z^2. Differentiate implicitly with respect to t, then substitute x, y, z, dx/dt, and dy/dt.',
+    step: `z\\dfrac{dz}{dt}=x\\dfrac{dx}{dt}+y\\dfrac{dy}{dt};\\;\\;(${z})\\dfrac{dz}{dt}=${x}(-${pA})+${y}(-${pB})=-${x*pA+y*pB}\\Rightarrow\\dfrac{dz}{dt}=-${ans}\\text{ mph}`
   };
 }
 
@@ -353,8 +351,8 @@ function updateScore() {
 function resetAll() { init(); buildCards(); updateScore(); }
 </script>
 
-<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/contrib/auto-render.min.js"></script>
 <script>
   renderMathInElement(document.body, {
     delimiters: [

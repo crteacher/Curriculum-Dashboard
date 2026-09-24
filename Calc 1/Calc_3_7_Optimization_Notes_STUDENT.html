@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Optimization &mdash; Notes</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75;font-size:15px}
+.container{max-width:900px;margin:0 auto;padding:2rem 1.5rem 4rem}
+.page-title{font-size:28px;font-weight:700;margin-bottom:4px}
+.page-sub{font-family:sans-serif;font-size:13px;color:#666;margin-bottom:1.6rem}
+.opening-q{background:#eef3f9;border-left:4px solid #1e3a5c;
+  border-radius:0 8px 8px 0;padding:1rem 1.2rem;font-size:15px;
+  margin-bottom:1.5rem;font-style:italic;line-height:1.75}
+.section-head{font-family:sans-serif;font-size:11px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.08em;color:#1e3a5c;
+  margin-top:1.4rem;margin-bottom:.6rem;
+  border-bottom:1px solid #c8d8ec;padding-bottom:4px}
+.accent-box{background:#d9e8f5;border-left:4px solid #1e3a5c;
+  border-radius:0 8px 8px 0;padding:.9rem 1.1rem;font-size:14px;
+  margin-bottom:.85rem;line-height:1.95}
+.accent-box ul{margin-left:1.3rem;margin-top:.3rem}
+.accent-box ol{margin-left:1.3rem;margin-top:.3rem}
+.accent-box li{margin-bottom:.15rem}
+.accent-box p{margin-bottom:.4rem}
+.body-text{font-size:14px;line-height:1.75;margin-bottom:.85rem}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:.5rem}
+.col{min-width:0}
+.examples-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem}
+.ex-block{border:1.5px solid #ddd;border-radius:9px;padding:1rem 1.1rem;background:#fff}
+.ex-label{font-family:sans-serif;font-size:11px;font-weight:700;color:#1e3a5c;
+  text-transform:uppercase;letter-spacing:.05em;margin-bottom:.45rem}
+.ex-body{font-size:14px;line-height:1.75;margin-bottom:.5rem}
+.ex-answer.instructor{background:#fef9e7;border-left:3px solid #7a5c1e;
+  border-radius:0 6px 6px 0;padding:.6rem .9rem;font-size:13.5px;
+  color:#5a3e00;line-height:1.85}
+.ex-answer.student{height:4.5rem;border-bottom:1.5px solid #bbb;margin-top:.4rem}
+.practice{margin-bottom:1.5rem}
+.pr-row{display:grid;grid-template-columns:1.6rem 1fr 210px;gap:.75rem;
+  align-items:start;padding:.6rem 0;border-bottom:1px solid #ece8e0}
+.pr-num{font-family:sans-serif;font-weight:700;font-size:14px;color:#1e3a5c;padding-top:2px}
+.pr-prob{font-size:14px;line-height:1.75}
+.pr-ans.instructor{font-size:13px;color:#5a3e00;background:#fef9e7;
+  border-radius:5px;padding:4px 9px;line-height:1.75}
+.pr-ans.student{border-bottom:1.5px solid #bbb;min-height:2.2rem}
+.st-work{width:100%;min-height:3rem;border:1px solid #ccc;border-radius:5px;
+  padding:.35rem .5rem;font-family:Georgia,serif;font-size:13px;resize:vertical;
+  background:#fafafa;display:block;margin-bottom:.3rem}
+.st-work-sm{width:100%;min-height:1.5rem;border:1px solid #ccc;border-radius:4px;
+  padding:.2rem .4rem;font-family:Georgia,serif;font-size:12px;resize:vertical;
+  background:#fafafa;display:block;margin-bottom:.2rem}
+.st-btn{font-family:sans-serif;font-size:10px;font-weight:700;color:#1e3a5c;
+  background:none;border:1.5px solid #1e3a5c;border-radius:4px;
+  padding:2px 9px;cursor:pointer;margin-bottom:.2rem;display:inline-block}
+.st-btn-sm{font-family:sans-serif;font-size:9px;font-weight:700;color:#1e3a5c;
+  background:none;border:1px solid #1e3a5c;border-radius:3px;
+  padding:1px 6px;cursor:pointer;margin-bottom:.15rem;display:inline-block}
+.st-btn:hover,.st-btn-sm:hover{background:#eef3f9}
+.st-ans-hidden{display:none;background:#fef9e7;border-left:3px solid #7a5c1e;
+  border-radius:0 5px 5px 0;padding:.4rem .7rem;font-size:13px;
+  color:#5a3e00;line-height:1.85}
+.st-ans-hidden.visible{display:block}
+.katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}
+@media print{
+  body{background:white;font-size:10pt;line-height:1.5}
+  .container{padding:0;max-width:none}
+  .page-sub{margin-bottom:.8rem}
+  .opening-q{padding:.5rem .8rem;margin-bottom:.8rem;font-size:10pt;line-height:1.5;break-inside:avoid}
+  .section-head{margin-top:.7rem;margin-bottom:.35rem}
+  .accent-box{padding:.5rem .75rem;margin-bottom:.5rem;font-size:10pt;line-height:1.55;
+    background:#e8f0f8 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .accent-box p{margin-bottom:.2rem}
+  .body-text{font-size:10pt;line-height:1.5;margin-bottom:.5rem}
+  .two-col{gap:1rem;margin-bottom:.3rem;break-inside:avoid}
+  .examples-grid{gap:.6rem;margin-bottom:.8rem;break-inside:avoid}
+  .ex-block{padding:.55rem .75rem;border:1px solid #ccc;break-inside:avoid}
+  .ex-label{margin-bottom:.25rem}
+  .ex-body{font-size:10pt;line-height:1.5;margin-bottom:.3rem}
+  .ex-answer.instructor{padding:.35rem .7rem;font-size:9.5pt;line-height:1.55;
+    background:#fef9e7 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .ex-answer.student{height:2.8rem}
+  .practice{margin-bottom:.8rem}
+  .pr-row{padding:.3rem 0;break-inside:avoid}
+  .pr-prob{font-size:10pt;line-height:1.5}
+  .pr-ans.instructor{font-size:9.5pt;padding:2px 7px;line-height:1.55;
+    background:#fef9e7 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .pr-ans.student{min-height:1.6rem}
+  .st-work{background:none;border:none;border-bottom:1.5px solid #bbb;
+    border-radius:0;min-height:2.6rem;resize:none}
+  .st-work-sm{background:none;border:none;border-bottom:1.5px solid #bbb;
+    border-radius:0;min-height:1.3rem;resize:none}
+  .st-btn,.st-btn-sm{display:none}
+  .st-ans-hidden{display:none !important}
+  .opening-q{background:#eef3f9 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+@page{margin:.55in .65in;size:letter}
+.proof-panel{margin:.4rem 0 1.1rem;border-left:3px solid #7a9a6a;border-radius:0 6px 6px 0;background:#f5f7f3}
+.proof-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#5a7a4a;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.proof-toggle::-webkit-details-marker{display:none}
+details[open]>.proof-toggle{color:#1e3a5c}
+.proof-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #c8d8b8}
+.proof-body p{margin-bottom:.45rem}
+.proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
+.mistake-panel{margin:.4rem 0 1.1rem;border-left:3px solid #b8860b;border-radius:0 6px 6px 0;background:#fdf8e8}
+.mistake-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#9a6a00;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.mistake-toggle::-webkit-details-marker{display:none}
+details[open]>.mistake-toggle{color:#1e3a5c}
+.mistake-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #e8d8a8}
+.mistake-body p{margin-bottom:.45rem}
+@media print{.proof-panel{break-inside:avoid}.mistake-panel{break-inside:avoid}details.mistake-panel:not([open]){display:none}}
+</style>
+</head>
+<body>
+<div class="container">
+<h1 class="page-title">Optimization</h1>
+<p class="page-sub">Calculus I &nbsp;&middot;&nbsp; &sect;3.7 &nbsp;&middot;&nbsp; Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026 &nbsp;&middot;&nbsp; <strong>STUDENT</strong></p>
+<div class="opening-q">A garden store wants to build a rectangular pen using 120 feet of fencing, using the side of their building as one wall (no fence needed there). What's the largest area they can enclose &mdash; and is "fence around every side equally" actually the best strategy?</div>
+
+<div class="two-col">
+<div class="col"><div class="section-head">Optimization Strategy</div>
+<div class="accent-box"><ol>
+<li>Identify what's being maximized or minimized. Write it as a function of <strong>one</strong> variable.</li>
+<li>Find a constraint equation relating the variables; solve for one variable and substitute it in.</li>
+<li>Find critical points: set the derivative equal to $0$ (or find where it's undefined), and solve.</li>
+<li>Check the endpoints of the domain too, and compare all candidates to find the actual max/min.</li>
+</ol></div>
+</div>
+<div class="col"><div class="section-head">Identifying the Domain</div>
+<div class="accent-box"><p>Real-world constraints often make the domain a <strong>closed interval</strong>, smaller than "all real numbers." Lengths must be positive, cut squares can't exceed half the shorter side, and so on.</p>
+<p>Always ask: <em>do the endpoints make physical sense?</em> A critical point that falls outside the valid domain is not a candidate at all.</p></div>
+</div>
+</div>
+
+<div class="two-col">
+<div class="col">
+<details class="mistake-panel">
+<summary class="mistake-toggle">▸ Common Mistake</summary>
+<div class="mistake-body">
+<p>Finding a critical point and assuming it's automatically the answer, without checking (a) that it's actually inside the valid domain, and (b) that it beats the endpoints and any other critical points.</p>
+<p>On a closed interval, the max/min is the largest/smallest value among: all critical points inside the domain, <strong>and</strong> both endpoints.</p>
+</div>
+</details>
+</div>
+<div class="col">
+<details class="proof-panel">
+<summary class="proof-toggle">▸ Why Check Endpoints? A Cautionary Example</summary>
+<div class="proof-body">
+<p>For the box-from-cardboard problem below (Example 1), solving $V'(s)=0$ actually gives <em>two</em> solutions: $s=3$ and $s=\tfrac{35}{3}\approx11.67$.</p>
+<p>But the valid domain is $(0,7)$ &mdash; cutting more than $7$ inches from the $14$-inch side is physically impossible. So $s=\tfrac{35}{3}$ is thrown out immediately; it's not a real candidate, even though it solves the equation.</p>
+<div class="proof-qed">&#9633;</div>
+</div>
+</details>
+</div>
+</div>
+
+<div class="section-head">Worked Examples</div>
+<div class="examples-grid">
+<div class="ex-block">
+  <div class="ex-label">Example 1 &nbsp;&mdash;&nbsp; Box from cardboard</div>
+  <div class="ex-body">A $14\times30$ in sheet of cardboard has equal squares of side $s$ cut from each corner; the sides fold up into an open-top box. What size squares maximize the volume?</div>
+  <textarea class="st-work" placeholder="Work it out..."></textarea>
+  <button class="st-btn" onclick="toggleAns(this)">Show answer</button>
+  <div class="st-ans-hidden">$V(s)=s(14-2s)(30-2s)$, domain $(0,7)$.<br>Expand: $V=4s^3-88s^2+420s$; $V'=12s^2-176s+420=4(3s^2-44s+105)$<br>$3s^2-44s+105=0\Rightarrow s=\dfrac{44\pm\sqrt{676}}{6}=\dfrac{44\pm26}{6}\Rightarrow s=3\text{ or }s=\tfrac{35}{3}$<br>Only $s=3$ is in $(0,7)$. $V(3)=3(8)(24)=576\text{ in}^3$ (max)</div>
+</div>
+<div class="ex-block">
+  <div class="ex-label">Example 2 &nbsp;&mdash;&nbsp; Closest point on a line</div>
+  <div class="ex-body">Which point on the graph of $y=x$ is closest to the point $(7,0)$?</div>
+  <textarea class="st-work" placeholder="Work it out..."></textarea>
+  <button class="st-btn" onclick="toggleAns(this)">Show answer</button>
+  <div class="st-ans-hidden">Minimize $D^2=(x-7)^2+x^2$ (dropping the square root simplifies the algebra).<br>$\dfrac{d}{dx}[D^2]=2(x-7)+2x=4x-14=0\Rightarrow x=\tfrac{7}{2}$<br>Point: $\left(\tfrac{7}{2},\tfrac{7}{2}\right)$; minimum distance $=\tfrac{7\sqrt2}{2}$</div>
+</div>
+<div class="ex-block">
+  <div class="ex-label">Example 3 &nbsp;&mdash;&nbsp; Fencing a yard</div>
+  <div class="ex-body">Using $120$ ft of fencing and a building wall as one side, what dimensions maximize the enclosed rectangular area?</div>
+  <textarea class="st-work" placeholder="Work it out..."></textarea>
+  <button class="st-btn" onclick="toggleAns(this)">Show answer</button>
+  <div class="st-ans-hidden">Let $x=$ side parallel to the wall, $y=$ each perpendicular side: $x+2y=120\Rightarrow x=120-2y$<br>$A(y)=xy=(120-2y)y=120y-2y^2$<br>$A'(y)=120-4y=0\Rightarrow y=30,\;x=60$<br>Maximum area $=60(30)=1800\text{ ft}^2$</div>
+</div>
+<div class="ex-block">
+  <div class="ex-label">Example 4 &nbsp;&mdash;&nbsp; Minimizing a poster's area</div>
+  <div class="ex-body">A poster needs $96\text{ in}^2$ of printed area, with $2$-in margins on each side and $3$-in margins top and bottom. What overall dimensions minimize the poster's total area?</div>
+  <textarea class="st-work" placeholder="Work it out..."></textarea>
+  <button class="st-btn" onclick="toggleAns(this)">Show answer</button>
+  <div class="st-ans-hidden">Printed: $x$ by $\tfrac{96}{x}$. Total area $S(x)=(x+4)\left(\tfrac{96}{x}+6\right)=6x+\tfrac{384}{x}+120$<br>$S'(x)=6-\tfrac{384}{x^2}=0\Rightarrow x^2=64\Rightarrow x=8,\;y=\tfrac{96}{8}=12$<br>Total dimensions: $12\times18$ in; minimum total area $=216\text{ in}^2$</div>
+</div>
+</div>
+
+<div class="section-head">Practice Problems</div>
+<div class="practice">
+<div class="pr-row">
+  <div class="pr-num">1.</div>
+  <div class="pr-prob">Two positive numbers have a sum of $20$. Maximize their product.
+    <textarea class="st-work-sm" placeholder="Work it out..."></textarea>
+    <button class="st-btn-sm" onclick="toggleAns(this)">Show answer</button>
+    <div class="st-ans-hidden">$P(x)=x(20-x)$, $P'=20-2x=0\Rightarrow x=10$. Max product $=100$</div>
+  </div>
+  <div class="pr-ans student"></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">2.</div>
+  <div class="pr-prob">An open-top box is made from a $12\times12$ in square by cutting corner squares of side $x$. Maximize the volume. (What's the domain?)
+    <textarea class="st-work-sm" placeholder="Work it out..."></textarea>
+    <button class="st-btn-sm" onclick="toggleAns(this)">Show answer</button>
+    <div class="st-ans-hidden">$V(x)=x(12-2x)^2$, domain $(0,6)$. $V'=(12-2x)(12-6x)=0\Rightarrow x=2$ (interior) or $x=6$ (endpoint, $V=0$). $V(2)=2(8)^2=128\text{ in}^3$</div>
+  </div>
+  <div class="pr-ans student"></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">3.</div>
+  <div class="pr-prob">A box with a square base and volume $32\text{ ft}^3$ has an open top. Minimize its surface area.
+    <textarea class="st-work-sm" placeholder="Work it out..."></textarea>
+    <button class="st-btn-sm" onclick="toggleAns(this)">Show answer</button>
+    <div class="st-ans-hidden">$S(x)=x^2+\tfrac{128}{x}$ (since $h=32/x^2$). $S'=2x-\tfrac{128}{x^2}=0\Rightarrow x^3=64\Rightarrow x=4,h=2$. Min $S=16+32=48\text{ ft}^2$</div>
+  </div>
+  <div class="pr-ans student"></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">4.</div>
+  <div class="pr-prob">Two adjacent rectangular pens share one middle divider; $240$ ft of fencing total (2 lengths + 3 widths). Maximize the total enclosed area.
+    <textarea class="st-work-sm" placeholder="Work it out..."></textarea>
+    <button class="st-btn-sm" onclick="toggleAns(this)">Show answer</button>
+    <div class="st-ans-hidden">$2x+3y=240\Rightarrow x=\tfrac{240-3y}{2}$. $A(y)=xy$, $A'=0\Rightarrow y=40,\;x=60$. Max area $=2400\text{ ft}^2$</div>
+  </div>
+  <div class="pr-ans student"></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">5.</div>
+  <div class="pr-prob">An open-top box with a square base and volume $27\text{ ft}^3$ costs \$2/ft&sup2; for the base and \$1/ft&sup2; for the sides. Minimize the total cost.
+    <textarea class="st-work-sm" placeholder="Work it out..."></textarea>
+    <button class="st-btn-sm" onclick="toggleAns(this)">Show answer</button>
+    <div class="st-ans-hidden">$C(x)=2x^2+\tfrac{108}{x}$ (since $h=27/x^2$). $C'=4x-\tfrac{108}{x^2}=0\Rightarrow x^3=27\Rightarrow x=3,h=3$. Min cost $=18+36=\$54$</div>
+  </div>
+  <div class="pr-ans student"></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">6.</div>
+  <div class="pr-prob">A rectangle is inscribed in a semicircle of radius $5$, with its base on the diameter. Maximize its area.
+    <textarea class="st-work-sm" placeholder="Work it out..."></textarea>
+    <button class="st-btn-sm" onclick="toggleAns(this)">Show answer</button>
+    <div class="st-ans-hidden">Half-base $x$, height $\sqrt{25-x^2}$: $A(x)=2x\sqrt{25-x^2}$. $A'=0\Rightarrow x^2=\tfrac{25}{2}\Rightarrow x=\tfrac{5\sqrt2}{2}$. Max area $=25$</div>
+  </div>
+  <div class="pr-ans student"></div>
+</div>
+</div>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/contrib/auto-render.min.js"></script>
+<script>
+function toggleAns(btn) {
+  if (!btn.dataset.orig) btn.dataset.orig = btn.textContent;
+  var ans = btn.nextElementSibling;
+  var showing = ans.classList.toggle('visible');
+  btn.textContent = showing ? 'Hide' : btn.dataset.orig;
+}
+renderMathInElement(document.body, {
+  delimiters: [
+    {left: '$$', right: '$$', display: true},
+    {left: '$',  right: '$',  display: false}
+  ],
+  throwOnError: false
+});
+</script>
+</body>
+</html>

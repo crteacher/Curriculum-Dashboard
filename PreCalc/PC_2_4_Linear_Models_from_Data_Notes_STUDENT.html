@@ -97,12 +97,34 @@ details[open]>.mistake-toggle{color:#1e3a5c}
 </div>
 </details>
 </div></div>
+<div class="section-head">The Least-Squares Method</div>
+<div class="accent-box"><p>To get the <strong>exact</strong> best-fit line by hand (rather than reading it off a calculator), minimize the sum of squared residuals. This gives the <strong>least-squares formulas</strong>:</p><p>$$b_1=\dfrac{\sum(x_i-\bar x)(y_i-\bar y)}{\sum(x_i-\bar x)^2},\qquad b_0=\bar y-b_1\bar x$$</p><p>$\bar x,\bar y$ are the means of the $x$- and $y$-values; $b_1$ is the slope, $b_0$ is the $y$-intercept. Technology (a calculator or spreadsheet trendline) computes exactly this — the formulas just let you do it by hand on a small data set.</p></div>
+<div style="text-align:center;margin:1rem 0 .6rem">
+<svg viewBox="0 0 340 210" style="max-width:430px;width:100%;height:auto" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Scatter plot with a positive linear trend and its line of best fit">
+  <line x1="40" y1="175" x2="315" y2="175" stroke="#999" stroke-width="1.5"/>
+  <line x1="40" y1="175" x2="40" y2="20" stroke="#999" stroke-width="1.5"/>
+  <text x="319" y="179" font-family="sans-serif" font-size="12" fill="#555">x</text>
+  <text x="30" y="22" font-family="sans-serif" font-size="12" fill="#555">y</text>
+  <line x1="50" y1="155" x2="300" y2="45" stroke="#1e3a5c" stroke-width="2"/>
+  <circle cx="62" cy="158" r="3.5" fill="#7a5c1e"/>
+  <circle cx="95" cy="138" r="3.5" fill="#7a5c1e"/>
+  <circle cx="122" cy="133" r="3.5" fill="#7a5c1e"/>
+  <circle cx="150" cy="107" r="3.5" fill="#7a5c1e"/>
+  <circle cx="180" cy="104" r="3.5" fill="#7a5c1e"/>
+  <circle cx="210" cy="80" r="3.5" fill="#7a5c1e"/>
+  <circle cx="245" cy="73" r="3.5" fill="#7a5c1e"/>
+  <circle cx="285" cy="49" r="3.5" fill="#7a5c1e"/>
+</svg>
+<div style="font-family:sans-serif;font-size:11px;color:#555;font-style:italic;margin-top:.2rem">A scatter plot with a positive linear trend ($r$ near 1) and its least-squares line of best fit.</div>
+</div>
 <div class="section-head">Worked Examples</div>
 <div class="examples-grid">
 <div class="ex-block"><div class="ex-label">Example 1 &mdash; Interpret a scatter plot</div><div class="ex-body">A scatter plot of study hours vs. test scores shows points generally rising from left to right. Describe the correlation.</div><div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">Positive correlation — more study hours tend to correspond with higher scores. $r>0$.</div></div></div>
 <div class="ex-block"><div class="ex-label">Example 2 &mdash; Use a regression line</div><div class="ex-body">A regression line for cricket chirps vs. temperature is $T=0.25n+40$ where $n$ is chirps/min. Predict $T$ when $n=100$.</div><div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">$T=0.25(100)+40=65°$.</div></div></div>
 <div class="ex-block"><div class="ex-label">Example 3 &mdash; Interpret $R^2$</div><div class="ex-body">A linear regression gives $R^2=0.92$. What does this mean?</div><div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">About 92% of the variation in the dependent variable is explained by the linear model. This is a strong fit.</div></div></div>
-<div class="ex-block"><div class="ex-label">Example 4 &mdash; Identify outliers</div><div class="ex-body">Most data follow a linear trend except one point far from the line. How does removing it affect the model?</div><div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">Removing an outlier often increases $r^2$ and changes the slope/intercept. Always note when outliers are removed.</div></div></div>
+<div class="ex-block"><div class="ex-label">Example 4 &mdash; Identify outliers</div><div class="ex-body">Most data follow a linear trend except one point far from the line. How does removing it affect the model?</div><div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">Removing an outlier often increases $R^2$ and changes the slope/intercept. Always note when outliers are removed.</div></div></div>
+<div class="ex-block"><div class="ex-label">Example 5 &mdash; Least-squares by hand</div><div class="ex-body">Find the least-squares line for the points $(1,3),(2,5),(3,4)$.</div><div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">$\bar x=2,\ \bar y=4$<br>$\sum(x-\bar x)(y-\bar y)=(-1)(-1)+(0)(1)+(1)(0)=1$<br>$\sum(x-\bar x)^2=1+0+1=2$<br>$b_1=1/2=0.5,\quad b_0=4-0.5(2)=3$<br>Least-squares line: $\hat y=0.5x+3$.</div></div></div>
+<div class="ex-block"><div class="ex-label">Example 6 &mdash; Least-squares, applied</div><div class="ex-body">Hours studied $x$ and quiz score $y$: $(1,60),(2,68),(3,70)$. Find the least-squares line and predict the score for 4 hours studied.</div><div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">$\bar x=2,\ \bar y=66$<br>$\sum(x-\bar x)(y-\bar y)=(-1)(-6)+(0)(2)+(1)(4)=10$<br>$\sum(x-\bar x)^2=1+0+1=2$<br>$b_1=10/2=5,\quad b_0=66-5(2)=56$<br>Least-squares line: $\hat y=5x+56$. At $x=4$: $\hat y=5(4)+56=76$.</div></div></div>
 </div>
 <div class="section-head">Practice Problems</div>
 <div class="practice">
