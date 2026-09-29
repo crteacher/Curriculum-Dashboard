@@ -196,6 +196,7 @@
     display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
     padding: 8px 10px; border: 1.5px dashed var(--card-border); border-radius: 10px;
   }
+  .qinputs input.ans-equation { min-width: 240px; flex: 1 1 260px; }
 
   .qactions { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; }
   .btn-primary {
@@ -237,7 +238,7 @@
   <header>
     <div class="eyebrow">College Algebra &middot; Linear Equations</div>
     <h1>Linear Equations Practice Test</h1>
-    <p>Every part regenerates its own random version — work it out on paper, type your answer, and check yourself. Click "New version" on any part as many times as you want to drill it again with different numbers. Group 3 is interactive — click two points on the grid to graph the line yourself, and it's graded automatically. Group 5 flips that skill around: it shows you a graphed line and asks you to identify its equation. Your <strong>Exam Score</strong> locks in the first time you check each part (or peek its solution) — everything after that is just practice. Use "Reset exam" any time for a brand-new attempt.</p>
+    <p>Every part regenerates its own random version — work it out on paper, type your answer, and check yourself. Click "New version" on any part as many times as you want to drill it again with different numbers. For Group 2, type your equation in whichever form you found it — slope-intercept (y = mx + b) or point-slope (y &minus; y&#8320; = m(x &minus; x&#8320;), using any point on the line) both work. Group 3 is interactive — click two points on the grid to graph the line yourself, and it's graded automatically. Group 5 flips that skill around: it shows you a graphed line and asks you to identify its equation. Your <strong>Exam Score</strong> locks in the first time you check each part (or peek its solution) — everything after that is just practice. Use "Reset exam" any time for a brand-new attempt.</p>
   </header>
 
   <div class="toolbar">
@@ -295,6 +296,15 @@
     var coefStr = (abs === 1 && label) ? "" : String(abs);
     return (coef < 0 ? "&minus;" : "+") + " " + coefStr + label;
   }
+  // Fraction-aware version of signedTerm, for a p/q value that might not be
+  // a clean integer (e.g. a y-intercept solved out of point-slope form).
+  function signedFracTerm(p, q, label) {
+    var fr = fracLabel(p, q);
+    if (fr.p === 0) return "";
+    var abs = Math.abs(fr.p);
+    var body = (fr.q === 1 ? String(abs) : (abs + "/" + fr.q));
+    return (fr.p < 0 ? "&minus;" : "+") + " " + body + (label || "");
+  }
   function leadTerm(coef, label) {
     var abs = Math.abs(coef);
     var coefStr = (abs === 1 && label) ? "" : String(abs);
@@ -351,6 +361,142 @@
   }
   function readSlopeOnly(card) {
     return { m: parseAnswer(card.querySelector(".ans-slope").value) };
+  }
+
+  // ---- free-text linear-equation input (Group 2) ----
+  // Students type their whole equation instead of decomposed slope/intercept
+  // fields, so either slope-intercept (y = mx + b) or point-slope
+  // (y - y0 = m(x - x0), using ANY point on the line -- not just a specific
+  // one) is accepted. Rather than pattern-matching those two forms by name,
+  // equationMatchesLine() evaluates both sides numerically and solves for y
+  // algebraically, so it also quietly accepts any other equivalent way of
+  // writing "y (plus/minus a constant) = <linear expression in x>".
+  function equationInputHtml() {
+    return "<div class=\"subrow\">" +
+      "<span class=\"field-label\">equation:</span>" +
+      "<input type=\"text\" class=\"ans-equation\" placeholder=\"e.g. y = 2x - 3  or  y - 1 = 2(x - 3)\">" +
+      "</div>";
+  }
+  function readEquationAnswer(card) {
+    return { raw: card.querySelector(".ans-equation").value };
+  }
+  function tokenizeEquation(raw) {
+    var s = String(raw).toLowerCase().replace(/\s+/g, "");
+    s = s.replace(/f\(x\)/g, "y");
+    s = s.replace(/[−–—]/g, "-").replace(/[×⋅]/g, "*");
+    var tokens = [];
+    var i = 0;
+    while (i < s.length) {
+      var c = s[i];
+      if ((c >= "0" && c <= "9") || c === ".") {
+        var j = i;
+        while (j < s.length && ((s[j] >= "0" && s[j] <= "9") || s[j] === ".")) j++;
+        tokens.push({ t: "num", v: parseFloat(s.slice(i, j)) });
+        i = j;
+      } else if (c === "x" || c === "y") {
+        tokens.push({ t: "var", v: c });
+        i++;
+      } else if (c === "+" || c === "-" || c === "*" || c === "/" || c === "(" || c === ")" || c === "=") {
+        tokens.push({ t: c });
+        i++;
+      } else {
+        throw new Error("bad character: " + c);
+      }
+    }
+    var out = [];
+    for (var k = 0; k < tokens.length; k++) {
+      var cur = tokens[k];
+      if (k > 0) {
+        var prev = tokens[k - 1];
+        var prevEndsValue = prev.t === "num" || prev.t === "var" || prev.t === ")";
+        var curStartsValue = cur.t === "num" || cur.t === "var" || cur.t === "(";
+        if (prevEndsValue && curStartsValue) out.push({ t: "*" });
+      }
+      out.push(cur);
+    }
+    return out;
+  }
+  function parseEquationSides(raw) {
+    var tokens = tokenizeEquation(raw);
+    var eqCount = 0, eqIdx = -1;
+    tokens.forEach(function (tk, idx) { if (tk.t === "=") { eqCount++; eqIdx = idx; } });
+    if (eqCount !== 1) throw new Error("need exactly one =");
+    var left = tokens.slice(0, eqIdx), right = tokens.slice(eqIdx + 1);
+    if (!left.length || !right.length) throw new Error("empty side");
+    return { left: left, right: right };
+  }
+  // Tiny recursive-descent evaluator: +, -, unary minus, *, /, parentheses,
+  // implicit multiplication (already expanded into explicit "*" tokens above).
+  function evalTokens(tokens, vars) {
+    var pos = 0;
+    function peek() { return tokens[pos]; }
+    function next() { return tokens[pos++]; }
+    function parseExpr() {
+      var v = parseTerm();
+      while (peek() && (peek().t === "+" || peek().t === "-")) {
+        var op = next().t, rhs = parseTerm();
+        v = op === "+" ? v + rhs : v - rhs;
+      }
+      return v;
+    }
+    function parseTerm() {
+      var v = parseUnary();
+      while (peek() && (peek().t === "*" || peek().t === "/")) {
+        var op = next().t, rhs = parseUnary();
+        v = op === "*" ? v * rhs : v / rhs;
+      }
+      return v;
+    }
+    function parseUnary() {
+      if (peek() && peek().t === "-") { next(); return -parseUnary(); }
+      if (peek() && peek().t === "+") { next(); return parseUnary(); }
+      return parsePrimary();
+    }
+    function parsePrimary() {
+      var tk = next();
+      if (!tk) throw new Error("unexpected end");
+      if (tk.t === "num") return tk.v;
+      if (tk.t === "var") return vars[tk.v];
+      if (tk.t === "(") {
+        var v = parseExpr();
+        if (!peek() || peek().t !== ")") throw new Error("missing )");
+        next();
+        return v;
+      }
+      throw new Error("unexpected token: " + tk.t);
+    }
+    var result = parseExpr();
+    if (pos !== tokens.length) throw new Error("trailing tokens");
+    return result;
+  }
+  function equationMatchesLine(raw, targetM, targetB) {
+    if (!raw || !raw.trim()) return false;
+    var sides;
+    try {
+      sides = parseEquationSides(raw);
+    } catch (e) {
+      return false;
+    }
+    try {
+      var lhsAt = function (yVal, xVal) { return evalTokens(sides.left, { x: xVal, y: yVal }); };
+      var rhsAt = function (xVal, yVal) { return evalTokens(sides.right, { x: xVal, y: yVal }); };
+      var lhs0 = lhsAt(0, 0), lhs1 = lhsAt(1, 0);
+      var lhsAltX = lhsAt(0, 7); // LHS shouldn't secretly depend on x
+      if (Math.abs(lhsAltX - lhs0) > 1e-6) return false;
+      var coeffY = lhs1 - lhs0;
+      if (Math.abs(coeffY - 1) > 1e-6) return false; // require y isolated with coefficient 1
+      var c1 = lhs0;
+
+      var rhs0 = rhsAt(0, 0), rhs1 = rhsAt(1, 0);
+      var rhsAltY = rhsAt(0, 7); // RHS shouldn't secretly depend on y
+      if (Math.abs(rhsAltY - rhs0) > 1e-6) return false;
+      var mInput = rhs1 - rhs0;
+      var bInput = rhs0 - c1;
+
+      return Math.abs(mInput - targetM) < 0.02 && Math.abs(bInput - targetB) < 0.02;
+    } catch (e) {
+      return false;
+    }
   }
 
   // ============================================================
@@ -652,13 +798,13 @@
     prompt: function (s) {
       return "The line with slope m = " + fracHtmlOrNum(s.p, s.q) + " and y-intercept " + s.b + ".";
     },
-    inputsHtml: slopeInterceptOnlyInputsHtml,
-    readAnswer: readSlopeInterceptOnly,
-    isCorrect: function (ua, s) { return answersMatch(ua.m, numAns(s.m), 0.02) && answersMatch(ua.b, numAns(s.b), 0.02); },
+    inputsHtml: equationInputHtml,
+    readAnswer: readEquationAnswer,
+    isCorrect: function (ua, s) { return equationMatchesLine(ua.raw, s.m, s.b); },
     solutionHtml: function (s) {
       return "<span class=\"sol-label\">Solution</span>" +
         "<div class=\"step\">You're already given the slope and the y-intercept — just plug them into y = mx + b.</div>" +
-        "<div class=\"final\">Answer: slope = " + fracOrNum(s.p, s.q) + ", y-intercept = " + s.b + "</div>";
+        "<div class=\"final\">Answer: y = " + fracOrNum(s.p, s.q) + "x " + signedFracTerm(s.b, 1, "") + " (slope-intercept), or any equivalent point-slope form.</div>";
     }
   });
 
@@ -675,15 +821,15 @@
     prompt: function (s) {
       return "The line with slope m = " + fracHtmlOrNum(s.p, s.q) + " containing the point (" + s.x0 + ", " + s.y0 + ").";
     },
-    inputsHtml: slopeInterceptOnlyInputsHtml,
-    readAnswer: readSlopeInterceptOnly,
-    isCorrect: function (ua, s) { return answersMatch(ua.m, numAns(s.m), 0.02) && answersMatch(ua.b, numAns(s.b), 0.02); },
+    inputsHtml: equationInputHtml,
+    readAnswer: readEquationAnswer,
+    isCorrect: function (ua, s) { return equationMatchesLine(ua.raw, s.m, s.b); },
     solutionHtml: function (s) {
       var mStr = fracOrNum(s.p, s.q), bStr = fracOrNum(s.bFr.p, s.bFr.q);
       return "<span class=\"sol-label\">Solution</span>" +
-        "<div class=\"step\">Use point-slope form with (" + s.x0 + ", " + s.y0 + "): y &minus; " + s.y0 + " = " + mStr + "(x &minus; " + s.x0 + ").</div>" +
-        "<div class=\"step\">Solve for b: b = " + s.y0 + " &minus; (" + mStr + ")(" + s.x0 + ") = " + bStr + ".</div>" +
-        "<div class=\"final\">Answer: slope = " + mStr + ", y-intercept = " + bStr + "</div>";
+        "<div class=\"step\">Point-slope form is the quickest route here: y &minus; " + s.y0 + " = " + mStr + "(x &minus; " + s.x0 + ") is already a complete, correct answer.</div>" +
+        "<div class=\"step\">If you'd rather convert to slope-intercept form, distribute and solve for y: b = " + s.y0 + " &minus; (" + mStr + ")(" + s.x0 + ") = " + bStr + ".</div>" +
+        "<div class=\"final\">Answer: y &minus; " + s.y0 + " = " + mStr + "(x &minus; " + s.x0 + "), or equivalently y = " + mStr + "x " + signedFracTerm(s.bFr.p, s.bFr.q, "") + "</div>";
     }
   });
 
@@ -700,15 +846,15 @@
     prompt: function (s) {
       return "The line containing the points (" + s.x1 + ", " + s.y1 + ") and (" + s.x2 + ", " + s.y2 + ").";
     },
-    inputsHtml: slopeInterceptOnlyInputsHtml,
-    readAnswer: readSlopeInterceptOnly,
-    isCorrect: function (ua, s) { return answersMatch(ua.m, numAns(s.m), 0.02) && answersMatch(ua.b, numAns(s.b), 0.02); },
+    inputsHtml: equationInputHtml,
+    readAnswer: readEquationAnswer,
+    isCorrect: function (ua, s) { return equationMatchesLine(ua.raw, s.m, s.b); },
     solutionHtml: function (s) {
       var mStr = fracOrNum(s.mFr.p, s.mFr.q), bStr = fracOrNum(s.bFr.p, s.bFr.q);
       return "<span class=\"sol-label\">Solution</span>" +
         "<div class=\"step\">m = (" + s.y2 + " &minus; " + s.y1 + ") / (" + s.x2 + " &minus; " + s.x1 + ") = " + mStr + ".</div>" +
-        "<div class=\"step\">Use point-slope form with (" + s.x1 + ", " + s.y1 + "): b = " + s.y1 + " &minus; (" + mStr + ")(" + s.x1 + ") = " + bStr + ".</div>" +
-        "<div class=\"final\">Answer: slope = " + mStr + ", y-intercept = " + bStr + "</div>";
+        "<div class=\"step\">You can stop right there and write point-slope form using either point, e.g. y &minus; " + s.y1 + " = " + mStr + "(x &minus; " + s.x1 + "), or solve for b to get slope-intercept form: b = " + s.y1 + " &minus; (" + mStr + ")(" + s.x1 + ") = " + bStr + ".</div>" +
+        "<div class=\"final\">Answer: y &minus; " + s.y1 + " = " + mStr + "(x &minus; " + s.x1 + "), or equivalently y = " + mStr + "x " + signedFracTerm(s.bFr.p, s.bFr.q, "") + "</div>";
     }
   });
 
