@@ -45,6 +45,13 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;min-height:100vh
 .sec-card.pc:hover{border-color:#7a5c1e;box-shadow:0 0 0 2px rgba(122,92,30,.12)}
 .sec-card.calc1:hover{border-color:#1e3a5c;box-shadow:0 0 0 2px rgba(30,58,92,.12)}
 .sec-card.random-card,.sec-card.prereq-card{border-style:dashed;background:#fafaf8}
+.print-card{border-top-width:3px!important;background:#fdfcfa}
+.print-card.calc1{border-top-color:#1e3a5c!important}
+.print-card.pc{border-top-color:#7a5c1e!important}
+.print-card.ca{border-top-color:#1a7a3a!important}
+.print-card.c2{border-top-color:#7a1a1a!important}
+.print-type{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:#888;margin-bottom:2px}
+.print-pages{font-size:11px;color:#bbb;margin-top:4px}
 .sec-card-num{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;
   color:#aaa;margin-bottom:3px}
 .sec-card-title{font-size:13px;font-weight:600;color:#1a1a1a;line-height:1.35;margin-bottom:4px}
@@ -189,6 +196,37 @@ const RESOURCES = {
   }
 };
 
+// Printable guides & worksheets — keyed by course, then listed in display order.
+// Add an entry here whenever a new PDF lands in resources/printable/<course>/.
+const PRINTABLES = {
+  calc1: [
+    { section: 'Related Rates',             type: 'guide',     label: 'Related Rates: Guide',                href: './resources/printable/calc1/Related_Rates_Guide.pdf',           pages: 2 },
+    { section: 'Related Rates',             type: 'worksheet', label: 'Related Rates: Worksheet',            href: './resources/printable/calc1/Related_Rates_Worksheet.pdf',       pages: 4 },
+    { section: 'Product, Quotient & Chain', type: 'guide',     label: 'Product, Quotient & Chain Rules: Guide', href: './resources/printable/calc1/Product_Quotient_Chain_Guide.pdf', pages: 2 },
+  ]
+};
+
+function printablesHtml(cls) {
+  const items = PRINTABLES[_currentCourse] || [];
+  if (!items.length) return '';
+  const icon  = { guide:'📋', worksheet:'📝' };
+  const label = { guide:'Guide', worksheet:'Worksheet' };
+  // Group by section so guides and worksheets for the same topic sit together
+  const sections = [...new Set(items.map(x => x.section))];
+  let html = '<div class="unit-block"><div class="unit-label">📎 Supplemental Materials</div><div class="section-grid">';
+  sections.forEach(sec => {
+    items.filter(x => x.section === sec).forEach(x => {
+      html += `<div class="sec-card print-card ${cls}" onclick="window.open('${x.href}','_blank')">
+        <div class="print-type">${icon[x.type]} ${label[x.type]}</div>
+        <div class="sec-card-title">${x.label}</div>
+        <div class="print-pages">${x.pages} pages · opens in new tab</div>
+      </div>`;
+    });
+  });
+  html += '</div></div>';
+  return html;
+}
+
 function resourcesHtml(cls) {
   const res = RESOURCES[_currentCourse] || {};
   const walkthroughs = res.walkthroughs || [], tests = res.tests || [], cards = res.flashcards || [];
@@ -256,7 +294,7 @@ function buildGrid() {
     if (!prereq && !day1) {
       document.getElementById('gridIntro').textContent =
         'No section review problems yet — but study resources are always available.';
-      container.innerHTML = resourcesHtml(cls);
+      container.innerHTML = printablesHtml(cls) + resourcesHtml(cls);
       return;
     }
     document.getElementById('gridIntro').textContent =
@@ -264,7 +302,7 @@ function buildGrid() {
     container.innerHTML = `<div class="unit-block">
       <div class="unit-label">Quick Start</div>
       <div class="section-grid">${prereqCard}${day1Card}</div>
-    </div>` + resourcesHtml(cls);
+    </div>` + printablesHtml(cls) + resourcesHtml(cls);
     return;
   }
 
@@ -299,7 +337,7 @@ function buildGrid() {
     html += `</div></div>`;
   });
 
-  html += resourcesHtml(cls);
+  html += printablesHtml(cls) + resourcesHtml(cls);
   container.innerHTML = html;
 }
 
@@ -355,8 +393,12 @@ Promise.all([
   _sections = sections;
   _units    = sections.units || {};
 
-  const initCourse = urlSection?.startsWith('C2_') ? 'c2' : urlSection?.startsWith('PC_') ? 'pc' : urlSection?.startsWith('Calc_') ? 'calc1' : 'ca';
+  const _courseParam = new URLSearchParams(window.location.search).get('course');
+  const _courseMap   = { calc1:'calc1', calc2:'c2', precalc:'pc', ca:'ca', pc:'pc', c2:'c2' };
+  const initCourse = (_courseParam && _courseMap[_courseParam]) ? _courseMap[_courseParam]
+    : urlSection?.startsWith('C2_') ? 'c2' : urlSection?.startsWith('PC_') ? 'pc' : urlSection?.startsWith('Calc_') ? 'calc1' : 'ca';
   _currentCourse = initCourse;
+  if (_courseParam && _courseMap[_courseParam]) document.querySelector('.course-toggle').style.display = 'none';
   document.getElementById('btnCA').className = 'course-btn ca' + (initCourse==='ca' ? ' active' : '');
   document.getElementById('btnPC').className = 'course-btn pc' + (initCourse==='pc' ? ' active' : '');
   document.getElementById('btnCalc1').className = 'course-btn calc1' + (initCourse==='calc1' ? ' active' : '');

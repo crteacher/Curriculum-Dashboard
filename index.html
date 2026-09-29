@@ -210,7 +210,7 @@ header{background:#6b1a26;color:#fff;padding:.9rem 2rem;
       <div class="sb-label">Quick Access</div>
       <a class="sb-btn crimson" id="doNowLink" href="./classrooms.html" target="_blank">Do Now</a>
       <a class="sb-btn crimson" href="./exit-ticket.html" target="_blank">Exit Ticket</a>
-      <a class="sb-btn gold" href="./review.html" target="_blank">Section Review</a>
+      <a class="sb-btn gold" id="sectionReviewLink" href="./review.html" target="_blank">Section Review</a>
       <hr class="sb-divider">
       <a class="sb-link" href="./lesson-plan.html" target="_blank">This Week&#8217;s Plan</a>
       <a class="sb-link" href="./puzzle.html" target="_blank">Puzzle of the Week</a>
@@ -389,6 +389,10 @@ function openCourse(id) {
 
   // Update Do Now link to show only this course's pane
   document.getElementById('doNowLink').href = './classrooms.html?course=' + id;
+
+  // Update Section Review link — review.html uses 'pc'/'c2' keys, map from dashboard ids
+  var reviewKey = {precalc:'pc', calc2:'c2'}[id] || id;
+  document.getElementById('sectionReviewLink').href = './review.html?course=' + reviewKey;
 
   land.style.display = 'none';
   cv.classList.add('visible');

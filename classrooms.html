@@ -224,7 +224,11 @@ function pickDailyEntries(courseId) {
   // Use date seed for section selection (same for all students each day)
   // Mix course into seed so each course picks different sections
   const courseHash = courseId.split('').reduce((h,c) => Math.imul(h^c.charCodeAt(0),16777619)>>>0, 2166136261);
-  return seededShuffle(unique, dailySeed() ^ courseHash).slice(0, Math.min(3, unique.length));
+  const combined = dailySeed() ^ courseHash;
+  const genRand  = makeLCG(combined ^ 0xdeadbeef);
+  return seededShuffle(unique, combined)
+    .slice(0, Math.min(3, unique.length))
+    .map(e => ({ title: e.title, generators: e.generators, genIdx: Math.floor(genRand() * e.generators.length) }));
 }
 
 function newNumbers(courseId) {
@@ -243,9 +247,9 @@ function newNumbers(courseId) {
       '<div class="status-msg">No completed sections yet for this course.</div>';
     return;
   }
-  // New random numbers, same today's sections
+  // New random numbers, same today's sections and same generator type per section
   sess.items    = sess.dailyEntries.map(e => {
-    const gen = e.generators[Math.floor(Math.random()*e.generators.length)];
+    const gen = e.generators[e.genIdx];
     return { title: e.title, problem: gen() };
   });
   sess.flags    = sess.items.map(()=>false);
