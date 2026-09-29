@@ -213,7 +213,7 @@ function printablesHtml(cls) {
   const label = { guide:'Guide', worksheet:'Worksheet' };
   // Group by section so guides and worksheets for the same topic sit together
   const sections = [...new Set(items.map(x => x.section))];
-  let html = '<div class="unit-block"><div class="unit-label">🖨️ Printable Materials</div><div class="section-grid">';
+  let html = '<div class="unit-block"><div class="unit-label">📎 Supplemental Materials</div><div class="section-grid">';
   sections.forEach(sec => {
     items.filter(x => x.section === sec).forEach(x => {
       html += `<div class="sec-card print-card ${cls}" onclick="window.open('${x.href}','_blank')">
@@ -393,8 +393,12 @@ Promise.all([
   _sections = sections;
   _units    = sections.units || {};
 
-  const initCourse = urlSection?.startsWith('C2_') ? 'c2' : urlSection?.startsWith('PC_') ? 'pc' : urlSection?.startsWith('Calc_') ? 'calc1' : 'ca';
+  const _courseParam = new URLSearchParams(window.location.search).get('course');
+  const _courseMap   = { calc1:'calc1', calc2:'c2', precalc:'pc', ca:'ca', pc:'pc', c2:'c2' };
+  const initCourse = (_courseParam && _courseMap[_courseParam]) ? _courseMap[_courseParam]
+    : urlSection?.startsWith('C2_') ? 'c2' : urlSection?.startsWith('PC_') ? 'pc' : urlSection?.startsWith('Calc_') ? 'calc1' : 'ca';
   _currentCourse = initCourse;
+  if (_courseParam && _courseMap[_courseParam]) document.querySelector('.course-toggle').style.display = 'none';
   document.getElementById('btnCA').className = 'course-btn ca' + (initCourse==='ca' ? ' active' : '');
   document.getElementById('btnPC').className = 'course-btn pc' + (initCourse==='pc' ? ' active' : '');
   document.getElementById('btnCalc1').className = 'course-btn calc1' + (initCourse==='calc1' ? ' active' : '');
