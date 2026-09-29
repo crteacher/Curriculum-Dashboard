@@ -237,7 +237,7 @@
   <header>
     <div class="eyebrow">College Algebra &middot; Linear Equations</div>
     <h1>Linear Equations Practice Test</h1>
-    <p>Every part regenerates its own random version — work it out on paper, type your answer, and check yourself. Click "New version" on any part as many times as you want to drill it again with different numbers. Groups 3 and 5 are interactive — click two points on the grid to graph the line yourself, and each is graded automatically. Your <strong>Exam Score</strong> locks in the first time you check each part (or peek its solution) — everything after that is just practice. Use "Reset exam" any time for a brand-new attempt.</p>
+    <p>Every part regenerates its own random version — work it out on paper, type your answer, and check yourself. Click "New version" on any part as many times as you want to drill it again with different numbers. Group 3 is interactive — click two points on the grid to graph the line yourself, and it's graded automatically. Group 5 flips that skill around: it shows you a graphed line and asks you to identify its equation. Your <strong>Exam Score</strong> locks in the first time you check each part (or peek its solution) — everything after that is just practice. Use "Reset exam" any time for a brand-new attempt.</p>
   </header>
 
   <div class="toolbar">
@@ -801,6 +801,7 @@
 
   // ============================================================
   // Group 5: read the slope-intercept equation off a graphed line
+  // (inverse of Group 3 — the line is drawn for you, you supply the equation)
   // ============================================================
   function genGraphLine() {
     var m, b, tries = 0, mFr;
@@ -820,27 +821,33 @@
     var y1 = m * xLo + b, y2 = m * xHi + b;
     return { mFr: mFr, m: m, b: b, x1: xLo, y1: y1, x2: xHi, y2: y2 };
   }
+  // Draws just the fixed target line — no click state, nothing to grade visually;
+  // the student reads it and types the equation in the inputs below.
+  function drawStaticGraphLine(canvas, s) {
+    var styles = getComputedStyle(document.documentElement);
+    var colorCorrect = styles.getPropertyValue("--graph-stroke-b").trim();
+    var g = drawGrid(canvas, -10, 10, -10, 10);
+    drawSegment(g.ctx, g.toPx, s.x1, s.y1, s.x2, s.y2, colorCorrect, 2.6);
+  }
   var part5 = {
-    id: "5", group: "5", label: "", points: 4, hasGraph: true, interactive: true,
+    id: "5", group: "5", label: "", points: 4, hasGraph: true,
     gen: genGraphLine,
-    prompt: function (s) {
-      var slopeHtml = s.mFr.q === 1 ? leadTerm(s.mFr.p, "x") : (s.mFr.p < 0 ? "&minus;" : "") + frac(String(Math.abs(s.mFr.p)), String(s.mFr.q)) + "x";
-      return "Click two points on the grid below to graph <span class=\"math\">y = " + slopeHtml + " " + signedTerm(s.b, "") + "</span>, then check your answer.";
+    prompt: function () {
+      return "The graph of a line is shown below. What is its equation?";
     },
-    inputsHtml: function () { return ""; },
-    readAnswer: clickGraphReadAnswer,
-    isCorrect: clickGraphIsCorrect,
-    drawGraph: drawClickGraph,
+    inputsHtml: slopeInterceptOnlyInputsHtml,
+    readAnswer: readSlopeInterceptOnly,
+    isCorrect: function (ua, s) { return answersMatch(ua.m, numAns(s.m), 0.02) && answersMatch(ua.b, numAns(s.b), 0.02); },
+    drawGraph: drawStaticGraphLine,
     solutionHtml: function (s) {
       var mStr = fracOrNum(s.mFr.p, s.mFr.q);
       var slopeHtml = s.mFr.q === 1 ? leadTerm(s.mFr.p, "x") : (s.mFr.p < 0 ? "&minus;" : "") + frac(String(Math.abs(s.mFr.p)), String(s.mFr.q)) + "x";
       return "<span class=\"sol-label\">Solution</span>" +
-        "<div class=\"step\">Start at the y-intercept (0, " + s.b + ") &mdash; that's always the fastest point to plot.</div>" +
-        "<div class=\"step\">From there, use the slope to find a second clean lattice point: run " + s.mFr.q + ", rise " + s.mFr.p + ".</div>" +
-        "<div class=\"final\">Answer: y = " + slopeHtml + " " + signedTerm(s.b, "") + " &mdash; shown in teal above, next to your points in gold. (slope = " + mStr + ")</div>";
+        "<div class=\"step\">Read the y-intercept straight off the graph &mdash; the line crosses the y-axis at (0, " + s.b + "), so b = " + s.b + ".</div>" +
+        "<div class=\"step\">Pick another clean lattice point the line passes through and count rise over run from the y-intercept to that point: m = " + mStr + ".</div>" +
+        "<div class=\"final\">Answer: y = " + slopeHtml + " " + signedTerm(s.b, "") + " (slope = " + mStr + ", y-intercept = " + s.b + ")</div>";
     }
   };
-  part5.afterRender = wireClickGraph(part5);
   PARTS.push(part5);
 
   // ============================================================
@@ -851,7 +858,7 @@
     "2": { num: "2.", desc: "Give equations for the following lines in any form." },
     "3": { num: "3.", desc: "Graph the following by clicking two points on the grid." },
     "4": { num: "4.", desc: "Find the perpendicular line through the given point." },
-    "5": { num: "5.", desc: "Graph the following by clicking two points on the grid." }
+    "5": { num: "5.", desc: "Read the equation of the graphed line." }
   };
 
   // ============================================================
