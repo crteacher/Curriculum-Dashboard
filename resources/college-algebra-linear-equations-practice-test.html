@@ -545,7 +545,7 @@
 
   // ============================================================
   // Group 1: find the slope — pooled archetypes for variety
-  // (two points / horizontal line / read off y = mx + b / standard form)
+  // (two points / horizontal line / read off y = mx + b / standard form / point-slope form)
   // ============================================================
   function genSlopeTwoPoints() {
     var x1 = randInt(-9, 9), x2 = randIntExcluding([x1], -9, 9);
@@ -568,7 +568,13 @@
     var m = -A / B;
     return { kind: "standard", A: A, B: B, C: C, m: m };
   }
-  var SLOPE_POOL = [genSlopeTwoPoints, genSlopeHorizontal, genSlopeFromForm, genSlopeStandard];
+  function genSlopePointSlope() {
+    var p = randNonZeroInt(-9, 9), q = randInt(1, 4);
+    var fr = fracLabel(p, q);
+    var x0 = randNonZeroInt(-9, 9), y0 = randInt(-9, 9);
+    return { kind: "pointslope", p: fr.p, q: fr.q, x0: x0, y0: y0, m: fr.p / fr.q };
+  }
+  var SLOPE_POOL = [genSlopeTwoPoints, genSlopeHorizontal, genSlopeFromForm, genSlopeStandard, genSlopePointSlope];
   function genSlopeItem() { return randChoice(SLOPE_POOL)(); }
 
   function slopePromptHtml(s) {
@@ -581,6 +587,12 @@
     if (s.kind === "standard") {
       var leftA = leadTerm(s.A, "x"), leftB = signedTerm(s.B, "y");
       return "The line <span class=\"math\">" + leftA + " " + leftB + " = " + s.C + "</span>";
+    }
+    if (s.kind === "pointslope") {
+      var coefHtml = s.q === 1 ? leadTerm(s.p, "") : (s.p < 0 ? "&minus;" : "") + frac(String(Math.abs(s.p)), String(s.q));
+      var yPart = s.y0 === 0 ? "y" : ("y " + (s.y0 > 0 ? "&minus; " + s.y0 : "+ " + Math.abs(s.y0)));
+      var xPart = "(x " + (s.x0 > 0 ? "&minus; " + s.x0 : "+ " + Math.abs(s.x0)) + ")";
+      return "The line <span class=\"math\">" + yPart + " = " + coefHtml + xPart + "</span>";
     }
   }
   function slopeSolutionHtml(s) {
@@ -604,6 +616,11 @@
       return "<span class=\"sol-label\">Solution</span>" +
         "<div class=\"step\">Solve for y: " + s.B + "y = " + s.C + " " + signedTerm(-s.A, "x") + ", so y = " + fracOrNum(-s.A, s.B) + "x + " + fracOrNum(s.C, s.B) + ".</div>" +
         "<div class=\"final\">Answer: m = " + fracOrNum(-s.A, s.B) + "</div>";
+    }
+    if (s.kind === "pointslope") {
+      return "<span class=\"sol-label\">Solution</span>" +
+        "<div class=\"step\">This is point-slope form, y &minus; y&#8320; = m(x &minus; x&#8320;) &mdash; the slope is just the coefficient m sitting in front of the parentheses. No need to distribute or solve anything.</div>" +
+        "<div class=\"final\">Answer: m = " + fracOrNum(s.p, s.q) + "</div>";
     }
   }
   ["a", "b", "c", "d"].forEach(function (letter) {
