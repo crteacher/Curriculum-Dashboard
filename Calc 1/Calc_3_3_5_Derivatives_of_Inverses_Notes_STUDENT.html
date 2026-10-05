@@ -175,6 +175,15 @@ $$f'(g(x))\cdot g'(x)=1\qquad(\text{chain rule})$$
 <div class="ex-block">
   <div class="ex-label">Example 3 &nbsp;&mdash;&nbsp; Deriving $\arcsin'(x)$</div>
   <div class="ex-body">Use $f(x)=\sin x$ on $[-\pi/2,\pi/2]$ (inverse $g(x)=\arcsin x$) to derive $\dfrac{d}{dx}[\arcsin x]$.</div>
+  <div class="tri-fig" style="text-align:center;margin:.4rem 0 .6rem;break-inside:avoid"><svg width="230" height="150" viewBox="0 0 230 150" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Right triangle with angle theta, opposite side x, hypotenuse 1, adjacent side square root of 1 minus x squared" style="max-width:100%;height:auto;font-family:'Times New Roman',serif">
+    <polygon points="30,120 180,120 180,30" fill="#eef4fb" stroke="#1f3b5c" stroke-width="2"/>
+    <polyline points="168,120 168,108 180,108" fill="none" stroke="#1f3b5c" stroke-width="1.5"/>
+    <path d="M 58,120 A 28,28 0 0,0 54,106" fill="none" stroke="#c0392b" stroke-width="1.8"/>
+    <text x="64" y="114" font-size="17" font-style="italic" fill="#c0392b">&#952;</text>
+    <text x="188" y="80" font-size="18" font-style="italic" fill="#1f3b5c">x</text>
+    <text x="92" y="66" font-size="18" fill="#1f3b5c">1</text>
+    <text x="105" y="142" font-size="16" fill="#1f3b5c" text-anchor="middle">&#8730;<tspan text-decoration="overline">1 &#8722; <tspan font-style="italic">x</tspan>&#178;</tspan></text>
+  </svg><div style="font-size:13px;color:#555;margin-top:.15rem">$\theta=\arcsin x \;\Rightarrow\; \sin\theta=\dfrac{x}{1}$, so by Pythagoras the adjacent side is $\sqrt{1-x^2}$ and $\cos\theta=\sqrt{1-x^2}$.</div></div>
   <textarea class="st-work" placeholder="Work it out..."></textarea>
   <button class="st-btn" onclick="toggleAns(this)">Show answer</button>
   <div class="st-ans-hidden">$f'(x)=\cos x$, so $f'(g(x))=\cos(\arcsin x)$.<br>If $\theta=\arcsin x$, then $\sin\theta=x$, and $\cos\theta=\sqrt{1-x^2}$ (right triangle: opposite $x$, hypotenuse 1).<br>$g'(x)=\dfrac{1}{\cos(\arcsin x)}=\dfrac{1}{\sqrt{1-x^2}}$</div>
