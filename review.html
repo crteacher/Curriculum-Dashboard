@@ -120,7 +120,11 @@ const PROBS_PER_SET = 5;
 const urlSection = new URLSearchParams(window.location.search).get('section');
 
 let _state, _sections, _units;
-let _currentCourse = 'ca';
+// Set course synchronously from URL param so there's never a default flash
+const _initCourseParam = new URLSearchParams(window.location.search).get('course');
+const _initCourseMap   = { calc1:'calc1', calc2:'c2', precalc:'pc', ca:'ca', pc:'pc', c2:'c2' };
+let _currentCourse = (_initCourseParam && _initCourseMap[_initCourseParam]) ? _initCourseMap[_initCourseParam] : 'ca';
+if (_initCourseParam && _initCourseMap[_initCourseParam]) document.querySelector('.course-toggle').style.display = 'none';
 let _currentSec = null;
 let _available = {};  // courseKey -> array of sections with reviewProblems
 let _secMap = {};     // id -> section object
@@ -185,7 +189,8 @@ const RESOURCES = {
     walkthroughs: [{ label: 'Implicit Differentiation &amp; Related Rates: A Guided Walkthrough', href: './resources/calc1-implicit-related-rates-walkthrough.html' }],
     tests:      [{ label: 'Limits',                       href: './resources/limits-practice-test.html' },
                  { label: 'Derivative Basics',             href: './resources/calc1-derivative-basics-practice-test.html' },
-                 { label: 'Derivative Rules',              href: './resources/calc1-derivative-rules-practice-test.html' }],
+                 { label: 'Derivative Rules',              href: './resources/calc1-derivative-rules-practice-test.html' },
+                 { label: 'Implicit Differentiation &amp; Related Rates', href: './resources/calc1-implicit-related-rates-practice-test.html' }],
     flashcards: [{ label: 'Derivative Rules',             href: './resources/derivative-rules.html' },
                  { label: 'Basic Antiderivatives',        href: './resources/basic-antiderivatives.html' }]
   },
@@ -393,12 +398,11 @@ Promise.all([
   _sections = sections;
   _units    = sections.units || {};
 
-  const _courseParam = new URLSearchParams(window.location.search).get('course');
-  const _courseMap   = { calc1:'calc1', calc2:'c2', precalc:'pc', ca:'ca', pc:'pc', c2:'c2' };
-  const initCourse = (_courseParam && _courseMap[_courseParam]) ? _courseMap[_courseParam]
-    : urlSection?.startsWith('C2_') ? 'c2' : urlSection?.startsWith('PC_') ? 'pc' : urlSection?.startsWith('Calc_') ? 'calc1' : 'ca';
-  _currentCourse = initCourse;
-  if (_courseParam && _courseMap[_courseParam]) document.querySelector('.course-toggle').style.display = 'none';
+  // Course already set synchronously from URL param; only derive from urlSection if no param
+  if (!_initCourseParam || !_initCourseMap[_initCourseParam]) {
+    _currentCourse = urlSection?.startsWith('C2_') ? 'c2' : urlSection?.startsWith('PC_') ? 'pc' : urlSection?.startsWith('Calc_') ? 'calc1' : 'ca';
+  }
+  const initCourse = _currentCourse;
   document.getElementById('btnCA').className = 'course-btn ca' + (initCourse==='ca' ? ' active' : '');
   document.getElementById('btnPC').className = 'course-btn pc' + (initCourse==='pc' ? ' active' : '');
   document.getElementById('btnCalc1').className = 'course-btn calc1' + (initCourse==='calc1' ? ' active' : '');
