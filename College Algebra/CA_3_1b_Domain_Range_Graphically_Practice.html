@@ -160,27 +160,29 @@ function oDot(x,y,c='#1e3a5c'){return `<circle cx="${gpx(x)}" cy="${gpy(y)}" r="
 function segL(x1,y1,x2,y2,c='#1e3a5c'){return `<line x1="${gpx(x1)}" y1="${gpy(y1)}" x2="${gpx(x2)}" y2="${gpy(y2)}" stroke="${c}" stroke-width="2.5"/>`;}
 function polyL(pts,c='#1e3a5c'){return `<polyline points="${pts.map(([x,y])=>gpx(x)+','+gpy(y)).join(' ')}" fill="none" stroke="${c}" stroke-width="2.5"/>`;}
 
+// Unit-vector arrowhead — always correctly aligned regardless of slope
+function arrowHead(sx1,sy1,sx2,sy2,r=14,ww=7,c='#1e3a5c'){
+  const dx=sx2-sx1, dy=sy2-sy1, len=Math.hypot(dx,dy);
+  if(len<1) return '';
+  const ux=dx/len, uy=dy/len;
+  const bx=sx2-r*ux, by=sy2-r*uy;
+  const w1x=bx-ww*uy, w1y=by+ww*ux;
+  const w2x=bx+ww*uy, w2y=by-ww*ux;
+  return `<polygon points="${sx2.toFixed(1)},${sy2.toFixed(1)} ${w1x.toFixed(1)},${w1y.toFixed(1)} ${w2x.toFixed(1)},${w2y.toFixed(1)}" fill="${c}"/>`;
+}
+
 function rayRight(x0,y0,slope,c='#1e3a5c'){
-  const xe=5.0, ye=y0+slope*(xe-x0);
+  // tip slightly inside right edge so arrowhead stays within viewport
+  const xe=4.5, ye=y0+slope*(xe-x0);
   const sx0=gpx(x0),sy0=gpy(y0),sxe=gpx(xe),sye=gpy(ye);
-  const ang=Math.atan2(sy0-sye,sxe-sx0);
-  const r=8;
-  const ax1=sxe-r*Math.cos(ang-0.3),ay1=sye+r*Math.sin(ang-0.3);
-  const ax2=sxe-r*Math.cos(ang+0.3),ay2=sye+r*Math.sin(ang+0.3);
-  return segL(x0,y0,xe,ye,c)+cDot(x0,y0,c)+
-    `<polygon points="${sxe},${sye} ${ax1.toFixed(1)},${ay1.toFixed(1)} ${ax2.toFixed(1)},${ay2.toFixed(1)}" fill="${c}"/>`;
+  return segL(x0,y0,xe,ye,c)+cDot(x0,y0,c)+arrowHead(sx0,sy0,sxe,sye,14,7,c);
 }
 function rayLeft(x0,y0,slope,c='#1e3a5c'){
-  const xe=-5.0, ye=y0+slope*(xe-x0);
+  const xe=-4.5, ye=y0+slope*(xe-x0);
   const sx0=gpx(x0),sy0=gpy(y0),sxe=gpx(xe),sye=gpy(ye);
-  const ang=Math.atan2(sy0-sye,sxe-sx0);
-  const r=8;
-  const ax1=sxe+r*Math.cos(ang-0.3),ay1=sye-r*Math.sin(ang-0.3);
-  const ax2=sxe+r*Math.cos(ang+0.3),ay2=sye-r*Math.sin(ang+0.3);
-  return segL(xe,ye,x0,y0,c)+cDot(x0,y0,c)+
-    `<polygon points="${sxe},${sye} ${ax1.toFixed(1)},${ay1.toFixed(1)} ${ax2.toFixed(1)},${ay2.toFixed(1)}" fill="${c}"/>`;
+  return segL(xe,ye,x0,y0,c)+cDot(x0,y0,c)+arrowHead(sx0,sy0,sxe,sye,14,7,c);
 }
-function parPts(h,k,a,x1,x2,n=24){
+function parPts(h,k,a,x1,x2,n=30){
   const pts=[];
   for(let i=0;i<=n;i++){const x=x1+(x2-x1)*i/n; pts.push([x,a*(x-h)**2+k]);}
   return pts;
@@ -188,127 +190,106 @@ function parPts(h,k,a,x1,x2,n=24){
 
 function svgG(content,q){
   return `<div style="font-size:14px;line-height:1.6;margin-bottom:5px">${q}</div>`+
-    `<p style="font-family:sans-serif;font-size:11px;color:#888;margin-bottom:5px">Interval notation &mdash; write <code>inf</code> for &infin;, <code>-inf</code> for &minus;&infin;. Example: <code>[-3,4]</code> or <code>(-inf,2]</code></p>`+
+    `<p style="font-family:sans-serif;font-size:11px;color:#888;margin-bottom:5px">Interval notation &mdash; write <code>inf</code> for &infin;, <code>-inf</code> for &minus;&infin;. Example: <code>[-3,4]</code></p>`+
     `<svg width="${GW}" height="${GH}" style="display:block;margin:0 auto" viewBox="0 0 ${GW} ${GH}">${mkGrid()}${content}</svg>`;
 }
 
 // ── Generators ───────────────────────────────────────────────────────────────
 function gen1(){
-  // Segment both closed, ask domain
   const x1=rInt(4)-4; const x2=x1+rInt(3)+2;
   const y1=rInt(7)-3; const y2=rInt(7)-3;
-  const ans=`[${x1},${x2}]`;
   return{svg:svgG(segL(x1,y1,x2,y2)+cDot(x1,y1)+cDot(x2,y2),
     'What is the <strong>domain</strong> of the function graphed below?'),
-    answer:[ans],
+    answer:[`[${x1},${x2}]`],
     hint:'How far left and right does the graph extend along the x-axis?',
     step:`\\text{Domain: }[${x1},\\,${x2}]`};
 }
 function gen2(){
-  // Segment both closed, ask range
   const x1=rInt(4)-4; const x2=x1+rInt(3)+2;
   let y1=rInt(7)-3; let y2=rInt(7)-3;
   while(y1===y2){y2=rInt(7)-3;}
   const yMin=Math.min(y1,y2); const yMax=Math.max(y1,y2);
-  const ans=`[${yMin},${yMax}]`;
   return{svg:svgG(segL(x1,y1,x2,y2)+cDot(x1,y1)+cDot(x2,y2),
     'What is the <strong>range</strong> of the function graphed below?'),
-    answer:[ans],
+    answer:[`[${yMin},${yMax}]`],
     hint:'How far up and down does the graph reach along the y-axis?',
     step:`\\text{Range: }[${yMin},\\,${yMax}]`};
 }
 function gen3(){
-  // Segment LEFT open, ask domain
   const x1=rInt(4)-4; const x2=x1+rInt(3)+2;
   const y1=rInt(7)-3; const y2=rInt(7)-3;
-  const ans=`(${x1},${x2}]`;
   return{svg:svgG(segL(x1,y1,x2,y2)+oDot(x1,y1)+cDot(x2,y2),
     'What is the <strong>domain</strong>? (Notice the open circle on the left.)'),
-    answer:[ans],
+    answer:[`(${x1},${x2}]`],
     hint:'Does the open circle mean that x-value is included or excluded?',
     step:`\\text{Domain: }(${x1},\\,${x2}]`};
 }
 function gen4(){
-  // Segment RIGHT open, ask domain
   const x1=rInt(4)-4; const x2=x1+rInt(3)+2;
   const y1=rInt(7)-3; const y2=rInt(7)-3;
-  const ans=`[${x1},${x2})`;
   return{svg:svgG(segL(x1,y1,x2,y2)+cDot(x1,y1)+oDot(x2,y2),
     'What is the <strong>domain</strong>? (Notice the open circle on the right.)'),
-    answer:[ans],
+    answer:[`[${x1},${x2})`],
     hint:'Closed dot = include with [ or ]. Open circle = exclude with ( or ).',
     step:`\\text{Domain: }[${x1},\\,${x2})`};
 }
 function gen5(){
-  // Segment both open, ask domain
   const x1=rInt(4)-4; const x2=x1+rInt(3)+2;
   const y1=rInt(7)-3; const y2=rInt(7)-3;
-  const ans=`(${x1},${x2})`;
   return{svg:svgG(segL(x1,y1,x2,y2)+oDot(x1,y1)+oDot(x2,y2),
     'What is the <strong>domain</strong>? (Both endpoints are open circles.)'),
-    answer:[ans],
+    answer:[`(${x1},${x2})`],
     hint:'Both endpoints are excluded — which bracket type matches that?',
     step:`\\text{Domain: }(${x1},\\,${x2})`};
 }
 function gen6(){
-  // Ray going right, ask domain
   const x0=rInt(5)-3; const y0=rInt(5)-2;
   const slope=choose([-1,-0.5,0,0.5,1]);
-  const ans=`[${x0},inf)`;
   return{svg:svgG(rayRight(x0,y0,slope),
     'What is the <strong>domain</strong> of the function graphed below?'),
-    answer:[ans],
+    answer:[`[${x0},inf)`],
     hint:'The arrow means the graph continues forever in that direction.',
     step:`\\text{Domain: }[${x0},\\,\\infty)`};
 }
 function gen7(){
-  // Ray going left, ask domain
   const x0=rInt(5)-1; const y0=rInt(5)-2;
   const slope=choose([-1,-0.5,0,0.5,1]);
-  const ans=`(-inf,${x0}]`;
   return{svg:svgG(rayLeft(x0,y0,slope),
     'What is the <strong>domain</strong> of the function graphed below?'),
-    answer:[ans],
+    answer:[`(-inf,${x0}]`],
     hint:'The arrow on the left side means the graph extends indefinitely in that direction.',
     step:`\\text{Domain: }(-\\infty,\\,${x0}]`};
 }
 function gen8(){
-  // Ray going right with positive slope, ask range
   const x0=rInt(5)-4; const y0=rInt(5)-3;
   const slope=choose([0.5,1,1.5]);
-  const ans=`[${y0},inf)`;
   return{svg:svgG(rayRight(x0,y0,slope),
     'What is the <strong>range</strong> of the function graphed below?'),
-    answer:[ans],
+    answer:[`[${y0},inf)`],
     hint:'The starting dot gives the minimum y-value; the arrow means no maximum.',
     step:`\\text{Range: }[${y0},\\,\\infty)`};
 }
 function gen9(){
-  // U-parabola y=(x-h)^2+k, ask range
   const h=rInt(3)-1; const k=rInt(4)-3;
-  const hw=rInt(2)+2; // half-width
+  const hw=rInt(2)+2;
   const x1=h-hw; const x2=h+hw;
   const yEnd=hw*hw+k;
-  // range: [k, yEnd]
   const pts=parPts(h,k,1,x1,x2);
-  const ans=`[${k},${yEnd}]`;
   return{svg:svgG(polyL(pts)+cDot(x1,hw*hw+k)+cDot(x2,hw*hw+k),
     'What is the <strong>range</strong> of the parabola shown?'),
-    answer:[ans],
+    answer:[`[${k},${yEnd}]`],
     hint:'The bottom of the parabola is the minimum y-value; the endpoints give the maximum.',
     step:`\\text{Range: }[${k},\\,${yEnd}]`};
 }
 function gen10(){
-  // Inverted parabola y=-(x-h)^2+k, ask range
   const h=rInt(3)-1; const k=rInt(3)+1;
   const hw=rInt(2)+2;
   const x1=h-hw; const x2=h+hw;
   const yEnd=k-hw*hw;
   const pts=parPts(h,k,-1,x1,x2);
-  const ans=`[${yEnd},${k}]`;
   return{svg:svgG(polyL(pts)+cDot(x1,k-hw*hw)+cDot(x2,k-hw*hw),
     'What is the <strong>range</strong> of the parabola shown?'),
-    answer:[ans],
+    answer:[`[${yEnd},${k}]`],
     hint:'The peak gives the maximum y-value; the endpoints give the minimum.',
     step:`\\text{Range: }[${yEnd},\\,${k}]`};
 }
