@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Domain and Range — Graphically &mdash; Practice</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.7}
+  .container{max-width:820px;margin:0 auto;padding:2rem 1.5rem 4rem}
+  h1{font-size:26px;font-weight:700;margin-bottom:4px}
+  .subtitle{font-size:14px;color:#666;margin-bottom:2rem;font-family:sans-serif}
+  .section{margin-bottom:2.5rem}
+  .section-title{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;
+    color:#777;font-family:sans-serif;margin-bottom:1rem;border-bottom:1px solid #ddd;padding-bottom:6px}
+  .concept{background:#d9e8f5;border-left:4px solid #1e3a5c;border-radius:0 8px 8px 0;
+    padding:.85rem 1.1rem;font-size:15px;margin-bottom:1rem}
+  .concept-label{font-family:sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;
+    letter-spacing:.07em;color:#1e3a5c;display:block;margin-bottom:.35rem}
+  .score-bar{display:flex;align-items:center;gap:12px;margin-bottom:1.25rem;
+    font-family:sans-serif;font-size:14px;flex-wrap:wrap}
+  .score-display{font-weight:700;font-size:18px;min-width:60px}
+  .score-label{color:#777;font-size:13px}
+  .score-note{font-size:12px;color:#999;font-style:italic}
+  .progress{flex:1;min-width:80px;height:6px;background:#e5e1d8;border-radius:3px;overflow:hidden}
+  .progress-fill{height:100%;background:#1e3a5c;border-radius:3px;transition:width .4s}
+  .reset-btn{font-size:12px;background:none;border:1px solid #bbb;border-radius:5px;
+    padding:4px 10px;cursor:pointer;color:#666;font-family:sans-serif;white-space:nowrap}
+  .reset-btn:hover{background:#eee}
+  .problems{display:grid;grid-template-columns:repeat(auto-fill,minmax(370px,1fr));gap:14px}
+  .card{background:#fff;border:1.5px solid #ddd;border-radius:10px;overflow:hidden;transition:border-color .25s}
+  .card.correct{border-color:#3a7a3a}.card.wrong{border-color:#b03030}.card.peeked{border-color:#b8860b}
+  .card-body{padding:14px 16px}
+  .card-meta{font-family:sans-serif;font-size:12px;color:#888;margin-bottom:4px}
+  .card-expr{font-size:17px;margin-bottom:12px;line-height:1.5;overflow-wrap:break-word;white-space:normal;overflow-x:auto}
+  .card-expr svg{max-width:100%;height:auto}
+  .katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}
+  .input-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .ans-input{font-family:'Courier New',monospace;font-size:14px;border:1px solid #ccc;
+    border-radius:6px;padding:7px 10px;flex:1;min-width:120px;background:#fafaf8;
+    color:#1a1a1a;outline:none}
+  .ans-input:focus{border-color:#1e3a5c;background:#fff}
+  .ans-input.ok{border-color:#3a7a3a;background:#f0faf0}
+  .ans-input.bad{border-color:#b03030;background:#fdf0f0}
+  .check-btn{font-family:sans-serif;font-size:13px;background:#1a1a1a;color:#fff;
+    border:none;border-radius:6px;padding:7px 14px;cursor:pointer}
+  .check-btn:hover{background:#333}.check-btn:disabled{background:#aaa;cursor:default}
+  .hint{font-family:sans-serif;font-size:12px;color:#888;margin-top:5px;display:none}
+  .hint-link{font-family:sans-serif;font-size:12px;color:#aaa;cursor:pointer;text-decoration:underline;margin-top:7px;display:inline-block}.hint-link:hover{color:#666}
+  .feedback{font-family:sans-serif;font-size:13px;margin-top:10px;padding:8px 12px;
+    border-radius:6px;display:none;line-height:1.5}
+  .feedback.correct{display:block;background:#eaf5ea;color:#1a5a1a}
+  .feedback.wrong{display:block;background:#faeaea;color:#7a1a1a}
+  .feedback.peeked{display:block;background:#fdf8e8;color:#7a5a00}
+  .reveal-link{font-family:sans-serif;font-size:12px;color:#999;cursor:pointer;
+    text-decoration:underline;margin-top:8px;display:inline-block}
+  .reveal-link:hover{color:#555}
+  .revealed-answer{display:none;margin-top:8px;font-family:sans-serif;font-size:13px;
+    color:#444;background:#f5f3ef;border-radius:6px;padding:8px 11px;line-height:1.8;overflow-x:auto}
+  .interval-hint{font-family:sans-serif;font-size:11px;color:#1e3a5c;margin-top:4px;
+    padding:2px 7px;background:#eef3f9;border-radius:4px;display:inline-block}
+  code{font-family:'Courier New',monospace;background:#f0ede7;padding:1px 5px;border-radius:3px;font-size:12px}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Domain and Range — Graphically</h1>
+  <p class="subtitle">College Algebra &nbsp;&middot;&nbsp; &sect;3.1b &nbsp;&middot;&nbsp; Instructor: Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026</p>
+
+  <div class="section">
+    <div class="section-title">Core Ideas</div>
+
+<div class="concept">
+  <span class="concept-label">Domain &amp; Range — Graphically</span>
+  <strong>Domain</strong> = all x-values where the graph exists (scan left &rarr; right).<br>
+  <strong>Range</strong> = all y-values the graph reaches (scan bottom &uarr; top).<br>
+  <strong>Filled dot</strong> &#9679; &rarr; include endpoint: <code>[</code> or <code>]</code>&nbsp;&nbsp;
+  <strong>Open circle</strong> &#9675; &rarr; exclude: <code>(</code> or <code>)</code>&nbsp;&nbsp;
+  <strong>Arrow</strong> &rarr; continues to &plusmn;&infin;: write <code>inf</code> or <code>-inf</code>
+</div>
+
+  </div>
+
+  <div class="section">
+    <div class="section-title">Practice Problems</div>
+    <p style="font-family:sans-serif;font-size:13px;color:#666;margin-bottom:1rem;">
+      Type your answer in interval notation (e.g. <code>[-3,4]</code>, <code>(-inf,2]</code>, <code>[1,inf)</code>). Spaces are ignored.
+      Press <strong>Check</strong> or hit Enter.
+    </p>
+    <div class="score-bar">
+      <span class="score-label">Score:</span>
+      <span class="score-display" id="score">0 / 8</span>
+      <span class="score-note">first attempt only</span>
+      <div class="progress"><div class="progress-fill" id="prog" style="width:0%"></div></div>
+      <button class="reset-btn" onclick="resetAll()">New set &nbsp;&#8635;</button>
+    </div>
+    <div class="problems" id="problems"></div>
+  </div>
+</div>
+
+<script>
+// ── Crypto-quality RNG ────────────────────────────────────────────────────────
+function _rf() {
+  const b = new Uint32Array(1);
+  crypto.getRandomValues(b);
+  return b[0] / 4294967296;
+}
+function rInt(n)   { return Math.floor(_rf() * n); }
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = rInt(i + 1);
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+// Pick one element at random from an array  e.g. choose([1,4,9])
+function choose(arr) { return arr[rInt(arr.length)]; }
+
+// ── Display helpers ───────────────────────────────────────────────────────────
+// Leading coefficient: 1→'', -1→'-', else the number as a string
+function fc(a) { if (a===1) return ''; if (a===-1) return '-'; return String(a); }
+// Subsequent term with sign: addT(-2,'x')→' - 2x', addT(3,'')→' + 3', addT(0,'x')→''
+function addT(n, v) {
+  if (n===0) return '';
+  const s = n>0?'+':'-', abs = Math.abs(n);
+  if (abs===1 && v) return ' ' + s + ' ' + v;
+  return ' ' + s + ' ' + abs + (v||'');
+}
+
+// ── Problem generators (section-specific, injected below) ─────────────────────
+
+// ── Graph helpers ────────────────────────────────────────────────────────────
+const GW=260, GH=200, GOX=130, GOY=100, GSX=25, GSY=23;
+function gpx(x){return Math.round(GOX + x*GSX);}
+function gpy(y){return Math.round(GOY - y*GSY);}
+
+function mkGrid(){
+  let s='';
+  for(let i=-4;i<=4;i++){
+    if(i){
+      s+=`<line x1="${gpx(i)}" y1="2" x2="${gpx(i)}" y2="${GH-2}" stroke="#eaeaea" stroke-width="0.9"/>`;
+      s+=`<line x1="2" y1="${gpy(i)}" x2="${GW-2}" y2="${gpy(i)}" stroke="#eaeaea" stroke-width="0.9"/>`;
+    }
+  }
+  s+=`<line x1="2" y1="${gpy(0)}" x2="${GW-2}" y2="${gpy(0)}" stroke="#555" stroke-width="1.5"/>`;
+  s+=`<line x1="${gpx(0)}" y1="2" x2="${gpx(0)}" y2="${GH-2}" stroke="#555" stroke-width="1.5"/>`;
+  for(let i=-4;i<=4;i++){
+    if(!i) continue;
+    s+=`<line x1="${gpx(i)}" y1="${gpy(0)-4}" x2="${gpx(i)}" y2="${gpy(0)+4}" stroke="#555" stroke-width="1"/>`;
+    s+=`<text x="${gpx(i)}" y="${gpy(0)+14}" text-anchor="middle" font-size="10" font-family="sans-serif" fill="#666">${i}</text>`;
+    s+=`<line x1="${gpx(0)-4}" y1="${gpy(i)}" x2="${gpx(0)+4}" y2="${gpy(i)}" stroke="#555" stroke-width="1"/>`;
+    s+=`<text x="${gpx(0)-6}" y="${gpy(i)+4}" text-anchor="end" font-size="10" font-family="sans-serif" fill="#666">${i}</text>`;
+  }
+  return s;
+}
+function cDot(x,y,c='#1e3a5c'){return `<circle cx="${gpx(x)}" cy="${gpy(y)}" r="5" fill="${c}"/>`;}
+function oDot(x,y,c='#1e3a5c'){return `<circle cx="${gpx(x)}" cy="${gpy(y)}" r="5" fill="white" stroke="${c}" stroke-width="2"/>`;}
+function segL(x1,y1,x2,y2,c='#1e3a5c'){return `<line x1="${gpx(x1)}" y1="${gpy(y1)}" x2="${gpx(x2)}" y2="${gpy(y2)}" stroke="${c}" stroke-width="2.5"/>`;}
+function polyL(pts,c='#1e3a5c'){return `<polyline points="${pts.map(([x,y])=>gpx(x)+','+gpy(y)).join(' ')}" fill="none" stroke="${c}" stroke-width="2.5"/>`;}
+
+function rayRight(x0,y0,slope,c='#1e3a5c'){
+  const xe=5.0, ye=y0+slope*(xe-x0);
+  const sx0=gpx(x0),sy0=gpy(y0),sxe=gpx(xe),sye=gpy(ye);
+  const ang=Math.atan2(sy0-sye,sxe-sx0);
+  const r=8;
+  const ax1=sxe-r*Math.cos(ang-0.3),ay1=sye+r*Math.sin(ang-0.3);
+  const ax2=sxe-r*Math.cos(ang+0.3),ay2=sye+r*Math.sin(ang+0.3);
+  return segL(x0,y0,xe,ye,c)+cDot(x0,y0,c)+
+    `<polygon points="${sxe},${sye} ${ax1.toFixed(1)},${ay1.toFixed(1)} ${ax2.toFixed(1)},${ay2.toFixed(1)}" fill="${c}"/>`;
+}
+function rayLeft(x0,y0,slope,c='#1e3a5c'){
+  const xe=-5.0, ye=y0+slope*(xe-x0);
+  const sx0=gpx(x0),sy0=gpy(y0),sxe=gpx(xe),sye=gpy(ye);
+  const ang=Math.atan2(sy0-sye,sxe-sx0);
+  const r=8;
+  const ax1=sxe+r*Math.cos(ang-0.3),ay1=sye-r*Math.sin(ang-0.3);
+  const ax2=sxe+r*Math.cos(ang+0.3),ay2=sye-r*Math.sin(ang+0.3);
+  return segL(xe,ye,x0,y0,c)+cDot(x0,y0,c)+
+    `<polygon points="${sxe},${sye} ${ax1.toFixed(1)},${ay1.toFixed(1)} ${ax2.toFixed(1)},${ay2.toFixed(1)}" fill="${c}"/>`;
+}
+function parPts(h,k,a,x1,x2,n=24){
+  const pts=[];
+  for(let i=0;i<=n;i++){const x=x1+(x2-x1)*i/n; pts.push([x,a*(x-h)**2+k]);}
+  return pts;
+}
+
+function svgG(content,q){
+  return `<div style="font-size:14px;line-height:1.6;margin-bottom:5px">${q}</div>`+
+    `<p style="font-family:sans-serif;font-size:11px;color:#888;margin-bottom:5px">Interval notation &mdash; write <code>inf</code> for &infin;, <code>-inf</code> for &minus;&infin;. Example: <code>[-3,4]</code> or <code>(-inf,2]</code></p>`+
+    `<svg width="${GW}" height="${GH}" style="display:block;margin:0 auto" viewBox="0 0 ${GW} ${GH}">${mkGrid()}${content}</svg>`;
+}
+
+// ── Generators ───────────────────────────────────────────────────────────────
+function gen1(){
+  // Segment both closed, ask domain
+  const x1=rInt(4)-4; const x2=x1+rInt(3)+2;
+  const y1=rInt(7)-3; const y2=rInt(7)-3;
+  const ans=`[${x1},${x2}]`;
+  return{svg:svgG(segL(x1,y1,x2,y2)+cDot(x1,y1)+cDot(x2,y2),
+    'What is the <strong>domain</strong> of the function graphed below?'),
+    answer:[ans],
+    hint:'How far left and right does the graph extend along the x-axis?',
+    step:`\\text{Domain: }[${x1},\\,${x2}]`};
+}
+function gen2(){
+  // Segment both closed, ask range
+  const x1=rInt(4)-4; const x2=x1+rInt(3)+2;
+  let y1=rInt(7)-3; let y2=rInt(7)-3;
+  while(y1===y2){y2=rInt(7)-3;}
+  const yMin=Math.min(y1,y2); const yMax=Math.max(y1,y2);
+  const ans=`[${yMin},${yMax}]`;
+  return{svg:svgG(segL(x1,y1,x2,y2)+cDot(x1,y1)+cDot(x2,y2),
+    'What is the <strong>range</strong> of the function graphed below?'),
+    answer:[ans],
+    hint:'How far up and down does the graph reach along the y-axis?',
+    step:`\\text{Range: }[${yMin},\\,${yMax}]`};
+}
+function gen3(){
+  // Segment LEFT open, ask domain
+  const x1=rInt(4)-4; const x2=x1+rInt(3)+2;
+  const y1=rInt(7)-3; const y2=rInt(7)-3;
+  const ans=`(${x1},${x2}]`;
+  return{svg:svgG(segL(x1,y1,x2,y2)+oDot(x1,y1)+cDot(x2,y2),
+    'What is the <strong>domain</strong>? (Notice the open circle on the left.)'),
+    answer:[ans],
+    hint:'Does the open circle mean that x-value is included or excluded?',
+    step:`\\text{Domain: }(${x1},\\,${x2}]`};
+}
+function gen4(){
+  // Segment RIGHT open, ask domain
+  const x1=rInt(4)-4; const x2=x1+rInt(3)+2;
+  const y1=rInt(7)-3; const y2=rInt(7)-3;
+  const ans=`[${x1},${x2})`;
+  return{svg:svgG(segL(x1,y1,x2,y2)+cDot(x1,y1)+oDot(x2,y2),
+    'What is the <strong>domain</strong>? (Notice the open circle on the right.)'),
+    answer:[ans],
+    hint:'Closed dot = include with [ or ]. Open circle = exclude with ( or ).',
+    step:`\\text{Domain: }[${x1},\\,${x2})`};
+}
+function gen5(){
+  // Segment both open, ask domain
+  const x1=rInt(4)-4; const x2=x1+rInt(3)+2;
+  const y1=rInt(7)-3; const y2=rInt(7)-3;
+  const ans=`(${x1},${x2})`;
+  return{svg:svgG(segL(x1,y1,x2,y2)+oDot(x1,y1)+oDot(x2,y2),
+    'What is the <strong>domain</strong>? (Both endpoints are open circles.)'),
+    answer:[ans],
+    hint:'Both endpoints are excluded — which bracket type matches that?',
+    step:`\\text{Domain: }(${x1},\\,${x2})`};
+}
+function gen6(){
+  // Ray going right, ask domain
+  const x0=rInt(5)-3; const y0=rInt(5)-2;
+  const slope=choose([-1,-0.5,0,0.5,1]);
+  const ans=`[${x0},inf)`;
+  return{svg:svgG(rayRight(x0,y0,slope),
+    'What is the <strong>domain</strong> of the function graphed below?'),
+    answer:[ans],
+    hint:'The arrow means the graph continues forever in that direction.',
+    step:`\\text{Domain: }[${x0},\\,\\infty)`};
+}
+function gen7(){
+  // Ray going left, ask domain
+  const x0=rInt(5)-1; const y0=rInt(5)-2;
+  const slope=choose([-1,-0.5,0,0.5,1]);
+  const ans=`(-inf,${x0}]`;
+  return{svg:svgG(rayLeft(x0,y0,slope),
+    'What is the <strong>domain</strong> of the function graphed below?'),
+    answer:[ans],
+    hint:'The arrow on the left side means the graph extends indefinitely in that direction.',
+    step:`\\text{Domain: }(-\\infty,\\,${x0}]`};
+}
+function gen8(){
+  // Ray going right with positive slope, ask range
+  const x0=rInt(5)-4; const y0=rInt(5)-3;
+  const slope=choose([0.5,1,1.5]);
+  const ans=`[${y0},inf)`;
+  return{svg:svgG(rayRight(x0,y0,slope),
+    'What is the <strong>range</strong> of the function graphed below?'),
+    answer:[ans],
+    hint:'The starting dot gives the minimum y-value; the arrow means no maximum.',
+    step:`\\text{Range: }[${y0},\\,\\infty)`};
+}
+function gen9(){
+  // U-parabola y=(x-h)^2+k, ask range
+  const h=rInt(3)-1; const k=rInt(4)-3;
+  const hw=rInt(2)+2; // half-width
+  const x1=h-hw; const x2=h+hw;
+  const yEnd=hw*hw+k;
+  // range: [k, yEnd]
+  const pts=parPts(h,k,1,x1,x2);
+  const ans=`[${k},${yEnd}]`;
+  return{svg:svgG(polyL(pts)+cDot(x1,hw*hw+k)+cDot(x2,hw*hw+k),
+    'What is the <strong>range</strong> of the parabola shown?'),
+    answer:[ans],
+    hint:'The bottom of the parabola is the minimum y-value; the endpoints give the maximum.',
+    step:`\\text{Range: }[${k},\\,${yEnd}]`};
+}
+function gen10(){
+  // Inverted parabola y=-(x-h)^2+k, ask range
+  const h=rInt(3)-1; const k=rInt(3)+1;
+  const hw=rInt(2)+2;
+  const x1=h-hw; const x2=h+hw;
+  const yEnd=k-hw*hw;
+  const pts=parPts(h,k,-1,x1,x2);
+  const ans=`[${yEnd},${k}]`;
+  return{svg:svgG(polyL(pts)+cDot(x1,k-hw*hw)+cDot(x2,k-hw*hw),
+    'What is the <strong>range</strong> of the parabola shown?'),
+    answer:[ans],
+    hint:'The peak gives the maximum y-value; the endpoints give the minimum.',
+    step:`\\text{Range: }[${yEnd},\\,${k}]`};
+}
+
+const GENERATORS=[gen1,gen2,gen3,gen4,gen5,gen6,gen7,gen8,gen9,gen10];
+
+
+// ── State ─────────────────────────────────────────────────────────────────────
+let ACTIVE, correct, flags, attempted, peeked;
+
+function norm(s) {
+  return s.trim().toLowerCase()
+    .replace(/\s+/g, '')
+    .replace(/[−–]/g, '-')
+    .replace(/∞/g, 'inf')
+    .replace(/∪/g, 'u')
+    .replace(/infinity/g, 'inf')
+    .replace(/union/g, 'u');
+}
+function ok(user, acc) { return acc.some(a => norm(user) === norm(a)); }
+
+function init() {
+  ACTIVE    = shuffle(GENERATORS).slice(0, Math.min(8, GENERATORS.length)).map(gen => gen());
+  correct   = 0;
+  flags     = Array(GENERATORS.length).fill(false);
+  attempted = Array(GENERATORS.length).fill(false);
+  peeked    = Array(GENERATORS.length).fill(false);
+}
+
+function buildCards() {
+  const wrap = document.getElementById('problems');
+  wrap.innerHTML = '';
+  ACTIVE.forEach((p, i) => {
+    const div = document.createElement('div');
+    div.className = 'card'; div.id = 'card-' + i;
+    div.innerHTML =
+      `<div class="card-body">
+        <div class="card-meta">Problem ${i + 1}</div>
+        <div class="card-expr" id="expr-${i}"></div>
+        <div class="input-row">
+          <input class="ans-input" id="ai-${i}" placeholder="${p.interval ? '[a,b)' : 'answer'}" />
+          <button class="check-btn" id="chk-${i}" onclick="check(${i})">Check</button>
+        </div>
+        <span class="hint-link" onclick="this.style.display='none';this.nextElementSibling.style.display='block'">Show hint</span><div class="hint">${p.hint}</div>
+        ${p.interval ? '<div class="interval-hint">Use <code>inf</code> and <code>u</code> for union &mdash; e.g. <code>[2,inf)</code> or <code>(-inf,0)u(0,inf)</code></div>' : ''}
+        <div class="feedback" id="fb-${i}"></div>
+        <span class="reveal-link" id="rl-${i}" onclick="reveal(${i})">Show solution</span>
+        <div class="revealed-answer" id="ra-${i}"></div>
+      </div>`;
+    wrap.appendChild(div);
+    document.getElementById('ai-' + i)
+      .addEventListener('keydown', e => { if (e.key === 'Enter') check(i); });
+    if (p.svg) {
+      document.getElementById('expr-' + i).innerHTML = p.svg;
+    } else if (p.text) {
+      document.getElementById('expr-' + i).innerHTML = p.text;
+    } else {
+      katex.render(p.latex, document.getElementById('expr-' + i),
+        { throwOnError: false, displayMode: true });
+    }
+  });
+}
+
+function check(i) {
+  const p = ACTIVE[i], inp = document.getElementById('ai-'+i),
+        fb = document.getElementById('fb-'+i), card = document.getElementById('card-'+i),
+        good = ok(inp.value, p.answer);
+  inp.className = 'ans-input';
+  if (good) {
+    inp.className = 'ans-input ok'; fb.className = 'feedback correct';
+    fb.textContent = '✓ Correct!'; card.className = 'card correct';
+    if (!flags[i] && !attempted[i] && !peeked[i]) { flags[i]=true; correct++; updateScore(); }
+    attempted[i] = true;
+    document.getElementById('chk-'+i).disabled = true; inp.readOnly = true;
+  } else {
+    attempted[i] = true; inp.className = 'ans-input bad'; fb.className = 'feedback wrong';
+    fb.textContent = '✗ Not quite — try again or show the solution.';
+    card.className = peeked[i] ? 'card peeked' : 'card wrong';
+  }
+}
+
+function reveal(i) {
+  const p = ACTIVE[i], box = document.getElementById('ra-'+i),
+        lnk = document.getElementById('rl-'+i);
+  if (box.style.display === 'block') {
+    box.style.display = 'none'; lnk.textContent = 'Show solution';
+  } else {
+    if (!flags[i]) {
+      peeked[i] = true; document.getElementById('card-'+i).className = 'card peeked';
+      if (!attempted[i]) {
+        const fb = document.getElementById('fb-'+i);
+        fb.className = 'feedback peeked';
+        fb.textContent = '⚠ Solution revealed — no point awarded.';
+      }
+    }
+    box.innerHTML = '<strong>Solution:</strong><br>';
+    const span = document.createElement('span'); box.appendChild(span);
+    katex.render(p.step, span, { throwOnError: false, displayMode: true });
+    box.style.display = 'block'; lnk.textContent = 'Hide solution';
+  }
+}
+
+function updateScore() {
+  const n = ACTIVE.length;
+  document.getElementById('score').textContent = correct + ' / ' + n;
+  document.getElementById('prog').style.width = Math.round(correct / n * 100) + '%';
+}
+
+function resetAll() { init(); buildCards(); updateScore(); }
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script>
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left: '$$', right: '$$', display: true},
+      {left: '$',  right: '$',  display: false}
+    ]
+  });
+  init(); buildCards(); updateScore();
+</script>
+</body>
+</html>
