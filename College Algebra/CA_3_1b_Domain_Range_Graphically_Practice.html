@@ -160,7 +160,7 @@ function oDot(x,y,c='#1e3a5c'){return `<circle cx="${gpx(x)}" cy="${gpy(y)}" r="
 function segL(x1,y1,x2,y2,c='#1e3a5c'){return `<line x1="${gpx(x1)}" y1="${gpy(y1)}" x2="${gpx(x2)}" y2="${gpy(y2)}" stroke="${c}" stroke-width="2.5"/>`;}
 function polyL(pts,c='#1e3a5c'){return `<polyline points="${pts.map(([x,y])=>gpx(x)+','+gpy(y)).join(' ')}" fill="none" stroke="${c}" stroke-width="2.5"/>`;}
 
-// Unit-vector arrowhead — always correctly aligned regardless of slope
+// Unit-vector arrowhead — correctly aligned at any angle
 function arrowHead(sx1,sy1,sx2,sy2,r=14,ww=7,c='#1e3a5c'){
   const dx=sx2-sx1, dy=sy2-sy1, len=Math.hypot(dx,dy);
   if(len<1) return '';
@@ -171,17 +171,31 @@ function arrowHead(sx1,sy1,sx2,sy2,r=14,ww=7,c='#1e3a5c'){
   return `<polygon points="${sx2.toFixed(1)},${sy2.toFixed(1)} ${w1x.toFixed(1)},${w1y.toFixed(1)} ${w2x.toFixed(1)},${w2y.toFixed(1)}" fill="${c}"/>`;
 }
 
+// Clip ray tip to stay inside visible grid, leaving room for arrowhead (mg = margin in math units)
+function clipTip(x0,y0,slope,goRight,mg=0.6){
+  const xEdge = goRight ? 4-mg : -4+mg;
+  if(slope===0) return [xEdge, y0];
+  const yAtX = y0 + slope*(xEdge - x0);
+  const yTop=4-mg, yBot=-4+mg;
+  if(yAtX > yTop){
+    const xAtTop = x0 + (yTop-y0)/slope;
+    return [goRight ? Math.min(xAtTop,xEdge) : Math.max(xAtTop,xEdge), yTop];
+  } else if(yAtX < yBot){
+    const xAtBot = x0 + (yBot-y0)/slope;
+    return [goRight ? Math.min(xAtBot,xEdge) : Math.max(xAtBot,xEdge), yBot];
+  }
+  return [xEdge, yAtX];
+}
+
 function rayRight(x0,y0,slope,c='#1e3a5c'){
-  // tip slightly inside right edge so arrowhead stays within viewport
-  const xe=4.5, ye=y0+slope*(xe-x0);
-  const sx0=gpx(x0),sy0=gpy(y0),sxe=gpx(xe),sye=gpy(ye);
-  return segL(x0,y0,xe,ye,c)+cDot(x0,y0,c)+arrowHead(sx0,sy0,sxe,sye,14,7,c);
+  const [xe,ye]=clipTip(x0,y0,slope,true);
+  return segL(x0,y0,xe,ye,c)+cDot(x0,y0,c)+arrowHead(gpx(x0),gpy(y0),gpx(xe),gpy(ye),14,7,c);
 }
 function rayLeft(x0,y0,slope,c='#1e3a5c'){
-  const xe=-4.5, ye=y0+slope*(xe-x0);
-  const sx0=gpx(x0),sy0=gpy(y0),sxe=gpx(xe),sye=gpy(ye);
-  return segL(xe,ye,x0,y0,c)+cDot(x0,y0,c)+arrowHead(sx0,sy0,sxe,sye,14,7,c);
+  const [xe,ye]=clipTip(x0,y0,slope,false);
+  return segL(xe,ye,x0,y0,c)+cDot(x0,y0,c)+arrowHead(gpx(x0),gpy(y0),gpx(xe),gpy(ye),14,7,c);
 }
+
 function parPts(h,k,a,x1,x2,n=30){
   const pts=[];
   for(let i=0;i<=n;i++){const x=x1+(x2-x1)*i/n; pts.push([x,a*(x-h)**2+k]);}
@@ -195,8 +209,9 @@ function svgG(content,q){
 }
 
 // ── Generators ───────────────────────────────────────────────────────────────
+// Segment generators: x in [-3,2], y in [-3,3] — always on screen
 function gen1(){
-  const x1=rInt(4)-4; const x2=x1+rInt(3)+2;
+  const x1=rInt(4)-3; const x2=x1+rInt(3)+2;  // x1 in [-3,-2,-1,0], x2 in [x1+2..x1+4]
   const y1=rInt(7)-3; const y2=rInt(7)-3;
   return{svg:svgG(segL(x1,y1,x2,y2)+cDot(x1,y1)+cDot(x2,y2),
     'What is the <strong>domain</strong> of the function graphed below?'),
@@ -205,7 +220,7 @@ function gen1(){
     step:`\\text{Domain: }[${x1},\\,${x2}]`};
 }
 function gen2(){
-  const x1=rInt(4)-4; const x2=x1+rInt(3)+2;
+  const x1=rInt(4)-3; const x2=x1+rInt(3)+2;
   let y1=rInt(7)-3; let y2=rInt(7)-3;
   while(y1===y2){y2=rInt(7)-3;}
   const yMin=Math.min(y1,y2); const yMax=Math.max(y1,y2);
@@ -216,7 +231,7 @@ function gen2(){
     step:`\\text{Range: }[${yMin},\\,${yMax}]`};
 }
 function gen3(){
-  const x1=rInt(4)-4; const x2=x1+rInt(3)+2;
+  const x1=rInt(4)-3; const x2=x1+rInt(3)+2;
   const y1=rInt(7)-3; const y2=rInt(7)-3;
   return{svg:svgG(segL(x1,y1,x2,y2)+oDot(x1,y1)+cDot(x2,y2),
     'What is the <strong>domain</strong>? (Notice the open circle on the left.)'),
@@ -225,7 +240,7 @@ function gen3(){
     step:`\\text{Domain: }(${x1},\\,${x2}]`};
 }
 function gen4(){
-  const x1=rInt(4)-4; const x2=x1+rInt(3)+2;
+  const x1=rInt(4)-3; const x2=x1+rInt(3)+2;
   const y1=rInt(7)-3; const y2=rInt(7)-3;
   return{svg:svgG(segL(x1,y1,x2,y2)+cDot(x1,y1)+oDot(x2,y2),
     'What is the <strong>domain</strong>? (Notice the open circle on the right.)'),
@@ -234,7 +249,7 @@ function gen4(){
     step:`\\text{Domain: }[${x1},\\,${x2})`};
 }
 function gen5(){
-  const x1=rInt(4)-4; const x2=x1+rInt(3)+2;
+  const x1=rInt(4)-3; const x2=x1+rInt(3)+2;
   const y1=rInt(7)-3; const y2=rInt(7)-3;
   return{svg:svgG(segL(x1,y1,x2,y2)+oDot(x1,y1)+oDot(x2,y2),
     'What is the <strong>domain</strong>? (Both endpoints are open circles.)'),
@@ -242,8 +257,9 @@ function gen5(){
     hint:'Both endpoints are excluded — which bracket type matches that?',
     step:`\\text{Domain: }(${x1},\\,${x2})`};
 }
+// Ray generators: clipTip ensures arrow always lands on screen regardless of slope
 function gen6(){
-  const x0=rInt(5)-3; const y0=rInt(5)-2;
+  const x0=rInt(5)-3; const y0=rInt(5)-2;  // start in [-3..1] × [-2..2]
   const slope=choose([-1,-0.5,0,0.5,1]);
   return{svg:svgG(rayRight(x0,y0,slope),
     'What is the <strong>domain</strong> of the function graphed below?'),
@@ -252,7 +268,7 @@ function gen6(){
     step:`\\text{Domain: }[${x0},\\,\\infty)`};
 }
 function gen7(){
-  const x0=rInt(5)-1; const y0=rInt(5)-2;
+  const x0=rInt(4)+0; const y0=rInt(5)-2;  // start in [0..3] × [-2..2]
   const slope=choose([-1,-0.5,0,0.5,1]);
   return{svg:svgG(rayLeft(x0,y0,slope),
     'What is the <strong>domain</strong> of the function graphed below?'),
@@ -261,33 +277,41 @@ function gen7(){
     step:`\\text{Domain: }(-\\infty,\\,${x0}]`};
 }
 function gen8(){
-  const x0=rInt(5)-4; const y0=rInt(5)-3;
-  const slope=choose([0.5,1,1.5]);
+  // Upward ray — answer is range [y0, inf)
+  const x0=rInt(4)-3; const y0=rInt(4)-3;  // y0 in [-3..0] so there's upward room
+  const slope=choose([0.5,1]);              // positive slope only; clipped if steep
   return{svg:svgG(rayRight(x0,y0,slope),
     'What is the <strong>range</strong> of the function graphed below?'),
     answer:[`[${y0},inf)`],
     hint:'The starting dot gives the minimum y-value; the arrow means no maximum.',
     step:`\\text{Range: }[${y0},\\,\\infty)`};
 }
+// Parabola generators: hw fixed at 2, parameters chosen so endpoints stay on screen
 function gen9(){
-  const h=rInt(3)-1; const k=rInt(4)-3;
-  const hw=rInt(2)+2;
-  const x1=h-hw; const x2=h+hw;
-  const yEnd=hw*hw+k;
+  // Upward parabola y=(x-h)^2+k. hw=2 → endpoints at y=4+k.
+  // k in [-3,-2,-1] → endpoints at [1,2,3]. Vertex at k ≥ -3. All on screen.
+  const hw=2;
+  const h=rInt(5)-2;           // h in [-2,-1,0,1,2]
+  const k=rInt(3)-3;           // k in [-3,-2,-1]
+  const x1=h-hw, x2=h+hw;
+  const yEnd=hw*hw+k;          // endpoint y in [1,2,3]
   const pts=parPts(h,k,1,x1,x2);
-  return{svg:svgG(polyL(pts)+cDot(x1,hw*hw+k)+cDot(x2,hw*hw+k),
+  return{svg:svgG(polyL(pts)+cDot(x1,yEnd)+cDot(x2,yEnd),
     'What is the <strong>range</strong> of the parabola shown?'),
     answer:[`[${k},${yEnd}]`],
     hint:'The bottom of the parabola is the minimum y-value; the endpoints give the maximum.',
     step:`\\text{Range: }[${k},\\,${yEnd}]`};
 }
 function gen10(){
-  const h=rInt(3)-1; const k=rInt(3)+1;
-  const hw=rInt(2)+2;
-  const x1=h-hw; const x2=h+hw;
-  const yEnd=k-hw*hw;
+  // Inverted parabola y=-(x-h)^2+k. hw=2 → endpoints at y=k-4.
+  // k in [1,2,3] → endpoints at [-3,-2,-1]. Vertex at k ≤ 3. All on screen.
+  const hw=2;
+  const h=rInt(5)-2;
+  const k=rInt(3)+1;           // k in [1,2,3]
+  const x1=h-hw, x2=h+hw;
+  const yEnd=k-hw*hw;          // endpoint y in [-3,-2,-1]
   const pts=parPts(h,k,-1,x1,x2);
-  return{svg:svgG(polyL(pts)+cDot(x1,k-hw*hw)+cDot(x2,k-hw*hw),
+  return{svg:svgG(polyL(pts)+cDot(x1,yEnd)+cDot(x2,yEnd),
     'What is the <strong>range</strong> of the parabola shown?'),
     answer:[`[${yEnd},${k}]`],
     hint:'The peak gives the maximum y-value; the endpoints give the minimum.',
