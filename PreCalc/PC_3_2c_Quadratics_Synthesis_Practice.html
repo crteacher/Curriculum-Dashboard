@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>§3.2c — Quadratics: Putting It All Together · Practice</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;font-size:15px;line-height:1.75}
+.container{max-width:820px;margin:0 auto;padding:2rem 1.5rem 4rem}
+h1{font-size:26px;font-weight:700;margin-bottom:4px}
+.sub{font-family:sans-serif;font-size:13px;color:#666;margin-bottom:1.5rem}
+.scenario{background:#eef3f9;border-left:4px solid #1e3a5c;border-radius:0 8px 8px 0;
+  padding:1rem 1.2rem;margin-bottom:1.4rem;font-size:15px;line-height:1.8}
+.scenario strong{color:#1e3a5c}
+.scenario .fn{font-size:16px;margin:.4rem 0 .1rem;text-align:center}
+.parts{display:flex;flex-direction:column;gap:.85rem;margin-bottom:1.4rem}
+.part{background:#fff;border:1.5px solid #ddd;border-radius:9px;padding:1rem 1.1rem}
+.part-label{font-family:sans-serif;font-size:11px;font-weight:700;color:#1e3a5c;
+  text-transform:uppercase;letter-spacing:.06em;margin-bottom:.4rem}
+.part-q{font-size:14.5px;line-height:1.75;margin-bottom:.6rem}
+.input-row{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;margin-bottom:.4rem}
+.ans-input{border:1.5px solid #bbb;border-radius:5px;padding:.3rem .6rem;
+  font-family:Georgia,serif;font-size:14px;width:110px;background:#fafafa}
+.ans-input.wide{width:160px}
+.ans-input:focus{outline:none;border-color:#1e3a5c;background:#fff}
+.ans-input.correct{border-color:#2d7a2d;background:#f0faf0}
+.ans-input.wrong{border-color:#c03030;background:#fdf0f0}
+.check-btn{font-family:sans-serif;font-size:11px;font-weight:700;color:#fff;
+  background:#1e3a5c;border:none;border-radius:5px;padding:5px 14px;cursor:pointer}
+.check-btn:hover{background:#162d4a}
+.feedback{font-family:sans-serif;font-size:12.5px;margin:.25rem 0;min-height:1.1rem}
+.feedback.ok{color:#1a6b1a}
+.feedback.no{color:#c03030}
+.toggles{display:flex;gap:.75rem;margin-top:.5rem}
+.tog{font-family:sans-serif;font-size:10.5px;font-weight:700;text-transform:uppercase;
+  letter-spacing:.05em;color:#1e3a5c;cursor:pointer;background:none;border:none;
+  padding:0;text-decoration:underline;text-underline-offset:2px}
+.hint-body,.sol-body{display:none;margin-top:.55rem;padding:.55rem .85rem;
+  border-radius:0 6px 6px 0;font-size:13.5px;line-height:1.85}
+.hint-body{background:#f4f0e8;border-left:3px solid #7a5c1e;color:#4a3800}
+.sol-body{background:#fef9e7;border-left:3px solid #7a5c1e;color:#5a3e00}
+.sol-body p{margin-bottom:.35rem}
+.new-btn{font-family:sans-serif;font-size:13px;font-weight:700;color:#fff;
+  background:#1e3a5c;border:none;border-radius:7px;padding:.6rem 1.4rem;
+  cursor:pointer;display:block;margin:0 auto}
+.new-btn:hover{background:#162d4a}
+.form-tag{display:inline-block;border-radius:3px;padding:1px 7px;font-size:10px;
+  font-weight:bold;font-family:sans-serif;vertical-align:middle}
+.tag-n{background:#1e3a5c;color:#fff}
+.tag-v{background:#1e3a5c;color:#fff}
+.tag-f{background:#7a5c1e;color:#fff}
+@media print{.new-btn,.toggles{display:none}.sol-body{display:block!important}
+  body{background:white}.part{break-inside:avoid}}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>§3.2c &mdash; Quadratics: Putting It All Together</h1>
+<p class="sub">PreCalc &nbsp;&middot;&nbsp; Practice &nbsp;&middot;&nbsp; Instructor: Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026</p>
+
+<div class="scenario" id="scenario"></div>
+
+<div class="parts">
+
+  <!-- Part (a) -->
+  <div class="part" id="part-a">
+    <div class="part-label">Part (a)</div>
+    <div class="part-q" id="qa">What is the launch height?</div>
+    <div class="input-row">
+      <input class="ans-input" id="in-a" type="text" placeholder="e.g. 10" autocomplete="off">
+      <span style="font-size:13px;color:#555">ft</span>
+      <button class="check-btn" onclick="checkA()">Check</button>
+    </div>
+    <div class="feedback" id="fb-a"></div>
+    <div class="toggles">
+      <button class="tog" onclick="tog('hint-a')">Hint</button>
+      <button class="tog" onclick="tog('sol-a')">Show solution</button>
+    </div>
+    <div class="hint-body" id="hint-a">The launch height is h(0). Which form lets you read this off in one step without substituting?</div>
+    <div class="sol-body" id="sol-a"></div>
+  </div>
+
+  <!-- Part (b) -->
+  <div class="part" id="part-b">
+    <div class="part-label">Part (b)</div>
+    <div class="part-q" id="qb">When does the object reach its maximum height, and how high does it go?</div>
+    <div class="input-row">
+      <span style="font-size:13px;color:#555">max height:</span>
+      <input class="ans-input" id="in-b1" type="text" placeholder="e.g. 74" autocomplete="off">
+      <span style="font-size:13px;color:#555">ft &nbsp; at &nbsp; t =</span>
+      <input class="ans-input" id="in-b2" type="text" placeholder="e.g. 2" autocomplete="off">
+      <span style="font-size:13px;color:#555">s</span>
+      <button class="check-btn" onclick="checkB()">Check</button>
+    </div>
+    <div class="feedback" id="fb-b"></div>
+    <div class="toggles">
+      <button class="tog" onclick="tog('hint-b')">Hint</button>
+      <button class="tog" onclick="tog('sol-b')">Show solution</button>
+    </div>
+    <div class="hint-body" id="hint-b">You need the vertex. Convert to vertex form by completing the square: factor out &minus;16, then add and subtract $(b/2)^2$ inside the parentheses.</div>
+    <div class="sol-body" id="sol-b"></div>
+  </div>
+
+  <!-- Part (c) -->
+  <div class="part" id="part-c">
+    <div class="part-label">Part (c)</div>
+    <div class="part-q" id="qc">When does the object hit the ground? (Round to two decimal places.)</div>
+    <div class="input-row">
+      <span style="font-size:13px;color:#555">t =</span>
+      <input class="ans-input" id="in-c" type="text" placeholder="e.g. 4.15" autocomplete="off">
+      <span style="font-size:13px;color:#555">s</span>
+      <button class="check-btn" onclick="checkC()">Check</button>
+    </div>
+    <div class="feedback" id="fb-c"></div>
+    <div class="toggles">
+      <button class="tog" onclick="tog('hint-c')">Hint</button>
+      <button class="tog" onclick="tog('sol-c')">Show solution</button>
+    </div>
+    <div class="hint-body" id="hint-c">Set h(t) = 0. Check the discriminant first &mdash; is it a perfect square? If not, reach for the quadratic formula. Take the positive root.</div>
+    <div class="sol-body" id="sol-c"></div>
+  </div>
+
+  <!-- Part (d) -->
+  <div class="part" id="part-d">
+    <div class="part-label">Part (d)</div>
+    <div class="part-q">What is the axis of symmetry? Give two ways to identify it.</div>
+    <div class="input-row">
+      <span style="font-size:13px;color:#555">t =</span>
+      <input class="ans-input" id="in-d" type="text" placeholder="e.g. 2" autocomplete="off">
+      <span style="font-size:13px;color:#555">s</span>
+      <button class="check-btn" onclick="checkD()">Check</button>
+    </div>
+    <div class="feedback" id="fb-d"></div>
+    <div class="toggles">
+      <button class="tog" onclick="tog('hint-d')">Hint</button>
+      <button class="tog" onclick="tog('sol-d')">Show solution</button>
+    </div>
+    <div class="hint-body" id="hint-d">You already found this in part (b). The axis of symmetry passes through the vertex. There is also an algebraic shortcut using $a$ and $b$ from standard form.</div>
+    <div class="sol-body" id="sol-d"></div>
+  </div>
+
+</div>
+
+<button class="new-btn" onclick="newProblem()">&#8635; New Problem</button>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/contrib/auto-render.min.js"></script>
+<script>
+const NOUNS = [
+  {noun:'ball',   verb:'thrown upward', from:'from a platform'},
+  {noun:'rocket', verb:'launched',      from:'from a launch pad'},
+  {noun:'ball',   verb:'kicked upward', from:'from ground level... wait'},
+];
+// Only use platform scenarios so h0 > 0 always
+const CONTEXTS = [
+  {noun:'ball',      verb:'thrown upward', from:'from a platform'},
+  {noun:'rocket',    verb:'launched',      from:'from a launch stand'},
+  {noun:'cannonball',verb:'fired',         from:'from a platform'},
+  {noun:'flare',     verb:'launched',      from:'from a ship deck'},
+];
+const V0S = [32, 48, 64, 80];
+const H0S = [4, 5, 6, 7, 8, 9, 10];
+
+let ANS_A, ANS_B1, ANS_B2, ANS_C, ANS_D;
+
+function rnd(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+
+function frac(n){
+  if(n===Math.floor(n)) return String(n);
+  return (n*2)+'/2';
+}
+function fracTeX(n){
+  if(n===Math.floor(n)) return String(n);
+  return '\\tfrac{'+(n*2)+'}{2}';
+}
+
+function newProblem(){
+  const v0  = rnd(V0S);
+  const h0  = rnd(H0S);
+  const ctx = rnd(CONTEXTS);
+
+  const tV   = v0/32;          // vertex t
+  const maxH = v0*v0/64 + h0;  // max height (always integer)
+  const disc = v0*v0 + 64*h0;
+  const tLand = (v0 + Math.sqrt(disc)) / 32;
+
+  ANS_A  = h0;
+  ANS_B1 = maxH;
+  ANS_B2 = tV;
+  ANS_C  = tLand;
+  ANS_D  = tV;
+
+  // Scenario text
+  const sign = h0 > 0 ? `+\\,${h0}` : '';
+  document.getElementById('scenario').innerHTML =
+    `<p>A ${ctx.noun} is ${ctx.verb} ${ctx.from}. `
+    +`Its height <strong>h</strong> (in feet) after <strong>t</strong> seconds is:</p>`
+    +`<p class="fn" id="fn-eq"></p>`
+    +`<p style="margin-top:.4rem;font-size:13.5px;color:#444">Use this function for all four parts below.</p>`;
+
+  katex.render(`h(t)=-16t^2+${v0}t${sign}`, document.getElementById('fn-eq'),{throwOnError:false,displayMode:true});
+
+  // Completing the square for solution display
+  // h = -16(t - tV)^2 + maxH
+  const halfV = v0/32;  // = tV
+  const sqTerm = `(t - ${fracTeX(halfV)})^2`;
+
+  // Solutions
+  document.getElementById('sol-a').innerHTML =
+    `<p><span class="form-tag tag-n">Standard</span>&nbsp; Read $c$ directly — no calculation needed.</p>`
+    +`<p>$h(0) = ${h0}$ &nbsp;&rarr;&nbsp; <strong>launch height: ${h0} ft</strong></p>`;
+
+  const halfB = v0/16;  // b/(2) for display as -16(t² - (v0/16)t)
+  document.getElementById('sol-b').innerHTML =
+    `<p><span class="form-tag tag-v">Vertex</span>&nbsp; Complete the square.</p>`
+    +`<p id="sol-b-eq1"></p>`
+    +`<p id="sol-b-eq2"></p>`
+    +`<p>Vertex $(${frac(tV)},\\,${maxH})$ &nbsp;&rarr;&nbsp; <strong>max height ${maxH} ft at $t=${frac(tV)}$ s</strong></p>`;
+
+  katex.render(
+    `h(t)=-16\\!\\left(t^2-${halfB}t\\right)+${h0}=-16\\!\\left(t-${fracTeX(tV)}\\right)^2+${tV*tV*16}+${h0}`,
+    document.getElementById('sol-b-eq1'),{throwOnError:false,displayMode:true});
+  katex.render(
+    `h(t)=-16\\!\\left(t-${fracTeX(tV)}\\right)^2+${maxH}`,
+    document.getElementById('sol-b-eq2'),{throwOnError:false,displayMode:true});
+
+  // Quadratic formula solution
+  const sqrtDisc = disc % 1 === 0 ? disc : disc.toFixed(0);
+  document.getElementById('sol-c').innerHTML =
+    `<p>Set $h(t)=0$: &nbsp; $-16t^2+${v0}t+${h0}=0$ &nbsp;&rarr;&nbsp; $16t^2-${v0}t-${h0}=0$</p>`
+    +`<p>Discriminant: $${v0}^2+4(16)(${h0})=${v0*v0}+${64*h0}=${disc}$ — not a perfect square, use the formula.</p>`
+    +`<p id="sol-c-eq"></p>`
+    +`<p>Positive root: <strong>$t\\approx ${tLand.toFixed(2)}$ s</strong></p>`;
+
+  katex.render(
+    `t=\\frac{${v0}\\pm\\sqrt{${disc}}}{32}`,
+    document.getElementById('sol-c-eq'),{throwOnError:false,displayMode:true});
+
+  document.getElementById('sol-d').innerHTML =
+    `<p><strong>From part (b):</strong> the vertex is at $t=${frac(tV)}$, so the axis of symmetry is $t=${frac(tV)}$ s.</p>`
+    +`<p><strong>Algebraic shortcut:</strong> axis $= -\\dfrac{b}{2a} = -\\dfrac{${v0}}{2(-16)} = \\dfrac{${v0}}{32} = ${frac(tV)}$ s.</p>`;
+
+  // Reset inputs and feedback
+  ['a','b1','b2','c','d'].forEach(id=>{
+    const el = document.getElementById('in-'+id);
+    if(el){ el.value=''; el.classList.remove('correct','wrong'); }
+  });
+  ['a','b','c','d'].forEach(id=>{
+    const fb = document.getElementById('fb-'+id);
+    if(fb) fb.innerHTML='';
+    // close hints and solutions
+    ['hint-'+id,'sol-'+id].forEach(sid=>{
+      const el=document.getElementById(sid);
+      if(el) el.style.display='none';
+    });
+  });
+
+  renderMathInElement(document.getElementById('scenario'),{delimiters:[{left:'$',right:'$',display:false},{left:'$$',right:'$$',display:true}],throwOnError:false});
+  ['sol-a','sol-b','sol-c','sol-d'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el) renderMathInElement(el,{delimiters:[{left:'$',right:'$',display:false},{left:'$$',right:'$$',display:true}],throwOnError:false});
+  });
+  ['hint-a','hint-b','hint-c','hint-d'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el) renderMathInElement(el,{delimiters:[{left:'$',right:'$',display:false}],throwOnError:false});
+  });
+}
+
+function norm(s){ return s.trim().replace(/\s+/g,''); }
+function numClose(a,b,tol){ return Math.abs(parseFloat(a)-b) <= tol; }
+function fracMatch(s, val){
+  const n=norm(s);
+  if(numClose(n, val, 0.01)) return true;
+  // accept fraction form like 3/2
+  const m=n.match(/^(-?\d+)\/(\d+)$/);
+  if(m) return Math.abs(parseInt(m[1])/parseInt(m[2]) - val) < 0.01;
+  return false;
+}
+
+function setFb(id, ok, msg){
+  const fb=document.getElementById('fb-'+id);
+  fb.textContent=msg; fb.className='feedback '+(ok?'ok':'no');
+  const inputs = id==='b'
+    ? [document.getElementById('in-b1'), document.getElementById('in-b2')]
+    : [document.getElementById('in-'+id)];
+  inputs.forEach(el=>{ if(el){ el.classList.remove('correct','wrong'); el.classList.add(ok?'correct':'wrong'); }});
+}
+
+function checkA(){
+  const v=document.getElementById('in-a').value;
+  if(!v.trim()){setFb('a',false,'Enter an answer first.');return;}
+  const ok=numClose(v, ANS_A, 0.5);
+  setFb('a', ok, ok ? `Correct! The launch height is ${ANS_A} ft.` : `Not quite. Hint: what does h(0) equal in standard form?`);
+}
+function checkB(){
+  const v1=document.getElementById('in-b1').value;
+  const v2=document.getElementById('in-b2').value;
+  if(!v1.trim()||!v2.trim()){setFb('b',false,'Fill in both fields.');return;}
+  const ok1=numClose(v1, ANS_B1, 0.5);
+  const ok2=fracMatch(v2, ANS_B2);
+  if(ok1&&ok2) setFb('b',true,`Correct! Vertex at (${frac(ANS_B2)}, ${ANS_B1}).`);
+  else if(!ok1&&!ok2) setFb('b',false,`Both values need another look. Try completing the square again.`);
+  else if(!ok1) setFb('b',false,`The height isn't right — recheck the vertex $k$ value.`);
+  else setFb('b',false,`The time isn't right — recheck the vertex $t$ value.`);
+}
+function checkC(){
+  const v=document.getElementById('in-c').value;
+  if(!v.trim()){setFb('c',false,'Enter an answer first.');return;}
+  const ok=numClose(v, ANS_C, 0.05);
+  setFb('c', ok, ok ? `Correct! Landing at t ≈ ${ANS_C.toFixed(2)} s.` : `Not quite — recheck your quadratic formula calculation.`);
+}
+function checkD(){
+  const v=document.getElementById('in-d').value;
+  if(!v.trim()){setFb('d',false,'Enter an answer first.');return;}
+  const ok=fracMatch(v, ANS_D);
+  setFb('d', ok, ok ? `Correct! Axis of symmetry: t = ${frac(ANS_D)} s.` : `Not quite — this should match the t-value from part (b).`);
+}
+
+function tog(id){
+  const el=document.getElementById(id);
+  el.style.display = el.style.display==='block' ? 'none' : 'block';
+}
+
+newProblem();
+</script>
+</body>
+</html>
