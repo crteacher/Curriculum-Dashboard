@@ -45,7 +45,8 @@
   .check-btn{font-family:sans-serif;font-size:13px;background:#1a1a1a;color:#fff;
     border:none;border-radius:6px;padding:7px 14px;cursor:pointer}
   .check-btn:hover{background:#333}.check-btn:disabled{background:#aaa;cursor:default}
-  .hint{font-family:sans-serif;font-size:12px;color:#888;margin-top:7px}
+  .hint{font-family:sans-serif;font-size:12px;color:#888;margin-top:5px;display:none}
+  .hint-link{font-family:sans-serif;font-size:12px;color:#aaa;cursor:pointer;text-decoration:underline;margin-top:7px;display:inline-block}.hint-link:hover{color:#666}
   .feedback{font-family:sans-serif;font-size:13px;margin-top:10px;padding:8px 12px;
     border-radius:6px;display:none;line-height:1.5}
   .feedback.correct{display:block;background:#eaf5ea;color:#1a5a1a}
@@ -57,9 +58,6 @@
   .revealed-answer{display:none;margin-top:8px;font-family:sans-serif;font-size:13px;
     color:#444;background:#f5f3ef;border-radius:6px;padding:8px 11px;line-height:1.8;overflow-x:auto}
   code{font-family:'Courier New',monospace;background:#f0ede7;padding:1px 5px;border-radius:3px;font-size:12px}
-
-
-.hint{display:none!important}
 </style>
 </head>
 <body>
@@ -74,13 +72,17 @@
       <span class="concept-label">Positive / Negative</span>
       $f$ is <strong>positive</strong> where $f(x)>0$ (graph above x-axis).
       $f$ is <strong>negative</strong> where $f(x)<0$ (graph below x-axis).
-      Boundaries are x-intercepts — find them by setting $f(x)=0$.
+      Boundaries are x-intercepts — find them by setting $f(x)=0$.<br>
+      <strong>Express "where" answers in interval notation.</strong>
+      Example: positive for $x&gt;3$ is written $(3,\infty)$.
+      Use <code>inf</code> for $\infty$ and <code>-inf</code> for $-\infty$.
     </div>
     <div class="concept">
       <span class="concept-label">Increasing / Decreasing</span>
       <strong>Increasing</strong>: graph rises left to right (positive slope).
-      <strong>Decreasing</strong>: graph falls left to right (negative slope).
-      Express the answer as an x-interval.
+      <strong>Decreasing</strong>: graph falls left to right (negative slope).<br>
+      <strong>Express "where" answers in interval notation.</strong>
+      Example: decreasing on all reals is $(-\infty,\infty)$.
     </div>
 
   </div>
@@ -88,7 +90,7 @@
   <div class="section">
     <div class="section-title">Practice Problems</div>
     <p style="font-family:sans-serif;font-size:13px;color:#666;margin-bottom:1rem;">
-      Enter an integer boundary value, or <code>positive</code>, <code>negative</code>, <code>increasing</code>, or <code>decreasing</code>.
+      For &ldquo;where&rdquo; questions, use interval notation — e.g. <code>(3,inf)</code> for $(3,\infty)$ or <code>(-inf,3)</code> for $(-\infty,3)$. For &ldquo;is it &hellip;?&rdquo; questions, enter <code>positive</code>, <code>negative</code>, <code>increasing</code>, or <code>decreasing</code>. For &ldquo;find the x-value&rdquo; questions, enter just the number.
       Press <strong>Check</strong> or hit Enter.
     </p>
     <div class="score-bar">
@@ -146,17 +148,15 @@ function gen1() {
   };
 }
 
-// gen2: find the x-intercept of f(x) = ax + b  (b negative in context, boundary positive)
+// gen2: positive interval of positive-slope line
 function gen2() {
   const a = rInt(3) + 2, k = rInt(4) + 2;
-  const b = -a * k;   // f(x) = ax + b = ax - a*k, zero at x=k... wait
-  // f(x) = ax + b = 0 → x = -b/a = k → b = -a*k
   const bAbs = a * k;
   return {
-    latex:  `g(x)=${a}x-${bAbs}.\\quad\\text{Where is }g\\text{ positive?}`,
-    answer: [String(k)],
-    hint:   `Find the zero first, then consider which side the positive slope puts the positive values.`,
-    step:   `${a}x-${bAbs}=0\\Rightarrow x=${k};\\quad\\text{positive slope → positive for }x>${k}`
+    latex:  `g(x)=${a}x-${bAbs}.\\quad\\text{Where is }g\\text{ positive? Use interval notation.}`,
+    answer: [`(${k},inf)`],
+    hint:   `A positive-slope line is negative before its zero and positive after. Find the zero, then write the positive region as an interval.`,
+    step:   `${a}x-${bAbs}=0\\Rightarrow x=${k};\\quad\\text{positive slope → positive for }x>${k}\\quad\\Rightarrow\\quad(${k},\\infty)`
   };
 }
 
@@ -167,7 +167,7 @@ function gen3() {
   return {
     latex:  `f(x)=-${a}x+${b}.\\quad\\text{Find the x-value where }f(x)=0.`,
     answer: [String(k)],
-    hint:   `Set the function equal to zero and solve for x.`,
+    hint:   `The function equals zero at the x-intercept — what x-value makes this expression zero?`,
     step:   `-${a}x+${b}=0\\Rightarrow x=${k}`
   };
 }
@@ -183,7 +183,7 @@ function gen4() {
   return {
     latex:  `f(x)=${a}x-${bVal}.\\quad\\text{Is }f\\text{ positive or negative at }x=${c}?`,
     answer: [ans],
-    hint:   `Substitute x = ${c} and check whether the result is above or below zero.`,
+    hint:   `A function is positive where its output is above zero — is this input in the positive region?`,
     step:   `f(${c})=${a}(${c})-${bVal}=${a*c-bVal}\\;${val>0?'>':'<'}\\;0\\quad\\text{→ ${ans}}`
   };
 }
@@ -204,15 +204,15 @@ function gen5() {
   };
 }
 
-// gen6: find x-intercept of -ax + b (negative slope line)
+// gen6: negative interval of negative-slope line
 function gen6() {
   const a = rInt(3) + 2, k = rInt(4) + 3;
   const b = a * k;
   return {
-    latex:  `h(x)=-${a}x+${b}.\\quad\\text{Where is }h\\text{ negative? Enter the boundary x-value.}`,
-    answer: [String(k)],
-    hint:   `Find the zero of h first. With a negative slope, which side of the zero is negative?`,
-    step:   `-${a}x+${b}=0\\Rightarrow x=${k};\\quad\\text{negative slope → negative for }x>${k}`
+    latex:  `h(x)=-${a}x+${b}.\\quad\\text{Where is }h\\text{ negative? Use interval notation.}`,
+    answer: [`(${k},inf)`],
+    hint:   `A negative-slope line is positive before its zero and negative after. Find the zero, then write the negative region as an interval.`,
+    step:   `-${a}x+${b}=0\\Rightarrow x=${k};\\quad\\text{negative slope → negative for }x>${k}\\quad\\Rightarrow\\quad(${k},\\infty)`
   };
 }
 
@@ -229,7 +229,7 @@ function gen7() {
   return {
     latex:  `f(x)=${a}x-${b}.\\quad\\text{Is }f(${c})\\text{ positive or negative?}`,
     answer: [ans],
-    hint:   `Substitute x = ${c} into f(x) and check the sign of the result.`,
+    hint:   `A specific input is given — what sign does f(x) have at that point?`,
     step:   `f(${c})=${a}(${c})-${b}=${val}\\;${val>0?'>':'<'}\\;0\\quad\\text{→ ${ans}}`
   };
 }
@@ -238,7 +238,6 @@ function gen7() {
 function gen8() {
   const a = rInt(4) + 2, k = rInt(5) + 2;
   const b = a * k;
-  const bStr = `- ${b}`;
   return {
     latex:  `f(x)=${a}x-${b}.\\quad\\text{At what x-value does f change from negative to positive?}`,
     answer: [String(k)],
@@ -259,7 +258,7 @@ function norm(s) {
 function ok(user, acc) { return acc.some(a => norm(user) === norm(a)); }
 
 function init() {
-  ACTIVE    = shuffle(GENERATORS.map(gen => gen()));
+  ACTIVE    = shuffle(GENERATORS).slice(0, Math.min(8, GENERATORS.length)).map(gen => gen());
   correct   = 0;
   flags     = Array(GENERATORS.length).fill(false);
   attempted = Array(GENERATORS.length).fill(false);
@@ -280,7 +279,7 @@ function buildCards() {
           <input class="ans-input" id="ai-${i}" placeholder="answer" />
           <button class="check-btn" id="chk-${i}" onclick="check(${i})">Check</button>
         </div>
-        <div class="hint">${p.hint}</div>
+        <span class="hint-link" onclick="this.style.display='none';this.nextElementSibling.style.display='block'">Show hint</span><div class="hint">${p.hint}</div>
         <div class="feedback" id="fb-${i}"></div>
         <span class="reveal-link" id="rl-${i}" onclick="reveal(${i})">Show solution</span>
         <div class="revealed-answer" id="ra-${i}"></div>
