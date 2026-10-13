@@ -18,6 +18,15 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 .opening-q{background:#eef3f9;border-left:4px solid #1e3a5c;
   border-radius:0 8px 8px 0;padding:1rem 1.2rem;font-size:15px;
   margin-bottom:1.5rem;font-style:italic;line-height:1.75}
+.hook-question{margin:0}
+.hook-graph{text-align:center;margin:.7rem 0 .3rem;font-style:normal}
+.hook-graph svg{max-width:100%;height:auto}
+.hook-reveal{margin-top:.5rem;font-style:normal}
+.hook-reveal-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;
+  color:#1e3a5c;text-transform:uppercase;letter-spacing:.07em;list-style:none;user-select:none;display:block}
+.hook-reveal-toggle::-webkit-details-marker{display:none}
+.hook-reveal-body{margin-top:.5rem;font-size:14px;line-height:1.75;padding-top:.5rem;
+  border-top:1px solid #c8d8ec}
 
 /* ── Section heading ── */
 .section-head{font-family:sans-serif;font-size:11px;font-weight:700;
@@ -127,6 +136,8 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   .opening-q{
     background:#eef3f9 !important;
     -webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .hook-graph{margin:.4rem 0 .2rem}
+  details.hook-reveal:not([open]){display:none}
   .svg-figure{margin:.25rem 0 .4rem}
   .svg-figure svg{max-width:100%;height:auto}
   .svg-caption{font-size:9pt}
@@ -141,6 +152,20 @@ details[open]>.proof-toggle{color:#1e3a5c}
 .proof-body p{margin-bottom:.45rem}
 .proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
 @media print{.proof-panel{break-inside:avoid}}
+.mistake-panel{margin:.4rem 0 1.1rem;border-left:3px solid #b8860b;border-radius:0 6px 6px 0;background:#fdf8e8}
+.mistake-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#9a6a00;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.mistake-toggle::-webkit-details-marker{display:none}
+details[open]>.mistake-toggle{color:#1e3a5c}
+.mistake-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #e8d8a8}
+.mistake-body p{margin-bottom:.45rem}
+.panel-row{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.1rem}
+.panel-row>.proof-panel,.panel-row>.mistake-panel{margin:0;min-width:0}
+.panel-row:has(.proof-panel):has(.mistake-panel){grid-template-columns:1fr}
+@media print{
+  .panel-row{break-inside:avoid}
+  .mistake-panel{break-inside:avoid}
+  details.mistake-panel:not([open]){display:none}
+}
 </style>
 </head>
 <body>
@@ -156,7 +181,7 @@ details[open]>.proof-toggle{color:#1e3a5c}
 <div class="accent-box"><p>From a <strong>graph</strong>: if any vertical line hits the graph more than once &rarr; <strong>not a function</strong> (one $x$, two $y$-values).</p><p>If every vertical line hits at most once &rarr; <strong>function</strong>.</p><ul>  <li>$y=2x+1$ &#x2713; &ensp; $y=x^2$ &#x2713;</li>  <li>$x=y^2$ &#x2717; &ensp; circle &#x2717;</li></ul><p>Note: $x=a$ (vertical line) is <strong>not</strong> a function. $y=b$ (horizontal line) <strong>is</strong> a function.</p></div>
 </div>
 </div>
-<div class="section-head">Worked Examples</div>
+<div style="text-align:center;margin:.5rem 0 1.1rem"><svg viewBox="0 0 380 165" width="100%" style="max-width:500px;display:inline-block"><line x1="12" y1="130" x2="178" y2="130" stroke="#aaa" stroke-width="1.3"/><polygon points="178,127 183,130 178,133" fill="#aaa"/><line x1="90" y1="138" x2="90" y2="12" stroke="#aaa" stroke-width="1.3"/><polygon points="87,12 90,7 93,12" fill="#aaa"/><text x="182" y="134" font-size="9" fill="#888" font-family="sans-serif">x</text><text x="93" y="11" font-size="9" fill="#888" font-family="sans-serif">y</text><polyline points="54,58 63,89 81,126 90,130 99,126 108,112 117,89 126,58" fill="none" stroke="#1e3a5c" stroke-width="2.5" stroke-linejoin="round"/><text x="132" y="54" font-size="10" fill="#1e3a5c" font-family="sans-serif" font-style="italic">y = x²</text><line x1="108" y1="12" x2="108" y2="132" stroke="#c03030" stroke-width="1.8" stroke-dasharray="5,3"/><circle cx="108" cy="112" r="4.5" fill="#c03030"/><text x="113" y="109" font-size="9" fill="#c03030" font-family="sans-serif">1 point</text><text x="90" y="152" text-anchor="middle" font-size="12" font-weight="bold" fill="#1a6b1a" font-family="sans-serif">Function ✓</text><line x1="191" y1="5" x2="191" y2="158" stroke="#ccc" stroke-width="1"/><line x1="205" y1="90" x2="373" y2="90" stroke="#aaa" stroke-width="1.3"/><polygon points="373,87 378,90 373,93" fill="#aaa"/><line x1="285" y1="155" x2="285" y2="12" stroke="#aaa" stroke-width="1.3"/><polygon points="282,12 285,7 288,12" fill="#aaa"/><text x="376" y="94" font-size="9" fill="#888" font-family="sans-serif">x</text><text x="288" y="11" font-size="9" fill="#888" font-family="sans-serif">y</text><circle cx="285" cy="90" r="40" fill="none" stroke="#1e3a5c" stroke-width="2.5"/><text x="319" y="55" font-size="10" fill="#1e3a5c" font-family="sans-serif" font-style="italic">x²+y²=4</text><line x1="305" y1="12" x2="305" y2="155" stroke="#c03030" stroke-width="1.8" stroke-dasharray="5,3"/><circle cx="305" cy="55" r="4.5" fill="#c03030"/><circle cx="305" cy="125" r="4.5" fill="#c03030"/><text x="310" y="90" font-size="9" fill="#c03030" font-family="sans-serif">2 points</text><text x="285" y="162" text-anchor="middle" font-size="12" font-weight="bold" fill="#c03030" font-family="sans-serif">Not a function ✗</text></svg><p style="font-family:sans-serif;font-size:11px;color:#666;margin-top:.2rem">Red dashed = vertical test line &nbsp;&middot;&nbsp; Red dots = intersections</p></div><div class="section-head">Worked Examples</div>
 <div class="examples-grid">
 <div class="ex-block">
   <div class="ex-label">Example 1 &nbsp;&mdash;&nbsp; Ordered pairs — function?</div>
@@ -198,18 +223,23 @@ details[open]>.proof-toggle{color:#1e3a5c}
 </div>
 <div class="pr-row">
   <div class="pr-num">4.</div>
-  <div class="pr-prob">Is $y=x^2+1$ a function?</div>
-  <div class="pr-ans instructor">Yes &mdash; one output per input</div>
+  <div class="pr-prob"><p style="font-size:13.5px;margin-bottom:.35rem">Is the relation graphed below a function? Explain using the vertical line test.</p><div style="text-align:center"><svg viewBox="0 0 140 110" width="140" height="110"><line x1="5" y1="80" x2="135" y2="80" stroke="#aaa" stroke-width="1.2"/><line x1="70" y1="105" x2="70" y2="5" stroke="#aaa" stroke-width="1.2"/><polyline points="33,111 40,85 50,60 60,45 70,40 80,45 90,60 100,85 107,111" fill="none" stroke="#1e3a5c" stroke-width="2.5" stroke-linejoin="round"/><text x="100" y="48" font-size="9" fill="#1e3a5c" font-family="sans-serif" font-style="italic">y=–x²+2</text></svg></div></div>
+  <div class="pr-ans instructor">Function &mdash; every vertical line hits the parabola at most once.</div>
 </div>
 <div class="pr-row">
   <div class="pr-num">5.</div>
-  <div class="pr-prob">Is $x^2+y^2=9$ a function?</div>
-  <div class="pr-ans instructor">No &mdash; fails vertical line test (e.g. $x=0$ gives $y=\pm 3$)</div>
+  <div class="pr-prob"><p style="font-size:13.5px;margin-bottom:.35rem">Is the relation graphed below a function? Explain using the vertical line test.</p><div style="text-align:center"><svg viewBox="0 0 140 110" width="140" height="110"><line x1="5" y1="60" x2="135" y2="60" stroke="#aaa" stroke-width="1.2"/><line x1="70" y1="105" x2="70" y2="5" stroke="#aaa" stroke-width="1.2"/><circle cx="70" cy="60" r="38" fill="none" stroke="#1e3a5c" stroke-width="2.5"/><text x="100" y="28" font-size="9" fill="#1e3a5c" font-family="sans-serif" font-style="italic">x²+y²≈4</text></svg></div></div>
+  <div class="pr-ans instructor">Not a function &mdash; a vertical line through the interior of the circle crosses it at two points.</div>
 </div>
 <div class="pr-row">
   <div class="pr-num">6.</div>
-  <div class="pr-prob">Is $y=5$ a function?</div>
-  <div class="pr-ans instructor">Yes &mdash; every $x$ maps to exactly one output (5)</div>
+  <div class="pr-prob"><p style="font-size:13.5px;margin-bottom:.35rem">Is the relation graphed below a function? Explain using the vertical line test.</p><div style="text-align:center"><svg viewBox="0 0 140 110" width="140" height="110"><line x1="5" y1="80" x2="135" y2="80" stroke="#aaa" stroke-width="1.2"/><line x1="70" y1="105" x2="70" y2="5" stroke="#aaa" stroke-width="1.2"/><polyline points="20,30 70,80 120,30" fill="none" stroke="#1e3a5c" stroke-width="2.5" stroke-linejoin="round"/><text x="105" y="35" font-size="9" fill="#1e3a5c" font-family="sans-serif" font-style="italic">y=|x|</text></svg></div></div>
+  <div class="pr-ans instructor">Function &mdash; the V-shape opens upward; every vertical line hits it at most once.</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">7.</div>
+  <div class="pr-prob"><p style="font-size:13.5px;margin-bottom:.35rem">Is the relation graphed below a function? Explain using the vertical line test.</p><div style="text-align:center"><svg viewBox="0 0 140 110" width="140" height="110"><line x1="5" y1="80" x2="135" y2="80" stroke="#aaa" stroke-width="1.2"/><line x1="70" y1="105" x2="70" y2="5" stroke="#aaa" stroke-width="1.2"/><polyline points="115,110 90,100 75,90 70,80 75,70 90,60 115,50" fill="none" stroke="#1e3a5c" stroke-width="2.5" stroke-linejoin="round"/><text x="117" y="78" font-size="9" fill="#1e3a5c" font-family="sans-serif" font-style="italic">x=y²</text></svg></div></div>
+  <div class="pr-ans instructor">Not a function &mdash; for any $x > 0$, a vertical line hits the sideways parabola at two points (one above and one below the axis).</div>
 </div>
 </div>
 
@@ -231,6 +261,5 @@ function toggleAns(btn) {
     throwOnError: false
   });
 </script>
-<!-- proof-layer:done -->
 </body>
 </html>
