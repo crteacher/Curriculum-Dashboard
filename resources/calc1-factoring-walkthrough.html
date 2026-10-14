@@ -1,0 +1,1803 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found]){display:none!important}</style></head><body>
+<title>Factoring and Zeros Walkthrough</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=JetBrains+Mono:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+  :root {
+    --paper: #f6f1e4;
+    --paper-line: rgba(58, 74, 94, 0.14);
+    --paper-line-strong: rgba(58, 74, 94, 0.26);
+    --ink: #26313f;
+    --ink-soft: #5b6b7d;
+    --card-bg: #fffdf7;
+    --card-border: #ddd2b6;
+    --accent: #b5790a;
+    --accent-strong: #8f5f06;
+    --accent-soft: rgba(181, 121, 10, 0.12);
+    --accent-ink: #fffaf0;
+    --good: #3f7a52;
+    --good-soft: rgba(63, 122, 82, 0.14);
+    --bad: #b3413a;
+    --bad-soft: rgba(179, 65, 58, 0.12);
+    --shadow: rgba(38, 49, 63, 0.16);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #1b2330;
+      --paper-line: rgba(238, 242, 240, 0.07);
+      --paper-line-strong: rgba(238, 242, 240, 0.15);
+      --ink: #edf1ef;
+      --ink-soft: #a3aebb;
+      --card-bg: #232e3d;
+      --card-border: #3a4a61;
+      --accent: #e8b04f;
+      --accent-strong: #f2c675;
+      --accent-soft: rgba(232, 176, 79, 0.16);
+      --accent-ink: #2b1e05;
+      --good: #7bc794;
+      --good-soft: rgba(123, 199, 148, 0.16);
+      --bad: #ff9a90;
+      --bad-soft: rgba(255, 154, 144, 0.14);
+      --shadow: rgba(0, 0, 0, 0.5);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #1b2330;
+    --paper-line: rgba(238, 242, 240, 0.07);
+    --paper-line-strong: rgba(238, 242, 240, 0.15);
+    --ink: #edf1ef;
+    --ink-soft: #a3aebb;
+    --card-bg: #232e3d;
+    --card-border: #3a4a61;
+    --accent: #e8b04f;
+    --accent-strong: #f2c675;
+    --accent-soft: rgba(232, 176, 79, 0.16);
+    --accent-ink: #2b1e05;
+    --good: #7bc794;
+    --good-soft: rgba(123, 199, 148, 0.16);
+    --bad: #ff9a90;
+    --bad-soft: rgba(255, 154, 144, 0.14);
+    --shadow: rgba(0, 0, 0, 0.5);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background:
+      repeating-linear-gradient(0deg, var(--paper-line) 0, var(--paper-line) 1px, transparent 1px, transparent 32px),
+      repeating-linear-gradient(90deg, var(--paper-line) 0, var(--paper-line) 1px, transparent 1px, transparent 32px),
+      var(--paper);
+    color: var(--ink);
+    font-family: "Source Sans 3", ui-sans-serif, system-ui, sans-serif;
+    display: flex;
+    justify-content: center;
+    padding: clamp(20px, 4vw, 56px) 18px 80px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+  }
+
+  .wrap { width: 100%; max-width: 900px; }
+  header { text-align: center; margin-bottom: 18px; }
+
+  .eyebrow {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--accent); font-weight: 600;
+  }
+
+  h1 {
+    font-family: "Fraunces", Georgia, serif; font-weight: 600;
+    font-size: clamp(1.8rem, 5vw, 2.5rem); margin: 6px 0 8px; text-wrap: balance;
+  }
+
+  header p { color: var(--ink-soft); font-size: 1rem; max-width: 62ch; margin: 0 auto; line-height: 1.55; }
+
+  .howto {
+    background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 14px;
+    box-shadow: 0 10px 26px -18px var(--shadow); padding: 16px 20px; margin: 22px 0 26px;
+    font-size: 0.92rem; line-height: 1.65; color: var(--ink);
+  }
+  .howto strong { color: var(--accent-strong); }
+
+  .stage-nav {
+    position: sticky; top: 12px; z-index: 5;
+    display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 28px; padding: 12px 14px;
+    background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 14px;
+    box-shadow: 0 10px 26px -16px var(--shadow);
+  }
+  .stage-pill {
+    display: inline-flex; align-items: center; gap: 6px; font-size: 0.76rem; font-weight: 600;
+    padding: 6px 11px; border-radius: 20px; background: var(--paper-line); color: var(--ink-soft);
+    border: 1px solid transparent; transition: all 0.2s ease;
+  }
+  .stage-pill .dot {
+    width: 7px; height: 7px; border-radius: 50%; background: var(--ink-soft); flex-shrink: 0; transition: background 0.2s ease;
+  }
+  .stage-pill.done { background: var(--good-soft); color: var(--good); border-color: var(--good-soft); }
+  .stage-pill.done .dot { background: var(--good); }
+
+  button { font-family: inherit; cursor: pointer; }
+  button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .icon-btn {
+    display: inline-flex; align-items: center; gap: 7px; background: var(--card-bg);
+    border: 1px solid var(--card-border); color: var(--ink); padding: 9px 14px;
+    border-radius: 9px; font-size: 0.86rem; font-weight: 600; text-decoration: none;
+    transition: border-color 0.15s ease, transform 0.1s ease;
+  }
+  .icon-btn:hover { border-color: var(--accent); }
+  .icon-btn:active { transform: translateY(1px); }
+  .icon-btn svg { width: 14px; height: 14px; flex-shrink: 0; }
+  .video-btn { color: var(--accent-strong); border-color: var(--accent-soft); background: var(--accent-soft); }
+  .video-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+
+  .group-head {
+    margin: 34px 0 16px; padding-bottom: 14px; border-bottom: 1.5px solid var(--paper-line-strong);
+  }
+  .group-head .gnum {
+    font-family: "JetBrains Mono", monospace; font-size: 0.74rem; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--accent); font-weight: 700;
+  }
+  .group-head .gtitle {
+    font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 1.4rem; color: var(--ink); margin: 2px 0 6px;
+  }
+  .group-head .gdesc { font-size: 0.94rem; color: var(--ink-soft); line-height: 1.6; max-width: 68ch; }
+
+  .exam-toolbar {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+    margin-top: 14px; padding: 12px 16px; background: var(--card-bg); border: 1px solid var(--card-border);
+    border-radius: 12px;
+  }
+  .exam-toolbar .score-group { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .score-box { display: flex; align-items: baseline; gap: 8px; }
+  .score-num { font-family: "JetBrains Mono", monospace; font-size: 1.2rem; font-weight: 700; color: var(--accent-strong); font-variant-numeric: tabular-nums; }
+  .score-label { font-size: 0.76rem; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.06em; }
+  .score-divider { width: 1px; align-self: stretch; min-height: 22px; background: var(--card-border); }
+  .exam-score-box .score-num { color: var(--ink); }
+
+  .exam-badge {
+    display: inline-flex; align-items: center; gap: 5px; font-size: 0.68rem; font-weight: 700;
+    padding: 3px 9px; border-radius: 20px; letter-spacing: 0.02em; white-space: nowrap;
+  }
+  .exam-badge svg { width: 11px; height: 11px; flex-shrink: 0; }
+  .exam-badge.exam-good { background: var(--good-soft); color: var(--good); }
+  .exam-badge.exam-bad { background: var(--bad-soft); color: var(--bad); }
+
+  .qcard {
+    background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px;
+    box-shadow: 0 14px 32px -22px var(--shadow), 0 2px 8px -2px var(--shadow);
+    padding: clamp(16px, 3vw, 24px); margin-bottom: 18px;
+  }
+
+  .qcard-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
+  .qcard-head .qtitle { display: flex; align-items: center; gap: 10px; }
+  .qlabel { font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 1.05rem; }
+  .qpoints {
+    font-family: "JetBrains Mono", monospace; font-size: 0.66rem; letter-spacing: 0.05em;
+    color: var(--ink-soft); background: var(--paper-line); padding: 2px 8px; border-radius: 20px;
+  }
+
+  .qprompt { font-size: 1rem; line-height: 1.7; margin-bottom: 14px; }
+  .qprompt .math { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 1.04rem; }
+  .qsolution .math { font-family: "JetBrains Mono", ui-monospace, monospace; }
+
+  .qinputs { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin-bottom: 14px; }
+  .qinputs .field-label { font-size: 0.86rem; color: var(--ink-soft); font-weight: 600; }
+  .qinputs input[type="text"] {
+    font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 0.95rem;
+    background: var(--paper); border: 1.5px solid var(--card-border); border-radius: 8px;
+    padding: 8px 10px; color: var(--ink); min-width: 92px;
+  }
+  .qinputs input:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .step-pair { display: flex; align-items: center; flex-wrap: wrap; gap: 10px 14px; }
+  .step-pair .arrow { color: var(--ink-soft); font-size: 1.1rem; }
+  .mc-row { display: flex; flex-direction: column; gap: 8px; }
+  .mc-opt {
+    border: 1.5px solid var(--card-border); border-radius: 9px; padding: 10px 13px; text-align: left;
+    font-size: 0.9rem; background: var(--card-bg); color: var(--ink); font-weight: 500; line-height: 1.45;
+    transition: border-color 0.15s ease, background 0.15s ease;
+  }
+  .mc-opt:hover { border-color: var(--accent); }
+  .mc-opt.selected { border-color: var(--accent); background: var(--accent-soft); color: var(--accent-strong); font-weight: 600; }
+
+  .qactions { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; }
+  .btn-primary {
+    background: var(--accent); color: var(--accent-ink); border: none; padding: 10px 20px;
+    border-radius: 10px; font-size: 0.92rem; font-weight: 700;
+    box-shadow: 0 8px 16px -8px var(--accent-strong); transition: transform 0.1s ease;
+  }
+  .btn-primary:active { transform: translateY(1px); }
+  .btn-secondary {
+    background: transparent; border: 1.5px solid var(--card-border); color: var(--ink);
+    padding: 9px 18px; border-radius: 10px; font-size: 0.92rem; font-weight: 700;
+    transition: border-color 0.15s ease;
+  }
+  .btn-secondary:hover { border-color: var(--accent); }
+
+  .qfeedback {
+    font-size: 0.9rem; font-weight: 700; padding: 9px 13px; border-radius: 9px; margin-bottom: 10px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .qfeedback.good { background: var(--good-soft); color: var(--good); }
+  .qfeedback.bad { background: var(--bad-soft); color: var(--bad); }
+  .qfeedback svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+  .qsolution {
+    background: var(--accent-soft); border: 1px solid var(--card-border); border-left: 4px solid var(--accent);
+    border-radius: 0 12px 12px 0; padding: 14px 16px; font-size: 0.92rem; line-height: 1.7;
+  }
+  .qsolution .sol-label {
+    font-family: "JetBrains Mono", monospace; font-size: 0.68rem; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--accent-strong); font-weight: 700; display: block; margin-bottom: 6px;
+  }
+  .qsolution .step { margin: 3px 0; }
+  .qsolution .final { margin-top: 8px; font-weight: 700; font-family: "JetBrains Mono", monospace; }
+
+  /* ---- worked-step "whiteboard" solution layout ---- */
+  .worksheet { margin-top: 2px; }
+  .ws-row {
+    display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; column-gap: 12px;
+    font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 1rem;
+  }
+  .ws-row .ws-expr { text-align: right; white-space: nowrap; }
+  .ws-row .ws-expr:last-child { text-align: left; }
+  .ws-row .ws-eq { color: var(--ink-soft); font-weight: 600; }
+  .ws-op-row { font-size: 0.88rem; color: var(--accent-strong); font-weight: 600; padding-top: 4px; }
+  .ws-op-row .ws-op { text-align: right; min-height: 1.2em; }
+  .ws-op-row .ws-op:last-child { text-align: left; }
+  .ws-note {
+    font-family: "Source Sans 3", sans-serif; font-size: 0.78rem; font-weight: 500;
+    color: var(--ink-soft); text-align: center; margin: 2px 0; font-style: italic;
+  }
+  .ws-rule { border: none; border-top: 1.5px solid var(--card-border); margin: 4px 0 9px; }
+  .ws-row.ws-final { margin-top: 3px; font-weight: 700; }
+  .ws-row.ws-final .ws-expr { color: var(--accent-strong); font-size: 1.06rem; }
+  @media (max-width: 480px) {
+    .ws-row, .ws-op-row { column-gap: 7px; font-size: 0.9rem; }
+  }
+
+
+  .frac { display: inline-flex; flex-direction: column; vertical-align: middle; text-align: center; line-height: 1.35; margin: 0 4px; }
+  .frac > span:first-child { border-bottom: 1.6px solid currentColor; padding: 0 6px 2px; }
+  .frac > span:last-child { padding: 2px 6px 0; }
+  .qfields { flex-direction: column; align-items: stretch; gap: 14px; }
+  .frow { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; }
+  .flabel { font-size: 0.86rem; color: var(--ink-soft); font-weight: 600; min-width: 168px; }
+  .fpts { font-family: "JetBrains Mono", monospace; font-size: 0.66rem; background: var(--paper-line); border-radius: 20px; padding: 1px 7px; margin-left: 4px; }
+  .qfields input.fin { min-width: 150px; flex: 0 1 190px; }
+  .qfields input.fin.wide { flex: 1 1 280px; max-width: 420px; }
+  .qfields input.fin.right { border-color: var(--good); }
+  .qfields input.fin.wrong { border-color: var(--bad); }
+  .fpreview { flex-basis: 100%; padding-left: 0; font-size: 0.82rem; color: var(--ink-soft); min-height: 0; }
+  .fpreview .math { font-family: "JetBrains Mono", ui-monospace, monospace; color: var(--ink); }
+  .qfeedback.multi { flex-direction: column; align-items: flex-start; gap: 6px; }
+  .qfeedback .fhead { display: flex; align-items: center; gap: 8px; }
+  .fres { display: flex; align-items: flex-start; gap: 8px; font-weight: 600; font-size: 0.86rem; }
+  .fres svg { width: 14px; height: 14px; margin-top: 3px; flex-shrink: 0; }
+  .fres.ok { color: var(--good); }
+  .fres.bad { color: var(--bad); }
+  .fres.bad b { font-weight: 700; }
+  .qsolution .note { color: var(--ink-soft); font-style: italic; font-size: 0.88rem; margin-top: 6px; }
+  .qsolution .step .math sup, .qprompt .math sup, .mc-opt sup, .fpreview sup { font-size: 0.72em; line-height: 0; }
+  .qprompt .math, .qsolution .math, .step-pair .math { white-space: normal; }
+  .howto code { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 0.88em; background: var(--accent-soft); padding: 1px 6px; border-radius: 5px; color: var(--accent-strong); }
+  .howto .typing { margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--card-border); }
+  @media (max-width: 560px) { .stage-nav { position: static; } .flabel { min-width: 100%; } .qfields input.fin, .qfields input.fin.wide { flex: 1 1 100%; max-width: none; } }
+
+  .hidden { display: none !important; }
+
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Calculus 1 &middot; Critical Points</div>
+    <h1>Factoring &amp; Solving for Zeros: A Guided Walkthrough</h1>
+    <p>Every critical-point problem ends in the same place: factor f&prime;(x) and find where it equals 0. This walkthrough rebuilds that skill from the zero-product property up through cubics, quartics, fractional exponents and quotient-rule numerators, then finishes with a critical-point exam.</p>
+  </header>
+
+  <div class="howto">
+    Work through the stages <strong>in order</strong> &mdash; each one builds on the last. In every stage: watch the short video if a concept feels shaky, try the &ldquo;What went wrong?&rdquo; checks (they are built around the exact mistakes students make), then work the practice problems &mdash; click <strong>New version</strong> for new numbers as many times as you want.
+    <div class="typing"><strong>How to type your answers.</strong> Write exactly what you would write on paper, using <code>^</code> for powers and parentheses for brackets: <code>3x(x-2)^2</code>, <code>(2x+1)(x-3)</code>, <code>x^2(x-4)</code>. Put fractional or negative exponents in parentheses: <code>x^(1/2)</code>, <code>3x^(-1/2)(x-2)</code>. Separate zeros with commas: <code>0, -2, 5/2</code> (use fractions, not rounded decimals, unless the problem says to round). Any order and any equivalent arrangement is fine, as long as it is completely factored. The line under each box shows how your answer reads.</div>
+  </div>
+
+  <div class="stage-nav" id="stageNav"></div>
+
+  <div id="groups"></div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+var SVG_REFRESH = "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M16 3h5v5\"/><path d=\"M4 20 21 3\"/><path d=\"M21 16v5h-5\"/><path d=\"M15 15l6 6\"/><path d=\"M4 4l5 5\"/></svg>";
+  var SVG_CHECK = "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M20 6 9 17l-5-5\"/></svg>";
+  var SVG_X = "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\"><circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M15 9l-6 6M9 9l6 6\"/></svg>";
+  var SVG_PLAY = "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M10 8.5 16 12l-6 3.5z\" fill=\"currentColor\" stroke=\"none\"/></svg>";
+  var SVG_LOCK = "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"4\" y=\"10\" width=\"16\" height=\"10\" rx=\"2\"/><path d=\"M8 10V7a4 4 0 0 1 8 0v3\"/></svg>";
+  // ============================================================
+  // Exact rational arithmetic + generalized polynomials (rational exponents)
+  // ============================================================
+  function gcd(a, b) { a = Math.abs(a); b = Math.abs(b); while (b) { var t = a % b; a = b; b = t; } return a; }
+  function F(n, d) {
+    if (d === undefined) d = 1;
+    if (d < 0) { n = -n; d = -d; }
+    var g = gcd(n, d) || 1;
+    return { n: n / g, d: d / g };
+  }
+  function fadd(a, b) { return F(a.n * b.d + b.n * a.d, a.d * b.d); }
+  function fmul(a, b) { return F(a.n * b.n, a.d * b.d); }
+  function fneg(a) { return { n: -a.n, d: a.d }; }
+  function finv(a) { if (a.n === 0) throw new Error("division by zero"); return F(a.d, a.n); }
+  function feq(a, b) { return a.n === b.n && a.d === b.d; }
+  function fnum(a) { return a.n / a.d; }
+  function fisInt(a) { return a.d === 1; }
+  function fstr(a) { return a.d === 1 ? String(a.n) : a.n + "/" + a.d; }
+  function fpowInt(a, k) {
+    var r = F(1), i;
+    if (k >= 0) { for (i = 0; i < k; i++) r = fmul(r, a); return r; }
+    return finv(fpowInt(a, -k));
+  }
+
+  // polynomial = { "exp-string": { e: Frac, c: Frac } }
+  function pConst(c) { var p = {}; if (c.n !== 0) p["0"] = { e: F(0), c: c }; return p; }
+  function pX() { var p = {}; p["1"] = { e: F(1), c: F(1) }; return p; }
+  function pAddTerm(p, e, c) {
+    var k = fstr(e);
+    var cur = p[k] ? p[k].c : F(0);
+    var nc = fadd(cur, c);
+    if (nc.n === 0) delete p[k]; else p[k] = { e: e, c: nc };
+  }
+  function pAdd(a, b) { var r = {}; Object.keys(a).forEach(function (k) { pAddTerm(r, a[k].e, a[k].c); }); Object.keys(b).forEach(function (k) { pAddTerm(r, b[k].e, b[k].c); }); return r; }
+  function pNeg(a) { var r = {}; Object.keys(a).forEach(function (k) { r[k] = { e: a[k].e, c: fneg(a[k].c) }; }); return r; }
+  function pMul(a, b) {
+    var r = {};
+    Object.keys(a).forEach(function (i) { Object.keys(b).forEach(function (j) { pAddTerm(r, fadd(a[i].e, b[j].e), fmul(a[i].c, b[j].c)); }); });
+    return r;
+  }
+  function pTerms(p) { return Object.keys(p).map(function (k) { return p[k]; }).sort(function (x, y) { return fnum(y.e) - fnum(x.e); }); }
+  function pEqual(a, b) {
+    var ka = Object.keys(a), kb = Object.keys(b);
+    if (ka.length !== kb.length) return false;
+    return ka.every(function (k) { return b[k] && feq(a[k].c, b[k].c); });
+  }
+
+  // ============================================================
+  // Parser for typed algebra:  3x(x-2)^2, x^(1/2)(x-4), 2(x+1)(x-1), x^(-1/2) ...
+  // ============================================================
+  function normalizeInput(s) {
+    s = String(s === null || s === undefined ? "" : s);
+    s = s.replace(/[−–—]/g, "-").replace(/[×·⋅]/g, "*")
+      .replace(/²/g, "^2").replace(/³/g, "^3").replace(/⁴/g, "^4").replace(/⁵/g, "^5")
+      .replace(/′|’/g, "'").replace(/\s+/g, "").replace(/X/g, "x").replace(/\*\*/g, "^");
+    // strip a leading "f'(x)=" / "y=" label (take everything after the last "=")
+    if (s.indexOf("=") !== -1) {
+      var eqi = s.lastIndexOf("="), rhs = s.slice(eqi + 1);
+      s = ((rhs === "0" || rhs === "") && eqi > 0) ? s.slice(0, eqi) : rhs;
+    }
+    return s;
+  }
+  function tokenize(s) {
+    var toks = [], i = 0, m;
+    while (i < s.length) {
+      var ch = s[i];
+      if (/[0-9.]/.test(ch)) {
+        m = /^[0-9]*\.?[0-9]+|^[0-9]+\.?/.exec(s.slice(i));
+        if (!m) throw new Error("I can't read the number near \"" + s.slice(i, i + 3) + "\".");
+        toks.push({ t: "num", v: m[0] }); i += m[0].length;
+      } else if (ch === "x") { toks.push({ t: "x" }); i++; }
+      else if ("+-*/^()".indexOf(ch) !== -1) { toks.push({ t: ch }); i++; }
+      else throw new Error("I can't read the symbol \"" + ch + "\". Use only numbers, x, + - / ^ and parentheses.");
+    }
+    return toks;
+  }
+  function decToFrac(str) {
+    var parts = str.split(".");
+    if (parts.length === 1 || parts[1] === "") return F(parseInt(parts[0], 10));
+    var d = Math.pow(10, parts[1].length);
+    return F(parseInt(parts[0] || "0", 10) * d + parseInt(parts[1], 10), d);
+  }
+  function parseExpr(str) {
+    var toks = tokenize(normalizeInput(str)), pos = 0;
+    if (!toks.length) throw new Error("Type an answer first.");
+    function peek() { return toks[pos]; }
+    function next() { return toks[pos++]; }
+    function expect(t) { var k = next(); if (!k || k.t !== t) throw new Error("Check your parentheses: I expected \"" + t + "\"."); return k; }
+    function pExpr() {
+      var left = pTerm();
+      while (peek() && (peek().t === "+" || peek().t === "-")) {
+        var op = next().t, right = pTerm();
+        left = { t: "add", a: left, b: op === "-" ? { t: "neg", a: right } : right };
+      }
+      return left;
+    }
+    function startsFactor() { var k = peek(); return k && (k.t === "num" || k.t === "x" || k.t === "("); }
+    function pTerm() {
+      var left = pUnary();
+      for (;;) {
+        var k = peek();
+        if (k && k.t === "*") { next(); left = { t: "mul", a: left, b: pUnary() }; }
+        else if (k && k.t === "/") { next(); left = { t: "div", a: left, b: pPowerOnly() }; }
+        else if (startsFactor()) { left = { t: "mul", a: left, b: pPowerOnly() }; }
+        else break;
+      }
+      return left;
+    }
+    function pUnary() {
+      var k = peek();
+      if (k && k.t === "-") { next(); return { t: "neg", a: pUnary() }; }
+      if (k && k.t === "+") { next(); return pUnary(); }
+      return pPowerOnly();
+    }
+    function pPowerOnly() {
+      var base = pAtom();
+      if (peek() && peek().t === "^") {
+        next();
+        var e;
+        if (peek() && peek().t === "(") { next(); var inner = pExpr(); expect(")"); e = constOf(inner); }
+        else {
+          var neg = false;
+          if (peek() && peek().t === "-") { next(); neg = true; }
+          var nt = next();
+          if (!nt || nt.t !== "num") throw new Error("Put exponents in parentheses, like x^(1/2) or x^(-1/2).");
+          e = decToFrac(nt.v); if (neg) e = fneg(e);
+        }
+        return { t: "pow", a: base, e: e };
+      }
+      return base;
+    }
+    function pAtom() {
+      var k = next();
+      if (!k) throw new Error("That expression ends too soon.");
+      if (k.t === "num") return { t: "num", v: decToFrac(k.v) };
+      if (k.t === "x") return { t: "x" };
+      if (k.t === "(") { var inner = pExpr(); expect(")"); return { t: "grp", a: inner }; }
+      throw new Error("I can't read that: unexpected \"" + k.t + "\".");
+    }
+    var tree = pExpr();
+    if (pos < toks.length) throw new Error("I can't read that: check for a stray \"" + toks[pos].t + "\".");
+    return tree;
+  }
+  function constOf(node) {
+    var p = expandNode(node);
+    var ks = Object.keys(p);
+    if (ks.length === 0) return F(0);
+    if (ks.length === 1 && ks[0] === "0") return p["0"].c;
+    throw new Error("An exponent must be a plain number.");
+  }
+  function expandNode(n) {
+    switch (n.t) {
+      case "num": return pConst(n.v);
+      case "x": return pX();
+      case "grp": return expandNode(n.a);
+      case "neg": return pNeg(expandNode(n.a));
+      case "add": return pAdd(expandNode(n.a), expandNode(n.b));
+      case "mul": return pMul(expandNode(n.a), expandNode(n.b));
+      case "div": {
+        var d = expandNode(n.b), ks = Object.keys(d);
+        if (ks.length !== 1) throw new Error("Only divide by a number or a power of x here.");
+        var inv = {}; inv[fstr(fneg(d[ks[0]].e))] = { e: fneg(d[ks[0]].e), c: finv(d[ks[0]].c) };
+        return pMul(expandNode(n.a), inv);
+      }
+      case "pow": {
+        var base = expandNode(n.a), q = n.e, bk = Object.keys(base), r, i;
+        if (fisInt(q) && q.n >= 0) { r = pConst(F(1)); for (i = 0; i < q.n; i++) r = pMul(r, base); return r; }
+        if (bk.length === 1) {
+          var t = base[bk[0]], out = {};
+          var c;
+          if (fisInt(q)) c = fpowInt(t.c, q.n);
+          else if (feq(t.c, F(1))) c = F(1);
+          else throw new Error("Fractional powers of numbers aren't supported here.");
+          var e2 = fmul(t.e, q);
+          out[fstr(e2)] = { e: e2, c: c };
+          return out;
+        }
+        throw new Error("Negative or fractional powers of a sum aren't supported here.");
+      }
+    }
+    throw new Error("Unsupported expression.");
+  }
+  function expandStr(s) { return expandNode(parseExpr(s)); }
+
+  // ============================================================
+  // Canonical factorization signature
+  // ============================================================
+  function collectFactors(n, out) {
+    switch (n.t) {
+      case "grp": collectFactors(n.a, out); return;
+      case "mul": collectFactors(n.a, out); collectFactors(n.b, out); return;
+      case "neg": out.consts.push(F(-1)); collectFactors(n.a, out); return;
+      case "num": out.consts.push(n.v); return;
+      case "div": {
+        var d = expandNode(n.b), ks = Object.keys(d);
+        if (ks.length === 1) {
+          collectFactors(n.a, out);
+          out.consts.push(finv(d[ks[0]].c)); out.exps.push(fneg(d[ks[0]].e));
+          return;
+        }
+        out.leaves.push(n); return;
+      }
+      case "pow":
+        if (fisInt(n.e) && n.e.n >= 2 && n.a.t !== "x" && n.a.t !== "num") {
+          for (var i = 0; i < n.e.n; i++) collectFactors(n.a, out);
+          return;
+        }
+        out.leaves.push(n); return;
+      default: out.leaves.push(n);
+    }
+  }
+  function intCoefList(p) {
+    // returns {coefs:[...ascending..], ok} when all exponents are non-negative integers
+    var ts = pTerms(p), deg = 0, i;
+    for (i = 0; i < ts.length; i++) { if (!fisInt(ts[i].e) || ts[i].e.n < 0) return null; deg = Math.max(deg, ts[i].e.n); }
+    var arr = []; for (i = 0; i <= deg; i++) arr.push(F(0));
+    ts.forEach(function (t) { arr[t.e.n] = t.c; });
+    return arr;
+  }
+  function canonOfTree(tree) {
+    var out = { consts: [], exps: [], leaves: [] };
+    collectFactors(tree, out);
+    var c = F(1), e = F(0), polys = [], flag = false, zero = false;
+    out.consts.forEach(function (k) { c = fmul(c, k); });
+    out.exps.forEach(function (k) { e = fadd(e, k); });
+    out.leaves.forEach(function (leaf) {
+      var p = expandNode(leaf), ts = pTerms(p);
+      if (ts.length === 0) { zero = true; return; }
+      if (ts.length === 1) { c = fmul(c, ts[0].c); e = fadd(e, ts[0].e); return; }
+      var arr = intCoefList(p);
+      if (!arr) { flag = true; polys.push("G" + ts.map(function (t) { return fstr(t.c) + "x^" + fstr(t.e); }).join(",")); return; }
+      if (arr[0].n === 0) flag = true; // an x is still inside this factor
+      var allInt = arr.every(function (k) { return fisInt(k); });
+      if (!allInt) {
+        flag = true;
+        var L = 1; arr.forEach(function (k) { L = L * k.d / gcd(L, k.d); });
+        arr = arr.map(function (k) { return fmul(k, F(L)); }); c = fmul(c, F(1, L));
+      }
+      var g = 0; arr.forEach(function (k) { g = gcd(g, k.n); });
+      if (g > 1) { flag = true; }
+      var lead = arr[arr.length - 1];
+      var sgn = lead.n < 0 ? -1 : 1;
+      var div = F(g * sgn);
+      arr = arr.map(function (k) { return fmul(k, finv(div)); });
+      c = fmul(c, div);
+      polys.push(arr.map(fstr).join(","));
+    });
+    if (zero) return { key: "ZERO", flag: flag, c: F(0), e: F(0), polys: [] };
+    polys.sort();
+    return { key: fstr(c) + "|" + fstr(e) + "|" + polys.join(";"), flag: flag, c: c, e: e, polys: polys };
+  }
+  function topIsSum(tree) {
+    while (tree.t === "grp") tree = tree.a;
+    return tree.t === "add";
+  }
+
+  // ============================================================
+  // Graders
+  // ============================================================
+  function gradeFactored(input, spec) {
+    // spec: { orig: "x^2-5x+6", ans: "(x-2)(x-3)" }
+    var tree;
+    try { tree = parseExpr(input); } catch (err) { return { ok: false, msg: err.message, unread: true }; }
+    var sp, op;
+    try { sp = expandNode(tree); op = expandStr(spec.orig); } catch (err2) { return { ok: false, msg: err2.message, unread: true }; }
+    if (!pEqual(sp, op)) return { ok: false, msg: "That doesn't equal the original expression. Multiply your answer back out to see where it drifts." };
+    var cs = canonOfTree(tree), ce = canonOfTree(parseExpr(spec.ans));
+    if (cs.key === ce.key && !cs.flag) return { ok: true, msg: "" };
+    if (topIsSum(tree)) return { ok: false, msg: "Same value, but it is still a sum. Write it as a product of factors." };
+    return { ok: false, msg: "Equivalent, but not completely factored yet. Look for a common factor still sitting inside a bracket, or a bracket that can split further." };
+  }
+  function gradePoly(input, spec) {
+    var sp;
+    try { sp = expandStr(input); } catch (err) { return { ok: false, msg: err.message, unread: true }; }
+    return pEqual(sp, expandStr(spec.orig)) ? { ok: true, msg: "" } : { ok: false, msg: "That isn't the derivative. Recheck the power rule on each term (and constants go to 0)." };
+  }
+  function parseZeros(input) {
+    var s = String(input === null || input === undefined ? "" : input).replace(/[−–]/g, "-").replace(/±/g, "+-");
+    var low = s.toLowerCase().trim();
+    if (low === "") return { empty: true };
+    if (/^(none|dne|no (real )?(zeros?|solutions?|roots?)|∅|n\/a)$/.test(low.replace(/\.$/, ""))) return { list: [] };
+    s = s.replace(/[{}\[\]]/g, "").replace(/x\s*=/gi, "").replace(/\band\b|\bor\b/gi, ",").replace(/;/g, ",");
+    s = s.replace(/\s*([\/^])\s*/g, "$1").replace(/-\s+/g, "-");
+    if (s.indexOf(",") === -1 && /\s/.test(s.trim())) s = s.trim().replace(/\s+/g, ",");
+    var toks = s.split(",").map(function (t) { return t.trim(); }).filter(function (t) { return t !== ""; });
+    var out = [];
+    for (var i = 0; i < toks.length; i++) {
+      var t = toks[i], plusMinus = false;
+      if (t.indexOf("+-") === 0) { plusMinus = true; t = t.slice(2); }
+      var v;
+      try { v = fnum(constOf(parseExpr(t))); } catch (err) { return { error: "I couldn't read \"" + toks[i] + "\" as a number. Use whole numbers, fractions like 3/2, or decimals." }; }
+      out.push(v); if (plusMinus) out.push(-v);
+    }
+    return { list: out };
+  }
+  function dedupe(arr, tol) {
+    var s = arr.slice().sort(function (a, b) { return a - b; }), out = [];
+    s.forEach(function (v) { if (!out.length || Math.abs(v - out[out.length - 1]) > tol) out.push(v); });
+    return out;
+  }
+  function fmtNum(v) {
+    if (Math.abs(v - Math.round(v)) < 1e-9) return String(Math.round(v)).replace("-", "−");
+    // try simple fraction
+    for (var d = 2; d <= 12; d++) { var n = v * d; if (Math.abs(n - Math.round(n)) < 1e-9) return (Math.round(n) < 0 ? "−" : "") + Math.abs(Math.round(n)) + "/" + d; }
+    return (Math.round(v * 100) / 100).toFixed(2).replace("-", "−");
+  }
+  function gradeZeros(input, spec) {
+    // spec: { zeros:[numbers], tol: 1e-9 | 0.011 }
+    var tol = spec.tol || 1e-9;
+    var r = parseZeros(input);
+    if (r.empty) return { ok: false, msg: "Type your answer first.", unread: true };
+    if (r.error) return { ok: false, msg: r.error, unread: true };
+    var mine = dedupe(r.list, tol), want = dedupe(spec.zeros, 1e-9);
+    var missing = want.filter(function (w) { return !mine.some(function (m) { return Math.abs(m - w) <= tol; }); });
+    var extra = mine.filter(function (m) { return !want.some(function (w) { return Math.abs(m - w) <= tol; }); });
+    if (!missing.length && !extra.length) return { ok: true, msg: "" };
+    var msg;
+    var near = extra.length && want.some(function (w) { return Math.abs(extra[0] - w) < 0.0105; });
+    if (extra.length && near && tol < 0.005) msg = "Close, but give the exact value (like 2/3 or \u22123/2), not a rounded decimal.";
+    else if (extra.length) msg = "x = " + fmtNum(extra[0]) + " doesn't make it zero. Substitute it back in to see.";
+    else if (missing.some(function (w) { return Math.abs(w) < 1e-12; })) msg = "You're missing a zero. Don't forget the factor of x itself gives x = 0.";
+    else if (!mine.length && !want.length) msg = "";
+    else msg = "You're missing " + (missing.length > 1 ? missing.length + " zeros" : "a zero") + ". Set every factor equal to 0.";
+    if (!want.length) msg = "This one has no real zeros. Type none.";
+    return { ok: false, msg: msg };
+  }
+  function gradeNum(input, spec) {
+    var s = String(input === null || input === undefined ? "" : input).trim();
+    if (s === "") return { ok: false, msg: "Type your answer first.", unread: true };
+    var v;
+    try { v = fnum(constOf(parseExpr(s))); } catch (err) { return { ok: false, msg: "Type a number.", unread: true }; }
+    return Math.abs(v - spec.value) < (spec.tol || 1e-9) ? { ok: true, msg: "" } : { ok: false, msg: spec.hint || "Not quite." };
+  }
+  function gradePair(input, spec) {
+    var r = parseZeros(input);
+    if (r.empty) return { ok: false, msg: "Type your two numbers first.", unread: true };
+    if (r.error) return { ok: false, msg: r.error, unread: true };
+    if (r.list.length !== 2) return { ok: false, msg: "Give exactly two numbers, separated by a comma." };
+    var a = r.list.slice().sort(function (x, y) { return x - y; }), b = [spec.m, spec.n].sort(function (x, y) { return x - y; });
+    if (Math.abs(a[0] - b[0]) < 1e-9 && Math.abs(a[1] - b[1]) < 1e-9) return { ok: true, msg: "" };
+    if (Math.abs(a[0] * a[1] - spec.prod) > 1e-9) return { ok: false, msg: "Those don't multiply to " + fmtNum(spec.prod) + "." };
+    return { ok: false, msg: "They multiply correctly, but they don't add to " + fmtNum(spec.sum) + ". Check the signs." };
+  }
+  function pDeriv(p) {
+    var r = {};
+    Object.keys(p).forEach(function (k) { var t = p[k]; if (t.e.n === 0) return; pAddTerm(r, fadd(t.e, F(-1)), fmul(t.c, t.e)); });
+    return r;
+  }
+  function gradeField(f, input) {
+    if (f.kind === "pair") return gradePair(input, f.spec);
+    if (f.kind === "factor") return gradeFactored(input, f.spec);
+    if (f.kind === "poly") return gradePoly(input, f.spec);
+    if (f.kind === "zeros") return gradeZeros(input, f.spec);
+    return gradeNum(input, f.spec);
+  }
+
+  // ============================================================
+  // Display helpers (plain -> HTML)
+  // ============================================================
+  function plainToHtml(s) {
+    s = String(s);
+    s = s.replace(/\^\(([^)]*)\)/g, function (_, g) { return "<sup>" + g.replace(/-/g, "−") + "</sup>"; });
+    s = s.replace(/\^(-?\d+)/g, function (_, g) { return "<sup>" + g.replace("-", "−") + "</sup>"; });
+    s = s.replace(/([0-9x)>])\s*([+-])\s*(?=[0-9x(])/g, function (_, pre, op) { return pre + " " + (op === "-" ? "\u2212" : "+") + " "; });
+    s = s.replace(/-/g, "−").replace(/\s*=\s*/g, " = ");
+    return s;
+  }
+  function mapPlain(p) {
+    var ts = pTerms(p), out = "";
+    ts.forEach(function (t, i) {
+      var c = t.c, neg = c.n < 0, ac = neg ? fneg(c) : c;
+      var cs = fisInt(ac) ? String(ac.n) : "(" + fstr(ac) + ")";
+      var isConst = t.e.n === 0;
+      var xs = isConst ? "" : (feq(t.e, F(1)) ? "x" : (fisInt(t.e) && t.e.n > 0 ? "x^" + t.e.n : "x^(" + fstr(t.e) + ")"));
+      var body = isConst ? cs : ((feq(ac, F(1)) ? "" : cs) + xs);
+      out += (i === 0 ? (neg ? "-" : "") : (neg ? "-" : "+")) + body;
+    });
+    return out || "0";
+  }
+  function linPlain(a, b) { // (ax+b)
+    var s = (a === 1 ? "" : a === -1 ? "-" : String(a)) + "x";
+    if (b > 0) s += "+" + b; else if (b < 0) s += "-" + (-b);
+    return "(" + s + ")";
+  }
+  function polyPlain(coefs) { // coefs ascending integers
+    var p = {};
+    coefs.forEach(function (c, i) { if (c !== 0) p[String(i)] = { e: F(i), c: F(c) }; });
+    return mapPlain(p);
+  }
+  function coefMul(A, B) { var r = [], i, j; for (i = 0; i < A.length + B.length - 1; i++) r.push(0); for (i = 0; i < A.length; i++) for (j = 0; j < B.length; j++) r[i + j] += A[i] * B[j]; return r; }
+
+  // ============================================================
+  // Random helpers
+  // ============================================================
+  function randInt(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+  function randNZ(min, max) { var v; do { v = randInt(min, max); } while (v === 0); return v; }
+  function randChoice(arr) { return arr[randInt(0, arr.length - 1)]; }
+  function shuffle(arr) { var a = arr.slice(); for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+  function isSquare(n) { if (n < 0) return false; var r = Math.round(Math.sqrt(n)); return r * r === n; }
+  function sgnStr(n) { return n < 0 ? "−" : "+"; }
+  function mn(n) { return String(n).replace("-", "−"); }
+  function ratZero(p, q) { return fnum(F(p, q)); }
+  // ============================================================
+  // Presentation helpers
+  // ============================================================
+  var H = plainToHtml;
+  function mathSpan(h) { return "<span class=\"math\">" + h + "</span>"; }
+  function eqH(l, r) { return H(l) + " = " + H(r); }
+  function par(n) { return n < 0 ? "(" + mn(n) + ")" : String(n); }
+  function fracH(num, den) { return "<span class=\"frac\"><span>" + H(num) + "</span><span>" + H(den) + "</span></span>"; }
+  function zerosStr(list) { return dedupe(list, 1e-9).map(fmtNum).join(", "); }
+  function lead(c) { return c === 1 ? "" : c === -1 ? "-" : String(c); }
+  function xp(k) { return k === 0 ? "" : k === 1 ? "x" : "x^" + k; }
+  function termX(c) { return c === 1 ? "+x" : c === -1 ? "-x" : (c > 0 ? "+" : "-") + Math.abs(c) + "x"; }
+  function SOL(lines) {
+    return "<span class=\"sol-label\">Solution</span>" + lines.map(function (l) {
+      if (l.charAt(0) === "~") return "<div class=\"step note\">" + l.slice(1) + "</div>";
+      if (l.charAt(0) === "=") return "<div class=\"final\">" + l.slice(1) + "</div>";
+      return "<div class=\"step\"><span class=\"math\">" + l + "</span></div>";
+    }).join("");
+  }
+  function linFactor(a, b) { return { plain: linPlain(a, b), zero: F(-b, a) }; }
+  function zpLines(facs) {
+    var lines = ["~Zero-product property: set each factor equal to 0."];
+    facs.forEach(function (f) {
+      var z = fmtNum(fnum(f.zero));
+      lines.push(f.plain === "x" ? "x = 0" : H(f.plain) + " = 0 &nbsp;&rarr;&nbsp; x = " + z);
+    });
+    return lines;
+  }
+  function fFactor(orig, ans, pts) { return { key: "f", label: "Factored form:", kind: "factor", spec: { orig: orig, ans: ans }, pts: pts || 1, ph: "e.g. 3x(x-2)", wide: true }; }
+  function fZeros(list, pts, tol) { return { key: "z", label: "Zeros (comma-separated):", kind: "zeros", spec: { zeros: list, tol: tol || 1e-9 }, pts: pts || 1, ph: "e.g. 0, -2, 5/2" }; }
+
+  // ---- diagnostics (spot the mistake) ----
+  function pickDiagnostic(pool) {
+    var idx = randInt(0, pool.length - 1);
+    var inst = pool[idx].build();
+    var reasons = pool.map(function (a) { return a.reason; });
+    var wrong = reasons.filter(function (_, i) { return i !== idx; });
+    var opts = shuffle([{ text: reasons[idx], correct: true }].concat(wrong.map(function (t) { return { text: t, correct: false }; })));
+    var correctIdx = 0; opts.forEach(function (o, i) { if (o.correct) correctIdx = i; });
+    return { orig: inst.orig, result: inst.result, correctFullStep: inst.correctFullStep, opts: opts, correctIdx: correctIdx };
+  }
+  function diagPart(id, group, pool, goal) {
+    return {
+      id: id, group: group, type: "diag", isPracticeGoal: !!goal, points: 0, pool: pool,
+      gen: function () { return pickDiagnostic(pool); }
+    };
+  }
+  var VALID_REASON = "Valid. Nothing is wrong with this step.";
+
+  // ============================================================
+  // STAGE A: zero-product property
+  // ============================================================
+  function genZP() {
+    for (;;) {
+      var nf = Math.random() < 0.7 ? 2 : 3, facs = [], zs = [], hasX = false, k = randChoice([1, 1, 1, 2, 3, 5]);
+      for (var i = 0; i < nf; i++) {
+        var kind = Math.random();
+        var f;
+        if (kind < 0.25 && !hasX) { f = { plain: "x", zero: F(0) }; hasX = true; }
+        else if (kind < 0.65) { f = linFactor(1, -randNZ(-7, 7)); }
+        else {
+          var b = randInt(2, 4), c = randNZ(-9, 9);
+          if (gcd(b, Math.abs(c)) !== 1) { i--; continue; }
+          f = linFactor(b, c);
+        }
+        facs.push(f);
+      }
+      zs = facs.map(function (f) { return fnum(f.zero); });
+      if (dedupe(zs, 1e-9).length !== zs.length) continue;
+      facs = shuffle(facs);
+      var plain = (k === 1 ? "" : String(k)) + facs.map(function (f) { return f.plain; }).join("");
+      return { plain: plain, facs: facs, zs: zs, k: k };
+    }
+  }
+  var poolA = [
+    { reason: VALID_REASON, build: function () {
+      var r = randInt(1, 8), s = randInt(1, 8);
+      return { orig: eqH(linPlain(1, -r) + linPlain(1, s), "0"), result: "x = " + r + " or x = −" + s };
+    } },
+    { reason: "Sign error: each zero is the opposite sign of the number inside its bracket. (x − 4) is zero at x = +4.", build: function () {
+      var r = randInt(1, 8), s = randInt(1, 8);
+      return { orig: eqH(linPlain(1, -r) + linPlain(1, s), "0"), result: "x = −" + r + " or x = " + s, correctFullStep: "x = " + r + " or x = −" + s };
+    } },
+    { reason: "The zero-product property only works when the product equals 0. Move everything to one side and simplify first.", build: function () {
+      var p = randInt(1, 6), q = randInt(1, 6), c = randChoice([6, 8, 10, 12]);
+      return { orig: eqH(linPlain(1, -p) + linPlain(1, q), String(c)), result: H("x-" + p + " = " + c) + " or " + H("x+" + q + " = " + c),
+        correctFullStep: "multiply out and subtract " + c + ": " + H(polyPlain([-(p * q + c), q - p, 1]) + " = 0") + ", then factor" };
+    } },
+    { reason: "A zero is missing: the factor x all by itself also gives x = 0.", build: function () {
+      var r = randNZ(-9, 9);
+      return { orig: eqH("x" + linPlain(1, -r), "0"), result: "x = " + mn(r), correctFullStep: "x = 0 or x = " + mn(r) };
+    } }
+  ];
+  var PARTS = [];
+  PARTS.push({
+    id: "A1", group: "A", type: "fields", isPracticeGoal: true, points: 3,
+    gen: genZP,
+    prompt: function (s) { return "Solve " + mathSpan(eqH(s.plain, "0")) + ". Type every zero, separated by commas."; },
+    fields: function (s) { return [fZeros(s.zs, 3)]; },
+    solution: function (s) {
+      var lines = zpLines(s.facs);
+      if (s.k !== 1) lines.splice(1, 0, "~The constant " + s.k + " can never be 0, so it gives no zero.");
+      lines.push("=Zeros: x = " + zerosStr(s.zs));
+      return SOL(lines);
+    }
+  });
+  PARTS.push(diagPart("A2", "A", poolA, false));
+
+  // ============================================================
+  // STAGE B: GCF
+  // ============================================================
+  function gcfInfo(origPlain) {
+    var p = expandStr(origPlain), ts = pTerms(p), g = 0, k = 99;
+    ts.forEach(function (t) { g = gcd(g, t.c.n); k = Math.min(k, t.e.n); });
+    var neg = ts[0].c.n < 0, mult = neg ? -g : g;
+    var parts = ts.map(function (t) {
+      var q = fmul(t.c, F(1, mult)), e = t.e.n - k;
+      return { orig: mapPlain((function () { var m = {}; m[String(t.e.n)] = t; return m; })()), div: lead(mult) + xp(k), q: mapPlain((function () { var m = {}; m[String(e)] = { e: F(e), c: q }; return m; })()) };
+    });
+    var inner = {};
+    ts.forEach(function (t) { var e = t.e.n - k; inner[String(e)] = { e: F(e), c: fmul(t.c, F(1, mult)) }; });
+    return { mult: mult, k: k, parts: parts, inner: mapPlain(inner), gcfStr: lead(mult) + xp(k) };
+  }
+  function gcfLines(origPlain, ans) {
+    var gi = gcfInfo(origPlain), lines = [];
+    lines.push("~Biggest number that divides every coefficient: " + Math.abs(gi.mult) + ". Lowest power of x in any term: " + (gi.k === 0 ? "none (x" + "⁰)" : "x" + (gi.k > 1 ? "<sup>" + gi.k + "</sup>" : "")) + (gi.mult < 0 ? ". The leading term is negative, so pull out the negative too." : "."));
+    lines.push("~Divide each term by " + H(gi.gcfStr) + ":");
+    gi.parts.forEach(function (pt) { lines.push(H(pt.orig) + " &divide; " + H(gi.gcfStr) + " = " + H(pt.q)); });
+    lines.push("=" + H(origPlain) + " = " + H(ans));
+    lines.push("~Check: multiply back out and you should get the original.");
+    return lines;
+  }
+  function irreducibleQuad(p, q) { var d = p * p - 4 * q; return d < 0 || !isSquare(d); }
+  function genGCF() {
+    for (;;) {
+      var r = Math.random(), g = randChoice([1, 2, 3, 4, 5, 6, 8]), k = randInt(1, 3), ans, neg = Math.random() < 0.2;
+      var m = neg ? -g : g;
+      if (r < 0.7) {
+        var a = randInt(1, 5), b = randNZ(-9, 9);
+        if (gcd(a, Math.abs(b)) !== 1) continue;
+        ans = lead(m) + xp(k) + linPlain(a, b);
+      } else {
+        var p = randInt(-5, 5), q = randInt(1, 9);
+        if (!irreducibleQuad(p, q)) continue;
+        ans = lead(m) + xp(k) + "(" + polyPlain([q, p, 1]) + ")";
+      }
+      if (g === 1 && k === 0 && !neg) continue;
+      return { ans: ans, orig: mapPlain(expandStr(ans)) };
+    }
+  }
+  var poolB = [
+    { reason: VALID_REASON, build: function () {
+      var g = randChoice([2, 3, 4, 5, 6]), k = randInt(1, 2), a = randInt(1, 4), b = randNZ(-7, 7);
+      if (gcd(a, Math.abs(b)) !== 1) b = (b > 0 ? 1 : -1);
+      var ans = lead(g) + xp(k) + linPlain(a, b);
+      return { orig: H(mapPlain(expandStr(ans))), result: H(ans) };
+    } },
+    { reason: "Not completely factored: a common factor of x is still left inside the brackets.", build: function () {
+      var g = randChoice([2, 3, 4, 5, 6]), a = randInt(1, 4), b = randNZ(-7, 7);
+      if (gcd(a, Math.abs(b)) !== 1) b = (b > 0 ? 1 : -1);
+      var ans = lead(g) + "x^2" + linPlain(a, b), inner = polyPlain([0, b, a]);
+      return { orig: H(mapPlain(expandStr(ans))), result: H(lead(g) + "x(" + inner + ")"), correctFullStep: H(ans) };
+    } },
+    { reason: "One term wasn't divided by the common factor. Every term has to be divided, including the plain number.", build: function () {
+      var g = randChoice([2, 3, 4, 5, 6]), a = randInt(1, 4), b = randNZ(-6, 6);
+      var orig = polyPlain([0, g * b, g * a]);
+      return { orig: H(orig), result: H(g + "x(" + polyPlain([g * b, a]) + ")"), correctFullStep: H(g + "x" + linPlain(a, b)) };
+    } },
+    { reason: "Sign error when pulling out a negative: every sign inside the brackets flips.", build: function () {
+      var g = randChoice([2, 3, 4, 5]), a = randInt(1, 4), b = randInt(1, 7);
+      var orig = polyPlain([0, g * b, -g * a]);
+      return { orig: H(orig), result: H("-" + g + "x" + linPlain(a, b)), correctFullStep: H("-" + g + "x" + linPlain(a, -b)) };
+    } },
+    { reason: "Dividing both sides by x throws away the zero x = 0. Move everything to one side and factor instead.", build: function () {
+      var r = randInt(2, 9), k = randInt(2, 3);
+      return { orig: H(xp(k) + " = " + r + xp(k - 1)), result: "x<sup>" + (k - 1) + "</sup> = " + r + (k - 1 > 1 ? "x" : ""), correctFullStep: H(xp(k - 1) + "(x-" + r + ") = 0") + ", so x = 0 or x = " + r };
+    } }
+  ];
+  PARTS.push({
+    id: "B1", group: "B", type: "fields", isPracticeGoal: true, points: 2,
+    gen: genGCF,
+    prompt: function (s) { return "Factor completely: " + mathSpan(H(s.orig)) + ". Pull out the biggest common factor, including the lowest power of x."; },
+    fields: function (s) { return [fFactor(s.orig, s.ans, 2)]; },
+    solution: function (s) { return SOL(gcfLines(s.orig, s.ans)); }
+  });
+  PARTS.push({
+    id: "B2", group: "B", type: "fields", points: 3,
+    gen: function () {
+      for (;;) {
+        var g = randChoice([2, 3, 4, 5, 6]), k = randInt(1, 2), a = randInt(1, 4), b = randNZ(-9, 9);
+        if (gcd(a, Math.abs(b)) !== 1) continue;
+        var ans = lead(g) + xp(k) + linPlain(a, b), std = mapPlain(expandStr(ans));
+        var flip = b < 0 && Math.random() < 0.45;
+        var shown = std + " = 0";
+        if (flip) shown = lead(g * a) + xp(k + 1) + " = " + (-g * b === 1 ? "" : String(-g * b)) + xp(k);
+        return { ans: ans, std: std, shown: shown, flip: flip, zs: [0, -b / a], a: a, b: b, k: k, g: g };
+      }
+    },
+    prompt: function (s) {
+      return "Solve " + mathSpan(H(s.shown)) + ". " + (s.flip ? "Get 0 on one side, then factor the " + mathSpan(H(s.std) + " = 0") + " version. " : "") + "Never divide by x. That throws away a zero.";
+    },
+    fields: function (s) { return [fFactor(s.std, s.ans, 1), fZeros(s.zs, 2)]; },
+    solution: function (s) {
+      var lines = [];
+      if (s.flip) lines.push("~Move everything to one side: " + H(s.std) + " = 0");
+      lines.push(H(s.std) + " = 0");
+      lines.push(H(s.ans) + " = 0");
+      var facs = [];
+      if (s.k >= 1) facs.push({ plain: "x", zero: F(0) });
+      facs.push(linFactor(s.a, s.b));
+      lines = lines.concat(zpLines(facs));
+      lines.push("=Zeros: x = " + zerosStr(s.zs));
+      return SOL(lines);
+    }
+  });
+  PARTS.push(diagPart("B3", "B", poolB, false));
+
+  // ============================================================
+  // STAGE C: x^2 + bx + c
+  // ============================================================
+  function genMN() {
+    for (;;) {
+      var m = randNZ(-9, 9), n = randNZ(-9, 9);
+      if (m === n || m + n === 0) continue;
+      return { m: m, n: n };
+    }
+  }
+  PARTS.push({
+    id: "C1", group: "C", type: "fields", isPracticeGoal: true, points: 2,
+    gen: function () {
+      var t = genMN();
+      return { m: t.m, n: t.n, b: t.m + t.n, c: t.m * t.n, orig: polyPlain([t.m * t.n, t.m + t.n, 1]), ans: linPlain(1, t.m) + linPlain(1, t.n) };
+    },
+    prompt: function (s) { return "Factor: " + mathSpan(H(s.orig)) + "."; },
+    fields: function (s) { return [fFactor(s.orig, s.ans, 2)]; },
+    solution: function (s) {
+      return SOL([
+        "~Find two numbers that multiply to c = " + mn(s.c) + " and add to b = " + mn(s.b) + ".",
+        mn(s.m) + " &times; " + par(s.n) + " = " + mn(s.c) + " &nbsp;and&nbsp; " + mn(s.m) + " + " + par(s.n) + " = " + mn(s.b),
+        "=" + H(s.orig) + " = " + H(s.ans),
+        "~Check with FOIL: the outer and inner terms should add to " + H(termX(s.b).replace("+", "")) + "."
+      ]);
+    }
+  });
+  PARTS.push({
+    id: "C2", group: "C", type: "fields", points: 3,
+    gen: function () {
+      var t = genMN(), b = t.m + t.n, c = t.m * t.n, v = randInt(1, 3), std = polyPlain([c, b, 1]), shown;
+      if (v === 1) shown = std + " = 0";
+      else if (v === 2) shown = polyPlain([0, b, 1]) + " = " + (-c);
+      else shown = "x^2 = " + (b === 0 ? "" : (-b === 1 ? "" : -b) + "x") + (c === 0 ? "" : (-c > 0 ? "+" : "") + (-c));
+      if (v === 3) { shown = "x^2 = " + mapPlain(expandStr(polyPlain([-c, -b]))); }
+      return { m: t.m, n: t.n, b: b, c: c, std: std, shown: shown, v: v, ans: linPlain(1, t.m) + linPlain(1, t.n), zs: [-t.m, -t.n] };
+    },
+    prompt: function (s) { return "Solve " + mathSpan(H(s.shown)) + (s.v === 1 ? "." : ". Get 0 on one side first; factor the " + mathSpan(H(s.std) + " = 0") + " version.") ; },
+    fields: function (s) { return [fFactor(s.std, s.ans, 1), fZeros(s.zs, 2)]; },
+    solution: function (s) {
+      var lines = [];
+      if (s.v !== 1) lines.push("~Get 0 on one side: " + H(s.std) + " = 0");
+      lines.push("~Numbers that multiply to " + mn(s.c) + " and add to " + mn(s.b) + ": " + mn(s.m) + " and " + mn(s.n));
+      lines.push(H(s.ans) + " = 0");
+      lines = lines.concat(zpLines([linFactor(1, s.m), linFactor(1, s.n)]));
+      lines.push("=Zeros: x = " + zerosStr(s.zs));
+      return SOL(lines);
+    }
+  });
+  PARTS.push(diagPart("C3", "C", [
+    { reason: VALID_REASON, build: function () {
+      var t = genMN();
+      return { orig: H(polyPlain([t.m * t.n, t.m + t.n, 1])), result: H(linPlain(1, t.m) + linPlain(1, t.n)) };
+    } },
+    { reason: "The numbers multiply to the right constant, but they don't add to the middle coefficient. Check the signs.", build: function () {
+      var t = genMN();
+      return { orig: H(polyPlain([t.m * t.n, t.m + t.n, 1])), result: H(linPlain(1, -t.m) + linPlain(1, -t.n)), correctFullStep: H(linPlain(1, t.m) + linPlain(1, t.n)) };
+    } },
+    { reason: "The numbers add to the middle coefficient, but they don't multiply to the constant term.", build: function () {
+      for (;;) {
+        var t = genMN(), m2 = t.m + 1, n2 = t.n - 1;
+        if (m2 === 0 || n2 === 0 || m2 * n2 === t.m * t.n) continue;
+        return { orig: H(polyPlain([t.m * t.n, t.m + t.n, 1])), result: H(linPlain(1, m2) + linPlain(1, n2)), correctFullStep: H(linPlain(1, t.m) + linPlain(1, t.n)) };
+      }
+    } }
+  ], false));
+
+  // ============================================================
+  // STAGE D: ax^2 + bx + c, a != 1
+  // ============================================================
+  function genAC() {
+    for (;;) {
+      var p = randInt(1, 4), r = randInt(1, 4);
+      if (p * r === 1) continue;
+      var q = randNZ(-7, 7), s = randNZ(-7, 7);
+      if (gcd(p, Math.abs(q)) !== 1 || gcd(r, Math.abs(s)) !== 1) continue;
+      if (p === r && q === s) continue;
+      var b = p * s + q * r;
+      if (b === 0) continue;
+      if (p > r) { var t = p; p = r; r = t; t = q; q = s; s = t; }
+      var a = p * r, c = q * s;
+      return { p: p, q: q, r: r, s: s, a: a, b: b, c: c, ac: a * c, m: p * s, n: q * r,
+        orig: polyPlain([c, b, a]), ans: linPlain(p, q) + linPlain(r, s) };
+    }
+  }
+  PARTS.push({
+    id: "D1", group: "D", type: "fields", points: 2,
+    gen: genAC,
+    prompt: function (s) {
+      return "For " + mathSpan(H(s.orig)) + ": a &middot; c = " + mathSpan(mn(s.a) + " &middot; " + par(s.c) + " = " + mn(s.ac)) + " and b = " + mn(s.b) + ". Find the two numbers that <b>multiply to " + mn(s.ac) + "</b> and <b>add to " + mn(s.b) + "</b>.";
+    },
+    fields: function (s) { return [{ key: "p", label: "The two numbers:", kind: "pair", spec: { m: s.m, n: s.n, prod: s.ac, sum: s.b }, pts: 2, ph: "e.g. 3, -8" }]; },
+    solution: function (s) {
+      return SOL([
+        "~Look for factor pairs of " + mn(s.ac) + " whose sum is " + mn(s.b) + " (a negative product means the numbers have opposite signs).",
+        mn(s.m) + " &times; " + par(s.n) + " = " + mn(s.ac) + ", &nbsp;" + mn(s.m) + " + " + par(s.n) + " = " + mn(s.b),
+        "=The numbers are " + mn(s.m) + " and " + mn(s.n)
+      ]);
+    }
+  });
+  function splitLines(s) {
+    var split = (s.a === 1 ? "" : String(s.a)) + "x^2" + termX(s.m) + termX(s.n) + (s.c > 0 ? "+" : "-") + Math.abs(s.c);
+    var g1 = (s.p === 1 ? "" : String(s.p)) + "x" + linPlain(s.r, s.s);
+    var g2 = (s.q > 0 ? "+" : "-") + Math.abs(s.q) + linPlain(s.r, s.s);
+    return [
+      "~Split the middle term using the pair " + mn(s.m) + " and " + mn(s.n) + ":",
+      H(s.orig) + " = " + H(split),
+      "~Group in pairs and factor each pair:",
+      H(g1 + g2),
+      "~Both groups now contain " + H(linPlain(s.r, s.s)) + ". Factor it out:",
+      "=" + H(s.orig) + " = " + H(s.ans)
+    ];
+  }
+  PARTS.push({
+    id: "D2", group: "D", type: "fields", isPracticeGoal: true, points: 3,
+    gen: genAC,
+    prompt: function (s) { return "Factor: " + mathSpan(H(s.orig)) + ". (Use the split-the-middle method from the video.)"; },
+    fields: function (s) { return [fFactor(s.orig, s.ans, 3)]; },
+    solution: function (s) { return SOL(splitLines(s)); }
+  });
+  PARTS.push({
+    id: "D3", group: "D", type: "fields", points: 3,
+    gen: function () {
+      var s = genAC(), gcfx = Math.random() < 0.45;
+      var std = gcfx ? mapPlain(expandStr("x" + s.ans)) : s.orig;
+      var ans = (gcfx ? "x" : "") + s.ans, zs = [-s.q / s.p, -s.s / s.r];
+      if (gcfx) zs.push(0);
+      s.std = std; s.fans = ans; s.zs = zs; s.gcfx = gcfx; return s;
+    },
+    prompt: function (s) { return "Solve " + mathSpan(H(s.std) + " = 0") + (s.gcfx ? ". Look for a common factor first." : ".") ; },
+    fields: function (s) { return [fFactor(s.std, s.fans, 1), fZeros(s.zs, 2)]; },
+    solution: function (s) {
+      var lines = [];
+      if (s.gcfx) lines.push("~Pull out the common factor x first: " + H(s.std) + " = " + H("x(" + s.orig + ")"));
+      lines.push("~Split the middle term with " + mn(s.m) + " and " + mn(s.n) + ", then group: " + H(s.ans));
+      lines.push(H(s.fans) + " = 0");
+      var facs = []; if (s.gcfx) facs.push({ plain: "x", zero: F(0) });
+      facs.push(linFactor(s.p, s.q)); facs.push(linFactor(s.r, s.s));
+      lines = lines.concat(zpLines(facs));
+      lines.push("=Zeros: x = " + zerosStr(s.zs));
+      return SOL(lines);
+    }
+  });
+  PARTS.push(diagPart("D4", "D", [
+    { reason: VALID_REASON, build: function () {
+      var t = genDX();
+      return { orig: H(polyPlain([t.q * t.s, t.p * t.s + t.q * t.r, t.p * t.r])), result: H(linPlain(t.p, t.q) + linPlain(t.r, t.s)) };
+    } },
+    { reason: "Right numbers, wrong pairing. FOIL's outer + inner terms give a different middle coefficient.", build: function () {
+      var t = genDX();
+      return { orig: H(polyPlain([t.q * t.s, t.p * t.s + t.q * t.r, t.p * t.r])), result: H(linPlain(t.p, t.s) + linPlain(t.r, t.q)), correctFullStep: H(linPlain(t.p, t.q) + linPlain(t.r, t.s)) };
+    } },
+    { reason: "The leading coefficient is off. The first terms must multiply to the x² coefficient in the original.", build: function () {
+      var t = genDX();
+      return { orig: H(polyPlain([t.q * t.s, t.p * t.s + t.q * t.r, t.p * t.r])), result: H(linPlain(1, t.q) + linPlain(1, t.s)), correctFullStep: H(linPlain(t.p, t.q) + linPlain(t.r, t.s)) };
+    } },
+    { reason: "Both signs are flipped, which would make the middle term negative. Check with FOIL.", build: function () {
+      var t = genDX();
+      return { orig: H(polyPlain([t.q * t.s, t.p * t.s + t.q * t.r, t.p * t.r])), result: H(linPlain(t.p, -t.q) + linPlain(t.r, -t.s)), correctFullStep: H(linPlain(t.p, t.q) + linPlain(t.r, t.s)) };
+    } }
+  ], false));
+  function genDX() {
+    for (;;) {
+      var p = randInt(1, 4), r = randInt(1, 4), q = randInt(1, 6), s = randInt(1, 6);
+      if (p === r || q === s || gcd(p, q) !== 1 || gcd(r, s) !== 1) continue;
+      return { p: p, q: q, r: r, s: s };
+    }
+  }
+
+  // ============================================================
+  // STAGE E: special patterns
+  // ============================================================
+  PARTS.push({
+    id: "E1", group: "E", type: "fields", isPracticeGoal: true, points: 2,
+    gen: function () {
+      var a, b; do { a = randInt(1, 4); b = randInt(1, 9); } while (gcd(a, b) !== 1);
+      var v = Math.random(), g = 1, rev = false;
+      if (v < 0.35) g = randChoice([2, 3, 5]); else if (v > 0.85) rev = true;
+      var ans;
+      if (rev) { ans = "-" + linPlain(a, -b) + linPlain(a, b); }
+      else ans = (g === 1 ? "" : String(g)) + linPlain(a, -b) + linPlain(a, b);
+      return { a: a, b: b, g: g, rev: rev, ans: ans, orig: mapPlain(expandStr(ans)), origShown: rev ? (b * b) + "-" + (a * a === 1 ? "" : a * a) + "x^2" : mapPlain(expandStr(ans)) };
+    },
+    prompt: function (s) { return "Factor completely: " + mathSpan(H(s.origShown)) + "."; },
+    fields: function (s) { return [fFactor(s.orig, s.ans, 2)]; },
+    solution: function (s) {
+      var lines = [];
+      if (s.g !== 1) lines.push("~Common factor " + s.g + " first: " + H(s.orig) + " = " + H(s.g + "(" + mapPlain(expandStr("(" + s.a + "x)^2-" + (s.b * s.b))) + ")"));
+      if (s.rev) { lines.push("~Pull out −1 so the x² term is positive: " + H(s.origShown) + " = " + H("-(" + mapPlain(expandStr("(" + s.a + "x)^2-" + (s.b * s.b))) + ")")); }
+      lines.push("~Difference of squares: A² − B² = (A − B)(A + B), with A = " + H(lead(s.a) + "x") + " and B = " + s.b + ".");
+      lines.push("=" + H(s.origShown) + " = " + H(s.ans));
+      return SOL(lines);
+    }
+  });
+  PARTS.push({
+    id: "E2", group: "E", type: "fields", points: 2,
+    gen: function () {
+      var a, b; do { a = randInt(1, 4); b = randInt(1, 7); } while (gcd(a, b) !== 1);
+      var sg = randChoice([1, -1]), g = Math.random() < 0.15 ? randChoice([2, 3]) : 1;
+      var ans = (g === 1 ? "" : String(g)) + linPlain(a, sg * b) + "^2";
+      return { a: a, b: b, sg: sg, g: g, ans: ans, orig: mapPlain(expandStr(ans)) };
+    },
+    prompt: function (s) { return "Factor completely: " + mathSpan(H(s.orig)) + ". (Check whether the first and last terms are perfect squares and the middle term is twice their product.)"; },
+    fields: function (s) { return [fFactor(s.orig, s.ans, 2)]; },
+    solution: function (s) {
+      var lines = [];
+      if (s.g !== 1) lines.push("~Common factor " + s.g + " first.");
+      lines.push("~First term: (" + H(lead(s.a) + "x") + ")². Last term: " + s.b + "². Middle term: 2 &middot; " + H(lead(s.a) + "x") + " &middot; " + s.b + " = " + H(termX(2 * s.a * s.b).replace(/^\+/, "")) + " &check;");
+      lines.push("~Perfect square: A² " + (s.sg > 0 ? "+" : "−") + " 2AB + B² = (A " + (s.sg > 0 ? "+" : "−") + " B)²");
+      lines.push("=" + H(s.orig) + " = " + H(s.ans));
+      return SOL(lines);
+    }
+  });
+  PARTS.push({
+    id: "E3", group: "E", type: "fields", points: 3,
+    gen: function () {
+      var v = randInt(1, 3);
+      for (;;) {
+        var a = randInt(1, 4), b = randInt(1, 9);
+        if (gcd(a, b) !== 1) continue;
+        if (v === 1) { // difference of squares, shown rearranged
+          var ans = linPlain(a, -b) + linPlain(a, b), std = mapPlain(expandStr(ans));
+          return { v: v, ans: ans, std: std, shown: (a * a === 1 ? "" : a * a) + "x^2 = " + (b * b), zs: [b / a, -b / a], a: a, b: b };
+        }
+        if (v === 2) { // perfect square, one zero
+          var sg = randChoice([1, -1]); if (a === 1 && b === 1) continue;
+          var ans2 = linPlain(a, sg * b) + "^2", std2 = mapPlain(expandStr(ans2));
+          return { v: v, ans: ans2, std: std2, shown: std2 + " = 0", zs: [-sg * b / a], a: a, b: b, sg: sg };
+        }
+        var ans3 = linPlain(a, -b) + linPlain(a, b), std3 = mapPlain(expandStr(ans3));
+        return { v: v, ans: ans3, std: std3, shown: std3 + " = 0", zs: [b / a, -b / a], a: a, b: b };
+      }
+    },
+    prompt: function (s) {
+      var extra = s.v === 1 ? " Get 0 on one side first." : s.v === 2 ? " (Count the zero once, even though the factor repeats.)" : "";
+      return "Solve " + mathSpan(H(s.shown)) + "." + extra;
+    },
+    fields: function (s) { return [fFactor(s.std, s.ans, 1), fZeros(s.zs, 2)]; },
+    solution: function (s) {
+      var lines = [];
+      if (s.v === 1) lines.push("~Move everything to one side: " + H(s.std) + " = 0");
+      lines.push(H(s.ans) + " = 0");
+      var facs = s.v === 2 ? [linFactor(s.a, s.sg * s.b)] : [linFactor(s.a, -s.b), linFactor(s.a, s.b)];
+      lines = lines.concat(zpLines(facs));
+      lines.push("=Zeros: x = " + zerosStr(s.zs));
+      return SOL(lines);
+    }
+  });
+  PARTS.push(diagPart("E4", "E", [
+    { reason: VALID_REASON, build: function () {
+      var b = randInt(2, 9);
+      if (Math.random() < 0.5) return { orig: H("x^2-" + b * b), result: H("(x-" + b + ")(x+" + b + ")") };
+      return { orig: H("x^2+" + 2 * b + "x+" + b * b), result: H("(x+" + b + ")^2") };
+    } },
+    { reason: "A difference of squares has no middle term. (x − b)² would create one. The pattern is (x − b)(x + b).", build: function () {
+      var b = randInt(2, 9);
+      return { orig: H("x^2-" + b * b), result: H("(x-" + b + ")^2"), correctFullStep: H("(x-" + b + ")(x+" + b + ")") };
+    } },
+    { reason: "A sum of squares doesn't factor over the real numbers. (x + b)(x − b) multiplies to a difference.", build: function () {
+      var b = randInt(2, 9);
+      return { orig: H("x^2+" + b * b), result: H("(x+" + b + ")(x-" + b + ")"), correctFullStep: H("x^2+" + b * b) + " is prime: it can't be factored" };
+    } },
+    { reason: "This is a perfect-square trinomial, so it factors as (x + b)². The (x + b)(x − b) pattern is for a difference with no middle term.", build: function () {
+      var b = randInt(2, 9);
+      return { orig: H("x^2+" + 2 * b + "x+" + b * b), result: H("(x+" + b + ")(x-" + b + ")"), correctFullStep: H("(x+" + b + ")^2") };
+    } },
+    { reason: "Take the square root of the whole first term. For 4x² that is 2x, so both brackets need the 2x.", build: function () {
+      var a = randInt(2, 4), b = randInt(2, 9);
+      if (gcd(a, b) !== 1) b = 1 + a;
+      return { orig: H((a * a) + "x^2-" + b * b), result: H(linPlain(a, -b) + "(x+" + b + ")"), correctFullStep: H(linPlain(a, -b) + linPlain(a, b)) };
+    } }
+  ], false));
+
+  // ============================================================
+  // STAGE F: higher degree
+  // ============================================================
+  PARTS.push({
+    id: "F1", group: "F", type: "fields", isPracticeGoal: true, points: 3,
+    gen: function () {
+      var r = Math.random(), g = randChoice([1, 1, 2, 3, 4]), k = randInt(1, 2), ans, kind;
+      if (r < 0.35) { var b = randInt(1, 6); ans = (g === 1 ? "" : String(g)) + xp(k) + linPlain(1, -b) + linPlain(1, b); kind = "diff"; }
+      else if (r < 0.7) { var t = genMN(); ans = (g === 1 ? "" : String(g)) + xp(k) + linPlain(1, t.m) + linPlain(1, t.n); kind = "tri"; }
+      else if (r < 0.85) { var q = genAC(); ans = (g === 1 ? "" : String(g)) + "x" + q.ans; kind = "ac"; }
+      else { var b2 = randInt(1, 7), sg = randChoice([1, -1]); ans = (g === 1 ? "" : String(g)) + xp(k) + linPlain(1, sg * b2) + "^2"; kind = "sq"; }
+      return { ans: ans, orig: mapPlain(expandStr(ans)), kind: kind };
+    },
+    prompt: function (s) { return "Factor completely: " + mathSpan(H(s.orig)) + ". Start with the GCF, then look at what is left."; },
+    fields: function (s) { return [fFactor(s.orig, s.ans, 3)]; },
+    solution: function (s) {
+      var gi = gcfInfo(s.orig);
+      var lines = ["~Step 1, pull out the GCF " + H(gi.gcfStr) + ": " + H(s.orig) + " = " + H(gi.gcfStr + "(" + gi.inner + ")")];
+      var how = s.kind === "diff" ? "The bracket is a difference of squares." : s.kind === "tri" ? "The bracket is a trinomial: find two numbers that multiply to c and add to b." : s.kind === "ac" ? "The bracket has a leading coefficient other than 1: split the middle term." : "The bracket is a perfect-square trinomial.";
+      lines.push("~Step 2, keep factoring what is left. " + how);
+      lines.push("=" + H(s.orig) + " = " + H(s.ans));
+      return SOL(lines);
+    }
+  });
+  PARTS.push({
+    id: "F2", group: "F", type: "fields", points: 4,
+    gen: function () {
+      if (Math.random() < 0.3) {
+        var t = randInt(1, 3), n4 = Math.pow(t, 4);
+        return { kind: "t4", t: t, orig: "x^4-" + n4, ans: linPlain(1, -t) + linPlain(1, t) + "(x^2+" + t * t + ")", zs: [t, -t] };
+      }
+      var r = randInt(1, 3), s = randInt(r + 1, 4);
+      return { kind: "quad", r: r, s: s, orig: polyPlain([r * r * s * s, 0, -(r * r + s * s), 0, 1]).replace(/^/, ""), ans: linPlain(1, -r) + linPlain(1, r) + linPlain(1, -s) + linPlain(1, s), zs: [r, -r, s, -s] };
+    },
+    prompt: function (s) {
+      return "Factor " + mathSpan(H(s.orig)) + " completely, then find all real zeros of " + mathSpan(H(s.orig) + " = 0") + ". " + (s.kind === "quad" ? "Treat x² as one chunk: " + mathSpan("x<sup>4</sup> = (x<sup>2</sup>)<sup>2</sup>") + "." : "Keep going until nothing factors further.");
+    },
+    fields: function (s) { return [fFactor(s.orig, s.ans, 2), fZeros(s.zs, 2)]; },
+    solution: function (s) {
+      var lines = [];
+      if (s.kind === "quad") {
+        lines.push("~Let u = x². Then " + H(s.orig) + " looks like " + H("u^2-" + (s.r * s.r + s.s * s.s) + "u+" + s.r * s.r * s.s * s.s) + " = " + H("(u-" + s.r * s.r + ")(u-" + s.s * s.s + ")"));
+        lines.push("~Put x² back: " + H("(x^2-" + s.r * s.r + ")(x^2-" + s.s * s.s + ")") + ". Each bracket is a difference of squares:");
+      } else {
+        lines.push("~Difference of squares, twice: " + H("x^4-" + Math.pow(s.t, 4)) + " = " + H("(x^2-" + s.t * s.t + ")(x^2+" + s.t * s.t + ")"));
+        lines.push("~" + H("x^2-" + s.t * s.t) + " splits again. " + H("x^2+" + s.t * s.t) + " is a sum of squares and stays.");
+      }
+      lines.push("=" + H(s.orig) + " = " + H(s.ans));
+      lines.push("~Set each factor to 0." + (s.kind === "t4" ? " " + H("x^2+" + s.t * s.t + " = 0") + " has no real solution." : ""));
+      lines.push("=Real zeros: x = " + zerosStr(s.zs));
+      return SOL(lines);
+    }
+  });
+  PARTS.push({
+    id: "F3", group: "F", type: "fields", points: 4,
+    gen: function () {
+      var a = randNZ(-6, 6), b = randInt(1, 5);
+      var ans = linPlain(1, a) + linPlain(1, -b) + linPlain(1, b);
+      return { a: a, b: b, ans: ans, orig: mapPlain(expandStr(ans)), zs: [-a, b, -b] };
+    },
+    prompt: function (s) { return "Factor " + mathSpan(H(s.orig)) + " by grouping, then find all zeros of " + mathSpan(H(s.orig) + " = 0") + ". (Four terms: group the first two and the last two.)"; },
+    fields: function (s) { return [fFactor(s.orig, s.ans, 2), fZeros(s.zs, 2)]; },
+    solution: function (s) {
+      var b2 = s.b * s.b;
+      var g1 = "x^2" + linPlain(1, s.a), g2 = (b2 === 1 ? "-" : "-" + b2) + linPlain(1, s.a);
+      return SOL([
+        "~Group: " + H("(x^3" + (s.a > 0 ? "+" : "-") + Math.abs(s.a) + "x^2)") + " + " + H("(" + (-b2) + "x" + (-s.a * b2 > 0 ? "+" : "-") + Math.abs(s.a * b2) + ")"),
+        "~Factor each group:",
+        H(g1 + g2),
+        "~Both groups share " + H(linPlain(1, s.a)) + ". Factor it out:",
+        H(linPlain(1, s.a) + "(x^2-" + b2 + ")"),
+        "~Then " + H("x^2-" + b2) + " is a difference of squares:",
+        "=" + H(s.orig) + " = " + H(s.ans),
+        "=Zeros: x = " + zerosStr(s.zs)
+      ]);
+    }
+  });
+  PARTS.push(diagPart("F4", "F", [
+    { reason: VALID_REASON, build: function () {
+      var b = randInt(2, 6), a = randInt(1, 6);
+      if (Math.random() < 0.5) return { orig: H("x^3-" + b * b + "x"), result: H("x(x-" + b + ")(x+" + b + ")") };
+      return { orig: H(polyPlain([-a * b * b, -b * b, a, 1])), result: H("x^2" + linPlain(1, a) + "-" + b * b + linPlain(1, a)) };
+    } },
+    { reason: "The common factor x disappeared. Whatever you pull out has to stay in the final answer as a factor.", build: function () {
+      var b = randInt(2, 6);
+      return { orig: H("x^3-" + b * b + "x"), result: H("(x-" + b + ")(x+" + b + ")"), correctFullStep: H("x(x-" + b + ")(x+" + b + ")") };
+    } },
+    { reason: "Not completely factored: both brackets are still differences of squares and can split again.", build: function () {
+      var r = randInt(1, 3), s = randInt(r + 1, 4);
+      return { orig: H(polyPlain([r * r * s * s, 0, -(r * r + s * s), 0, 1])), result: H("(x^2-" + r * r + ")(x^2-" + s * s + ")"), correctFullStep: H("(x-" + r + ")(x+" + r + ")(x-" + s + ")(x+" + s + ")") };
+    } },
+    { reason: "Sign slip in the second group. Factoring out −b² leaves a bracket that must match the first group exactly.", build: function () {
+      var a = randInt(1, 6), b = randInt(2, 5);
+      return { orig: H(polyPlain([-a * b * b, -b * b, a, 1])), result: H("x^2" + linPlain(1, a) + "-" + b * b + linPlain(1, -a)), correctFullStep: H("x^2" + linPlain(1, a) + "-" + b * b + linPlain(1, a)) };
+    } }
+  ], false));
+
+  // ============================================================
+  // STAGE G: when it won't factor, and calculus-style forms
+  // ============================================================
+  function discCase(kind) {
+    for (var i = 0; i < 4000; i++) {
+      var a = randInt(1, 3), b = randNZ(-9, 9), c = randNZ(-9, 9), d = b * b - 4 * a * c;
+      if (kind === "none" && d < 0) return { a: a, b: b, c: c, d: d, n: 0 };
+      if (kind === "one" && d === 0) return { a: a, b: b, c: c, d: d, n: 1 };
+      if (kind === "rat" && d > 0 && isSquare(d)) return { a: a, b: b, c: c, d: d, n: 2 };
+      if (kind === "irr" && d > 0 && !isSquare(d)) return { a: a, b: b, c: c, d: d, n: 2 };
+    }
+    return { a: 1, b: 4, c: 7, d: -12, n: 0 };
+  }
+  PARTS.push({
+    id: "G1", group: "G", type: "fields", isPracticeGoal: true, points: 2,
+    gen: function () {
+      var s = discCase(randChoice(["none", "one", "rat", "irr"]));
+      s.orig = polyPlain([s.c, s.b, s.a]); return s;
+    },
+    prompt: function (s) { return "For " + mathSpan(H(s.orig) + " = 0") + ", compute the discriminant " + mathSpan("b<sup>2</sup> &minus; 4ac") + " and say how many real zeros there are."; },
+    fields: function (s) {
+      return [{ key: "d", label: "Discriminant:", kind: "num", spec: { value: s.d, hint: "Plug into b² − 4ac. Square b first (it is never negative), then subtract 4ac." }, pts: 1, ph: "number" },
+        { key: "n", label: "Number of real zeros (0, 1 or 2):", kind: "num", spec: { value: s.n, hint: "Negative discriminant: none. Zero: one. Positive: two." }, pts: 1, ph: "0, 1 or 2" }];
+    },
+    solution: function (s) {
+      return SOL([
+        "b² − 4ac = " + par(s.b) + "² − 4(" + s.a + ")(" + par(s.c) + ") = " + mn(s.b * s.b) + " − " + par(4 * s.a * s.c) + " = " + mn(s.d),
+        "~Negative: no real zeros. Zero: exactly one. Positive: two" + (s.d > 0 ? (isSquare(s.d) ? ". It is a perfect square, so this one factors over the integers." : ". It is not a perfect square, so the zeros are irrational and need the quadratic formula.") : "."),
+        "=" + s.n + " real zero" + (s.n === 1 ? "" : "s")
+      ]);
+    }
+  });
+  PARTS.push({
+    id: "G2", group: "G", type: "fields", points: 3,
+    gen: function () { var s = discCase("irr"); s.orig = polyPlain([s.c, s.b, s.a]); var sq = Math.sqrt(s.d); s.zs = [(-s.b + sq) / (2 * s.a), (-s.b - sq) / (2 * s.a)]; return s; },
+    prompt: function (s) { return "This one does not factor over the integers. Use the quadratic formula to solve " + mathSpan(H(s.orig) + " = 0") + ". Round both zeros to 2 decimal places."; },
+    fields: function (s) { return [fZeros(s.zs, 3, 0.011)]; },
+    solution: function (s) {
+      var sq = Math.sqrt(s.d), f = function (v) { return mn((Math.round(v * 100) / 100).toFixed(2)); };
+      return SOL([
+        "a = " + mn(s.a) + ", &nbsp;b = " + mn(s.b) + ", &nbsp;c = " + mn(s.c),
+        "x = (−b ± √(b² − 4ac)) / 2a = (" + mn(-s.b) + " ± √" + s.d + ") / " + 2 * s.a,
+        "~√" + s.d + " ≈ " + sq.toFixed(3),
+        "x ≈ " + f(s.zs[0]) + " &nbsp;or&nbsp; x ≈ " + f(s.zs[1]),
+        "=Zeros: x ≈ " + f(s.zs[0]) + ", " + f(s.zs[1])
+      ]);
+    }
+  });
+  var EXPS = [[1, 2], [1, 3], [2, 3], [-1, 2], [-1, 3], [-2, 3], [-1, 1], [-2, 1], [3, 2]];
+  function expStr(e) { return e[1] === 1 ? String(e[0]) : e[0] + "/" + e[1]; }
+  PARTS.push({
+    id: "G3", group: "G", type: "fields", points: 4,
+    gen: function () {
+      for (;;) {
+        var e = randChoice(EXPS), c = randChoice([1, 2, 3, 4, 5, 6]), a = randInt(1, 3), b = randNZ(-8, 8);
+        if (gcd(a, Math.abs(b)) !== 1) continue;
+        var zero = -b / a, evenDen = e[1] === 2;
+        if (evenDen && zero <= 0) continue;
+        var ans = (c === 1 ? "" : String(c)) + "x^(" + expStr(e) + ")" + linPlain(a, b);
+        var orig = mapPlain(expandStr(ans));
+        return { e: e, c: c, a: a, b: b, ans: ans, orig: orig, zs: [zero] };
+      }
+    },
+    prompt: function (s) {
+      return "The derivative of some function is " + mathSpan("f&prime;(x) = " + H(s.orig)) + ". Factor out the <b>smallest power of x</b> (and the common number), then find where f&prime;(x) = 0.";
+    },
+    fields: function (s) {
+      var f = fFactor(s.orig, s.ans, 2); f.ph = "e.g. 3x^(-1/2)(x-2)";
+      return [f, fZeros(s.zs, 2)];
+    },
+    solution: function (s) {
+      var gi = (s.c === 1 ? "" : String(s.c)) + "x^(" + expStr(s.e) + ")";
+      return SOL([
+        "~Smallest exponent is " + mn(expStr(s.e)) + ". The common number is " + s.c + ". Pull out " + H(gi) + " (subtract exponents to see what is left behind):",
+        H(s.orig) + " = " + H(s.ans),
+        "~Set each factor to 0. " + H("x^(" + expStr(s.e) + ")") + " can never be 0 (it is a power of x), so it gives no zero.",
+        H(linPlain(s.a, s.b)) + " = 0 &nbsp;&rarr;&nbsp; x = " + fmtNum(s.zs[0]),
+        "=Zero: x = " + fmtNum(s.zs[0]),
+        s.e[0] < 0 ? "~Note: f′ is undefined at x = 0. If x = 0 is in the domain of f, that is also a critical number." : "~Check the domain of f before calling this a critical number."
+      ]);
+    }
+  });
+  function genQuot() {
+    for (;;) {
+      var r1 = randInt(-5, 5), r2 = randInt(-5, 5), a = randChoice([1, 1, 2, 3]);
+      if (r1 === r2) continue;
+      var dn = randChoice(["lin", "lin", "quad"]), d = randInt(-4, 4);
+      if (dn === "lin" && (d === r1 || d === r2)) continue;
+      var ans = (a === 1 ? "" : String(a)) + (r1 === 0 ? "x" : linPlain(1, -r1)) + (r2 === 0 ? "x" : linPlain(1, -r2));
+      var den = dn === "lin" ? linPlain(1, -d) + "^2" : "(x^2+" + randInt(1, 5) + ")^2";
+      return { ans: ans, num: mapPlain(expandStr(ans)), den: den, dn: dn, d: d, zs: [r1, r2], undef: dn === "lin" ? [d] : [] };
+    }
+  }
+  PARTS.push({
+    id: "G4", group: "G", type: "fields", points: 4,
+    gen: genQuot,
+    prompt: function (s) {
+      return "After the quotient rule, " + mathSpan("f&prime;(x) = " + fracH(s.num, s.den)) + ". Factor the numerator completely, find every zero of f&prime;, and list any x-values where f&prime; is undefined (type <i>none</i> if there are none).";
+    },
+    fields: function (s) {
+      var f = fFactor(s.num, s.ans, 1); f.label = "Numerator, factored:";
+      var u = fZeros(s.undef, 1); u.key = "u"; u.label = "f′ undefined at x =";
+      return [f, fZeros(s.zs, 2), u];
+    },
+    solution: function (s) {
+      return SOL([
+        "~A fraction is 0 only when its <b>numerator</b> is 0 (and the denominator isn't). Factor the numerator:",
+        H(s.num) + " = " + H(s.ans),
+        "~Set each factor to 0:",
+        "=Zeros of f′: x = " + zerosStr(s.zs),
+        s.dn === "lin" ? "~The denominator " + H(s.den) + " is 0 at x = " + s.d + ", so f′ is undefined there. That value is not one of the zeros." : "~The denominator " + H(s.den) + " is never 0 (x² + k is always positive), so f′ is never undefined."
+      ]);
+    }
+  });
+  PARTS.push(diagPart("G5", "G", [
+    { reason: VALID_REASON, build: function () {
+      if (Math.random() < 0.5) {
+        var r = randInt(2, 7), d = randInt(-4, 4); if (d === 0 || d === r) d = r + 1;
+        return { orig: fracH("x(x-" + r + ")", "(x-" + d + ")^2") + " = 0", result: "x = 0 or x = " + r };
+      }
+      var r2 = randInt(2, 8);
+      return { orig: H("3x^(-1/2)(x-" + r2 + ") = 0"), result: "x = " + r2 };
+    } },
+    { reason: "A fraction equals 0 only when its numerator does. Set the numerator equal to 0. Don't multiply the denominator across.", build: function () {
+      var k = randInt(2, 6), d = randInt(1, 5);
+      return { orig: fracH("x^2-" + k * k, "x-" + d) + " = 0", result: H("x^2-" + k * k + " = x-" + d), correctFullStep: H("x^2-" + k * k + " = 0") + ", so x = " + k + " or x = −" + k };
+    } },
+    { reason: "x = d makes the denominator 0, so f′ is undefined there. It can't be a zero.", build: function () {
+      var d = randInt(1, 6), t = randInt(1, 6);
+      return { orig: fracH("(x-" + d + ")(x+" + t + ")", "(x-" + d + ")^2") + " = 0", result: "x = " + d + " or x = −" + t, correctFullStep: "x = −" + t + " only (f′ is undefined at x = " + d + ")" };
+    } },
+    { reason: "A power like x^(−1/2) = 1/√x is never 0. Only the other factor can give a zero.", build: function () {
+      var r = randInt(2, 8);
+      return { orig: H("3x^(-1/2)(x-" + r + ") = 0"), result: "x = 0 or x = " + r, correctFullStep: "x = " + r + " only" };
+    } }
+  ], false));
+
+  // ============================================================
+  // STAGE H: critical-point exam
+  // ============================================================
+  function derivPlain(fPlain) { return mapPlain(pDeriv(expandStr(fPlain))); }
+  function genQ1() {
+    for (;;) {
+      var r = randInt(-4, 4), s = randInt(-4, 4), m = randChoice([1, 1, 2]);
+      if (r === s || (m * (r + s)) % 2 !== 0) continue;
+      var C = randNZ(-9, 9);
+      var f = polyPlain([C, 3 * m * r * s, -(3 * m * (r + s)) / 2, m]);
+      var ans = (3 * m) + (r === 0 ? "x" : linPlain(1, -r)) + (s === 0 ? "x" : linPlain(1, -s));
+      return { f: f, fp: derivPlain(f), ans: ans, zs: [r, s] };
+    }
+  }
+  function genQ2() {
+    var t = randInt(1, 3), f, ans, zs;
+    if (t === 1) { var k = randInt(1, 4); f = polyPlain([randNZ(-9, 9), 0, -2 * k * k, 0, 1]); ans = "4x" + linPlain(1, -k) + linPlain(1, k); zs = [0, k, -k]; }
+    else if (t === 2) { var m = randNZ(-5, 5); f = polyPlain([randNZ(-9, 9), 0, 0, -4 * m, 3]); ans = "12x^2" + linPlain(1, -m); zs = [0, m]; }
+    else { var k2 = randInt(1, 2); f = polyPlain([randNZ(-9, 9), -5 * Math.pow(k2, 4), 0, 0, 0, 1]); ans = "5" + linPlain(1, -k2) + linPlain(1, k2) + "(x^2+" + k2 * k2 + ")"; zs = [k2, -k2]; }
+    return { f: f, fp: derivPlain(f), ans: ans, zs: zs };
+  }
+  function genQ3() {
+    for (var t = 0; t < 5000; t++) {
+      var A = randInt(1, 3), B = randInt(-6, 6), C = randInt(-10, 10), D = randNZ(-9, 9);
+      var al = 3 * A, be = 2 * B, ga = C, disc = be * be - 4 * al * ga;
+      if (disc <= 0 || !isSquare(disc)) continue;
+      var sq = Math.round(Math.sqrt(disc)), r1 = F(-be + sq, 2 * al), r2 = F(-be - sq, 2 * al);
+      if (feq(r1, r2) || (r1.d === 1 && r2.d === 1)) continue;
+      var K = F(al, r1.d * r2.d);
+      if (!fisInt(K)) continue;
+      var fac = function (r) { return r.n === 0 ? "x" : linPlain(r.d, -r.n); };
+      var ans = lead(K.n) + fac(r1) + fac(r2);
+      var f = polyPlain([D, C, B, A]);
+      return { f: f, fp: derivPlain(f), ans: ans, zs: [fnum(r1), fnum(r2)] };
+    }
+    throw new Error("Q3 generator failed");
+  }
+  function genQ4() {
+    if (Math.random() < 0.5) {
+      var r = randInt(1, 6), t = randChoice([1, 2]);
+      var f = (2 * t) + "x^(3/2)-" + (6 * r * t) + "x^(1/2)";
+      return { f: f, fp: derivPlain(f), ans: (3 * t) + "x^(-1/2)" + linPlain(1, -r), zs: [r], dom: "x > 0" };
+    }
+    var b = randChoice([-8, -6, -4, -2, 2, 4, 6, 8]);
+    var f2 = "3x^(5/3)" + (b < 0 ? "-" : "+") + Math.abs(3 * b / 2) + "x^(2/3)";
+    return { f: f2, fp: derivPlain(f2), ans: "x^(-1/3)" + linPlain(5, b), zs: [-b / 5], dom: "all real x" };
+  }
+  function genQ5() {
+    for (;;) {
+      var a = randChoice([1, 1, 2]), d = randInt(-4, 4), u = randInt(1, 4), b = randInt(-6, 6);
+      var c = -a * (d * d - u * u) - b * d;
+      if (Math.abs(c) > 30) continue;
+      var P = polyPlain([c, b, a]);
+      var r1 = d + u, r2 = d - u;
+      var fac = function (r) { return r === 0 ? "x" : linPlain(1, -r); };
+      var ans = lead(a) + fac(r1) + fac(r2);
+      var N = polyPlain(coefMul([-d, 1], [b, 2 * a]).map(function (v, i) { return v - [c, b, a][i]; }));
+      return { P: P, d: d, ans: ans, N: N, zs: [r1, r2] };
+    }
+  }
+  function examPart(id, points, genFn, build) {
+    return { id: id, group: "H", type: "fields", points: points, gen: genFn, prompt: build.prompt, fields: build.fields, solution: build.solution };
+  }
+  function derivSolutionLines(s) {
+    return ["~Differentiate term by term (power rule):", "f′(x) = " + H(s.fp), "~Factor f′(x) completely:", H(s.fp) + " = " + H(s.ans), "~Set each factor to 0:"];
+  }
+  var stdFields = function (s) {
+    var d = { key: "d", label: "f′(x) =", kind: "poly", spec: { orig: s.fp }, pts: 2, ph: "e.g. 3x^2-6x", wide: true };
+    var f = fFactor(s.fp, s.ans, 2); f.label = "f′(x) factored:";
+    var z = fZeros(s.zs, 2); z.label = "Critical numbers x =";
+    return [d, f, z];
+  };
+  PARTS.push(examPart("H1", 6, genQ1, {
+    prompt: function (s) { return "Let " + mathSpan("f(x) = " + H(s.f)) + ". Find f&prime;(x), factor it completely, and list the critical numbers (where f&prime;(x) = 0)."; },
+    fields: stdFields,
+    solution: function (s) { return SOL(derivSolutionLines(s).concat(["=Critical numbers: x = " + zerosStr(s.zs)])); }
+  }));
+  PARTS.push(examPart("H2", 6, genQ2, {
+    prompt: function (s) { return "Let " + mathSpan("f(x) = " + H(s.f)) + ". Find f&prime;(x), factor it completely, and list the critical numbers."; },
+    fields: stdFields,
+    solution: function (s) { return SOL(derivSolutionLines(s).concat(["=Critical numbers: x = " + zerosStr(s.zs), "~Any factor like x² + k (k > 0) never equals 0, so it adds no real critical number."])); }
+  }));
+  PARTS.push(examPart("H3", 6, genQ3, {
+    prompt: function (s) { return "Let " + mathSpan("f(x) = " + H(s.f)) + ". Find f&prime;(x), factor it completely (the leading coefficient won't be 1), and list the critical numbers."; },
+    fields: stdFields,
+    solution: function (s) { return SOL(derivSolutionLines(s).concat(["~For a bracket like " + H("(3x+2)") + ", the zero is x = −2/3.", "=Critical numbers: x = " + zerosStr(s.zs)])); }
+  }));
+  PARTS.push(examPart("H4", 6, genQ4, {
+    prompt: function (s) { return "Let " + mathSpan("f(x) = " + H(s.f)) + " (domain: " + s.dom + "). Find f&prime;(x), factor out the smallest power of x, and list the critical numbers where f&prime;(x) = 0."; },
+    fields: stdFields,
+    solution: function (s) { return SOL(derivSolutionLines(s).concat(["~The power of x can never be 0, so only the other bracket gives a zero.", "=Critical number: x = " + zerosStr(s.zs)])); }
+  }));
+  PARTS.push(examPart("H5", 6, genQ5, {
+    prompt: function (s) {
+      return "Let " + mathSpan("f(x) = " + fracH(s.P, linPlain(1, -s.d).replace(/^\((.*)\)$/, "$1"))) + ". The quotient rule gives " + mathSpan("f&prime;(x) = " + fracH("N(x)", linPlain(1, -s.d).replace(/^\((.*)\)$/, "($1)^2"))) + ". Find the numerator N(x) in simplified form and factor it, then list the critical numbers (zeros of N that are in the domain of f).";
+    },
+    fields: function (s) {
+      var n = fFactor(s.N, s.ans, 3); n.label = "N(x) factored:";
+      var z = fZeros(s.zs, 3); z.label = "Critical numbers x =";
+      return [n, z];
+    },
+    solution: function (s) {
+      var pPr = mapPlain(pDeriv(expandStr(s.P))), den = (s.d === 0 ? "x" : "x" + (s.d > 0 ? "-" : "+") + Math.abs(s.d));
+      return SOL([
+        "~Quotient rule numerator: (top)&prime; &middot; (bottom) &minus; (top) &middot; (bottom)&prime;",
+        "N(x) = (" + H(pPr) + ")(" + H(den) + ") &minus; (" + H(s.P) + ")(1)",
+        "N(x) = " + H(s.N),
+        "~Factor:",
+        H(s.N) + " = " + H(s.ans),
+        "=Critical numbers: x = " + zerosStr(s.zs),
+        "~x = " + s.d + " makes the denominator 0, so f isn't defined there. It is never a critical number."
+      ]);
+    }
+  }));
+  // ============================================================
+  // Stage metadata
+  // ============================================================
+  var KA = "https://www.khanacademy.org/math/";
+  var STAGES = [
+    { key: "A", label: "1. Zero-Product" },
+    { key: "B", label: "2. GCF" },
+    { key: "C", label: "3. x² + bx + c" },
+    { key: "D", label: "4. ax² + bx + c" },
+    { key: "E", label: "5. Patterns" },
+    { key: "F", label: "6. Higher Degree" },
+    { key: "G", label: "7. Calc Forms" },
+    { key: "H", label: "8. Critical-Point Exam" }
+  ];
+  var GROUP_META = {
+    A: {
+      num: "Stage 1", title: "The Zero-Product Property",
+      desc: "Every critical-point problem ends the same way: a product equals <strong>0</strong>, so at least one factor must be 0. Set <em>each factor</em> equal to 0 and solve. It only works when the other side is exactly 0 &mdash; never when it equals 5 or any other number.",
+      videos: [{ url: "https://khanacademy.org/math/algebra-2018/quadratics/solving-quadratic-equations-by-factoring/v/example-1-solving-a-quadratic-equation-by-factoring", label: "Solving by factoring" }]
+    },
+    B: {
+      num: "Stage 2", title: "Greatest Common Factor",
+      desc: "Always look here first. Pull out the biggest number that divides every coefficient <em>and</em> the lowest power of x that appears in every term. Never divide both sides by x: that throws away the zero x = 0.",
+      videos: [
+        { url: KA + "algebra/x2f8bb11595b61c86:quadratics-multiplying-factoring/x2f8bb11595b61c86:factor-quadratics-intro/v/factor-completely-common-factor", label: "Factoring with a common factor" },
+        { url: KA + "algebra2/x2ec2f6f830c9fb89:poly-graphs/x2ec2f6f830c9fb89:poly-zeros/v/polynomial-zeros-common-factor", label: "Zeros with a common factor" }
+      ]
+    },
+    C: {
+      num: "Stage 3", title: "Trinomials with Leading Coefficient 1",
+      desc: "For x&sup2; + bx + c, find two numbers that <strong>multiply to c</strong> and <strong>add to b</strong>. Same signs in the brackets when c is positive; opposite signs when c is negative. Check by multiplying back out.",
+      videos: [{ url: KA + "get-ready-for-ap-calc/xa350bf684c056c5c:get-ready-for-limits-and-continuity/xa350bf684c056c5c:factoring-quadratics-intro/v/factoring-simple-quadratic-expression", label: "Factoring (x + a)(x + b)" }]
+    },
+    D: {
+      num: "Stage 4", title: "Trinomials with Leading Coefficient Not 1",
+      desc: "Multiply a &middot; c, find the pair that multiplies to <strong>ac</strong> and adds to <strong>b</strong>, split the middle term with that pair, then factor by grouping. The two groups must leave the <em>same</em> bracket behind.",
+      videos: [
+        { url: KA + "algebra2/polynomial-functions/factoring-polynomials-quadratic-forms-alg2/v/factor-by-grouping-and-factoring-completely", label: "Intro to grouping" },
+        { url: KA + "algebra2/polynomial-functions/factoring-polynomials-quadratic-forms-alg2/v/factoring-trinomials-by-grouping-6", label: "Negative common factor + grouping" }
+      ]
+    },
+    E: {
+      num: "Stage 5", title: "Special Patterns",
+      desc: "Two shortcuts show up constantly. <strong>Difference of squares:</strong> A&sup2; &minus; B&sup2; = (A &minus; B)(A + B). <strong>Perfect square:</strong> A&sup2; &plusmn; 2AB + B&sup2; = (A &plusmn; B)&sup2;. Spot them and you skip the guess-and-check.",
+      videos: [
+        { url: KA + "math3/x5549cc1686316ba5:factorization/x5549cc1686316ba5:factor-using-structure/v/factoring-difference-of-squares", label: "Difference of squares" },
+        { url: KA + "algebra/x2f8bb11595b61c86:quadratics-multiplying-factoring/x2f8bb11595b61c86:factor-perfect-squares/v/identifying-perfect-square-trinomials", label: "Perfect-square trinomials" }
+      ]
+    },
+    F: {
+      num: "Stage 6", title: "Higher-Degree Polynomials",
+      desc: "Cubics and quartics are the same skills stacked: GCF first, then trinomial or pattern, then keep going until nothing factors. Four terms? Try grouping. x&#8308; &minus; 5x&sup2; + 4 is a trinomial in disguise: let u = x&sup2;.",
+      videos: [{ url: KA + "algebra2/x2ec2f6f830c9fb89:poly-graphs/x2ec2f6f830c9fb89:poly-zeros/v/polynomial-zeros-grouping", label: "Zeros by grouping" }]
+    },
+    G: {
+      num: "Stage 7", title: "When It Won't Factor, and Calculus-Style Forms",
+      desc: "Not every quadratic factors over the integers: the discriminant b&sup2; &minus; 4ac tells you before you waste time, and the quadratic formula always works. Derivatives also hand you fractional and negative exponents (pull out the <em>smallest</em> power) and fractions (set the <em>numerator</em> to 0, then check the denominator).",
+      videos: [
+        { url: KA + "algebra/quadratics/solving-quadratics-using-the-quadratic-formula/v/using-the-quadratic-formula", label: "The quadratic formula" },
+        { url: KA + "get-ready-for-algebra-ii/x6e4201668896ef07:get-ready-for-equations/x6e4201668896ef07:the-quadratic-formula/v/quadratic-formula-3", label: "Number of solutions" }
+      ]
+    },
+    H: {
+      num: "Stage 8", title: "Critical-Point Exam",
+      desc: "The real thing: differentiate, factor f&prime;(x) completely, and list the critical numbers. Points are awarded for each part. Your exam score locks in on the first check of each question (or if you peek at the solution first) &mdash; everything after that is just practice. Use &ldquo;Reset exam&rdquo; for a fresh attempt.",
+      videos: []
+    }
+  };
+  var TITLES = {
+    A1: "Solve it", A2: "What went wrong?", B1: "Factor out the GCF", B2: "Solve it", B3: "What went wrong?",
+    C1: "Factor it", C2: "Solve it", C3: "What went wrong?", D1: "Find the pair", D2: "Factor it", D3: "Solve it", D4: "What went wrong?",
+    E1: "Difference of squares", E2: "Perfect squares", E3: "Solve it", E4: "What went wrong?",
+    F1: "GCF first, then keep going", F2: "Quadratic form", F3: "Four terms: grouping", F4: "What went wrong?",
+    G1: "Discriminant", G2: "Quadratic formula", G3: "Smallest power of x", G4: "Numerator = 0", G5: "What went wrong?",
+    H1: "Question 1", H2: "Question 2", H3: "Question 3", H4: "Question 4", H5: "Question 5"
+  };
+
+  // ============================================================
+  // Stage nav
+  // ============================================================
+  function buildStageNav() {
+    document.getElementById("stageNav").innerHTML = STAGES.map(function (s) {
+      return "<span class=\"stage-pill\" id=\"pill-" + s.key + "\"><span class=\"dot\"></span>" + s.label + "</span>";
+    }).join("");
+  }
+  function markStageDone(key) { var p = document.getElementById("pill-" + key); if (p) p.classList.add("done"); }
+  function groupHeadHtml(meta) {
+    var v = meta.videos.length ? "<div class=\"video-row\">" + meta.videos.map(function (x) {
+      return "<a class=\"icon-btn video-btn\" href=\"" + x.url + "\" target=\"_blank\" rel=\"noopener\">" + SVG_PLAY + "Watch: " + x.label + "</a>";
+    }).join("") + "</div>" : "";
+    return "<div class=\"gnum\">" + meta.num + "</div><div class=\"gtitle\">" + meta.title + "</div><div class=\"gdesc\">" + meta.desc + "</div>" + v;
+  }
+
+  // ============================================================
+  // Card engine
+  // ============================================================
+  var examScoreMap = {}, practiceScoreMap = {}, examCardRenders = [];
+  var HPARTS = PARTS.filter(function (p) { return p.group === "H"; });
+  var H_TOTAL = HPARTS.reduce(function (sum, p) { return sum + p.points; }, 0);
+  function updateHScores() {
+    var ep = 0, ee = 0; Object.keys(practiceScoreMap).forEach(function (k) { ep += practiceScoreMap[k]; }); Object.keys(examScoreMap).forEach(function (k) { ee += examScoreMap[k]; });
+    var a = document.getElementById("hScoreNum"), b = document.getElementById("hExamScoreNum");
+    if (a) a.textContent = ep + " / " + H_TOTAL; if (b) b.textContent = ee + " / " + H_TOTAL;
+  }
+  function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+
+  function mountCard(part, container, isExam) {
+    var card = document.createElement("div");
+    card.className = "qcard"; card.setAttribute("data-id", part.id);
+    var left = isExam
+      ? "<span class=\"qlabel\">" + TITLES[part.id] + "</span><span class=\"qpoints\">" + part.points + " pts</span><span class=\"exam-badge hidden\"></span>"
+      : "<span class=\"qlabel\">" + TITLES[part.id] + "</span>";
+    card.innerHTML =
+      "<div class=\"qcard-head\"><div class=\"qtitle\">" + left + "</div>" +
+      "<button class=\"icon-btn new-version-btn\" type=\"button\">" + SVG_REFRESH + "New version</button></div>" +
+      "<div class=\"qprompt\"></div><div class=\"qinputs qfields\"></div>" +
+      "<div class=\"qactions\"><button class=\"btn-primary check-btn\" type=\"button\">Check Answer</button><button class=\"btn-secondary solution-btn\" type=\"button\">Show Solution</button></div>" +
+      "<div class=\"qfeedback hidden\"></div><div class=\"qsolution hidden\"></div>";
+    container.appendChild(card);
+    var promptEl = card.querySelector(".qprompt"), inputsEl = card.querySelector(".qinputs"),
+      fbEl = card.querySelector(".qfeedback"), solEl = card.querySelector(".qsolution"), badgeEl = card.querySelector(".exam-badge");
+    var state, fields, examAttempted = false;
+
+    function lockExam(pts, note) {
+      if (examAttempted) return; examAttempted = true; examScoreMap[part.id] = pts;
+      badgeEl.className = "exam-badge " + (pts >= part.points ? "exam-good" : "exam-bad");
+      badgeEl.innerHTML = SVG_LOCK + " Exam: " + pts + "/" + part.points + (note ? " (" + note + ")" : "");
+      updateHScores(); markStageDone("H");
+    }
+    function renderFields() {
+      if (part.type === "diag") {
+        promptEl.innerHTML = "<div class=\"step-pair\"><span class=\"math\">" + state.orig + "</span><span class=\"arrow\">&rarr;</span><span class=\"math\">" + state.result + "</span></div>" +
+          "<div style=\"margin-top:10px\">A student wrote this. Is the step valid? If not, what went wrong?</div>";
+        inputsEl.className = "qinputs";
+        inputsEl.innerHTML = "<div class=\"mc-row\">" + state.opts.map(function (o, i) { return "<button type=\"button\" class=\"mc-opt\" data-val=\"" + i + "\">" + o.text + "</button>"; }).join("") + "</div>";
+        var opts = inputsEl.querySelectorAll(".mc-opt");
+        opts.forEach(function (b) { b.addEventListener("click", function () { opts.forEach(function (x) { x.classList.remove("selected"); }); b.classList.add("selected"); }); });
+        return;
+      }
+      promptEl.innerHTML = part.prompt(state);
+      fields = part.fields(state);
+      inputsEl.className = "qinputs qfields";
+      inputsEl.innerHTML = fields.map(function (f) {
+        var pv = (f.kind === "factor" || f.kind === "poly") ? "<div class=\"fpreview\" data-pv=\"" + f.key + "\"></div>" : "";
+        return "<div class=\"frow\"><label class=\"flabel\">" + f.label + (isExam ? " <span class=\"fpts\">" + f.pts + " pt" + (f.pts > 1 ? "s" : "") + "</span>" : "") + "</label>" +
+          "<input type=\"text\" class=\"fin" + (f.wide ? " wide" : "") + "\" data-key=\"" + f.key + "\" autocomplete=\"off\" autocapitalize=\"off\" autocorrect=\"off\" spellcheck=\"false\" placeholder=\"" + esc(f.ph || "") + "\" aria-label=\"" + esc(f.label) + "\">" + pv + "</div>";
+      }).join("");
+      inputsEl.querySelectorAll("input").forEach(function (inp) {
+        inp.addEventListener("input", function () {
+          var pv = inputsEl.querySelector("[data-pv=\"" + inp.getAttribute("data-key") + "\"]");
+          if (pv) pv.innerHTML = inp.value.trim() ? "Reads as: <span class=\"math\">" + plainToHtml(inp.value.replace(/\s+/g, "").replace(/[−]/g, "-")) + "</span>" : "";
+        });
+        inp.addEventListener("keydown", function (e) { if (e.key === "Enter") { e.preventDefault(); card.querySelector(".check-btn").click(); } });
+      });
+    }
+    function render() {
+      state = part.gen(); renderFields();
+      fbEl.classList.add("hidden"); fbEl.innerHTML = ""; solEl.classList.add("hidden"); solEl.innerHTML = "";
+      if (isExam) { practiceScoreMap[part.id] = 0; updateHScores(); }
+    }
+    if (isExam) examCardRenders.push(function () { examAttempted = false; badgeEl.className = "exam-badge hidden"; badgeEl.innerHTML = ""; render(); });
+
+    card.querySelector(".new-version-btn").addEventListener("click", render);
+    card.querySelector(".check-btn").addEventListener("click", function () {
+      var pts = 0, allOk, html = "";
+      if (part.type === "diag") {
+        var sel = inputsEl.querySelector(".mc-opt.selected");
+        if (!sel) { fbEl.className = "qfeedback bad"; fbEl.innerHTML = SVG_X + " Pick an answer first."; return; }
+        allOk = parseInt(sel.getAttribute("data-val"), 10) === state.correctIdx;
+        fbEl.className = "qfeedback " + (allOk ? "good" : "bad");
+        fbEl.innerHTML = allOk ? SVG_CHECK + " Correct!" : SVG_X + " Not quite. Check the solution below.";
+        if (allOk && part.isPracticeGoal) markStageDone(part.group);
+        return;
+      }
+      var anyText = false; inputsEl.querySelectorAll("input").forEach(function (i) { if (i.value.trim()) anyText = true; });
+      if (!anyText) { fbEl.classList.remove("hidden"); fbEl.className = "qfeedback bad"; fbEl.innerHTML = SVG_X + " Type an answer first."; return; }
+      allOk = true; var unread = false, detail = [];
+      fields.forEach(function (f) {
+        var inp = inputsEl.querySelector("input[data-key=\"" + f.key + "\"]"), r = gradeField(f, inp.value);
+        if (r.ok) { pts += f.pts; inp.classList.remove("wrong"); inp.classList.add("right"); detail.push("<div class=\"fres ok\">" + SVG_CHECK + "<span>" + f.label.replace(/\s*[:=]\s*$/, "") + "</span></div>"); }
+        else { allOk = false; if (r.unread) unread = true; inp.classList.remove("right"); inp.classList.add("wrong"); detail.push("<div class=\"fres bad\">" + SVG_X + "<span><b>" + f.label.replace(/\s*[:=]\s*$/, "") + "</b> " + (r.msg ? "&mdash; " + esc(r.msg) : "") + "</span></div>"); }
+      });
+      fbEl.classList.remove("hidden");
+      var head;
+      if (allOk) head = SVG_CHECK + " Correct!" + (isExam ? " " + pts + "/" + part.points + " pts" : "");
+      else if (isExam) head = SVG_X + " " + pts + "/" + part.points + " pts. Not everything is right yet.";
+      else head = SVG_X + " Not quite.";
+      fbEl.className = "qfeedback " + (allOk ? "good" : "bad") + " multi";
+      fbEl.innerHTML = "<div class=\"fhead\">" + head + "</div>" + (fields.length > 1 || !allOk ? detail.join("") : "");
+      if (isExam) { practiceScoreMap[part.id] = pts; updateHScores(); lockExam(pts); }
+      else if (allOk && part.isPracticeGoal) markStageDone(part.group);
+    });
+    card.querySelector(".solution-btn").addEventListener("click", function () {
+      solEl.innerHTML = part.type === "diag"
+        ? "<span class=\"sol-label\">Solution</span><div class=\"step\">" + state.opts[state.correctIdx].text + "</div>" + (state.correctFullStep ? "<div class=\"final\">Correct step: " + state.correctFullStep + "</div>" : "")
+        : part.solution(state);
+      solEl.classList.remove("hidden");
+      if (isExam) lockExam(0, "viewed solution");
+    });
+    render();
+  }
+
+  function wireExamToolbar(gh) {
+    var bar = document.createElement("div");
+    bar.className = "exam-toolbar";
+    bar.innerHTML =
+      "<div class=\"score-group\"><div class=\"score-box\"><span class=\"score-num\" id=\"hScoreNum\">0 / " + H_TOTAL + "</span><span class=\"score-label\">points checked correct</span></div>" +
+      "<div class=\"score-divider\"></div><div class=\"score-box exam-score-box\"><span class=\"score-num\" id=\"hExamScoreNum\">0 / " + H_TOTAL + "</span><span class=\"score-label\">exam score</span></div></div>" +
+      "<button class=\"icon-btn\" id=\"resetExamBtn\" type=\"button\">" + SVG_REFRESH + "Reset exam</button>";
+    gh.appendChild(bar);
+    document.getElementById("resetExamBtn").addEventListener("click", function () {
+      examScoreMap = {}; practiceScoreMap = {};
+      examCardRenders.forEach(function (r) { r(); });
+      updateHScores();
+    });
+  }
+
+  function buildAll() {
+    buildStageNav();
+    var groupsEl = document.getElementById("groups"); groupsEl.innerHTML = "";
+    var seen = {}, container = null;
+    PARTS.forEach(function (part) {
+      if (!seen[part.group]) {
+        seen[part.group] = true;
+        var gh = document.createElement("div"); gh.className = "group-head"; gh.innerHTML = groupHeadHtml(GROUP_META[part.group]);
+        groupsEl.appendChild(gh);
+        if (part.group === "H") wireExamToolbar(gh);
+        container = document.createElement("div"); groupsEl.appendChild(container);
+      }
+      mountCard(part, container, part.group === "H");
+    });
+  }
+  buildAll();
+
+})();
+</script>
+
+</body></html>
