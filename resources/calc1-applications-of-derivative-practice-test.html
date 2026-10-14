@@ -1,0 +1,1364 @@
+<title>Applications of the Derivative Practice Test</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=JetBrains+Mono:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #f6f1e4;
+    --paper-line: rgba(58, 74, 94, 0.14);
+    --paper-line-strong: rgba(58, 74, 94, 0.26);
+    --ink: #26313f;
+    --ink-soft: #5b6b7d;
+    --card-bg: #fffdf7;
+    --card-border: #ddd2b6;
+    --accent: #2f7d6b;
+    --accent-strong: #1f5c4e;
+    --accent-soft: rgba(47, 125, 107, 0.12);
+    --accent-ink: #f5fbf9;
+    --good: #3f7a52;
+    --good-soft: rgba(63, 122, 82, 0.14);
+    --bad: #b3413a;
+    --bad-soft: rgba(179, 65, 58, 0.12);
+    --shadow: rgba(38, 49, 63, 0.16);
+    --graph-grid: rgba(58, 74, 94, 0.14);
+    --graph-axis: rgba(38, 49, 63, 0.55);
+    --graph-stroke-a: #2f7d6b;
+    --graph-stroke-b: #c1483f;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #1b2330;
+      --paper-line: rgba(238, 242, 240, 0.07);
+      --paper-line-strong: rgba(238, 242, 240, 0.15);
+      --ink: #edf1ef;
+      --ink-soft: #a3aebb;
+      --card-bg: #232e3d;
+      --card-border: #3a4a61;
+      --accent: #5fd1b3;
+      --accent-strong: #86e0c8;
+      --accent-soft: rgba(95, 209, 179, 0.16);
+      --accent-ink: #0c2620;
+      --good: #7bc794;
+      --good-soft: rgba(123, 199, 148, 0.16);
+      --bad: #ff9a90;
+      --bad-soft: rgba(255, 154, 144, 0.14);
+      --shadow: rgba(0, 0, 0, 0.5);
+      --graph-grid: rgba(238, 242, 240, 0.10);
+      --graph-axis: rgba(238, 242, 240, 0.55);
+      --graph-stroke-a: #5fd1b3;
+      --graph-stroke-b: #ff9179;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #1b2330;
+    --paper-line: rgba(238, 242, 240, 0.07);
+    --paper-line-strong: rgba(238, 242, 240, 0.15);
+    --ink: #edf1ef;
+    --ink-soft: #a3aebb;
+    --card-bg: #232e3d;
+    --card-border: #3a4a61;
+    --accent: #5fd1b3;
+    --accent-strong: #86e0c8;
+    --accent-soft: rgba(95, 209, 179, 0.16);
+    --accent-ink: #0c2620;
+    --good: #7bc794;
+    --good-soft: rgba(123, 199, 148, 0.16);
+    --bad: #ff9a90;
+    --bad-soft: rgba(255, 154, 144, 0.14);
+    --shadow: rgba(0, 0, 0, 0.5);
+    --graph-grid: rgba(238, 242, 240, 0.10);
+    --graph-axis: rgba(238, 242, 240, 0.55);
+    --graph-stroke-a: #5fd1b3;
+    --graph-stroke-b: #ff9179;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background:
+      repeating-linear-gradient(0deg, var(--paper-line) 0, var(--paper-line) 1px, transparent 1px, transparent 32px),
+      repeating-linear-gradient(90deg, var(--paper-line) 0, var(--paper-line) 1px, transparent 1px, transparent 32px),
+      var(--paper);
+    color: var(--ink);
+    font-family: "Source Sans 3", ui-sans-serif, system-ui, sans-serif;
+    display: flex;
+    justify-content: center;
+    padding: clamp(20px, 4vw, 56px) 18px 80px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+  }
+
+  .wrap { width: 100%; max-width: 900px; }
+  header { text-align: center; margin-bottom: 22px; }
+
+  .eyebrow {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--accent); font-weight: 600;
+  }
+
+  h1 {
+    font-family: "Fraunces", Georgia, serif; font-weight: 600;
+    font-size: clamp(1.9rem, 5vw, 2.6rem); margin: 6px 0 8px; text-wrap: balance;
+  }
+
+  header p { color: var(--ink-soft); font-size: 1rem; max-width: 62ch; margin: 0 auto; line-height: 1.55; }
+
+  .toolbar {
+    position: sticky; top: 12px; z-index: 5;
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    margin: 22px 0 26px; padding: 12px 16px; flex-wrap: wrap;
+    background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 14px;
+    box-shadow: 0 10px 26px -16px var(--shadow);
+  }
+  .score-box { display: flex; align-items: baseline; gap: 8px; }
+  .score-num { font-family: "JetBrains Mono", monospace; font-size: 1.3rem; font-weight: 700; color: var(--accent-strong); font-variant-numeric: tabular-nums; }
+  .score-label { font-size: 0.78rem; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.06em; }
+  .score-group { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .score-divider { width: 1px; align-self: stretch; min-height: 24px; background: var(--card-border); }
+  .exam-score-box .score-num { color: var(--ink); }
+  .exam-score-box .score-label { display: flex; align-items: center; gap: 5px; }
+  .exam-score-box .score-label svg { width: 11px; height: 11px; flex-shrink: 0; }
+
+  .exam-badge {
+    display: inline-flex; align-items: center; gap: 5px; font-size: 0.68rem; font-weight: 700;
+    padding: 3px 9px; border-radius: 20px; letter-spacing: 0.02em; white-space: nowrap;
+  }
+  .exam-badge svg { width: 11px; height: 11px; flex-shrink: 0; }
+  .exam-badge.exam-good { background: var(--good-soft); color: var(--good); }
+  .exam-badge.exam-bad { background: var(--bad-soft); color: var(--bad); }
+
+  button { font-family: inherit; cursor: pointer; }
+  button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .icon-btn {
+    display: inline-flex; align-items: center; gap: 7px; background: var(--card-bg);
+    border: 1px solid var(--card-border); color: var(--ink); padding: 9px 14px;
+    border-radius: 9px; font-size: 0.86rem; font-weight: 600;
+    transition: border-color 0.15s ease, transform 0.1s ease;
+  }
+  .icon-btn:hover { border-color: var(--accent); }
+  .icon-btn:active { transform: translateY(1px); }
+  .icon-btn svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+  .group-head {
+    margin: 34px 0 14px; padding-bottom: 8px; border-bottom: 1.5px solid var(--paper-line-strong);
+  }
+  .group-head .gnum {
+    font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 1.3rem; color: var(--ink);
+  }
+  .group-head .gdesc { font-size: 0.92rem; color: var(--ink-soft); margin-top: 2px; }
+
+  .qcard {
+    background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px;
+    box-shadow: 0 14px 32px -22px var(--shadow), 0 2px 8px -2px var(--shadow);
+    padding: clamp(16px, 3vw, 24px); margin-bottom: 18px;
+  }
+
+  .qcard-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
+  .qcard-head .qtitle { display: flex; align-items: center; gap: 10px; }
+  .qlabel { font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 1.1rem; }
+  .qpoints {
+    font-family: "JetBrains Mono", monospace; font-size: 0.68rem; letter-spacing: 0.05em;
+    color: var(--ink-soft); background: var(--paper-line); padding: 2px 8px; border-radius: 20px;
+  }
+
+  .qprompt { font-size: 1rem; line-height: 1.7; margin-bottom: 14px; }
+  .qprompt .math { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 1.02rem; }
+  .qprompt .frac, .qsolution .frac { display: inline-flex; flex-direction: column; vertical-align: middle; text-align: center; margin: 0 3px; line-height: 1.15; }
+  .qprompt .frac .num, .qsolution .frac .num { border-bottom: 1.3px solid currentColor; padding: 0 3px 1px; }
+  .qprompt .frac .den, .qsolution .frac .den { padding: 1px 3px 0; }
+  .qprompt .radical, .qsolution .radical { display: inline-flex; align-items: flex-start; margin: 0 2px; }
+  .qprompt .radical .idx, .qsolution .radical .idx { font-size: 0.62em; margin-right: -0.35em; margin-top: -0.3em; }
+  .qprompt .radical .rsym, .qsolution .radical .rsym { font-size: 1.1em; }
+  .qprompt .radical .rad-inner, .qsolution .radical .rad-inner { border-top: 1.3px solid currentColor; padding: 0 3px; margin-left: 1px; }
+
+  .qgraph-wrap { display: flex; justify-content: center; margin: 10px 0 16px; }
+  .qgraph-wrap canvas { width: 100%; max-width: 380px; height: 230px; display: block; }
+  .qgraph-wrap.small canvas { max-width: 280px; height: 190px; }
+
+  .qinputs { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin-bottom: 10px; }
+  .qinputs .field-label { font-size: 0.86rem; color: var(--ink-soft); font-weight: 600; }
+  .qinputs input[type="text"], .qinputs select {
+    font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 0.95rem;
+    background: var(--paper); border: 1.5px solid var(--card-border); border-radius: 8px;
+    padding: 8px 10px; color: var(--ink); min-width: 92px;
+  }
+  .qinputs input.ans-wide { min-width: 220px; }
+  .qinputs select { font-family: "Source Sans 3", sans-serif; min-width: 190px; }
+  .qinputs input:focus, .qinputs select:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .qinputs .subrow {
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    padding: 8px 10px; border: 1.5px dashed var(--card-border); border-radius: 10px;
+  }
+  .qinputs .hidden { display: none !important; }
+  .qhint { font-size: 0.8rem; color: var(--ink-soft); margin: -2px 0 14px; line-height: 1.5; }
+  .mc-row { display: flex; flex-wrap: wrap; gap: 8px; }
+  .mc-opt {
+    border: 1.5px solid var(--card-border); border-radius: 9px; padding: 8px 13px;
+    font-size: 0.88rem; background: var(--card-bg); color: var(--ink); font-weight: 600;
+    transition: border-color 0.15s ease, background 0.15s ease;
+  }
+  .mc-opt:hover { border-color: var(--accent); }
+  .mc-opt.selected { border-color: var(--accent); background: var(--accent-soft); color: var(--accent-strong); }
+
+  .qtable-wrap { overflow-x: auto; margin: 4px 0 16px; }
+  .qtable { border-collapse: collapse; font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 0.85rem; }
+  .qtable th, .qtable td { border: 1px solid var(--card-border); padding: 5px 11px; text-align: center; }
+  .qtable th { background: var(--paper-line); font-weight: 700; }
+  .qtable td.rowlabel { font-weight: 700; text-align: left; background: var(--paper-line); }
+
+  .qactions { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; }
+  .btn-primary {
+    background: var(--accent); color: var(--accent-ink); border: none; padding: 10px 20px;
+    border-radius: 10px; font-size: 0.92rem; font-weight: 700;
+    box-shadow: 0 8px 16px -8px var(--accent-strong); transition: transform 0.1s ease;
+  }
+  .btn-primary:active { transform: translateY(1px); }
+  .btn-secondary {
+    background: transparent; border: 1.5px solid var(--card-border); color: var(--ink);
+    padding: 9px 18px; border-radius: 10px; font-size: 0.92rem; font-weight: 700;
+    transition: border-color 0.15s ease;
+  }
+  .btn-secondary:hover { border-color: var(--accent); }
+
+  .qfeedback {
+    font-size: 0.9rem; font-weight: 700; padding: 9px 13px; border-radius: 9px; margin-bottom: 10px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .qfeedback.good { background: var(--good-soft); color: var(--good); }
+  .qfeedback.bad { background: var(--bad-soft); color: var(--bad); }
+  .qfeedback svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+  .qsolution {
+    background: var(--accent-soft); border: 1px solid var(--card-border); border-left: 4px solid var(--accent);
+    border-radius: 0 12px 12px 0; padding: 14px 16px; font-size: 0.92rem; line-height: 1.7;
+  }
+  .qsolution .sol-label {
+    font-family: "JetBrains Mono", monospace; font-size: 0.68rem; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--accent-strong); font-weight: 700; display: block; margin-bottom: 6px;
+  }
+  .qsolution .step { margin: 3px 0; }
+  .qsolution .final { margin-top: 8px; font-weight: 700; font-family: "JetBrains Mono", monospace; }
+
+  .hidden { display: none !important; }
+  /* --- additions for this test (grouped inputs + optional feedback note) --- */
+  .qinputs .subrow.full { flex: 1 1 100%; }
+  .qinputs .subrow .grp-label { font-size: 0.86rem; font-weight: 700; color: var(--ink); min-width: 118px; }
+  .qfeedback .fb-note { display: block; font-weight: 600; font-size: 0.84rem; margin-top: 3px; line-height: 1.5; }
+  .qfeedback .fb-body { display: block; }
+  .qprompt .qhint { margin: 8px 0 0; }
+  .qsolution .qtable-wrap { margin: 6px 0 8px; }
+  .qsolution .step.sub { padding-left: 14px; }
+  .qsolution .qtable { background: var(--card-bg); }
+  .qsolution .qtable td, .qsolution .qtable th { white-space: nowrap; padding: 5px 9px; }
+  .qcard-head { flex-wrap: wrap; }
+  .qcard-head .qtitle { flex-wrap: wrap; }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Calculus 1 &middot; Applications of the Derivative</div>
+    <h1>Applications of the Derivative Practice Test</h1>
+    <p>Every part regenerates its own random version &mdash; work it out on paper, type your answer, and check yourself. Type exact answers as integers, fractions (like 4/27) or decimals; when a part says <em>Round to 2 decimal places</em>, any answer within 0.02 of the true value counts. Use <em>none</em> when something does not exist. Click &ldquo;New version&rdquo; on any part as many times as you want to drill it again with different numbers. Your <strong>Exam Score</strong> locks in the first time you check each part (or peek its solution) &mdash; everything after that is just practice. Use &ldquo;Reset exam&rdquo; any time for a brand-new attempt.</p>
+  </header>
+
+  <div class="toolbar">
+    <div class="score-group">
+      <div class="score-box">
+        <span class="score-num" id="scoreNum">0 / 0</span>
+        <span class="score-label">points checked correct</span>
+      </div>
+      <div class="score-divider"></div>
+      <div class="score-box exam-score-box">
+        <span class="score-num" id="examScoreNum">0 / 0</span>
+        <span class="score-label">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+          exam score
+        </span>
+      </div>
+    </div>
+    <button class="icon-btn" id="newTestBtn" type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3h5v5"/><path d="M4 20 21 3"/><path d="M21 16v5h-5"/><path d="M15 15l6 6"/><path d="M4 4l5 5"/></svg>
+      Reset exam
+    </button>
+  </div>
+
+  <div id="groups"></div>
+</div>
+<script>
+(function () {
+  "use strict";
+
+  // ============================================================
+  // Utilities
+  // ============================================================
+  function randInt(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+  function randNonZeroInt(min, max) { var v; do { v = randInt(min, max); } while (v === 0); return v; }
+  function randChoice(arr) { return arr[randInt(0, arr.length - 1)]; }
+  function randBool() { return Math.random() < 0.5; }
+  function gcdInt(a, b) { a = Math.abs(a); b = Math.abs(b); while (b) { var t = b; b = a % b; a = t; } return a || 1; }
+  function fracLabel(p, q) {
+    var g = gcdInt(p, q);
+    p = p / g; q = q / g;
+    if (q < 0) { p = -p; q = -q; }
+    return { p: p, q: q };
+  }
+
+  function frac(numHtml, denHtml) {
+    return "<span class=\"frac\"><span class=\"num\">" + numHtml + "</span><span class=\"den\">" + denHtml + "</span></span>";
+  }
+  function signedTerm(coef, label) {
+    if (coef === 0) return "";
+    var abs = Math.abs(coef);
+    var coefStr = (abs === 1 && label) ? "" : String(abs);
+    return (coef < 0 ? "&minus;" : "+") + " " + coefStr + label;
+  }
+  function leadTerm(coef, label) {
+    if (coef === 0) return "0";
+    var abs = Math.abs(coef);
+    var coefStr = (abs === 1 && label) ? "" : String(abs);
+    return (coef < 0 ? "&minus;" : "") + coefStr + label;
+  }
+  function powLabel(exp) {
+    if (exp === 0) return "";
+    if (exp === 1) return "x";
+    return "x<sup>" + exp + "</sup>";
+  }
+
+  // ---- number formatting ----
+  function mn(s) { return String(s).replace(/-/g, "&minus;"); }
+  function fmtDec(v, d) {
+    var s = v.toFixed(d === undefined ? 2 : d);
+    if (s.indexOf(".") >= 0) s = s.replace(/0+$/, "").replace(/\.$/, "");
+    if (s === "-0") s = "0";
+    return s;
+  }
+  function numHtml(v, d) { return mn(fmtDec(v, d)); }
+  function isClean(v) { return Math.abs(v * 100 - Math.round(v * 100)) < 1e-7; }
+  // exact fraction {p,q} -> html
+  function exactHtml(fr) {
+    if (fr.q === 1) return mn(fr.p);
+    return (fr.p < 0 ? "&minus;" : "") + frac(Math.abs(fr.p), fr.q);
+  }
+  // exact fraction plus decimal approximation when it is not a whole number
+  function exactApproxHtml(fr) {
+    var v = fr.p / fr.q;
+    if (fr.q === 1) return mn(fr.p);
+    return exactHtml(fr) + " &asymp; " + numHtml(v, 2);
+  }
+  function wrapNeg(html, v) { return v < 0 ? "(" + html + ")" : html; }
+
+  // ---- polynomials: {c: [c0, c1, ...] integers, den: positive integer} means (sum c_k x^k) / den ----
+  function mkPoly(c, den) { return { c: c.slice(), den: den || 1 }; }
+  function evalPoly(P, x) {
+    var s = 0;
+    for (var k = P.c.length - 1; k >= 0; k--) s = s * x + P.c[k];
+    return s / P.den;
+  }
+  function derivPoly(P) {
+    var c = [];
+    for (var k = 1; k < P.c.length; k++) c.push(P.c[k] * k);
+    return { c: c.length ? c : [0], den: P.den };
+  }
+  // exact value at x = p/q as a reduced fraction {p,q}
+  function evalPolyFrac(P, p, q) {
+    var n = P.c.length - 1, N = 0;
+    for (var k = 0; k <= n; k++) N += P.c[k] * Math.pow(p, k) * Math.pow(q, n - k);
+    return fracLabel(N, P.den * Math.pow(q, n));
+  }
+  function polyHtml(P) {
+    var out = "", first = true;
+    for (var k = P.c.length - 1; k >= 0; k--) {
+      if (!P.c[k]) continue;
+      var fr = fracLabel(P.c[k], P.den);
+      var neg = fr.p < 0, ap = Math.abs(fr.p);
+      var pw = powLabel(k);
+      var body;
+      if (fr.q === 1) body = (ap === 1 && pw) ? pw : String(ap) + pw;
+      else body = frac(ap, fr.q) + pw;
+      if (first) out += (neg ? "&minus;" : "") + body;
+      else out += " " + (neg ? "&minus;" : "+") + " " + body;
+      first = false;
+    }
+    return first ? "0" : out;
+  }
+  // K * (x - r1)^m1 * (x - r2)^m2 ...   roots: [{r: integer, m: multiplicity}]
+  function factorHtml(K, roots) {
+    var s = K === 1 ? "" : (K === -1 ? "&minus;" : mn(K));
+    roots.forEach(function (rt) {
+      var base = rt.r === 0 ? "x" : "(x " + (rt.r < 0 ? "+ " + (-rt.r) : "&minus; " + rt.r) + ")";
+      s += base + (rt.m > 1 ? "<sup>" + rt.m + "</sup>" : "");
+    });
+    return s === "" ? "1" : s;
+  }
+  function factorVal(K, roots, x) {
+    var v = K;
+    roots.forEach(function (rt) { v *= Math.pow(x - rt.r, rt.m); });
+    return v;
+  }
+  // f(x) = e^x * G(x) + cst, written the way a textbook would: x^2 e^x + 2x e^x - e^x + 1
+  function expFormHtml(G, cst) {
+    var out = "", first = true;
+    for (var k = G.length - 1; k >= 0; k--) {
+      if (!G[k]) continue;
+      var ap = Math.abs(G[k]);
+      var lab = powLabel(k) + "e<sup>x</sup>";
+      var body = (ap === 1 ? "" : String(ap)) + lab;
+      if (first) out += (G[k] < 0 ? "&minus;" : "") + body;
+      else out += " " + (G[k] < 0 ? "&minus;" : "+") + " " + body;
+      first = false;
+    }
+    if (cst) out += " " + (cst < 0 ? "&minus;" : "+") + " " + Math.abs(cst);
+    return out;
+  }
+  // exact form of e^x0 * g + cst with integer g, for solutions
+  function expValueHtml(g, x0, cst) {
+    var term = "";
+    if (g !== 0) {
+      var eStr = x0 === 0 ? "" : (x0 === 1 ? "e" : "e<sup>" + mn(x0) + "</sup>");
+      if (x0 === 0) term = mn(g);
+      else term = (g === 1 ? "" : (g === -1 ? "&minus;" : mn(g))) + eStr;
+    }
+    var total;
+    if (x0 === 0) { total = mn(g + cst); return total; }
+    if (g === 0) return mn(cst);
+    total = term;
+    if (cst) total += " " + (cst < 0 ? "&minus;" : "+") + " " + Math.abs(cst);
+    return total;
+  }
+
+  function buildTable(rowLabels, colHeaders, cellsMatrix, cornerHtml) {
+    var html = "<div class=\"qtable-wrap\"><table class=\"qtable\"><tr><th>" + (cornerHtml || "") + "</th>";
+    colHeaders.forEach(function (h) { html += "<th>" + h + "</th>"; });
+    html += "</tr>";
+    rowLabels.forEach(function (rl, i) {
+      html += "<tr><td class=\"rowlabel\">" + rl + "</td>";
+      cellsMatrix[i].forEach(function (c) { html += "<td>" + c + "</td>"; });
+      html += "</tr>";
+    });
+    html += "</table></div>";
+    return html;
+  }
+
+  // ---- answer parsing / checking ----
+  var NONE_WORDS = ["dne", "does not exist", "none", "no", "n/a", "na", "none exist", "no extrema", "no extremum",
+    "no local extrema", "no inflection points", "no inflection point", "empty", "{}"];
+  function parseAnswer(raw) {
+    if (raw === null || raw === undefined) return { type: "invalid" };
+    var str = String(raw).trim().toLowerCase().replace(/\u2212/g, "-");
+    str = str.replace(/^[a-z]\s*(\([^)]*\))?\s*=\s*/, "");
+    if (str === "") return { type: "invalid" };
+    if (NONE_WORDS.indexOf(str) !== -1) return { type: "dne" };
+    var fracMatch = str.match(/^([+-]?\d+(\.\d+)?)\s*\/\s*([+-]?\d+(\.\d+)?)$/);
+    if (fracMatch) {
+      var p = parseFloat(fracMatch[1]), q = parseFloat(fracMatch[3]);
+      if (q !== 0) return { type: "number", value: p / q };
+    }
+    var cleaned = str.replace(/,/g, "");
+    if (/^[+-]?(\d+\.?\d*|\.\d+)$/.test(cleaned)) return { type: "number", value: parseFloat(cleaned) };
+    return { type: "invalid" };
+  }
+  // Comma-separated list of numbers, or "none".
+  function parseList(raw) {
+    var str = String(raw === null || raw === undefined ? "" : raw).trim().toLowerCase().replace(/\u2212/g, "-");
+    str = str.replace(/x\s*=/g, "").replace(/y\s*=/g, "");
+    str = str.replace(/[()\[\]{}]/g, " ");
+    if (str.replace(/\s+/g, "") === "") return { type: "invalid", nums: [] };
+    if (NONE_WORDS.indexOf(str.trim()) !== -1) return { type: "none", nums: [] };
+    var parts = str.replace(/\band\b/g, ",").split(/[,;]+/);
+    var nums = [];
+    for (var i = 0; i < parts.length; i++) {
+      var t = parts[i].trim();
+      if (t === "") continue;
+      var a = parseAnswer(t);
+      if (a.type !== "number") return { type: "invalid", nums: [] };
+      nums.push(a.value);
+    }
+    return nums.length ? { type: "list", nums: nums } : { type: "invalid", nums: [] };
+  }
+  // Absolute tolerance 0.02. For answers that are irrational and large, allow a relative window of 0.01%.
+  function tolFor(truth, approxOnly) {
+    return approxOnly ? Math.max(0.02, Math.abs(truth) * 1e-4) : 0.02;
+  }
+  function numMatch(user, truth, approxOnly) {
+    if (!user || user.type !== "number") return false;
+    return Math.abs(user.value - truth) <= tolFor(truth, approxOnly) + 1e-9;
+  }
+  function isNone(u) { return u && u.type === "dne"; }
+  function isBlankOrNone(u) { return u && (u.type === "dne" || u.type === "invalid"); }
+  function roundNote(values) {
+    var allClean = values.every(isClean);
+    return allClean ? "" : "Round to 2 decimal places (an exact fraction is also accepted).";
+  }
+  function hintDiv(text) { return text ? "<div class=\"qhint\">" + text + "</div>" : ""; }
+  function inp(cls, ph, wide) {
+    return "<input type=\"text\" class=\"" + cls + (wide ? " ans-wide" : "") + "\" placeholder=\"" + ph + "\" autocomplete=\"off\" autocapitalize=\"off\" spellcheck=\"false\">";
+  }
+  function intervalHtml(lo, hi) { return "[" + mn(lo) + ", " + mn(hi) + "]"; }
+
+  // ============================================================
+  // Shared helpers for the extrema parts
+  // ============================================================
+  function sgn(v) { return v > 0 ? 1 : (v < 0 ? -1 : 0); }
+  function fmtSig(v) { var s = String(parseFloat(v.toPrecision(3))); return mn(s); }
+
+  // Candidate points for the closed-interval method: endpoints + interior critical points.
+  // crits: [{p,q}] rational critical x-values. fval(x) numeric; fHtmlFn(cand) html for the exact/approx value.
+  function makeCands(lo, hi, crits, fval, fHtmlFn) {
+    var list = [{ p: lo, q: 1, end: true }, { p: hi, q: 1, end: true }];
+    crits.forEach(function (c) {
+      var xv = c.p / c.q;
+      if (xv > lo + 1e-9 && xv < hi - 1e-9) list.push({ p: c.p, q: c.q, end: false });
+    });
+    list.sort(function (a, b) { return a.p / a.q - b.p / b.q; });
+    list.forEach(function (c) {
+      c.xv = c.p / c.q;
+      c.xHtml = exactHtml(fracLabel(c.p, c.q));
+      c.fv = fval(c.xv);
+      c.fHtml = fHtmlFn(c);
+    });
+    return list;
+  }
+  // global max / min, or null when the answer would be ambiguous (ties)
+  function pickGlobal(list) {
+    var mx = list[0], mi = list[0];
+    list.forEach(function (c) { if (c.fv > mx.fv) mx = c; if (c.fv < mi.fv) mi = c; });
+    var tieMax = list.filter(function (c) { return Math.abs(c.fv - mx.fv) < 0.05; }).length;
+    var tieMin = list.filter(function (c) { return Math.abs(c.fv - mi.fv) < 0.05; }).length;
+    if (tieMax > 1 || tieMin > 1 || mx === mi) return null;
+    return { max: mx, min: mi };
+  }
+  function candTableHtml(cands, ext) {
+    var heads = cands.map(function (c) { return c.xHtml; });
+    var vals = cands.map(function (c) { return c.fHtml; });
+    var tags = cands.map(function (c) { return c === ext.max ? "<strong>global max</strong>" : (c === ext.min ? "<strong>global min</strong>" : "&nbsp;"); });
+    return buildTable(["f(x)", "&nbsp;"], heads, [vals, tags], "x");
+  }
+
+  // Sign chart for a derivative function: one row per interval between the zeros.
+  function signChartHtml(fn, zeroVals, zeroHtmls, fnName, upWord, downWord, behaviorHead) {
+    var n = zeroVals.length, labels = [], cells = [], i;
+    for (i = 0; i <= n; i++) {
+      var lab, t;
+      if (n === 0) { lab = "all x"; t = 0; }
+      else if (i === 0) { lab = "x &lt; " + zeroHtmls[0]; t = zeroVals[0] - 1; }
+      else if (i === n) { lab = "x &gt; " + zeroHtmls[n - 1]; t = zeroVals[n - 1] + 1; }
+      else { lab = zeroHtmls[i - 1] + " &lt; x &lt; " + zeroHtmls[i]; t = (zeroVals[i - 1] + zeroVals[i]) / 2; }
+      var v = fn(t);
+      cells.push([numHtml(t, 2), fmtSig(v), v > 0 ? "+" : "&minus;", v > 0 ? upWord : downWord]);
+      labels.push(lab);
+      if (n === 0) break;
+    }
+    return buildTable(labels, ["test x", fnName + "(test x)", "sign", behaviorHead], cells, "interval");
+  }
+
+  function classify(fpFn, r) {
+    var d = 1e-3, a = fpFn(r - d), b = fpFn(r + d);
+    if (a > 0 && b < 0) return "max";
+    if (a < 0 && b > 0) return "min";
+    return "none";
+  }
+
+  // ---- cubic builders (integer coefficients; roots of f' are integers or simple fractions) ----
+  // f = a x^3 - b x^2   (the original 1(a) shape):  f' = x(3a x - 2b)
+  function cubF1() {
+    var a = randChoice([1, 1, 2, 3]), b = randInt(1, 6);
+    var cr = fracLabel(2 * b, 3 * a);
+    var P = mkPoly([0, 0, -b, a], 1);
+    return {
+      fam: "F1", P: P, fpP: derivPoly(P),
+      crits: [{ p: 0, q: 1, m: 1 }, { p: cr.p, q: cr.q, m: 1 }],
+      fpFact: "x(" + polyHtml(mkPoly([-2 * b, 3 * a])) + ")",
+      fpFn: function (x) { return x * (3 * a * x - 2 * b); }
+    };
+  }
+  // f' = K (x-p)(x-q) with integer p<q; f = lam*sig*x^3 - 3/2 lam sig (p+q) x^2 + 3 lam sig p q x + D
+  function cubF2(allowNeg, withD) {
+    var p, q;
+    do { p = randInt(-3, 3); q = randInt(-3, 3); } while (p >= q);
+    var even = (((p + q) % 2) + 2) % 2 === 0;
+    var lam = even ? randChoice([1, 1, 2]) : 2;
+    var sig = (allowNeg && Math.random() < 0.3) ? -1 : 1;
+    var D = (withD && Math.random() < 0.4) ? randInt(-6, 6) : 0;
+    var K = 3 * lam * sig;
+    var P = mkPoly([D, 3 * lam * p * q * sig, -(3 * lam * (p + q) * sig) / 2, lam * sig], 1);
+    var roots = [{ r: p, m: 1 }, { r: q, m: 1 }];
+    return {
+      fam: "F2", P: P, fpP: derivPoly(P),
+      crits: [{ p: p, q: 1, m: 1 }, { p: q, q: 1, m: 1 }],
+      fpFact: factorHtml(K, roots),
+      fpFn: function (x) { return factorVal(K, roots, x); }
+    };
+  }
+
+  // ---- e^x-type builders: f(x) = e^x G(x) + cst,  f'(x) = e^x (G + G') = e^x K prod (x - r)^m ----
+  function addPolyDeriv(G) {
+    var H = [];
+    for (var i = 0; i < G.length; i++) H.push(G[i] + (i + 1 < G.length ? G[i + 1] * (i + 1) : 0));
+    return H;
+  }
+  // kind "trap": G+G' = k (x+r)^2   (the double root is NOT an extremum)
+  // kind "two":  G+G' = k (x-p)(x-q)
+  // kind "one":  G = k (x - a),  G+G' = k (x - a + 1)
+  function expFactorHtml(k, roots) {
+    return (k < 0 ? "&minus;" : "") + (Math.abs(k) === 1 ? "" : Math.abs(k)) + "e<sup>x</sup>&middot;" + factorHtml(1, roots);
+  }
+  function buildExp(kind, k, par, cst) {
+    var G, roots;
+    if (kind === "trap") {
+      var r = par.r;
+      G = [k * (r * r - 2 * r + 2), k * (2 * r - 2), k];
+      roots = [{ r: -r, m: 2 }];
+    } else if (kind === "two") {
+      var p = par.p, q = par.q;
+      G = [k * (p * q + p + q + 2), k * (-(p + q) - 2), k];
+      roots = [{ r: p, m: 1 }, { r: q, m: 1 }];
+    } else {
+      var a = par.a;
+      G = [-k * a, k];
+      roots = [{ r: a - 1, m: 1 }];
+    }
+    var Gp = { c: G, den: 1 };
+    var H = addPolyDeriv(G);
+    return {
+      kind: kind, k: k, G: G, cst: cst, roots: roots,
+      fHtml: expFormHtml(G, cst),
+      f: function (x) { return Math.exp(x) * evalPoly(Gp, x) + cst; },
+      fpFn: function (x) { return Math.exp(x) * factorVal(k, roots, x); },
+      fpFactHtml: expFactorHtml(k, roots),
+      GHtml: polyHtml(Gp), GpHtml: polyHtml(derivPoly(Gp)), HHtml: polyHtml({ c: H, den: 1 }),
+      critXs: roots.map(function (rt) { return rt.r; }),
+      fValHtml: function (x0) {
+        var g = evalPoly(Gp, x0);
+        var fv = Math.exp(x0) * g + cst;
+        if (x0 === 0 || g === 0) return mn(fmtDec(fv, 3));
+        return expValueHtml(g, x0, cst) + " &asymp; " + numHtml(fv, 3);
+      }
+    };
+  }
+
+  // ============================================================
+  // Question part definitions
+  // ============================================================
+  var PARTS = [];
+
+  // ---------- Group 1: global extrema on a closed interval ----------
+  function globalInputsHtml(ph) {
+    return "<div class=\"subrow full\"><span class=\"grp-label\">Global maximum</span><span class=\"field-label\">at x =</span>" + inp("ans-xmax", ph[0]) +
+      "<span class=\"field-label\">value f(x) =</span>" + inp("ans-vmax", ph[1]) + "</div>" +
+      "<div class=\"subrow full\"><span class=\"grp-label\">Global minimum</span><span class=\"field-label\">at x =</span>" + inp("ans-xmin", ph[2]) +
+      "<span class=\"field-label\">value f(x) =</span>" + inp("ans-vmin", ph[3]) + "</div>";
+  }
+  function globalRead(card) {
+    return {
+      xmax: parseAnswer(card.querySelector(".ans-xmax").value), vmax: parseAnswer(card.querySelector(".ans-vmax").value),
+      xmin: parseAnswer(card.querySelector(".ans-xmin").value), vmin: parseAnswer(card.querySelector(".ans-vmin").value)
+    };
+  }
+  function globalCorrect(ua, s) {
+    return numMatch(ua.xmax, s.ext.max.xv, false) && numMatch(ua.vmax, s.ext.max.fv, s.approx) &&
+      numMatch(ua.xmin, s.ext.min.xv, false) && numMatch(ua.vmin, s.ext.min.fv, s.approx);
+  }
+  function globalExplain(ua, s) {
+    if (s.trap) {
+      var cx = s.trap.x;
+      var hit = function (u) { return u && u.type === "number" && Math.abs(u.value - cx) <= 0.02; };
+      if (hit(ua.xmax) || hit(ua.xmin)) {
+        return "x = " + mn(cx) + " is a critical point, but f&prime; does not change sign there, so it is neither a maximum nor a minimum. Compare the endpoints instead.";
+      }
+    }
+    if (numMatch(ua.xmax, s.ext.min.xv, false) && numMatch(ua.xmin, s.ext.max.xv, false)) {
+      return "It looks like the maximum and minimum are swapped &mdash; the global maximum is the <em>largest</em> value in your comparison table.";
+    }
+    return "";
+  }
+  function globalSolutionHtml(s) {
+    var h = "<span class=\"sol-label\">Solution</span>";
+    h += "<div class=\"step\"><strong>Step 1 &mdash; differentiate.</strong> " + (s.fpWorkHtml || "") + "f&prime;(x) = " + s.fpHtml + " = " + s.fpFactHtml + "</div>";
+    h += "<div class=\"step\"><strong>Step 2 &mdash; critical points.</strong> " + (s.isExp ? "Since e<sup>x</sup> is never 0, only the other factor can vanish. " : "") +
+      "Set f&prime;(x) = 0: " + s.critAll.map(function (c) { return "x = " + c.xHtml; }).join(" &nbsp;or&nbsp; ") + ".</div>";
+    var inside = s.critAll.filter(function (c) { return c.xv > s.lo + 1e-9 && c.xv < s.hi - 1e-9; });
+    var outside = s.critAll.filter(function (c) { return !(c.xv > s.lo + 1e-9 && c.xv < s.hi - 1e-9); });
+    h += "<div class=\"step\"><strong>Step 3 &mdash; keep only those in " + intervalHtml(s.lo, s.hi) + ".</strong> " +
+      (inside.length ? "Keep " + inside.map(function (c) { return "x = " + c.xHtml; }).join(", ") + ". " : "None of them lie inside the interval. ") +
+      (outside.length ? "Discard " + outside.map(function (c) { return "x = " + c.xHtml; }).join(", ") + " (outside the interval)." : "") + "</div>";
+    if (s.trap) {
+      h += "<div class=\"step sub\">Look closely at the one that is inside: " + s.trap.why + "</div>";
+    }
+    h += "<div class=\"step\"><strong>Step 4 &mdash; evaluate f at the endpoints and the critical points inside.</strong></div>";
+    h += candTableHtml(s.cands, s.ext);
+    h += "<div class=\"step\"><strong>Step 5 &mdash; compare.</strong> The largest value is " + s.ext.max.fHtml + ", at x = " + s.ext.max.xHtml +
+      "; the smallest value is " + s.ext.min.fHtml + ", at x = " + s.ext.min.xHtml + ".</div>";
+    h += "<div class=\"final\">Answer: global max f(" + s.ext.max.xHtml + ") = " + numHtml(s.ext.max.fv, 2) + " &nbsp;|&nbsp; global min f(" + s.ext.min.xHtml + ") = " + numHtml(s.ext.min.fv, 2) + "</div>";
+    return h;
+  }
+  function globalPrompt(s) {
+    var rn = roundNote([s.ext.max.xv, s.ext.max.fv, s.ext.min.xv, s.ext.min.fv]);
+    if (s.isExp) rn = "Round to 2 decimal places.";
+    return "<span class=\"math\">f(x) = " + s.fHtml + " &nbsp; on " + intervalHtml(s.lo, s.hi) + "</span>" +
+      "<div style=\"margin-top:8px\">Find the global (absolute) maximum and global minimum of f on this interval. Give the x-value where each occurs and the function value there.</div>" +
+      hintDiv(rn);
+  }
+
+  PARTS.push({
+    id: "1a", group: "1", label: "(a)", points: 4,
+    gen: function () {
+      for (var t = 0; t < 2000; t++) {
+        var cub = Math.random() < 0.4 ? cubF1() : cubF2(true, true);
+        var lo, hi;
+        if (cub.fam === "F1") {
+          var cp = cub.crits[1];
+          lo = randChoice([0, 0, 0, -1, -2]);
+          hi = Math.ceil(cp.p / cp.q) + randInt(1, 3);
+        } else {
+          lo = randInt(-3, 1);
+          hi = lo + randInt(3, 7);
+          var inCount = cub.crits.filter(function (c) { return c.p / c.q > lo && c.p / c.q < hi; }).length;
+          if (!inCount) continue;
+        }
+        var P = cub.P;
+        var cands = makeCands(lo, hi, cub.crits, function (x) { return evalPoly(P, x); }, function (c) { return exactApproxHtml(evalPolyFrac(P, c.p, c.q)); });
+        var ext = pickGlobal(cands);
+        if (!ext) continue;
+        return {
+          P: P, lo: lo, hi: hi, fHtml: polyHtml(P), fpHtml: polyHtml(cub.fpP), fpFactHtml: cub.fpFact, fpFn: cub.fpFn,
+          f: function (x) { return evalPoly(P, x); },
+          critAll: cub.crits.map(function (c) { return { xv: c.p / c.q, xHtml: exactHtml(fracLabel(c.p, c.q)) }; }),
+          cands: cands, ext: ext, isExp: false, approx: false, trap: null
+        };
+      }
+      throw new Error("1a gen failed");
+    },
+    prompt: globalPrompt,
+    inputsHtml: function () { return globalInputsHtml(["e.g. 3", "e.g. -1.5", "e.g. 0", "e.g. 2"]); },
+    readAnswer: globalRead, isCorrect: globalCorrect, explain: globalExplain,
+    solutionHtml: globalSolutionHtml
+  });
+
+  PARTS.push({
+    id: "1b", group: "1", label: "(b)", points: 4,
+    gen: function () {
+      for (var t = 0; t < 2000; t++) {
+        var roll = Math.random(), kind, e, lo, hi, trap = null;
+        if (roll < 0.45) {
+          kind = "trap";
+          var r = randChoice([-2, -1, 1, 1, 2, 3]);
+          e = buildExp("trap", randChoice([1, 1, -1]), { r: r }, 0);
+          var x0 = -r;
+          lo = Math.max(x0 - randInt(1, 3), -5); hi = Math.min(x0 + randInt(1, 3), 4);
+          if (!(lo < x0 && x0 < hi)) continue;
+          trap = {
+            x: x0,
+            why: "f&prime;(x) = " + e.fpFactHtml + " has the factor (x " + (r < 0 ? "&minus; " + (-r) : "+ " + r) + ")<sup>2</sup>, which is never negative. " +
+              "So f&prime; is " + (e.k > 0 ? "positive" : "negative") + " on both sides of x = " + mn(x0) + " and f is always " + (e.k > 0 ? "increasing" : "decreasing") +
+              ". That critical point is <em>not</em> a maximum or minimum &mdash; the global extrema must be at the endpoints."
+          };
+        } else if (roll < 0.75) {
+          kind = "two";
+          var p, q;
+          do { p = randInt(-3, 2); q = randInt(-3, 2); } while (p >= q);
+          e = buildExp("two", randChoice([1, 1, -1]), { p: p, q: q }, 0);
+          lo = randInt(-4, 0); hi = Math.min(lo + randInt(3, 6), 4);
+          if (!(hi > lo + 2)) continue;
+        } else {
+          kind = "one";
+          var a = randChoice([-1, 0, 1, 1, 2, 3]);
+          e = buildExp("one", randChoice([1, 1, 2, -1, -2]), { a: a }, randChoice([0, 0, 1, -1, 2]));
+          lo = randInt(-3, 1); hi = Math.min(lo + randInt(3, 6), 4);
+        }
+        var crits = e.critXs.map(function (x) { return { p: x, q: 1 }; });
+        if (kind !== "trap" && !crits.some(function (c) { return c.p > lo && c.p < hi; })) continue;
+        var cands = makeCands(lo, hi, crits, e.f, function (c) { return e.fValHtml(c.xv); });
+        var ext = pickGlobal(cands);
+        if (!ext) continue;
+        return {
+          kind: kind, e: e, lo: lo, hi: hi, fHtml: e.fHtml, fpHtml: "e<sup>x</sup>(" + e.HHtml + ")", fpFactHtml: e.fpFactHtml,
+          fpWorkHtml: "Product rule on each term, d/dx[x<sup>n</sup>e<sup>x</sup>] = n x<sup>n&minus;1</sup>e<sup>x</sup> + x<sup>n</sup>e<sup>x</sup>, and then factor out e<sup>x</sup>: f&prime;(x) = e<sup>x</sup>[(" + e.GHtml + ") + (" + e.GpHtml + ")]. Hence &nbsp;",
+          fpFn: e.fpFn, f: e.f,
+          critAll: e.critXs.map(function (x) { return { xv: x, xHtml: mn(x) }; }),
+          cands: cands, ext: ext, isExp: true, approx: true, trap: trap
+        };
+      }
+      throw new Error("1b gen failed");
+    },
+    prompt: globalPrompt,
+    inputsHtml: function () { return globalInputsHtml(["e.g. 3", "e.g. 20.09", "e.g. -1", "e.g. 0.37"]); },
+    readAnswer: globalRead, isCorrect: globalCorrect, explain: globalExplain,
+    solutionHtml: globalSolutionHtml
+  });
+
+  // ---------- Group 2: local extrema ----------
+  function localFinish(o) {
+    // o: fHtml, fpHtml, fpFactHtml, fpFn, f, crits:[{xv,xHtml,m,fv,fHtml}], isExp, noCritWhy, fpWorkHtml
+    var ext = { max: null, min: null };
+    o.crits.forEach(function (c) {
+      c.kind = c.m % 2 === 0 ? "none" : classify(o.fpFn, c.xv);
+      if (c.kind === "max") ext.max = c;
+      if (c.kind === "min") ext.min = c;
+    });
+    o.ext = ext;
+    o.approx = !!o.isExp;
+    return o;
+  }
+  function localCrit(P, r, m) {
+    return { xv: r.p / r.q, xHtml: exactHtml(fracLabel(r.p, r.q)), m: m, fv: evalPoly(P, r.p / r.q), fHtml: exactApproxHtml(evalPolyFrac(P, r.p, r.q)) };
+  }
+  function polyCoefHtml(a) { return a === 1 ? "" : (a === -1 ? "&minus;" : mn(a)); }
+
+  function genLocalPoly() {
+    var roll = Math.random(), P, fpFact, fpFn, crits = [], noCritWhy = "";
+    if (roll < 0.45) {
+      var a = randChoice([1, 1, 2, 3, -1, -2]), m = randInt(1, 3);
+      var D = Math.random() < 0.4 ? randInt(-5, 5) : 0;
+      P = mkPoly([3 * D, -3 * a * m * m, 0, a], 3);
+      var roots = [{ r: -m, m: 1 }, { r: m, m: 1 }];
+      fpFact = factorHtml(a, roots);
+      fpFn = function (x) { return factorVal(a, roots, x); };
+      crits = [localCrit(P, { p: -m, q: 1 }, 1), localCrit(P, { p: m, q: 1 }, 1)];
+    } else if (roll < 0.8) {
+      var cub = cubF2(true, true);
+      P = cub.P; fpFact = cub.fpFact; fpFn = cub.fpFn;
+      crits = cub.crits.map(function (c) { return localCrit(P, c, 1); });
+    } else if (roll < 0.9) {
+      var a2 = randChoice([1, 2, 3, -1, -2, -3]), m2 = randInt(1, 3), D2 = Math.random() < 0.4 ? randInt(-5, 5) : 0;
+      P = mkPoly([3 * D2, 3 * a2 * m2 * m2, 0, a2], 3);
+      fpFact = polyCoefHtml(a2) + "(x<sup>2</sup> + " + (m2 * m2) + ")";
+      fpFn = function (x) { return a2 * (x * x + m2 * m2); };
+      noCritWhy = "x<sup>2</sup> + " + (m2 * m2) + " is at least " + (m2 * m2) + " for every x, so f&prime;(x) is never 0 (it is always " + (a2 > 0 ? "positive" : "negative") + ").";
+    } else {
+      var a3 = randChoice([1, 3, -1, -3]), r3 = randInt(-2, 2), D3 = Math.random() < 0.4 ? randInt(-3, 3) : 0;
+      P = mkPoly([-a3 * r3 * r3 * r3 + 3 * D3, 3 * a3 * r3 * r3, -3 * a3 * r3, a3], 3);
+      var roots3 = [{ r: r3, m: 2 }];
+      fpFact = factorHtml(a3, roots3);
+      fpFn = function (x) { return factorVal(a3, roots3, x); };
+      crits = [localCrit(P, { p: r3, q: 1 }, 2)];
+    }
+    return localFinish({
+      fHtml: polyHtml(P), fpHtml: polyHtml(derivPoly(P)), fpFactHtml: fpFact, fpFn: fpFn,
+      f: function (x) { return evalPoly(P, x); }, crits: crits, isExp: false, noCritWhy: noCritWhy, fpWorkHtml: ""
+    });
+  }
+  function genLocalExp() {
+    var kind, e;
+    if (Math.random() < 0.65) {
+      kind = "one";
+      e = buildExp("one", randChoice([1, 1, 2, -1, -2]), { a: randChoice([-1, 0, 1, 1, 2, 3]) }, randChoice([0, 1, 1, -1, 2, -2, 3]));
+    } else {
+      var p, q;
+      do { p = randInt(-3, 2); q = randInt(-3, 2); } while (p >= q);
+      e = buildExp("two", randChoice([1, 1, -1]), { p: p, q: q }, randChoice([0, 0, 1, -1, 2]));
+    }
+    var crits = e.critXs.map(function (x) {
+      return { xv: x, xHtml: mn(x), m: 1, fv: e.f(x), fHtml: e.fValHtml(x) };
+    });
+    return localFinish({
+      fHtml: e.fHtml, fpHtml: "e<sup>x</sup>(" + e.HHtml + ")", fpFactHtml: e.fpFactHtml, fpFn: e.fpFn, f: e.f, crits: crits, isExp: true,
+      noCritWhy: "",
+      fpWorkHtml: "Product rule on each term, d/dx[x<sup>n</sup>e<sup>x</sup>] = n x<sup>n&minus;1</sup>e<sup>x</sup> + x<sup>n</sup>e<sup>x</sup>, then factor out e<sup>x</sup>: f&prime;(x) = e<sup>x</sup>[(" + e.GHtml + ") + (" + e.GpHtml + ")]. Hence &nbsp;"
+    });
+  }
+
+  function localInputsHtml(ph) {
+    return "<div class=\"subrow full\"><span class=\"grp-label\">Local maximum</span><span class=\"field-label\">at x =</span>" + inp("ans-xmax", ph[0]) +
+      "<span class=\"field-label\">value f(x) =</span>" + inp("ans-vmax", ph[1]) + "</div>" +
+      "<div class=\"subrow full\"><span class=\"grp-label\">Local minimum</span><span class=\"field-label\">at x =</span>" + inp("ans-xmin", ph[2]) +
+      "<span class=\"field-label\">value f(x) =</span>" + inp("ans-vmin", ph[3]) + "</div>";
+  }
+  function localPrompt(s) {
+    var vals = [];
+    if (s.ext.max) { vals.push(s.ext.max.xv); vals.push(s.ext.max.fv); }
+    if (s.ext.min) { vals.push(s.ext.min.xv); vals.push(s.ext.min.fv); }
+    var rn = s.isExp ? "Round to 2 decimal places." : roundNote(vals);
+    return "<span class=\"math\">f(x) = " + s.fHtml + "</span>" +
+      "<div style=\"margin-top:8px\">Find the local maximum and the local minimum of f. Give the x-value where each occurs and the function value there. If f has no local maximum (or no local minimum), type <em>none</em> in both boxes of that row.</div>" +
+      hintDiv(rn);
+  }
+  function localCorrect(ua, s) {
+    function side(ex, xu, vu) {
+      if (!ex) return isNone(xu) && isBlankOrNone(vu);
+      return numMatch(xu, ex.xv, false) && numMatch(vu, ex.fv, s.approx);
+    }
+    return side(s.ext.max, ua.xmax, ua.vmax) && side(s.ext.min, ua.xmin, ua.vmin);
+  }
+  function localExplain(ua, s) {
+    if (s.ext.max && s.ext.min && numMatch(ua.xmax, s.ext.min.xv, false) && numMatch(ua.xmin, s.ext.max.xv, false)) {
+      return "It looks like the maximum and minimum are swapped &mdash; a local maximum is where f&prime; changes from positive to negative.";
+    }
+    var msg = "";
+    [["max", ua.xmax], ["min", ua.xmin]].forEach(function (pair) {
+      if (msg || s.ext[pair[0]]) return;
+      var u = pair[1];
+      if (u && u.type === "number") {
+        s.crits.forEach(function (c) {
+          if (!msg && Math.abs(c.xv - u.value) <= 0.02) msg = "x = " + c.xHtml + " is a critical point, but f&prime; does not change sign there, so it is not a local " + (pair[0] === "max" ? "maximum" : "minimum") + ".";
+        });
+      }
+    });
+    return msg;
+  }
+  function localSolutionHtml(s) {
+    var h = "<span class=\"sol-label\">Solution</span>";
+    h += "<div class=\"step\"><strong>Step 1 &mdash; differentiate.</strong> " + (s.fpWorkHtml || "") + "f&prime;(x) = " + s.fpHtml + " = " + s.fpFactHtml + "</div>";
+    if (!s.crits.length) {
+      h += "<div class=\"step\"><strong>Step 2 &mdash; critical points.</strong> Set f&prime;(x) = 0. " + s.noCritWhy + " There are no critical points.</div>";
+      h += "<div class=\"step\"><strong>Step 3 &mdash; sign of f&prime;.</strong></div>";
+      h += signChartHtml(s.fpFn, [], [], "f&prime;", "increasing", "decreasing", "f is");
+      h += "<div class=\"step\">f&prime; has the same sign for every x, so f never turns around.</div>";
+      h += "<div class=\"final\">Answer: no local maximum and no local minimum (type none)</div>";
+      return h;
+    }
+    h += "<div class=\"step\"><strong>Step 2 &mdash; critical points.</strong> " + (s.isExp ? "Since e<sup>x</sup> is never 0, only the other factor can vanish. " : "") +
+      "Set f&prime;(x) = 0: " + s.crits.map(function (c) { return "x = " + c.xHtml; }).join(" &nbsp;or&nbsp; ") + ".</div>";
+    h += "<div class=\"step\"><strong>Step 3 &mdash; sign of f&prime; on each side of the critical point" + (s.crits.length > 1 ? "s" : "") + " (first derivative test).</strong></div>";
+    h += signChartHtml(s.fpFn, s.crits.map(function (c) { return c.xv; }), s.crits.map(function (c) { return c.xHtml; }), "f&prime;", "increasing", "decreasing", "f is");
+    s.crits.forEach(function (c) {
+      var line;
+      if (c.kind === "none") {
+        line = "At x = " + c.xHtml + " the sign of f&prime; does not change (the factor is squared), so there is <strong>no</strong> local extremum there.";
+      } else if (c.kind === "max") {
+        line = "At x = " + c.xHtml + " f&prime; changes from + to &minus; (increasing, then decreasing): <strong>local maximum</strong>, f(" + c.xHtml + ") = " + c.fHtml + ".";
+      } else {
+        line = "At x = " + c.xHtml + " f&prime; changes from &minus; to + (decreasing, then increasing): <strong>local minimum</strong>, f(" + c.xHtml + ") = " + c.fHtml + ".";
+      }
+      h += "<div class=\"step\">" + line + "</div>";
+    });
+    var mx = s.ext.max ? "x = " + s.ext.max.xHtml + ", f = " + numHtml(s.ext.max.fv, 2) : "none";
+    var mi = s.ext.min ? "x = " + s.ext.min.xHtml + ", f = " + numHtml(s.ext.min.fv, 2) : "none";
+    h += "<div class=\"final\">Answer: local max: " + mx + " &nbsp;|&nbsp; local min: " + mi + "</div>";
+    return h;
+  }
+  function localRead(card) {
+    return {
+      xmax: parseAnswer(card.querySelector(".ans-xmax").value), vmax: parseAnswer(card.querySelector(".ans-vmax").value),
+      xmin: parseAnswer(card.querySelector(".ans-xmin").value), vmin: parseAnswer(card.querySelector(".ans-vmin").value)
+    };
+  }
+
+  PARTS.push({
+    id: "2a", group: "2", label: "(a)", points: 4,
+    gen: genLocalPoly,
+    prompt: localPrompt,
+    inputsHtml: function () { return localInputsHtml(["x-value or none", "value or none", "x-value or none", "value or none"]); },
+    readAnswer: localRead, isCorrect: localCorrect, explain: localExplain, solutionHtml: localSolutionHtml
+  });
+  PARTS.push({
+    id: "2b", group: "2", label: "(b)", points: 4,
+    gen: genLocalExp,
+    prompt: localPrompt,
+    inputsHtml: function () { return localInputsHtml(["x-value or none", "value or none", "x-value or none", "value or none"]); },
+    readAnswer: localRead, isCorrect: localCorrect, explain: localExplain, solutionHtml: localSolutionHtml
+  });
+
+  // ---------- Group 3: constrained product ----------
+  PARTS.push({
+    id: "3", group: "3", label: "", points: 4,
+    gen: function () {
+      var k = randInt(1, 9), S;
+      for (;;) {
+        S = randInt(k + 2, 30);
+        if (((S + k) % 2 === 0) || Math.random() < 0.3) break;
+      }
+      var x = (S + k) / 2, y = S - x;
+      return { S: S, k: k, x: x, y: y, P: x * (y + k) };
+    },
+    prompt: function (s) {
+      var rn = roundNote([s.x, s.y, s.P]);
+      return "<div>If x + y = " + s.S + ", maximize the product x(y + " + s.k + "). Find the values of x and y that give the maximum, and the maximum product.</div>" + hintDiv(rn);
+    },
+    inputsHtml: function () {
+      return "<span class=\"field-label\">x =</span>" + inp("ans-x", "e.g. 6") +
+        "<span class=\"field-label\">y =</span>" + inp("ans-y", "e.g. 4") +
+        "<span class=\"field-label\">maximum product =</span>" + inp("ans-p", "e.g. 36");
+    },
+    readAnswer: function (card) {
+      return { x: parseAnswer(card.querySelector(".ans-x").value), y: parseAnswer(card.querySelector(".ans-y").value), p: parseAnswer(card.querySelector(".ans-p").value) };
+    },
+    isCorrect: function (ua, s) { return numMatch(ua.x, s.x, false) && numMatch(ua.y, s.y, false) && numMatch(ua.p, s.P, false); },
+    explain: function (ua, s) {
+      if (numMatch(ua.x, s.y, false) && numMatch(ua.y, s.x, false)) return "It looks like x and y are swapped &mdash; x is the variable in the first factor, x(y + " + s.k + ").";
+      return "";
+    },
+    solutionHtml: function (s) {
+      var S = s.S, k = s.k, T = S + k;
+      return "<span class=\"sol-label\">Solution</span>" +
+        "<div class=\"step\"><strong>Step 1 &mdash; one variable.</strong> From x + y = " + S + ", y = " + S + " &minus; x. So P(x) = x(y + " + k + ") = x(" + S + " &minus; x + " + k + ") = x(" + T + " &minus; x) = &minus;x<sup>2</sup> + " + T + "x.</div>" +
+        "<div class=\"step\"><strong>Step 2 &mdash; differentiate.</strong> P&prime;(x) = &minus;2x + " + T + ".</div>" +
+        "<div class=\"step\"><strong>Step 3 &mdash; critical point.</strong> &minus;2x + " + T + " = 0, so x = " + T + "/2 = " + numHtml(s.x, 2) + ".</div>" +
+        "<div class=\"step\"><strong>Step 4 &mdash; confirm it is a maximum.</strong> P&Prime;(x) = &minus;2 &lt; 0 (the parabola opens downward), so this is the maximum.</div>" +
+        "<div class=\"step\"><strong>Step 5 &mdash; finish.</strong> y = " + S + " &minus; " + numHtml(s.x, 2) + " = " + numHtml(s.y, 2) + ". Then the product is x(y + " + k + ") = " + numHtml(s.x, 2) + "&middot;(" + numHtml(s.y, 2) + " + " + k + ") = " + numHtml(s.x, 2) + "&middot;" + numHtml(s.y + k, 2) + " = " + numHtml(s.P, 4) + ".</div>" +
+        "<div class=\"final\">Answer: x = " + numHtml(s.x, 2) + ", y = " + numHtml(s.y, 2) + ", maximum product = " + numHtml(s.P, 4) + "</div>";
+    }
+  });
+
+  // ---------- Group 4: fenced yard along a river ----------
+  PARTS.push({
+    id: "4", group: "4", label: "", points: 4,
+    gen: function () {
+      var div = Math.random() < 0.3, L, w, l, A;
+      if (div) { L = 12 * randInt(10, 60); w = L / 6; l = L / 2; A = L * L / 12; }
+      else { L = 10 * randInt(10, 100); w = L / 4; l = L / 2; A = L * L / 8; }
+      return { div: div, L: L, w: w, l: l, A: A };
+    },
+    prompt: function (s) {
+      var rn = roundNote([s.w, s.l, s.A]);
+      var extra = s.div ? " One more fence, running from the river to the opposite side, divides the yard into two equal pens (so the river side needs no fence, but there are three fences perpendicular to the river)." : "";
+      return "<div>You want to enclose a rectangular yard and can use a river as one of its sides, so no fence is needed along the river." + extra +
+        " You have " + s.L + " feet of fencing. Find the dimensions of the yard that give the largest area, and that largest area.</div>" + hintDiv(rn);
+    },
+    inputsHtml: function () {
+      return "<span class=\"field-label\">side perpendicular to the river (ft) =</span>" + inp("ans-w", "e.g. 100") +
+        "<span class=\"field-label\">side parallel to the river (ft) =</span>" + inp("ans-l", "e.g. 200") +
+        "<span class=\"field-label\">maximum area (sq ft) =</span>" + inp("ans-a", "e.g. 20000");
+    },
+    readAnswer: function (card) {
+      return { w: parseAnswer(card.querySelector(".ans-w").value), l: parseAnswer(card.querySelector(".ans-l").value), a: parseAnswer(card.querySelector(".ans-a").value) };
+    },
+    isCorrect: function (ua, s) { return numMatch(ua.w, s.w, false) && numMatch(ua.l, s.l, false) && numMatch(ua.a, s.A, false); },
+    explain: function (ua, s) {
+      if (numMatch(ua.w, s.l, false) && numMatch(ua.l, s.w, false)) return "It looks like the two sides are swapped &mdash; check which side runs along the river.";
+      return "";
+    },
+    solutionHtml: function (s) {
+      var L = s.L, n = s.div ? 3 : 2, c = s.div ? 6 : 4;
+      var fenceEq = s.div ? "3w + l = " + L : "2w + l = " + L;
+      return "<span class=\"sol-label\">Solution</span>" +
+        "<div class=\"step\"><strong>Step 1 &mdash; set up.</strong> Let w be the side perpendicular to the river and l the side parallel to it. Fence is needed on " + (s.div ? "three perpendicular sides (two ends plus the divider) and one parallel side" : "two perpendicular sides and one parallel side") + ", so " + fenceEq + " and l = " + L + " &minus; " + n + "w.</div>" +
+        "<div class=\"step\"><strong>Step 2 &mdash; area as a function of w.</strong> A(w) = w&middot;l = w(" + L + " &minus; " + n + "w) = " + L + "w &minus; " + n + "w<sup>2</sup>, with 0 &lt; w &lt; " + numHtml(L / n, 2) + ".</div>" +
+        "<div class=\"step\"><strong>Step 3 &mdash; differentiate.</strong> A&prime;(w) = " + L + " &minus; " + (2 * n) + "w = 0, so w = " + L + "/" + c + " = " + numHtml(s.w, 2) + ".</div>" +
+        "<div class=\"step\"><strong>Step 4 &mdash; confirm.</strong> A&Prime;(w) = &minus;" + (2 * n) + " &lt; 0, so this is a maximum (and A = 0 at both ends of the domain).</div>" +
+        "<div class=\"step\"><strong>Step 5 &mdash; finish.</strong> l = " + L + " &minus; " + n + "(" + numHtml(s.w, 2) + ") = " + numHtml(s.l, 2) + ". Area = w&middot;l = " + numHtml(s.w, 2) + " &middot; " + numHtml(s.l, 2) + " = " + numHtml(s.A, 2) + " sq ft.</div>" +
+        "<div class=\"final\">Answer: " + numHtml(s.w, 2) + " ft by " + numHtml(s.l, 2) + " ft, maximum area = " + numHtml(s.A, 2) + " sq ft</div>";
+    }
+  });
+
+  // ---------- Group 5: inflection points ----------
+  function q5Gen() {
+    var roll = Math.random(), fam, P, zeros, K = null, fppFn, fppFact, pre = "";
+    if (roll < 0.35) {
+      // a x^5 + b x^4  (a = 3 s sg, b = -5 s t sg):  f'' = 60 s sg x^2 (x - t)
+      fam = "A";
+      var s1 = randInt(1, 2), t1 = randChoice([-2, -1, 1, 2]), sg1 = randBool() ? 1 : -1;
+      P = mkPoly([0, 0, 0, 0, -5 * s1 * t1 * sg1, 3 * s1 * sg1], 1);
+      K = 60 * s1 * sg1; zeros = [{ r: 0, m: 2 }, { r: t1, m: 1 }].sort(function (a, b) { return a.r - b.r; });
+    } else if (roll < 0.6) {
+      // a x^6 + b x^5 (a = 2 s sg, b = -3 s t sg):  f'' = 60 s sg x^3 (x - t)
+      fam = "B";
+      var s2 = randInt(1, 2), t2 = randChoice([-2, -1, 1, 2]), sg2 = randBool() ? 1 : -1;
+      P = mkPoly([0, 0, 0, 0, 0, -3 * s2 * t2 * sg2, 2 * s2 * sg2], 1);
+      K = 60 * s2 * sg2; zeros = [{ r: 0, m: 3 }, { r: t2, m: 1 }].sort(function (a, b) { return a.r - b.r; });
+    } else if (roll < 0.8) {
+      // a x^4 - 6 a m^2 x^2 + e x + g:  f'' = 12 a (x - m)(x + m)
+      fam = "C";
+      var a3 = randInt(1, 2) * (randBool() ? 1 : -1), m3 = randInt(1, 2);
+      var e3 = Math.random() < 0.5 ? randInt(-4, 4) : 0, g3 = Math.random() < 0.4 ? randInt(-5, 5) : 0;
+      P = mkPoly([g3, e3, -6 * a3 * m3 * m3, 0, a3], 1);
+      K = 12 * a3; zeros = [{ r: -m3, m: 1 }, { r: m3, m: 1 }];
+    } else if (roll < 0.9) {
+      // a x^4 + b x^2:  f'' = 2(6a x^2 + b), never zero
+      fam = "D1";
+      var a4 = randInt(1, 3), b4 = randInt(1, 6), sg4 = randBool() ? 1 : -1;
+      P = mkPoly([0, 0, b4 * sg4, 0, a4 * sg4], 1);
+      zeros = [];
+      fppFn = function (x) { return sg4 * 2 * (6 * a4 * x * x + b4); };
+      fppFact = (sg4 < 0 ? "&minus;" : "") + "2(" + polyHtml(mkPoly([b4, 0, 6 * a4])) + ")";
+    } else {
+      // a x^6 + b x^4:  f'' = 6 x^2 (5a x^2 + 2b)  (zero only at x = 0, no sign change)
+      fam = "D2";
+      var a5 = randInt(1, 3), b5 = randInt(1, 4), sg5 = randBool() ? 1 : -1;
+      P = mkPoly([0, 0, 0, 0, b5 * sg5, 0, a5 * sg5], 1);
+      zeros = [{ r: 0, m: 2 }];
+      fppFn = function (x) { return sg5 * 6 * x * x * (5 * a5 * x * x + 2 * b5); };
+      fppFact = (sg5 < 0 ? "&minus;" : "") + "6x<sup>2</sup>(" + polyHtml(mkPoly([2 * b5, 0, 5 * a5])) + ")";
+    }
+    if (K !== null) {
+      var zz = zeros;
+      fppFn = function (x) { return factorVal(K, zz, x); };
+      fppFact = factorHtml(K, zz);
+    }
+    var infl = zeros.filter(function (z) { return z.m % 2 === 1; }).map(function (z) { return { x: z.r, y: evalPoly(P, z.r) }; });
+    var fpP = derivPoly(P), fppP = derivPoly(fpP);
+    return {
+      fam: fam, P: P, fpP: fpP, fppP: fppP, zeros: zeros, infl: infl, fppFn: fppFn, fppFact: fppFact,
+      f: function (x) { return evalPoly(P, x); }
+    };
+  }
+  function q5Eval(ua, s) {
+    var exp = s.infl, xs = ua.xs, ys = ua.ys, notes = [], ok = false, i;
+    if (xs.type === "list") {
+      xs.nums.forEach(function (v) {
+        var isInf = exp.some(function (e) { return Math.abs(e.x - v) <= 0.02; });
+        if (isInf) return;
+        var z = s.zeros.filter(function (zz) { return zz.m % 2 === 0 && Math.abs(zz.r - v) <= 0.02; })[0];
+        if (z) notes.push("x = " + mn(z.r) + " makes f&Prime;(x) = 0, but f&Prime; does not change sign there (its factor has an even power), so the concavity stays the same on both sides and it is <strong>not</strong> an inflection point.");
+        else notes.push("x = " + mn(v) + " is not an inflection point of f.");
+      });
+    }
+    if (exp.length === 0) {
+      ok = xs.type === "none" && (ys.type === "none" || ys.type === "invalid");
+    } else if (xs.type === "list" && ys.type === "list" && xs.nums.length === exp.length && ys.nums.length === exp.length) {
+      ok = exp.every(function (e) {
+        for (i = 0; i < xs.nums.length; i++) {
+          if (Math.abs(xs.nums[i] - e.x) <= 0.02 + 1e-9 && Math.abs(ys.nums[i] - e.y) <= 0.02 + 1e-9) return true;
+        }
+        return false;
+      });
+      if (!ok) {
+        var xsOk = exp.every(function (e) { return xs.nums.some(function (v) { return Math.abs(v - e.x) <= 0.02; }); });
+        if (xsOk && !notes.length) notes.push("Your x-values are right, but at least one y-value is off &mdash; plug each x into f(x) itself (not f&prime; or f&Prime;), keeping the same order as your x-values.");
+      }
+    } else if (xs.type === "list" && ys.type !== "list" && !notes.length) {
+      var allIn = exp.length > 0 && xs.nums.length === exp.length && exp.every(function (e) { return xs.nums.some(function (v) { return Math.abs(v - e.x) <= 0.02; }); });
+      notes.push(allIn ? "Your x-values are right &mdash; now also give the matching y-value of each inflection point (in the same order)." : "Give the y-value of each inflection point too, in the same order as your x-values.");
+    }
+    if (!ok && !notes.length && xs.type === "list" && xs.nums.length < exp.length) notes.push("There is at least one more inflection point &mdash; check every place where f&Prime; changes sign.");
+    if (!ok && !notes.length && exp.length === 0 && xs.type === "list") notes.push("Check the sign of f&Prime;: does it ever change?");
+    return { ok: ok, note: notes.join(" ") };
+  }
+
+  PARTS.push({
+    id: "5", group: "5", label: "", points: 4,
+    gen: q5Gen,
+    prompt: function (s) {
+      return "<div>What are the inflection points of</div><span class=\"math\">f(x) = " + polyHtml(s.P) + "</span>" +
+        "<div style=\"margin-top:8px\">Give the x-values separated by commas, and the matching y-values in the same order. If there are no inflection points, type <em>none</em>.</div>";
+    },
+    inputsHtml: function () {
+      return "<div class=\"subrow full\"><span class=\"field-label\">inflection x-values =</span>" + inp("ans-xs", "e.g. -2, 3  or  none", true) + "</div>" +
+        "<div class=\"subrow full\"><span class=\"field-label\">matching y-values =</span>" + inp("ans-ys", "e.g. 4, -1", true) + "</div>";
+    },
+    readAnswer: function (card) {
+      return { xs: parseList(card.querySelector(".ans-xs").value), ys: parseList(card.querySelector(".ans-ys").value) };
+    },
+    isCorrect: function (ua, s) { return q5Eval(ua, s).ok; },
+    explain: function (ua, s) { return q5Eval(ua, s).note; },
+    solutionHtml: function (s) {
+      var h = "<span class=\"sol-label\">Solution</span>";
+      h += "<div class=\"step\"><strong>Step 1 &mdash; second derivative.</strong> f&prime;(x) = " + polyHtml(s.fpP) + ", &nbsp; f&Prime;(x) = " + polyHtml(s.fppP) + ".</div>";
+      h += "<div class=\"step\"><strong>Step 2 &mdash; factor.</strong> f&Prime;(x) = " + s.fppFact + ".</div>";
+      if (!s.zeros.length) {
+        h += "<div class=\"step\"><strong>Step 3 &mdash; where is f&Prime;(x) = 0?</strong> The bracket is a positive constant plus a positive multiple of x<sup>2</sup>, so it is never 0: f&Prime; has no real zeros.</div>";
+        h += "<div class=\"step\"><strong>Step 4 &mdash; sign chart.</strong></div>";
+        h += signChartHtml(s.fppFn, [], [], "f&Prime;", "concave up", "concave down", "f is");
+        h += "<div class=\"step\">f&Prime; has the same sign everywhere, so the concavity never changes. An inflection point needs a change of concavity.</div>";
+        h += "<div class=\"final\">Answer: none</div>";
+        return h;
+      }
+      h += "<div class=\"step\"><strong>Step 3 &mdash; where is f&Prime;(x) = 0?</strong> " + s.zeros.map(function (z) { return "x = " + mn(z.r); }).join(" &nbsp;or&nbsp; ") + ". These are only <em>candidates</em> &mdash; an inflection point needs f&Prime; to change sign there.</div>";
+      h += "<div class=\"step\"><strong>Step 4 &mdash; sign chart for f&Prime;.</strong></div>";
+      h += signChartHtml(s.fppFn, s.zeros.map(function (z) { return z.r; }), s.zeros.map(function (z) { return mn(z.r); }), "f&Prime;", "concave up", "concave down", "f is");
+      s.zeros.forEach(function (z) {
+        var before = s.fppFn(z.r - 0.001), after = s.fppFn(z.r + 0.001);
+        var yv = evalPoly(s.P, z.r);
+        if (z.m % 2 === 0) {
+          h += "<div class=\"step\">At x = " + mn(z.r) + ": f&Prime; is " + (before > 0 ? "positive" : "negative") + " on both sides (the factor " + (z.r === 0 ? "x" : "(x " + (z.r < 0 ? "+ " + (-z.r) : "&minus; " + z.r) + ")") + "<sup>" + z.m + "</sup> never changes sign), so the concavity does <strong>not</strong> change. (" + mn(z.r) + ", " + mn(fmtDec(yv, 2)) + ") is <strong>not</strong> an inflection point.</div>";
+        } else {
+          h += "<div class=\"step\">At x = " + mn(z.r) + ": f&Prime; changes from " + (before > 0 ? "+ to &minus; (concave up to concave down)" : "&minus; to + (concave down to concave up)") + ", so this <strong>is</strong> an inflection point. y = f(" + mn(z.r) + ") = " + mn(fmtDec(yv, 2)) + ".</div>";
+        }
+      });
+      h += "<div class=\"final\">Answer: " + (s.infl.length ? s.infl.map(function (p) { return "(" + mn(p.x) + ", " + mn(fmtDec(p.y, 2)) + ")"; }).join(", ") : "none") + "</div>";
+      return h;
+    }
+  });
+
+  // ---------- Group 6: open-top box ----------
+  PARTS.push({
+    id: "6", group: "6", label: "", points: 4,
+    gen: function () {
+      var a, b;
+      if (Math.random() < 0.2) { a = b = randInt(8, 24); }
+      else { a = randInt(8, 18); b = a + randInt(1, 10); }
+      var S = a + b, disc = S * S - 3 * a * b, r = Math.sqrt(disc);
+      var x1 = (S - r) / 6, x2 = (S + r) / 6;
+      return { a: a, b: b, S: S, disc: disc, x1: x1, x2: x2, V: x1 * (b - 2 * x1) * (a - 2 * x1), V2: x2 * (b - 2 * x2) * (a - 2 * x2) };
+    },
+    prompt: function (s) {
+      var rn = roundNote([s.x1, s.V]);
+      return "<div>A piece of cardboard is " + s.a + " inches by " + s.b + " inches. A square of side x is cut out of each corner and the sides are folded up to make an open-top box. Find the value of x that gives the largest volume, and that largest volume.</div>" + hintDiv(rn);
+    },
+    inputsHtml: function () {
+      return "<span class=\"field-label\">cut-out size x (in) =</span>" + inp("ans-x", "e.g. 2.31") +
+        "<span class=\"field-label\">maximum volume (cubic in) =</span>" + inp("ans-v", "e.g. 200.5");
+    },
+    readAnswer: function (card) { return { x: parseAnswer(card.querySelector(".ans-x").value), v: parseAnswer(card.querySelector(".ans-v").value) }; },
+    isCorrect: function (ua, s) { return numMatch(ua.x, s.x1, false) && numMatch(ua.v, s.V, true); },
+    explain: function (ua, s) {
+      if (numMatch(ua.x, s.x2, false)) return "That root is too big: you cannot cut squares of side " + numHtml(s.x2, 2) + " from a sheet only " + s.a + " inches wide (x must be less than " + numHtml(s.a / 2, 2) + "). Use the other root.";
+      return "";
+    },
+    solutionHtml: function (s) {
+      var a = s.a, b = s.b, S = s.S, sq = a === b;
+      var h = "<span class=\"sol-label\">Solution</span>";
+      h += "<div class=\"step\"><strong>Step 1 &mdash; set up.</strong> Cutting a square of side x from each corner leaves a base of " + (b) + " &minus; 2x by " + a + " &minus; 2x, and the height is x. The cut must be less than half of the shorter side, so 0 &lt; x &lt; " + numHtml(a / 2, 2) + ".</div>";
+      h += "<div class=\"step\"><strong>Step 2 &mdash; volume.</strong> V(x) = x(" + b + " &minus; 2x)(" + a + " &minus; 2x) = 4x<sup>3</sup> &minus; " + (2 * S) + "x<sup>2</sup> + " + (a * b) + "x.</div>";
+      h += "<div class=\"step\"><strong>Step 3 &mdash; differentiate.</strong> V&prime;(x) = 12x<sup>2</sup> &minus; " + (4 * S) + "x + " + (a * b) + " = 0.</div>";
+      h += "<div class=\"step\"><strong>Step 4 &mdash; quadratic formula.</strong> x = [" + (4 * S) + " &plusmn; &radic;(" + (4 * S) + "<sup>2</sup> &minus; 4&middot;12&middot;" + (a * b) + ")] / 24 = [" + S + " &plusmn; &radic;" + s.disc + "] / 6" + (sq ? ", and &radic;" + s.disc + " = " + Math.round(Math.sqrt(s.disc)) + " so V&prime;(x) factors as 12(x &minus; " + numHtml(a / 6, 2) + ")(x &minus; " + numHtml(a / 2, 2) + ")" : "") + ".</div>";
+      h += "<div class=\"step sub\">x<sub>1</sub> = " + numHtml(s.x1, 4) + " &nbsp;&nbsp; x<sub>2</sub> = " + numHtml(s.x2, 4) + "</div>";
+      h += "<div class=\"step\"><strong>Step 5 &mdash; check the domain.</strong> x<sub>2</sub> = " + numHtml(s.x2, 4) + " is " + (sq ? "exactly " : "larger than ") + numHtml(a / 2, 2) + " (half the shorter side)" + (sq ? ", which uses up the whole sheet and gives volume 0" : ", so you cannot cut that much") + " &mdash; <strong>reject it</strong>. Only x<sub>1</sub> = " + numHtml(s.x1, 4) + " is in the domain.</div>";
+      h += "<div class=\"step\"><strong>Step 6 &mdash; confirm a maximum.</strong> V&Prime;(x) = 24x &minus; " + (4 * S) + "; V&Prime;(" + numHtml(s.x1, 4) + ") = " + numHtml(24 * s.x1 - 4 * S, 3) + " &lt; 0, so x<sub>1</sub> gives a maximum (and V = 0 at both ends of the domain).</div>";
+      h += "<div class=\"step\"><strong>Step 7 &mdash; maximum volume.</strong> V(" + numHtml(s.x1, 4) + ") = " + numHtml(s.x1, 4) + "&middot;(" + b + " &minus; " + numHtml(2 * s.x1, 4) + ")&middot;(" + a + " &minus; " + numHtml(2 * s.x1, 4) + ") = " + numHtml(s.V, 3) + ".</div>";
+      h += "<div class=\"final\">Answer: x &asymp; " + numHtml(s.x1, 2) + " in, maximum volume &asymp; " + numHtml(s.V, 2) + " cubic in</div>";
+      return h;
+    }
+  });
+  // ============================================================
+  // Group metadata
+  // ============================================================
+  var GROUP_META = {
+    "1": { num: "1.", desc: "Find the global (absolute) extrema of each function on the given closed interval. Give the x-value and the function value for both the maximum and the minimum." },
+    "2": { num: "2.", desc: "Find the local extrema of each function. Type none if there is no local maximum or no local minimum." },
+    "3": { num: "3.", desc: "Optimization: use calculus to maximize the product." },
+    "4": { num: "4.", desc: "Optimization: use calculus to find the largest area you can enclose." },
+    "5": { num: "5.", desc: "Find the inflection points of the function." },
+    "6": { num: "6.", desc: "Optimization: use calculus to maximize the volume of the box." }
+  };
+
+  // ============================================================
+  // Engine: mount cards
+  // ============================================================
+  var scoreMap = {};
+  var TOTAL_POINTS = PARTS.reduce(function (sum, p) { return sum + p.points; }, 0);
+  var scoreNumEl = document.getElementById("scoreNum");
+
+  function updateScore() {
+    var earned = 0;
+    Object.keys(scoreMap).forEach(function (k) { earned += scoreMap[k]; });
+    scoreNumEl.textContent = earned + " / " + TOTAL_POINTS;
+  }
+
+  var examScoreMap = {};
+  var examScoreNumEl = document.getElementById("examScoreNum");
+
+  function updateExamScore() {
+    var earned = 0;
+    Object.keys(examScoreMap).forEach(function (k) { earned += examScoreMap[k]; });
+    examScoreNumEl.textContent = earned + " / " + TOTAL_POINTS;
+  }
+
+  window.__PT_STATE = {};
+  window.__PT_PARTS = PARTS;
+
+  function mountCard(part, container) {
+    var card = document.createElement("div");
+    card.className = "qcard";
+    card.setAttribute("data-id", part.id);
+
+    var headHtml = "<div class=\"qcard-head\"><div class=\"qtitle\">" +
+      (part.label ? "<span class=\"qlabel\">" + part.label + "</span>" : "") +
+      "<span class=\"qpoints\">" + part.points + " pt" + (part.points === 1 ? "" : "s") + "</span>" +
+      "<span class=\"exam-badge hidden\"></span></div>" +
+      "<button class=\"icon-btn new-version-btn\" type=\"button\">" +
+      "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M16 3h5v5\"/><path d=\"M4 20 21 3\"/><path d=\"M21 16v5h-5\"/><path d=\"M15 15l6 6\"/><path d=\"M4 4l5 5\"/></svg>" +
+      "New version</button></div>";
+
+    card.innerHTML = headHtml +
+      "<div class=\"qprompt\"></div>" +
+      (part.hasGraph ? "<div class=\"qgraph-wrap" + (part.graphSmall ? " small" : "") + "\"><canvas></canvas></div>" : "") +
+      "<div class=\"qinputs\"></div>" +
+      "<div class=\"qactions\"><button class=\"btn-primary check-btn\" type=\"button\">Check Answer</button><button class=\"btn-secondary solution-btn\" type=\"button\">Show Solution</button></div>" +
+      "<div class=\"qfeedback hidden\"></div>" +
+      "<div class=\"qsolution hidden\"></div>";
+
+    container.appendChild(card);
+
+    var promptEl = card.querySelector(".qprompt");
+    var inputsEl = card.querySelector(".qinputs");
+    var feedbackEl = card.querySelector(".qfeedback");
+    var solutionEl = card.querySelector(".qsolution");
+    var examBadgeEl = card.querySelector(".exam-badge");
+    var canvasEl = part.hasGraph ? card.querySelector("canvas") : null;
+
+    var state;
+    var examAttempted = false;
+
+    function lockExam(pts, note) {
+      if (examAttempted) return;
+      examAttempted = true;
+      examScoreMap[part.id] = pts;
+      examBadgeEl.className = "exam-badge " + (pts >= part.points ? "exam-good" : "exam-bad");
+      examBadgeEl.innerHTML = "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"4\" y=\"10\" width=\"16\" height=\"10\" rx=\"2\"/><path d=\"M8 10V7a4 4 0 0 1 8 0v3\"/></svg> Exam: " + pts + "/" + part.points + (note ? " (" + note + ")" : "");
+      updateExamScore();
+    }
+
+    function render() {
+      state = part.gen();
+      window.__PT_STATE[part.id] = state;
+      promptEl.innerHTML = part.prompt(state);
+      inputsEl.innerHTML = part.inputsHtml(state, part.id);
+      feedbackEl.classList.add("hidden");
+      feedbackEl.innerHTML = "";
+      solutionEl.classList.add("hidden");
+      solutionEl.innerHTML = "";
+      scoreMap[part.id] = 0;
+      updateScore();
+      if (part.afterRender) part.afterRender(card);
+      if (part.hasGraph) part.drawGraph(canvasEl, state);
+    }
+
+    card.querySelector(".new-version-btn").addEventListener("click", render);
+    card.querySelector(".check-btn").addEventListener("click", function () {
+      var ua = part.readAnswer(card);
+      var correct = part.isCorrect(ua, state);
+      feedbackEl.classList.remove("hidden");
+      if (correct) {
+        feedbackEl.className = "qfeedback good";
+        feedbackEl.innerHTML = "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M20 6 9 17l-5-5\"/></svg> Correct!";
+        scoreMap[part.id] = part.points;
+      } else {
+        feedbackEl.className = "qfeedback bad";
+        var note = part.explain ? part.explain(ua, state) : "";
+        feedbackEl.innerHTML = "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\"><circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M15 9l-6 6M9 9l6 6\"/></svg><span class=\"fb-body\">Not quite &mdash; check the solution below." + (note ? "<span class=\"fb-note\">" + note + "</span>" : "") + "</span>";
+        scoreMap[part.id] = 0;
+      }
+      updateScore();
+      lockExam(correct ? part.points : 0);
+    });
+    card.querySelector(".solution-btn").addEventListener("click", function () {
+      solutionEl.innerHTML = part.solutionHtml(state);
+      solutionEl.classList.remove("hidden");
+      lockExam(0, "viewed solution");
+    });
+
+    if (part.hasGraph) {
+      window.addEventListener("resize", function () { if (state) part.drawGraph(canvasEl, state); });
+    }
+
+    render();
+  }
+
+  function buildAll() {
+    var groupsEl = document.getElementById("groups");
+    groupsEl.innerHTML = "";
+    scoreMap = {};
+    examScoreMap = {};
+    var seenGroups = {};
+    var currentContainer = null;
+    PARTS.forEach(function (part) {
+      if (!seenGroups[part.group]) {
+        seenGroups[part.group] = true;
+        var meta = GROUP_META[part.group];
+        var gh = document.createElement("div");
+        gh.className = "group-head";
+        gh.innerHTML = "<div class=\"gnum\">" + meta.num + "</div><div class=\"gdesc\">" + meta.desc + "</div>";
+        groupsEl.appendChild(gh);
+        currentContainer = document.createElement("div");
+        groupsEl.appendChild(currentContainer);
+      }
+      mountCard(part, currentContainer);
+    });
+    updateScore();
+    updateExamScore();
+  }
+
+  document.getElementById("newTestBtn").addEventListener("click", buildAll);
+
+  buildAll();
+})();
+</script>
