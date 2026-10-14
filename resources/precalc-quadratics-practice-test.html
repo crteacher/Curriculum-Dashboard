@@ -1346,7 +1346,7 @@
     inputsHtml: function () {
       return "<div class=\"subrow\"><span class=\"field-label\">f(x) =</span>" + inputHtml("ans-f", "your first quadratic", "wide") +
         "<span class=\"field-label\">g(x) =</span>" + inputHtml("ans-g", "your second quadratic", "wide") + "</div>" +
-        "<div class=\"subrow\"><span class=\"field-label\">x-value(s) where they intersect:</span>" + inputHtml("ans-main", "e.g. -1, 2") + "</div>" +
+        "<div class=\"subrow\"><span class=\"field-label\">x-value(s) where they intersect:</span>" + inputHtml("ans-main", "e.g. -1, 2  (or type none)") + "</div>" +
         "<div class=\"subrow col\"><span class=\"field-label\">If they never intersect, why not?</span>" + mcRowHtml("why", WHY_OPTS) + "</div>";
     },
     afterRender: mcAfterRender,
@@ -1358,7 +1358,9 @@
       if (msgs.length) return bad(msgs.join(" "));
       if (pEqual(rf.poly, rg.poly)) return bad("these two are the same function. They need to be two distinct quadratics.");
       var T = intersectTruth(rf.co, rg.co);
-      var r = gradeNumList(ua.main, T.roots, T.tols, {
+      // leaving the box blank while picking a reason means "they never intersect"
+      var mainIn = (!String(ua.main || "").trim() && ua.why) ? "none" : ua.main;
+      var r = gradeNumList(mainIn, T.roots, T.tols, {
         noneMsg: "recheck your intersection: set f(x) = g(x), bring everything to one side and solve. Your two functions do meet.",
         someMsg: "recheck your intersection: set f(x) = g(x) and solve. For your two functions, f(x) − g(x) = 0 does have a real solution.",
         pointMsg: "give just the x-value(s) of the intersection, not (x, y) points.",
