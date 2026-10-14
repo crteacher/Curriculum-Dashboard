@@ -287,6 +287,22 @@
   .fres.ok { color: var(--good); }
   .fres.bad { color: var(--bad); }
   .fres.bad b { font-weight: 700; }
+  .gstep { border-left: 3px solid var(--card-border); padding: 2px 0 2px 16px; margin: 0 0 18px; }
+  .gstep.done { border-left-color: var(--good); }
+  .ghead { display: flex; align-items: center; gap: 10px; font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 1.02rem; }
+  .gn { width: 24px; height: 24px; border-radius: 50%; background: var(--accent); color: var(--accent-ink); display: inline-grid; place-items: center; font: 700 0.78rem "JetBrains Mono", monospace; flex-shrink: 0; }
+  .gstep.done .gn { background: var(--good); }
+  .gexplain { font-size: 0.94rem; line-height: 1.65; margin: 6px 0 10px; }
+  .gexplain .math { font-family: "JetBrains Mono", ui-monospace, monospace; }
+  .gworked { margin-top: 8px; font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 0.92rem; line-height: 1.7; }
+  .gstep > .gworked:not(.qsolution) { background: var(--accent-soft); border-left: 4px solid var(--good); border-radius: 0 10px 10px 0; padding: 10px 14px; }
+  .gstep .qsolution { font-family: inherit; }
+  .gstep .qsolution .step, .gstep .qsolution { font-family: "JetBrains Mono", ui-monospace, monospace; }
+  .gdone { margin-top: 6px; }
+  .ptable { border-collapse: collapse; margin: 6px 0 10px; font-size: 0.86rem; }
+  .ptable th, .ptable td { border: 1px solid var(--card-border); padding: 4px 12px; text-align: left; }
+  .ptable th { font-family: "Source Sans 3", sans-serif; color: var(--ink-soft); font-weight: 700; }
+  .ptable tr.hit td { background: var(--good-soft); color: var(--good); font-weight: 700; }
   .qsolution .note { color: var(--ink-soft); font-style: italic; font-size: 0.88rem; margin-top: 6px; }
   .qsolution .step .math sup, .qprompt .math sup, .mc-opt sup, .fpreview sup { font-size: 0.72em; line-height: 0; }
   .qprompt .math, .qsolution .math, .step-pair .math { white-space: normal; }
@@ -671,7 +687,39 @@ var SVG_REFRESH = "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColo
     Object.keys(p).forEach(function (k) { var t = p[k]; if (t.e.n === 0) return; pAddTerm(r, fadd(t.e, F(-1)), fmul(t.c, t.e)); });
     return r;
   }
+  function flatTerms(node) {
+    while (node.t === "grp") node = node.a;
+    var out = [];
+    (function walk(n) { if (n.t === "add") { walk(n.a); walk(n.b); } else out.push(n); })(node);
+    return out;
+  }
+  function containsGrp(n) {
+    if (!n) return false;
+    if (n.t === "grp") return true;
+    return containsGrp(n.a) || containsGrp(n.b);
+  }
+  function gradeSplit(input, spec) {
+    var tree;
+    try { tree = parseExpr(input); } catch (err) { return { ok: false, msg: err.message, unread: true }; }
+    var sp;
+    try { sp = expandNode(tree); } catch (err2) { return { ok: false, msg: err2.message, unread: true }; }
+    if (!pEqual(sp, expandStr(spec.orig))) return { ok: false, msg: "This has to equal the original exactly. You are only rewriting the middle term: bx becomes mx + nx, using your pair." };
+    if (flatTerms(tree).length !== 4) return { ok: false, msg: "Equal to the original, but split the middle term into two terms so there are four terms in all." };
+    return { ok: true, msg: "" };
+  }
+  function gradeGrouped(input, spec) {
+    var tree;
+    try { tree = parseExpr(input); } catch (err) { return { ok: false, msg: err.message, unread: true }; }
+    var sp;
+    try { sp = expandNode(tree); } catch (err2) { return { ok: false, msg: err2.message, unread: true }; }
+    if (!pEqual(sp, expandStr(spec.orig))) return { ok: false, msg: "This has to equal the original. Check what you pulled out of each pair: multiply it back in to see." };
+    var ts = flatTerms(tree);
+    if (ts.length !== 2 || !ts.every(containsGrp)) return { ok: false, msg: "Equal to the original, but it should be two terms, one per pair, each with a bracket: (what you pulled out)(bracket)." };
+    return { ok: true, msg: "" };
+  }
   function gradeField(f, input) {
+    if (f.kind === "split") return gradeSplit(input, f.spec);
+    if (f.kind === "grouped") return gradeGrouped(input, f.spec);
     if (f.kind === "pair") return gradePair(input, f.spec);
     if (f.kind === "factor") return gradeFactored(input, f.spec);
     if (f.kind === "poly") return gradePoly(input, f.spec);
@@ -739,6 +787,7 @@ var SVG_REFRESH = "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColo
   function termX(c) { return c === 1 ? "+x" : c === -1 ? "-x" : (c > 0 ? "+" : "-") + Math.abs(c) + "x"; }
   function SOL(lines) {
     return "<span class=\"sol-label\">Solution</span>" + lines.map(function (l) {
+      if (l.charAt(0) === "@") return l.slice(1);
       if (l.charAt(0) === "~") return "<div class=\"step note\">" + l.slice(1) + "</div>";
       if (l.charAt(0) === "=") return "<div class=\"final\">" + l.slice(1) + "</div>";
       return "<div class=\"step\"><span class=\"math\">" + l + "</span></div>";
@@ -1012,7 +1061,7 @@ var SVG_REFRESH = "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColo
   // ============================================================
   // STAGE D: ax^2 + bx + c, a != 1
   // ============================================================
-  function genAC() {
+  function genAC(maxAC) {
     for (;;) {
       var p = randInt(1, 4), r = randInt(1, 4);
       if (p * r === 1) continue;
@@ -1023,24 +1072,78 @@ var SVG_REFRESH = "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColo
       if (b === 0) continue;
       if (p > r) { var t = p; p = r; r = t; t = q; q = s; s = t; }
       var a = p * r, c = q * s;
+      if (typeof maxAC === "number" && Math.abs(a * c) > maxAC) continue;
       return { p: p, q: q, r: r, s: s, a: a, b: b, c: c, ac: a * c, m: p * s, n: q * r,
         orig: polyPlain([c, b, a]), ans: linPlain(p, q) + linPlain(r, s) };
     }
   }
-  PARTS.push({
-    id: "D1", group: "D", type: "fields", points: 2,
-    gen: genAC,
-    prompt: function (s) {
-      return "For " + mathSpan(H(s.orig)) + ": a &middot; c = " + mathSpan(mn(s.a) + " &middot; " + par(s.c) + " = " + mn(s.ac)) + " and b = " + mn(s.b) + ". Find the two numbers that <b>multiply to " + mn(s.ac) + "</b> and <b>add to " + mn(s.b) + "</b>.";
-    },
-    fields: function (s) { return [{ key: "p", label: "The two numbers:", kind: "pair", spec: { m: s.m, n: s.n, prod: s.ac, sum: s.b }, pts: 2, ph: "e.g. 3, -8" }]; },
-    solution: function (s) {
-      return SOL([
-        "~Look for factor pairs of " + mn(s.ac) + " whose sum is " + mn(s.b) + " (a negative product means the numbers have opposite signs).",
-        mn(s.m) + " &times; " + par(s.n) + " = " + mn(s.ac) + ", &nbsp;" + mn(s.m) + " + " + par(s.n) + " = " + mn(s.b),
-        "=The numbers are " + mn(s.m) + " and " + mn(s.n)
-      ]);
+  function pairTableHtml(ac, b) {
+    var A = Math.abs(ac), rows = [], u, hit = null;
+    for (u = 1; u * u <= A; u++) if (A % u === 0) {
+      var v = A / u, sums, label;
+      if (ac < 0) { sums = [v - u, u - v]; } else { sums = [u + v, -(u + v)]; }
+      var win = sums.indexOf(b) !== -1, pair = "";
+      if (win) {
+        if (ac < 0) pair = (b === v - u) ? mn(-u) + " and " + v : mn(-v) + " and " + u;
+        else pair = (b > 0) ? u + " and " + v : mn(-u) + " and " + mn(-v);
+      }
+      rows.push("<tr" + (win ? " class=\"hit\"" : "") + "><td>" + u + " &times; " + v + "</td><td>" + sums.map(mn).join(" or ") + "</td><td>" + (win ? "&check; " + pair : "") + "</td></tr>");
     }
+    return "<table class=\"ptable\"><thead><tr><th>Factor pair of " + A + "</th><th>Sum, with signs</th><th>Matches b = " + mn(b) + "?</th></tr></thead><tbody>" + rows.join("") + "</tbody></table>";
+  }
+  function signRule(ac, b) {
+    return ac < 0
+      ? "ac is negative, so the two numbers have <b>opposite signs</b>, and the one with the bigger size takes the sign of b."
+      : "ac is positive, so the two numbers have the <b>same sign</b>, the same as the sign of b.";
+  }
+  function acStrings(s) {
+    var split = (s.a === 1 ? "" : String(s.a)) + "x^2" + termX(s.m) + termX(s.n) + (s.c > 0 ? "+" : "-") + Math.abs(s.c);
+    var br = linPlain(s.r, s.s);
+    var g1 = (s.p === 1 ? "" : String(s.p)) + "x" + br;
+    var g2 = (s.q > 0 ? "+" : "-") + Math.abs(s.q) + br;
+    return { split: split, g1: g1, g2: g2, grouped: g1 + g2 };
+  }
+  function acSteps(s) {
+    var st = acStrings(s);
+    return [
+      { title: "Multiply a and c",
+        explain: "In " + mathSpan(H(s.orig)) + ", <b>a</b> = " + mn(s.a) + " (the x&sup2; coefficient), <b>b</b> = " + mn(s.b) + " (the x coefficient) and <b>c</b> = " + mn(s.c) + " (the constant). Multiply a &middot; c, keeping the sign. (Always look for a common factor first. Here there isn't one.)",
+        field: { key: "ac", label: "a &middot; c =", kind: "num", spec: { value: s.ac, hint: "Multiply the x\u00B2 coefficient by the constant term and keep the sign." }, pts: 1, ph: "number" },
+        answer: String(s.ac),
+        worked: "a &middot; c = " + mn(s.a) + " &middot; " + par(s.c) + " = " + mn(s.ac) },
+      { title: "Find the pair",
+        explain: "Find two numbers that <b>multiply to " + mn(s.ac) + "</b> (a &middot; c) and <b>add to " + mn(s.b) + "</b> (b). Method: list every factor pair of " + Math.abs(s.ac) + ", then work down the list until the right signs give a sum of " + mn(s.b) + ". " + signRule(s.ac, s.b),
+        field: { key: "pair", label: "The two numbers:", kind: "pair", spec: { m: s.m, n: s.n, prod: s.ac, sum: s.b }, pts: 1, ph: "e.g. 3, -8" },
+        answer: s.m + ", " + s.n,
+        worked: pairTableHtml(s.ac, s.b) + "<div class=\"step\">So the pair is <b>" + mn(s.m) + "</b> and <b>" + mn(s.n) + "</b>: " + mn(s.m) + " &times; " + par(s.n) + " = " + mn(s.ac) + " and " + mn(s.m) + " + " + par(s.n) + " = " + mn(s.b) + ".</div>" },
+      { title: "Split the middle term",
+        explain: "Rewrite the middle term " + mathSpan(H(termX(s.b).replace(/^\+/, ""))) + " as the <b>sum of two terms</b> built from your pair: " + mathSpan(H(termX(s.m).replace(/^\+/, "")) + " " + H(termX(s.n))) + ". The value hasn't changed, you've only rewritten it. You should now have four terms.",
+        field: { key: "sp", label: "Rewritten expression:", kind: "split", spec: { orig: s.orig }, pts: 1, ph: "e.g. 6x^2-9x+8x-12", wide: true },
+        answer: st.split,
+        worked: H(s.orig) + " = " + H(st.split) },
+      { title: "Group in pairs and factor each pair",
+        explain: "Put the first two terms together and the last two together. Pull the greatest common factor out of <b>each</b> pair. If you did it right, <b>both pairs leave the same bracket behind</b>. If they don't match, recheck your pair or your signs.",
+        field: { key: "gr", label: "Grouped and factored:", kind: "grouped", spec: { orig: s.orig }, pts: 1, ph: "e.g. 3x(2x-3)+4(2x-3)", wide: true },
+        answer: st.grouped,
+        worked: H("(" + (s.a === 1 ? "" : s.a) + "x^2" + termX(s.m) + ")") + " + " + H("(" + termX(s.n).replace(/^\+/, "") + (s.c > 0 ? "+" : "-") + Math.abs(s.c) + ")") + "<br>" + H(st.grouped) + "<div class=\"step note\">Both pairs left " + H(linPlain(s.r, s.s)) + ".</div>" },
+      { title: "Factor out the shared bracket",
+        explain: "The bracket is now a common factor of the whole expression. Pull it out front. What is left over (the " + mathSpan(H(lead(s.p) + "x" + (s.q > 0 ? "+" : "-") + Math.abs(s.q))) + " pieces) becomes the other factor.",
+        field: { key: "f", label: "Factored form:", kind: "factor", spec: { orig: s.orig, ans: s.ans }, pts: 1, ph: "e.g. (3x+4)(2x-3)", wide: true },
+        answer: s.ans,
+        worked: H(s.orig) + " = " + H(s.ans) + "<div class=\"step note\">Check with FOIL: outer + inner = " + mn(s.p * s.s) + "x + " + par(s.q * s.r) + "x = " + mn(s.b) + "x &check;</div>" }
+    ];
+  }
+  PARTS.push({
+    id: "D0", group: "D", type: "walk", points: 0,
+    gen: function () { return genAC(72); },
+    prompt: function (s) { return "Watch the AC method factor " + mathSpan(H(s.orig)) + " one step at a time. Click through, then try one yourself below. The same five steps work every time."; },
+    steps: acSteps
+  });
+  PARTS.push({
+    id: "D1", group: "D", type: "guided", isPracticeGoal: true, points: 5,
+    gen: function () { return genAC(72); },
+    prompt: function (s) { return "Factor " + mathSpan(H(s.orig)) + " using the AC method. Do one step at a time. Each step unlocks the next, and <b>Show me</b> works the step if you're stuck."; },
+    steps: acSteps
   });
   function splitLines(s) {
     var split = (s.a === 1 ? "" : String(s.a)) + "x^2" + termX(s.m) + termX(s.n) + (s.c > 0 ? "+" : "-") + Math.abs(s.c);
@@ -1060,7 +1163,9 @@ var SVG_REFRESH = "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColo
     gen: genAC,
     prompt: function (s) { return "Factor: " + mathSpan(H(s.orig)) + ". (Use the split-the-middle method from the video.)"; },
     fields: function (s) { return [fFactor(s.orig, s.ans, 3)]; },
-    solution: function (s) { return SOL(splitLines(s)); }
+    solution: function (s) {
+      return SOL(["~a &middot; c = " + mn(s.a) + " &middot; " + par(s.c) + " = " + mn(s.ac) + ", &nbsp;b = " + mn(s.b) + ". " + signRule(s.ac, s.b), "@" + pairTableHtml(s.ac, s.b)].concat(splitLines(s)));
+    }
   });
   PARTS.push({
     id: "D3", group: "D", type: "fields", points: 3,
@@ -1598,7 +1703,7 @@ var SVG_REFRESH = "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColo
     },
     D: {
       num: "Stage 4", title: "Trinomials with Leading Coefficient Not 1",
-      desc: "Multiply a &middot; c, find the pair that multiplies to <strong>ac</strong> and adds to <strong>b</strong>, split the middle term with that pair, then factor by grouping. The two groups must leave the <em>same</em> bracket behind.",
+      desc: "The AC method works on <em>every</em> trinomial ax&sup2; + bx + c, and it never leaves you guessing: (1) multiply a &middot; c, (2) find the pair that multiplies to <strong>ac</strong> and adds to <strong>b</strong>, (3) split the middle term with that pair, (4) group and factor each pair, (5) pull out the shared bracket. If no pair exists, the trinomial doesn&rsquo;t factor. Already good at guess-and-check? Keep it, but verify with FOIL.",
       videos: [
         { url: KA + "algebra2/polynomial-functions/factoring-polynomials-quadratic-forms-alg2/v/factor-by-grouping-and-factoring-completely", label: "Intro to grouping" },
         { url: KA + "algebra2/polynomial-functions/factoring-polynomials-quadratic-forms-alg2/v/factoring-trinomials-by-grouping-6", label: "Negative common factor + grouping" }
@@ -1633,7 +1738,7 @@ var SVG_REFRESH = "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColo
   };
   var TITLES = {
     A1: "Solve it", A2: "What went wrong?", B1: "Factor out the GCF", B2: "Solve it", B3: "What went wrong?",
-    C1: "Factor it", C2: "Solve it", C3: "What went wrong?", D1: "Find the pair", D2: "Factor it", D3: "Solve it", D4: "What went wrong?",
+    C1: "Factor it", C2: "Solve it", C3: "What went wrong?", D0: "Watch the method", D1: "Now you try: step by step", D2: "Factor it", D3: "Solve it", D4: "What went wrong?",
     E1: "Difference of squares", E2: "Perfect squares", E3: "Solve it", E4: "What went wrong?",
     F1: "GCF first, then keep going", F2: "Quadratic form", F3: "Four terms: grouping", F4: "What went wrong?",
     G1: "Discriminant", G2: "Quadratic formula", G3: "Smallest power of x", G4: "Numerator = 0", G5: "What went wrong?",
@@ -1706,7 +1811,7 @@ var SVG_REFRESH = "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColo
       fields = part.fields(state);
       inputsEl.className = "qinputs qfields";
       inputsEl.innerHTML = fields.map(function (f) {
-        var pv = (f.kind === "factor" || f.kind === "poly") ? "<div class=\"fpreview\" data-pv=\"" + f.key + "\"></div>" : "";
+        var pv = (f.kind === "factor" || f.kind === "poly" || f.kind === "split" || f.kind === "grouped") ? "<div class=\"fpreview\" data-pv=\"" + f.key + "\"></div>" : "";
         return "<div class=\"frow\"><label class=\"flabel\">" + f.label + (isExam ? " <span class=\"fpts\">" + f.pts + " pt" + (f.pts > 1 ? "s" : "") + "</span>" : "") + "</label>" +
           "<input type=\"text\" class=\"fin" + (f.wide ? " wide" : "") + "\" data-key=\"" + f.key + "\" autocomplete=\"off\" autocapitalize=\"off\" autocorrect=\"off\" spellcheck=\"false\" placeholder=\"" + esc(f.ph || "") + "\" aria-label=\"" + esc(f.label) + "\">" + pv + "</div>";
       }).join("");
@@ -1765,6 +1870,84 @@ var SVG_REFRESH = "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColo
     render();
   }
 
+
+  // ============================================================
+  // Process cards: walk (watch) and guided (do it step by step)
+  // ============================================================
+  function mountWalk(part, container) {
+    var card = document.createElement("div"); card.className = "qcard"; card.setAttribute("data-id", part.id);
+    card.innerHTML =
+      "<div class=\"qcard-head\"><div class=\"qtitle\"><span class=\"qlabel\">" + TITLES[part.id] + "</span></div>" +
+      "<button class=\"icon-btn new-version-btn\" type=\"button\">" + SVG_REFRESH + "New version</button></div>" +
+      "<div class=\"qprompt\"></div><div class=\"wsteps\"></div>" +
+      "<div class=\"qactions\"><button class=\"btn-primary next-btn\" type=\"button\"></button></div>";
+    container.appendChild(card);
+    var promptEl = card.querySelector(".qprompt"), listEl = card.querySelector(".wsteps"), nextBtn = card.querySelector(".next-btn");
+    var state, steps, shown;
+    function label() { nextBtn.textContent = shown === 0 ? "Start: step 1, " + steps[0].title : "Next step: " + steps[shown].title; }
+    function render() {
+      state = part.gen(); steps = part.steps(state); shown = 0; listEl.innerHTML = "";
+      promptEl.innerHTML = part.prompt(state); nextBtn.classList.remove("hidden"); label();
+    }
+    nextBtn.addEventListener("click", function () {
+      var st = steps[shown], d = document.createElement("div"); d.className = "gstep done";
+      d.innerHTML = "<div class=\"ghead\"><span class=\"gn\">" + (shown + 1) + "</span><span class=\"gt\">" + st.title + "</span></div><div class=\"gexplain\">" + st.explain + "</div><div class=\"gworked\">" + st.worked + "</div>";
+      listEl.appendChild(d); shown++;
+      if (shown >= steps.length) nextBtn.classList.add("hidden"); else label();
+    });
+    card.querySelector(".new-version-btn").addEventListener("click", render);
+    render();
+  }
+
+  function mountGuided(part, container) {
+    var card = document.createElement("div"); card.className = "qcard"; card.setAttribute("data-id", part.id);
+    card.innerHTML =
+      "<div class=\"qcard-head\"><div class=\"qtitle\"><span class=\"qlabel\">" + TITLES[part.id] + "</span></div>" +
+      "<button class=\"icon-btn new-version-btn\" type=\"button\">" + SVG_REFRESH + "New version</button></div>" +
+      "<div class=\"qprompt\"></div><div class=\"gsteps\"></div><div class=\"qfeedback good hidden gdone\"></div>";
+    container.appendChild(card);
+    var promptEl = card.querySelector(".qprompt"), listEl = card.querySelector(".gsteps"), doneEl = card.querySelector(".gdone");
+    var state, steps, idx;
+
+    function addStep(i) {
+      var st = steps[i], f = st.field, d = document.createElement("div"); d.className = "gstep"; d.setAttribute("data-i", i);
+      var pv = (f.kind === "factor" || f.kind === "split" || f.kind === "grouped") ? "<div class=\"fpreview\"></div>" : "";
+      d.innerHTML =
+        "<div class=\"ghead\"><span class=\"gn\">" + (i + 1) + "</span><span class=\"gt\">" + st.title + "</span></div>" +
+        "<div class=\"gexplain\">" + st.explain + "</div>" +
+        "<div class=\"frow\"><label class=\"flabel\">" + f.label + "</label><input type=\"text\" class=\"fin" + (f.wide ? " wide" : "") + "\" autocomplete=\"off\" autocapitalize=\"off\" autocorrect=\"off\" spellcheck=\"false\" placeholder=\"" + esc(f.ph || "") + "\" aria-label=\"" + esc(f.label.replace(/<[^>]+>|&[a-z]+;/g, " ")) + "\">" + pv + "</div>" +
+        "<div class=\"qactions\"><button class=\"btn-primary gcheck\" type=\"button\">Check</button><button class=\"btn-secondary gshow\" type=\"button\">Show me</button></div>" +
+        "<div class=\"qfeedback hidden\"></div><div class=\"qsolution gworked hidden\"></div>";
+      listEl.appendChild(d);
+      var inp = d.querySelector("input"), fb = d.querySelector(".qfeedback"), wk = d.querySelector(".gworked"), pvEl = d.querySelector(".fpreview");
+      function finish(helped) {
+        d.classList.add("done"); inp.disabled = true;
+        d.querySelector(".qactions").classList.add("hidden");
+        wk.innerHTML = "<span class=\"sol-label\">" + (helped ? "Worked step" : "Step " + (i + 1) + " done") + "</span>" + st.worked; wk.classList.remove("hidden");
+        if (!helped) { fb.className = "qfeedback good"; fb.innerHTML = SVG_CHECK + " Correct!"; } else fb.classList.add("hidden");
+        idx = i + 1;
+        if (idx < steps.length) addStep(idx);
+        else { doneEl.classList.remove("hidden"); doneEl.innerHTML = SVG_CHECK + " That is the whole AC method. The same five steps work on any trinomial, and if step 2 finds no pair, it doesn&rsquo;t factor."; markStageDone(part.group); }
+      }
+      inp.addEventListener("input", function () { if (pvEl) pvEl.innerHTML = inp.value.trim() ? "Reads as: <span class=\"math\">" + plainToHtml(inp.value.replace(/\s+/g, "").replace(/[\u2212]/g, "-")) + "</span>" : ""; });
+      inp.addEventListener("keydown", function (e) { if (e.key === "Enter") { e.preventDefault(); d.querySelector(".gcheck").click(); } });
+      d.querySelector(".gcheck").addEventListener("click", function () {
+        if (!inp.value.trim()) { fb.className = "qfeedback bad"; fb.innerHTML = SVG_X + " Type an answer first."; return; }
+        var r = gradeField(f, inp.value);
+        if (r.ok) finish(false);
+        else { fb.className = "qfeedback bad"; fb.innerHTML = SVG_X + " " + esc(r.msg || "Not quite."); inp.classList.add("wrong"); }
+      });
+      d.querySelector(".gshow").addEventListener("click", function () { finish(true); });
+      inp.focus && i > 0 && inp.focus();
+    }
+    function render() {
+      state = part.gen(); steps = part.steps(state); idx = 0; listEl.innerHTML = ""; doneEl.classList.add("hidden");
+      promptEl.innerHTML = part.prompt(state); addStep(0);
+    }
+    card.querySelector(".new-version-btn").addEventListener("click", render);
+    render();
+  }
+
   function wireExamToolbar(gh) {
     var bar = document.createElement("div");
     bar.className = "exam-toolbar";
@@ -1792,7 +1975,9 @@ var SVG_REFRESH = "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColo
         if (part.group === "H") wireExamToolbar(gh);
         container = document.createElement("div"); groupsEl.appendChild(container);
       }
-      mountCard(part, container, part.group === "H");
+      if (part.type === "walk") mountWalk(part, container);
+      else if (part.type === "guided") mountGuided(part, container);
+      else mountCard(part, container, part.group === "H");
     });
   }
   buildAll();
