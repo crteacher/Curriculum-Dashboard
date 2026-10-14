@@ -232,7 +232,51 @@ function gen8() {
   };
 }
 
-const GENERATORS = [gen1, gen2, gen3, gen4, gen5, gen6, gen7, gen8];
+// gen9–gen12: vertical line test — graph-based problems
+const _AX_SVG  = '<line x1="5" y1="80" x2="135" y2="80" stroke="#aaa" stroke-width="1.2"/><line x1="70" y1="105" x2="70" y2="5" stroke="#aaa" stroke-width="1.2"/>';
+const _AX_C_SVG = '<line x1="5" y1="60" x2="135" y2="60" stroke="#aaa" stroke-width="1.2"/><line x1="70" y1="105" x2="70" y2="5" stroke="#aaa" stroke-width="1.2"/>';
+function _gSVG(inner, ax) {
+  return '<p style="font-size:13.5px;margin-bottom:.35rem;font-family:sans-serif">Is the relation graphed below a function? (<strong>yes</strong> or <strong>no</strong>)</p>'
+       + '<div style="text-align:center"><svg viewBox="0 0 140 110" width="140" height="110">' + ax + inner + '</svg></div>';
+}
+// gen9: downward parabola y=–x²+2 → yes
+function gen9() {
+  return {
+    svg:    _gSVG('<polyline points="33,108 40,85 50,60 60,45 70,40 80,45 90,60 100,85 107,108" fill="none" stroke="#1e3a5c" stroke-width="2.5" stroke-linejoin="round"/><text x="100" y="48" font-size="9" fill="#1e3a5c" font-family="sans-serif" font-style="italic">y=–x²+2</text>', _AX_SVG),
+    answer: ['yes'],
+    hint:   'Draw a vertical line anywhere on the graph — does it hit the curve more than once?',
+    step:   '\\text{Every vertical line crosses the parabola at most once → function (yes)}'
+  };
+}
+// gen10: circle x²+y²≈4 → no
+function gen10() {
+  return {
+    svg:    _gSVG('<circle cx="70" cy="60" r="38" fill="none" stroke="#1e3a5c" stroke-width="2.5"/><text x="100" y="28" font-size="9" fill="#1e3a5c" font-family="sans-serif" font-style="italic">x²+y²≈4</text>', _AX_C_SVG),
+    answer: ['no'],
+    hint:   'Draw a vertical line through the interior of the circle — how many times does it cross?',
+    step:   '\\text{A vertical line through the middle crosses the circle twice → not a function (no)}'
+  };
+}
+// gen11: absolute value y=|x| → yes
+function gen11() {
+  return {
+    svg:    _gSVG('<polyline points="20,30 70,80 120,30" fill="none" stroke="#1e3a5c" stroke-width="2.5" stroke-linejoin="round"/><text x="102" y="35" font-size="9" fill="#1e3a5c" font-family="sans-serif" font-style="italic">y=|x|</text>', _AX_SVG),
+    answer: ['yes'],
+    hint:   'Apply the vertical line test to the V-shape — can any vertical line intersect it twice?',
+    step:   '\\text{The V-shape: no vertical line hits it more than once → function (yes)}'
+  };
+}
+// gen12: sideways parabola x=y² → no
+function gen12() {
+  return {
+    svg:    _gSVG('<polyline points="115,110 90,100 75,90 70,80 75,70 90,60 115,50" fill="none" stroke="#1e3a5c" stroke-width="2.5" stroke-linejoin="round"/><text x="117" y="78" font-size="9" fill="#1e3a5c" font-family="sans-serif" font-style="italic">x=y²</text>', _AX_SVG),
+    answer: ['no'],
+    hint:   'For any x > 0, draw a vertical line — does it hit the sideways curve once or twice?',
+    step:   '\\text{For x>0, a vertical line hits the curve at two points (above and below axis) → not a function (no)}'
+  };
+}
+
+const GENERATORS = [gen1, gen2, gen3, gen4, gen5, gen6, gen7, gen8, gen9, gen10, gen11, gen12];
 
 
 // ── State ─────────────────────────────────────────────────────────────────────
