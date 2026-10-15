@@ -48,6 +48,26 @@ h1{font-size:26px;font-weight:700;margin-bottom:4px}
 svg.sketch{display:block;margin:.5rem auto 0}
 @media print{.new-btn,.toggles{display:none}.sol-body{display:block!important}
   body{background:white}.part{break-inside:avoid}}
+
+/* ── Embedded Sketch Widget (Part e) ── */
+.sk-toolbar{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:.55rem}
+.sk-btn{display:flex;align-items:center;gap:.38rem;padding:.38rem .75rem;
+  border:2px solid #ddd;border-radius:6px;cursor:pointer;
+  font-family:sans-serif;font-size:12.5px;font-weight:600;background:#fafaf8;color:#1a1a1a}
+.sk-btn:hover{border-color:#1e3a5c;color:#1e3a5c}
+.sk-btn.sk-active{border-color:#1e3a5c;background:#1e3a5c;color:#fff}
+.sk-actions{display:flex;gap:.45rem;margin-top:.55rem;flex-wrap:wrap}
+.sk-act{padding:.38rem .9rem;border:2px solid #1e3a5c;border-radius:6px;cursor:pointer;
+  font-family:sans-serif;font-size:12px;font-weight:700;background:#1e3a5c;color:#fff}
+.sk-act:hover{background:#162d4a}
+.sk-act.sk-sec{background:transparent;color:#1e3a5c}
+.sk-act.sk-sec:hover{background:#1e3a5c;color:#fff}
+.sk-fb{margin-top:.55rem;font-family:sans-serif;font-size:13px}
+.sk-feat{display:flex;align-items:center;gap:.45rem;padding:.32rem .5rem;
+  border-radius:5px;margin-bottom:.22rem}
+.sk-feat.hit{background:rgba(63,122,82,0.13);color:#3f7a52}
+.sk-feat.miss{background:rgba(179,65,58,0.11);color:#b3413a}
+#sketch-grid{cursor:crosshair;display:block;width:100%;max-width:460px;height:auto}
 </style>
 </head>
 <body>
@@ -238,12 +258,215 @@ svg.sketch{display:block;margin:.5rem auto 0}
   </div>
 </div>
 
+
+<!-- Part (e) -->
+<div class="part">
+  <div class="part-label">Part (e) &mdash; Sketch the Curve</div>
+  <div class="part-q">
+    Using everything you found in parts (a)&ndash;(d), place markers for each key feature
+    on the grid: zeros, local max, local min, and inflection point.
+    <em>Hint: one point is both a zero and a local min &mdash; mark it as both.</em>
+  </div>
+  <div class="sk-toolbar">
+    <button class="sk-btn sk-active" data-sktype="zero">&#9675; Zero</button>
+    <button class="sk-btn" data-sktype="max">&#9650; Local Max</button>
+    <button class="sk-btn" data-sktype="min">&#9661; Local Min</button>
+    <button class="sk-btn" data-sktype="inflection">&#9670; Inflection</button>
+  </div>
+  <svg id="sketch-grid" viewBox="0 0 480 280" xmlns="http://www.w3.org/2000/svg"></svg>
+  <div class="sk-actions">
+    <button class="sk-act" onclick="skWidget.checkSketch()">Check Sketch</button>
+    <button class="sk-act sk-sec" onclick="skWidget.showAnswer()">Show Answer</button>
+    <button class="sk-act sk-sec" onclick="skWidget.reset()">Reset</button>
+  </div>
+  <div id="sk-fb" class="sk-fb"></div>
+</div>
+
 </div><!-- .parts -->
 <div class="score-bar" id="score-bar"></div>
 <button class="new-btn" onclick="location.reload()">New Problem (same function)</button>
 </div><!-- .container -->
 
-<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js">
+// ── SketchWidget (embedded) ─────────────────────────────────
+class SketchWidget {
+  constructor(svgId, fbId, prob) {
+    this.svgEl=document.getElementById(svgId);
+    this.fbEl=document.getElementById(fbId);
+    this.prob=prob;
+    this.markers=[];this.nextId=0;this.checked=false;this.answered=false;this._scored=false;
+    this.activeType='zero';
+    this.W=480;this.H=280;this.PL=44;this.PR=22;this.PT=20;this.PB=38;
+    this.IW=this.W-this.PL-this.PR;this.IH=this.H-this.PT-this.PB;
+    document.querySelectorAll('[data-sktype]').forEach(b=>{
+      b.addEventListener('click',()=>{
+        this.activeType=b.dataset.sktype;
+        document.querySelectorAll('[data-sktype]').forEach(x=>x.classList.remove('sk-active'));
+        b.classList.add('sk-active');
+      });
+    });
+    this._buildGrid();
+  }
+  tx(x){const{xMin,xMax}=this.prob;return this.PL+(x-xMin)/(xMax-xMin)*this.IW;}
+  ty(y){const{yMin,yMax}=this.prob;return this.PT+(yMax-y)/(yMax-yMin)*this.IH;}
+  fromSVG(sx,sy){
+    const{xMin,xMax,yMin,yMax}=this.prob;
+    return{x:xMin+(sx-this.PL)/this.IW*(xMax-xMin),y:yMax-(sy-this.PT)/this.IH*(yMax-yMin)};
+  }
+  _buildGrid(){
+    const svg=this.svgEl;svg.innerHTML='';
+    const{xMin,xMax,yMin,yMax}=this.prob;
+    const GRID='#ddd',AXIS='rgba(38,49,63,0.55)',NAVY='#1e3a5c';
+    const defs=this._el('defs');const cp=this._el('clipPath');cp.id='sk-clip';
+    const cr=this._el('rect');cr.setAttribute('x',this.PL);cr.setAttribute('y',this.PT);
+    cr.setAttribute('width',this.IW);cr.setAttribute('height',this.IH);
+    cp.appendChild(cr);defs.appendChild(cp);svg.appendChild(defs);
+    const bg=this._el('rect');bg.setAttribute('x',this.PL);bg.setAttribute('y',this.PT);
+    bg.setAttribute('width',this.IW);bg.setAttribute('height',this.IH);bg.setAttribute('fill','#fafaf8');svg.appendChild(bg);
+    for(let x=Math.ceil(xMin);x<=xMax+1e-9;x++) this._ln(svg,this.tx(x),this.PT,this.tx(x),this.H-this.PB,GRID,1);
+    for(let y=Math.ceil(yMin);y<=yMax+1e-9;y++) this._ln(svg,this.PL,this.ty(y),this.W-this.PR,this.ty(y),GRID,1);
+    const ay=this.ty(0),ax=this.tx(0);
+    this._ln(svg,this.PL,ay,this.W-this.PR,ay,AXIS,1.8);
+    if(ax>=this.PL&&ax<=this.W-this.PR) this._ln(svg,ax,this.PT,ax,this.H-this.PB,AXIS,1.8);
+    const ff="Georgia,sans-serif";
+    for(let x=Math.ceil(xMin);x<=xMax+1e-9;x++){
+      if(Math.abs(x)<1e-9)continue;
+      const sx=this.tx(x);this._ln(svg,sx,ay-3,sx,ay+3,AXIS,1);
+      svg.appendChild(this._txt(x,sx,ay+14,10,'#777',ff,'middle'));
+    }
+    for(let y=Math.ceil(yMin);y<=yMax+1e-9;y++){
+      if(Math.abs(y)<1e-9)continue;
+      const sy=this.ty(y);this._ln(svg,ax-3,sy,ax+3,sy,AXIS,1);
+      svg.appendChild(this._txt(y,ax-7,sy+3.5,10,'#777',ff,'end'));
+    }
+    svg.appendChild(this._txt('t',this.W-this.PR+6,ay+4,11,NAVY,ff,'start'));
+    svg.appendChild(this._txt('s',ax+4,this.PT-3,11,NAVY,ff,'start'));
+    this.mg=this._el('g');svg.appendChild(this.mg);
+    svg.addEventListener('click',e=>this._click(e));
+  }
+  _click(e){
+    if(this.checked)return;
+    const r=this.svgEl.getBoundingClientRect();
+    const rx=(e.clientX-r.left)*this.W/r.width,ry=(e.clientY-r.top)*this.H/r.height;
+    const hit=this._hit(rx,ry);if(hit!==null){this._rm(hit);return;}
+    if(rx<this.PL||rx>this.W-this.PR||ry<this.PT||ry>this.H-this.PB)return;
+    let{x,y}=this.fromSVG(rx,ry);
+    if(this.activeType==='zero')y=0;
+    const{xMin,xMax,yMin,yMax}=this.prob;
+    x=Math.max(xMin+.01,Math.min(xMax-.01,x));y=Math.max(yMin+.01,Math.min(yMax-.01,y));
+    const id=this.nextId++;const sx=this.tx(x),sy=this.ty(y);
+    this.markers.push({id,type:this.activeType,mx:x,my:y,svgX:sx,svgY:sy,correct:null});
+    this._draw(id,this.activeType,sx,sy);
+  }
+  _hit(sx,sy){for(const m of this.markers){const dx=m.svgX-sx,dy=m.svgY-sy;if(dx*dx+dy*dy<196)return m.id;}return null;}
+  _rm(id){this.markers=this.markers.filter(m=>m.id!==id);const el=this.mg.querySelector(`[data-mid="${id}"]`);if(el)el.remove();}
+  _draw(id,type,sx,sy,state){
+    const NAVY='#1e3a5c',GOLD='#7a5c1e',HIT='#3f7a52',MISS='#b3413a',ANS='rgba(30,58,92,0.28)';
+    const g=this._el('g');g.setAttribute('data-mid',id);g.style.cursor='pointer';
+    let el;
+    if(type==='zero'){
+      el=this._el('circle');el.setAttribute('cx',sx);el.setAttribute('cy',sy);el.setAttribute('r',7);
+      el.setAttribute('fill','white');
+      el.setAttribute('stroke',state==='hit'?HIT:state==='miss'?MISS:state==='answer'?ANS:NAVY);
+      el.setAttribute('stroke-width',2.2);
+    } else if(type==='max'){
+      const h=11,w=10;el=this._el('polygon');
+      el.setAttribute('points',`${sx},${sy-h} ${sx+w},${sy+h*0.4} ${sx-w},${sy+h*0.4}`);
+      el.setAttribute('fill',state==='hit'?HIT:state==='miss'?MISS:state==='answer'?ANS:GOLD);
+    } else if(type==='min'){
+      const h=11,w=10;el=this._el('polygon');
+      el.setAttribute('points',`${sx},${sy+h} ${sx+w},${sy-h*0.4} ${sx-w},${sy-h*0.4}`);
+      el.setAttribute('fill',state==='hit'?HIT:state==='miss'?MISS:state==='answer'?ANS:NAVY);
+    } else {
+      const r=8;el=this._el('polygon');
+      el.setAttribute('points',`${sx},${sy-r} ${sx+r},${sy} ${sx},${sy+r} ${sx-r},${sy}`);
+      el.setAttribute('fill','white');
+      el.setAttribute('stroke',state==='hit'?HIT:state==='miss'?MISS:state==='answer'?ANS:'#7a5c1e');
+      el.setAttribute('stroke-width',2.2);
+    }
+    g.appendChild(el);this.mg.appendChild(g);
+  }
+  checkSketch(){
+    if(this.checked)return;this.checked=true;
+    const{expected,tolerance=0.38}=this.prob;
+    const tm={zeros:'zero',maxima:'max',minima:'min',inflections:'inflection'};
+    let correct=0,total=0;const results=[];
+    for(const[key,pts] of Object.entries(expected)){
+      const mt=tm[key];
+      for(const ep of pts){
+        total++;
+        const cands=this.markers.filter(m=>m.type===mt);
+        let best=Infinity,bestId=null;
+        for(const m of cands){
+          const dx=m.mx-ep.x,dy=key==='zeros'?0:(m.my-(ep.y||0));
+          const d=Math.sqrt(dx*dx+dy*dy);if(d<best){best=d;bestId=m.id;}
+        }
+        const hit=best<=tolerance;
+        if(hit){correct++;const m=this.markers.find(m=>m.id===bestId);if(m)m.correct=true;}
+        results.push({key,ep,hit});
+      }
+    }
+    for(const m of this.markers)if(m.correct===null)m.correct=false;
+    this.mg.innerHTML='';
+    for(const m of this.markers)this._draw(m.id,m.type,m.svgX,m.svgY,m.correct===true?'hit':'miss');
+    this._curve();this._showFB(results,correct,total);
+    if(correct>=4&&!this._scored){
+      this._scored=true;score++;
+      document.getElementById('score-bar').textContent=`Score: ${score} / 5`;
+    }
+  }
+  showAnswer(){
+    if(!this.checked)this.checkSketch();if(this.answered)return;this.answered=true;
+    const tm={zeros:'zero',maxima:'max',minima:'min',inflections:'inflection'};
+    let aid=10000;
+    for(const[key,pts] of Object.entries(this.prob.expected))
+      for(const ep of pts)this._draw(aid++,tm[key],this.tx(ep.x),this.ty(ep.y||0),'answer');
+  }
+  _curve(){
+    const{fn,xMin,xMax,yMin,yMax}=this.prob;const N=300,pts=[];
+    for(let i=0;i<=N;i++){
+      const x=xMin+i/N*(xMax-xMin),y=fn(x);
+      pts.push(`${this.tx(x).toFixed(1)},${this.ty(Math.max(yMin-.5,Math.min(yMax+.5,y))).toFixed(1)}`);
+    }
+    const p=this._el('polyline');p.setAttribute('points',pts.join(' '));
+    p.setAttribute('fill','none');p.setAttribute('stroke','#1e3a5c');
+    p.setAttribute('stroke-width','2.5');p.setAttribute('opacity','0.6');
+    p.setAttribute('clip-path','url(#sk-clip)');p.setAttribute('stroke-linejoin','round');
+    this.svgEl.insertBefore(p,this.mg);
+  }
+  _showFB(results,correct,total){
+    const kl={zeros:'Zero',maxima:'Local Max',minima:'Local Min',inflections:'Inflection'};
+    let html=`<div style="margin-bottom:.4rem;font-weight:700;color:#1e3a5c">${correct}/${total} key features identified</div>`;
+    for(const r of results){
+      html+=`<div class="sk-feat ${r.hit?'hit':'miss'}"><span>${r.hit?'✓':'✗'}</span><span><strong>${kl[r.key]}:</strong> ${r.ep.label}</span></div>`;
+    }
+    if(correct>=4)html+=`<div style="margin-top:.45rem;color:#3f7a52;font-weight:700">&#10003; Point awarded! (${correct}/5 features found)</div>`;
+    this.fbEl.innerHTML=html;
+  }
+  reset(){
+    this.markers=[];this.nextId=0;this.checked=false;this.answered=false;this._scored=false;
+    this.fbEl.innerHTML='';this._buildGrid();
+  }
+  _el(t){return document.createElementNS('http://www.w3.org/2000/svg',t);}
+  _ln(p,x1,y1,x2,y2,s,w){const l=this._el('line');l.setAttribute('x1',x1);l.setAttribute('y1',y1);l.setAttribute('x2',x2);l.setAttribute('y2',y2);l.setAttribute('stroke',s);l.setAttribute('stroke-width',w);p.appendChild(l);return l;}
+  _txt(text,x,y,size,fill,family,anchor){const t=this._el('text');t.setAttribute('x',x);t.setAttribute('y',y);t.setAttribute('font-size',size);t.setAttribute('fill',fill);t.setAttribute('font-family',family);if(anchor)t.setAttribute('text-anchor',anchor);t.textContent=text;return t;}
+}
+
+// ── Problem: s(t) = t³ − 6t² + 9t ─────────────────────────
+const skProblem = {
+  fn: t => t**3 - 6*t**2 + 9*t,
+  xMin: -0.4, xMax: 4.4, yMin: -0.8, yMax: 5.2,
+  tolerance: 0.38,
+  expected: {
+    zeros:       [{x:0, y:0, label:'t = 0, s = 0'}, {x:3, y:0, label:'t = 3, s = 0'}],
+    maxima:      [{x:1, y:4, label:'(t, s) = (1, 4)'}],
+    minima:      [{x:3, y:0, label:'(t, s) = (3, 0)'}],
+    inflections: [{x:2, y:2, label:'(t, s) = (2, 2)'}],
+  }
+};
+const skWidget = new SketchWidget('sketch-grid', 'sk-fb', skProblem);
+
+</script>
 <script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/contrib/auto-render.min.js"></script>
 <script>
 renderMathInElement(document.body, {
@@ -261,7 +484,7 @@ function norm(s) { return s.trim().toLowerCase().replace(/\s+/g,''); }
 
 let score = 0;
 function addPoint(id) {
-  document.getElementById('score-bar').textContent = `Score: ${score} / 4`;
+  document.getElementById('score-bar').textContent = `Score: ${score} / 5`;
 }
 
 function checkA() {
@@ -273,7 +496,7 @@ function checkA() {
   if (ok) {
     inp.className='ans-input correct'; fb.className='feedback ok';
     fb.textContent='✓ Correct! Zeros at t = 0 and t = 3.';
-    score++; document.getElementById('score-bar').textContent=`Score: ${score} / 4`;
+    score++; document.getElementById('score-bar').textContent=`Score: ${score} / 5`;
   } else {
     inp.className='ans-input wrong'; fb.className='feedback no';
     fb.textContent='Not quite. Try factoring out t first.';
@@ -288,7 +511,7 @@ function checkB() {
     document.getElementById('in-b1').className='ans-input correct';
     document.getElementById('in-b2').className='ans-input correct';
     fb.className='feedback ok'; fb.textContent='✓ Correct! Local max of 4 m at t = 1 s.';
-    score++; document.getElementById('score-bar').textContent=`Score: ${score} / 4`;
+    score++; document.getElementById('score-bar').textContent=`Score: ${score} / 5`;
   } else {
     document.getElementById('in-b1').className='ans-input wrong';
     document.getElementById('in-b2').className='ans-input wrong';
@@ -303,7 +526,7 @@ function checkC() {
   if (ok) {
     inp.className='ans-input correct'; fb.className='feedback ok';
     fb.textContent='✓ Correct! Inflection at t = 2, s(2) = 2 m.';
-    score++; document.getElementById('score-bar').textContent=`Score: ${score} / 4`;
+    score++; document.getElementById('score-bar').textContent=`Score: ${score} / 5`;
   } else {
     inp.className='ans-input wrong'; fb.className='feedback no';
     fb.textContent='Set s\'\'(t) = 0 and verify the sign changes.';
@@ -317,13 +540,13 @@ function checkD() {
   if (ok) {
     inp.className='ans-input correct'; fb.className='feedback ok';
     fb.textContent='✓ Correct! s is decreasing on (1,3) — the particle moves backward.';
-    score++; document.getElementById('score-bar').textContent=`Score: ${score} / 4`;
+    score++; document.getElementById('score-bar').textContent=`Score: ${score} / 5`;
   } else {
     inp.className='ans-input wrong'; fb.className='feedback no';
     fb.textContent='Check the sign of s\'(t) between t=1 and t=3.';
   }
 }
-document.getElementById('score-bar').textContent = 'Score: 0 / 4';
+document.getElementById('score-bar').textContent = 'Score: 0 / 5';
 </script>
 </body>
 </html>
