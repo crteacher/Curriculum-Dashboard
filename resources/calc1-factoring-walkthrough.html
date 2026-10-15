@@ -310,6 +310,26 @@
   .howto .typing { margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--card-border); }
   @media (max-width: 560px) { .stage-nav { position: static; } .flabel { min-width: 100%; } .qfields input.fin, .qfields input.fin.wide { flex: 1 1 100%; max-width: none; } }
 
+  .wex { margin-top: 12px; border: 1.5px solid var(--card-border); border-radius: 12px; background: var(--card-bg); overflow: hidden; }
+  .wex > summary { cursor: pointer; padding: 10px 14px; font-weight: 700; font-size: 0.95rem; list-style: none; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .wex > summary::-webkit-details-marker { display: none; }
+  .wex > summary::after { content: "Show"; margin-left: auto; font-size: 0.78rem; font-weight: 600; color: var(--accent); border: 1px solid var(--accent); border-radius: 20px; padding: 1px 10px; }
+  .wex[open] > summary::after { content: "Hide"; }
+  .wex > summary:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+  .wex-sum-sub { font-weight: 500; font-size: 0.82rem; color: var(--ink-soft); }
+  .wex-body { padding: 4px 16px 16px; border-top: 1px solid var(--card-border); }
+  .wex-one { padding: 10px 0 4px; }
+  .wex-one + .wex-one { border-top: 1px dashed var(--card-border); margin-top: 8px; padding-top: 14px; }
+  .wex-title { font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 1.02rem; margin-bottom: 10px; }
+  .wex-step { margin: 0 0 10px; }
+  .wex-head { display: flex; align-items: flex-start; gap: 10px; font-weight: 700; font-size: 0.92rem; }
+  .wex-n { flex: 0 0 22px; width: 22px; height: 22px; border-radius: 50%; background: var(--accent); color: var(--accent-ink); display: inline-grid; place-items: center; font: 700 0.74rem "JetBrains Mono", monospace; margin-top: 1px; }
+  .wex-why { margin: 2px 0 0 32px; font-size: 0.9rem; line-height: 1.55; color: var(--ink-soft); }
+  .wex-math { margin: 4px 0 0 32px; background: var(--accent-soft); border-left: 4px solid var(--good); border-radius: 0 10px 10px 0; padding: 6px 12px; font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 0.9rem; line-height: 1.75; overflow-x: auto; }
+  .wex-math .math { font-family: "JetBrains Mono", ui-monospace, monospace; }
+  .wex-note { margin: 6px 0 4px 32px; font-size: 0.88rem; font-style: italic; color: var(--ink-soft); line-height: 1.55; }
+  @media (max-width: 560px) { .wex-why, .wex-math, .wex-note { margin-left: 0; } }
+
   .hidden { display: none !important; }
 
 </style>
@@ -322,7 +342,7 @@
   </header>
 
   <div class="howto">
-    Work through the stages <strong>in order</strong> &mdash; each one builds on the last. In every stage: watch the short video if a concept feels shaky, try the &ldquo;What went wrong?&rdquo; checks (they are built around the exact mistakes students make), then work the practice problems &mdash; click <strong>New version</strong> for new numbers as many times as you want.
+    Work through the stages <strong>in order</strong> &mdash; each one builds on the last. In every stage: open the worked example or watch a short video if a concept feels shaky, try the &ldquo;What went wrong?&rdquo; checks (they are built around the exact mistakes students make), then work the practice problems &mdash; click <strong>New version</strong> for new numbers as many times as you want.
     <div class="typing"><strong>How to type your answers.</strong> Write exactly what you would write on paper, using <code>^</code> for powers and parentheses for brackets: <code>3x(x-2)^2</code>, <code>(2x+1)(x-3)</code>, <code>x^2(x-4)</code>. Put fractional or negative exponents in parentheses: <code>x^(1/2)</code>, <code>3x^(-1/2)(x-2)</code>. Separate zeros with commas: <code>0, -2, 5/2</code> (use fractions, not rounded decimals, unless the problem says to round). Any order and any equivalent arrangement is fine, as long as it is completely factored. The line under each box shows how your answer reads.</div>
   </div>
 
@@ -1669,6 +1689,133 @@ var SVG_REFRESH = "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColo
     }
   }));
   // ============================================================
+  // Static worked examples (one collapsible card per stage)
+  // ============================================================
+  function fr(n, d) { return "<span class=\"frac\"><span>" + n + "</span><span>" + d + "</span></span>"; }
+  function M(s) { return "<span class=\"math\">" + s + "</span>"; }
+  // example = { title, steps: [ [heading, explanation, [math lines]] ], note }
+  function exBlock(ex) {
+    return "<div class=\"wex-one\"><div class=\"wex-title\">" + ex.title + "</div>" +
+      ex.steps.map(function (st, i) {
+        return "<div class=\"wex-step\"><div class=\"wex-head\"><span class=\"wex-n\">" + (i + 1) + "</span>" + st[0] + "</div>" +
+          (st[1] ? "<div class=\"wex-why\">" + st[1] + "</div>" : "") +
+          (st[2] && st[2].length ? "<div class=\"wex-math\">" + st[2].map(function (l) { return "<div>" + l + "</div>"; }).join("") + "</div>" : "") + "</div>";
+      }).join("") +
+      (ex.note ? "<div class=\"wex-note\">" + ex.note + "</div>" : "") + "</div>";
+  }
+  var EXAMPLES = {
+    A: [
+      { title: "Solve (2x &minus; 1)(x + 6) = 0",
+        steps: [
+          ["Check that one side is 0 and the other is a product", "The zero-product property only works when a product equals exactly 0. This one does.", [M("(2x &minus; 1)(x + 6) = 0")]],
+          ["Set each factor equal to 0", "If two things multiply to 0, at least one of them is 0.", [M("2x &minus; 1 = 0") + " &nbsp;&nbsp;or&nbsp;&nbsp; " + M("x + 6 = 0")]],
+          ["Solve each little equation", "Add 1 and divide by 2 in the first; subtract 6 in the second.", [M("2x = 1 &rarr; x = " + fr(1, 2)), M("x = &minus;6")]],
+          ["Write the answer", "", [M("x = " + fr(1, 2) + " &nbsp;or&nbsp; x = &minus;6")]]
+        ],
+        note: "Don't divide both sides by a factor. In x(x &minus; 4) = 0, dividing by x loses the solution x = 0. Set both factors to 0 instead: x = 0 or x = 4." }
+    ],
+    B: [
+      { title: "Factor 12x&sup3; &minus; 18x&sup2;, then solve 12x&sup3; &minus; 18x&sup2; = 0",
+        steps: [
+          ["Find the biggest number that divides every coefficient", "gcd(12, 18) = 6.", [M("12 = 6 &middot; 2"), M("18 = 6 &middot; 3")]],
+          ["Find the lowest power of x in every term", "x&sup3; and x&sup2; both contain x&sup2;, and x&sup2; is the lowest power that every term has.", [M("x&sup3; = x&sup2; &middot; x")]],
+          ["Pull out the GCF 6x&sup2; and see what is left", "Divide each term by 6x&sup2;.", [M("12x&sup3; &divide; 6x&sup2; = 2x"), M("18x&sup2; &divide; 6x&sup2; = 3"), M("12x&sup3; &minus; 18x&sup2; = 6x&sup2;(2x &minus; 3)")]],
+          ["Check by distributing", "Multiply back out. You should get the original.", [M("6x&sup2; &middot; 2x = 12x&sup3;"), M("6x&sup2; &middot; (&minus;3) = &minus;18x&sup2;")]],
+          ["Solve with the zero-product property", "Set each factor equal to 0. The number 6 is never 0, so it gives nothing.", [M("6x&sup2; = 0 &rarr; x = 0"), M("2x &minus; 3 = 0 &rarr; x = " + fr(3, 2))]]
+        ],
+        note: "Never divide both sides by x&sup2;: you would lose x = 0. Factor it out instead." }
+    ],
+    C: [
+      { title: "Factor x&sup2; &minus; 5x &minus; 14, then solve it",
+        steps: [
+          ["Read off b and c", "The leading coefficient is 1, so we need two numbers that multiply to c and add to b.", [M("b = &minus;5, &nbsp; c = &minus;14")]],
+          ["List factor pairs of c = &minus;14", "c is negative, so the two numbers have opposite signs. Look for the pair that adds to &minus;5.", [
+            M("1 + (&minus;14) = &minus;13 &nbsp; no"), M("&minus;1 + 14 = 13 &nbsp; no"), M("2 + (&minus;7) = &minus;5 &nbsp; yes"), M("&minus;2 + 7 = 5 &nbsp; no")]],
+          ["Use the winning pair in the brackets", "The numbers 2 and &minus;7 go in the brackets after the x.", [M("x&sup2; &minus; 5x &minus; 14 = (x + 2)(x &minus; 7)")]],
+          ["Check with FOIL", "", [M("x&sup2; &minus; 7x + 2x &minus; 14 = x&sup2; &minus; 5x &minus; 14")]],
+          ["Solve", "Set each factor equal to 0.", [M("x + 2 = 0 &rarr; x = &minus;2"), M("x &minus; 7 = 0 &rarr; x = 7")]]
+        ],
+        note: "Sign rule: if c is positive, both numbers have the same sign as b. If c is negative, the numbers have opposite signs and the bigger one takes the sign of b." }
+    ],
+    E: [
+      { title: "Difference of squares: factor 25x&sup2; &minus; 36",
+        steps: [
+          ["Spot two perfect squares with a minus between them", "25x&sup2; is (5x)&sup2; and 36 is 6&sup2;.", [M("25x&sup2; &minus; 36 = (5x)&sup2; &minus; 6&sup2;")]],
+          ["Apply A&sup2; &minus; B&sup2; = (A &minus; B)(A + B)", "Here A = 5x and B = 6.", [M("(5x &minus; 6)(5x + 6)")]],
+          ["Check with FOIL", "The middle terms cancel.", [M("25x&sup2; + 30x &minus; 30x &minus; 36 = 25x&sup2; &minus; 36")]],
+          ["Solve", "", [M("5x &minus; 6 = 0 &rarr; x = " + fr(6, 5)), M("5x + 6 = 0 &rarr; x = &minus;" + fr(6, 5))]]
+        ],
+        note: "A <em>sum</em> of squares such as x&sup2; + 9 does not factor over the real numbers." },
+      { title: "Perfect square: factor 9x&sup2; &minus; 24x + 16",
+        steps: [
+          ["Check the first and last terms are perfect squares", "9x&sup2; = (3x)&sup2; and 16 = 4&sup2;, so A = 3x and B = 4.", []],
+          ["Check the middle term is 2AB", "2 &middot; 3x &middot; 4 = 24x, and the sign is minus, so this is (A &minus; B)&sup2;.", [M("9x&sup2; &minus; 24x + 16 = (3x &minus; 4)&sup2;")]],
+          ["Solve", "Both factors are the same, so there is just one solution.", [M("3x &minus; 4 = 0 &rarr; x = " + fr(4, 3))]]
+        ],
+        note: "If the middle term is not exactly 2AB, it is not a perfect square. Use the AC method instead." }
+    ],
+    F: [
+      { title: "GCF first, then keep going: factor 2x&#8308; &minus; 18x&sup2; completely",
+        steps: [
+          ["Pull out the GCF", "gcd(2, 18) = 2 and the lowest power of x is x&sup2;.", [M("2x&#8308; &minus; 18x&sup2; = 2x&sup2;(x&sup2; &minus; 9)")]],
+          ["Look inside the bracket for another pattern", "x&sup2; &minus; 9 is a difference of squares.", [M("x&sup2; &minus; 9 = (x &minus; 3)(x + 3)")]],
+          ["Write the complete factorization and solve", "Keep the GCF in front.", [M("2x&sup2;(x &minus; 3)(x + 3) = 0"), M("x = 0, &nbsp; x = 3, &nbsp; x = &minus;3")]]
+        ] },
+      { title: "Quadratic form: factor x&#8308; &minus; 5x&sup2; + 4",
+        steps: [
+          ["Notice that x&#8308; is (x&sup2;)&sup2;", "Replace x&sup2; with a single letter u to see an ordinary trinomial.", [M("u = x&sup2; &nbsp;&rarr;&nbsp; u&sup2; &minus; 5u + 4")]],
+          ["Factor it as usual", "Two numbers that multiply to 4 and add to &minus;5: &minus;1 and &minus;4.", [M("(u &minus; 1)(u &minus; 4)")]],
+          ["Put x&sup2; back, then factor again", "Both brackets are differences of squares.", [M("(x&sup2; &minus; 1)(x&sup2; &minus; 4) = (x &minus; 1)(x + 1)(x &minus; 2)(x + 2)"), M("x = 1, &minus;1, 2, &minus;2")]]
+        ] },
+      { title: "Four terms: factor x&sup3; + 2x&sup2; &minus; 9x &minus; 18 by grouping",
+        steps: [
+          ["Split into two pairs", "Take the first two terms and the last two terms.", [M("(x&sup3; + 2x&sup2;) + (&minus;9x &minus; 18)")]],
+          ["Pull the GCF out of each pair", "Choose the second GCF (&minus;9) so the brackets match.", [M("x&sup2;(x + 2) &minus; 9(x + 2)")]],
+          ["Pull out the shared bracket", "", [M("(x + 2)(x&sup2; &minus; 9)")]],
+          ["Keep factoring and solve", "x&sup2; &minus; 9 is a difference of squares.", [M("(x + 2)(x &minus; 3)(x + 3) = 0"), M("x = &minus;2, 3, &minus;3")]]
+        ] }
+    ],
+    G: [
+      { title: "When it won't factor: solve x&sup2; &minus; 4x + 1 = 0",
+        steps: [
+          ["Compute the discriminant b&sup2; &minus; 4ac first", "a = 1, b = &minus;4, c = 1. If it is a positive perfect square, the quadratic factors nicely. Otherwise use the formula.", [M("(&minus;4)&sup2; &minus; 4(1)(1) = 12")]],
+          ["12 is positive but not a perfect square", "So there are two real solutions, but they are not whole numbers. Use the quadratic formula.", [M("x = " + fr("4 &plusmn; &radic;12", 2))]],
+          ["Simplify the square root", "&radic;12 = 2&radic;3, then divide everything by 2.", [M("x = " + fr("4 &plusmn; 2&radic;3", 2) + " = 2 &plusmn; &radic;3")]]
+        ],
+        note: "If the discriminant is negative (for example x&sup2; + 2x + 5 gives 4 &minus; 20 = &minus;16), there are no real solutions, so no critical points come from that factor." },
+      { title: "Smallest power of x: find where x<sup>3/2</sup> &minus; 4x<sup>1/2</sup> = 0",
+        steps: [
+          ["Pull out the <em>smallest</em> exponent", "The smallest power is x<sup>1/2</sup>, since 1/2 &lt; 3/2.", [M("x<sup>3/2</sup> = x<sup>1/2</sup> &middot; x"), M("x<sup>3/2</sup> &minus; 4x<sup>1/2</sup> = x<sup>1/2</sup>(x &minus; 4)")]],
+          ["Set each factor equal to 0", "", [M("x<sup>1/2</sup> = 0 &rarr; x = 0"), M("x &minus; 4 = 0 &rarr; x = 4")]]
+        ],
+        note: "With negative exponents it works the same way: x<sup>&minus;2</sup> &minus; 3x<sup>&minus;3</sup> = x<sup>&minus;3</sup>(x &minus; 3). Since x<sup>&minus;3</sup> = 1/x&sup3; is never 0, the only zero is x = 3. (x = 0 makes the original undefined.)" },
+      { title: "Numerator = 0: find the critical points of f(x) = x&sup2;/(x + 1)",
+        steps: [
+          ["Differentiate with the quotient rule", "", [M("f&prime;(x) = " + fr("2x(x + 1) &minus; x&sup2;(1)", "(x + 1)&sup2;"))]],
+          ["Simplify the numerator and factor it", "2x&sup2; + 2x &minus; x&sup2; = x&sup2; + 2x = x(x + 2).", [M("f&prime;(x) = " + fr("x(x + 2)", "(x + 1)&sup2;"))]],
+          ["A fraction is 0 only when its numerator is 0", "Set the numerator equal to 0.", [M("x(x + 2) = 0 &rarr; x = 0, &nbsp; x = &minus;2")]],
+          ["Check the denominator", "x = &minus;1 makes the denominator 0, and it is not in the domain of f, so it is not a critical number.", []]
+        ] }
+    ],
+    H: [
+      { title: "Method recap: find the critical numbers of f(x) = x&sup3; &minus; 3x&sup2; &minus; 9x",
+        steps: [
+          ["Differentiate", "", [M("f&prime;(x) = 3x&sup2; &minus; 6x &minus; 9")]],
+          ["Factor completely: GCF first", "Pull out the 3, then look at the trinomial inside.", [M("3(x&sup2; &minus; 2x &minus; 3)")]],
+          ["Factor the trinomial", "Multiply to &minus;3 and add to &minus;2: that is &minus;3 and 1.", [M("3(x &minus; 3)(x + 1)")]],
+          ["Set each factor equal to 0", "The 3 gives nothing.", [M("x &minus; 3 = 0 &rarr; x = 3"), M("x + 1 = 0 &rarr; x = &minus;1")]],
+          ["Check where f&prime; does not exist", "f is a polynomial, so f&prime; exists everywhere. The critical numbers are x = &minus;1 and x = 3.", []]
+        ],
+        note: "Checklist for every problem: (1) differentiate, (2) GCF first, (3) pattern, trinomial, grouping or quadratic form, (4) zero-product property, (5) check the domain and where f&prime; does not exist." }
+    ]
+  };
+  function exampleHtml(key) {
+    var list = EXAMPLES[key];
+    if (!list) return "";
+    return "<details class=\"wex\"><summary><span class=\"wex-sum-ic\">&#9998;</span> Worked example <span class=\"wex-sum-sub\">(read this instead of watching a video)</span></summary>" +
+      "<div class=\"wex-body\">" + list.map(exBlock).join("") + "</div></details>";
+  }
+  // ============================================================
   // Stage metadata
   // ============================================================
   var KA = "https://www.khanacademy.org/math/";
@@ -1970,7 +2117,7 @@ var SVG_REFRESH = "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColo
     PARTS.forEach(function (part) {
       if (!seen[part.group]) {
         seen[part.group] = true;
-        var gh = document.createElement("div"); gh.className = "group-head"; gh.innerHTML = groupHeadHtml(GROUP_META[part.group]);
+        var gh = document.createElement("div"); gh.className = "group-head"; gh.innerHTML = groupHeadHtml(GROUP_META[part.group]) + exampleHtml(part.group);
         groupsEl.appendChild(gh);
         if (part.group === "H") wireExamToolbar(gh);
         container = document.createElement("div"); groupsEl.appendChild(container);
