@@ -111,7 +111,7 @@ body{background:var(--paper);color:var(--ink);font-family:'Source Sans 3',sans-s
     <strong>How to use:</strong> Pick a marker type below, then click the grid.
     <strong>Zeros snap to the x-axis.</strong>
     Click any existing marker to remove it.
-    Hit <strong>Check Sketch</strong> when done &mdash; the curve plots and each marker is graded.
+    Hit <strong>Check Sketch</strong> when done &mdash; the curve plots and each marker is graded. Use <strong>Show Curve</strong> to see the graph while you place markers.
   </div>
 
   <div class="layout">
@@ -126,6 +126,7 @@ body{background:var(--paper);color:var(--ink);font-family:'Source Sans 3',sans-s
       <div class="tb-lbl">Actions</div>
       <button class="ab" id="check-btn" onclick="W.check()">Check Sketch</button>
       <button class="ab sec" id="ans-btn" onclick="W.showAnswer()">Show Answer</button>
+      <button class="ab sec" id="curve-btn" onclick="W.toggleCurve()">Show Curve</button>
       <button class="ab rst" onclick="W.reset()">Reset</button>
     </div>
 
@@ -139,6 +140,7 @@ body{background:var(--paper);color:var(--ink);font-family:'Source Sans 3',sans-s
         <span class="li"><svg width="14" height="13" viewBox="-7 -6 14 13"><polygon points="0,-6 7,6 -7,6" fill="#7a5c1e"/></svg>Local Max</span>
         <span class="li"><svg width="14" height="13" viewBox="-7 -6 14 13"><polygon points="0,6 7,-6 -7,-6" fill="#1e3a5c"/></svg>Local Min</span>
         <span class="li"><svg width="16" height="16" viewBox="-8 -8 16 16"><polygon points="0,-7 7,0 0,7 -7,0" fill="none" stroke="#7a5c1e" stroke-width="2"/></svg>Inflection</span>
+        <span class="li"><svg width="28" height="10" viewBox="0 0 28 10"><line x1="0" y1="5" x2="28" y2="5" stroke="#7a5c1e" stroke-width="2.2" stroke-dasharray="7,4"/></svg>Your sketch</span>
       </div>
     </div>
   </div>
@@ -222,7 +224,7 @@ const W = (() => {
   const VW=500,VH=380,PL=48,PR=24,PT=24,PB=46;
   const IW=VW-PL-PR, IH=VH-PT-PB;  // 428, 310
 
-  let prob=null, markers=[], nid=0, checked=false, answered=false, atype='zero';
+  let prob=null, markers=[], nid=0, checked=false, answered=false, atype='zero', showCurve=false;
   const el = id => document.getElementById(id);
   const svg = el(SVG_ID);
 
@@ -289,6 +291,7 @@ const W = (() => {
 
   function drawGrid(){
     svg.innerHTML=gridHTML();
+    if(showCurve&&prob) plotCurve();
   }
 
   function markerSVG(type,sx,sy,state){
@@ -312,11 +315,65 @@ const W = (() => {
     g.setAttribute('data-mid',id);g.style.cursor='pointer';
     g.innerHTML=markerSVG(type,sx,sy,null);
     mg.appendChild(g);
+    sketchFromMarkers();
   }
 
   function removeMarker(id){
     markers=markers.filter(m=>m.id!==id);
     const g=svg.querySelector(`[data-mid="${id}"]`); if(g)g.remove();
+    sketchFromMarkers();
+  }
+
+  function sketchFromMarkers(){
+    const old=svg.querySelector('#sk-sketch'); if(old)old.remove();
+    if(markers.length<2)return;
+    // Sort by x; y=0 for zeros
+    const pts=[...markers].sort((a,b)=>a.mx-b.mx).map(m=>({
+      x:m.mx, y:m.type==='zero'?0:m.my,
+      s:(m.type==='max'||m.type==='min')?0:null
+    }));
+    // Catmull-Rom slope estimate for zeros/inflections
+    for(let i=0;i<pts.length;i++){
+      if(pts[i].s!==null)continue;
+      const L=i>0?pts[i-1]:null, R=i<pts.length-1?pts[i+1]:null;
+      if(L&&R) pts[i].s=(R.y-L.y)/(R.x-L.x);
+      else if(L) pts[i].s=(pts[i].y-L.y)/(pts[i].x-L.x);
+      else if(R) pts[i].s=(R.y-pts[i].y)/(R.x-pts[i].x);
+      else pts[i].s=0;
+    }
+    const {xMin,xMax,yMin,yMax}=prob;
+    const path=[];
+    // Extend left
+    const f=pts[0];
+    path.push([xMin, f.y+f.s*(xMin-f.x)]);
+    // Hermite segments
+    const STEPS=60;
+    for(let i=0;i<pts.length-1;i++){
+      const p0=pts[i],p1=pts[i+1],dt=p1.x-p0.x;
+      if(Math.abs(dt)<1e-9)continue;
+      for(let j=0;j<=STEPS;j++){
+        const t=j/STEPS;
+        const h00=2*t**3-3*t**2+1, h10=t**3-2*t**2+t;
+        const h01=-2*t**3+3*t**2,  h11=t**3-t**2;
+        path.push([p0.x+t*dt, h00*p0.y+h10*dt*p0.s+h01*p1.y+h11*dt*p1.s]);
+      }
+    }
+    // Extend right
+    const lp=pts[pts.length-1];
+    path.push([xMax, lp.y+lp.s*(xMax-lp.x)]);
+    const ptStr=path.map(([x,y])=>{
+      const cy=Math.max(yMin-.5,Math.min(yMax+.5,y));
+      return `${tx(x).toFixed(1)},${ty(cy).toFixed(1)}`;
+    }).join(' ');
+    const NS='http://www.w3.org/2000/svg';
+    const poly=document.createElementNS(NS,'polyline');
+    poly.setAttribute('id','sk-sketch');
+    poly.setAttribute('points',ptStr);
+    poly.setAttribute('fill','none'); poly.setAttribute('stroke','#7a5c1e');
+    poly.setAttribute('stroke-width','2.2'); poly.setAttribute('stroke-dasharray','7,4');
+    poly.setAttribute('opacity','.8'); poly.setAttribute('clip-path','url(#sk-clip)');
+    poly.setAttribute('stroke-linejoin','round');
+    svg.insertBefore(poly,el('sk-mg'));
   }
 
   function handleClick(e){
@@ -396,6 +453,8 @@ const W = (() => {
         g.innerHTML=markerSVG(m.type,m.sx,m.sy,m.ok?'hit':'miss');
         mg.appendChild(g);
       }
+      // Remove student sketch; plot correct curve
+      svg.querySelectorAll('polyline').forEach(p=>p.remove());
       plotCurve();
       // Feedback
       el('sn').textContent=correct;
@@ -424,6 +483,18 @@ const W = (() => {
         }
       }
       el('note').textContent='Ghost markers show the correct locations.';
+    },
+
+    toggleCurve(){
+      showCurve=!showCurve;
+      const btn=el('curve-btn');
+      btn.textContent=showCurve?'Hide Curve':'Show Curve';
+      btn.style.background=showCurve?'#1e3a5c':'';
+      btn.style.color=showCurve?'#fff':'';
+      // redraw: clear any existing curve polyline then plot if on
+      const existing=svg.querySelector('polyline');
+      if(existing)existing.remove();
+      if(showCurve&&prob&&!checked) plotCurve();
     },
 
     reset(){
