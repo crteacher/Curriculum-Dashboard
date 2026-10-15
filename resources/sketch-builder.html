@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <title>Curve Sketch Builder</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.css">
 <style>
-:root{--paper:#f6f1e4;--ink:#26313f;--ink-soft:#5b6b7d;--card-bg:#fffdf7;
-  --card-border:#ddd2b6;--navy:#1e3a5c;--gold:#7a5c1e;--shadow:rgba(38,49,63,0.14)}
+:root{--paper:#f6f1e4;--ink:#26313f;--ink-soft:#5b6b7d;
+  --card-bg:#fffdf7;--card-border:#ddd2b6;--shadow:rgba(38,49,63,0.13)}
 @media(prefers-color-scheme:dark){:root{
   --paper:#1b2330;--ink:#edf1ef;--ink-soft:#a3aebb;
   --card-bg:#232e3d;--card-border:#3a4a61}}
@@ -16,140 +16,140 @@
 body{background:var(--paper);color:var(--ink);font-family:'Source Sans 3',sans-serif;min-height:100vh}
 .katex,.katex *{text-transform:none;letter-spacing:normal}
 
-.page-header{background:#1e3a5c;color:#fff;padding:1rem 2rem;display:flex;align-items:center;gap:1.5rem}
-.page-header a{color:#c8d8ec;font-size:13px;text-decoration:none}
-.page-header a:hover{color:#fff;text-decoration:underline}
-.page-title{font-family:'Fraunces',serif;font-size:1.35rem;font-weight:700;flex:1}
-.page-sub{font-size:12.5px;color:#c8d8ec;margin-top:.12rem}
+.hdr{background:#1e3a5c;color:#fff;padding:.9rem 1.8rem;display:flex;align-items:center;gap:1.5rem}
+.hdr a{color:#c8d8ec;font-size:13px;text-decoration:none}
+.hdr a:hover{color:#fff;text-decoration:underline}
+.hdr-title{font-family:'Fraunces',serif;font-size:1.3rem;font-weight:700;flex:1}
+.hdr-sub{font-size:12px;color:#c8d8ec;margin-top:.1rem}
 
-.page-body{max-width:960px;margin:0 auto;padding:1.5rem 1.5rem 3rem}
+.body{max-width:940px;margin:0 auto;padding:1.4rem 1.4rem 3rem}
 
-.fn-card{background:var(--card-bg);border:1px solid var(--card-border);border-radius:10px;
-  padding:1.1rem 1.4rem;margin-bottom:1rem;box-shadow:0 2px 8px var(--shadow);
+.fn-row{background:var(--card-bg);border:1px solid var(--card-border);border-radius:9px;
+  padding:1rem 1.3rem;margin-bottom:.9rem;box-shadow:0 2px 7px var(--shadow);
   display:flex;align-items:center;gap:1rem;flex-wrap:wrap}
-.fn-display{flex:1;min-width:200px}
-.fn-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;
-  color:#1e3a5c;font-family:'Source Sans 3',sans-serif;margin-bottom:.3rem}
-.fn-expr{font-size:1.1rem;color:#1e3a5c;font-weight:600}
-.fn-desc{font-size:13px;color:var(--ink-soft);margin-top:.25rem}
-.new-btn{padding:.5rem 1.1rem;border:2px solid #1e3a5c;border-radius:7px;cursor:pointer;
+.fn-info{flex:1;min-width:180px}
+.fn-lbl{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;
+  color:#1e3a5c;margin-bottom:.25rem}
+.fn-expr{font-size:1.05rem;font-weight:600;color:#1e3a5c;min-height:1.4em}
+.fn-desc{font-size:13px;color:var(--ink-soft);margin-top:.2rem}
+.new-btn{padding:.48rem 1.1rem;border:2px solid #1e3a5c;border-radius:7px;cursor:pointer;
   font-family:'Source Sans 3',sans-serif;font-size:13px;font-weight:700;
-  background:#1e3a5c;color:#fff;white-space:nowrap}
+  background:#1e3a5c;color:#fff}
 .new-btn:hover{background:#152c47}
 
-.instructions{background:rgba(30,58,92,0.08);border-left:4px solid #1e3a5c;
-  border-radius:0 7px 7px 0;padding:.7rem 1rem;font-size:13.5px;
-  line-height:1.65;margin-bottom:1rem;color:var(--ink-soft)}
-.instructions strong{color:#1e3a5c}
+.tip{background:rgba(30,58,92,0.08);border-left:4px solid #1e3a5c;
+  border-radius:0 7px 7px 0;padding:.65rem 1rem;font-size:13px;
+  line-height:1.65;margin-bottom:.9rem;color:var(--ink-soft)}
+.tip strong{color:#1e3a5c}
 
-.sketch-layout{display:grid;grid-template-columns:115px 1fr;gap:1.2rem;align-items:start}
-@media(max-width:660px){.sketch-layout{grid-template-columns:1fr}}
+.layout{display:grid;grid-template-columns:110px 1fr;gap:1.1rem;align-items:start}
+@media(max-width:620px){.layout{grid-template-columns:1fr}}
 
-.toolbar{display:flex;flex-direction:column;gap:.4rem}
-.tb-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;
-  color:var(--ink-soft);margin-bottom:.1rem;margin-top:.4rem}
-.mk-btn{display:flex;align-items:center;gap:.4rem;padding:.45rem .7rem;
+.tb{display:flex;flex-direction:column;gap:.35rem}
+.tb-lbl{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;
+  color:var(--ink-soft);margin-bottom:.05rem;margin-top:.4rem}
+.mb{display:flex;align-items:center;gap:.38rem;padding:.4rem .65rem;
   border:2px solid transparent;border-radius:6px;cursor:pointer;
-  font-family:'Source Sans 3',sans-serif;font-size:13px;font-weight:600;
-  background:var(--card-bg);color:var(--ink);transition:all .12s}
-.mk-btn:hover{border-color:#1e3a5c;color:#1e3a5c}
-.mk-btn.active{border-color:#1e3a5c;background:#1e3a5c;color:#fff}
-.mk-icon{font-size:15px;width:17px;text-align:center;display:inline-block}
-.tb-div{height:1px;background:rgba(0,0,0,.1);margin:.2rem 0}
-.ac-btn{width:100%;padding:.45rem .7rem;border:2px solid #1e3a5c;border-radius:6px;
-  cursor:pointer;font-family:'Source Sans 3',sans-serif;font-size:12.5px;font-weight:700;
-  background:#1e3a5c;color:#fff;transition:all .12s}
-.ac-btn:hover{background:#152c47}
-.ac-btn.sec{background:transparent;color:#1e3a5c}
-.ac-btn.sec:hover{background:#1e3a5c;color:#fff}
-.ac-btn.rst{border-color:#aaa;color:#777;background:transparent}
-.ac-btn.rst:hover{background:#eee;color:#333}
+  font-family:'Source Sans 3',sans-serif;font-size:12.5px;font-weight:600;
+  background:var(--card-bg);color:var(--ink)}
+.mb:hover{border-color:#1e3a5c;color:#1e3a5c}
+.mb.on{border-color:#1e3a5c;background:#1e3a5c;color:#fff}
+.mi{font-size:14px;width:16px;text-align:center}
+.div{height:1px;background:rgba(0,0,0,.1);margin:.2rem 0}
+.ab{width:100%;padding:.4rem .65rem;border:2px solid #1e3a5c;border-radius:6px;
+  cursor:pointer;font-family:'Source Sans 3',sans-serif;font-size:12px;font-weight:700;
+  background:#1e3a5c;color:#fff}
+.ab:hover{background:#152c47}
+.ab.sec{background:transparent;color:#1e3a5c}
+.ab.sec:hover{background:#1e3a5c;color:#fff}
+.ab.rst{border-color:#aaa;color:#888;background:transparent}
+.ab.rst:hover{background:#f0f0f0;color:#333}
 
-.grid-wrap{background:var(--card-bg);border:1px solid var(--card-border);
-  border-radius:10px;overflow:visible;box-shadow:0 2px 8px var(--shadow)}
-#sketch-svg{display:block;width:100%;max-width:500px}
+.gw{background:#fff;border:1px solid #ccc;border-radius:9px;
+  overflow:hidden;box-shadow:0 2px 7px var(--shadow);line-height:0}
+#sk{display:block;width:100%;max-width:500px;cursor:crosshair}
 
-.legend{display:flex;flex-wrap:wrap;gap:.4rem .9rem;margin-top:.5rem;font-size:12.5px;color:var(--ink-soft)}
-.leg{display:flex;align-items:center;gap:.3rem}
+.leg{display:flex;flex-wrap:wrap;gap:.35rem .8rem;margin-top:.5rem;
+  font-size:12px;color:var(--ink-soft)}
+.li{display:flex;align-items:center;gap:.28rem}
 
-.feedback{margin-top:1rem;display:none}
-.feedback.show{display:block}
-.score-bar{background:var(--card-bg);border:1px solid var(--card-border);
-  border-radius:9px;padding:.9rem 1.2rem;margin-bottom:.7rem;
-  display:flex;align-items:center;gap:.75rem}
-.score-n{font-family:'Fraunces',serif;font-size:2rem;font-weight:700;color:#1e3a5c}
-.score-info{font-size:13px;color:var(--ink-soft)}
-.feat-row{display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;
-  border-radius:5px;margin-bottom:.2rem;font-size:13.5px}
-.feat-row.hit{background:rgba(63,122,82,0.13);color:#3f7a52}
-.feat-row.miss{background:rgba(179,65,58,0.11);color:#b3413a}
-.ans-note{font-size:12.5px;color:var(--ink-soft);margin-top:.4rem;font-style:italic;line-height:1.6}
+.fb{margin-top:.9rem;display:none}
+.fb.show{display:block}
+.sb{background:var(--card-bg);border:1px solid var(--card-border);border-radius:8px;
+  padding:.8rem 1.1rem;margin-bottom:.6rem;display:flex;align-items:center;gap:.7rem}
+.sn{font-family:'Fraunces',serif;font-size:2rem;font-weight:700;color:#1e3a5c}
+.si{font-size:13px;color:var(--ink-soft)}
+.fr{display:flex;align-items:center;gap:.55rem;padding:.32rem .5rem;
+  border-radius:5px;margin-bottom:.2rem;font-size:13px}
+.fr.hit{background:rgba(60,130,80,0.13);color:#2d7a45}
+.fr.miss{background:rgba(185,55,50,0.11);color:#b03030}
+.note{font-size:12.5px;color:var(--ink-soft);margin-top:.35rem;font-style:italic}
 </style>
 </head>
 <body>
 
-<header class="page-header">
+<header class="hdr">
   <div>
-    <div class="page-title">Curve Sketch Builder</div>
-    <div class="page-sub">Place key features on the graph &mdash; then check your sketch</div>
+    <div class="hdr-title">Curve Sketch Builder</div>
+    <div class="hdr-sub">Place key features on the graph &mdash; then check your sketch</div>
   </div>
   <a href="../index.html">&larr; Dashboard</a>
 </header>
 
-<div class="page-body">
+<div class="body">
 
-  <div class="fn-card">
-    <div class="fn-display">
-      <div class="fn-label">Function</div>
+  <div class="fn-row">
+    <div class="fn-info">
+      <div class="fn-lbl">Function</div>
       <div class="fn-expr" id="fn-expr"></div>
       <div class="fn-desc" id="fn-desc"></div>
     </div>
-    <button class="new-btn" onclick="newProblem()">New Problem</button>
+    <button class="new-btn" onclick="newProblem()">&#8635; New Problem</button>
   </div>
 
-  <div class="instructions">
-    <strong>How to use:</strong> Select a marker type, then click on the grid to place it.
-    Click an existing marker to remove it.
+  <div class="tip">
+    <strong>How to use:</strong> Pick a marker type below, then click the grid.
     <strong>Zeros snap to the x-axis.</strong>
-    Hit <strong>Check Sketch</strong> when done &mdash; the curve appears and each placement is graded.
-    Find <em>all</em> zeros, local maxima, local minima, and inflection points to get full marks.
+    Click any existing marker to remove it.
+    Hit <strong>Check Sketch</strong> when done &mdash; the curve plots and each marker is graded.
   </div>
 
-  <div class="sketch-layout">
-    <div class="toolbar" id="toolbar">
-      <div class="tb-label">Place</div>
-      <button class="mk-btn active" data-type="zero"><span class="mk-icon">&#9675;</span>Zero</button>
-      <button class="mk-btn" data-type="max"><span class="mk-icon">&#9650;</span>Local Max</button>
-      <button class="mk-btn" data-type="min"><span class="mk-icon">&#9661;</span>Local Min</button>
-      <button class="mk-btn" data-type="inflection"><span class="mk-icon">&#9670;</span>Inflection</button>
-      <div class="tb-div"></div>
-      <div class="tb-label">Actions</div>
-      <button class="ac-btn" id="check-btn" onclick="widget.checkSketch()">Check Sketch</button>
-      <button class="ac-btn sec" id="ans-btn" onclick="widget.showAnswer()">Show Answer</button>
-      <button class="ac-btn rst" onclick="resetCurrent()">Reset</button>
+  <div class="layout">
+
+    <div class="tb" id="toolbar">
+      <div class="tb-lbl">Place</div>
+      <button class="mb on" data-type="zero"><span class="mi">&#9675;</span>Zero</button>
+      <button class="mb" data-type="max"><span class="mi">&#9650;</span>Local Max</button>
+      <button class="mb" data-type="min"><span class="mi">&#9661;</span>Local Min</button>
+      <button class="mb" data-type="inflection"><span class="mi">&#9670;</span>Inflection</button>
+      <div class="div"></div>
+      <div class="tb-lbl">Actions</div>
+      <button class="ab" id="check-btn" onclick="W.check()">Check Sketch</button>
+      <button class="ab sec" id="ans-btn" onclick="W.showAnswer()">Show Answer</button>
+      <button class="ab rst" onclick="W.reset()">Reset</button>
     </div>
 
     <div>
-      <div class="grid-wrap">
-        <svg id="sketch-svg" viewBox="0 0 500 380" width="500" height="380"
+      <div class="gw">
+        <svg id="sk" viewBox="0 0 500 380" width="500" height="380"
              xmlns="http://www.w3.org/2000/svg"></svg>
       </div>
-      <div class="legend">
-        <span class="leg"><svg width="15" height="15" viewBox="0 0 15 15"><circle cx="7.5" cy="7.5" r="6" fill="white" stroke="#1e3a5c" stroke-width="2"/></svg>Zero</span>
-        <span class="leg"><svg width="15" height="15" viewBox="0 0 15 15"><polygon points="7.5,1 14,13 1,13" fill="#7a5c1e"/></svg>Local Max</span>
-        <span class="leg"><svg width="15" height="15" viewBox="0 0 15 15"><polygon points="7.5,14 14,2 1,2" fill="#1e3a5c"/></svg>Local Min</span>
-        <span class="leg"><svg width="16" height="16" viewBox="0 0 16 16"><polygon points="8,1 15,8 8,15 1,8" fill="none" stroke="#7a5c1e" stroke-width="2"/></svg>Inflection</span>
+      <div class="leg">
+        <span class="li"><svg width="14" height="14" viewBox="-7 -7 14 14"><circle r="6" fill="white" stroke="#1e3a5c" stroke-width="2"/></svg>Zero</span>
+        <span class="li"><svg width="14" height="13" viewBox="-7 -6 14 13"><polygon points="0,-6 7,6 -7,6" fill="#7a5c1e"/></svg>Local Max</span>
+        <span class="li"><svg width="14" height="13" viewBox="-7 -6 14 13"><polygon points="0,6 7,-6 -7,-6" fill="#1e3a5c"/></svg>Local Min</span>
+        <span class="li"><svg width="16" height="16" viewBox="-8 -8 16 16"><polygon points="0,-7 7,0 0,7 -7,0" fill="none" stroke="#7a5c1e" stroke-width="2"/></svg>Inflection</span>
       </div>
     </div>
   </div>
 
-  <div class="feedback" id="feedback">
-    <div class="score-bar">
-      <div class="score-n" id="score-n">0</div>
-      <div class="score-info"><span id="score-of">/0</span> key features<br>identified correctly</div>
+  <div class="fb" id="feedback">
+    <div class="sb">
+      <div class="sn" id="sn">0</div>
+      <div class="si"><span id="sof">/0</span> key features found</div>
     </div>
-    <div id="feat-list"></div>
-    <div class="ans-note" id="ans-note"></div>
+    <div id="flist"></div>
+    <div class="note" id="note"></div>
   </div>
 
 </div>
@@ -157,403 +157,302 @@ body{background:var(--paper);color:var(--ink);font-family:'Source Sans 3',sans-s
 <script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/contrib/auto-render.min.js"></script>
 <script>
-// ═══════════════════════════════════════════════════
-// PROBLEM BANK  (8 curated cubics)
-// ═══════════════════════════════════════════════════
-const BANK = [
-  { latex:'f(x)=x^3-3x',
-    fn: x=>x**3-3*x, xMin:-3.3,xMax:3.3,yMin:-4,yMax:4,
-    tol:0.44,
-    desc:'Classic cubic — three real zeros, symmetric about the origin.',
-    expected:{zeros:[{x:-Math.sqrt(3),y:0,label:'x≈−1.73'},{x:0,y:0,label:'x=0'},{x:Math.sqrt(3),y:0,label:'x≈1.73'}],
-      maxima:[{x:-1,y:2,label:'(−1, 2)'}],minima:[{x:1,y:-2,label:'(1, −2)'}],
-      inflections:[{x:0,y:0,label:'(0, 0)'}]}},
+// ── Problem bank ─────────────────────────────────────────────
+const BANK=[
+  {latex:'f(x)=x^3-3x',fn:x=>x**3-3*x,
+   xMin:-3.3,xMax:3.3,yMin:-3.8,yMax:3.8,tol:.44,
+   desc:'Classic cubic — symmetric about the origin.',
+   expected:{zeros:[{x:-Math.sqrt(3),y:0,label:'x≈−1.73'},{x:0,y:0,label:'x=0'},{x:Math.sqrt(3),y:0,label:'x≈1.73'}],
+     maxima:[{x:-1,y:2,label:'(−1, 2)'}],minima:[{x:1,y:-2,label:'(1, −2)'}],
+     inflections:[{x:0,y:0,label:'(0, 0)'}]}},
 
-  { latex:'f(x)=x^3-3x+2',
-    fn: x=>x**3-3*x+2, xMin:-2.8,xMax:2.8,yMin:-1,yMax:5,
-    tol:0.44,
-    desc:'Same shape, shifted up — note the double zero at x = 1.',
-    expected:{zeros:[{x:-2,y:0,label:'x=−2'},{x:1,y:0,label:'x=1 (double zero)'}],
-      maxima:[{x:-1,y:4,label:'(−1, 4)'}],minima:[{x:1,y:0,label:'(1, 0)'}],
-      inflections:[{x:0,y:2,label:'(0, 2)'}]}},
+  {latex:'f(x)=x^3-3x+2',fn:x=>x**3-3*x+2,
+   xMin:-2.8,xMax:2.8,yMin:-.8,yMax:5.2,tol:.44,
+   desc:'Shifted up 2 — double zero at x = 1.',
+   expected:{zeros:[{x:-2,y:0,label:'x=−2'},{x:1,y:0,label:'x=1 (double)'}],
+     maxima:[{x:-1,y:4,label:'(−1, 4)'}],minima:[{x:1,y:0,label:'(1, 0)'}],
+     inflections:[{x:0,y:2,label:'(0, 2)'}]}},
 
-  { latex:'f(x)=(x-2)^3-3(x-2)',
-    fn: x=>(x-2)**3-3*(x-2), xMin:-0.8,xMax:4.8,yMin:-4,yMax:4,
-    tol:0.44,
-    desc:'Translated two units right — same shape as f(x)=x³−3x.',
-    expected:{zeros:[{x:2-Math.sqrt(3),y:0,label:'x≈0.27'},{x:2,y:0,label:'x=2'},{x:2+Math.sqrt(3),y:0,label:'x≈3.73'}],
-      maxima:[{x:1,y:2,label:'(1, 2)'}],minima:[{x:3,y:-2,label:'(3, −2)'}],
-      inflections:[{x:2,y:0,label:'(2, 0)'}]}},
+  {latex:'f(x)=x^3-3x-2',fn:x=>x**3-3*x-2,
+   xMin:-2.8,xMax:2.8,yMin:-5.2,yMax:.8,tol:.44,
+   desc:'Shifted down 2 — double zero at x = −1.',
+   expected:{zeros:[{x:-1,y:0,label:'x=−1 (double)'},{x:2,y:0,label:'x=2'}],
+     maxima:[{x:-1,y:0,label:'(−1, 0)'}],minima:[{x:1,y:-4,label:'(1, −4)'}],
+     inflections:[{x:0,y:-2,label:'(0, −2)'}]}},
 
-  { latex:'f(x)=-x^3+3x',
-    fn: x=>-x**3+3*x, xMin:-3.3,xMax:3.3,yMin:-4,yMax:4,
-    tol:0.44,
-    desc:'Reflected over x-axis — the min and max swap.',
-    expected:{zeros:[{x:-Math.sqrt(3),y:0,label:'x≈−1.73'},{x:0,y:0,label:'x=0'},{x:Math.sqrt(3),y:0,label:'x≈1.73'}],
-      maxima:[{x:1,y:2,label:'(1, 2)'}],minima:[{x:-1,y:-2,label:'(−1, −2)'}],
-      inflections:[{x:0,y:0,label:'(0, 0)'}]}},
+  {latex:'f(x)=-x^3+3x',fn:x=>-x**3+3*x,
+   xMin:-3.3,xMax:3.3,yMin:-3.8,yMax:3.8,tol:.44,
+   desc:'Reflected — max and min swap compared to x³−3x.',
+   expected:{zeros:[{x:-Math.sqrt(3),y:0,label:'x≈−1.73'},{x:0,y:0,label:'x=0'},{x:Math.sqrt(3),y:0,label:'x≈1.73'}],
+     maxima:[{x:1,y:2,label:'(1, 2)'}],minima:[{x:-1,y:-2,label:'(−1, −2)'}],
+     inflections:[{x:0,y:0,label:'(0, 0)'}]}},
 
-  { latex:'f(x)=x^3-3x^2',
-    fn: x=>x**3-3*x**2, xMin:-1.2,xMax:4.2,yMin:-6,yMax:2.5,
-    tol:0.44,
-    desc:'Double zero at x = 0 — the graph touches the x-axis there.',
-    expected:{zeros:[{x:0,y:0,label:'x=0 (double)'},{x:3,y:0,label:'x=3'}],
-      maxima:[{x:0,y:0,label:'(0, 0)'}],minima:[{x:2,y:-4,label:'(2, −4)'}],
-      inflections:[{x:1,y:-2,label:'(1, −2)'}]}},
+  {latex:'f(x)=x^3-3x^2',fn:x=>x**3-3*x**2,
+   xMin:-1.3,xMax:4.3,yMin:-5.5,yMax:2.2,tol:.44,
+   desc:'Double zero at x = 0 — the graph just touches the x-axis there.',
+   expected:{zeros:[{x:0,y:0,label:'x=0 (double)'},{x:3,y:0,label:'x=3'}],
+     maxima:[{x:0,y:0,label:'(0, 0)'}],minima:[{x:2,y:-4,label:'(2, −4)'}],
+     inflections:[{x:1,y:-2,label:'(1, −2)'}]}},
 
-  { latex:'f(x)=-x^3+3x^2',
-    fn: x=>-x**3+3*x**2, xMin:-1.2,xMax:4.2,yMin:-2.5,yMax:6,
-    tol:0.44,
-    desc:'Double zero and a local min at the origin.',
-    expected:{zeros:[{x:0,y:0,label:'x=0 (double)'},{x:3,y:0,label:'x=3'}],
-      maxima:[{x:2,y:4,label:'(2, 4)'}],minima:[{x:0,y:0,label:'(0, 0)'}],
-      inflections:[{x:1,y:2,label:'(1, 2)'}]}},
+  {latex:'f(x)=-x^3+3x^2',fn:x=>-x**3+3*x**2,
+   xMin:-1.3,xMax:4.3,yMin:-2.2,yMax:5.5,tol:.44,
+   desc:'Double zero at origin; local min there, local max at (2, 4).',
+   expected:{zeros:[{x:0,y:0,label:'x=0 (double)'},{x:3,y:0,label:'x=3'}],
+     maxima:[{x:2,y:4,label:'(2, 4)'}],minima:[{x:0,y:0,label:'(0, 0)'}],
+     inflections:[{x:1,y:2,label:'(1, 2)'}]}},
 
-  { latex:'f(x)=(x+1)^3-3(x+1)',
-    fn: x=>(x+1)**3-3*(x+1), xMin:-4.3,xMax:2.3,yMin:-4,yMax:4,
-    tol:0.44,
-    desc:'Translated one unit left.',
-    expected:{zeros:[{x:-1-Math.sqrt(3),y:0,label:'x≈−2.73'},{x:-1,y:0,label:'x=−1'},{x:-1+Math.sqrt(3),y:0,label:'x≈0.73'}],
-      maxima:[{x:-2,y:2,label:'(−2, 2)'}],minima:[{x:0,y:-2,label:'(0, −2)'}],
-      inflections:[{x:-1,y:0,label:'(−1, 0)'}]}},
+  {latex:'f(x)=(x-2)^3-3(x-2)',fn:x=>(x-2)**3-3*(x-2),
+   xMin:-.8,xMax:4.8,yMin:-3.8,yMax:3.8,tol:.44,
+   desc:'Same shape as x³−3x, shifted right 2.',
+   expected:{zeros:[{x:2-Math.sqrt(3),y:0,label:'x≈0.27'},{x:2,y:0,label:'x=2'},{x:2+Math.sqrt(3),y:0,label:'x≈3.73'}],
+     maxima:[{x:1,y:2,label:'(1, 2)'}],minima:[{x:3,y:-2,label:'(3, −2)'}],
+     inflections:[{x:2,y:0,label:'(2, 0)'}]}},
 
-  { latex:'f(x)=x^3-3x-2',
-    fn: x=>x**3-3*x-2, xMin:-2.8,xMax:2.8,yMin:-5,yMax:1.5,
-    tol:0.44,
-    desc:'Shifted down — note the double zero at x = −1.',
-    expected:{zeros:[{x:-1,y:0,label:'x=−1 (double)'},{x:2,y:0,label:'x=2'}],
-      maxima:[{x:-1,y:0,label:'(−1, 0)'}],minima:[{x:1,y:-4,label:'(1, −4)'}],
-      inflections:[{x:0,y:-2,label:'(0, −2)'}]}},
+  {latex:'f(x)=(x+1)^3-3(x+1)',fn:x=>(x+1)**3-3*(x+1),
+   xMin:-4.3,xMax:2.3,yMin:-3.8,yMax:3.8,tol:.44,
+   desc:'Same shape as x³−3x, shifted left 1.',
+   expected:{zeros:[{x:-1-Math.sqrt(3),y:0,label:'x≈−2.73'},{x:-1,y:0,label:'x=−1'},{x:-1+Math.sqrt(3),y:0,label:'x≈0.73'}],
+     maxima:[{x:-2,y:2,label:'(−2, 2)'}],minima:[{x:0,y:-2,label:'(0, −2)'}],
+     inflections:[{x:-1,y:0,label:'(−1, 0)'}]}},
 ];
 
-// ═══════════════════════════════════════════════════
-// SKETCH WIDGET
-// ═══════════════════════════════════════════════════
-class SketchWidget {
-  constructor(svgId, fbId) {
-    this.svgEl   = document.getElementById(svgId);
-    this.fbEl    = document.getElementById(fbId);
-    this.prob    = null;
-    this.markers = [];
-    this.nextId  = 0;
-    this.checked = false;
-    this.answered= false;
-    this.atype   = 'zero';
-    // Layout (matches viewBox 500×380)
-    this.W=500; this.H=380;
-    this.PL=48; this.PR=24; this.PT=24; this.PB=46;
-    this.IW = this.W-this.PL-this.PR;  // 428
-    this.IH = this.H-this.PT-this.PB;  // 310
-    // Toolbar
-    document.getElementById('toolbar').addEventListener('click', e=>{
-      const b = e.target.closest('[data-type]');
-      if(!b) return;
-      this.atype = b.dataset.type;
-      document.querySelectorAll('[data-type]').forEach(x=>x.classList.remove('active'));
-      b.classList.add('active');
-    });
-  }
+// ── Widget ───────────────────────────────────────────────────
+const W = (() => {
+  const SVG_ID='sk', FB_ID='feedback';
+  const VW=500,VH=380,PL=48,PR=24,PT=24,PB=46;
+  const IW=VW-PL-PR, IH=VH-PT-PB;  // 428, 310
 
-  // Math ↔ SVG conversions
-  tx(x){ const{xMin,xMax}=this.prob; return this.PL+(x-xMin)/(xMax-xMin)*this.IW; }
-  ty(y){ const{yMin,yMax}=this.prob; return this.PT+(yMax-y)/(yMax-yMin)*this.IH; }
-  mx(sx){ const{xMin,xMax}=this.prob; return xMin+(sx-this.PL)/this.IW*(xMax-xMin); }
-  my(sy){ const{yMin,yMax}=this.prob; return yMax-(sy-this.PT)/this.IH*(yMax-yMin); }
+  let prob=null, markers=[], nid=0, checked=false, answered=false, atype='zero';
+  const el = id => document.getElementById(id);
+  const svg = el(SVG_ID);
 
-  load(prob){
-    this.prob    = prob;
-    this.markers = [];
-    this.nextId  = 0;
-    this.checked = false;
-    this.answered= false;
-    this.fbEl.classList.remove('show');
-    document.getElementById('check-btn').disabled = false;
-    document.getElementById('ans-btn').disabled   = false;
-    this._drawGrid();
-    this.svgEl.onclick = e => this._click(e);
-  }
+  // Toolbar
+  el('toolbar').addEventListener('click', e=>{
+    const b=e.target.closest('[data-type]'); if(!b)return;
+    atype=b.dataset.type;
+    document.querySelectorAll('[data-type]').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on');
+  });
 
-  _drawGrid(){
-    const svg = this.svgEl;
-    // Clear everything
-    while(svg.firstChild) svg.removeChild(svg.firstChild);
+  function tx(x){ return PL+(x-prob.xMin)/(prob.xMax-prob.xMin)*IW; }
+  function ty(y){ return PT+(prob.yMax-y)/(prob.yMax-prob.yMin)*IH; }
+  function mx(sx){ return prob.xMin+(sx-PL)/IW*(prob.xMax-prob.xMin); }
+  function my(sy){ return prob.yMax-(sy-PT)/IH*(prob.yMax-prob.yMin); }
 
-    const{xMin,xMax,yMin,yMax}=this.prob;
-    const NS = 'http://www.w3.org/2000/svg';
-    const mk = tag => document.createElementNS(NS, tag);
+  // Build the static grid as an SVG innerHTML string
+  function gridHTML(){
+    const {xMin,xMax,yMin,yMax}=prob;
+    const f=n=>n.toFixed(2);
+    const ay=f(ty(0)), ax=f(tx(0));
+    let s='';
 
-    // Clip path so curve stays inside grid
-    const defs = mk('defs');
-    const clip = mk('clipPath'); clip.setAttribute('id','sk-clip');
-    const cr   = mk('rect');
-    cr.setAttribute('x',this.PL);cr.setAttribute('y',this.PT);
-    cr.setAttribute('width',this.IW);cr.setAttribute('height',this.IH);
-    clip.appendChild(cr); defs.appendChild(clip); svg.appendChild(defs);
-
-    // White grid background
-    const bg = mk('rect');
-    bg.setAttribute('x',this.PL); bg.setAttribute('y',this.PT);
-    bg.setAttribute('width',this.IW); bg.setAttribute('height',this.IH);
-    bg.setAttribute('fill','#fff'); bg.setAttribute('stroke','#ccc'); bg.setAttribute('stroke-width','1');
-    svg.appendChild(bg);
-
-    // Grid lines
-    for(let x=Math.ceil(xMin); x<=xMax+1e-9; x++){
-      const sx=this.tx(x);
-      const l=mk('line'); l.setAttribute('x1',sx);l.setAttribute('x2',sx);
-      l.setAttribute('y1',this.PT);l.setAttribute('y2',this.H-this.PB);
-      l.setAttribute('stroke','#ddd');l.setAttribute('stroke-width','1');
-      svg.appendChild(l);
+    // Clip path
+    s+=`<defs><clipPath id="sk-clip"><rect x="${PL}" y="${PT}" width="${IW}" height="${IH}"/></clipPath></defs>`;
+    // Background
+    s+=`<rect x="${PL}" y="${PT}" width="${IW}" height="${IH}" fill="#ffffff"/>`;
+    // Grid
+    for(let x=Math.ceil(xMin);x<=xMax+.001;x++){
+      const sx=f(tx(x));
+      s+=`<line x1="${sx}" y1="${PT}" x2="${sx}" y2="${VH-PB}" stroke="#e8e8e8" stroke-width="1"/>`;
     }
-    for(let y=Math.ceil(yMin); y<=yMax+1e-9; y++){
-      const sy=this.ty(y);
-      const l=mk('line'); l.setAttribute('x1',this.PL);l.setAttribute('x2',this.W-this.PR);
-      l.setAttribute('y1',sy);l.setAttribute('y2',sy);
-      l.setAttribute('stroke','#ddd');l.setAttribute('stroke-width','1');
-      svg.appendChild(l);
+    for(let y=Math.ceil(yMin);y<=yMax+.001;y++){
+      const sy=f(ty(y));
+      s+=`<line x1="${PL}" y1="${sy}" x2="${VW-PR}" y2="${sy}" stroke="#e8e8e8" stroke-width="1"/>`;
     }
-
     // Axes
-    const ay=this.ty(0), ax=this.tx(0);
-    const hax=mk('line'); hax.setAttribute('x1',this.PL);hax.setAttribute('x2',this.W-this.PR);
-    hax.setAttribute('y1',ay);hax.setAttribute('y2',ay);
-    hax.setAttribute('stroke','#444');hax.setAttribute('stroke-width','1.8');
-    svg.appendChild(hax);
-    if(ax>=this.PL && ax<=this.W-this.PR){
-      const vax=mk('line'); vax.setAttribute('x1',ax);vax.setAttribute('x2',ax);
-      vax.setAttribute('y1',this.PT);vax.setAttribute('y2',this.H-this.PB);
-      vax.setAttribute('stroke','#444');vax.setAttribute('stroke-width','1.8');
-      svg.appendChild(vax);
-    }
-
+    s+=`<line x1="${PL}" y1="${ay}" x2="${VW-PR}" y2="${ay}" stroke="#555" stroke-width="2"/>`;
+    const axn=parseFloat(ax);
+    if(axn>=PL&&axn<=VW-PR)
+      s+=`<line x1="${ax}" y1="${PT}" x2="${ax}" y2="${VH-PB}" stroke="#555" stroke-width="2"/>`;
     // Tick marks + labels
-    const ff = "Georgia,'Times New Roman',serif";
-    for(let x=Math.ceil(xMin); x<=xMax+1e-9; x++){
-      if(Math.abs(x)<1e-9) continue;
-      const sx=this.tx(x);
-      const tk=mk('line'); tk.setAttribute('x1',sx);tk.setAttribute('x2',sx);
-      tk.setAttribute('y1',ay-4);tk.setAttribute('y2',ay+4);
-      tk.setAttribute('stroke','#444');tk.setAttribute('stroke-width','1.2');
-      svg.appendChild(tk);
-      const lbl=mk('text');
-      lbl.setAttribute('x',sx);lbl.setAttribute('y',ay+15);
-      lbl.setAttribute('text-anchor','middle');lbl.setAttribute('font-size','11');
-      lbl.setAttribute('fill','#666');lbl.setAttribute('font-family',ff);
-      lbl.textContent=x; svg.appendChild(lbl);
+    const ayn=parseFloat(ay);
+    for(let x=Math.ceil(xMin);x<=xMax+.001;x++){
+      if(Math.abs(x)<.001)continue;
+      const sx=f(tx(x));
+      s+=`<line x1="${sx}" y1="${ayn-4}" x2="${sx}" y2="${ayn+4}" stroke="#555" stroke-width="1.3"/>`;
+      s+=`<text x="${sx}" y="${ayn+16}" text-anchor="middle" font-size="11" fill="#666" font-family="sans-serif">${x}</text>`;
     }
-    for(let y=Math.ceil(yMin); y<=yMax+1e-9; y++){
-      if(Math.abs(y)<1e-9) continue;
-      const sy=this.ty(y);
-      const tk=mk('line'); tk.setAttribute('x1',ax-4);tk.setAttribute('x2',ax+4);
-      tk.setAttribute('y1',sy);tk.setAttribute('y2',sy);
-      tk.setAttribute('stroke','#444');tk.setAttribute('stroke-width','1.2');
-      svg.appendChild(tk);
-      const lbl=mk('text');
-      lbl.setAttribute('x',ax-7);lbl.setAttribute('y',sy+4);
-      lbl.setAttribute('text-anchor','end');lbl.setAttribute('font-size','11');
-      lbl.setAttribute('fill','#666');lbl.setAttribute('font-family',ff);
-      lbl.textContent=y; svg.appendChild(lbl);
+    for(let y=Math.ceil(yMin);y<=yMax+.001;y++){
+      if(Math.abs(y)<.001)continue;
+      const sy=f(ty(y));
+      s+=`<line x1="${axn-4}" y1="${sy}" x2="${axn+4}" y2="${sy}" stroke="#555" stroke-width="1.3"/>`;
+      s+=`<text x="${axn-8}" y="${(parseFloat(sy)+4).toFixed(1)}" text-anchor="end" font-size="11" fill="#666" font-family="sans-serif">${y}</text>`;
     }
-
-    // Axis letter labels
-    const xl=mk('text'); xl.setAttribute('x',this.W-this.PR+4);xl.setAttribute('y',ay+4);
-    xl.setAttribute('font-size','13');xl.setAttribute('fill','#1e3a5c');
-    xl.setAttribute('font-weight','bold');xl.setAttribute('font-family',ff);
-    xl.textContent='x'; svg.appendChild(xl);
-    const yl=mk('text'); yl.setAttribute('x',ax+4);yl.setAttribute('y',this.PT-4);
-    yl.setAttribute('font-size','13');yl.setAttribute('fill','#1e3a5c');
-    yl.setAttribute('font-weight','bold');yl.setAttribute('font-family',ff);
-    yl.textContent='y'; svg.appendChild(yl);
-
-    // Marker group (on top)
-    this.mg = mk('g'); svg.appendChild(this.mg);
+    // Axis letters
+    s+=`<text x="${VW-PR+4}" y="${(ayn+5).toFixed(1)}" font-size="13" fill="#1e3a5c" font-weight="bold" font-family="sans-serif">x</text>`;
+    if(axn>=PL&&axn<=VW-PR)
+      s+=`<text x="${(axn+5).toFixed(1)}" y="${PT-4}" font-size="13" fill="#1e3a5c" font-weight="bold" font-family="sans-serif">y</text>`;
+    // Marker group
+    s+='<g id="sk-mg"></g>';
+    return s;
   }
 
-  _click(e){
-    if(this.checked) return;
-    const r  = this.svgEl.getBoundingClientRect();
-    const sx = (e.clientX - r.left) * (this.W / r.width);
-    const sy = (e.clientY - r.top)  * (this.H / r.height);
+  function drawGrid(){
+    svg.innerHTML=gridHTML();
+  }
 
-    // Hit existing marker → remove it
-    for(const m of this.markers){
-      const dx=m.sx-sx, dy=m.sy-sy;
-      if(dx*dx+dy*dy < 225){ this._rmMarker(m.id); return; }
+  function markerSVG(type,sx,sy,state){
+    const NAVY='#1e3a5c',GOLD='#7a5c1e',HIT='#2d7a45',MISS='#b03030',ANS='rgba(30,58,92,.22)';
+    const c=state==='hit'?HIT:state==='miss'?MISS:state==='answer'?ANS:null;
+    const f=n=>n.toFixed(1);
+    if(type==='zero')
+      return `<circle cx="${f(sx)}" cy="${f(sy)}" r="7" fill="white" stroke="${c||NAVY}" stroke-width="2.5"/>`;
+    if(type==='max')
+      return `<polygon points="${f(sx)},${f(sy-11)} ${f(sx+10)},${f(sy+5)} ${f(sx-10)},${f(sy+5)}" fill="${c||GOLD}"/>`;
+    if(type==='min')
+      return `<polygon points="${f(sx)},${f(sy+11)} ${f(sx+10)},${f(sy-5)} ${f(sx-10)},${f(sy-5)}" fill="${c||NAVY}"/>`;
+    return `<polygon points="${f(sx)},${f(sy-9)} ${f(sx+9)},${f(sy)} ${f(sx)},${f(sy+9)} ${f(sx-9)},${f(sy)}" fill="white" stroke="${c||GOLD}" stroke-width="2.5"/>`;
+  }
+
+  function addMarker(type,sx,sy){
+    const id=nid++;
+    markers.push({id,type,sx,sy,mx:mx(sx),my:my(sy),ok:null});
+    const mg=el('sk-mg');
+    const g=document.createElementNS('http://www.w3.org/2000/svg','g');
+    g.setAttribute('data-mid',id);g.style.cursor='pointer';
+    g.innerHTML=markerSVG(type,sx,sy,null);
+    mg.appendChild(g);
+  }
+
+  function removeMarker(id){
+    markers=markers.filter(m=>m.id!==id);
+    const g=svg.querySelector(`[data-mid="${id}"]`); if(g)g.remove();
+  }
+
+  function handleClick(e){
+    if(checked)return;
+    const r=svg.getBoundingClientRect();
+    const sx=(e.clientX-r.left)*(VW/r.width);
+    const sy=(e.clientY-r.top)*(VH/r.height);
+    // hit test
+    for(const m of markers){
+      const dx=m.sx-sx,dy=m.sy-sy;
+      if(dx*dx+dy*dy<225){removeMarker(m.id);return;}
     }
-
-    // Outside grid → ignore
-    if(sx<this.PL||sx>this.W-this.PR||sy<this.PT||sy>this.H-this.PB) return;
-
-    let mx=this.mx(sx), my=this.my(sy);
-    if(this.atype==='zero') my=0;  // snap to x-axis
-
-    // Clamp
-    const{xMin,xMax,yMin,yMax}=this.prob;
-    mx=Math.max(xMin+.02,Math.min(xMax-.02,mx));
-    my=Math.max(yMin+.02,Math.min(yMax-.02,my));
-
-    const id=this.nextId++;
-    const fsx=this.tx(mx), fsy=this.ty(my);
-    this.markers.push({id,type:this.atype,mx,my,sx:fsx,sy:fsy,correct:null});
-    this._drawMarker(id,this.atype,fsx,fsy,null);
+    if(sx<PL||sx>VW-PR||sy<PT||sy>VH-PB)return;
+    let smx=mx(sx),smy=my(sy);
+    if(atype==='zero')smy=0;
+    const{xMin,xMax,yMin,yMax}=prob;
+    smx=Math.max(xMin+.02,Math.min(xMax-.02,smx));
+    smy=Math.max(yMin+.02,Math.min(yMax-.02,smy));
+    addMarker(atype,tx(smx),ty(smy));
   }
 
-  _rmMarker(id){
-    this.markers=this.markers.filter(m=>m.id!==id);
-    const el=this.mg.querySelector(`[data-mid="${id}"]`);
-    if(el) el.remove();
-  }
-
-  _drawMarker(id,type,sx,sy,state){
-    const NS='http://www.w3.org/2000/svg';
-    const mk=tag=>document.createElementNS(NS,tag);
-    const NAVY='#1e3a5c',GOLD='#7a5c1e';
-    const HIT='#3a8c52',MISS='#c0392b',ANS='rgba(30,58,92,0.22)';
-    const col=state==='hit'?HIT:state==='miss'?MISS:state==='answer'?ANS:null;
-
-    const g=mk('g'); g.setAttribute('data-mid',id); g.style.cursor='pointer';
-    let el;
-    if(type==='zero'){
-      el=mk('circle');el.setAttribute('cx',sx);el.setAttribute('cy',sy);el.setAttribute('r',7);
-      el.setAttribute('fill','white');el.setAttribute('stroke',col||NAVY);el.setAttribute('stroke-width','2.5');
-    } else if(type==='max'){
-      el=mk('polygon');
-      el.setAttribute('points',`${sx},${sy-11} ${sx+10},${sy+5} ${sx-10},${sy+5}`);
-      el.setAttribute('fill',col||GOLD);
-    } else if(type==='min'){
-      el=mk('polygon');
-      el.setAttribute('points',`${sx},${sy+11} ${sx+10},${sy-5} ${sx-10},${sy-5}`);
-      el.setAttribute('fill',col||NAVY);
-    } else {
-      el=mk('polygon');
-      el.setAttribute('points',`${sx},${sy-9} ${sx+9},${sy} ${sx},${sy+9} ${sx-9},${sy}`);
-      el.setAttribute('fill','white');el.setAttribute('stroke',col||GOLD);el.setAttribute('stroke-width','2.5');
+  function plotCurve(){
+    const{fn,xMin,xMax,yMin,yMax}=prob;
+    const pts=[];
+    for(let i=0;i<=400;i++){
+      const x=xMin+i/400*(xMax-xMin);
+      const y=Math.max(yMin-1,Math.min(yMax+1,fn(x)));
+      pts.push(`${tx(x).toFixed(1)},${ty(y).toFixed(1)}`);
     }
-    g.appendChild(el); this.mg.appendChild(g);
-  }
-
-  checkSketch(){
-    if(this.checked) return;
-    this.checked=true;
-    document.getElementById('check-btn').disabled=true;
-    const{expected,tol=0.42}=this.prob;
-    const TM={zeros:'zero',maxima:'max',minima:'min',inflections:'inflection'};
-    let correct=0,total=0;
-    const results=[];
-    for(const[key,pts] of Object.entries(expected)){
-      const mt=TM[key];
-      for(const ep of pts){
-        total++;
-        const cands=this.markers.filter(m=>m.type===mt);
-        let best=Infinity,bestId=null;
-        for(const m of cands){
-          const dx=m.mx-ep.x, dy=key==='zeros'?0:(m.my-(ep.y||0));
-          const d=Math.sqrt(dx*dx+dy*dy);
-          if(d<best){best=d;bestId=m.id;}
-        }
-        const hit=best<=tol;
-        if(hit){correct++;const m=this.markers.find(m=>m.id===bestId);if(m)m.correct=true;}
-        results.push({key,ep,hit});
-      }
-    }
-    for(const m of this.markers) if(m.correct===null) m.correct=false;
-    // Re-draw all markers with feedback colours
-    this.mg.innerHTML='';
-    for(const m of this.markers)
-      this._drawMarker(m.id,m.type,m.sx,m.sy,m.correct?'hit':'miss');
-    // Plot curve
-    this._plotCurve();
-    this._showFeedback(results,correct,total);
-  }
-
-  showAnswer(){
-    if(!this.checked) this.checkSketch();
-    if(this.answered) return;
-    this.answered=true;
-    document.getElementById('ans-btn').disabled=true;
-    const TM={zeros:'zero',maxima:'max',minima:'min',inflections:'inflection'};
-    let aid=9999;
-    for(const[key,pts] of Object.entries(this.prob.expected))
-      for(const ep of pts)
-        this._drawMarker(aid++,TM[key],this.tx(ep.x),this.ty(ep.y||0),'answer');
-    document.getElementById('ans-note').textContent=
-      'Ghost markers show the correct expected locations.';
-  }
-
-  _plotCurve(){
-    const{fn,xMin,xMax,yMin,yMax}=this.prob;
     const NS='http://www.w3.org/2000/svg';
     const poly=document.createElementNS(NS,'polyline');
-    const N=400,pts=[];
-    for(let i=0;i<=N;i++){
-      const x=xMin+i/N*(xMax-xMin);
-      const y=Math.max(yMin-1,Math.min(yMax+1,fn(x)));
-      pts.push(`${this.tx(x).toFixed(1)},${this.ty(y).toFixed(1)}`);
-    }
     poly.setAttribute('points',pts.join(' '));
     poly.setAttribute('fill','none');poly.setAttribute('stroke','#1e3a5c');
-    poly.setAttribute('stroke-width','2.5');poly.setAttribute('opacity','0.65');
-    poly.setAttribute('clip-path','url(#sk-clip)');
-    poly.setAttribute('stroke-linejoin','round');poly.setAttribute('stroke-linecap','round');
-    this.svgEl.insertBefore(poly, this.mg);
+    poly.setAttribute('stroke-width','2.5');poly.setAttribute('opacity','.65');
+    poly.setAttribute('clip-path','url(#sk-clip)');poly.setAttribute('stroke-linejoin','round');
+    const mg=el('sk-mg');
+    svg.insertBefore(poly,mg);
   }
 
-  _showFeedback(results,correct,total){
-    document.getElementById('score-n').textContent=correct;
-    document.getElementById('score-of').textContent=`/${total}`;
-    const KL={zeros:'Zero',maxima:'Local Max',minima:'Local Min',inflections:'Inflection'};
-    const list=document.getElementById('feat-list');
-    list.innerHTML='';
-    for(const r of results){
-      const d=document.createElement('div');
-      d.className='feat-row '+(r.hit?'hit':'miss');
-      d.innerHTML=`<span>${r.hit?'&#10003;':'&#10007;'}</span><span><strong>${KL[r.key]}:</strong> ${r.ep.label}</span>`;
-      list.appendChild(d);
+  return {
+    load(p){
+      prob=p; markers=[]; nid=0; checked=false; answered=false;
+      drawGrid();
+      svg.onclick=handleClick;
+      el('feedback').classList.remove('show');
+      el('check-btn').disabled=false; el('ans-btn').disabled=false;
+      el('note').textContent='';
+    },
+
+    check(){
+      if(checked)return; checked=true; el('check-btn').disabled=true;
+      const{expected,tol=.42}=prob;
+      const TM={zeros:'zero',maxima:'max',minima:'min',inflections:'inflection'};
+      let correct=0,total=0; const results=[];
+      for(const[key,pts] of Object.entries(expected)){
+        const mt=TM[key];
+        for(const ep of pts){
+          total++;
+          const cands=markers.filter(m=>m.type===mt);
+          let best=Infinity,bestId=null;
+          for(const m of cands){
+            const dx=m.mx-ep.x,dy=key==='zeros'?0:(m.my-(ep.y||0));
+            const d=Math.sqrt(dx*dx+dy*dy);
+            if(d<best){best=d;bestId=m.id;}
+          }
+          const hit=best<=tol;
+          if(hit){correct++;const m2=markers.find(m=>m.id===bestId);if(m2)m2.ok=true;}
+          results.push({key,ep,hit});
+        }
+      }
+      for(const m of markers)if(m.ok===null)m.ok=false;
+      // Re-colour markers
+      const mg=el('sk-mg'); mg.innerHTML='';
+      for(const m of markers){
+        const g=document.createElementNS('http://www.w3.org/2000/svg','g');
+        g.setAttribute('data-mid',m.id);g.style.cursor='pointer';
+        g.innerHTML=markerSVG(m.type,m.sx,m.sy,m.ok?'hit':'miss');
+        mg.appendChild(g);
+      }
+      plotCurve();
+      // Feedback
+      el('sn').textContent=correct;
+      el('sof').textContent=`/${total}`;
+      const KL={zeros:'Zero',maxima:'Local Max',minima:'Local Min',inflections:'Inflection'};
+      let html='';
+      for(const r of results)
+        html+=`<div class="fr ${r.hit?'hit':'miss'}"><span>${r.hit?'&#10003;':'&#10007;'}</span><span><strong>${KL[r.key]}:</strong> ${r.ep.label}</span></div>`;
+      el('flist').innerHTML=html;
+      const wrongs=markers.filter(m=>!m.ok).length;
+      if(wrongs)el('note').textContent=`${wrongs} marker${wrongs>1?'s':''} in red didn’t match any expected feature.`;
+      el('feedback').classList.add('show');
+    },
+
+    showAnswer(){
+      if(!checked)this.check();
+      if(answered)return; answered=true; el('ans-btn').disabled=true;
+      const TM={zeros:'zero',maxima:'max',minima:'min',inflections:'inflection'};
+      let aid=9999; const mg=el('sk-mg');
+      for(const[key,pts] of Object.entries(prob.expected)){
+        for(const ep of pts){
+          const g=document.createElementNS('http://www.w3.org/2000/svg','g');
+          g.setAttribute('data-mid',aid++);
+          g.innerHTML=markerSVG(TM[key],tx(ep.x),ty(ep.y||0),'answer');
+          mg.appendChild(g);
+        }
+      }
+      el('note').textContent='Ghost markers show the correct locations.';
+    },
+
+    reset(){
+      markers=[]; nid=0; checked=false; answered=false;
+      drawGrid(); svg.onclick=handleClick;
+      el('feedback').classList.remove('show');
+      el('note').textContent='';
+      el('check-btn').disabled=false; el('ans-btn').disabled=false;
     }
-    const wrongs=this.markers.filter(m=>m.correct===false);
-    if(wrongs.length) document.getElementById('ans-note').textContent=
-      `${wrongs.length} marker${wrongs.length>1?'s':''} (in red) didn’t match any expected feature.`;
-    document.getElementById('feedback').classList.add('show');
-  }
+  };
+})();
 
-  reset(){
-    this.markers=[];this.nextId=0;this.checked=false;this.answered=false;
-    document.getElementById('feedback').classList.remove('show');
-    document.getElementById('ans-note').textContent='';
-    this._drawGrid();
-    this.svgEl.onclick = e => this._click(e);
-    document.getElementById('check-btn').disabled=false;
-    document.getElementById('ans-btn').disabled=false;
-  }
+// ── Init ─────────────────────────────────────────────────────
+let curIdx=0;
+function loadProblem(i){
+  curIdx=i;
+  const p=BANK[i];
+  const fn=el('fn-expr');
+  fn.innerHTML='';
+  try{katex.render(p.latex,fn,{throwOnError:false});}catch(e){fn.textContent=p.latex;}
+  el('fn-desc').textContent=p.desc;
+  W.load(p);
 }
-
-// ═══════════════════════════════════════════════════
-// PAGE LOGIC
-// ═══════════════════════════════════════════════════
-const widget = new SketchWidget('sketch-svg','feedback');
-let currentIdx = 0;
-
-function loadProblem(p, idx){
-  currentIdx = idx;
-  const el = document.getElementById('fn-expr');
-  el.innerHTML='';
-  try{ katex.render(p.latex, el, {throwOnError:false}); }
-  catch(e){ el.textContent=p.latex; }
-  document.getElementById('fn-desc').textContent = p.desc;
-  widget.load(p);
-}
-
+function el(id){return document.getElementById(id);}
 function newProblem(){
-  let next;
-  do{ next = Math.floor(Math.random()*BANK.length); } while(next===currentIdx && BANK.length>1);
-  loadProblem(BANK[next], next);
+  let n; do{n=Math.floor(Math.random()*BANK.length);}while(n===curIdx&&BANK.length>1);
+  loadProblem(n);
 }
-
-function resetCurrent(){ widget.reset(); }
-
-// Load first problem (random)
-loadProblem(BANK[0], 0);
-
+loadProblem(0);
 renderMathInElement(document.body,{
   delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],
   throwOnError:false
