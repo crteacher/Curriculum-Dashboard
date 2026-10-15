@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Curve Sketch Builder — Curriculum Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.css">
+<style>
+  :root {
+    --paper: #f6f1e4; --paper-line: rgba(58,74,94,0.14);
+    --ink: #26313f; --ink-soft: #5b6b7d;
+    --card-bg: #fffdf7; --card-border: #ddd2b6;
+    --navy: #1e3a5c; --gold: #7a5c1e;
+    --accent-soft: rgba(30,58,92,0.10);
+    --good: #3f7a52; --good-soft: rgba(63,122,82,0.14);
+    --bad: #b3413a; --bad-soft: rgba(179,65,58,0.12);
+    --shadow: rgba(38,49,63,0.14);
+  }
+  @media(prefers-color-scheme:dark){
+    :root{
+      --paper:#1b2330; --paper-line:rgba(238,242,240,0.07);
+      --ink:#edf1ef; --ink-soft:#a3aebb;
+      --card-bg:#232e3d; --card-border:#3a4a61;
+      --accent-soft:rgba(90,140,200,0.12);
+    }
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--paper);color:var(--ink);font-family:'Source Sans 3',sans-serif;min-height:100vh}
+  .katex,.katex *{text-transform:none;letter-spacing:normal}
+
+  /* ── Header ── */
+  .page-header{background:var(--navy);color:#fff;padding:1rem 2rem;display:flex;align-items:center;gap:1.5rem}
+  .page-header a{color:#c8d8ec;font-size:13px;text-decoration:none;font-family:'Source Sans 3',sans-serif}
+  .page-header a:hover{color:#fff;text-decoration:underline}
+  .page-title{font-family:'Fraunces',serif;font-size:1.4rem;font-weight:700;color:#fff;flex:1}
+  .page-subtitle{font-size:13px;color:#c8d8ec;margin-top:.15rem}
+
+  /* ── Layout ── */
+  .page-body{max-width:980px;margin:0 auto;padding:1.5rem 1.5rem 3rem}
+
+  /* ── Problem selector ── */
+  .prob-card{background:var(--card-bg);border:1px solid var(--card-border);
+    border-radius:10px;padding:1.2rem 1.4rem;margin-bottom:1.2rem;
+    box-shadow:0 2px 8px var(--shadow)}
+  .prob-label{font-family:'Fraunces',serif;font-size:.8rem;font-weight:600;
+    color:var(--navy);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.5rem}
+  .prob-select{width:100%;font-size:14.5px;font-family:'Source Sans 3',sans-serif;
+    padding:.5rem .7rem;border:1px solid var(--card-border);border-radius:6px;
+    background:var(--paper);color:var(--ink);cursor:pointer}
+  .prob-desc{margin-top:.6rem;font-size:13.5px;color:var(--ink-soft);line-height:1.6}
+  .prob-fn{font-size:1.05rem;font-weight:600;color:var(--navy);margin-bottom:.3rem;margin-top:.4rem}
+
+  /* ── Instructions banner ── */
+  .instructions{background:var(--accent-soft);border-left:4px solid var(--navy);
+    border-radius:0 8px 8px 0;padding:.75rem 1rem;font-size:13.5px;
+    line-height:1.65;margin-bottom:1.2rem;color:var(--ink-soft)}
+  .instructions strong{color:var(--navy)}
+
+  /* ── Main sketch area ── */
+  .sketch-area{display:grid;grid-template-columns:auto 1fr;gap:1.4rem;align-items:start}
+  @media(max-width:700px){.sketch-area{grid-template-columns:1fr}}
+
+  /* ── Toolbar (vertical on left) ── */
+  .toolbar{display:flex;flex-direction:column;gap:.5rem;min-width:110px}
+  .toolbar-label{font-size:11px;font-weight:700;color:var(--ink-soft);
+    text-transform:uppercase;letter-spacing:.07em;margin-bottom:.2rem;margin-top:.5rem}
+  .marker-btn{display:flex;align-items:center;gap:.45rem;padding:.55rem .8rem;
+    border:2px solid transparent;border-radius:7px;cursor:pointer;
+    font-family:'Source Sans 3',sans-serif;font-size:13px;font-weight:600;
+    background:var(--card-bg);color:var(--ink);transition:all .15s;white-space:nowrap}
+  .marker-btn:hover{border-color:var(--navy);color:var(--navy)}
+  .marker-btn.active{border-color:var(--navy);background:var(--navy);color:#fff}
+  .marker-btn .icon{font-size:16px;line-height:1;display:inline-block;width:18px;text-align:center}
+  .btn-divider{height:1px;background:var(--paper-line);margin:.25rem 0}
+  .action-btn{width:100%;padding:.55rem .8rem;border:2px solid var(--navy);
+    border-radius:7px;cursor:pointer;font-family:'Source Sans 3',sans-serif;
+    font-size:13px;font-weight:700;background:transparent;color:var(--navy);transition:all .15s}
+  .action-btn:hover{background:var(--navy);color:#fff}
+  .action-btn.primary{background:var(--navy);color:#fff}
+  .action-btn.primary:hover{background:#152c47}
+  .action-btn.danger{border-color:#999;color:#666}
+  .action-btn.danger:hover{background:#eee;color:#333}
+
+  /* ── SVG Grid wrapper ── */
+  .grid-wrap{background:var(--card-bg);border:1px solid var(--card-border);
+    border-radius:10px;overflow:hidden;box-shadow:0 2px 8px var(--shadow)}
+  #sketch-svg{display:block;width:100%;cursor:crosshair;max-width:480px;height:auto}
+
+  /* ── Legend ── */
+  .legend{display:flex;flex-wrap:wrap;gap:.5rem 1rem;margin-top:.6rem;
+    font-size:12.5px;color:var(--ink-soft)}
+  .legend-item{display:flex;align-items:center;gap:.3rem}
+
+  /* ── Feedback panel ── */
+  .feedback{margin-top:1.2rem;display:none}
+  .feedback.show{display:block}
+  .score-bar{background:var(--card-bg);border:1px solid var(--card-border);
+    border-radius:10px;padding:1rem 1.3rem;margin-bottom:.8rem}
+  .score-num{font-family:'Fraunces',serif;font-size:2rem;font-weight:700;color:var(--navy)}
+  .score-label{font-size:13px;color:var(--ink-soft)}
+  .score-pct{display:inline-block;margin-left:.5rem;font-size:1rem;color:var(--ink-soft)}
+  .feature-row{display:flex;align-items:center;gap:.7rem;padding:.45rem .6rem;
+    border-radius:6px;margin-bottom:.3rem;font-size:13.5px}
+  .feature-row.hit{background:var(--good-soft);color:var(--good)}
+  .feature-row.miss{background:var(--bad-soft);color:var(--bad)}
+  .feature-row .fi{font-size:16px;width:20px;text-align:center}
+  .feature-row .fd{flex:1}
+  .feature-row .fa{font-size:12px;opacity:.75}
+  .ans-note{font-size:12.5px;color:var(--ink-soft);margin-top:.5rem;
+    font-style:italic;line-height:1.6}
+</style>
+</head>
+<body>
+
+<header class="page-header">
+  <div>
+    <div class="page-title">Curve Sketch Builder</div>
+    <div class="page-subtitle">Place key features on the graph, then check your sketch</div>
+  </div>
+  <a href="../index.html">← Dashboard</a>
+</header>
+
+<div class="page-body">
+
+  <!-- Problem selector -->
+  <div class="prob-card">
+    <div class="prob-label">Choose a Function</div>
+    <select class="prob-select" id="prob-select">
+      <option value="0">f(x) = x³ − 3x &nbsp;(§3.6.7 Curve Sketching)</option>
+      <option value="1">f(x) = −x³ + 3x² &nbsp;(§3.6.7 Practice)</option>
+      <option value="2">f(x) = x⁴ − 4x² &nbsp;(§3.6.5 Practice)</option>
+      <option value="3">f(x) = x³ − 3x² &nbsp;(§3.6.5 Worked Example)</option>
+    </select>
+    <div class="prob-fn" id="prob-fn"></div>
+    <div class="prob-desc" id="prob-desc"></div>
+  </div>
+
+  <!-- Instructions -->
+  <div class="instructions">
+    <strong>How to use:</strong> Select a marker type from the toolbar, then click on the grid to place it.
+    Click an existing marker to remove it. When ready, hit <strong>Check Sketch</strong> —
+    the curve will appear and each placement is scored.
+    Zeros snap to the x-axis automatically.
+    <br><strong>Tip:</strong> You need to find <em>all</em> zeros, local maxima, local minima, and inflection points.
+  </div>
+
+  <div class="sketch-area">
+    <!-- Toolbar -->
+    <div class="toolbar" id="toolbar">
+      <div class="toolbar-label">Place</div>
+      <button class="marker-btn active" data-type="zero">
+        <span class="icon">○</span>Zero
+      </button>
+      <button class="marker-btn" data-type="max">
+        <span class="icon">▲</span>Local Max
+      </button>
+      <button class="marker-btn" data-type="min">
+        <span class="icon">▽</span>Local Min
+      </button>
+      <button class="marker-btn" data-type="inflection">
+        <span class="icon">◆</span>Inflection
+      </button>
+      <div class="btn-divider"></div>
+      <div class="toolbar-label">Actions</div>
+      <button class="action-btn primary" id="check-btn" onclick="widget.checkSketch()">Check Sketch</button>
+      <button class="action-btn" id="ans-btn" onclick="widget.showAnswer()">Show Answer</button>
+      <button class="action-btn danger" onclick="widget.reset()">Reset</button>
+    </div>
+
+    <!-- SVG Grid -->
+    <div>
+      <div class="grid-wrap">
+        <svg id="sketch-svg" viewBox="0 0 480 380" xmlns="http://www.w3.org/2000/svg"></svg>
+      </div>
+      <div class="legend">
+        <span class="legend-item"><svg width="14" height="14" style="overflow:visible"><circle cx="7" cy="7" r="6" fill="white" stroke="#1e3a5c" stroke-width="2"/></svg>Zero</span>
+        <span class="legend-item"><svg width="14" height="14" style="overflow:visible"><polygon points="7,0 14,14 0,14" fill="#7a5c1e"/></svg>Local Max</span>
+        <span class="legend-item"><svg width="14" height="14" style="overflow:visible"><polygon points="7,14 14,0 0,0" fill="#1e3a5c"/></svg>Local Min</span>
+        <span class="legend-item"><svg width="16" height="16" style="overflow:visible"><polygon points="8,0 16,8 8,16 0,8" fill="none" stroke="#7a5c1e" stroke-width="2"/></svg>Inflection</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Feedback -->
+  <div class="feedback" id="feedback">
+    <div class="score-bar">
+      <span class="score-num" id="score-num">0</span><span class="score-pct" id="score-pct">/0 correct</span>
+      <div class="score-label">key features identified</div>
+    </div>
+    <div id="feature-list"></div>
+    <div class="ans-note" id="ans-note"></div>
+  </div>
+
+</div><!-- page-body -->
+
+<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/contrib/auto-render.min.js"></script>
+<script>
+// ════════════════════════════════════════════════════════════
+// PROBLEM DEFINITIONS
+// ════════════════════════════════════════════════════════════
+const PROBLEMS = [
+  {
+    label: 'f(x) = x³ − 3x',
+    latex: 'f(x) = x^3 - 3x',
+    section: '§3.6.7',
+    fn: x => x**3 - 3*x,
+    xMin: -3.2, xMax: 3.2, yMin: -4.5, yMax: 4.5,
+    xTick: 1, yTick: 1,
+    tolerance: 0.42,
+    desc: 'Find all zeros, local extrema, and inflection points.',
+    expected: {
+      zeros:       [{x: -Math.sqrt(3), y: 0, label: 'x = −√3 ≈ −1.73'},
+                   {x: 0,             y: 0, label: 'x = 0'},
+                   {x:  Math.sqrt(3), y: 0, label: 'x = √3 ≈ 1.73'}],
+      maxima:      [{x: -1, y: 2,  label: '(−1, 2)'}],
+      minima:      [{x:  1, y: -2, label: '(1, −2)'}],
+      inflections: [{x:  0, y: 0,  label: '(0, 0)'}],
+    }
+  },
+  {
+    label: 'f(x) = −x³ + 3x²',
+    latex: 'f(x) = -x^3 + 3x^2',
+    section: '§3.6.7 Practice',
+    fn: x => -x**3 + 3*x**2,
+    xMin: -1.5, xMax: 4.5, yMin: -2.5, yMax: 6.5,
+    xTick: 1, yTick: 1,
+    tolerance: 0.42,
+    desc: 'This function has a double zero at x = 0 (the graph touches but does not cross).',
+    expected: {
+      zeros:       [{x: 0, y: 0, label: 'x = 0 (double)'},
+                   {x: 3, y: 0, label: 'x = 3'}],
+      maxima:      [{x: 2, y: 4, label: '(2, 4)'}],
+      minima:      [{x: 0, y: 0, label: '(0, 0)'}],
+      inflections: [{x: 1, y: 2, label: '(1, 2)'}],
+    }
+  },
+  {
+    label: 'f(x) = x⁴ − 4x²',
+    latex: 'f(x) = x^4 - 4x^2',
+    section: '§3.6.5 Practice',
+    fn: x => x**4 - 4*x**2,
+    xMin: -2.8, xMax: 2.8, yMin: -5.5, yMax: 2.5,
+    xTick: 1, yTick: 1,
+    tolerance: 0.42,
+    desc: 'A quartic with two local minima. Note: the local maximum at x = 0 is also a zero.',
+    expected: {
+      zeros:       [{x: -2, y: 0, label: 'x = −2'},
+                   {x:  0, y: 0, label: 'x = 0'},
+                   {x:  2, y: 0, label: 'x = 2'}],
+      maxima:      [{x: 0, y: 0,  label: '(0, 0)'}],
+      minima:      [{x: -Math.sqrt(2), y: -4, label: '(−√2, −4)'},
+                   {x:  Math.sqrt(2), y: -4, label: '(√2, −4)'}],
+      inflections: [{x: -Math.sqrt(2/3), y: -(4/9)*4+4/9*4-(4/3)*(4/3),
+                     label: '≈ (−0.82, −2.22)'},
+                   {x:  Math.sqrt(2/3), y: -(4/9)*4+4/9*4-(4/3)*(4/3),
+                     label: '≈ (0.82, −2.22)'}],
+    }
+  },
+  {
+    label: 'f(x) = x³ − 3x²',
+    latex: 'f(x) = x^3 - 3x^2',
+    section: '§3.6.5',
+    fn: x => x**3 - 3*x**2,
+    xMin: -1.5, xMax: 4.5, yMin: -6, yMax: 2.5,
+    xTick: 1, yTick: 1,
+    tolerance: 0.42,
+    desc: 'Note: x = 0 is both a zero and a local maximum.',
+    expected: {
+      zeros:       [{x: 0, y: 0, label: 'x = 0'},
+                   {x: 3, y: 0, label: 'x = 3'}],
+      maxima:      [{x: 0, y: 0,   label: '(0, 0)'}],
+      minima:      [{x: 2, y: -4,  label: '(2, −4)'}],
+      inflections: [{x: 1, y: -2,  label: '(1, −2)'}],
+    }
+  }
+];
+
+// Fix inflection y-values for problem 2 (x⁴ - 4x²)
+(function(){
+  const p = PROBLEMS[2];
+  const xi = Math.sqrt(2/3);
+  const yi = p.fn(xi);
+  p.expected.inflections[0].y = yi;
+  p.expected.inflections[0].label = `≈ (−0.82, ${yi.toFixed(2)})`;
+  p.expected.inflections[1].y = yi;
+  p.expected.inflections[1].label = `≈ (0.82, ${yi.toFixed(2)})`;
+})();
+
+
+// ════════════════════════════════════════════════════════════
+// SKETCH WIDGET
+// ════════════════════════════════════════════════════════════
+class SketchWidget {
+  constructor(svgId, feedbackId) {
+    this.svgEl    = document.getElementById(svgId);
+    this.fbEl     = document.getElementById(feedbackId);
+    this.markers  = [];
+    this.nextId   = 0;
+    this.checked  = false;
+    this.answered = false;
+    this.activeType = 'zero';
+    this.problem  = null;
+
+    // Layout constants (match viewBox="0 0 480 380")
+    this.W=480; this.H=380;
+    this.PL=46; this.PR=22; this.PT=22; this.PB=44;
+    this.IW = this.W-this.PL-this.PR; // 412
+    this.IH = this.H-this.PT-this.PB; // 314
+
+    this._initToolbar();
+  }
+
+  tx(x){
+    const {xMin,xMax}=this.problem;
+    return this.PL+(x-xMin)/(xMax-xMin)*this.IW;
+  }
+  ty(y){
+    const {yMin,yMax}=this.problem;
+    return this.PT+(yMax-y)/(yMax-yMin)*this.IH;
+  }
+  fromSVG(sx,sy){
+    const {xMin,xMax,yMin,yMax}=this.problem;
+    return{
+      x: xMin+(sx-this.PL)/this.IW*(xMax-xMin),
+      y: yMax-(sy-this.PT)/this.IH*(yMax-yMin)
+    };
+  }
+
+  load(problem){
+    this.problem  = problem;
+    this.markers  = [];
+    this.checked  = false;
+    this.answered = false;
+    this._buildGrid();
+    this.fbEl.classList.remove('show');
+    document.getElementById('check-btn').disabled = false;
+    document.getElementById('ans-btn').disabled   = false;
+  }
+
+  // ── Grid ─────────────────────────────────────────────────
+  _buildGrid(){
+    const svg = this.svgEl;
+    svg.innerHTML = '';
+    const {xMin,xMax,yMin,yMax,xTick=1,yTick=1}=this.problem;
+    const GRID='#ddd', AXIS='rgba(38,49,63,0.55)', NAVY='#1e3a5c';
+
+    // Clip path
+    const defs = this._el('defs');
+    const cp   = this._el('clipPath'); cp.id='grid-clip';
+    const r    = this._el('rect');
+    r.setAttribute('x',this.PL); r.setAttribute('y',this.PT);
+    r.setAttribute('width',this.IW); r.setAttribute('height',this.IH);
+    cp.appendChild(r); defs.appendChild(cp); svg.appendChild(defs);
+
+    // Background
+    const bg = this._el('rect');
+    bg.setAttribute('x',this.PL); bg.setAttribute('y',this.PT);
+    bg.setAttribute('width',this.IW); bg.setAttribute('height',this.IH);
+    bg.setAttribute('fill','#fafaf8'); svg.appendChild(bg);
+
+    // Grid lines
+    for(let x=Math.ceil(xMin/xTick)*xTick; x<=xMax+1e-9; x+=xTick){
+      const sx=this.tx(x);
+      this._line(svg,sx,this.PT,sx,this.H-this.PB,GRID,1);
+    }
+    for(let y=Math.ceil(yMin/yTick)*yTick; y<=yMax+1e-9; y+=yTick){
+      const sy=this.ty(y);
+      this._line(svg,this.PL,sy,this.W-this.PR,sy,GRID,1);
+    }
+
+    // Axes
+    const ay=this.ty(0), ax=this.tx(0);
+    if(ay>=this.PT && ay<=this.H-this.PB)
+      this._line(svg,this.PL,ay,this.W-this.PR,ay,AXIS,1.8);
+    if(ax>=this.PL && ax<=this.W-this.PR)
+      this._line(svg,ax,this.PT,ax,this.H-this.PB,AXIS,1.8);
+
+    // Tick labels
+    const fs=10.5, ff="'Source Sans 3',sans-serif", fc='#667';
+    for(let x=Math.ceil(xMin/xTick)*xTick; x<=xMax+1e-9; x+=xTick){
+      if(Math.abs(x)<1e-9) continue;
+      const sx=this.tx(x), labelY=Math.min(ay+16,this.H-this.PB+14);
+      const t=this._txt(x%1===0?x:x.toFixed(1),sx,labelY,fs,fc,ff,'middle');
+      svg.appendChild(t);
+      const tick=this._el('line');
+      tick.setAttribute('x1',sx); tick.setAttribute('x2',sx);
+      tick.setAttribute('y1',ay-3); tick.setAttribute('y2',ay+3);
+      tick.setAttribute('stroke',AXIS); tick.setAttribute('stroke-width',1);
+      svg.appendChild(tick);
+    }
+    for(let y=Math.ceil(yMin/yTick)*yTick; y<=yMax+1e-9; y+=yTick){
+      if(Math.abs(y)<1e-9) continue;
+      const sy=this.ty(y), labelX=Math.max(ax-7,this.PL-8);
+      const t=this._txt(y%1===0?y:y.toFixed(1),labelX,sy+3.5,fs,fc,ff,'end');
+      svg.appendChild(t);
+      const tick=this._el('line');
+      tick.setAttribute('x1',ax-3); tick.setAttribute('x2',ax+3);
+      tick.setAttribute('y1',sy); tick.setAttribute('y2',sy);
+      tick.setAttribute('stroke',AXIS); tick.setAttribute('stroke-width',1);
+      svg.appendChild(tick);
+    }
+
+    // Axis labels
+    const xlbl=this._txt('x',this.W-this.PR+6,ay+4,11,NAVY,ff,'start');
+    xlbl.setAttribute('font-weight','600'); svg.appendChild(xlbl);
+    const ylbl=this._txt('y',ax+4,this.PT-5,11,NAVY,ff,'start');
+    ylbl.setAttribute('font-weight','600'); svg.appendChild(ylbl);
+
+    // x-axis highlight for zero snapping
+    this.xAxisY = ay;
+
+    // Click handler group (markers go in here, after grid)
+    this.markerGroup = this._el('g');
+    this.markerGroup.id = 'marker-group';
+    svg.appendChild(this.markerGroup);
+
+    // Bind click
+    svg.onclick = null;
+    svg.addEventListener('click', e => this._handleClick(e), {once:false});
+  }
+
+  // ── Click handler ────────────────────────────────────────
+  _handleClick(e){
+    if(this.checked) return;
+    const rect = this.svgEl.getBoundingClientRect();
+    const scX = this.W/rect.width, scY = this.H/rect.height;
+    const rawX = (e.clientX-rect.left)*scX;
+    const rawY = (e.clientY-rect.top)*scY;
+
+    // Hit-test existing markers first
+    const hit = this._hitTest(rawX,rawY);
+    if(hit!==null){ this._removeMarker(hit); return; }
+
+    // Out of grid bounds?
+    if(rawX<this.PL||rawX>this.W-this.PR||rawY<this.PT||rawY>this.H-this.PB) return;
+
+    let{x,y}=this.fromSVG(rawX,rawY);
+    if(this.activeType==='zero') y=0; // snap zeros to x-axis
+
+    // Clamp to range
+    const{xMin,xMax,yMin,yMax}=this.problem;
+    x=Math.max(xMin+.01,Math.min(xMax-.01,x));
+    y=Math.max(yMin+.01,Math.min(yMax-.01,y));
+
+    this._addMarker(this.activeType,x,y);
+  }
+
+  _hitTest(svgX,svgY){
+    for(const m of this.markers){
+      const dx=m.svgX-svgX, dy=m.svgY-svgY;
+      if(dx*dx+dy*dy<196) return m.id; // 14px radius
+    }
+    return null;
+  }
+
+  _addMarker(type,mx,my){
+    const id=this.nextId++;
+    const svgX=this.tx(mx), svgY=this.ty(my);
+    this.markers.push({id,type,mx,my,svgX,svgY,correct:null});
+    this._renderMarker(id,type,svgX,svgY);
+  }
+
+  _removeMarker(id){
+    this.markers=this.markers.filter(m=>m.id!==id);
+    const el=this.markerGroup.querySelector(`[data-mid="${id}"]`);
+    if(el) el.remove();
+  }
+
+  _renderMarker(id,type,sx,sy,state){
+    // state: null=default, 'hit'=green, 'miss'=red, 'answer'=blue
+    const NAVY='#1e3a5c',GOLD='#7a5c1e';
+    const HIT='#3f7a52',MISS='#b3413a',ANS='rgba(30,58,92,0.35)';
+    const g=this._el('g');
+    g.setAttribute('data-mid',id);
+    g.style.cursor='pointer';
+
+    let fill,stroke,sw=2.2;
+    if(state==='hit'){fill=HIT;stroke=HIT}
+    else if(state==='miss'){fill=MISS;stroke=MISS}
+    else if(state==='answer'){fill='none';stroke=ANS;sw=1.5}
+    else{fill=type==='max'?GOLD:type==='min'?NAVY:type==='zero'?'white':'white';
+         stroke=type==='inflection'?GOLD:NAVY}
+
+    let el;
+    if(type==='zero'){
+      el=this._el('circle');
+      el.setAttribute('cx',sx); el.setAttribute('cy',sy);
+      el.setAttribute('r',7);
+      el.setAttribute('fill',state?'white':fill);
+      el.setAttribute('stroke',state?(state==='answer'?ANS:fill):stroke);
+      el.setAttribute('stroke-width',sw);
+    } else if(type==='max'){
+      const h=11,w=10;
+      el=this._el('polygon');
+      el.setAttribute('points',`${sx},${sy-h} ${sx+w},${sy+h*0.4} ${sx-w},${sy+h*0.4}`);
+      el.setAttribute('fill',state&&state!=='answer'?fill:state==='answer'?ANS:GOLD);
+      el.setAttribute('stroke','none');
+    } else if(type==='min'){
+      const h=11,w=10;
+      el=this._el('polygon');
+      el.setAttribute('points',`${sx},${sy+h} ${sx+w},${sy-h*0.4} ${sx-w},${sy-h*0.4}`);
+      el.setAttribute('fill',state&&state!=='answer'?fill:state==='answer'?ANS:NAVY);
+      el.setAttribute('stroke','none');
+    } else { // inflection
+      const r=8;
+      el=this._el('polygon');
+      el.setAttribute('points',`${sx},${sy-r} ${sx+r},${sy} ${sx},${sy+r} ${sx-r},${sy}`);
+      el.setAttribute('fill',state&&state!=='answer'?fill:'white');
+      el.setAttribute('stroke',state?fill:GOLD);
+      el.setAttribute('stroke-width',sw);
+    }
+    g.appendChild(el);
+    this.markerGroup.appendChild(g);
+    return g;
+  }
+
+  // ── Check ────────────────────────────────────────────────
+  checkSketch(){
+    if(this.checked) return;
+    this.checked=true;
+    document.getElementById('check-btn').disabled=true;
+
+    const{expected,tolerance=0.42}=this.problem;
+    const typeMap={zeros:'zero',maxima:'max',minima:'min',inflections:'inflection'};
+    let correct=0,total=0;
+    const results=[];
+
+    for(const[key,pts] of Object.entries(expected)){
+      const mtype=typeMap[key];
+      for(const ep of pts){
+        total++;
+        const cands=this.markers.filter(m=>m.type===mtype);
+        let bestDist=Infinity, bestId=null;
+        for(const m of cands){
+          const dx=m.mx-ep.x;
+          const dy=key==='zeros'?0:(m.my-(ep.y||0));
+          const d=Math.sqrt(dx*dx+dy*dy);
+          if(d<bestDist){bestDist=d;bestId=m.id}
+        }
+        const hit=bestDist<=tolerance;
+        if(hit){
+          correct++;
+          if(bestId!==null){
+            const m=this.markers.find(m=>m.id===bestId);
+            if(m) m.correct=true;
+          }
+        }
+        results.push({key,mtype,ep,hit,bestDist});
+      }
+    }
+
+    // Mark missed student markers
+    for(const m of this.markers){
+      if(m.correct===null) m.correct=false;
+    }
+
+    // Re-render all markers with feedback colors
+    this.markerGroup.innerHTML='';
+    for(const m of this.markers){
+      const state=m.correct===true?'hit':m.correct===false?'miss':null;
+      this._renderMarker(m.id,m.type,m.svgX,m.svgY,state);
+    }
+
+    this._plotCurve();
+    this._showFeedback(results,correct,total);
+  }
+
+  showAnswer(){
+    if(!this.checked) this.checkSketch();
+    if(this.answered) return;
+    this.answered=true;
+    document.getElementById('ans-btn').disabled=true;
+
+    const{expected}=this.problem;
+    const typeMap={zeros:'zero',maxima:'max',minima:'min',inflections:'inflection'};
+    let ansId=10000;
+    for(const[key,pts] of Object.entries(expected)){
+      const mtype=typeMap[key];
+      for(const ep of pts){
+        const sx=this.tx(ep.x), sy=this.ty(ep.y||0);
+        this._renderMarker(ansId++,mtype,sx,sy,'answer');
+      }
+    }
+    document.getElementById('ans-note').textContent=
+      'Ghost markers show the exact expected locations.';
+  }
+
+  _plotCurve(){
+    const{fn,xMin,xMax,yMin,yMax}=this.problem;
+    const N=400,pts=[];
+    for(let i=0;i<=N;i++){
+      const x=xMin+i/N*(xMax-xMin);
+      const y=fn(x);
+      if(y<yMin-20||y>yMax+20) continue;
+      pts.push(`${this.tx(x).toFixed(1)},${this.ty(Math.max(yMin-.5,Math.min(yMax+.5,y))).toFixed(1)}`);
+    }
+    const poly=this._el('polyline');
+    poly.setAttribute('points',pts.join(' '));
+    poly.setAttribute('fill','none');
+    poly.setAttribute('stroke','#1e3a5c');
+    poly.setAttribute('stroke-width','2.5');
+    poly.setAttribute('opacity','0.65');
+    poly.setAttribute('clip-path','url(#grid-clip)');
+    poly.setAttribute('stroke-linejoin','round');
+    poly.setAttribute('stroke-linecap','round');
+    // Insert before marker group so markers appear on top
+    this.svgEl.insertBefore(poly, this.markerGroup);
+  }
+
+  _showFeedback(results,correct,total){
+    document.getElementById('score-num').textContent=correct;
+    document.getElementById('score-pct').textContent=`/${total} correct`;
+    const list=document.getElementById('feature-list');
+    list.innerHTML='';
+
+    const keyLabel={zeros:'Zero',maxima:'Local Max',minima:'Local Min',inflections:'Inflection'};
+    const keyIcon={zeros:'○',maxima:'▲',minima:'▽',inflections:'◆'};
+
+    for(const r of results){
+      const row=document.createElement('div');
+      row.className='feature-row '+(r.hit?'hit':'miss');
+      const icon=r.hit?'✓':'✗';
+      const detail=r.hit
+        ?`<strong>${keyLabel[r.key]}:</strong> ${r.ep.label}`
+        :`<strong>${keyLabel[r.key]}:</strong> ${r.ep.label} — not found`;
+      const dist=r.hit?`(dist ${r.bestDist.toFixed(2)})`:'';
+      row.innerHTML=`<span class="fi">${icon}</span><span class="fd">${detail}</span><span class="fa">${dist}</span>`;
+      list.appendChild(row);
+    }
+
+    // Flag extra wrong-type markers
+    const wrongType=this.markers.filter(m=>m.correct===false);
+    if(wrongType.length>0){
+      const note=document.getElementById('ans-note');
+      note.textContent=`${wrongType.length} marker${wrongType.length>1?'s':''} shown in red did not match any expected feature.`;
+    }
+
+    this.fbEl.classList.add('show');
+  }
+
+  reset(){
+    this.load(this.problem);
+    document.getElementById('ans-note').textContent='';
+  }
+
+  // ── Toolbar binding ──────────────────────────────────────
+  _initToolbar(){
+    document.getElementById('toolbar').addEventListener('click',e=>{
+      const btn=e.target.closest('.marker-btn');
+      if(!btn) return;
+      this.activeType=btn.dataset.type;
+      document.querySelectorAll('.marker-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  }
+
+  // ── SVG helpers ──────────────────────────────────────────
+  _el(tag){ return document.createElementNS('http://www.w3.org/2000/svg',tag); }
+  _line(parent,x1,y1,x2,y2,stroke,sw){
+    const l=this._el('line');
+    l.setAttribute('x1',x1);l.setAttribute('y1',y1);
+    l.setAttribute('x2',x2);l.setAttribute('y2',y2);
+    l.setAttribute('stroke',stroke);l.setAttribute('stroke-width',sw);
+    parent.appendChild(l); return l;
+  }
+  _txt(text,x,y,size,fill,family,anchor){
+    const t=this._el('text');
+    t.setAttribute('x',x); t.setAttribute('y',y);
+    t.setAttribute('font-size',size); t.setAttribute('fill',fill);
+    t.setAttribute('font-family',family);
+    if(anchor) t.setAttribute('text-anchor',anchor);
+    t.textContent=text; return t;
+  }
+}
+
+// ════════════════════════════════════════════════════════════
+// INIT
+// ════════════════════════════════════════════════════════════
+const widget = new SketchWidget('sketch-svg','feedback');
+
+function loadProblem(idx){
+  const p = PROBLEMS[idx];
+  document.getElementById('prob-fn').innerHTML = '';
+  katex.render(p.latex, document.getElementById('prob-fn'), {throwOnError:false});
+  document.getElementById('prob-desc').textContent = p.desc;
+  widget.load(p);
+}
+
+document.getElementById('prob-select').addEventListener('change', e=>{
+  loadProblem(parseInt(e.target.value));
+});
+
+loadProblem(0);
+
+renderMathInElement(document.body, {
+  delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],
+  throwOnError:false
+});
+</script>
+</body>
+</html>
