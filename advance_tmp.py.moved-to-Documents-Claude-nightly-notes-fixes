@@ -1,0 +1,93 @@
+import json, datetime, subprocess, os, sys
+
+REPO = os.path.dirname(os.path.abspath(__file__))
+STATE = os.path.join(REPO, 'state.json')
+
+def load(): return json.load(open(STATE))
+def save(s): open(STATE,'w').write(json.dumps(s, indent=2))
+
+def lesson_ids(schedule):
+    return [x['sectionId'] for x in schedule if x.get('type')=='lesson' and 'sectionId' in x]
+
+def next_section(schedule, current_id):
+    ids = lesson_ids(schedule)
+    if not ids: return None
+    if current_id is None: return ids[0]
+    try:
+        idx = ids.index(current_id)
+        return ids[idx+1] if idx+1 < len(ids) else None
+    except ValueError:
+        return ids[0]
+
+def git_push(message):
+    for cmd in [
+        ['git','-C',REPO,'add','state.json'],
+        ['git','-C',REPO,'commit','-m', message],
+        ['git','-C',REPO,'push'],
+    ]:
+        r = subprocess.run(cmd, capture_output=True, text=True)
+        print('$ ' + ' '.join(cmd))
+        if r.stdout.strip(): print(r.stdout.strip())
+        if r.returncode != 0:
+            print('  -> non-zero exit (' + str(r.returncode) + '): ' + r.stderr.strip())
+
+today = datetime.date.today()
+
+if today.weekday() >= 5:
+    print('Weekend (' + today.strftime('%A') + ') -- no advancement.')
+    sys.exit(0)
+
+state = load()
+sched = state.get('schedule', {})
+
+if not sched.get('active'):
+    print('schedule.active is false -- no advancement.')
+    sys.exit(0)
+
+if state.get('lastCheckin') == str(today):
+    print('Already checked in today (' + str(today) + ') -- skipping auto-advance.')
+    sys.exit(0)
+
+ALL_COURSES = [
+    ('preCalc',        'preCalc',        'PC', None),
+    ('collegeAlgebra', 'collegeAlgebra', 'CA', None),
+    ('calc1',          'calc1',          'C1', range(8, 13)),
+    ('calc2',          'calc2',          'C2', range(1, 7)),
+]
+COURSES = [(k, s, l) for (k, s, l, months) in ALL_COURSES
+           if months is None or today.month in months]
+
+changed = False
+log = []
+
+for course_key, sched_key, label in COURSES:
+    course   = state['courses'].get(course_key, {})
+    c_sched  = sched.get(sched_key, [])
+    current  = course.get('currentSection')
+    nxt      = next_section(c_sched, current)
+
+    if not c_sched:
+        log.append(label + ': no schedule yet -- skipped')
+        continue
+
+    if nxt and nxt != current:
+        completed = course.setdefault('completedSections', [])
+        if current and current not in completed:
+            completed.append(current)
+        course['currentSection'] = nxt
+        state['courses'][course_key] = course
+        log.append(label + ': ' + str(current) + ' -> ' + str(nxt))
+        changed = True
+    elif nxt is None:
+        log.append(label + ': at end of schedule (' + str(current) + ')')
+    else:
+        log.append(label + ': no change (' + str(current) + ')')
+
+if changed:
+    state['lastCheckin'] = str(today)
+    save(state)
+    msg = 'Auto-advance ' + str(today) + ': ' + ', '.join(log)
+    print(msg)
+    git_push(msg)
+else:
+    print('No section changes. ' + '; '.join(log))
