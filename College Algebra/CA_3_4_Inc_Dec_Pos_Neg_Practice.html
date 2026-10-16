@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Increasing, Decreasing, Positive &amp; Negative &mdash; Practice</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
 <style>
   *{box-sizing:border-box;margin:0;padding:0}
   body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.7}
@@ -33,7 +33,8 @@
   .card.correct{border-color:#3a7a3a}.card.wrong{border-color:#b03030}.card.peeked{border-color:#b8860b}
   .card-body{padding:14px 16px}
   .card-meta{font-family:sans-serif;font-size:12px;color:#888;margin-bottom:4px}
-  .card-expr{font-size:17px;margin-bottom:12px;line-height:2.2;overflow-x:auto}
+  .card-expr{font-size:17px;margin-bottom:12px;line-height:1.5;overflow-wrap:break-word;white-space:normal;overflow-x:auto}
+  .card-expr svg{max-width:100%;height:auto}
   .katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}
   .input-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
   .ans-input{font-family:'Courier New',monospace;font-size:14px;border:1px solid #ccc;
@@ -57,6 +58,8 @@
   .reveal-link:hover{color:#555}
   .revealed-answer{display:none;margin-top:8px;font-family:sans-serif;font-size:13px;
     color:#444;background:#f5f3ef;border-radius:6px;padding:8px 11px;line-height:1.8;overflow-x:auto}
+  .interval-hint{font-family:sans-serif;font-size:11px;color:#1e3a5c;margin-top:4px;
+    padding:2px 7px;background:#eef3f9;border-radius:4px;display:inline-block}
   code{font-family:'Courier New',monospace;background:#f0ede7;padding:1px 5px;border-radius:3px;font-size:12px}
 </style>
 </head>
@@ -69,20 +72,20 @@
     <div class="section-title">Core Ideas</div>
 
     <div class="concept">
-      <span class="concept-label">Positive / Negative</span>
-      $f$ is <strong>positive</strong> where $f(x)>0$ (graph above x-axis).
-      $f$ is <strong>negative</strong> where $f(x)<0$ (graph below x-axis).
-      Boundaries are x-intercepts — find them by setting $f(x)=0$.<br>
-      <strong>Express "where" answers in interval notation.</strong>
-      Example: positive for $x&gt;3$ is written $(3,\infty)$.
-      Use <code>inf</code> for $\infty$ and <code>-inf</code> for $-\infty$.
+      <span class="concept-label">Reading from a Graph</span>
+      <strong>Positive</strong>: graph <em>above</em> the x-axis &nbsp;&nbsp;
+      <strong>Negative</strong>: graph <em>below</em> the x-axis.<br>
+      <strong>Increasing</strong>: graph <em>rises</em> left to right (right of the turning point for a &cup;-parabola).<br>
+      <strong>Decreasing</strong>: graph <em>falls</em> left to right (left of the turning point).<br>
+      <span style="color:#1e3a5c;font-weight:bold">Navy dots</span> = x-intercepts &nbsp;&nbsp;
+      <span style="color:#7a5c1e;font-weight:bold">Gold dot</span> = vertex (turning point).
     </div>
     <div class="concept">
-      <span class="concept-label">Increasing / Decreasing</span>
-      <strong>Increasing</strong>: graph rises left to right (positive slope).
-      <strong>Decreasing</strong>: graph falls left to right (negative slope).<br>
-      <strong>Express "where" answers in interval notation.</strong>
-      Example: decreasing on all reals is $(-\infty,\infty)$.
+      <span class="concept-label">Interval Notation</span>
+      Write the <em>x-values</em> where the behavior occurs, not y-values.
+      Use open parentheses at x-intercepts and $\pm\infty$.<br>
+      Example: positive between $x=-2$ and $x=3$ &rarr; $(-2,3)$.
+      Type <code>inf</code> for $\infty$ and <code>-inf</code> for $-\infty$.
     </div>
 
   </div>
@@ -90,7 +93,7 @@
   <div class="section">
     <div class="section-title">Practice Problems</div>
     <p style="font-family:sans-serif;font-size:13px;color:#666;margin-bottom:1rem;">
-      For &ldquo;where&rdquo; questions, use interval notation — e.g. <code>(3,inf)</code> for $(3,\infty)$ or <code>(-inf,3)</code> for $(-\infty,3)$. For &ldquo;is it &hellip;?&rdquo; questions, enter <code>positive</code>, <code>negative</code>, <code>increasing</code>, or <code>decreasing</code>. For &ldquo;find the x-value&rdquo; questions, enter just the number.
+      For interval questions type e.g. <code>(-2,inf)</code> or <code>(1,3)</code>. For positive/negative and increasing/decreasing questions type the word in full. For x-value questions type just the number.
       Press <strong>Check</strong> or hit Enter.
     </p>
     <div class="score-bar">
@@ -136,114 +139,159 @@ function addT(n, v) {
 
 // ── Problem generators (section-specific, injected below) ─────────────────────
 
-// gen1: find the x-intercept of f(x) = ax - b  (where sign changes)
-function gen1() {
-  const a = rInt(4) + 2, k = rInt(5) + 2;
-  const b = a * k;
-  return {
-    latex:  `f(x)=${a}x-${b}.\\quad\\text{Find the x-value where }f(x)=0.`,
-    answer: [String(k)],
-    hint:   `Set the function equal to zero and solve — this is the boundary between positive and negative.`,
-    step:   `${a}x-${b}=0\\Rightarrow x=${k}`
-  };
+// ── Shared SVG helpers ───────────────────────────────────────────────────────
+const W=300,H=180,XMN=-4,XMX=4,YMN=-5,YMX=5;
+function tx(x){return (x-XMN)/(XMX-XMN)*W;}
+function ty(y){return H-(y-YMN)/(YMX-YMN)*H;}
+
+function gridAxes(){
+  let s='<rect width="'+W+'" height="'+H+'" fill="#fafaf8" rx="3"/>';
+  for(let gx=XMN;gx<=XMX;gx++){
+    const sx=tx(gx).toFixed(1);
+    s+='<line x1="'+sx+'" y1="0" x2="'+sx+'" y2="'+H+'" stroke="'+(gx===0?'#aaa':'#e8e8e8')+'" stroke-width="'+(gx===0?1.5:0.8)+'"/>';
+    if(gx!==0)s+='<text x="'+sx+'" y="'+(ty(0)+11).toFixed(1)+'" text-anchor="middle" font-size="9" fill="#999" font-family="sans-serif">'+gx+'</text>';
+  }
+  for(let gy=YMN;gy<=YMX;gy++){
+    const sy=ty(gy).toFixed(1);
+    s+='<line x1="0" y1="'+sy+'" x2="'+W+'" y2="'+sy+'" stroke="'+(gy===0?'#aaa':'#e8e8e8')+'" stroke-width="'+(gy===0?1.5:0.8)+'"/>';
+    if(gy!==0&&gy%2===0)s+='<text x="'+(tx(0)-4).toFixed(1)+'" y="'+(+sy+3).toFixed(1)+'" text-anchor="end" font-size="9" fill="#999" font-family="sans-serif">'+gy+'</text>';
+  }
+  return s;
 }
 
-// gen2: positive interval of positive-slope line
-function gen2() {
-  const a = rInt(3) + 2, k = rInt(4) + 2;
-  const bAbs = a * k;
-  return {
-    latex:  `g(x)=${a}x-${bAbs}.\\quad\\text{Where is }g\\text{ positive? Use interval notation.}`,
-    answer: [`(${k},inf)`],
-    hint:   `A positive-slope line is negative before its zero and positive after. Find the zero, then write the positive region as an interval.`,
-    step:   `${a}x-${bAbs}=0\\Rightarrow x=${k};\\quad\\text{positive slope → positive for }x>${k}\\quad\\Rightarrow\\quad(${k},\\infty)`
-  };
+function curvePts(fn){
+  let pts=[],s='';
+  for(let i=0;i<=300;i++){
+    const x=XMN+i*(XMX-XMN)/300,y=fn(x);
+    if(y<YMN-0.3||y>YMX+0.3){
+      if(pts.length){s+='<polyline points="'+pts.join(' ')+'" fill="none" stroke="#1e3a5c" stroke-width="2.2" stroke-linejoin="round"/>';pts=[];}
+      continue;
+    }
+    pts.push(tx(x).toFixed(1)+','+ty(y).toFixed(1));
+  }
+  if(pts.length)s+='<polyline points="'+pts.join(' ')+'" fill="none" stroke="#1e3a5c" stroke-width="2.2" stroke-linejoin="round"/>';
+  return s;
 }
 
-// gen3: f(x) = -ax + b, zero at x = k, negative for x > k
-function gen3() {
-  const a = rInt(3) + 2, k = rInt(4) + 2;
-  const b = a * k;
-  return {
-    latex:  `f(x)=-${a}x+${b}.\\quad\\text{Find the x-value where }f(x)=0.`,
-    answer: [String(k)],
-    hint:   `The function equals zero at the x-intercept — what x-value makes this expression zero?`,
-    step:   `-${a}x+${b}=0\\Rightarrow x=${k}`
-  };
+function dot(x,y,c){return '<circle cx="'+tx(x).toFixed(1)+'" cy="'+ty(y).toFixed(1)+'" r="4" fill="'+(c||'#1e3a5c')+'"/>';}
+
+function zeroMark(x){
+  return dot(x,0)+'<text x="'+tx(x).toFixed(1)+'" y="'+(ty(0)+12).toFixed(1)+'" text-anchor="middle" font-size="9.5" font-weight="bold" fill="#1e3a5c" font-family="sans-serif">'+x+'</text>';
 }
 
-// gen4: is f positive or negative at x = c? (pos/neg text)
-function gen4() {
-  const a = rInt(3) + 2, b = rInt(5) + 2;
-  const k = rInt(4) + 1;   // zero at x = k
-  const c = rInt(2) === 0 ? k + rInt(3) + 1 : k - rInt(3) - 1;
-  const val = a * c - a * k;   // f(c) = a*(c-k) since f(x)=a(x-k)
-  const ans = val > 0 ? 'positive' : 'negative';
-  const bVal = a * k;
-  return {
-    latex:  `f(x)=${a}x-${bVal}.\\quad\\text{Is }f\\text{ positive or negative at }x=${c}?`,
-    answer: [ans],
-    hint:   `A function is positive where its output is above zero — is this input in the positive region?`,
-    step:   `f(${c})=${a}(${c})-${bVal}=${a*c-bVal}\\;${val>0?'>':'<'}\\;0\\quad\\text{→ ${ans}}`
-  };
+function markX(xv,fn){
+  return '<line x1="'+tx(xv).toFixed(1)+'" y1="0" x2="'+tx(xv).toFixed(1)+'" y2="'+H+'" stroke="#7a5c1e" stroke-width="1.2" stroke-dasharray="4,3"/>'+dot(xv,fn(xv),'#7a5c1e')+'<text x="'+tx(xv).toFixed(1)+'" y="'+(ty(0)+12).toFixed(1)+'" text-anchor="middle" font-size="9.5" font-weight="bold" fill="#7a5c1e" font-family="sans-serif">x = '+xv+'</text>';
 }
 
-// gen5: is f increasing or decreasing? (for linear function — slope tells all)
-function gen5() {
-  const a = rInt(4) - 2;
-  const adjA = a === 0 ? 3 : a;
-  const b = rInt(6) - 3;
-  const adjB = b === 0 ? 1 : b;
-  const ans = adjA > 0 ? 'increasing' : 'decreasing';
-  const bStr = adjB < 0 ? `- ${Math.abs(adjB)}` : `+ ${adjB}`;
-  return {
-    latex:  `\\text{Is }f(x)=${adjA}x${bStr}\\text{ increasing or decreasing?}`,
-    answer: [ans],
-    hint:   `Look at the slope. What does a positive slope tell you about the direction of the graph?`,
-    step:   `\\text{Slope }=${adjA}\\;${adjA>0?'>':'<'}\\;0\\quad\\text{→ ${ans}}`
-  };
+function svgQ(inner,q){
+  return '<svg width="'+W+'" height="'+H+'" viewBox="0 0 '+W+' '+H+'" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:0 auto">'+inner+'</svg><p style="font-family:sans-serif;font-size:13px;text-align:center;margin-top:6px;color:#1a1a1a">'+q+'</p>';
 }
 
-// gen6: negative interval of negative-slope line
-function gen6() {
-  const a = rInt(3) + 2, k = rInt(4) + 3;
-  const b = a * k;
-  return {
-    latex:  `h(x)=-${a}x+${b}.\\quad\\text{Where is }h\\text{ negative? Use interval notation.}`,
-    answer: [`(${k},inf)`],
-    hint:   `A negative-slope line is positive before its zero and negative after. Find the zero, then write the negative region as an interval.`,
-    step:   `-${a}x+${b}=0\\Rightarrow x=${k};\\quad\\text{negative slope → negative for }x>${k}\\quad\\Rightarrow\\quad(${k},\\infty)`
-  };
+// gen1: upward parabola — where is f increasing?
+function gen1(){
+  const h=choose([-2,-1,0,1,2]),k=choose([-1,-4]);
+  const sq=Math.sqrt(-k),r1=h-sq,r2=h+sq;
+  const fn=x=>(x-h)*(x-h)+k;
+  const g=gridAxes()+curvePts(fn)+zeroMark(r1)+zeroMark(r2)+dot(h,k,'#7a5c1e');
+  return{svg:svgQ(g,'On what interval is <em>f</em> <strong>increasing</strong>? (interval notation)'),interval:true,
+    answer:['('+h+',inf)'],
+    hint:'A function increases where the graph rises — look at which x-values lie to the right of the turning point.',
+    step:'\\\\text{Vertex at }x='+h+';\\\\text{ graph rises for }x>'+h+'.\\\\quad\\\\text{Increasing: }('+h+',\\\\infty)'};
 }
 
-// gen7: evaluate f at two points and determine sign of each
-function gen7() {
-  const a = rInt(3) + 2, k = rInt(3) + 3;
-  const b = a * k;
-  const cBelow = k - rInt(2) - 1;
-  const cAbove = k + rInt(2) + 1;
-  const pick   = rInt(2) === 0;
-  const c      = pick ? cBelow : cAbove;
-  const val    = a * c - b;
-  const ans    = val > 0 ? 'positive' : 'negative';
-  return {
-    latex:  `f(x)=${a}x-${b}.\\quad\\text{Is }f(${c})\\text{ positive or negative?}`,
-    answer: [ans],
-    hint:   `A specific input is given — what sign does f(x) have at that point?`,
-    step:   `f(${c})=${a}(${c})-${b}=${val}\\;${val>0?'>':'<'}\\;0\\quad\\text{→ ${ans}}`
-  };
+// gen2: upward parabola — where is f decreasing?
+function gen2(){
+  const h=choose([-2,-1,0,1,2]),k=choose([-1,-4]);
+  const sq=Math.sqrt(-k),r1=h-sq,r2=h+sq;
+  const fn=x=>(x-h)*(x-h)+k;
+  const g=gridAxes()+curvePts(fn)+zeroMark(r1)+zeroMark(r2)+dot(h,k,'#7a5c1e');
+  return{svg:svgQ(g,'On what interval is <em>f</em> <strong>decreasing</strong>? (interval notation)'),interval:true,
+    answer:['(-inf,'+h+')'],
+    hint:'A function decreases where the graph falls — look at which x-values lie to the left of the turning point.',
+    step:'\\\\text{Vertex at }x='+h+';\\\\text{ graph falls for }x<'+h+'.\\\\quad\\\\text{Decreasing: }(-\\\\infty,'+h+')'};
 }
 
-// gen8: f(x) = ax + b, at what x does it cross zero?
-function gen8() {
-  const a = rInt(4) + 2, k = rInt(5) + 2;
-  const b = a * k;
-  return {
-    latex:  `f(x)=${a}x-${b}.\\quad\\text{At what x-value does f change from negative to positive?}`,
-    answer: [String(k)],
-    hint:   `A function changes sign at its zero. What x makes f(x) = 0?`,
-    step:   `${a}x-${b}=0\\Rightarrow x=${k}`
-  };
+// gen3: downward parabola — where is f positive?
+function gen3(){
+  const h=choose([-2,-1,0,1,2]),k=choose([1,4]);
+  const sq=Math.sqrt(k),r1=h-sq,r2=h+sq;
+  const fn=x=>-(x-h)*(x-h)+k;
+  const g=gridAxes()+curvePts(fn)+zeroMark(r1)+zeroMark(r2)+dot(h,k,'#7a5c1e');
+  return{svg:svgQ(g,'On what interval is <em>f</em> <strong>positive</strong>? (interval notation)'),interval:true,
+    answer:['('+r1+','+r2+')'],
+    hint:'A function is positive where its graph is above the x-axis — look between the x-intercepts.',
+    step:'\\\\text{Graph above }x\\\\text{-axis between zeros }'+r1+'\\\\text{ and }'+r2+'.\\\\quad('+r1+','+r2+')'};
+}
+
+// gen4: upward parabola — where is f negative?
+function gen4(){
+  const h=choose([-2,-1,0,1,2]),k=choose([-1,-4]);
+  const sq=Math.sqrt(-k),r1=h-sq,r2=h+sq;
+  const fn=x=>(x-h)*(x-h)+k;
+  const g=gridAxes()+curvePts(fn)+zeroMark(r1)+zeroMark(r2)+dot(h,k,'#7a5c1e');
+  return{svg:svgQ(g,'On what interval is <em>f</em> <strong>negative</strong>? (interval notation)'),interval:true,
+    answer:['('+r1+','+r2+')'],
+    hint:'A function is negative where its graph is below the x-axis — look between the x-intercepts.',
+    step:'\\\\text{Graph below }x\\\\text{-axis between zeros }'+r1+'\\\\text{ and }'+r2+'.\\\\quad('+r1+','+r2+')'};
+}
+
+// gen5: upward parabola with marked x — increasing or decreasing at that point?
+function gen5(){
+  const h=choose([-1,0,1]),k=-4;
+  const sq=2,r1=h-sq,r2=h+sq;
+  const fn=x=>(x-h)*(x-h)+k;
+  const offset=choose([-1,1]);
+  const c=h+offset;
+  const ans=c>h?'increasing':'decreasing';
+  const g=gridAxes()+curvePts(fn)+zeroMark(r1)+zeroMark(r2)+dot(h,k,'#7a5c1e')+markX(c,fn);
+  return{svg:svgQ(g,'Is <em>f</em> <strong>increasing</strong> or <strong>decreasing</strong> at the marked x-value?'),
+    answer:[ans],
+    hint:'Compare the marked x to the turning point — the function changes direction there.',
+    step:'\\\\text{Vertex at }x='+h+';\\\\text{ marked }x='+c+'\\\\;'+(c>h?'>':'<')+'\\\\;'+h+'\\\\quad\\\\Rightarrow\\\\quad\\\\text{'+ans+'}'};
+}
+
+// gen6: downward parabola with marked x — positive or negative at that point?
+function gen6(){
+  const h=choose([-1,0,1]),k=4;
+  const sq=2,r1=h-sq,r2=h+sq;
+  const fn=x=>-(x-h)*(x-h)+k;
+  const insideOpts=[];
+  for(let c=r1+1;c<r2;c++)insideOpts.push(c);
+  const outsideOpts=[];
+  for(let c=-3;c<=3;c++){if(c<=r1-1||c>=r2+1)outsideOpts.push(c);}
+  let c,ans;
+  if(rInt(2)===0&&insideOpts.length){c=choose(insideOpts);ans='positive';}
+  else if(outsideOpts.length){c=choose(outsideOpts);ans='negative';}
+  else{c=h;ans='positive';}
+  const g=gridAxes()+curvePts(fn)+zeroMark(r1)+zeroMark(r2)+dot(h,k,'#7a5c1e')+markX(c,fn);
+  return{svg:svgQ(g,'Is <em>f</em> <strong>positive</strong> or <strong>negative</strong> at the marked x-value?'),
+    answer:[ans],
+    hint:'A function is positive where its graph is above the x-axis — check whether the marked point is above or below.',
+    step:'\\\\text{At }x='+c+'\\\\text{: graph is '+(ans==='positive'?'above':'below')+' the }x\\\\text{-axis}\\\\;\\\\Rightarrow\\\\;\\\\text{'+ans+'}'};
+}
+
+// gen7: upward parabola — where does f change from negative to positive? (right root)
+function gen7(){
+  const h=choose([-2,-1,0,1,2]),k=choose([-1,-4]);
+  const sq=Math.sqrt(-k),r1=h-sq,r2=h+sq;
+  const fn=x=>(x-h)*(x-h)+k;
+  const g=gridAxes()+curvePts(fn)+zeroMark(r1)+zeroMark(r2)+dot(h,k,'#7a5c1e');
+  return{svg:svgQ(g,'At what <em>x</em>-value does <em>f</em> change from <strong>negative to positive</strong>?'),
+    answer:[String(r2)],
+    hint:'The sign changes at an x-intercept — which zero marks the end of the negative region?',
+    step:'\\\\text{Negative between roots, positive outside. Changes }(-\\\\!\\\\to\\\\!+)\\\\text{ at right root: }x='+r2};
+}
+
+// gen8: upward parabola — where does f change from positive to negative? (left root)
+function gen8(){
+  const h=choose([-2,-1,0,1,2]),k=choose([-1,-4]);
+  const sq=Math.sqrt(-k),r1=h-sq,r2=h+sq;
+  const fn=x=>(x-h)*(x-h)+k;
+  const g=gridAxes()+curvePts(fn)+zeroMark(r1)+zeroMark(r2)+dot(h,k,'#7a5c1e');
+  return{svg:svgQ(g,'At what <em>x</em>-value does <em>f</em> change from <strong>positive to negative</strong>?'),
+    answer:[String(r1)],
+    hint:'The sign changes at an x-intercept — which zero marks the start of the negative region?',
+    step:'\\\\text{Positive outside, negative between roots. Changes }(+\\\\!\\\\to\\\\!-)\\\\text{ at left root: }x='+r1};
 }
 
 const GENERATORS = [gen1, gen2, gen3, gen4, gen5, gen6, gen7, gen8];
@@ -253,7 +301,13 @@ const GENERATORS = [gen1, gen2, gen3, gen4, gen5, gen6, gen7, gen8];
 let ACTIVE, correct, flags, attempted, peeked;
 
 function norm(s) {
-  return s.trim().toLowerCase().replace(/\s+/g, '').replace(/[−–]/g, '-');
+  return s.trim().toLowerCase()
+    .replace(/\s+/g, '')
+    .replace(/[−–]/g, '-')
+    .replace(/∞/g, 'inf')
+    .replace(/∪/g, 'u')
+    .replace(/infinity/g, 'inf')
+    .replace(/union/g, 'u');
 }
 function ok(user, acc) { return acc.some(a => norm(user) === norm(a)); }
 
@@ -276,10 +330,11 @@ function buildCards() {
         <div class="card-meta">Problem ${i + 1}</div>
         <div class="card-expr" id="expr-${i}"></div>
         <div class="input-row">
-          <input class="ans-input" id="ai-${i}" placeholder="answer" />
+          <input class="ans-input" id="ai-${i}" placeholder="${p.interval ? '[a,b)' : 'answer'}" />
           <button class="check-btn" id="chk-${i}" onclick="check(${i})">Check</button>
         </div>
         <span class="hint-link" onclick="this.style.display='none';this.nextElementSibling.style.display='block'">Show hint</span><div class="hint">${p.hint}</div>
+        ${p.interval ? '<div class="interval-hint">Use <code>inf</code> and <code>u</code> for union &mdash; e.g. <code>[2,inf)</code> or <code>(-inf,0)u(0,inf)</code></div>' : ''}
         <div class="feedback" id="fb-${i}"></div>
         <span class="reveal-link" id="rl-${i}" onclick="reveal(${i})">Show solution</span>
         <div class="revealed-answer" id="ra-${i}"></div>
@@ -289,6 +344,8 @@ function buildCards() {
       .addEventListener('keydown', e => { if (e.key === 'Enter') check(i); });
     if (p.svg) {
       document.getElementById('expr-' + i).innerHTML = p.svg;
+    } else if (p.text) {
+      document.getElementById('expr-' + i).innerHTML = p.text;
     } else {
       katex.render(p.latex, document.getElementById('expr-' + i),
         { throwOnError: false, displayMode: true });
@@ -344,8 +401,8 @@ function updateScore() {
 function resetAll() { init(); buildCards(); updateScore(); }
 </script>
 
-<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/contrib/auto-render.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
 <script>
   renderMathInElement(document.body, {
     delimiters: [
