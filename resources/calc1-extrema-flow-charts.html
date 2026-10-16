@@ -125,6 +125,7 @@
     .layout { display: block; }
     .chart-card { border: none; box-shadow: none; padding: 0; overflow: visible; }
     .chart-card svg { min-width: 0; max-height: 7.3in; width: 100%; }
+    #sec-c1 .chart-card svg { max-height: 7.7in; }
     .chart-title { display: block; font-family: "Fraunces", Georgia, serif; font-weight: 700; font-size: 17pt; margin: 0 0 4px; }
     .chart-sub { display: block !important; color: #444; font-size: 10pt; margin-bottom: 6px; }
     .notes { margin-top: 8px; grid-template-columns: repeat(3, 1fr); gap: 8px; }
@@ -193,7 +194,7 @@
   // Chart 1: local extrema
   // ---------------------------------------------------------------
   var C1 = {
-    id: "c1", w: 1100, h: 1090,
+    id: "c1", w: 1100, h: 1245,
     label: "Flow chart for finding local maxima and minima with the First and Second Derivative Tests",
     nodes: [
       { id: "start", t: "start", x: 330, y: 40, w: 300, h: 44, lines: ["START: a function f(x)"],
@@ -206,25 +207,27 @@
         title: "Pick one critical number", tip: "Classify one critical number, then come back to the next one. Each c gets its own trip through this chart." },
       { id: "d1", t: "dec", x: 330, y: 455, w: 360, h: 130, lines: ["Is f′(c) = 0 ?"],
         title: "Is the slope exactly 0 at c?", tip: "The Second Derivative Test only works when f′(c) = 0. If f′ is undefined at c, you must use the First Derivative Test." },
-      { id: "sdt", t: "proc", x: 330, y: 590, w: 380, h: 60, b: 1, lines: ["Second Derivative Test:", "compute f″(c)"],
+      { id: "d1b", t: "dec", x: 330, y: 620, w: 360, h: 110, lines: ["Which test", "do you want?"],
+        title: "Which test do you want to use?", tip: "Both tests work when f′(c) = 0. The First Derivative Test always works. The Second Derivative Test is optional: a quick shortcut if f″ is easy to find, but it can come back inconclusive." },
+      { id: "sdt", t: "proc", x: 330, y: 745, w: 380, h: 60, b: 1, lines: ["Second Derivative Test:", "compute f″(c)"],
         title: "Second Derivative Test", tip: "Differentiate f′ to get f″, then plug in c. Positive f″ means concave up (a bowl); negative means concave down (a cap)." },
-      { id: "d2", t: "dec", x: 330, y: 735, w: 400, h: 140, lines: ["Sign of f″(c) ?"],
+      { id: "d2", t: "dec", x: 330, y: 890, w: 400, h: 140, lines: ["Sign of f″(c) ?"],
         title: "What is the sign of f″(c)?", tip: "Bowl (concave up) with a flat tangent is a minimum. Cap (concave down) with a flat tangent is a maximum. If f″(c) is exactly 0, the test tells you nothing." },
-      { id: "min1", t: "end", k: "min", x: 130, y: 890, w: 180, h: 64, lines: ["LOCAL MIN", "concave up at c"],
+      { id: "min1", t: "end", k: "min", x: 130, y: 1045, w: 180, h: 64, lines: ["LOCAL MIN", "concave up at c"],
         title: "Local minimum", tip: "f″(c) > 0 and f′(c) = 0: the graph is a bowl at c, so f has a local minimum at x = c.", end: "Local MIN at x = c. The y-value is f(c)." },
-      { id: "max1", t: "end", k: "max", x: 330, y: 890, w: 180, h: 64, lines: ["LOCAL MAX", "concave down at c"],
+      { id: "max1", t: "end", k: "max", x: 330, y: 1045, w: 180, h: 64, lines: ["LOCAL MAX", "concave down at c"],
         title: "Local maximum", tip: "f″(c) < 0 and f′(c) = 0: the graph is a cap at c, so f has a local maximum at x = c.", end: "Local MAX at x = c. The y-value is f(c)." },
-      { id: "fdt", t: "proc", x: 810, y: 585, w: 300, h: 84, b: 1, lines: ["First Derivative Test", "Check the sign of f′ just left", "and just right of c"],
+      { id: "fdt", t: "proc", x: 810, y: 700, w: 300, h: 84, b: 1, lines: ["First Derivative Test", "Check the sign of f′ just left", "and just right of c"],
         title: "First Derivative Test", tip: "Pick a test value a little to the left of c and one a little to the right. Plug each into f′ (or read a sign chart) and write down only + or −. This test always works." },
-      { id: "d3", t: "dec", x: 810, y: 735, w: 400, h: 150, lines: ["Does f′ change sign", "at c ?"],
+      { id: "d3", t: "dec", x: 810, y: 890, w: 400, h: 150, lines: ["Does f′ change sign", "at c ?"],
         title: "Does f′ change sign at c?", tip: "Going from + (rising) to − (falling) is a peak. Going from − to + is a valley. The same sign on both sides is neither." },
-      { id: "max2", t: "end", k: "max", x: 610, y: 890, w: 170, h: 64, lines: ["LOCAL MAX", "f′: + to −"],
+      { id: "max2", t: "end", k: "max", x: 610, y: 1045, w: 170, h: 64, lines: ["LOCAL MAX", "f′: + to −"],
         title: "Local maximum", tip: "f′ goes from positive to negative at c: the function rises, then falls. That is a local maximum at x = c.", end: "Local MAX at x = c. The y-value is f(c)." },
-      { id: "none", t: "end", k: "none", x: 810, y: 890, w: 170, h: 64, lines: ["NEITHER", "no extremum at c"],
+      { id: "none", t: "end", k: "none", x: 810, y: 1045, w: 170, h: 64, lines: ["NEITHER", "no extremum at c"],
         title: "Neither", tip: "f′ keeps the same sign on both sides of c, so f keeps rising (or keeps falling) straight through. c is a critical number but not an extremum.", end: "Neither. c is a critical number but gives no local max or min." },
-      { id: "min2", t: "end", k: "min", x: 1010, y: 890, w: 170, h: 64, lines: ["LOCAL MIN", "f′: − to +"],
+      { id: "min2", t: "end", k: "min", x: 1010, y: 1045, w: 170, h: 64, lines: ["LOCAL MIN", "f′: − to +"],
         title: "Local minimum", tip: "f′ goes from negative to positive at c: the function falls, then rises. That is a local minimum at x = c.", end: "Local MIN at x = c. The y-value is f(c)." },
-      { id: "final", t: "end", k: "final", x: 550, y: 1020, w: 1040, h: 76, b: 1, lines: ["Step 4: Report the point: local max or min at x = c, with y = f(c)", "Then go back to step 3 for the next critical number"],
+      { id: "final", t: "end", k: "final", x: 550, y: 1175, w: 1040, h: 76, b: 1, lines: ["Step 4: Report the point: local max or min at x = c, with y = f(c)", "Then go back to step 3 for the next critical number"],
         title: "Report and repeat", tip: "Write each answer as a point (c, f(c)). Then pick the next critical number and run it through the chart again." }
     ],
     edges: [
@@ -232,21 +235,23 @@
       { f: "deriv", t: "crit", p: [[330, 156], [330, 193]] },
       { f: "crit", t: "pick", p: [[330, 277], [330, 309]] },
       { f: "pick", t: "d1", p: [[330, 355], [330, 390]] },
-      { f: "d1", t: "sdt", p: [[330, 520], [330, 560]], label: "yes: f′(c) = 0", btn: "Yes, f′(c) = 0" },
-      { f: "d1", t: "fdt", p: [[510, 455], [810, 455], [810, 543]], label: "no: f′(c) is undefined", lp: [660, 455], btn: "No, f′(c) is undefined there" },
-      { f: "sdt", t: "d2", p: [[330, 620], [330, 665]] },
-      { f: "d2", t: "min1", p: [[130, 735], [130, 858]], label: "f″(c) > 0", lp: [130, 802], btn: "f″(c) > 0  (positive)" },
-      { f: "d2", t: "max1", p: [[330, 805], [330, 858]], label: "f″(c) < 0", lp: [330, 832], btn: "f″(c) < 0  (negative)" },
-      { f: "d2", t: "fdt", p: [[530, 735], [585, 735], [585, 585], [660, 585]], label: "f″(c) = 0: inconclusive", lp: [585, 660], btn: "f″(c) = 0  (inconclusive)" },
-      { f: "fdt", t: "d3", p: [[810, 627], [810, 660]] },
-      { f: "d3", t: "max2", p: [[610, 735], [610, 858]], label: "+ to −", lp: [610, 802], btn: "Positive to negative  (+ to −)" },
-      { f: "d3", t: "none", p: [[810, 810], [810, 858]], label: "same sign", lp: [810, 834], btn: "Same sign on both sides" },
-      { f: "d3", t: "min2", p: [[1010, 735], [1010, 858]], label: "− to +", lp: [1010, 802], btn: "Negative to positive  (− to +)" },
-      { f: "min1", t: "final", p: [[130, 922], [130, 982]] },
-      { f: "max1", t: "final", p: [[330, 922], [330, 982]] },
-      { f: "max2", t: "final", p: [[610, 922], [610, 982]] },
-      { f: "none", t: "final", p: [[810, 922], [810, 982]] },
-      { f: "min2", t: "final", p: [[1010, 922], [1010, 982]] }
+      { f: "d1", t: "d1b", p: [[330, 520], [330, 565]], label: "yes: f′(c) = 0", lp: [330, 543], btn: "Yes, f′(c) = 0" },
+      { f: "d1", t: "fdt", p: [[510, 455], [810, 455], [810, 658]], label: "no: f′(c) is undefined", lp: [660, 455], btn: "No, f′(c) is undefined there" },
+      { f: "d1b", t: "sdt", p: [[330, 675], [330, 715]], label: "Second Derivative Test (shortcut)", lp: [330, 695], btn: "Second Derivative Test (optional shortcut)" },
+      { f: "d1b", t: "fdt", p: [[510, 620], [570, 620], [570, 700], [660, 700]], label: "First Derivative Test (always works)", lp: [650, 598], btn: "First Derivative Test (always works)" },
+      { f: "sdt", t: "d2", p: [[330, 775], [330, 820]] },
+      { f: "d2", t: "min1", p: [[130, 890], [130, 1013]], label: "f″(c) > 0", lp: [130, 957], btn: "f″(c) > 0  (positive)" },
+      { f: "d2", t: "max1", p: [[330, 960], [330, 1013]], label: "f″(c) < 0", lp: [330, 987], btn: "f″(c) < 0  (negative)" },
+      { f: "d2", t: "fdt", p: [[530, 890], [570, 890], [570, 700], [660, 700]], label: "f″(c) = 0: inconclusive", lp: [570, 800], btn: "f″(c) = 0  (inconclusive)" },
+      { f: "fdt", t: "d3", p: [[810, 742], [810, 815]] },
+      { f: "d3", t: "max2", p: [[610, 890], [610, 1013]], label: "+ to −", lp: [610, 957], btn: "Positive to negative  (+ to −)" },
+      { f: "d3", t: "none", p: [[810, 965], [810, 1013]], label: "same sign", lp: [810, 989], btn: "Same sign on both sides" },
+      { f: "d3", t: "min2", p: [[1010, 890], [1010, 1013]], label: "− to +", lp: [1010, 957], btn: "Negative to positive  (− to +)" },
+      { f: "min1", t: "final", p: [[130, 1077], [130, 1137]] },
+      { f: "max1", t: "final", p: [[330, 1077], [330, 1137]] },
+      { f: "max2", t: "final", p: [[610, 1077], [610, 1137]] },
+      { f: "none", t: "final", p: [[810, 1077], [810, 1137]] },
+      { f: "min2", t: "final", p: [[1010, 1077], [1010, 1137]] }
     ]
   };
 
