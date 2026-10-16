@@ -222,14 +222,15 @@ const PRINTABLES = {
     { section: 'Implicit, Related Rates & More', type: 'guide', label: 'Implicit, Related Rates & More: Big Guide', href: './resources/printable/calc1/Implicit_RelatedRates_More_Guide.pdf', pages: 4 },
     { section: 'Related Rates',             type: 'guide',     label: 'Related Rates: Guide',                href: './resources/printable/calc1/Related_Rates_Guide.pdf',           pages: 2 },
     { section: 'Related Rates',             type: 'worksheet', label: 'Related Rates: Worksheet',            href: './resources/printable/calc1/Related_Rates_Worksheet.pdf',       pages: 4 },
+    { section: 'Local & Global Extrema', type: 'chart', label: 'Local & Global Extrema: Flow Charts', href: './resources/printable/calc1/Extrema_Flow_Charts.pdf', pages: 2 },
   ]
 };
 
 function printablesHtml(cls) {
   const items = PRINTABLES[_currentCourse] || [];
   if (!items.length) return '';
-  const icon  = { guide:'📋', worksheet:'📝' };
-  const label = { guide:'Guide', worksheet:'Worksheet' };
+  const icon  = { guide:'📋', worksheet:'📝', chart:'🧭' };
+  const label = { guide:'Guide', worksheet:'Worksheet', chart:'Flow Chart' };
   // Group by section so guides and worksheets for the same topic sit together
   const sections = [...new Set(items.map(x => x.section))];
   let html = '<div class="unit-block"><div class="unit-label">📎 Supplemental Materials</div><div class="section-grid">';
