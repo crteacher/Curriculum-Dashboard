@@ -287,7 +287,8 @@ svg.sketch{display:block;margin:.5rem auto 0}
 <button class="new-btn" onclick="location.reload()">New Problem (same function)</button>
 </div><!-- .container -->
 
-<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js">
+<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
+<script>
 // ── SketchWidget (embedded) ─────────────────────────────────
 class SketchWidget {
   constructor(svgId, fbId, prob) {
@@ -356,10 +357,41 @@ class SketchWidget {
     x=Math.max(xMin+.01,Math.min(xMax-.01,x));y=Math.max(yMin+.01,Math.min(yMax-.01,y));
     const id=this.nextId++;const sx=this.tx(x),sy=this.ty(y);
     this.markers.push({id,type:this.activeType,mx:x,my:y,svgX:sx,svgY:sy,correct:null});
-    this._draw(id,this.activeType,sx,sy);
+    this._draw(id,this.activeType,sx,sy);this._sketchFromMarkers();
   }
   _hit(sx,sy){for(const m of this.markers){const dx=m.svgX-sx,dy=m.svgY-sy;if(dx*dx+dy*dy<196)return m.id;}return null;}
-  _rm(id){this.markers=this.markers.filter(m=>m.id!==id);const el=this.mg.querySelector(`[data-mid="${id}"]`);if(el)el.remove();}
+  _rm(id){this.markers=this.markers.filter(m=>m.id!==id);const el=this.mg.querySelector(`[data-mid="${id}"]`);if(el)el.remove();this._sketchFromMarkers();}
+  _sketchFromMarkers(){
+    const old=this.svgEl.querySelector('#sk-sketch');if(old)old.remove();
+    if(this.markers.length<2)return;
+    const pts=[...this.markers].sort((a,b)=>a.mx-b.mx).map(m=>({
+      x:m.mx,y:m.type==='zero'?0:m.my,s:(m.type==='max'||m.type==='min')?0:null
+    }));
+    for(let i=0;i<pts.length;i++){
+      if(pts[i].s!==null)continue;
+      const L=i>0?pts[i-1]:null,R=i<pts.length-1?pts[i+1]:null;
+      if(L&&R)pts[i].s=(R.y-L.y)/(R.x-L.x);
+      else if(L)pts[i].s=(pts[i].y-L.y)/(pts[i].x-L.x);
+      else if(R)pts[i].s=(R.y-pts[i].y)/(R.x-pts[i].x);
+      else pts[i].s=0;
+    }
+    const{xMin,xMax,yMin,yMax}=this.prob;const path=[];
+    const f=pts[0];path.push([xMin,f.y+f.s*(xMin-f.x)]);
+    for(let i=0;i<pts.length-1;i++){
+      const p0=pts[i],p1=pts[i+1],dt=p1.x-p0.x;if(Math.abs(dt)<1e-9)continue;
+      for(let j=0;j<=60;j++){
+        const t=j/60,h00=2*t**3-3*t**2+1,h10=t**3-2*t**2+t,h01=-2*t**3+3*t**2,h11=t**3-t**2;
+        path.push([p0.x+t*dt,h00*p0.y+h10*dt*p0.s+h01*p1.y+h11*dt*p1.s]);
+      }
+    }
+    const lp=pts[pts.length-1];path.push([xMax,lp.y+lp.s*(xMax-lp.x)]);
+    const ptStr=path.map(([x,y])=>`${this.tx(x).toFixed(1)},${this.ty(Math.max(yMin-.5,Math.min(yMax+.5,y))).toFixed(1)}`).join(' ');
+    const p=this._el('polyline');p.setAttribute('id','sk-sketch');p.setAttribute('points',ptStr);
+    p.setAttribute('fill','none');p.setAttribute('stroke','#7a5c1e');p.setAttribute('stroke-width','2');
+    p.setAttribute('stroke-dasharray','7,4');p.setAttribute('opacity','.8');
+    p.setAttribute('clip-path','url(#sk-clip)');p.setAttribute('stroke-linejoin','round');
+    this.svgEl.insertBefore(p,this.mg);
+  }
   _draw(id,type,sx,sy,state){
     const NAVY='#1e3a5c',GOLD='#7a5c1e',HIT='#3f7a52',MISS='#b3413a',ANS='rgba(30,58,92,0.28)';
     const g=this._el('g');g.setAttribute('data-mid',id);g.style.cursor='pointer';
@@ -423,6 +455,7 @@ class SketchWidget {
       for(const ep of pts)this._draw(aid++,tm[key],this.tx(ep.x),this.ty(ep.y||0),'answer');
   }
   _curve(){
+    const sk=this.svgEl.querySelector('#sk-sketch');if(sk)sk.remove();
     const{fn,xMin,xMax,yMin,yMax}=this.prob;const N=300,pts=[];
     for(let i=0;i<=N;i++){
       const x=xMin+i/N*(xMax-xMin),y=fn(x);
