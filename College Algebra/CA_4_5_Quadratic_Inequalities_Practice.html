@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Quadratic Inequalities &mdash; Practice</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
 <style>
   *{box-sizing:border-box;margin:0;padding:0}
   body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.7}
@@ -33,7 +33,8 @@
   .card.correct{border-color:#3a7a3a}.card.wrong{border-color:#b03030}.card.peeked{border-color:#b8860b}
   .card-body{padding:14px 16px}
   .card-meta{font-family:sans-serif;font-size:12px;color:#888;margin-bottom:4px}
-  .card-expr{font-size:17px;margin-bottom:12px;line-height:2.2;overflow-x:auto}
+  .card-expr{font-size:17px;margin-bottom:12px;line-height:1.5;overflow-wrap:break-word;white-space:normal;overflow-x:auto}
+  .card-expr svg{max-width:100%;height:auto}
   .katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}
   .input-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
   .ans-input{font-family:'Courier New',monospace;font-size:14px;border:1px solid #ccc;
@@ -45,7 +46,8 @@
   .check-btn{font-family:sans-serif;font-size:13px;background:#1a1a1a;color:#fff;
     border:none;border-radius:6px;padding:7px 14px;cursor:pointer}
   .check-btn:hover{background:#333}.check-btn:disabled{background:#aaa;cursor:default}
-  .hint{font-family:sans-serif;font-size:12px;color:#888;margin-top:7px}
+  .hint{font-family:sans-serif;font-size:12px;color:#888;margin-top:5px;display:none}
+  .hint-link{font-family:sans-serif;font-size:12px;color:#aaa;cursor:pointer;text-decoration:underline;margin-top:7px;display:inline-block}.hint-link:hover{color:#666}
   .feedback{font-family:sans-serif;font-size:13px;margin-top:10px;padding:8px 12px;
     border-radius:6px;display:none;line-height:1.5}
   .feedback.correct{display:block;background:#eaf5ea;color:#1a5a1a}
@@ -56,10 +58,9 @@
   .reveal-link:hover{color:#555}
   .revealed-answer{display:none;margin-top:8px;font-family:sans-serif;font-size:13px;
     color:#444;background:#f5f3ef;border-radius:6px;padding:8px 11px;line-height:1.8;overflow-x:auto}
+  .interval-hint{font-family:sans-serif;font-size:11px;color:#1e3a5c;margin-top:4px;
+    padding:2px 7px;background:#eef3f9;border-radius:4px;display:inline-block}
   code{font-family:'Courier New',monospace;background:#f0ede7;padding:1px 5px;border-radius:3px;font-size:12px}
-
-
-.hint{display:none!important}
 </style>
 </head>
 <body>
@@ -87,7 +88,7 @@
   <div class="section">
     <div class="section-title">Practice Problems</div>
     <p style="font-family:sans-serif;font-size:13px;color:#666;margin-bottom:1rem;">
-      Integer answers for boundary values. Enter <code>positive</code> or <code>negative</code> for sign questions; <code>yes</code> or <code>no</code> for solution-membership questions.
+      Interval answers: use notation like <code>(-2,3)</code>. Yes/no: <code>yes</code> or <code>no</code>. Boundary x-values: enter the integer.
       Press <strong>Check</strong> or hit Enter.
     </p>
     <div class="score-bar">
@@ -133,123 +134,144 @@ function addT(n, v) {
 
 // ── Problem generators (section-specific, injected below) ─────────────────────
 
-// gen1: f(x) = (x-r1)(x-r2) < 0 (opens up) — find larger boundary root
-function gen1() {
-  const r1 = rInt(4) + 1, r2 = r1 + rInt(3) + 1;
-  return {
-    latex:  `(x-${r1})(x-${r2})<0.\\quad\\text{Find the larger boundary value.}`,
-    answer: [String(r2)],
-    hint:   'A parabola can only change sign at its zeros — what are they?',
-    step:   `\\text{Zeros at }x=${r1}\\text{ and }x=${r2};\\quad\\text{larger boundary: }${r2}`
-  };
+const W=300,H=180,XMN=-4,XMX=4,YMN=-5,YMX=5;
+function tx(x){return (x-XMN)/(XMX-XMN)*W;}
+function ty(y){return H-(y-YMN)/(YMX-YMN)*H;}
+function gridAxes(){
+  let s='<rect width="'+W+'" height="'+H+'" fill="#fafaf8" rx="3"/>';
+  for(let x=XMN+1;x<XMX;x++){
+    const px=tx(x).toFixed(1);
+    s+='<line x1="'+px+'" y1="0" x2="'+px+'" y2="'+H+'" stroke="#ddd" stroke-width="0.5"/>';
+    if(x!==0)s+='<text x="'+px+'" y="'+(ty(0)+12).toFixed(1)+'" font-size="9" text-anchor="middle" fill="#888">'+x+'</text>';
+  }
+  for(let y=YMN+1;y<YMX;y++){
+    const py=ty(y).toFixed(1);
+    s+='<line x1="0" y1="'+py+'" x2="'+W+'" y2="'+py+'" stroke="#ddd" stroke-width="0.5"/>';
+    if(y!==0)s+='<text x="'+(tx(0)-5).toFixed(1)+'" y="'+(parseFloat(py)+3).toFixed(1)+'" font-size="9" text-anchor="end" fill="#888">'+y+'</text>';
+  }
+  s+='<line x1="0" y1="'+ty(0).toFixed(1)+'" x2="'+W+'" y2="'+ty(0).toFixed(1)+'" stroke="#555" stroke-width="1.2"/>';
+  s+='<line x1="'+tx(0).toFixed(1)+'" y1="0" x2="'+tx(0).toFixed(1)+'" y2="'+H+'" stroke="#555" stroke-width="1.2"/>';
+  return s;
 }
-
-// gen2: is x = c a solution to (x-r1)(x-r2) < 0?
-function gen2() {
-  const r1 = rInt(3) + 1, r2 = r1 + rInt(3) + 2;
-  const inside = rInt(2) === 0;
-  const c = inside
-    ? r1 + rInt(r2 - r1 - 1) + 1   // strictly between
-    : r2 + rInt(3) + 1;             // outside (above r2)
-  const val = (c - r1) * (c - r2);
-  const ans = val < 0 ? 'yes' : 'no';
-  return {
-    latex:  `(x-${r1})(x-${r2})<0.\\quad\\text{Is }x=${c}\\text{ a solution?}`,
-    answer: [ans],
-    hint:   'What does it mean for a value to be a solution to an inequality?',
-    step:   `(${c}-${r1})(${c}-${r2})=${c-r1}\\cdot${c-r2}=${val}\\;${val<0?'<':'>'}\\;0\\quad\\text{→ ${ans}}`
-  };
+function curvePts(fn){
+  let pts=[],s='';
+  for(let i=0;i<=300;i++){
+    const x=XMN+i*(XMX-XMN)/300,y=fn(x);
+    if(y<YMN-0.3||y>YMX+0.3){if(pts.length){s+='<polyline points="'+pts.join(' ')+'" fill="none" stroke="#1e3a5c" stroke-width="2.2" stroke-linejoin="round"/>';pts=[];}continue;}
+    pts.push(tx(x).toFixed(1)+','+ty(y).toFixed(1));
+  }
+  if(pts.length)s+='<polyline points="'+pts.join(' ')+'" fill="none" stroke="#1e3a5c" stroke-width="2.2" stroke-linejoin="round"/>';
+  return s;
 }
-
-// gen3: (x-r1)(x-r2) > 0 — find smaller boundary (outside roots, opens up)
-function gen3() {
-  const r1 = -(rInt(3) + 1), r2 = rInt(3) + 1;
-  return {
-    latex:  `(x-${r1})(x-${r2})>0.\\quad\\text{Find the smaller boundary value.}`,
-    answer: [String(r1)],
-    hint:   'For a parabola opening upward, where is it positive relative to its zeros?',
-    step:   `\\text{Zeros at }x=${r1}\\text{ and }x=${r2};\\quad\\text{smaller boundary: }${r1}`
-  };
+function dot(x,y,col){return '<circle cx="'+tx(x).toFixed(1)+'" cy="'+ty(y).toFixed(1)+'" r="4" fill="'+(col||'#1e3a5c')+'" stroke="white" stroke-width="1"/>';}
+function zeroMark(x){return '<circle cx="'+tx(x).toFixed(1)+'" cy="'+ty(0).toFixed(1)+'" r="4" fill="#1e3a5c" stroke="white" stroke-width="1"/>';}
+function markX(c,fn){
+  return '<line x1="'+tx(c).toFixed(1)+'" y1="0" x2="'+tx(c).toFixed(1)+'" y2="'+H+'" stroke="#7a5c1e" stroke-width="1.2" stroke-dasharray="4,3"/>'+
+    '<circle cx="'+tx(c).toFixed(1)+'" cy="'+ty(fn(c)).toFixed(1)+'" r="4" fill="#7a5c1e" stroke="white" stroke-width="1"/>'+
+    '<text x="'+tx(c).toFixed(1)+'" y="'+(H-4)+'" font-size="9" text-anchor="middle" fill="#7a5c1e">x='+c+'</text>';
 }
-
-// gen4: x² + bx + c < 0 (opens up, integer roots) — find left boundary
-function gen4() {
-  const r1 = rInt(3) + 1, r2 = r1 + rInt(3) + 1;
-  const b = -(r1 + r2), c = r1 * r2;
-  const bStr = b < 0 ? `- ${Math.abs(b)}` : `+ ${b}`;
-  return {
-    latex:  `x^2${bStr}x+${c}<0.\\quad\\text{Find the left boundary of the solution interval.}`,
-    answer: [String(r1)],
-    hint:   'For a parabola opening upward, where is it negative relative to its zeros?',
-    step:   `(x-${r1})(x-${r2})<0\\Rightarrow\\text{solution: }(${r1},${r2});\\quad\\text{left boundary: }${r1}`
-  };
+function svgQ(inner,q){
+  return '<svg width="'+W+'" height="'+H+'" viewBox="0 0 '+W+' '+H+'" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:0 auto">'+inner+'</svg><p style="font-family:sans-serif;font-size:13px;text-align:center;margin-top:6px;color:#1a1a1a">'+q+'</p>';
 }
-
-// gen5: sign at a test value — positive or negative?
-function gen5() {
-  const r1 = rInt(3) + 1, r2 = r1 + rInt(3) + 2;
-  const c  = r1 + rInt(r2 - r1 - 1) + 1;   // strictly between roots
-  const val = (c - r1) * (c - r2);
-  return {
-    latex:  `f(x)=(x-${r1})(x-${r2}).\\quad\\text{Is }f(${c})\\text{ positive or negative?}`,
-    answer: ['negative'],
-    hint:   'Is the test point inside or outside the roots?',
-    step:   `f(${c})=(${c-r1})(${c-r2})=${val}<0\\quad\\text{→ negative}`
-  };
+function upPara(){
+  const h=choose([-2,-1,0,1,2]),k=choose([-1,-4]);
+  const rt=Math.sqrt(-k),r1=h-rt,r2=h+rt;
+  return {h,k,r1,r2,fn:x=>(x-h)*(x-h)+k};
 }
-
-// gen6: test value outside the roots — positive or negative?
-function gen6() {
-  const r1 = rInt(3) + 1, r2 = r1 + rInt(3) + 2;
-  const c  = r2 + rInt(3) + 1;   // outside, above r2
-  const val = (c - r1) * (c - r2);
-  return {
-    latex:  `f(x)=(x-${r1})(x-${r2}).\\quad\\text{Is }f(${c})\\text{ positive or negative?}`,
-    answer: ['positive'],
-    hint:   'Is the test point inside or outside the roots?',
-    step:   `f(${c})=(${c-r1})(${c-r2})=${val}>0\\quad\\text{→ positive}`
-  };
+function downPara(){
+  const h=choose([-2,-1,0,1,2]),k=choose([1,4]);
+  const rt=Math.sqrt(k),r1=h-rt,r2=h+rt;
+  return {h,k,r1,r2,fn:x=>-(x-h)*(x-h)+k};
 }
-
-// gen7: x² + bx + c > 0 (opens up) — find right boundary
-function gen7() {
-  const r1 = -(rInt(2) + 1), r2 = rInt(3) + 1;
-  const b = -(r1 + r2), c = r1 * r2;
-  const bStr = b < 0 ? `- ${Math.abs(b)}` : `+ ${b}`;
-  const cStr = c < 0 ? `- ${Math.abs(c)}` : `+ ${c}`;
-  return {
-    latex:  `x^2${bStr}x${cStr}>0.\\quad\\text{Find the right boundary of the solution.}`,
-    answer: [String(r2)],
-    hint:   'For a parabola opening upward, which region satisfies > 0?',
-    step:   `(x-${r1})(x-${r2})>0\\Rightarrow\\text{solution: }(-\\infty,${r1})\\cup(${r2},\\infty);\\quad\\text{right boundary: }${r2}`
-  };
+function gen1(){
+  const {h,k,r1,r2,fn}=upPara();
+  const inner=gridAxes()+curvePts(fn)+zeroMark(r1)+zeroMark(r2)+dot(h,k,'#7a5c1e');
+  return {svg:svgQ(inner,'Where is f(x) &lt; 0? (interval notation)'),
+    answer:['('+r1+','+r2+')','('+r1+', '+r2+')'],interval:true,
+    hint:'Look at where the parabola dips below the x-axis — between which zeros does that happen?',
+    step:'f(x)<0 \\text{ between the zeros: } ('+r1+','+r2+')'};
 }
-
-// gen8: is x = c a solution to f(x) ≥ 0? (boundary point, always yes)
-function gen8() {
-  const r1 = rInt(3) + 1, r2 = r1 + rInt(3) + 2;
-  const c  = choose([r1, r2]);   // boundary point itself
-  return {
-    latex:  `(x-${r1})(x-${r2})\\geq 0.\\quad\\text{Is }x=${c}\\text{ a solution?}`,
-    answer: ['yes'],
-    hint:   'Does a non-strict inequality include its boundary points?',
-    step:   `f(${c})=(${c}-${r1})(${c}-${r2})=0\\geq 0\\quad\\text{→ yes (boundary included)}`
-  };
+function gen2(){
+  const {h,k,r1,r2,fn}=downPara();
+  const inner=gridAxes()+curvePts(fn)+zeroMark(r1)+zeroMark(r2)+dot(h,k,'#7a5c1e');
+  return {svg:svgQ(inner,'Where is f(x) &gt; 0? (interval notation)'),
+    answer:['('+r1+','+r2+')','('+r1+', '+r2+')'],interval:true,
+    hint:'Look at where the parabola rises above the x-axis — between which zeros does that happen?',
+    step:'f(x)>0 \\text{ between the zeros: } ('+r1+','+r2+')'};
 }
-
-const GENERATORS = [gen1, gen2, gen3, gen4, gen5, gen6, gen7, gen8];
+function gen3(){
+  const {h,k,r1,r2,fn}=upPara();
+  const cands=[];for(let x=Math.ceil(r1+0.5);x<r2;x++)if(x!==h)cands.push(x);
+  const c=cands.length?choose(cands):h;
+  const inner=gridAxes()+curvePts(fn)+zeroMark(r1)+zeroMark(r2)+markX(c,fn);
+  return {svg:svgQ(inner,'Is x = '+c+' a solution to f(x) &lt; 0?'),
+    answer:['yes'],
+    hint:'Is the marked point on the curve above or below the x-axis?',
+    step:'f('+c+')='+fn(c).toFixed(0)+'<0 \\Rightarrow \\text{yes}'};
+}
+function gen4(){
+  const {h,k,r1,r2,fn}=upPara();
+  const opts=[r1-2,r1-1,r2+1,r2+2].filter(x=>x>=XMN+0.5&&x<=XMX-0.5&&x===Math.round(x));
+  const c=opts.length?choose(opts):r2+1;
+  const inner=gridAxes()+curvePts(fn)+zeroMark(r1)+zeroMark(r2)+markX(c,fn);
+  return {svg:svgQ(inner,'Is x = '+c+' a solution to f(x) &lt; 0?'),
+    answer:['no'],
+    hint:'Is the marked point on the curve above or below the x-axis?',
+    step:'f('+c+')='+fn(c).toFixed(0)+'>0 \\Rightarrow \\text{no}'};
+}
+function gen5(){
+  const {h,k,r1,r2,fn}=upPara();
+  const inner=gridAxes()+curvePts(fn)+zeroMark(r1)+zeroMark(r2)+markX(r2,fn);
+  return {svg:svgQ(inner,'Is x = '+r2+' a solution to f(x) ≤ 0?'),
+    answer:['yes'],
+    hint:'What is the value of f at a zero of the function — is that value ≤ 0?',
+    step:'f('+r2+')=0 \\le 0 \\Rightarrow \\text{yes}'};
+}
+function gen6(){
+  const {h,k,r1,r2,fn}=downPara();
+  const opts=[r1-2,r1-1,r2+1,r2+2].filter(x=>x>=XMN+0.5&&x<=XMX-0.5&&x===Math.round(x));
+  const c=opts.length?choose(opts):r2+1;
+  const inner=gridAxes()+curvePts(fn)+zeroMark(r1)+zeroMark(r2)+markX(c,fn);
+  return {svg:svgQ(inner,'Is x = '+c+' a solution to f(x) &gt; 0?'),
+    answer:['no'],
+    hint:'Is the marked point on the curve above or below the x-axis?',
+    step:'f('+c+')='+fn(c).toFixed(0)+'<0 \\Rightarrow \\text{no}'};
+}
+function gen7(){
+  const {h,k,r1,r2,fn}=upPara();
+  const inner=gridAxes()+curvePts(fn)+zeroMark(r1)+zeroMark(r2);
+  return {svg:svgQ(inner,'At what x-value does f change from negative to positive?'),
+    answer:[String(r2)],
+    hint:'Moving left to right, which zero is where the graph rises back above the x-axis?',
+    step:'f \\text{ negative}→\\text{positive at the right zero: } x='+r2};
+}
+function gen8(){
+  const {h,k,r1,r2,fn}=downPara();
+  const inner=gridAxes()+curvePts(fn)+zeroMark(r1)+zeroMark(r2);
+  return {svg:svgQ(inner,'At what x-value does f change from positive to negative?'),
+    answer:[String(r2)],
+    hint:'Moving left to right, which zero is where the graph drops below the x-axis?',
+    step:'f \\text{ positive}→\\text{negative at the right zero: } x='+r2};
+}
+const GENERATORS=[gen1,gen2,gen3,gen4,gen5,gen6,gen7,gen8];
 
 
 // ── State ─────────────────────────────────────────────────────────────────────
 let ACTIVE, correct, flags, attempted, peeked;
 
 function norm(s) {
-  return s.trim().toLowerCase().replace(/\s+/g, '').replace(/[−–]/g, '-');
+  return s.trim().toLowerCase()
+    .replace(/\s+/g, '')
+    .replace(/[−–]/g, '-')
+    .replace(/∞/g, 'inf')
+    .replace(/∪/g, 'u')
+    .replace(/infinity/g, 'inf')
+    .replace(/union/g, 'u');
 }
 function ok(user, acc) { return acc.some(a => norm(user) === norm(a)); }
 
 function init() {
-  ACTIVE    = shuffle(GENERATORS.map(gen => gen()));
+  ACTIVE    = shuffle(GENERATORS).slice(0, Math.min(8, GENERATORS.length)).map(gen => gen());
   correct   = 0;
   flags     = Array(GENERATORS.length).fill(false);
   attempted = Array(GENERATORS.length).fill(false);
@@ -267,10 +289,11 @@ function buildCards() {
         <div class="card-meta">Problem ${i + 1}</div>
         <div class="card-expr" id="expr-${i}"></div>
         <div class="input-row">
-          <input class="ans-input" id="ai-${i}" placeholder="answer" />
+          <input class="ans-input" id="ai-${i}" placeholder="${p.interval ? '[a,b)' : 'answer'}" />
           <button class="check-btn" id="chk-${i}" onclick="check(${i})">Check</button>
         </div>
-        <div class="hint">${p.hint}</div>
+        <span class="hint-link" onclick="this.style.display='none';this.nextElementSibling.style.display='block'">Show hint</span><div class="hint">${p.hint}</div>
+        ${p.interval ? '<div class="interval-hint">Use <code>inf</code> and <code>u</code> for union &mdash; e.g. <code>[2,inf)</code> or <code>(-inf,0)u(0,inf)</code></div>' : ''}
         <div class="feedback" id="fb-${i}"></div>
         <span class="reveal-link" id="rl-${i}" onclick="reveal(${i})">Show solution</span>
         <div class="revealed-answer" id="ra-${i}"></div>
@@ -280,6 +303,8 @@ function buildCards() {
       .addEventListener('keydown', e => { if (e.key === 'Enter') check(i); });
     if (p.svg) {
       document.getElementById('expr-' + i).innerHTML = p.svg;
+    } else if (p.text) {
+      document.getElementById('expr-' + i).innerHTML = p.text;
     } else {
       katex.render(p.latex, document.getElementById('expr-' + i),
         { throwOnError: false, displayMode: true });
@@ -335,8 +360,8 @@ function updateScore() {
 function resetAll() { init(); buildCards(); updateScore(); }
 </script>
 
-<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/contrib/auto-render.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
 <script>
   renderMathInElement(document.body, {
     delimiters: [

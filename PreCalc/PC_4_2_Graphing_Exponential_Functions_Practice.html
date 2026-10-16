@@ -34,6 +34,8 @@
   .card-body{padding:14px 16px}
   .card-meta{font-family:sans-serif;font-size:12px;color:#888;margin-bottom:4px}
   .card-expr{font-size:17px;margin-bottom:12px;line-height:2.2;overflow-x:auto}
+  .card-expr svg{max-width:100%;height:auto}
+  .card-question{font-family:sans-serif;font-size:14px;font-weight:700;color:#1e3a5c;margin-bottom:10px}
   .katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}
   .input-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
   .ans-input{font-family:'Courier New',monospace;font-size:14px;border:1px solid #ccc;
@@ -45,7 +47,8 @@
   .check-btn{font-family:sans-serif;font-size:13px;background:#1a1a1a;color:#fff;
     border:none;border-radius:6px;padding:7px 14px;cursor:pointer}
   .check-btn:hover{background:#333}.check-btn:disabled{background:#aaa;cursor:default}
-  .hint{font-family:sans-serif;font-size:12px;color:#888;margin-top:7px}
+  .hint{font-family:sans-serif;font-size:12px;color:#888;margin-top:5px;display:none}
+  .hint-link{font-family:sans-serif;font-size:12px;color:#aaa;cursor:pointer;text-decoration:underline;margin-top:7px;display:inline-block}.hint-link:hover{color:#666}
   .feedback{font-family:sans-serif;font-size:13px;margin-top:10px;padding:8px 12px;
     border-radius:6px;display:none;line-height:1.5}
   .feedback.correct{display:block;background:#eaf5ea;color:#1a5a1a}
@@ -57,9 +60,6 @@
   .revealed-answer{display:none;margin-top:8px;font-family:sans-serif;font-size:13px;
     color:#444;background:#f5f3ef;border-radius:6px;padding:8px 11px;line-height:1.8;overflow-x:auto}
   code{font-family:'Courier New',monospace;background:#f0ede7;padding:1px 5px;border-radius:3px;font-size:12px}
-
-
-.hint{display:none!important}
 </style>
 </head>
 <body>
@@ -90,7 +90,7 @@
   <div class="section">
     <div class="section-title">Practice Problems</div>
     <p style="font-family:sans-serif;font-size:13px;color:#666;margin-bottom:1rem;">
-      Enter integers for HA, shifts, and intercept values; <code>(0,c)</code> for y-intercepts; <code>(k,inf)</code> for range; <code>increasing</code> or <code>decreasing</code>.
+      Enter integers for HA and y-intercept. Range: <code>(k,inf)</code>. Enter <code>increasing</code> or <code>decreasing</code>.
       Press <strong>Check</strong> or hit Enter.
     </p>
     <div class="score-bar">
@@ -136,124 +136,115 @@ function addT(n, v) {
 
 // ── Problem generators (section-specific, injected below) ─────────────────────
 
+const EW=300,EH=180;
+function expAxesK(k){
+  const xn=-3,xx=3,yn=k-2,yx=k+14;
+  const x0px=((0-xn)/(xx-xn)*EW);
+  const y0py=(EH-(0-yn)/(yx-yn)*EH);
+  let s='<rect width="'+EW+'" height="'+EH+'" fill="#fafaf8" rx="3"/>';
+  for(let x=xn+1;x<xx;x++){
+    const px=((x-xn)/(xx-xn)*EW).toFixed(1);
+    s+='<line x1="'+px+'" y1="0" x2="'+px+'" y2="'+EH+'" stroke="#ddd" stroke-width="0.5"/>';
+    s+='<text x="'+px+'" y="'+(y0py+12).toFixed(1)+'" font-size="9" text-anchor="middle" fill="#888">'+x+'</text>';
+  }
+  for(let y=Math.ceil(yn/2)*2;y<=yx;y+=4){
+    const py=(EH-(y-yn)/(yx-yn)*EH).toFixed(1);
+    s+='<line x1="0" y1="'+py+'" x2="'+EW+'" y2="'+py+'" stroke="#ddd" stroke-width="0.5"/>';
+    s+='<text x="'+(x0px-5).toFixed(1)+'" y="'+(parseFloat(py)+3).toFixed(1)+'" font-size="9" text-anchor="end" fill="#888">'+y+'</text>';
+  }
+  s+='<line x1="0" y1="'+y0py.toFixed(1)+'" x2="'+EW+'" y2="'+y0py.toFixed(1)+'" stroke="#555" stroke-width="1.2"/>';
+  s+='<line x1="'+x0px.toFixed(1)+'" y1="0" x2="'+x0px.toFixed(1)+'" y2="'+EH+'" stroke="#555" stroke-width="1.2"/>';
+  return {s,yn,yx,xn,xx,x0px,y0py};
+}
+function expCurveK(fn,g){
+  let pts=[],s='';
+  for(let i=0;i<=300;i++){
+    const x=g.xn+i*(g.xx-g.xn)/300,y=fn(x);
+    if(y<g.yn-0.2||y>g.yx+0.2){if(pts.length){s+='<polyline points="'+pts.join(' ')+'" fill="none" stroke="#1e3a5c" stroke-width="2.2" stroke-linejoin="round"/>';pts=[];}continue;}
+    const px=((x-g.xn)/(g.xx-g.xn)*EW).toFixed(1),py=(EH-(y-g.yn)/(g.yx-g.yn)*EH).toFixed(1);
+    pts.push(px+','+py);
+  }
+  if(pts.length)s+='<polyline points="'+pts.join(' ')+'" fill="none" stroke="#1e3a5c" stroke-width="2.2" stroke-linejoin="round"/>';
+  return s;
+}
+function edotK(x,y,g,col){
+  const px=((x-g.xn)/(g.xx-g.xn)*EW).toFixed(1),py=(EH-(y-g.yn)/(g.yx-g.yn)*EH).toFixed(1);
+  return '<circle cx="'+px+'" cy="'+py+'" r="5" fill="'+(col||'#1e3a5c')+'" stroke="white" stroke-width="1.5"/>';
+}
+function haDashK(k,g){
+  const py=(EH-(k-g.yn)/(g.yx-g.yn)*EH).toFixed(1);
+  return '<line x1="0" y1="'+py+'" x2="'+EW+'" y2="'+py+'" stroke="#7a5c1e" stroke-width="1.5" stroke-dasharray="6,4"/>'+
+    '<text x="'+(EW-4)+'" y="'+(parseFloat(py)-4).toFixed(1)+'" font-size="9" text-anchor="end" fill="#7a5c1e">y='+k+'</text>';
+}
+function esvgQ(inner,q){
+  return '<svg width="'+EW+'" height="'+EH+'" viewBox="0 0 '+EW+' '+EH+'" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:0 auto">'+inner+'</svg><p style="font-family:sans-serif;font-size:13px;text-align:center;margin-top:6px;color:#1a1a1a">'+q+'</p>';
+}
 function gen1(){
-  // HA of y = a·b^x + k → answer is k
-  const b = choose([2, 3, 4, 5]);
-  const a = choose([1, 2, 3, -1, -2, -3]);
-  const k = choose([-5, -4, -3, -2, -1, 1, 2, 3, 4, 5]);
-  const aS = a === 1 ? '' : (a === -1 ? '-' : `${a}\\cdot`);
-  const kS = k >= 0 ? `+${k}` : `${k}`;
-  return {
-    latex: `f(x)=${aS}${b}^x${kS}.\\quad\\text{Horizontal asymptote: }y=`,
-    answer: [String(k)],
-    hint: 'As x→±∞, the exponential term b^x approaches zero — what does the function approach?',
-    step: `b^x\\to 0\\text{ as }x\\to-\\infty,\\text{ so }f(x)\\to${k}.\\;\\text{HA: }y=${k}`
-  };
+  const k=choose([2,3,4]),a=choose([1,2]),b=2,fn=x=>a*Math.pow(b,x)+k;
+  const g=expAxesK(k);
+  return {svg:esvgQ(g.s+expCurveK(fn,g)+haDashK(k,g),'What is the horizontal asymptote of this function?'),
+    answer:[String(k),'y='+k],
+    hint:'Which dashed line does the curve approach as x decreases without bound?',
+    step:'a\\cdot b^x\\to 0 \\text{ as }x\\to-\\infty, \\text{ HA: }y='+k};
 }
-
 function gen2(){
-  // y-intercept of f(x) = a·b^(x+h) + k (h≥1 so b^h is integer)
-  const b = choose([2, 3]);
-  const h = choose([1, 2]);
-  const a = choose([1, 2, 3]);
-  const k = choose([-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5]);
-  const bh = Math.pow(b, h);
-  const yint = a * bh + k;
-  const hS = h === 1 ? '+1' : `+${h}`;
-  const kS = k >= 0 ? `+${k}` : `${k}`;
-  const aS = a === 1 ? '' : `${a}\\cdot`;
-  return {
-    latex: `f(x)=${aS}${b}^{x${hS}}${kS}.\\quad\\text{y-intercept}=`,
-    answer: [`(0,${yint})`, `(0, ${yint})`],
-    hint: 'At the y-intercept the graph crosses the vertical axis — what is x at that moment?',
-    step: `f(0)=${a}\\cdot${b}^{${h}}${kS}=${a}\\cdot${bh}${kS}=${yint}.\\;(0,${yint})`
-  };
+  const k=choose([-3,-2,-1]),a=choose([1,2]),b=2,fn=x=>a*Math.pow(b,x)+k;
+  const g=expAxesK(k);
+  return {svg:esvgQ(g.s+expCurveK(fn,g)+haDashK(k,g),'What is the horizontal asymptote of this function?'),
+    answer:[String(k),'y='+k],
+    hint:'Which dashed line does the curve approach as x decreases without bound?',
+    step:'\\text{HA: }y='+k};
 }
-
 function gen3(){
-  // Horizontal shift: f(x) = b^(x-h) — how many units right?
-  const b = choose([2, 3, 4, 5]);
-  const h = choose([1, 2, 3, 4, 5]);
-  return {
-    latex: `f(x)=${b}^{x-${h}}.\\quad\\text{Shift right by how many units?}`,
-    answer: [String(h)],
-    hint: 'In f(x)=b^(x−h), what role does h play in the horizontal position of the graph?',
-    step: `(x-${h})\\Rightarrow\\text{graph of }y=${b}^x\\text{ shifted right }${h}\\text{ unit(s)}`
-  };
+  const k=choose([1,2,3]),a=choose([2,3]),b=2,fn=x=>a*Math.pow(b,x)+k;
+  const yint=a+k;
+  const g=expAxesK(k);
+  return {svg:esvgQ(g.s+expCurveK(fn,g)+haDashK(k,g)+edotK(0,yint,g,'#1e3a5c'),'What is the y-intercept of this function?'),
+    answer:[String(yint),'(0,'+yint+')'],
+    hint:'Read the y-value of the marked dot where the curve crosses the y-axis.',
+    step:'f(0)='+a+'\\cdot 2^0+'+k+'='+a+'+'+k+'='+yint};
 }
-
 function gen4(){
-  // Increasing or decreasing?
-  // b > 1 always; sign of leading coefficient determines inc/dec
-  const b = choose([2, 3, 4, 5]);
-  const aSign = choose([-1, 1]);
-  const expr = aSign === 1 ? `${b}^x` : `-${b}^x`;
-  const ans = aSign === 1 ? 'increasing' : 'decreasing';
-  return {
-    latex: `f(x)=${expr}.\\quad\\text{Increasing or decreasing?}`,
-    answer: [ans],
-    hint: 'Does reflecting y=b^x across the x-axis reverse the direction the graph travels?',
-    step: `b=${b}>1,\\text{ leading coefficient }${aSign>0?'positive → increasing':'negative → decreasing'}`
-  };
+  const k=choose([8,10,12]),a=choose([2,3]),b=2,fn=x=>-a*Math.pow(b,x)+k;
+  const g=expAxesK(0);
+  return {svg:esvgQ(g.s+expCurveK(fn,g)+haDashK(k,g),'Is this function increasing or decreasing?'),
+    answer:['decreasing'],
+    hint:'Does the curve fall or rise as you move from left to right?',
+    step:'-'+a+'\\cdot 2^x \\text{ reflects growth vertically }\\Rightarrow \\text{decreasing}'};
 }
-
 function gen5(){
-  // Range of f(x) = a·b^x + k (a > 0 only for clean interval format)
-  const b = choose([2, 3, 4, 5]);
-  const k = choose([-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5]);
-  const kS = k >= 0 ? `+${k}` : `${k}`;
-  return {
-    latex: `f(x)=${b}^x${kS}.\\quad\\text{Range}=`,
-    answer: [`(${k},inf)`, `(${k},+inf)`, `y>${k}`],
-    hint: 'Since b^x is always positive, how does adding a constant k change the output range?',
-    step: `b^x>0\\Rightarrow${b}^x${kS}>${k}.\\;\\text{Range: }(${k},\\infty)`
-  };
+  const k=choose([2,3,4]),a=choose([1,2]),b=2,fn=x=>a*Math.pow(b,x)+k;
+  const g=expAxesK(k);
+  return {svg:esvgQ(g.s+expCurveK(fn,g)+haDashK(k,g),'As x → −∞, what y-value does the function approach?'),
+    answer:[String(k)],
+    hint:'Which dashed horizontal line does the left tail of the curve get close to?',
+    step:'a\\cdot b^x\\to 0 \\text{ as }x\\to-\\infty \\Rightarrow f\\to'+k};
 }
-
 function gen6(){
-  // Find b from f(0)=a and f(2)=a·b^2 (model context)
-  const a = choose([1, 2, 3, 4, 5]);
-  const b = choose([2, 3, 4, 5]);
-  const f2 = a * Math.pow(b, 2);
-  return {
-    latex: `f(t)=a\\cdot b^t.\\;f(0)=${a},\\;f(2)=${f2}.\\quad b=`,
-    answer: [String(b)],
-    hint: 'Given two data points on an exponential model, what operation on their ratio gives b?',
-    step: `b^2=\\dfrac{f(2)}{f(0)}=\\dfrac{${f2}}{${a}}=${b*b}\\Rightarrow b=\\sqrt{${b*b}}=${b}`
-  };
+  const k=choose([1,2,3]),a=choose([1,2]),b=2,fn=x=>a*Math.pow(b,x)+k;
+  const g=expAxesK(k);
+  return {svg:esvgQ(g.s+expCurveK(fn,g)+haDashK(k,g),'What is the range of this function? (interval notation)'),
+    answer:['('+k+',inf)','('+k+', inf)'],
+    hint:'What is the smallest y-value the function can approach, and can the function reach it?',
+    step:'\\text{Range: }('+k+',\\infty) \\text{ — never reaches the HA}'};
 }
-
 function gen7(){
-  // Find a from f(x)=a·b^x given f(n)=val
-  const a = choose([2, 3, 4, 5, 6]);
-  const b = choose([2, 3]);
-  const n = choose([2, 3]);
-  const fn = a * Math.pow(b, n);
-  const bn = Math.pow(b, n);
-  return {
-    latex: `f(x)=a\\cdot${b}^x.\\;f(${n})=${fn}.\\quad a=`,
-    answer: [String(a)],
-    hint: 'In f(x)=a·b^x, which value does the coefficient a represent at x=0?',
-    step: `${fn}=a\\cdot${b}^{${n}}=a\\cdot${bn}\\Rightarrow a=${fn}\\div${bn}=${a}`
-  };
+  const k=choose([2,3]),a=choose([2,4]),fn=x=>a*Math.pow(0.5,x)+k;
+  const g=expAxesK(k);
+  return {svg:esvgQ(g.s+expCurveK(fn,g)+haDashK(k,g),'What is the horizontal asymptote of this function?'),
+    answer:[String(k),'y='+k],
+    hint:'Which dashed line does the right tail of this decay curve approach?',
+    step:'a\\cdot(\\tfrac{1}{2})^x\\to 0 \\text{ as }x\\to+\\infty \\Rightarrow \\text{HA: }y='+k};
 }
-
 function gen8(){
-  // y-intercept of reflected/shifted: f(x) = -a·b^x + k
-  const b = choose([2, 3, 4, 5]);
-  const k = choose([4, 5, 6, 7, 8, 9, 10]);
-  const a = choose([1, 2, 3]);
-  const yint = k - a;  // f(0) = -a·b^0 + k = -a + k
-  const kS = `+${k}`;
-  return {
-    latex: `f(x)=-${a}\\cdot${b}^x${kS}.\\quad\\text{y-intercept}=`,
-    answer: [`(0,${yint})`, `(0, ${yint})`],
-    hint: 'At the y-intercept, what does b^0 simplify to regardless of b?',
-    step: `f(0)=-${a}\\cdot${b}^0+${k}=-${a}+${k}=${yint}.\\;(0,${yint})`
-  };
+  const k=choose([1,2,3]),a=choose([1,2]),b=choose([2,3]),fn=x=>a*Math.pow(b,x)+k;
+  const g=expAxesK(k);
+  return {svg:esvgQ(g.s+expCurveK(fn,g)+haDashK(k,g),'Is this function increasing or decreasing?'),
+    answer:['increasing'],
+    hint:'Does the curve rise or fall as you move from left to right?',
+    step:'b='+b+'>1, a>0 \\Rightarrow \\text{increasing on }\\mathbb{R}'};
 }
-
-const GENERATORS = [gen1, gen2, gen3, gen4, gen5, gen6, gen7, gen8];
+const GENERATORS=[gen1,gen2,gen3,gen4,gen5,gen6,gen7,gen8];
 
 
 // ── State ─────────────────────────────────────────────────────────────────────
@@ -269,7 +260,7 @@ function norm(s) {
 function ok(user, acc) { return acc.some(a => norm(user) === norm(a)); }
 
 function init() {
-  ACTIVE    = shuffle(GENERATORS.map(gen => gen()));
+  ACTIVE    = shuffle(GENERATORS).slice(0, Math.min(8, GENERATORS.length)).map(gen => gen());
   correct   = 0;
   flags     = Array(GENERATORS.length).fill(false);
   attempted = Array(GENERATORS.length).fill(false);
@@ -282,15 +273,17 @@ function buildCards() {
   ACTIVE.forEach((p, i) => {
     const div = document.createElement('div');
     div.className = 'card'; div.id = 'card-' + i;
+    const qLine = p.q ? `<div class="card-question">${p.q}</div>` : '';
     div.innerHTML =
       `<div class="card-body">
         <div class="card-meta">Problem ${i + 1}</div>
         <div class="card-expr" id="expr-${i}"></div>
+        ${qLine}
         <div class="input-row">
           <input class="ans-input" id="ai-${i}" placeholder="answer" />
           <button class="check-btn" id="chk-${i}" onclick="check(${i})">Check</button>
         </div>
-        <div class="hint">${p.hint}</div>
+        <span class="hint-link" onclick="this.style.display='none';this.nextElementSibling.style.display='block'">Show hint</span><div class="hint">${p.hint}</div>
         <div class="feedback" id="fb-${i}"></div>
         <span class="reveal-link" id="rl-${i}" onclick="reveal(${i})">Show solution</span>
         <div class="revealed-answer" id="ra-${i}"></div>

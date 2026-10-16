@@ -34,6 +34,8 @@
   .card-body{padding:14px 16px}
   .card-meta{font-family:sans-serif;font-size:12px;color:#888;margin-bottom:4px}
   .card-expr{font-size:17px;margin-bottom:12px;line-height:2.2;overflow-x:auto}
+  .card-expr svg{max-width:100%;height:auto}
+  .card-question{font-family:sans-serif;font-size:14px;font-weight:700;color:#1e3a5c;margin-bottom:10px}
   .katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}
   .input-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
   .ans-input{font-family:'Courier New',monospace;font-size:14px;border:1px solid #ccc;
@@ -45,7 +47,8 @@
   .check-btn{font-family:sans-serif;font-size:13px;background:#1a1a1a;color:#fff;
     border:none;border-radius:6px;padding:7px 14px;cursor:pointer}
   .check-btn:hover{background:#333}.check-btn:disabled{background:#aaa;cursor:default}
-  .hint{font-family:sans-serif;font-size:12px;color:#888;margin-top:7px}
+  .hint{font-family:sans-serif;font-size:12px;color:#888;margin-top:5px;display:none}
+  .hint-link{font-family:sans-serif;font-size:12px;color:#aaa;cursor:pointer;text-decoration:underline;margin-top:7px;display:inline-block}.hint-link:hover{color:#666}
   .feedback{font-family:sans-serif;font-size:13px;margin-top:10px;padding:8px 12px;
     border-radius:6px;display:none;line-height:1.5}
   .feedback.correct{display:block;background:#eaf5ea;color:#1a5a1a}
@@ -57,9 +60,6 @@
   .revealed-answer{display:none;margin-top:8px;font-family:sans-serif;font-size:13px;
     color:#444;background:#f5f3ef;border-radius:6px;padding:8px 11px;line-height:1.8;overflow-x:auto}
   code{font-family:'Courier New',monospace;background:#f0ede7;padding:1px 5px;border-radius:3px;font-size:12px}
-
-
-.hint{display:none!important}
 </style>
 </head>
 <body>
@@ -91,7 +91,7 @@
   <div class="section">
     <div class="section-title">Practice Problems</div>
     <p style="font-family:sans-serif;font-size:13px;color:#666;margin-bottom:1rem;">
-      Enter <code>crosses</code> or <code>touches</code>; <code>up</code> or <code>down</code>; <code>positive</code> or <code>negative</code>; integers; or <code>(0,c)</code> for intercepts.
+      Enter <code>crosses</code> or <code>touches</code>; <code>up</code> or <code>down</code>; <code>positive</code> or <code>negative</code>; integers for counts and intercepts.
       Press <strong>Check</strong> or hit Enter.
     </p>
     <div class="score-bar">
@@ -137,170 +137,130 @@ function addT(n, v) {
 
 // ── Problem generators (section-specific, injected below) ─────────────────────
 
+const W=300,H=180,XMN=-4,XMX=4,YMN=-12,YMX=12;
+function tx(x){return (x-XMN)/(XMX-XMN)*W;}
+function ty(y){return H-(y-YMN)/(YMX-YMN)*H;}
+function gridAxes(){
+  let s='<rect width="'+W+'" height="'+H+'" fill="#fafaf8" rx="3"/>';
+  for(let x=XMN+1;x<XMX;x++){
+    const px=tx(x).toFixed(1);
+    s+='<line x1="'+px+'" y1="0" x2="'+px+'" y2="'+H+'" stroke="#ddd" stroke-width="0.5"/>';
+    if(x!==0)s+='<text x="'+px+'" y="'+(ty(0)+12).toFixed(1)+'" font-size="9" text-anchor="middle" fill="#888">'+x+'</text>';
+  }
+  for(let y=YMN+2;y<YMX;y+=2){
+    const py=ty(y).toFixed(1);
+    s+='<line x1="0" y1="'+py+'" x2="'+W+'" y2="'+py+'" stroke="#ddd" stroke-width="0.5"/>';
+    if(y!==0)s+='<text x="'+(tx(0)-5).toFixed(1)+'" y="'+(parseFloat(py)+3).toFixed(1)+'" font-size="9" text-anchor="end" fill="#888">'+y+'</text>';
+  }
+  s+='<line x1="0" y1="'+ty(0).toFixed(1)+'" x2="'+W+'" y2="'+ty(0).toFixed(1)+'" stroke="#555" stroke-width="1.2"/>';
+  s+='<line x1="'+tx(0).toFixed(1)+'" y1="0" x2="'+tx(0).toFixed(1)+'" y2="'+H+'" stroke="#555" stroke-width="1.2"/>';
+  return s;
+}
+function curvePts(fn){
+  let pts=[],s='';
+  for(let i=0;i<=400;i++){
+    const x=XMN+i*(XMX-XMN)/400,y=fn(x);
+    if(y<YMN-0.5||y>YMX+0.5){if(pts.length){s+='<polyline points="'+pts.join(' ')+'" fill="none" stroke="#1e3a5c" stroke-width="2.2" stroke-linejoin="round"/>';pts=[];}continue;}
+    pts.push(tx(x).toFixed(1)+','+ty(y).toFixed(1));
+  }
+  if(pts.length)s+='<polyline points="'+pts.join(' ')+'" fill="none" stroke="#1e3a5c" stroke-width="2.2" stroke-linejoin="round"/>';
+  return s;
+}
+function dot(x,y,col){return '<circle cx="'+tx(x).toFixed(1)+'" cy="'+ty(y).toFixed(1)+'" r="4" fill="'+(col||'#1e3a5c')+'" stroke="white" stroke-width="1"/>';}
+function zeroMark(x){return '<circle cx="'+tx(x).toFixed(1)+'" cy="'+ty(0).toFixed(1)+'" r="4" fill="#1e3a5c" stroke="white" stroke-width="1"/>';}
+function goldZero(x){
+  return '<circle cx="'+tx(x).toFixed(1)+'" cy="'+ty(0).toFixed(1)+'" r="5" fill="#7a5c1e" stroke="white" stroke-width="1.5"/>'+
+    '<text x="'+tx(x).toFixed(1)+'" y="'+(ty(0)+16).toFixed(1)+'" font-size="9" text-anchor="middle" fill="#7a5c1e">x='+x+'</text>';
+}
+function markX(c,fn){
+  return '<line x1="'+tx(c).toFixed(1)+'" y1="0" x2="'+tx(c).toFixed(1)+'" y2="'+H+'" stroke="#7a5c1e" stroke-width="1.2" stroke-dasharray="4,3"/>'+
+    '<circle cx="'+tx(c).toFixed(1)+'" cy="'+ty(fn(c)).toFixed(1)+'" r="4" fill="#7a5c1e" stroke="white" stroke-width="1"/>'+
+    '<text x="'+tx(c).toFixed(1)+'" y="'+(H-4)+'" font-size="9" text-anchor="middle" fill="#7a5c1e">x='+c+'</text>';
+}
+function svgQ(inner,q){
+  return '<svg width="'+W+'" height="'+H+'" viewBox="0 0 '+W+' '+H+'" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:0 auto">'+inner+'</svg><p style="font-family:sans-serif;font-size:13px;text-align:center;margin-top:6px;color:#1a1a1a">'+q+'</p>';
+}
 function gen1(){
-  // Cross or touch at a zero — odd multiplicity crosses, even touches
-  const cases = [
-    {expr:'(x-2)^3(x+1)',   zero:2,  mult:3, beh:'crosses'},
-    {expr:'(x+3)^2(x-1)',   zero:-3, mult:2, beh:'touches'},
-    {expr:'(x-1)^4(x+2)',   zero:1,  mult:4, beh:'touches'},
-    {expr:'(x-4)(x+2)^3',   zero:4,  mult:1, beh:'crosses'},
-    {expr:'(x+1)^2(x-3)^2', zero:-1, mult:2, beh:'touches'},
-    {expr:'(x-2)^5(x+1)',   zero:2,  mult:5, beh:'crosses'},
-    {expr:'2(x+3)^3(x-1)',  zero:-3, mult:3, beh:'crosses'},
-    {expr:'(x-1)^2(x+4)^4', zero:1,  mult:2, beh:'touches'},
-  ];
-  const {expr,zero,mult,beh} = choose(cases);
-  return {
-    latex: `f(x)=${expr}.\\quad\\text{At }x=${zero},\\text{ graph crosses or touches?}`,
-    answer: [beh],
-    hint: 'What does the parity of a zero\'s multiplicity reveal about the graph\'s behavior there?',
-    step: `\\text{Multiplicity of }x=${zero}\\text{ is }${mult}\\text{ (${mult%2===1?'odd':'even'})}\\Rightarrow\\text{graph }${beh}`
-  };
+  const r0=choose([-3,-2]),r1=choose([-1,0]),r2=choose([1,2]);
+  const fn=x=>(x-r0)*(x-r1)*(x-r2);
+  const inner=gridAxes()+curvePts(fn)+zeroMark(r0)+zeroMark(r1)+zeroMark(r2);
+  return {svg:svgQ(inner,'How many x-intercepts does this polynomial have?'),
+    answer:['3'],
+    hint:'Count the places where the graph crosses or touches the x-axis.',
+    step:'\\text{Three distinct zeros at }x='+r0+', '+r1+', '+r2};
 }
-
 function gen2(){
-  // y-intercept from factored form f(x) = a(x-r1)^m1 (x-r2)^m2 ...
-  const cases = [
-    {expr:'(x-1)^2(x+2)',          yint: (-1)**2*(2)},
-    {expr:'2(x-3)(x+1)^2',         yint: 2*(-3)*(1)**2},
-    {expr:'-(x+2)^2(x-1)',          yint: -(2**2)*(-1)},
-    {expr:'(x-2)^3(x+1)',           yint: (-2)**3*(1)},
-    {expr:'3(x-1)(x+3)^2',          yint: 3*(-1)*(3)**2},
-    {expr:'-2(x+1)^2(x-2)',         yint: -2*(1)**2*(-2)},
-    {expr:'(x+3)(x-1)^2(x+2)',      yint: (3)*(-1)**2*(2)},
-    {expr:'(x-4)^2(x+2)^2',         yint: (-4)**2*(2)**2},
-  ];
-  const {expr,yint} = choose(cases);
-  return {
-    latex: `f(x)=${expr}.\\quad\\text{y-intercept}=`,
-    answer: [`(0,${yint})`, `(0, ${yint})`],
-    hint: 'What does each factor simplify to when x equals zero?',
-    step: `f(0)=${expr.replace(/x/g,'(0)')}=${yint}.\\;\\text{y-intercept: }(0,${yint})`
-  };
+  const r1=choose([-2,-1,1,2]);
+  const r2opts=[-3,-2,-1,0,1,2,3].filter(x=>x!==r1);
+  const r2=choose(r2opts);
+  const fn=x=>(x-r1)*(x-r1)*(x-r2);
+  const inner=gridAxes()+curvePts(fn)+zeroMark(r2)+goldZero(r1);
+  return {svg:svgQ(inner,'Does the graph cross or touch the x-axis at the marked zero (x='+r1+')?'),
+    answer:['touches'],
+    hint:'What kind of multiplicity — even or odd — causes the graph to bounce at a zero?',
+    step:'x='+r1+' \\text{ has multiplicity 2 (even) }\\Rightarrow \\text{touches}'};
 }
-
 function gen3(){
-  // End behavior as x→+∞
-  const cases = [
-    {lc:2,  deg:3, ans:'up',   label:'odd,pos'},
-    {lc:-1, deg:3, ans:'down', label:'odd,neg'},
-    {lc:3,  deg:4, ans:'up',   label:'even,pos'},
-    {lc:-2, deg:4, ans:'down', label:'even,neg'},
-    {lc:1,  deg:5, ans:'up',   label:'odd,pos'},
-    {lc:-3, deg:5, ans:'down', label:'odd,neg'},
-    {lc:4,  deg:6, ans:'up',   label:'even,pos'},
-    {lc:-1, deg:6, ans:'down', label:'even,neg'},
-  ];
-  const {lc,deg,ans} = choose(cases);
-  return {
-    latex: `f(x)=${lc}x^{${deg}}+\\cdots\\quad\\text{As }x\\to+\\infty:\\;`,
-    answer: [ans, (ans==='up'?'+inf':'-inf')],
-    hint: 'For very large positive x, which term of the polynomial controls the output?',
-    step: `\\text{Leading term }${lc}x^{${deg}}.\\;${lc}>0?\\text{pos}:\\text{neg},\\;\\text{degree }${deg}.\\;f\\to${ans==='up'?'+\\infty':'-\\infty'}`
-  };
+  const r0=choose([-3,-2]),r1=choose([-1,0]),r2=choose([1,2]);
+  const fn=x=>(x-r0)*(x-r1)*(x-r2);
+  const marked=choose([r0,r1,r2]);
+  const others=[r0,r1,r2].filter(r=>r!==marked);
+  const inner=gridAxes()+curvePts(fn)+others.map(r=>zeroMark(r)).join('')+goldZero(marked);
+  return {svg:svgQ(inner,'Does the graph cross or touch the x-axis at the marked zero (x='+marked+')?'),
+    answer:['crosses'],
+    hint:'What kind of multiplicity — even or odd — causes the graph to pass through a zero?',
+    step:'x='+marked+' \\text{ has multiplicity 1 (odd) }\\Rightarrow \\text{crosses}'};
 }
-
 function gen4(){
-  // End behavior as x→-∞
-  const cases = [
-    {lc:2,  deg:3, ans:'down'},
-    {lc:-1, deg:3, ans:'up'},
-    {lc:3,  deg:4, ans:'up'},
-    {lc:-2, deg:4, ans:'down'},
-    {lc:1,  deg:5, ans:'down'},
-    {lc:-3, deg:5, ans:'up'},
-    {lc:4,  deg:6, ans:'up'},
-    {lc:-1, deg:6, ans:'down'},
-  ];
-  const {lc,deg,ans} = choose(cases);
-  return {
-    latex: `f(x)=${lc}x^{${deg}}+\\cdots\\quad\\text{As }x\\to-\\infty:\\;`,
-    answer: [ans, (ans==='up'?'+inf':'-inf')],
-    hint: 'For large negative x, does the degree being odd or even change the sign of the leading term?',
-    step: `\\text{Leading term }${lc}x^{${deg}}.\\;\\text{Degree }${deg%2===0?'even':'odd'}:\\;f\\to${ans==='up'?'+\\infty':'-\\infty'}`
-  };
+  const r0=choose([-3,-2]),r1=choose([-1,0]),r2=choose([1,2]);
+  const fn=x=>(x-r0)*(x-r1)*(x-r2);
+  const inner=gridAxes()+curvePts(fn)+[r0,r1,r2].map(r=>zeroMark(r)).join('');
+  return {svg:svgQ(inner,'As x → +∞, does this polynomial go up or down?'),
+    answer:['up'],
+    hint:'What does a positive leading coefficient with odd degree tell you about right-end behavior?',
+    step:'\\text{Positive leading coeff, odd degree }\\Rightarrow \\text{up as }x\\to+\\infty'};
 }
-
 function gen5(){
-  // Sign of f(x) at a test point between zeros — positive or negative
-  // Use degree-2 factored form for simplicity
-  const r1 = choose([-4,-3,-2,-1]);
-  const r2 = choose([1,2,3,4]);
-  const a  = choose([-2,-1,1,2]);
-  // test point between r1 and r2
-  const test = Math.round((r1 + r2) / 2);
-  const val = a * (test - r1) * (test - r2);
-  const ans = val > 0 ? 'positive' : 'negative';
-  const r1S = r1 >= 0 ? `-${r1}` : `+${-r1}`;
-  const r2S = r2 >= 0 ? `-${r2}` : `+${-r2}`;
-  return {
-    latex: `f(x)=${fc(a)}(x${r1S})(x${r2S}).\\quad\\text{Is }f(${test})\\text{ positive or negative?}`,
-    answer: [ans],
-    hint: 'What does the sign of each factor at a test point tell you about the function\'s value there?',
-    step: `f(${test})=${fc(a)}(${test}${r1S})(${test}${r2S})=${val}${val>0?'>0':' < 0'}\\Rightarrow\\text{${ans}}`
-  };
+  const r0=choose([-3,-2]),r1=choose([-1,0]),r2=choose([1,2]);
+  const fn=x=>-(x-r0)*(x-r1)*(x-r2);
+  const inner=gridAxes()+curvePts(fn)+[r0,r1,r2].map(r=>zeroMark(r)).join('');
+  return {svg:svgQ(inner,'As x → +∞, does this polynomial go up or down?'),
+    answer:['down'],
+    hint:'What does a negative leading coefficient with odd degree tell you about right-end behavior?',
+    step:'\\text{Negative leading coeff, odd degree }\\Rightarrow \\text{down as }x\\to+\\infty'};
 }
-
 function gen6(){
-  // Minimum possible degree from zeros and multiplicities
-  const cases = [
-    {desc:'zeros at x=1 (mult 2) and x=-3 (mult 1)', min:3},
-    {desc:'zeros at x=0 (mult 3) and x=2 (mult 2)', min:5},
-    {desc:'zeros at x=-1 (mult 2) and x=4 (mult 2)', min:4},
-    {desc:'zeros at x=1 (mult 4) and x=-2 (mult 1) and x=3 (mult 1)', min:6},
-    {desc:'zeros at x=0 (mult 1) and x=-1 (mult 3)', min:4},
-    {desc:'zeros at x=2 (mult 2) and x=-2 (mult 2) and x=1 (mult 1)', min:5},
-  ];
-  const {desc,min} = choose(cases);
-  return {
-    latex: `\\text{${desc}.}\\quad\\text{Min degree}=`,
-    answer: [String(min)],
-    hint: 'How do the multiplicities of all known zeros combine to give a lower bound on the degree?',
-    step: `\\text{Sum of multiplicities}=${min}\\Rightarrow\\text{min degree}=${min}`
-  };
+  const r1=choose([-2,-1]),r2=choose([1,2]);
+  const fn=x=>(x-r1)*(x-r1)*(x-r2)*(x-r2);
+  const inner=gridAxes()+curvePts(fn)+zeroMark(r1)+zeroMark(r2);
+  return {svg:svgQ(inner,'How many x-intercepts does this polynomial have?'),
+    answer:['2'],
+    hint:'How many distinct values of x make this function equal zero?',
+    step:'\\text{Two distinct zeros at }x='+r1+', '+r2+' \\text{ (each with even mult.)}'};
 }
-
 function gen7(){
-  // Number of distinct x-intercepts from factored form
-  const cases = [
-    {expr:'(x-1)^2(x+3)(x-2)',          n:3},
-    {expr:'x^2(x-4)^3',                  n:2},
-    {expr:'(x+1)(x-1)(x+2)(x-3)',        n:4},
-    {expr:'(x-2)^4(x+1)^2',             n:2},
-    {expr:'3(x-1)(x+2)(x-3)(x+4)',       n:4},
-    {expr:'(x-5)^3(x+5)^3',             n:2},
-    {expr:'(x-1)^2(x+2)^2(x-3)',         n:3},
-  ];
-  const {expr,n} = choose(cases);
-  return {
-    latex: `f(x)=${expr}.\\quad\\text{Number of distinct x-intercepts}=`,
-    answer: [String(n)],
-    hint: 'In factored form, how many different zero-values does the function have?',
-    step: `\\text{Distinct factors (by zero value): }${n}`
-  };
+  const r0=choose([-3,-2]),r1=choose([-1,0]),r2=choose([1,2]);
+  const fn=x=>(x-r0)*(x-r1)*(x-r2);
+  const cands=[];for(let x=r1+1;x<r2;x++)if(x===Math.round(x))cands.push(x);
+  const c=cands.length?choose(cands):r1+1;
+  const fVal=fn(c);
+  const inner=gridAxes()+curvePts(fn)+[r0,r1,r2].map(r=>zeroMark(r)).join('')+markX(c,fn);
+  return {svg:svgQ(inner,'Is the function positive or negative at the marked x-value?'),
+    answer:[fVal>0?'positive':'negative'],
+    hint:'Is the marked point on the curve above or below the x-axis?',
+    step:'f('+c+')='+fVal.toFixed(0)+(fVal>0?' > 0':' < 0')+' \\Rightarrow \\text{'+(fVal>0?'positive':'negative')+'}'};
 }
-
 function gen8(){
-  // Cross or touch — different pool from gen1, focuses on even multiplicity
-  const cases = [
-    {expr:'-3(x-1)^2(x+2)',    zero:-2, mult:1, beh:'crosses'},
-    {expr:'(x+3)^4(x-2)^3',   zero:-3, mult:4, beh:'touches'},
-    {expr:'(x-5)^2(x+1)^3',   zero:5,  mult:2, beh:'touches'},
-    {expr:'(x-1)^3(x+4)^2',   zero:-4, mult:2, beh:'touches'},
-    {expr:'(x+2)^5(x-3)',      zero:-2, mult:5, beh:'crosses'},
-    {expr:'4(x-2)^2(x+3)^4',  zero:2,  mult:2, beh:'touches'},
-    {expr:'(x-6)(x+1)^4',     zero:6,  mult:1, beh:'crosses'},
-  ];
-  const {expr,zero,mult,beh} = choose(cases);
-  return {
-    latex: `f(x)=${expr}.\\quad\\text{At }x=${zero},\\text{ graph crosses or touches?}`,
-    answer: [beh],
-    hint: 'Does an even or odd multiplicity cause the graph to change sign at that zero?',
-    step: `\\text{Multiplicity at }x=${zero}\\text{ is }${mult}\\text{ (${mult%2===1?'odd':'even'})}\\Rightarrow\\text{graph }${beh}`
-  };
+  const r0=choose([-2,-1]),r2=choose([1,2]);
+  const fn=x=>(x-r0)*x*(x-r2);
+  const yint=fn(0);
+  const inner=gridAxes()+curvePts(fn)+[r0,0,r2].map(r=>zeroMark(r)).join('')+dot(0,yint);
+  return {svg:svgQ(inner,'What is the y-intercept of this polynomial?'),
+    answer:[String(Math.round(yint))],
+    hint:'Read the y-value where the curve crosses the vertical axis.',
+    step:'f(0)=(0-('+r0+'))\\cdot 0\\cdot(0-'+r2+')=0'};
 }
-
-const GENERATORS = [gen1, gen2, gen3, gen4, gen5, gen6, gen7, gen8];
+const GENERATORS=[gen1,gen2,gen3,gen4,gen5,gen6,gen7,gen8];
 
 
 // ── State ─────────────────────────────────────────────────────────────────────
@@ -316,7 +276,7 @@ function norm(s) {
 function ok(user, acc) { return acc.some(a => norm(user) === norm(a)); }
 
 function init() {
-  ACTIVE    = shuffle(GENERATORS.map(gen => gen()));
+  ACTIVE    = shuffle(GENERATORS).slice(0, Math.min(8, GENERATORS.length)).map(gen => gen());
   correct   = 0;
   flags     = Array(GENERATORS.length).fill(false);
   attempted = Array(GENERATORS.length).fill(false);
@@ -329,15 +289,17 @@ function buildCards() {
   ACTIVE.forEach((p, i) => {
     const div = document.createElement('div');
     div.className = 'card'; div.id = 'card-' + i;
+    const qLine = p.q ? `<div class="card-question">${p.q}</div>` : '';
     div.innerHTML =
       `<div class="card-body">
         <div class="card-meta">Problem ${i + 1}</div>
         <div class="card-expr" id="expr-${i}"></div>
+        ${qLine}
         <div class="input-row">
           <input class="ans-input" id="ai-${i}" placeholder="answer" />
           <button class="check-btn" id="chk-${i}" onclick="check(${i})">Check</button>
         </div>
-        <div class="hint">${p.hint}</div>
+        <span class="hint-link" onclick="this.style.display='none';this.nextElementSibling.style.display='block'">Show hint</span><div class="hint">${p.hint}</div>
         <div class="feedback" id="fb-${i}"></div>
         <span class="reveal-link" id="rl-${i}" onclick="reveal(${i})">Show solution</span>
         <div class="revealed-answer" id="ra-${i}"></div>

@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Graphing Exponential Functions &mdash; Practice</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
 <style>
   *{box-sizing:border-box;margin:0;padding:0}
   body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.7}
@@ -33,7 +33,8 @@
   .card.correct{border-color:#3a7a3a}.card.wrong{border-color:#b03030}.card.peeked{border-color:#b8860b}
   .card-body{padding:14px 16px}
   .card-meta{font-family:sans-serif;font-size:12px;color:#888;margin-bottom:4px}
-  .card-expr{font-size:17px;margin-bottom:12px;line-height:2.2;overflow-x:auto}
+  .card-expr{font-size:17px;margin-bottom:12px;line-height:1.5;overflow-wrap:break-word;white-space:normal;overflow-x:auto}
+  .card-expr svg{max-width:100%;height:auto}
   .katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}
   .input-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
   .ans-input{font-family:'Courier New',monospace;font-size:14px;border:1px solid #ccc;
@@ -45,7 +46,8 @@
   .check-btn{font-family:sans-serif;font-size:13px;background:#1a1a1a;color:#fff;
     border:none;border-radius:6px;padding:7px 14px;cursor:pointer}
   .check-btn:hover{background:#333}.check-btn:disabled{background:#aaa;cursor:default}
-  .hint{font-family:sans-serif;font-size:12px;color:#888;margin-top:7px}
+  .hint{font-family:sans-serif;font-size:12px;color:#888;margin-top:5px;display:none}
+  .hint-link{font-family:sans-serif;font-size:12px;color:#aaa;cursor:pointer;text-decoration:underline;margin-top:7px;display:inline-block}.hint-link:hover{color:#666}
   .feedback{font-family:sans-serif;font-size:13px;margin-top:10px;padding:8px 12px;
     border-radius:6px;display:none;line-height:1.5}
   .feedback.correct{display:block;background:#eaf5ea;color:#1a5a1a}
@@ -56,10 +58,9 @@
   .reveal-link:hover{color:#555}
   .revealed-answer{display:none;margin-top:8px;font-family:sans-serif;font-size:13px;
     color:#444;background:#f5f3ef;border-radius:6px;padding:8px 11px;line-height:1.8;overflow-x:auto}
+  .interval-hint{font-family:sans-serif;font-size:11px;color:#1e3a5c;margin-top:4px;
+    padding:2px 7px;background:#eef3f9;border-radius:4px;display:inline-block}
   code{font-family:'Courier New',monospace;background:#f0ede7;padding:1px 5px;border-radius:3px;font-size:12px}
-
-
-.hint{display:none!important}
 </style>
 </head>
 <body>
@@ -91,7 +92,7 @@
   <div class="section">
     <div class="section-title">Practice Problems</div>
     <p style="font-family:sans-serif;font-size:13px;color:#666;margin-bottom:1rem;">
-      Most answers are integers — enter the value. For growth/decay: <code>growth</code> or <code>decay</code>. For asymptote: enter the number. For the larger-value question enter the expression, e.g. <code>2^x</code>.
+      Enter the number for y-intercept and asymptote. Enter <code>growth</code> or <code>decay</code>; <code>increasing</code> or <code>decreasing</code>.
       Press <strong>Check</strong> or hit Enter.
     </p>
     <div class="score-bar">
@@ -137,125 +138,126 @@ function addT(n, v) {
 
 // ── Problem generators (section-specific, injected below) ─────────────────────
 
-// gen1: y-intercept of y = a·b^x
-function gen1() {
-  const a = rInt(9) + 2;
-  const b = choose([2, 3, 4, 5]);
-  return {
-    latex:  `y = ${a} \\cdot ${b}^x.\\quad \\text{What is the } y\\text{-intercept?}`,
-    answer: [String(a)],
-    hint:   'What is the y-intercept of an exponential function in terms of its parameters?',
-    step:   `x=0:\\;y=${a}\\cdot${b}^0=${a}\\cdot1=${a}`
-  };
+const EW=300,EH=180,EXN=-3,EXX=3,EYN=-1,EYX=14;
+function etx(x){return (x-EXN)/(EXX-EXN)*EW;}
+function ety(y){return EH-(y-EYN)/(EYX-EYN)*EH;}
+function expAxes(){
+  let s='<rect width="'+EW+'" height="'+EH+'" fill="#fafaf8" rx="3"/>';
+  for(let x=EXN+1;x<EXX;x++){
+    const px=etx(x).toFixed(1);
+    s+='<line x1="'+px+'" y1="0" x2="'+px+'" y2="'+EH+'" stroke="#ddd" stroke-width="0.5"/>';
+    s+='<text x="'+px+'" y="'+(ety(0)+12).toFixed(1)+'" font-size="9" text-anchor="middle" fill="#888">'+x+'</text>';
+  }
+  for(let y=0;y<=EYX;y+=2){
+    const py=ety(y).toFixed(1);
+    s+='<line x1="0" y1="'+py+'" x2="'+EW+'" y2="'+py+'" stroke="#ddd" stroke-width="0.5"/>';
+    s+='<text x="'+(etx(0)-5).toFixed(1)+'" y="'+(parseFloat(py)+3).toFixed(1)+'" font-size="9" text-anchor="end" fill="#888">'+y+'</text>';
+  }
+  s+='<line x1="0" y1="'+ety(0).toFixed(1)+'" x2="'+EW+'" y2="'+ety(0).toFixed(1)+'" stroke="#555" stroke-width="1.2"/>';
+  s+='<line x1="'+etx(0).toFixed(1)+'" y1="0" x2="'+etx(0).toFixed(1)+'" y2="'+EH+'" stroke="#555" stroke-width="1.2"/>';
+  return s;
 }
-
-// gen2: next-step — multiply current y by b
-function gen2() {
-  const b = choose([2, 3, 4]);
-  const x0 = rInt(3) + 1;
-  const y0 = (rInt(4) + 1) * b;   // y0 divisible by b so y1 is clean
-  const y1 = y0 * b;
-  return {
-    latex:  `y = a\\cdot${b}^x \\text{ passes through }(${x0},\\,${y0}).\\quad \\text{Find }y\\text{ at }x=${x0+1}.`,
-    answer: [String(y1)],
-    hint:   'In an exponential function, what happens to the output each time the input increases by 1?',
-    step:   `${y0}\\cdot${b}=${y1}`
-  };
+function expCurve(fn){
+  let pts=[],s='';
+  for(let i=0;i<=300;i++){
+    const x=EXN+i*(EXX-EXN)/300,y=fn(x);
+    if(y<EYN-0.2||y>EYX+0.2){if(pts.length){s+='<polyline points="'+pts.join(' ')+'" fill="none" stroke="#1e3a5c" stroke-width="2.2" stroke-linejoin="round"/>';pts=[];}continue;}
+    pts.push(etx(x).toFixed(1)+','+ety(y).toFixed(1));
+  }
+  if(pts.length)s+='<polyline points="'+pts.join(' ')+'" fill="none" stroke="#1e3a5c" stroke-width="2.2" stroke-linejoin="round"/>';
+  return s;
 }
-
-// gen3: growth or decay — text answer
-function gen3() {
-  const isGrowth = Math.random() < 0.5;
-  const b = isGrowth ? choose([2, 3, 4, 5]) : choose([2, 3, 4]);
-  const bLabel = isGrowth ? String(b) : `\\tfrac{1}{${b}}`;
-  const answer = isGrowth ? 'growth' : 'decay';
-  return {
-    latex:  `y = a \\cdot \\left(${bLabel}\\right)^x.\\quad \\text{Is this growth or decay?}`,
-    answer: [answer],
-    hint:   'How does the size of the base determine whether an exponential curve rises or falls?',
-    step:   isGrowth ? `b=${b}>1\\Rightarrow\\text{growth}` : `b=\\tfrac{1}{${b}}<1\\Rightarrow\\text{decay}`
-  };
+function edot(x,y,col){return '<circle cx="'+etx(x).toFixed(1)+'" cy="'+ety(y).toFixed(1)+'" r="5" fill="'+(col||'#1e3a5c')+'" stroke="white" stroke-width="1.5"/>';}
+function haDash(){
+  return '<line x1="0" y1="'+ety(0).toFixed(1)+'" x2="'+EW+'" y2="'+ety(0).toFixed(1)+'" stroke="#7a5c1e" stroke-width="1.5" stroke-dasharray="6,4"/>'+
+    '<text x="'+(EW-4)+'" y="'+(ety(0)-4).toFixed(1)+'" font-size="9" text-anchor="end" fill="#7a5c1e">y=0</text>';
 }
-
-// gen4: horizontal asymptote — always 0
-function gen4() {
-  const a = rInt(8) + 2;
-  const b = choose([2, 3, 5]);
-  return {
-    latex:  `y = ${a}\\cdot${b}^x.\\quad \\text{What is the horizontal asymptote? (Enter the }y\\text{-value.)}`,
-    answer: ['0'],
-    hint:   'What is the horizontal asymptote of an exponential function?',
-    step:   `y=0\\text{ (the }x\\text{-axis)}`
-  };
+function esvgQ(inner,q){
+  return '<svg width="'+EW+'" height="'+EH+'" viewBox="0 0 '+EW+' '+EH+'" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:0 auto">'+inner+'</svg><p style="font-family:sans-serif;font-size:13px;text-align:center;margin-top:6px;color:#1a1a1a">'+q+'</p>';
 }
-
-// gen5: evaluate at x=0 — confirms y-intercept = a
-function gen5() {
-  const a = rInt(8) + 2;
-  const b = choose([2, 3, 4]);
-  return {
-    latex:  `y = ${a}\\cdot${b}^x.\\quad \\text{Find }y\\text{ when }x=0.`,
-    answer: [String(a)],
-    hint:   'What is the value of any non-zero base raised to the power zero?',
-    step:   `y=${a}\\cdot${b}^0=${a}\\cdot1=${a}`
-  };
+function gen1(){
+  const a=choose([2,3,4]),b=2,fn=x=>a*Math.pow(b,x);
+  const inner=expAxes()+expCurve(fn)+edot(0,a,'#1e3a5c');
+  return {svg:esvgQ(inner,'What is the y-intercept of this exponential function?'),
+    answer:[String(a),'(0,'+a+')'],
+    hint:'Read the y-value where the curve crosses the y-axis — at x = 0.',
+    step:'f(0)='+a+'\\cdot 2^0='+a+'\\cdot 1='+a};
 }
-
-// gen6: table value — evaluate at x=1,2,3
-function gen6() {
-  const a = rInt(5) + 1;
-  const b = choose([2, 3]);
-  const x = rInt(3) + 1;
-  const val = a * Math.pow(b, x);
-  return {
-    latex:  `y = ${a}\\cdot${b}^x.\\quad \\text{Find }y\\text{ when }x = ${x}.`,
-    answer: [String(val)],
-    hint:   'What does the exponent in an exponential expression tell you to do with the base?',
-    step:   `y=${a}\\cdot${b}^{${x}}=${a}\\cdot${Math.pow(b,x)}=${val}`
-  };
+function gen2(){
+  const a=choose([4,6,8]),fn=x=>a*Math.pow(0.5,x);
+  const inner=expAxes()+expCurve(fn)+edot(0,a,'#1e3a5c');
+  return {svg:esvgQ(inner,'What is the y-intercept of this exponential function?'),
+    answer:[String(a),'(0,'+a+')'],
+    hint:'Read the y-value where the curve crosses the y-axis — at x = 0.',
+    step:'f(0)='+a+'\\cdot (\\tfrac{1}{2})^0='+a};
 }
-
-// gen7: find b from two consecutive table values y1 = y0·b
-function gen7() {
-  const b = choose([2, 3, 4, 5]);
-  const y0 = (rInt(4) + 1);
-  const y1 = y0 * b;
-  return {
-    latex:  `\\text{An exponential function has }y(0)=${y0}\\text{ and }y(1)=${y1}.\\quad\\text{What is the base }b?`,
-    answer: [String(b)],
-    hint:   'What is the ratio of consecutive outputs in an exponential function?',
-    step:   `b=\\frac{${y1}}{${y0}}=${b}`
-  };
+function gen3(){
+  const a=choose([1,2,3]),b=choose([2,3]),fn=x=>a*Math.pow(b,x);
+  const inner=expAxes()+expCurve(fn)+haDash();
+  return {svg:esvgQ(inner,'Is this an example of exponential growth or decay?'),
+    answer:['growth'],
+    hint:'Is the curve rising or falling as x increases?',
+    step:'b='+b+'>1 \\Rightarrow \\text{exponential growth}'};
 }
-
-// gen8: which is larger for big x — exponential vs linear
-function gen8() {
-  const c = rInt(8) + 2;
-  const b = choose([2, 3]);
-  const x = rInt(3) + 4;   // x = 4..6
-  const expVal = Math.pow(b, x);
-  const linVal = c * x;
-  return {
-    latex:  `\\text{At }x=${x},\\text{ which is larger: }${b}^x\\text{ or }${c}x?`,
-    answer: [String(b) + '^x'],
-    hint:   'How does exponential growth compare to linear growth for large inputs?',
-    step:   `${b}^{${x}}=${expVal},\\quad ${c}\\cdot${x}=${linVal};\\quad ${expVal}>$${linVal}`
-  };
+function gen4(){
+  const a=choose([4,6,8]),fn=x=>a*Math.pow(0.5,x);
+  const inner=expAxes()+expCurve(fn)+haDash();
+  return {svg:esvgQ(inner,'Is this an example of exponential growth or decay?'),
+    answer:['decay'],
+    hint:'Is the curve rising or falling as x increases?',
+    step:'b=\\tfrac{1}{2}<1 \\Rightarrow \\text{exponential decay}'};
 }
-
-const GENERATORS = [gen1, gen2, gen3, gen4, gen5, gen6, gen7, gen8];
+function gen5(){
+  const a=choose([1,2,3]),b=choose([2,3]),fn=x=>a*Math.pow(b,x);
+  const inner=expAxes()+expCurve(fn);
+  return {svg:esvgQ(inner,'Is this function increasing or decreasing?'),
+    answer:['increasing'],
+    hint:'Does the curve go higher or lower as you move from left to right?',
+    step:'b='+b+'>1 \\Rightarrow \\text{increasing on }\\mathbb{R}'};
+}
+function gen6(){
+  const a=choose([4,5,6]),fn=x=>a*Math.pow(0.5,x);
+  const inner=expAxes()+expCurve(fn);
+  return {svg:esvgQ(inner,'Is this function increasing or decreasing?'),
+    answer:['decreasing'],
+    hint:'Does the curve go higher or lower as you move from left to right?',
+    step:'b=\\tfrac{1}{2}<1 \\Rightarrow \\text{decreasing on }\\mathbb{R}'};
+}
+function gen7(){
+  const a=choose([2,3,4]),b=choose([2,3]),fn=x=>a*Math.pow(b,x);
+  const inner=expAxes()+expCurve(fn)+haDash();
+  return {svg:esvgQ(inner,'What is the horizontal asymptote of this function?'),
+    answer:['0','y=0'],
+    hint:'Which horizontal line does the graph approach as x decreases without bound?',
+    step:'a\\cdot b^x\\to 0 \\text{ as }x\\to-\\infty, \\text{ HA: }y=0'};
+}
+function gen8(){
+  const a=choose([4,6,8]),fn=x=>a*Math.pow(0.5,x);
+  const inner=expAxes()+expCurve(fn)+haDash();
+  return {svg:esvgQ(inner,'What is the horizontal asymptote of this function?'),
+    answer:['0','y=0'],
+    hint:'Which horizontal line does the curve approach as x increases without bound?',
+    step:'a\\cdot(\\tfrac{1}{2})^x\\to 0 \\text{ as }x\\to+\\infty, \\text{ HA: }y=0'};
+}
+const GENERATORS=[gen1,gen2,gen3,gen4,gen5,gen6,gen7,gen8];
 
 
 // ── State ─────────────────────────────────────────────────────────────────────
 let ACTIVE, correct, flags, attempted, peeked;
 
 function norm(s) {
-  return s.trim().toLowerCase().replace(/\s+/g, '').replace(/[−–]/g, '-');
+  return s.trim().toLowerCase()
+    .replace(/\s+/g, '')
+    .replace(/[−–]/g, '-')
+    .replace(/∞/g, 'inf')
+    .replace(/∪/g, 'u')
+    .replace(/infinity/g, 'inf')
+    .replace(/union/g, 'u');
 }
 function ok(user, acc) { return acc.some(a => norm(user) === norm(a)); }
 
 function init() {
-  ACTIVE    = shuffle(GENERATORS.map(gen => gen()));
+  ACTIVE    = shuffle(GENERATORS).slice(0, Math.min(8, GENERATORS.length)).map(gen => gen());
   correct   = 0;
   flags     = Array(GENERATORS.length).fill(false);
   attempted = Array(GENERATORS.length).fill(false);
@@ -273,10 +275,11 @@ function buildCards() {
         <div class="card-meta">Problem ${i + 1}</div>
         <div class="card-expr" id="expr-${i}"></div>
         <div class="input-row">
-          <input class="ans-input" id="ai-${i}" placeholder="answer" />
+          <input class="ans-input" id="ai-${i}" placeholder="${p.interval ? '[a,b)' : 'answer'}" />
           <button class="check-btn" id="chk-${i}" onclick="check(${i})">Check</button>
         </div>
-        <div class="hint">${p.hint}</div>
+        <span class="hint-link" onclick="this.style.display='none';this.nextElementSibling.style.display='block'">Show hint</span><div class="hint">${p.hint}</div>
+        ${p.interval ? '<div class="interval-hint">Use <code>inf</code> and <code>u</code> for union &mdash; e.g. <code>[2,inf)</code> or <code>(-inf,0)u(0,inf)</code></div>' : ''}
         <div class="feedback" id="fb-${i}"></div>
         <span class="reveal-link" id="rl-${i}" onclick="reveal(${i})">Show solution</span>
         <div class="revealed-answer" id="ra-${i}"></div>
@@ -286,6 +289,8 @@ function buildCards() {
       .addEventListener('keydown', e => { if (e.key === 'Enter') check(i); });
     if (p.svg) {
       document.getElementById('expr-' + i).innerHTML = p.svg;
+    } else if (p.text) {
+      document.getElementById('expr-' + i).innerHTML = p.text;
     } else {
       katex.render(p.latex, document.getElementById('expr-' + i),
         { throwOnError: false, displayMode: true });
@@ -341,8 +346,8 @@ function updateScore() {
 function resetAll() { init(); buildCards(); updateScore(); }
 </script>
 
-<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/contrib/auto-render.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
 <script>
   renderMathInElement(document.body, {
     delimiters: [

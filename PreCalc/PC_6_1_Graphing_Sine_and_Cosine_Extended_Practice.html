@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Graphing Sine and Cosine &mdash; Extended &mdash; Practice</title>
+<title>Graphing Sine and Cosine — Extended &mdash; Practice</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.css">
 <style>
   *{box-sizing:border-box;margin:0;padding:0}
@@ -34,6 +34,8 @@
   .card-body{padding:14px 16px}
   .card-meta{font-family:sans-serif;font-size:12px;color:#888;margin-bottom:4px}
   .card-expr{font-size:17px;margin-bottom:12px;line-height:2.2;overflow-x:auto}
+  .card-expr svg{max-width:100%;height:auto}
+  .card-question{font-family:sans-serif;font-size:14px;font-weight:700;color:#1e3a5c;margin-bottom:10px}
   .katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}
   .input-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
   .ans-input{font-family:'Courier New',monospace;font-size:14px;border:1px solid #ccc;
@@ -45,7 +47,8 @@
   .check-btn{font-family:sans-serif;font-size:13px;background:#1a1a1a;color:#fff;
     border:none;border-radius:6px;padding:7px 14px;cursor:pointer}
   .check-btn:hover{background:#333}.check-btn:disabled{background:#aaa;cursor:default}
-  .hint{font-family:sans-serif;font-size:12px;color:#888;margin-top:7px}
+  .hint{font-family:sans-serif;font-size:12px;color:#888;margin-top:5px;display:none}
+  .hint-link{font-family:sans-serif;font-size:12px;color:#aaa;cursor:pointer;text-decoration:underline;margin-top:7px;display:inline-block}.hint-link:hover{color:#666}
   .feedback{font-family:sans-serif;font-size:13px;margin-top:10px;padding:8px 12px;
     border-radius:6px;display:none;line-height:1.5}
   .feedback.correct{display:block;background:#eaf5ea;color:#1a5a1a}
@@ -57,14 +60,11 @@
   .revealed-answer{display:none;margin-top:8px;font-family:sans-serif;font-size:13px;
     color:#444;background:#f5f3ef;border-radius:6px;padding:8px 11px;line-height:1.8;overflow-x:auto}
   code{font-family:'Courier New',monospace;background:#f0ede7;padding:1px 5px;border-radius:3px;font-size:12px}
-
-
-.hint{display:none!important}
 </style>
 </head>
 <body>
 <div class="container">
-  <h1>Graphing Sine and Cosine &mdash; Extended</h1>
+  <h1>Graphing Sine and Cosine — Extended</h1>
   <p class="subtitle">PreCalc &nbsp;&middot;&nbsp; &sect;6.1 &nbsp;&middot;&nbsp; Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026</p>
 
   <div class="section">
@@ -90,7 +90,7 @@
   <div class="section">
     <div class="section-title">Practice Problems</div>
     <p style="font-family:sans-serif;font-size:13px;color:#666;margin-bottom:1rem;">
-      Integers for amplitude, midline, max. Phase shift and B values involving &pi;: write &pi; as <code>pi</code> (e.g. <code>pi/2</code>, <code>-pi/4</code>, <code>2pi/3</code>). y-intercept: enter the y-value or <code>(0,value)</code>.
+      π as <code>pi</code>. Integers for amplitude, midline, max, min, B, and period counts.
       Press <strong>Check</strong> or hit Enter.
     </p>
     <div class="score-bar">
@@ -136,146 +136,117 @@ function addT(n, v) {
 
 // ── Problem generators (section-specific, injected below) ─────────────────────
 
-function gen1(){
-  // Factor y = A·sin(Bx + C) to find phase shift = -C/B
-  const cases = [
-    {expr:'\\sin(2x-\\pi)',        ps:'\\dfrac{\\pi}{2}',  psAns:['pi/2'],   step:'\\sin(2(x-\\pi/2))'},
-    {expr:'\\sin(2x+\\pi)',        ps:'-\\dfrac{\\pi}{2}', psAns:['-pi/2'],  step:'\\sin(2(x+\\pi/2))'},
-    {expr:'\\sin(3x-\\pi)',        ps:'\\dfrac{\\pi}{3}',  psAns:['pi/3'],   step:'\\sin(3(x-\\pi/3))'},
-    {expr:'2\\cos(2x-\\pi/2)',     ps:'\\dfrac{\\pi}{4}',  psAns:['pi/4'],   step:'2\\cos(2(x-\\pi/4))'},
-    {expr:'\\sin(4x-\\pi)',        ps:'\\dfrac{\\pi}{4}',  psAns:['pi/4'],   step:'\\sin(4(x-\\pi/4))'},
-    {expr:'3\\sin(2x+\\pi/2)',     ps:'-\\dfrac{\\pi}{4}', psAns:['-pi/4'],  step:'3\\sin(2(x+\\pi/4))'},
-    {expr:'\\cos(3x+\\pi)',        ps:'-\\dfrac{\\pi}{3}', psAns:['-pi/3'],  step:'\\cos(3(x+\\pi/3))'},
-  ];
-  const {expr, ps, psAns, step} = choose(cases);
-  return {
-    latex: `y=${expr}.\\quad\\text{Phase shift}=`,
-    answer: psAns,
-    hint: 'To read the phase shift from A·sin(Bx+C), rewrite it in the form A·sin(B(x−?)) by factoring out B from the argument.',
-    step: `${step}\\Rightarrow\\text{phase shift}=${ps}`
-  };
+const TW=300,TH=180,PI=Math.PI;
+function ttx(x){return x/(2*PI)*TW;}
+function tty(y,yn,yx){return TH-(y-yn)/(yx-yn)*TH;}
+function trigAxes(A,D){
+  const yn=D-A-1,yx=D+A+1;
+  let s='<rect width="'+TW+'" height="'+TH+'" fill="#fafaf8" rx="3"/>';
+  [[PI/2,'π/2'],[PI,'π'],[3*PI/2,'3π/2'],[2*PI,'2π']].forEach(function(m){
+    const px=ttx(m[0]).toFixed(1),py0=tty(0,yn,yx).toFixed(1);
+    s+='<line x1="'+px+'" y1="0" x2="'+px+'" y2="'+TH+'" stroke="#ddd" stroke-width="0.5"/>';
+    s+='<text x="'+px+'" y="'+(parseFloat(py0)+12).toFixed(1)+'" font-size="9" text-anchor="middle" fill="#888">'+m[1]+'</text>';
+  });
+  const ymarks=[0,D,D+A,D-A];
+  const seen={};
+  ymarks.forEach(function(yv){
+    if(seen[yv])return;seen[yv]=1;
+    const py=tty(yv,yn,yx).toFixed(1);
+    s+='<line x1="0" y1="'+py+'" x2="'+TW+'" y2="'+py+'" stroke="#ddd" stroke-width="0.5"/>';
+    s+='<text x="-4" y="'+(parseFloat(py)+3).toFixed(1)+'" font-size="9" text-anchor="end" fill="#888">'+yv+'</text>';
+  });
+  s+='<line x1="0" y1="'+tty(0,yn,yx).toFixed(1)+'" x2="'+TW+'" y2="'+tty(0,yn,yx).toFixed(1)+'" stroke="#555" stroke-width="1.2"/>';
+  s+='<line x1="0" y1="0" x2="0" y2="'+TH+'" stroke="#555" stroke-width="1.2"/>';
+  if(D!==0)s+='<line x1="0" y1="'+tty(D,yn,yx).toFixed(1)+'" x2="'+TW+'" y2="'+tty(D,yn,yx).toFixed(1)+'" stroke="#7a5c1e" stroke-width="1" stroke-dasharray="5,3"/>';
+  return {s,yn,yx};
 }
-
-function gen2(){
-  // Amplitude from graph: max and min given → amplitude = (max - min) / 2
-  const A = choose([2, 3, 4, 5, 6]);
-  const D = choose([-3, -2, -1, 0, 1, 2, 3]);
-  const maxV = D + A, minV = D - A;
-  return {
-    latex: `\\text{Graph max}=${maxV},\\;\\text{min}=${minV}.\\quad\\text{Amplitude}=`,
-    answer: [String(A)],
-    hint: 'Amplitude is half the total vertical span of the wave — what is half the difference between max and min?',
-    step: `A=\\dfrac{\\text{max}-\\text{min}}{2}=\\dfrac{${maxV}-(${minV})}{2}=${A}`
-  };
-}
-
-function gen3(){
-  // Midline from graph: max and min given → midline = (max + min) / 2
-  const A = choose([2, 3, 4, 5, 6]);
-  const D = choose([-4, -3, -2, -1, 0, 1, 2, 3, 4]);
-  const maxV = D + A, minV = D - A;
-  return {
-    latex: `\\text{Graph max}=${maxV},\\;\\text{min}=${minV}.\\quad\\text{Midline: }y=`,
-    answer: [String(D)],
-    hint: 'The midline is centered halfway between max and min — what is the average of those two values?',
-    step: `D=\\dfrac{\\text{max}+\\text{min}}{2}=\\dfrac{${maxV}+(${minV})}{2}=${D}`
-  };
-}
-
-function gen4(){
-  // Find B from period (same as §6.0 gen7 but varied)
-  const cases = [
-    {T:'2',  B:'\\pi',            bAns:['pi']},
-    {T:'4',  B:'\\dfrac{\\pi}{2}',bAns:['pi/2']},
-    {T:'1',  B:'2\\pi',           bAns:['2pi']},
-    {T:'3',  B:'\\dfrac{2\\pi}{3}',bAns:['2pi/3']},
-    {T:'8',  B:'\\dfrac{\\pi}{4}',bAns:['pi/4']},
-  ];
-  const {T, B, bAns} = choose(cases);
-  const fn = choose(['sin','cos']);
-  return {
-    latex: `y=A\\${fn}(Bx).\\;\\text{Period}=${T}.\\quad B=`,
-    answer: bAns,
-    hint: 'Period T and the coefficient B are connected by 2π — if T is the period, how do you find B?',
-    step: `B=\\dfrac{2\\pi}{T}=\\dfrac{2\\pi}{${T}}=${B}`
-  };
-}
-
-function gen5(){
-  // Range max of y = A·sin(Bx) + D → D + A (given A, D)
-  const A = choose([3, 4, 5, 6, 7]);
-  const D = choose([-2, -1, 0, 1, 2, 3, 4, 5]);
-  const fn = choose(['sin','cos']);
-  const dStr = D === 0 ? '' : (D > 0 ? `+${D}` : String(D));
-  return {
-    latex: `y=${A}\\${fn}(x)${dStr}.\\quad\\text{Max value}=`,
-    answer: [String(D + A)],
-    hint: 'The range of A·sin(x)+D runs from D−|A| to D+|A| — what is the upper boundary?',
-    step: `\\text{max}=${D}+${A}=${D+A}`
-  };
-}
-
-function gen6(){
-  // Period from description: given B = fraction → period = 2π/B
-  const cases = [
-    {B:'0.5', Bstr:'0.5', period:'4\\pi', ans:['4pi']},
-    {B:'2',   Bstr:'2',   period:'\\pi',  ans:['pi']},
-    {B:'0.25',Bstr:'0.25',period:'8\\pi', ans:['8pi']},
-    {B:'3',   Bstr:'3',   period:'\\dfrac{2\\pi}{3}', ans:['2pi/3']},
-  ];
-  const {Bstr, period, ans} = choose(cases);
-  const fn = choose(['sin','cos']);
-  return {
-    latex: `y=A\\${fn}(${Bstr}x).\\quad\\text{Period}=`,
-    answer: ans,
-    hint: 'Period equals 2π divided by the coefficient of x — what is 2π divided by this particular B?',
-    step: `T=\\dfrac{2\\pi}{${Bstr}}=${period}`
-  };
-}
-
-function gen7(){
-  // Does y = A·sin(Bx) pass through (0, 0)? → yes
-  // Does y = A·cos(Bx) pass through (0, A)? → yes, so y-intercept = A
-  const fn = choose(['sin','cos']);
-  const A = choose([2, 3, 4, 5, 6]);
-  const B = choose([1, 2, 3]);
-  if (fn === 'sin') {
-    return {
-      latex: `y=${A}\\sin(${B}x).\\quad\\text{y-intercept}=`,
-      answer: ['0', '(0,0)'],
-      hint: 'What does sin(0) equal, and how does that give you the y-intercept of A·sin(Bx)?',
-      step: `y(0)=${A}\\sin(0)=${A}\\cdot0=0\\Rightarrow(0,0)`
-    };
-  } else {
-    return {
-      latex: `y=${A}\\cos(${B}x).\\quad\\text{y-intercept}=`,
-      answer: [String(A), `(0,${A})`],
-      hint: 'What does cos(0) equal, and how does that give you the y-intercept of A·cos(Bx)?',
-      step: `y(0)=${A}\\cos(0)=${A}\\cdot1=${A}\\Rightarrow(0,${A})`
-    };
+function trigCurve(fn,yn,yx){
+  let pts=[],s='';
+  for(let i=0;i<=400;i++){
+    const x=i*2*PI/400,y=fn(x);
+    if(y<yn-0.1||y>yx+0.1){if(pts.length){s+='<polyline points="'+pts.join(' ')+'" fill="none" stroke="#1e3a5c" stroke-width="2.2" stroke-linejoin="round"/>';pts=[];}continue;}
+    pts.push(ttx(x).toFixed(1)+','+tty(y,yn,yx).toFixed(1));
   }
+  if(pts.length)s+='<polyline points="'+pts.join(' ')+'" fill="none" stroke="#1e3a5c" stroke-width="2.2" stroke-linejoin="round"/>';
+  return s;
 }
-
+function tdot(x,y,yn,yx,col){return '<circle cx="'+ttx(x).toFixed(1)+'" cy="'+tty(y,yn,yx).toFixed(1)+'" r="4" fill="'+(col||'#7a5c1e')+'" stroke="white" stroke-width="1"/>';}
+function tsvgQ(inner,q){
+  return '<svg width="'+TW+'" height="'+TH+'" viewBox="-8 0 '+(TW+8)+' '+TH+'" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:0 auto">'+inner+'</svg><p style="font-family:sans-serif;font-size:13px;text-align:center;margin-top:6px;color:#1a1a1a">'+q+'</p>';
+}
+function gen1(){
+  const A=choose([1,2,3]),D=choose([-1,0,1]);
+  const fn=function(x){return A*Math.sin(x)+D;};
+  const {s,yn,yx}=trigAxes(A,D);
+  return {svg:tsvgQ(s+trigCurve(fn,yn,yx),'What is the amplitude of this sinusoidal function?'),
+    answer:[String(A)],
+    hint:'Amplitude is half the vertical distance from the minimum to the maximum.',
+    step:'A='+A+' \\quad (\\text{max}='+(D+A)+', \\;\\text{min}='+(D-A)+')'};
+}
+function gen2(){
+  const A=choose([1,2]),D=choose([-2,-1,1,2]);
+  const fn=function(x){return A*Math.cos(x)+D;};
+  const {s,yn,yx}=trigAxes(A,D);
+  return {svg:tsvgQ(s+trigCurve(fn,yn,yx),'What is the midline (y = ?) of this function?'),
+    answer:[String(D),'y='+D],
+    hint:'The midline is the horizontal axis of symmetry halfway between the max and min.',
+    step:'D='+D+' \\; (\\text{midline: }y='+D+')'};
+}
+function gen3(){
+  const A=choose([2,3]),D=choose([-1,0,1,2]);
+  const fn=function(x){return A*Math.sin(x)+D;};
+  const {s,yn,yx}=trigAxes(A,D);
+  return {svg:tsvgQ(s+trigCurve(fn,yn,yx)+tdot(PI/2,A+D,yn,yx,'#7a5c1e'),'What is the maximum value of this function?'),
+    answer:[String(A+D)],
+    hint:'Read the y-coordinate of the highest point on the curve.',
+    step:'\\text{max}=A+D='+A+(D>=0?'+':'')+D+'='+(A+D)};
+}
+function gen4(){
+  const A=choose([1,2]),D=choose([-1,0,1]);
+  const fn=function(x){return A*Math.sin(2*x)+D;};
+  const {s,yn,yx}=trigAxes(A,D);
+  return {svg:tsvgQ(s+trigCurve(fn,yn,yx),'What is the period of this function? (write π as pi)'),
+    answer:['pi','π'],
+    hint:'Count how many x-units one complete wave cycle occupies on the graph.',
+    step:'T=\\dfrac{2\\pi}{B}=\\dfrac{2\\pi}{2}=\\pi'};
+}
+function gen5(){
+  const A=choose([1,2]),D=choose([-1,0,1]);
+  const fn=function(x){return A*Math.cos(2*x)+D;};
+  const {s,yn,yx}=trigAxes(A,D);
+  return {svg:tsvgQ(s+trigCurve(fn,yn,yx),'How many complete periods are shown in the graph above?'),
+    answer:['2'],
+    hint:'How many full wave cycles can you count between x = 0 and x = 2π?',
+    step:'T=\\pi, \\text{ two full cycles fit in }[0,2\\pi]'};
+}
+function gen6(){
+  const A=choose([2,3]),D=choose([-1,0,1,2]);
+  const fn=function(x){return A*Math.sin(x)+D;};
+  const {s,yn,yx}=trigAxes(A,D);
+  return {svg:tsvgQ(s+trigCurve(fn,yn,yx)+tdot(3*PI/2,D-A,yn,yx,'#7a5c1e'),'What is the minimum value of this function?'),
+    answer:[String(D-A)],
+    hint:'Read the y-coordinate of the lowest point on the curve.',
+    step:'\\text{min}=D-A='+D+((-A)>=0?'+':'')+(-A)+'='+(D-A)};
+}
+function gen7(){
+  const A=choose([2,3]),D=choose([-2,-1,1,2]);
+  const fn=function(x){return A*Math.cos(x)+D;};
+  const {s,yn,yx}=trigAxes(A,D);
+  return {svg:tsvgQ(s+trigCurve(fn,yn,yx),'What is the amplitude of this cosine function?'),
+    answer:[String(A)],
+    hint:'Amplitude is half the total vertical height of the wave.',
+    step:'A='+A+' \\quad (\\text{peak-to-trough}='+(2*A)+')'};
+}
 function gen8(){
-  // Write equation from graph: max, min, period given → identify A, D, B, write B value
-  const A = choose([2, 3, 4, 5]);
-  const D = choose([1, 2, 3, 4, 5]);
-  const maxV = D + A, minV = D - A;
-  const cases = [
-    {T:4, B:'\\dfrac{\\pi}{2}', bAns:['pi/2']},
-    {T:6, B:'\\dfrac{\\pi}{3}', bAns:['pi/3']},
-    {T:2, B:'\\pi',             bAns:['pi']},
-  ];
-  const {T, B, bAns} = choose(cases);
-  return {
-    latex: `\\text{Graph: max}=${maxV},\\;\\text{min}=${minV},\\;\\text{period}=${T}.\\quad B=`,
-    answer: bAns,
-    hint: 'Given the period, find B — how do you obtain B from the period of a sinusoidal function?',
-    step: `A=${A},\\;D=${D},\\;B=\\dfrac{2\\pi}{${T}}=${B}`
-  };
+  const A=choose([1,2,3]),D=choose([-1,0,1]);
+  const fn=function(x){return A*Math.sin(2*x)+D;};
+  const {s,yn,yx}=trigAxes(A,D);
+  return {svg:tsvgQ(s+trigCurve(fn,yn,yx),'What is the value of B for this function? (period = π)'),
+    answer:['2'],
+    hint:'Given period = π, what B satisfies T = 2π / B?',
+    step:'T=\\pi \\Rightarrow B=\\dfrac{2\\pi}{\\pi}=2'};
 }
-
-const GENERATORS = [gen1, gen2, gen3, gen4, gen5, gen6, gen7, gen8];
+const GENERATORS=[gen1,gen2,gen3,gen4,gen5,gen6,gen7,gen8];
 
 
 // ── State ─────────────────────────────────────────────────────────────────────
@@ -291,7 +262,7 @@ function norm(s) {
 function ok(user, acc) { return acc.some(a => norm(user) === norm(a)); }
 
 function init() {
-  ACTIVE    = shuffle(GENERATORS.map(gen => gen()));
+  ACTIVE    = shuffle(GENERATORS).slice(0, Math.min(8, GENERATORS.length)).map(gen => gen());
   correct   = 0;
   flags     = Array(GENERATORS.length).fill(false);
   attempted = Array(GENERATORS.length).fill(false);
@@ -304,15 +275,17 @@ function buildCards() {
   ACTIVE.forEach((p, i) => {
     const div = document.createElement('div');
     div.className = 'card'; div.id = 'card-' + i;
+    const qLine = p.q ? `<div class="card-question">${p.q}</div>` : '';
     div.innerHTML =
       `<div class="card-body">
         <div class="card-meta">Problem ${i + 1}</div>
         <div class="card-expr" id="expr-${i}"></div>
+        ${qLine}
         <div class="input-row">
           <input class="ans-input" id="ai-${i}" placeholder="answer" />
           <button class="check-btn" id="chk-${i}" onclick="check(${i})">Check</button>
         </div>
-        <div class="hint">${p.hint}</div>
+        <span class="hint-link" onclick="this.style.display='none';this.nextElementSibling.style.display='block'">Show hint</span><div class="hint">${p.hint}</div>
         <div class="feedback" id="fb-${i}"></div>
         <span class="reveal-link" id="rl-${i}" onclick="reveal(${i})">Show solution</span>
         <div class="revealed-answer" id="ra-${i}"></div>
