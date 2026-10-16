@@ -1,0 +1,455 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Extrema Flow Charts</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%20100%20100'%3E%3Ctext%20y%3D'.9em'%20font-size%3D'90'%3E%F0%9F%93%9D%3C%2Ftext%3E%3C%2Fsvg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=JetBrains+Mono:wght@400;600&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #f6f1e4; --paper-line: rgba(58,74,94,.14);
+    --ink: #26313f; --ink-soft: #5b6b7d;
+    --card-bg: #fffdf7; --card-border: #ddd2b6;
+    --accent: #2f7d6b; --accent-strong: #1f5c4e; --accent-soft: rgba(47,125,107,.14); --accent-ink: #f5fbf9;
+    --coral: #c1483f; --coral-soft: rgba(193,72,63,.12);
+    --neutral-soft: rgba(91,107,125,.10);
+    --edge: #6b7a8c; --shadow: rgba(38,49,63,.16);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #1b2330; --paper-line: rgba(238,242,240,.07);
+      --ink: #edf1ef; --ink-soft: #a3aebb;
+      --card-bg: #232e3d; --card-border: #3a4a61;
+      --accent: #5fd1b3; --accent-strong: #86e0c8; --accent-soft: rgba(95,209,179,.18); --accent-ink: #0c2620;
+      --coral: #ff9179; --coral-soft: rgba(255,145,121,.16);
+      --neutral-soft: rgba(163,174,187,.12);
+      --edge: #8b99aa; --shadow: rgba(0,0,0,.5);
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #1b2330; --paper-line: rgba(238,242,240,.07);
+    --ink: #edf1ef; --ink-soft: #a3aebb;
+    --card-bg: #232e3d; --card-border: #3a4a61;
+    --accent: #5fd1b3; --accent-strong: #86e0c8; --accent-soft: rgba(95,209,179,.18); --accent-ink: #0c2620;
+    --coral: #ff9179; --coral-soft: rgba(255,145,121,.16);
+    --neutral-soft: rgba(163,174,187,.12);
+    --edge: #8b99aa; --shadow: rgba(0,0,0,.5);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background-color: var(--paper); color: var(--ink);
+    background-image: linear-gradient(var(--paper-line) 1px, transparent 1px), linear-gradient(90deg, var(--paper-line) 1px, transparent 1px);
+    background-size: 28px 28px;
+    font-family: "Source Sans 3", system-ui, -apple-system, "Segoe UI", sans-serif; line-height: 1.5;
+  }
+  .wrap { max-width: 1240px; margin: 0 auto; padding: 28px 16px 56px; }
+  .eyebrow { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: .74rem; letter-spacing: .12em; text-transform: uppercase; color: var(--accent-strong); font-weight: 600; }
+  h1 { font-family: "Fraunces", Georgia, serif; font-weight: 700; font-size: clamp(1.7rem, 4vw, 2.4rem); line-height: 1.12; margin: 6px 0 8px; text-wrap: balance; }
+  .lede { color: var(--ink-soft); max-width: 68ch; margin: 0 0 18px; }
+  .toolbar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 16px; }
+  .tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+  .tab { font: 600 .95rem "Source Sans 3", sans-serif; padding: 9px 16px; border-radius: 10px; border: 1.5px solid var(--card-border); background: var(--card-bg); color: var(--ink); cursor: pointer; }
+  .tab[aria-selected="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+  .tab:focus-visible, .btn:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+  .spacer { flex: 1; }
+  .btn { font: 600 .9rem "Source Sans 3", sans-serif; padding: 8px 14px; border-radius: 9px; border: 1.5px solid var(--card-border); background: var(--card-bg); color: var(--ink); cursor: pointer; }
+  .btn:hover { border-color: var(--accent); }
+  .btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+  .btn:disabled { opacity: .45; cursor: default; }
+  .chart-sec { display: none; }
+  .chart-sec.on { display: block; }
+  .layout { display: grid; grid-template-columns: minmax(0, 1fr) 330px; gap: 18px; align-items: start; }
+  .chart-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 12px; box-shadow: 0 14px 32px -22px var(--shadow); overflow-x: auto; }
+  .chart-title { display: none; }
+  .chart-card svg { display: block; width: 100%; min-width: 720px; height: auto; }
+  .panel { position: sticky; top: 12px; background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 16px 18px; box-shadow: 0 14px 32px -22px var(--shadow); }
+  .panel h2 { font: 700 .72rem "JetBrains Mono", monospace; letter-spacing: .12em; text-transform: uppercase; color: var(--accent-strong); margin: 0 0 6px; }
+  .panel .q { font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 1.15rem; line-height: 1.25; margin: 0 0 8px; }
+  .panel .tip { font-size: .96rem; color: var(--ink); margin: 0 0 12px; }
+  .panel .choices { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
+  .panel .choice { text-align: left; font: 600 .95rem "Source Sans 3", sans-serif; padding: 10px 12px; border-radius: 10px; border: 1.5px solid var(--accent); background: var(--accent-soft); color: var(--ink); cursor: pointer; }
+  .panel .choice:hover { background: var(--accent); color: var(--accent-ink); }
+  .panel .concl { border-radius: 10px; padding: 10px 12px; font-size: .95rem; margin-bottom: 12px; border-left: 5px solid var(--accent); background: var(--accent-soft); }
+  .panel .concl.max { border-left-color: var(--coral); background: var(--coral-soft); }
+  .panel .concl.none { border-left-color: var(--edge); background: var(--neutral-soft); }
+  .panel .nav { display: flex; gap: 8px; }
+  .hint { font-size: .84rem; color: var(--ink-soft); margin-top: 10px; }
+  .pathlist { margin: 10px 0 0; padding: 0; list-style: none; font-size: .84rem; color: var(--ink-soft); display: flex; flex-wrap: wrap; gap: 4px 6px; }
+  .pathlist li::after { content: "\2192"; margin-left: 6px; opacity: .6; }
+  .pathlist li:last-child::after { content: ""; }
+  .notes { margin-top: 16px; display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; }
+  .note { background: var(--card-bg); border: 1px solid var(--card-border); border-left: 5px solid var(--accent); border-radius: 12px; padding: 12px 14px; font-size: .94rem; }
+  .note b { display: block; font-family: "Fraunces", Georgia, serif; font-size: 1rem; margin-bottom: 3px; }
+
+  /* --- SVG chart --- */
+  svg .node rect, svg .node polygon { fill: var(--card-bg); stroke: var(--edge); stroke-width: 2; }
+  svg .node.start rect { fill: var(--ink); stroke: var(--ink); }
+  svg .node.start text { fill: var(--paper); font-weight: 700; }
+  svg .node.dec polygon { fill: var(--card-bg); stroke: var(--accent); stroke-width: 2.4; }
+  svg .node.end.min rect { fill: var(--accent-soft); stroke: var(--accent); }
+  svg .node.end.max rect { fill: var(--coral-soft); stroke: var(--coral); }
+  svg .node.end.none rect { fill: var(--neutral-soft); stroke: var(--edge); stroke-dasharray: 6 4; }
+  svg .node.end.final rect { fill: var(--card-bg); stroke: var(--ink-soft); }
+  svg .node text { fill: var(--ink); font: 500 16.5px "Source Sans 3", system-ui, sans-serif; text-anchor: middle; }
+  svg .node text.b { font-weight: 700; }
+  svg .node.end.min text.b { fill: var(--accent-strong); }
+  svg .node.end.max text.b { fill: var(--coral); }
+  svg .node.visited rect, svg .node.visited polygon { stroke-width: 3.6; }
+  svg .node.visited:not(.start):not(.end) rect, svg .node.visited.dec polygon { fill: var(--accent-soft); stroke: var(--accent); }
+  svg .node.current rect, svg .node.current polygon { stroke: var(--accent); stroke-width: 5; filter: drop-shadow(0 0 6px var(--accent)); }
+  svg .edge polyline { fill: none; stroke: var(--edge); stroke-width: 2; }
+  svg .edge.used polyline { stroke: var(--accent); stroke-width: 4.2; }
+  svg .mk { fill: var(--edge); }
+  svg .elabel { font: 700 14.5px "Source Sans 3", system-ui, sans-serif; fill: var(--accent-strong); text-anchor: middle; stroke: var(--card-bg); stroke-width: 7px; paint-order: stroke; stroke-linejoin: round; }
+  svg .dimmed { opacity: .5; }
+  svg.walking .node:not(.visited):not(.current) { opacity: .55; }
+  svg.walking .edge:not(.used) { opacity: .4; }
+  svg.walking .elabel { opacity: .85; }
+  @media (max-width: 980px) {
+    .layout { grid-template-columns: 1fr; }
+    .panel { position: static; order: -1; }
+  }
+  @media (prefers-reduced-motion: no-preference) { svg .node rect, svg .node polygon, svg .edge polyline { transition: stroke .2s, fill .2s; } }
+
+  @media print {
+    :root:root:root { --paper:#fff; --ink:#111; --ink-soft:#444; --card-bg:#fff; --card-border:#bbb; --accent:#1f6e5c; --accent-strong:#14503f; --accent-soft:rgba(47,125,107,.16); --coral:#b03a32; --coral-soft:rgba(193,72,63,.14); --neutral-soft:rgba(0,0,0,.06); --edge:#555; }
+    body { background: #fff; background-image: none; font-size: 11pt; }
+    .wrap { max-width: none; padding: 0; }
+    .toolbar, .panel, .hint-screen, .eyebrow-hide { display: none !important; }
+    header.top { display: none; }
+    .chart-sec { display: block !important; page-break-after: always; break-after: page; }
+    .chart-sec:last-of-type { page-break-after: auto; break-after: auto; }
+    .layout { display: block; }
+    .chart-card { border: none; box-shadow: none; padding: 0; overflow: visible; }
+    .chart-card svg { min-width: 0; max-height: 7.3in; width: 100%; }
+    .chart-title { display: block; font-family: "Fraunces", Georgia, serif; font-weight: 700; font-size: 17pt; margin: 0 0 4px; }
+    .chart-sub { display: block !important; color: #444; font-size: 10pt; margin-bottom: 6px; }
+    .notes { margin-top: 8px; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .note { font-size: 9pt; padding: 6px 9px; break-inside: avoid; }
+    svg.walking .node, svg.walking .edge, svg .node.visited, svg .node.current { opacity: 1 !important; filter: none !important; }
+    @page { size: letter portrait; margin: .45in; }
+  }
+  .chart-sub { display: none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="eyebrow">Calculus 1 &middot; &sect;3.5 &ndash; 3.6</div>
+    <h1>Extrema Flow Charts</h1>
+    <p class="lede">Two charts for the whole procedure: first find and classify <strong>local</strong> extrema with the First and Second Derivative Tests, then decide how to find the <strong>absolute</strong> (global) max and min. Click <em>Walk me through it</em> and answer each question to trace your own path, or print the charts as a one-page handout.</p>
+  </header>
+
+  <div class="toolbar">
+    <div class="tabs" role="tablist" aria-label="Choose a chart">
+      <button class="tab" role="tab" id="tab-c1" aria-selected="true" aria-controls="sec-c1" type="button">1. Local extrema (1st &amp; 2nd derivative tests)</button>
+      <button class="tab" role="tab" id="tab-c2" aria-selected="false" aria-controls="sec-c2" type="button">2. Global (absolute) extrema</button>
+    </div>
+    <span class="spacer"></span>
+    <button class="btn" id="printBtn" type="button">Print both charts</button>
+  </div>
+
+  <section class="chart-sec on" id="sec-c1" role="tabpanel" aria-labelledby="tab-c1">
+    <div class="layout">
+      <div class="chart-card">
+        <h2 class="chart-title">Local extrema: First &amp; Second Derivative Tests</h2>
+        <span class="chart-sub">Work through every critical number c, one at a time.</span>
+        <div id="svg-c1"></div>
+      </div>
+      <aside class="panel" id="panel-c1" aria-live="polite"></aside>
+    </div>
+    <div class="notes">
+      <div class="note"><b>Critical numbers must be in the domain</b>If f(c) does not exist, c is not a critical number, even if f&prime; is undefined there.</div>
+      <div class="note"><b>f&Prime;(c) = 0 does not mean &ldquo;neither&rdquo;</b>The Second Derivative Test is just silent. Go to the First Derivative Test and check the sign change.</div>
+      <div class="note"><b>The answer is a point</b>The critical number c is the x-value. Plug it into f to get the y-value of the local max or min.</div>
+    </div>
+  </section>
+
+  <section class="chart-sec" id="sec-c2" role="tabpanel" aria-labelledby="tab-c2">
+    <div class="layout">
+      <div class="chart-card">
+        <h2 class="chart-title">Global (absolute) extrema</h2>
+        <span class="chart-sub">Start by asking whether the interval is closed and f is continuous on it.</span>
+        <div id="svg-c2"></div>
+      </div>
+      <aside class="panel" id="panel-c2" aria-live="polite"></aside>
+    </div>
+    <div class="notes">
+      <div class="note"><b>Shortcut on an open or infinite interval</b>If f has exactly one critical number c on the interval, and f&prime; changes from &minus; to + there (or f&Prime; &gt; 0 everywhere), c gives the absolute <em>min</em>. From + to &minus; (or f&Prime; &lt; 0 everywhere), c gives the absolute <em>max</em>.</div>
+      <div class="note"><b>Endpoints only count if they are included</b>A square bracket means the endpoint is in the interval and must be tested. A round bracket or &infin; means the value is only approached, never reached.</div>
+      <div class="note"><b>Absolute extremum &ne; local extremum</b>An absolute max is the highest value on the whole interval. It can be a local max or an endpoint, and a local max does not have to be the absolute max.</div>
+    </div>
+  </section>
+</div>
+<script>
+(function () {
+  "use strict";
+  function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+
+  // ---------------------------------------------------------------
+  // Chart 1: local extrema
+  // ---------------------------------------------------------------
+  var C1 = {
+    id: "c1", w: 1100, h: 1090,
+    label: "Flow chart for finding local maxima and minima with the First and Second Derivative Tests",
+    nodes: [
+      { id: "start", t: "start", x: 330, y: 40, w: 300, h: 44, lines: ["START: a function f(x)"],
+        title: "Local extrema of f", tip: "We want every local maximum and local minimum of f. A local max is the highest point in its own neighborhood; a local min is the lowest." },
+      { id: "deriv", t: "proc", x: 330, y: 130, w: 380, h: 52, lines: ["Step 1: Find f′(x)"],
+        title: "Differentiate", tip: "Find f′(x) and simplify it enough that you can factor it in the next step." },
+      { id: "crit", t: "proc", x: 330, y: 235, w: 460, h: 84, b: 1, lines: ["Step 2: Find the critical numbers c", "f′(c) = 0, or f′(c) is undefined but f(c) exists"],
+        title: "Find the critical numbers", tip: "Set f′(x) = 0 and solve (factor!). Also look for x-values where f′ is undefined, such as a corner or a vertical tangent, but where f itself is still defined. Throw out any x that is not in the domain of f." },
+      { id: "pick", t: "proc", x: 330, y: 332, w: 380, h: 46, lines: ["Step 3: Take ONE critical number c at a time"],
+        title: "Pick one critical number", tip: "Classify one critical number, then come back to the next one. Each c gets its own trip through this chart." },
+      { id: "d1", t: "dec", x: 330, y: 455, w: 360, h: 130, lines: ["Is f′(c) = 0 ?"],
+        title: "Is the slope exactly 0 at c?", tip: "The Second Derivative Test only works when f′(c) = 0. If f′ is undefined at c, you must use the First Derivative Test." },
+      { id: "sdt", t: "proc", x: 330, y: 590, w: 380, h: 60, b: 1, lines: ["Second Derivative Test:", "compute f″(c)"],
+        title: "Second Derivative Test", tip: "Differentiate f′ to get f″, then plug in c. Positive f″ means concave up (a bowl); negative means concave down (a cap)." },
+      { id: "d2", t: "dec", x: 330, y: 735, w: 400, h: 140, lines: ["Sign of f″(c) ?"],
+        title: "What is the sign of f″(c)?", tip: "Bowl (concave up) with a flat tangent is a minimum. Cap (concave down) with a flat tangent is a maximum. If f″(c) is exactly 0, the test tells you nothing." },
+      { id: "min1", t: "end", k: "min", x: 130, y: 890, w: 180, h: 64, lines: ["LOCAL MIN", "concave up at c"],
+        title: "Local minimum", tip: "f″(c) > 0 and f′(c) = 0: the graph is a bowl at c, so f has a local minimum at x = c.", end: "Local MIN at x = c. The y-value is f(c)." },
+      { id: "max1", t: "end", k: "max", x: 330, y: 890, w: 180, h: 64, lines: ["LOCAL MAX", "concave down at c"],
+        title: "Local maximum", tip: "f″(c) < 0 and f′(c) = 0: the graph is a cap at c, so f has a local maximum at x = c.", end: "Local MAX at x = c. The y-value is f(c)." },
+      { id: "fdt", t: "proc", x: 810, y: 585, w: 300, h: 84, b: 1, lines: ["First Derivative Test", "Check the sign of f′ just left", "and just right of c"],
+        title: "First Derivative Test", tip: "Pick a test value a little to the left of c and one a little to the right. Plug each into f′ (or read a sign chart) and write down only + or −. This test always works." },
+      { id: "d3", t: "dec", x: 810, y: 735, w: 400, h: 150, lines: ["Does f′ change sign", "at c ?"],
+        title: "Does f′ change sign at c?", tip: "Going from + (rising) to − (falling) is a peak. Going from − to + is a valley. The same sign on both sides is neither." },
+      { id: "max2", t: "end", k: "max", x: 610, y: 890, w: 170, h: 64, lines: ["LOCAL MAX", "f′: + to −"],
+        title: "Local maximum", tip: "f′ goes from positive to negative at c: the function rises, then falls. That is a local maximum at x = c.", end: "Local MAX at x = c. The y-value is f(c)." },
+      { id: "none", t: "end", k: "none", x: 810, y: 890, w: 170, h: 64, lines: ["NEITHER", "no extremum at c"],
+        title: "Neither", tip: "f′ keeps the same sign on both sides of c, so f keeps rising (or keeps falling) straight through. c is a critical number but not an extremum.", end: "Neither. c is a critical number but gives no local max or min." },
+      { id: "min2", t: "end", k: "min", x: 1010, y: 890, w: 170, h: 64, lines: ["LOCAL MIN", "f′: − to +"],
+        title: "Local minimum", tip: "f′ goes from negative to positive at c: the function falls, then rises. That is a local minimum at x = c.", end: "Local MIN at x = c. The y-value is f(c)." },
+      { id: "final", t: "end", k: "final", x: 550, y: 1020, w: 1040, h: 76, b: 1, lines: ["Step 4: Report the point: local max or min at x = c, with y = f(c)", "Then go back to step 3 for the next critical number"],
+        title: "Report and repeat", tip: "Write each answer as a point (c, f(c)). Then pick the next critical number and run it through the chart again." }
+    ],
+    edges: [
+      { f: "start", t: "deriv", p: [[330, 62], [330, 104]], btn: "Start" },
+      { f: "deriv", t: "crit", p: [[330, 156], [330, 193]] },
+      { f: "crit", t: "pick", p: [[330, 277], [330, 309]] },
+      { f: "pick", t: "d1", p: [[330, 355], [330, 390]] },
+      { f: "d1", t: "sdt", p: [[330, 520], [330, 560]], label: "yes: f′(c) = 0", btn: "Yes, f′(c) = 0" },
+      { f: "d1", t: "fdt", p: [[510, 455], [810, 455], [810, 543]], label: "no: f′(c) is undefined", lp: [660, 455], btn: "No, f′(c) is undefined there" },
+      { f: "sdt", t: "d2", p: [[330, 620], [330, 665]] },
+      { f: "d2", t: "min1", p: [[130, 735], [130, 858]], label: "f″(c) > 0", lp: [130, 802], btn: "f″(c) > 0  (positive)" },
+      { f: "d2", t: "max1", p: [[330, 805], [330, 858]], label: "f″(c) < 0", lp: [330, 832], btn: "f″(c) < 0  (negative)" },
+      { f: "d2", t: "fdt", p: [[530, 735], [585, 735], [585, 585], [660, 585]], label: "f″(c) = 0: inconclusive", lp: [585, 660], btn: "f″(c) = 0  (inconclusive)" },
+      { f: "fdt", t: "d3", p: [[810, 627], [810, 660]] },
+      { f: "d3", t: "max2", p: [[610, 735], [610, 858]], label: "+ to −", lp: [610, 802], btn: "Positive to negative  (+ to −)" },
+      { f: "d3", t: "none", p: [[810, 810], [810, 858]], label: "same sign", lp: [810, 834], btn: "Same sign on both sides" },
+      { f: "d3", t: "min2", p: [[1010, 735], [1010, 858]], label: "− to +", lp: [1010, 802], btn: "Negative to positive  (− to +)" },
+      { f: "min1", t: "final", p: [[130, 922], [130, 982]] },
+      { f: "max1", t: "final", p: [[330, 922], [330, 982]] },
+      { f: "max2", t: "final", p: [[610, 922], [610, 982]] },
+      { f: "none", t: "final", p: [[810, 922], [810, 982]] },
+      { f: "min2", t: "final", p: [[1010, 922], [1010, 982]] }
+    ]
+  };
+
+  // ---------------------------------------------------------------
+  // Chart 2: global extrema
+  // ---------------------------------------------------------------
+  var C2 = {
+    id: "c2", w: 1100, h: 1300,
+    label: "Flow chart for finding absolute maxima and minima on an interval",
+    nodes: [
+      { id: "start", t: "start", x: 550, y: 40, w: 520, h: 44, lines: ["START: absolute extrema of f on an interval I"],
+        title: "Absolute extrema of f on I", tip: "An absolute (global) max is the largest value of f on the whole interval; an absolute min is the smallest. First decide which method applies." },
+      { id: "d1", t: "dec", x: 550, y: 175, w: 600, h: 140, lines: ["Is I a closed interval [a, b]", "and is f continuous on all of it?"],
+        title: "Closed interval and continuous?", tip: "A square bracket on both ends means closed. If f is also continuous on every point of [a, b], the Extreme Value Theorem applies. An open interval, an infinite interval, or a break in f means it does not." },
+      { id: "evt", t: "proc", x: 250, y: 330, w: 380, h: 64, b: 1, lines: ["EVT: an absolute max and an", "absolute min are guaranteed"],
+        title: "Extreme Value Theorem", tip: "Because f is continuous on a closed interval, both an absolute max and an absolute min must exist. They are hiding at critical numbers or endpoints." },
+      { id: "lcrit", t: "proc", x: 250, y: 440, w: 380, h: 64, lines: ["Find the critical numbers inside (a, b)", "f′ = 0 or f′ undefined"],
+        title: "Critical numbers inside (a, b)", tip: "Solve f′(x) = 0 and find where f′ is undefined. Keep only the ones strictly between a and b." },
+      { id: "leval", t: "proc", x: 250, y: 555, w: 380, h: 78, lines: ["Evaluate f at every critical number", "AND at both endpoints a and b"],
+        title: "Evaluate f at the candidates", tip: "Build a table: each critical number from inside (a, b), plus a and b. Plug every one into f (the original function, not f′)." },
+      { id: "lcmp", t: "end", k: "final", x: 250, y: 690, w: 380, h: 88, b: 1, lines: ["Compare the values", "largest = absolute MAX", "smallest = absolute MIN"],
+        title: "Compare the values", tip: "The biggest number in your table is the absolute max and the smallest is the absolute min.", end: "Largest value = absolute max, smallest value = absolute min. Report each as a point (x, f(x))." },
+      { id: "no", t: "proc", x: 850, y: 330, w: 420, h: 78, b: 1, lines: ["No guarantee of extrema.", "Find the critical numbers and the", "local extrema (use the Local chart)"],
+        title: "No guarantee", tip: "Without a closed interval and continuity, there may be no absolute max or min. Find the critical numbers and the local extrema first (chart 1)." },
+      { id: "ends", t: "proc", x: 850, y: 455, w: 420, h: 92, b: 1, lines: ["Check the ends of the interval:", "f(a) or f(b) for an included endpoint;", "limits as x → ±∞ or at an open end"],
+        title: "Check the ends", tip: "For a square-bracket endpoint, compute f there. For an open end, an infinite end, or an asymptote, compute the limit of f as x approaches that end." },
+      { id: "dmax", t: "dec", x: 850, y: 620, w: 320, h: 130, lines: ["Does f → +∞", "at some end?"],
+        title: "Does f head to +∞ at an end?", tip: "If f grows without bound toward some end of the interval, nothing can be the largest value." },
+      { id: "nomax", t: "end", k: "none", x: 555, y: 620, w: 150, h: 56, lines: ["NO absolute", "MAX"],
+        title: "No absolute max", tip: "f has no upper limit on this interval, so there is no absolute maximum. Now check the minimum.", end: "No absolute max. Now check the minimum." },
+      { id: "maxval", t: "end", k: "max", x: 850, y: 760, w: 420, h: 84, b: 1, lines: ["Absolute max = the largest of the", "local-max values and the end values", "that are actually reached"],
+        title: "Absolute max", tip: "Compare the local-max values with the end values. Only a value that is actually reached counts: if the biggest value is only approached at an open end, there is no absolute max.", end: "Absolute max = the largest local-max or reached end value (if the biggest is only approached, there is none)." },
+      { id: "dmin", t: "dec", x: 850, y: 920, w: 320, h: 130, lines: ["Does f → −∞", "at some end?"],
+        title: "Does f head to −∞ at an end?", tip: "If f drops without bound toward some end of the interval, nothing can be the smallest value." },
+      { id: "nomin", t: "end", k: "none", x: 555, y: 920, w: 150, h: 56, lines: ["NO absolute", "MIN"],
+        title: "No absolute min", tip: "f has no lower limit on this interval, so there is no absolute minimum.", end: "No absolute min." },
+      { id: "minval", t: "end", k: "min", x: 850, y: 1060, w: 420, h: 84, b: 1, lines: ["Absolute min = the smallest of the", "local-min values and the end values", "that are actually reached"],
+        title: "Absolute min", tip: "Compare the local-min values with the end values. Only a value that is actually reached counts: if the smallest value is only approached at an open end, there is no absolute min.", end: "Absolute min = the smallest local-min or reached end value (if the smallest is only approached, there is none)." },
+      { id: "final", t: "end", k: "final", x: 550, y: 1232, w: 1040, h: 84, b: 1, lines: ["Report each answer as a point: the x-value and y = f(x).", "A value that is only approached (an open end or a limit) is never reached,", "so it cannot be an absolute max or min."],
+        title: "Report your answer", tip: "Write the absolute max and min as points (x, f(x)), and say “none” when one does not exist." }
+    ],
+    edges: [
+      { f: "start", t: "d1", p: [[550, 62], [550, 105]], btn: "Start" },
+      { f: "d1", t: "evt", p: [[250, 175], [250, 298]], label: "yes", lp: [250, 236], btn: "Yes: closed interval and continuous" },
+      { f: "d1", t: "no", p: [[850, 175], [850, 291]], label: "no (open, infinite, or a break)", lp: [850, 236], btn: "No: open, infinite, or f has a break" },
+      { f: "evt", t: "lcrit", p: [[250, 362], [250, 408]] },
+      { f: "lcrit", t: "leval", p: [[250, 472], [250, 516]] },
+      { f: "leval", t: "lcmp", p: [[250, 594], [250, 646]] },
+      { f: "no", t: "ends", p: [[850, 369], [850, 409]] },
+      { f: "ends", t: "dmax", p: [[850, 501], [850, 555]] },
+      { f: "dmax", t: "nomax", p: [[690, 620], [630, 620]], label: "yes", lp: [660, 604], btn: "Yes, f → +∞ at an end" },
+      { f: "dmax", t: "maxval", p: [[850, 685], [850, 718]], label: "no", lp: [868, 702], btn: "No, f stays bounded above" },
+      { f: "nomax", t: "dmin", p: [[555, 648], [555, 830], [850, 830], [850, 855]], to: true },
+      { f: "maxval", t: "dmin", p: [[850, 802], [850, 855]] },
+      { f: "dmin", t: "nomin", p: [[690, 920], [630, 920]], label: "yes", lp: [660, 904], btn: "Yes, f → −∞ at an end" },
+      { f: "dmin", t: "minval", p: [[850, 985], [850, 1018]], label: "no", lp: [868, 1002], btn: "No, f stays bounded below" },
+      { f: "nomin", t: "final", p: [[555, 948], [555, 1190]] },
+      { f: "minval", t: "final", p: [[850, 1102], [850, 1190]] },
+      { f: "lcmp", t: "final", p: [[250, 734], [250, 1190]] }
+    ]
+  };
+
+  // ---------------------------------------------------------------
+  // Build SVG
+  // ---------------------------------------------------------------
+  function buildSvg(C) {
+    var s = "<svg viewBox=\"0 0 " + C.w + " " + C.h + "\" role=\"img\" aria-label=\"" + esc(C.label) + ". Use the Walk me through it panel for a step-by-step version.\" id=\"" + C.id + "-svg\">" +
+      "<defs><marker id=\"" + C.id + "-mk\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerUnits=\"userSpaceOnUse\" markerWidth=\"13\" markerHeight=\"13\" orient=\"auto-start-reverse\"><path class=\"mk\" d=\"M0 0 L10 5 L0 10 z\"/></marker></defs>";
+    C.edges.forEach(function (e, i) {
+      e.dom = C.id + "-e" + i;
+      var pts = e.p.map(function (q) { return q[0] + "," + q[1]; }).join(" ");
+      s += "<g class=\"edge\" id=\"" + e.dom + "\"><polyline points=\"" + pts + "\" marker-end=\"url(#" + C.id + "-mk)\"/></g>";
+    });
+    C.nodes.forEach(function (n) {
+      var cls = "node " + n.t + (n.k ? " " + n.k : "");
+      s += "<g class=\"" + cls + "\" id=\"" + C.id + "-n-" + n.id + "\">";
+      var x = n.x - n.w / 2, y = n.y - n.h / 2;
+      if (n.t === "dec") {
+        s += "<polygon points=\"" + n.x + "," + y + " " + (n.x + n.w / 2) + "," + n.y + " " + n.x + "," + (n.y + n.h / 2) + " " + (n.x - n.w / 2) + "," + n.y + "\"/>";
+      } else {
+        var rx = n.t === "start" ? n.h / 2 : (n.t === "end" ? 12 : 8);
+        s += "<rect x=\"" + x + "\" y=\"" + y + "\" width=\"" + n.w + "\" height=\"" + n.h + "\" rx=\"" + rx + "\"/>";
+      }
+      var lh = 21, nb = (n.b != null ? n.b : (n.t === "end" && n.k !== "final" ? 1 : 0));
+      var y0 = n.y - (n.lines.length - 1) * lh / 2 + 5.5;
+      n.lines.forEach(function (ln, i) {
+        s += "<text x=\"" + n.x + "\" y=\"" + (y0 + i * lh) + "\"" + (i < nb ? " class=\"b\"" : "") + ">" + esc(ln) + "</text>";
+      });
+      s += "</g>";
+    });
+    C.edges.forEach(function (e) {
+      if (!e.label) return;
+      var lp = e.lp;
+      if (!lp) {
+        var best = 0, bi = 0;
+        for (var i = 0; i < e.p.length - 1; i++) {
+          var d = Math.abs(e.p[i + 1][0] - e.p[i][0]) + Math.abs(e.p[i + 1][1] - e.p[i][1]);
+          if (d > best) { best = d; bi = i; }
+        }
+        lp = [(e.p[bi][0] + e.p[bi + 1][0]) / 2, (e.p[bi][1] + e.p[bi + 1][1]) / 2];
+      }
+      s += "<text class=\"elabel\" x=\"" + lp[0] + "\" y=\"" + (lp[1] + 5) + "\">" + esc(e.label) + "</text>";
+    });
+    return s + "</svg>";
+  }
+
+  // ---------------------------------------------------------------
+  // Walker
+  // ---------------------------------------------------------------
+  function Chart(C) {
+    var self = this;
+    this.C = C; this.byId = {}; this.out = {};
+    C.nodes.forEach(function (n) { self.byId[n.id] = n; self.out[n.id] = []; });
+    C.edges.forEach(function (e) { self.out[e.f].push(e); });
+    this.path = []; this.usedEdges = []; this.walking = false;
+    document.getElementById("svg-" + C.id).innerHTML = buildSvg(C);
+    this.svg = document.getElementById(C.id + "-svg");
+    this.panel = document.getElementById("panel-" + C.id);
+    this.render();
+  }
+  Chart.prototype.start = function () {
+    this.path = ["start"]; this.usedEdges = []; this.walking = true; this.render();
+  };
+  Chart.prototype.reset = function () { this.path = []; this.usedEdges = []; this.walking = false; this.render(); };
+  Chart.prototype.back = function () {
+    if (this.path.length <= 1) { this.reset(); return; }
+    this.path.pop(); this.usedEdges.pop(); this.render();
+  };
+  Chart.prototype.go = function (e) { this.usedEdges.push(e); this.path.push(e.t); this.render(); };
+  Chart.prototype.render = function () {
+    var self = this, C = this.C, cur = this.path[this.path.length - 1];
+    this.svg.setAttribute("class", this.walking ? "walking" : "");
+    C.nodes.forEach(function (n) {
+      var g = document.getElementById(C.id + "-n-" + n.id), cls = "node " + n.t + (n.k ? " " + n.k : "");
+      if (self.path.indexOf(n.id) >= 0) cls += " visited";
+      if (n.id === cur) cls += " current";
+      g.setAttribute("class", cls);
+    });
+    C.edges.forEach(function (e) {
+      var g = document.getElementById(e.dom);
+      g.setAttribute("class", "edge" + (self.usedEdges.indexOf(e) >= 0 ? " used" : ""));
+    });
+    var p = this.panel, h = "";
+    if (!this.walking) {
+      h = "<h2>Walk me through it</h2><p class=\"q\">Trace your own path</p><p class=\"tip\">Answer each question about your function and the chart lights up your route to a conclusion. Nothing is graded; it is just the procedure, one decision at a time.</p>" +
+        "<div class=\"choices\"><button type=\"button\" class=\"choice\" data-act=\"start\">Start the walk-through</button></div>" +
+        "<p class=\"hint\">Or just read the chart, or use <b>Print both charts</b> for a one-page handout of each.</p>";
+    } else {
+      var n = this.byId[cur], outs = this.out[cur];
+      h = "<h2>Step " + this.path.length + "</h2><p class=\"q\">" + esc(n.title) + "</p><p class=\"tip\">" + esc(n.tip) + "</p>";
+      if (n.end) {
+        var kc = n.k === "max" ? " max" : (n.k === "none" ? " none" : "");
+        h += "<div class=\"concl" + kc + "\"><b>Conclusion:</b> " + esc(n.end) + "</div>";
+      }
+      if (outs.length) {
+        h += "<div class=\"choices\">";
+        outs.forEach(function (e, i) {
+          var txt = e.btn || (outs.length === 1 ? "Next step" : "Continue");
+          if (outs.length === 1 && !e.btn) txt = "Next step →";
+          h += "<button type=\"button\" class=\"choice\" data-edge=\"" + C.edges.indexOf(e) + "\">" + esc(txt) + "</button>";
+        });
+        h += "</div>";
+      } else {
+        h += "<p class=\"hint\" style=\"margin-top:0\">End of this path. Pick the next critical number (or the next function) and restart.</p>";
+      }
+      h += "<div class=\"nav\"><button type=\"button\" class=\"btn\" data-act=\"back\">Back</button><button type=\"button\" class=\"btn\" data-act=\"reset\">Start over</button></div>";
+      h += "<ol class=\"pathlist\" aria-label=\"Your path so far\">" + this.path.map(function (id) { var t = self.byId[id].title; return "<li>" + esc(t) + "</li>"; }).join("") + "</ol>";
+    }
+    p.innerHTML = h;
+    p.onclick = function (ev) {
+      var b = ev.target.closest("button"); if (!b) return;
+      if (b.dataset.act === "start") self.start();
+      else if (b.dataset.act === "back") self.back();
+      else if (b.dataset.act === "reset") self.reset();
+      else if (b.dataset.edge != null) self.go(C.edges[+b.dataset.edge]);
+    };
+    var focusEl = p.querySelector(".choice"); // keep keyboard flow on the new choices
+    if (this._userActed && focusEl) focusEl.focus({ preventScroll: true });
+    this._userActed = true;
+  };
+
+  var charts = { c1: new Chart(C1), c2: new Chart(C2) };
+  charts.c1._userActed = false; charts.c2._userActed = false;
+
+  // tabs
+  function showTab(key) {
+    ["c1", "c2"].forEach(function (k) {
+      document.getElementById("sec-" + k).className = "chart-sec" + (k === key ? " on" : "");
+      document.getElementById("tab-" + k).setAttribute("aria-selected", k === key ? "true" : "false");
+    });
+  }
+  document.getElementById("tab-c1").addEventListener("click", function () { showTab("c1"); });
+  document.getElementById("tab-c2").addEventListener("click", function () { showTab("c2"); });
+  document.getElementById("printBtn").addEventListener("click", function () { window.print(); });
+  // printouts are always the clean, un-highlighted chart
+  window.addEventListener("beforeprint", function () {
+    ["c1", "c2"].forEach(function (k) { var c = charts[k]; c._saved = { path: c.path.slice(), used: c.usedEdges.slice(), walking: c.walking }; c.path = []; c.usedEdges = []; c.walking = false; c._userActed = false; c.render(); });
+  });
+  window.addEventListener("afterprint", function () {
+    ["c1", "c2"].forEach(function (k) { var c = charts[k]; if (c._saved) { c.path = c._saved.path; c.usedEdges = c._saved.used; c.walking = c._saved.walking; c._userActed = false; c.render(); } });
+  });
+  window.__charts = charts; // used by the test harness only
+})();
+</script>
+</body>
+</html>
