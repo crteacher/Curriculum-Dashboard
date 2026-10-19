@@ -1,0 +1,2448 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Positive, Negative, Increasing, Decreasing</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%20100%20100'%3E%3Ctext%20y%3D'.9em'%20font-size%3D'90'%3E%F0%9F%93%88%3C%2Ftext%3E%3C%2Fsvg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=JetBrains+Mono:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #f6f1e4;
+    --paper-line: rgba(58, 74, 94, 0.14);
+    --paper-line-strong: rgba(58, 74, 94, 0.26);
+    --ink: #26313f;
+    --ink-soft: #5b6b7d;
+    --card-bg: #fffdf7;
+    --card-border: #ddd2b6;
+    --accent: #b5790a;
+    --accent-strong: #8f5f06;
+    --accent-soft: rgba(181, 121, 10, 0.12);
+    --accent-ink: #fffaf0;
+    --good: #3f7a52;
+    --good-soft: rgba(63, 122, 82, 0.14);
+    --bad: #b3413a;
+    --bad-soft: rgba(179, 65, 58, 0.12);
+    --shadow: rgba(38, 49, 63, 0.16);
+    --graph-grid: rgba(58, 74, 94, 0.14);
+    --graph-axis: rgba(38, 49, 63, 0.55);
+    --graph-stroke-a: #b5790a;
+    --graph-stroke-b: #2f7d6b;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #1b2330;
+      --paper-line: rgba(238, 242, 240, 0.07);
+      --paper-line-strong: rgba(238, 242, 240, 0.15);
+      --ink: #edf1ef;
+      --ink-soft: #a3aebb;
+      --card-bg: #232e3d;
+      --card-border: #3a4a61;
+      --accent: #e8b04f;
+      --accent-strong: #f2c675;
+      --accent-soft: rgba(232, 176, 79, 0.16);
+      --accent-ink: #2b1e05;
+      --good: #7bc794;
+      --good-soft: rgba(123, 199, 148, 0.16);
+      --bad: #ff9a90;
+      --bad-soft: rgba(255, 154, 144, 0.14);
+      --shadow: rgba(0, 0, 0, 0.5);
+      --graph-grid: rgba(238, 242, 240, 0.10);
+      --graph-axis: rgba(238, 242, 240, 0.55);
+      --graph-stroke-a: #e8b04f;
+      --graph-stroke-b: #5fd1b3;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #1b2330;
+    --paper-line: rgba(238, 242, 240, 0.07);
+    --paper-line-strong: rgba(238, 242, 240, 0.15);
+    --ink: #edf1ef;
+    --ink-soft: #a3aebb;
+    --card-bg: #232e3d;
+    --card-border: #3a4a61;
+    --accent: #e8b04f;
+    --accent-strong: #f2c675;
+    --accent-soft: rgba(232, 176, 79, 0.16);
+    --accent-ink: #2b1e05;
+    --good: #7bc794;
+    --good-soft: rgba(123, 199, 148, 0.16);
+    --bad: #ff9a90;
+    --bad-soft: rgba(255, 154, 144, 0.14);
+    --shadow: rgba(0, 0, 0, 0.5);
+    --graph-grid: rgba(238, 242, 240, 0.10);
+    --graph-axis: rgba(238, 242, 240, 0.55);
+    --graph-stroke-a: #e8b04f;
+    --graph-stroke-b: #5fd1b3;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background:
+      repeating-linear-gradient(0deg, var(--paper-line) 0, var(--paper-line) 1px, transparent 1px, transparent 32px),
+      repeating-linear-gradient(90deg, var(--paper-line) 0, var(--paper-line) 1px, transparent 1px, transparent 32px),
+      var(--paper);
+    color: var(--ink);
+    font-family: "Source Sans 3", ui-sans-serif, system-ui, sans-serif;
+    display: flex;
+    justify-content: center;
+    padding: clamp(20px, 4vw, 56px) 18px 80px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+  }
+
+  .wrap { width: 100%; max-width: 900px; }
+  header { text-align: center; margin-bottom: 22px; }
+
+  .eyebrow {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--accent); font-weight: 600;
+  }
+
+  h1 {
+    font-family: "Fraunces", Georgia, serif; font-weight: 600;
+    font-size: clamp(1.9rem, 5vw, 2.6rem); margin: 6px 0 8px; text-wrap: balance;
+  }
+
+  header p { color: var(--ink-soft); font-size: 1rem; max-width: 60ch; margin: 0 auto; line-height: 1.55; }
+
+  .toolbar {
+    position: sticky; top: 12px; z-index: 5;
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    margin: 22px 0 26px; padding: 12px 16px; flex-wrap: wrap;
+    background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 14px;
+    box-shadow: 0 10px 26px -16px var(--shadow);
+  }
+  .score-box { display: flex; align-items: baseline; gap: 8px; }
+  .score-num { font-family: "JetBrains Mono", monospace; font-size: 1.3rem; font-weight: 700; color: var(--accent-strong); font-variant-numeric: tabular-nums; }
+  .score-label { font-size: 0.78rem; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.06em; }
+  .score-group { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .score-divider { width: 1px; align-self: stretch; min-height: 24px; background: var(--card-border); }
+  .exam-score-box .score-num { color: var(--ink); }
+  .exam-score-box .score-label { display: flex; align-items: center; gap: 5px; }
+  .exam-score-box .score-label svg { width: 11px; height: 11px; flex-shrink: 0; }
+
+  .exam-badge {
+    display: inline-flex; align-items: center; gap: 5px; font-size: 0.68rem; font-weight: 700;
+    padding: 3px 9px; border-radius: 20px; letter-spacing: 0.02em; white-space: nowrap;
+  }
+  .exam-badge svg { width: 11px; height: 11px; flex-shrink: 0; }
+  .exam-badge.exam-good { background: var(--good-soft); color: var(--good); }
+  .exam-badge.exam-bad { background: var(--bad-soft); color: var(--bad); }
+
+  button { font-family: inherit; cursor: pointer; }
+  button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .icon-btn {
+    display: inline-flex; align-items: center; gap: 7px; background: var(--card-bg);
+    border: 1px solid var(--card-border); color: var(--ink); padding: 9px 14px;
+    border-radius: 9px; font-size: 0.86rem; font-weight: 600;
+    transition: border-color 0.15s ease, transform 0.1s ease;
+  }
+  .icon-btn:hover { border-color: var(--accent); }
+  .icon-btn:active { transform: translateY(1px); }
+  .icon-btn svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+  .group-head {
+    margin: 34px 0 14px; padding-bottom: 8px; border-bottom: 1.5px solid var(--paper-line-strong);
+  }
+  .group-head .gnum {
+    font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 1.3rem; color: var(--ink);
+  }
+  .group-head .gdesc { font-size: 0.92rem; color: var(--ink-soft); margin-top: 2px; }
+
+  .qcard {
+    background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px;
+    box-shadow: 0 14px 32px -22px var(--shadow), 0 2px 8px -2px var(--shadow);
+    padding: clamp(16px, 3vw, 24px); margin-bottom: 18px;
+  }
+
+  .qcard-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
+  .qcard-head .qtitle { display: flex; align-items: center; gap: 10px; }
+  .qlabel { font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 1.1rem; }
+  .qpoints {
+    font-family: "JetBrains Mono", monospace; font-size: 0.68rem; letter-spacing: 0.05em;
+    color: var(--ink-soft); background: var(--paper-line); padding: 2px 8px; border-radius: 20px;
+  }
+
+  .qprompt { font-size: 1rem; line-height: 1.7; margin-bottom: 14px; }
+  .qprompt .math { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 1.02rem; }
+  .qprompt .frac { display: inline-flex; flex-direction: column; vertical-align: middle; text-align: center; margin: 0 3px; line-height: 1.15; }
+  .qprompt .frac .num { border-bottom: 1.3px solid currentColor; padding: 0 3px 1px; }
+  .qprompt .frac .den { padding: 1px 3px 0; }
+
+  .qinputs { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin-bottom: 14px; }
+  .qinputs .field-label { font-size: 0.86rem; color: var(--ink-soft); font-weight: 600; }
+  .qinputs input[type="text"], .qinputs select {
+    font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 0.95rem;
+    background: var(--paper); border: 1.5px solid var(--card-border); border-radius: 8px;
+    padding: 8px 10px; color: var(--ink); min-width: 92px;
+  }
+  .qinputs select { font-family: "Source Sans 3", sans-serif; min-width: 190px; }
+  .qinputs input:focus, .qinputs select:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .qinputs .subrow {
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    padding: 8px 10px; border: 1.5px dashed var(--card-border); border-radius: 10px;
+  }
+  .qinputs label.chk { display: inline-flex; align-items: center; gap: 6px; font-size: 0.86rem; color: var(--ink-soft); font-weight: 600; }
+  .qinputs .hidden { display: none !important; }
+  .mc-row { display: flex; flex-wrap: wrap; gap: 8px; }
+  .mc-opt {
+    border: 1.5px solid var(--card-border); border-radius: 9px; padding: 8px 13px;
+    font-size: 0.88rem; background: var(--card-bg); color: var(--ink); font-weight: 600;
+    transition: border-color 0.15s ease, background 0.15s ease;
+  }
+  .mc-opt:hover { border-color: var(--accent); }
+  .mc-opt.selected { border-color: var(--accent); background: var(--accent-soft); color: var(--accent-strong); }
+
+  .qactions { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; }
+  .btn-primary {
+    background: var(--accent); color: var(--accent-ink); border: none; padding: 10px 20px;
+    border-radius: 10px; font-size: 0.92rem; font-weight: 700;
+    box-shadow: 0 8px 16px -8px var(--accent-strong); transition: transform 0.1s ease;
+  }
+  .btn-primary:active { transform: translateY(1px); }
+  .btn-secondary {
+    background: transparent; border: 1.5px solid var(--card-border); color: var(--ink);
+    padding: 9px 18px; border-radius: 10px; font-size: 0.92rem; font-weight: 700;
+    transition: border-color 0.15s ease;
+  }
+  .btn-secondary:hover { border-color: var(--accent); }
+
+  .qfeedback {
+    font-size: 0.9rem; font-weight: 700; padding: 9px 13px; border-radius: 9px; margin-bottom: 10px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .qfeedback.good { background: var(--good-soft); color: var(--good); }
+  .qfeedback.bad { background: var(--bad-soft); color: var(--bad); }
+  .qfeedback svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+  .qsolution {
+    background: var(--accent-soft); border: 1px solid var(--card-border); border-left: 4px solid var(--accent);
+    border-radius: 0 12px 12px 0; padding: 14px 16px; font-size: 0.92rem; line-height: 1.7;
+  }
+  .qsolution .sol-label {
+    font-family: "JetBrains Mono", monospace; font-size: 0.68rem; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--accent-strong); font-weight: 700; display: block; margin-bottom: 6px;
+  }
+  .qsolution .step { margin: 3px 0; }
+  .qsolution .final { margin-top: 8px; font-weight: 700; font-family: "JetBrains Mono", monospace; }
+
+  .hidden { display: none !important; }
+
+  /* ---- additions for this test (fractions/radicals in solutions, graphs, tables, whiteboard) ---- */
+  .qprompt .frac, .qsolution .frac { display: inline-flex; flex-direction: column; vertical-align: middle; text-align: center; margin: 0 3px; line-height: 1.15; }
+  .qprompt .frac .num, .qsolution .frac .num { border-bottom: 1.3px solid currentColor; padding: 0 3px 1px; }
+  .qprompt .frac .den, .qsolution .frac .den { padding: 1px 3px 0; }
+  .qprompt .radical, .qsolution .radical { display: inline-flex; align-items: flex-start; margin: 0 2px; }
+  .qprompt .radical .idx, .qsolution .radical .idx { font-size: 0.62em; margin-right: -0.35em; margin-top: -0.3em; }
+  .qprompt .radical .rsym, .qsolution .radical .rsym { font-size: 1.1em; }
+  .qprompt .radical .rad-inner, .qsolution .radical .rad-inner { border-top: 1.3px solid currentColor; padding: 0 3px; margin-left: 1px; }
+  .qprompt .frac .radical, .qsolution .frac .radical { margin: 0; }
+
+  .qgraph-wrap { display: flex; justify-content: center; margin: 10px 0 16px; }
+  .qgraph-wrap canvas { width: 100%; max-width: 440px; height: auto; display: block; }
+  .stim .qcard-head { margin-bottom: 4px; }
+  .stim .qgraph-wrap { margin: 6px 0 4px; }
+  .stim-note { text-align: center; font-size: 0.85rem; color: var(--ink-soft); }
+  .qfeedback span { min-width: 0; }
+
+  .wb { margin: 6px 0 8px; padding: 8px 12px; background: var(--card-bg); border: 1px dashed var(--card-border); border-radius: 10px; }
+  .wb .ln { display: flex; align-items: center; gap: 6px 18px; flex-wrap: wrap; padding: 3px 0; }
+  .wb .ex { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 0.95rem; }
+  .wb .nt { font-size: 0.82rem; color: var(--ink-soft); }
+  .wb .nt::before { content: "\2190\00a0"; }
+
+  .gopt-row { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+  .gopt {
+    position: relative; padding: 6px; background: var(--card-bg); color: var(--ink);
+    border: 1.5px solid var(--card-border); border-radius: 12px;
+    transition: border-color 0.15s ease, background 0.15s ease;
+  }
+  .gopt:hover { border-color: var(--accent); }
+  .gopt.selected { border-color: var(--accent); background: var(--accent-soft); box-shadow: 0 0 0 1.5px var(--accent); }
+  .gopt canvas { width: 100%; height: auto; aspect-ratio: 1 / 1; display: block; }
+  .gopt .gletter {
+    position: absolute; top: 8px; left: 8px; z-index: 1;
+    font-family: "JetBrains Mono", monospace; font-weight: 700; font-size: 0.78rem;
+    color: var(--accent-strong); background: var(--accent-soft); padding: 1px 8px; border-radius: 20px;
+  }
+  @media (max-width: 640px) { .gopt-row { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+  .tbl-editor { display: flex; flex-direction: column; gap: 10px; align-items: flex-start; }
+  .tbl { border-collapse: collapse; background: var(--paper); }
+  .tbl th, .tbl td { border: 1.5px solid var(--card-border); padding: 4px 6px; text-align: center; }
+  .tbl th { font-family: "JetBrains Mono", monospace; font-size: 0.82rem; color: var(--ink-soft); background: var(--accent-soft); padding: 5px 10px; }
+  .tbl input { width: 92px; min-width: 0 !important; text-align: center; }
+  .sol-tbl { margin: 6px 0 8px; background: var(--card-bg); }
+  .sol-tbl td { font-family: "JetBrains Mono", monospace; min-width: 64px; }
+  .tbl-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+  .mini {
+    font-size: 0.8rem; font-weight: 600; padding: 6px 12px; border-radius: 8px;
+    background: transparent; color: var(--ink); border: 1.5px dashed var(--card-border);
+  }
+  .mini:hover { border-color: var(--accent); }
+
+  .qcard-head, .qcard-head .qtitle { flex-wrap: wrap; row-gap: 8px; }
+
+  @media (max-width: 480px) {
+    .toolbar { padding: 10px 12px; }
+    .qinputs input[type="text"] { min-width: 0; }
+  }
+
+
+  /* ---- additions for this walkthrough ---- */
+  .qprompt .frac { display: inline-flex; flex-direction: column; vertical-align: middle; text-align: center; margin: 0 3px; line-height: 1.15; }
+  .qgraph-wrap { display: flex; justify-content: center; margin: 10px 0 16px; }
+  .qgraph-wrap canvas { width: 100%; max-width: 440px; height: auto; display: block; }
+  .stim .qcard-head { margin-bottom: 4px; }
+  .stim .qgraph-wrap { margin: 6px 0 4px; }
+  .stim-note { text-align: center; font-size: 0.85rem; color: var(--ink-soft); }
+  .qfeedback span { min-width: 0; }
+  .qfeedback .fnote { font-weight: 600; opacity: 0.9; }
+  .qcard-head, .qcard-head .qtitle { flex-wrap: wrap; row-gap: 8px; }
+  .hintline { margin-top: 8px; font-size: 0.88rem; color: var(--ink-soft); }
+  .stu { display: inline-block; margin: 8px 0 8px 6px; padding: 4px 12px; font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 0.98rem; background: var(--accent-soft); border: 1px dashed var(--card-border); border-radius: 8px; }
+  .qsolution .nt { color: var(--ink-soft); font-size: 0.88rem; }
+  .qsolution .sol-fig { margin: 12px 0 0; }
+  .tbl-show { border-collapse: collapse; margin: 8px 0 12px; font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 0.92rem; background: var(--paper); }
+  .tbl-show th, .tbl-show td { border: 1.5px solid var(--card-border); padding: 5px 12px; text-align: center; }
+  .tbl-show th { background: var(--accent-soft); color: var(--ink-soft); }
+  .mc-row { max-width: 100%; }
+  .mc-opt { text-align: left; }
+  .qinputs input[type="text"] { max-width: 100%; }
+
+  /* intro + name */
+  .howto { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: clamp(16px, 3vw, 26px); box-shadow: 0 14px 32px -22px var(--shadow); line-height: 1.65; }
+  .howto h2 { font-family: "Fraunces", Georgia, serif; font-size: 1.2rem; margin: 0 0 8px; }
+  .howto ol { margin: 8px 0 14px; padding-left: 22px; }
+  .howto li { margin: 5px 0; }
+  .loop { display: flex; flex-wrap: wrap; gap: 10px; margin: 14px 0 18px; }
+  .loop > div { flex: 1 1 150px; background: var(--paper); border: 1px solid var(--card-border); border-radius: 12px; padding: 10px 12px; font-size: 0.9rem; }
+  .loop b { display: block; font-family: "JetBrains Mono", monospace; font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent-strong); margin-bottom: 3px; }
+  .name-row { display: flex; flex-wrap: wrap; gap: 10px 12px; align-items: center; margin-top: 8px; }
+  .name-row label { font-weight: 700; font-size: 0.92rem; }
+  .name-row input { flex: 1 1 240px; max-width: 340px; font-size: 1rem; padding: 10px 12px; background: var(--paper); border: 1.5px solid var(--card-border); border-radius: 9px; color: var(--ink); font-family: inherit; }
+  .name-row input:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .err { color: var(--bad); font-weight: 700; font-size: 0.88rem; margin-top: 6px; }
+
+  /* sticky bar */
+  .topbar { position: sticky; top: 8px; z-index: 6; margin: 0 0 22px; padding: 10px 12px; background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 14px; box-shadow: 0 10px 26px -16px var(--shadow); display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; }
+  .pills { display: flex; flex-wrap: wrap; gap: 6px; flex: 1 1 420px; }
+  .stage-pill { display: inline-flex; align-items: center; gap: 6px; font-size: 0.76rem; font-weight: 700; padding: 6px 11px; border-radius: 20px; background: var(--paper-line); color: var(--ink-soft); border: 1px solid transparent; transition: background 0.2s ease, color 0.2s ease; }
+  .stage-pill .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--ink-soft); flex-shrink: 0; }
+  .stage-pill.done { background: var(--good-soft); color: var(--good); }
+  .stage-pill.done .dot { background: var(--good); }
+  .stage-pill.current { border-color: var(--accent); color: var(--ink); box-shadow: 0 0 0 1.5px var(--accent); }
+  .stage-pill.bonus { border-style: dashed; border-color: var(--card-border); }
+  .stage-pill:hover { border-color: var(--accent); }
+  .stats { display: flex; align-items: center; gap: 14px; margin-left: auto; font-family: "JetBrains Mono", monospace; font-size: 0.82rem; color: var(--ink-soft); }
+  .stats b { color: var(--accent-strong); font-size: 1.02rem; font-variant-numeric: tabular-nums; }
+  .stats .who { font-family: "Source Sans 3", sans-serif; font-weight: 600; max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  /* stage frame */
+  .stage-head { margin-bottom: 18px; }
+  .stage-kicker { font-family: "JetBrains Mono", monospace; font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); font-weight: 600; }
+  .stage-head h2 { font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: clamp(1.55rem, 4vw, 2.1rem); margin: 4px 0 8px; text-wrap: balance; }
+  .stage-meta { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 12px; color: var(--ink-soft); }
+  .time-chip { font-family: "JetBrains Mono", monospace; font-size: 0.72rem; background: var(--paper-line); border-radius: 20px; padding: 3px 10px; white-space: nowrap; }
+  .goal { font-size: 1rem; }
+  .stage-body { display: flex; flex-direction: column; gap: 14px; }
+  .stage-body > * { margin: 0; }
+  .para { font-size: 1.02rem; line-height: 1.7; max-width: 70ch; }
+  .para.small, .small { font-size: 0.9rem; color: var(--ink-soft); }
+  h3.sec { font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 1.25rem; margin: 8px 0 0; }
+  code { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 0.9em; background: var(--accent-soft); padding: 1px 6px; border-radius: 5px; color: var(--accent-strong); }
+  .stage-foot { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; margin-top: 34px; padding-top: 18px; border-top: 1.5px solid var(--paper-line-strong); }
+  .stage-foot .foot-mid { flex: 1; }
+
+  /* callouts */
+  .callout { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 14px; padding: 14px 18px; font-size: 0.98rem; line-height: 1.65; }
+  .callout p { margin: 6px 0; }
+  .callout .ct { font-family: "JetBrains Mono", monospace; font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; margin-bottom: 4px; }
+  .c-key { background: var(--accent-soft); border-color: var(--accent); }
+  .c-key .ct { color: var(--accent-strong); }
+  .c-warn { background: var(--bad-soft); border-color: var(--bad); }
+  .c-warn .ct { color: var(--bad); }
+  .c-tip { background: var(--card-bg); border-style: dashed; }
+  .c-tip .ct { color: var(--ink-soft); }
+  .c-good { background: var(--good-soft); border-color: var(--good); }
+  .c-good .ct { color: var(--good); }
+  ol.inl { margin: 6px 0 4px; padding-left: 22px; }
+  ol.inl li { margin: 4px 0; }
+  ol.method { counter-reset: m; list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; }
+  ol.method li { counter-increment: m; position: relative; padding: 12px 16px 12px 52px; background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; line-height: 1.6; }
+  ol.method li::before { content: counter(m); position: absolute; left: 14px; top: 11px; width: 26px; height: 26px; border-radius: 50%; background: var(--accent); color: var(--accent-ink); display: grid; place-items: center; font: 700 0.82rem "JetBrains Mono", monospace; }
+  .vocab { width: 100%; border-collapse: collapse; background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; overflow: hidden; font-size: 0.94rem; line-height: 1.5; }
+  .vocab th, .vocab td { padding: 9px 12px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--card-border); }
+  .vocab thead th { background: var(--accent-soft); font-family: "JetBrains Mono", monospace; font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent-strong); }
+  .vocab tbody tr:last-child td, .vocab tbody tr:last-child th { border-bottom: 0; }
+  .vocab.combo th[scope], .vocab.combo tbody th { background: var(--accent-soft); font-size: 0.9rem; }
+  .vocab.typing { width: auto; min-width: min(100%, 420px); }
+  @media (max-width: 560px) { .vocab th, .vocab td { padding: 7px 8px; font-size: 0.86rem; } }
+  .reveal { background: var(--card-bg); border: 1px dashed var(--card-border); border-radius: 12px; padding: 4px 16px; }
+  .reveal summary { cursor: pointer; font-weight: 700; padding: 10px 0; color: var(--accent-strong); }
+  .reveal-body { padding: 2px 0 12px; line-height: 1.65; }
+  .reveal-body p { margin: 6px 0; }
+  .cpbanner { display: flex; flex-direction: column; gap: 4px; padding: 12px 16px; border: 1.5px dashed var(--accent); border-radius: 12px; background: var(--accent-soft); font-size: 0.94rem; line-height: 1.55; margin-top: 10px !important; }
+  .cpbanner .cpb-t { font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 1.15rem; }
+
+  /* figures */
+  .fig { margin: 0; }
+  .fig figcaption { text-align: center; color: var(--ink-soft); font-size: 0.92rem; line-height: 1.5; max-width: 62ch; margin: 0 auto; }
+  .fig .qgraph-wrap { margin: 6px 0 4px; }
+
+  /* worked example */
+  .worked { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: clamp(14px, 3vw, 22px); box-shadow: 0 14px 32px -22px var(--shadow); }
+  .worked-tag { font-family: "JetBrains Mono", monospace; font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 700; color: var(--accent-strong); }
+  .worked h4 { font-family: "Fraunces", Georgia, serif; font-size: 1.2rem; margin: 2px 0 6px; }
+  .worked-intro { margin: 0 0 6px; color: var(--ink-soft); }
+  .wsteps { list-style: none; padding: 0; margin: 6px 0 10px; display: flex; flex-direction: column; gap: 8px; counter-reset: w; }
+  .wsteps:empty { display: none; }
+  .wsteps li { counter-increment: w; padding: 9px 12px 9px 44px; position: relative; border-radius: 10px; background: var(--paper); line-height: 1.6; font-size: 0.97rem; }
+  .wsteps li::before { content: counter(w); position: absolute; left: 12px; top: 9px; width: 22px; height: 22px; border-radius: 50%; background: var(--paper-line-strong); color: var(--ink); display: grid; place-items: center; font: 700 0.74rem "JetBrains Mono", monospace; }
+  .wsteps li.cur { background: var(--accent-soft); }
+  .wsteps li.cur::before { background: var(--accent); color: var(--accent-ink); }
+  .wbtns { display: flex; flex-wrap: wrap; gap: 10px; }
+  button:disabled { opacity: 0.5; cursor: default; }
+
+  /* scanner */
+  .scanner { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: clamp(14px, 3vw, 22px); box-shadow: 0 14px 32px -22px var(--shadow); }
+  .scan-modes { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+  .scan-slide { display: flex; align-items: center; gap: 12px; max-width: 520px; margin: 0 auto 14px; }
+  .scan-slide label { font-weight: 700; font-size: 0.92rem; white-space: nowrap; }
+  .scan-slide input[type="range"] { flex: 1; accent-color: var(--accent); height: 28px; }
+  .scan-read { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+  .scan-read .tile { background: var(--paper); border: 1.5px solid var(--card-border); border-radius: 12px; padding: 8px 12px; min-width: 0; }
+  .scan-read .tl { display: block; font-size: 0.72rem; color: var(--ink-soft); font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 2px; }
+  .scan-read .tv { font-family: "JetBrains Mono", monospace; font-weight: 700; font-size: 1.05rem; font-variant-numeric: tabular-nums; }
+  .scan-read .sg .tv, .scan-read .dr .tv { font-size: 0.92rem; font-family: "Source Sans 3", sans-serif; }
+  .tile.t-pos { background: var(--good-soft); border-color: var(--good); }
+  .tile.t-neg { background: var(--bad-soft); border-color: var(--bad); }
+  .tile.t-zero { background: var(--accent-soft); border-color: var(--accent); }
+  @media (max-width: 700px) { .scan-read { grid-template-columns: 1fr 1fr; } }
+
+  /* cards */
+  .cards { display: flex; flex-direction: column; }
+  .group-head { margin: 22px 0 12px; }
+  .kind-chip { font-family: "JetBrains Mono", monospace; font-size: 0.66rem; letter-spacing: 0.05em; padding: 3px 9px; border-radius: 20px; background: var(--paper-line); color: var(--ink-soft); white-space: nowrap; }
+  .kind-chip.k-cp, .kind-chip.k-exam { background: var(--accent-soft); color: var(--accent-strong); font-weight: 700; }
+  .kind-chip.k-bonus { background: var(--good-soft); color: var(--good); font-weight: 700; }
+
+  /* summary */
+  .sumcard { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: clamp(14px, 3vw, 24px); box-shadow: 0 14px 32px -22px var(--shadow); overflow-x: auto; }
+  .sum-id { display: flex; flex-wrap: wrap; gap: 8px 40px; margin-bottom: 14px; }
+  .sum-id .tl { font-size: 0.72rem; color: var(--ink-soft); font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
+  .sum-name { font-family: "Fraunces", Georgia, serif; font-size: 1.4rem; font-weight: 600; }
+  .sumtbl { width: 100%; border-collapse: collapse; font-size: 0.94rem; }
+  .sumtbl th, .sumtbl td { padding: 8px 10px; border-bottom: 1px solid var(--card-border); text-align: left; }
+  .sumtbl thead th { font-family: "JetBrains Mono", monospace; font-size: 0.68rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-soft); }
+  .sumtbl td.num { font-family: "JetBrains Mono", monospace; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .sumtbl tr.bonus td { color: var(--ink-soft); font-style: italic; }
+  .sumtbl tfoot td { font-weight: 700; border-bottom: 0; border-top: 2px solid var(--paper-line-strong); }
+  .sum-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+  .copied { color: var(--good); font-weight: 700; }
+  .misslist { margin: 4px 0 8px; padding-left: 20px; }
+  .linkbtn { background: none; border: 0; padding: 0; font: inherit; font-weight: 700; color: var(--accent-strong); text-decoration: underline; cursor: pointer; }
+
+  /* print: only the summary */
+  #printSummary { display: none; }
+  @media print {
+    html, body { background: #fff !important; }
+    body { display: block !important; padding: 0 !important; min-height: 0 !important; background-image: none !important; }
+    .wrap { display: none !important; }
+    #printSummary { display: block !important; color: #111; background: #fff; font-family: "Source Sans 3", Arial, sans-serif; padding: 0.4in 0.5in; }
+    #printSummary h1 { font-family: "Fraunces", Georgia, serif; font-size: 22pt; margin: 0; color: #111; }
+    #printSummary .ps-sub { color: #555; margin: 2px 0 16px; font-size: 11pt; }
+    #printSummary .ps-id { display: flex; gap: 40px; margin-bottom: 14px; font-size: 12pt; }
+    #printSummary .sumtbl { font-size: 11pt; }
+    #printSummary .sumtbl th, #printSummary .sumtbl td { border-bottom: 1px solid #bbb; color: #111; }
+    #printSummary .sumtbl thead th { color: #555; }
+    #printSummary .sumtbl tr.bonus td { color: #555; }
+    #printSummary .sumtbl tfoot td { border-top: 2px solid #333; }
+    #printSummary .ps-note { color: #555; font-size: 10pt; margin-top: 14px; }
+    @page { margin: 0.5in; }
+  }
+  @media (max-width: 640px) {
+    .topbar { position: static; }
+    .stats { margin-left: 0; width: 100%; justify-content: space-between; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">College Algebra &middot; Reading Graphs</div>
+    <h1>Positive, Negative, Increasing, Decreasing</h1>
+    <p>A self-paced lesson. Everything you need is on this page: the explanations, worked examples, practice, and a short set of checkpoints at the end of each stage. No videos and no other materials are required.</p>
+  </header>
+
+  <section id="intro" class="howto">
+    <h2>How today works</h2>
+    <p>You will work through seven short stages at your own pace. Plan on about <b>65 minutes</b> for all seven. Keep scratch paper and a pencil next to you: sketching and marking up the graphs on paper makes every stage easier.</p>
+    <div class="loop">
+      <div><b>1 Learn</b>Read the explanation and step through the worked examples.</div>
+      <div><b>2 Practice</b>Unscored. Use the hints, new versions, and solutions as much as you want.</div>
+      <div><b>3 Checkpoint</b>Scored. No hints. Your first check is the one that counts.</div>
+    </div>
+    <ol>
+      <li>Answers about intervals are typed with the keyboard, like <code>(-3, 2) U (5, inf)</code>. Stage 2 shows exactly how.</li>
+      <li>If you open a solution <i>before</i> you check a checkpoint, that part scores 0. Try it first.</li>
+      <li>Your page keeps a record of your scores and your time on each stage. At the end, go to <b>Summary</b>, save it as a PDF or print it, and turn it in.</li>
+      <li>Do not refresh or close this tab until you have turned in your summary. Your progress is not saved if the page reloads.</li>
+      <li>Finished early? There is a Bonus stage after Stage 7.</li>
+    </ol>
+    <div class="name-row"><label for="stuName">Your first and last name:</label><input id="stuName" type="text" autocomplete="off" maxlength="60"><button type="button" class="btn-primary" id="beginBtn">Begin</button></div>
+    <div id="nameErr" class="err hidden">Type your name first so it appears on your summary.</div>
+  </section>
+
+  <div id="lesson" class="hidden">
+    <div id="navbar" class="topbar">
+      <div class="pills" id="pills"></div>
+      <div class="stats"><span class="who" id="whoName"></span><span title="Points recorded so far (checkpoints and Stage 7)">Score <b id="stScore">0 / 0</b></span><span title="Time since you began">Time <b id="stClock">0:00</b></span></div>
+    </div>
+    <div id="stages"></div>
+  </div>
+</div>
+<section id="printSummary"></section>
+
+<script>
+(function () {
+  "use strict";
+  // ============================================================
+  // Utilities (shared with the rest of the practice-test family)
+  // ============================================================
+  function randInt(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+  function randNonZeroInt(min, max) { var v; do { v = randInt(min, max); } while (v === 0); return v; }
+  function randIntExcluding(exclude, min, max) {
+    var v, tries = 0;
+    do { v = randInt(min, max); tries++; } while (exclude.indexOf(v) !== -1 && tries < 200);
+    return v;
+  }
+  function randChoice(arr) { return arr[randInt(0, arr.length - 1)]; }
+  function randBool() { return Math.random() < 0.5; }
+  function shuffle(arr) {
+    var a = arr.slice();
+    for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; }
+    return a;
+  }
+  // weighted pick: list of [value, weight]
+  function pickW(list) {
+    var total = 0, i;
+    for (i = 0; i < list.length; i++) total += list[i][1];
+    var r = Math.random() * total;
+    for (i = 0; i < list.length; i++) { r -= list[i][1]; if (r < 0) return list[i][0]; }
+    return list[list.length - 1][0];
+  }
+  function gcdInt(a, b) { a = Math.abs(a); b = Math.abs(b); while (b) { var t = b; b = a % b; a = t; } return a || 1; }
+  function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+
+  // ---- exact rationals (used for slopes / fractional answers) ----
+  function R(n, d) {
+    if (d === undefined) d = 1;
+    if (d < 0) { n = -n; d = -d; }
+    var g = gcdInt(n, d);
+    return { n: n / g, d: d / g };
+  }
+  function rAdd(a, b) { return R(a.n * b.d + b.n * a.d, a.d * b.d); }
+  function rSub(a, b) { return R(a.n * b.d - b.n * a.d, a.d * b.d); }
+  function rMul(a, b) { return R(a.n * b.n, a.d * b.d); }
+  function rDiv(a, b) { return R(a.n * b.d, a.d * b.n); }
+  function rVal(a) { return a.n / a.d; }
+  function rEq(a, b) { return a.n === b.n && a.d === b.d; }
+  function rIsInt(a) { return a.d === 1; }
+
+  // ---- HTML helpers ----
+  function frac(numHtml, denHtml) {
+    return "<span class=\"frac\"><span class=\"num\">" + numHtml + "</span><span class=\"den\">" + denHtml + "</span></span>";
+  }
+  function radical(innerHtml, index) {
+    var idx = index ? "<span class=\"idx\">" + index + "</span>" : "";
+    return "<span class=\"radical\">" + idx + "<span class=\"rsym\">&radic;</span><span class=\"rad-inner\">" + innerHtml + "</span></span>";
+  }
+  function mn(n) { return n < 0 ? "&minus;" + (-n) : String(n); }          // signed number as html
+  function par(n) { return n < 0 ? "(&minus;" + (-n) + ")" : String(n); }  // parenthesise negatives
+  function rHtml(a) {
+    if (a.d === 1) return mn(a.n);
+    return (a.n < 0 ? "&minus;" : "") + frac(String(Math.abs(a.n)), String(a.d));
+  }
+  function rPlain(a) { return a.d === 1 ? String(a.n) : a.n + "/" + a.d; }
+  // polynomial from [[coef, labelHtml], ...] (integer coefficients; zero terms skipped)
+  function poly(terms) {
+    var out = "", first = true;
+    terms.forEach(function (t) {
+      var c = t[0], l = t[1];
+      if (c === 0) return;
+      var a = Math.abs(c), cs = (a === 1 && l) ? "" : String(a);
+      if (first) { out += (c < 0 ? "&minus;" : "") + cs + l; first = false; }
+      else out += " " + (c < 0 ? "&minus;" : "+") + " " + cs + l;
+    });
+    return first ? "0" : out;
+  }
+  // m x + b with rational slope m (non-zero) and integer intercept b
+  function linHtml(m, b, v) {
+    v = v || "x";
+    var an = Math.abs(m.n), s;
+    if (m.d === 1) s = (m.n < 0 ? "&minus;" : "") + (an === 1 ? "" : an) + v;
+    else s = (m.n < 0 ? "&minus;" : "") + frac(String(an), String(m.d)) + v;
+    if (b !== 0) s += " " + (b < 0 ? "&minus;" : "+") + " " + Math.abs(b);
+    return s;
+  }
+  // "whiteboard" stack: lines = [[exprHtml, noteHtml], ...]
+  function wb(lines) {
+    return "<div class=\"wb\">" + lines.map(function (l) {
+      return "<div class=\"ln\"><span class=\"ex\">" + l[0] + "</span>" + (l[1] ? "<span class=\"nt\">" + l[1] + "</span>" : "") + "</div>";
+    }).join("") + "</div>";
+  }
+  // number -> exact-looking string ("2/3" if it is a small-denominator fraction, otherwise 2 decimals)
+  function fmtNum(v) {
+    if (v === Infinity) return "inf";
+    if (v === -Infinity) return "-inf";
+    for (var d = 1; d <= 24; d++) {
+      var n = Math.round(v * d);
+      if (Math.abs(v * d - n) < 1e-9) { var g = gcdInt(n, d); return (n / g) + (d / g === 1 ? "" : "/" + (d / g)); }
+    }
+    return String(Math.round(v * 100) / 100);
+  }
+
+  // ============================================================
+  // Number parsing (typed numeric answers)
+  // ============================================================
+  function normText(raw) {
+    return String(raw === null || raw === undefined ? "" : raw)
+      .replace(/[−‒–—]/g, "-").replace(/ /g, " ").trim().toLowerCase();
+  }
+  // -> { type: "number", value } or { type: "invalid" }.  Accepts 5, -5, +5, 5., .5, 1/2, -3/2, 1.5, "x = 4", "f(2) = -3"
+  function parseAnswer(raw) {
+    var str = normText(raw);
+    if (str === "") return { type: "invalid" };
+    var eq = str.indexOf("=");
+    if (eq !== -1) str = str.slice(eq + 1).trim();
+    str = str.replace(/\s+/g, "").replace(/,/g, "");
+    var m = str.match(/^([+-]?(?:\d+\.?\d*|\.\d+))\/([+-]?(?:\d+\.?\d*|\.\d+))$/);
+    if (m) {
+      var p = parseFloat(m[1]), q = parseFloat(m[2]);
+      if (q !== 0) return { type: "number", value: p / q };
+      return { type: "invalid" };
+    }
+    if (/^[+-]?(?:\d+\.?\d*|\.\d+)$/.test(str)) return { type: "number", value: parseFloat(str) };
+    return { type: "invalid" };
+  }
+  var NUM_HELP = "Type a number (a fraction like 3/2 or a decimal is fine).";
+  // numeric check: expected number, tolerance, optional diag list [{value, msg}] for targeted feedback
+  function numCheck(raw, expected, tol, diags) {
+    var u = parseAnswer(raw);
+    if (u.type === "invalid") return { ok: false, msg: String(raw === null || raw === undefined ? "" : raw).trim() === "" ? "Type your answer in the box first." : "I could not read that as a number. " + NUM_HELP };
+    if (Math.abs(u.value - expected) <= tol) return { ok: true };
+    var msg = "";
+    (diags || []).some(function (d) {
+      if (d.value !== null && d.value !== undefined && isFinite(d.value) && Math.abs(u.value - d.value) <= tol * 0.999 + 1e-9) { msg = d.msg; return true; }
+      return false;
+    });
+    return { ok: false, msg: msg };
+  }
+
+  // ============================================================
+  // Interval notation: hand-typed, parsed, merged, compared
+  // ============================================================
+  function parseBoundToken(raw) {
+    var s = normText(raw).replace(/\s+/g, "");
+    if (["-infinity", "-inf", "-oo", "-∞"].indexOf(s) !== -1) return -Infinity;
+    if (["infinity", "+infinity", "inf", "+inf", "oo", "+oo", "∞", "+∞"].indexOf(s) !== -1) return Infinity;
+    var m = s.match(/^([+-]?\d+(?:\.\d+)?|[+-]?\.\d+)\/([+-]?\d+(?:\.\d+)?)$/);
+    if (m) { var p = parseFloat(m[1]), q = parseFloat(m[2]); if (q !== 0) return p / q; return null; }
+    if (/^[+-]?(?:\d+\.?\d*|\.\d+)$/.test(s)) return parseFloat(s);
+    return null;
+  }
+  var EMPTY_WORDS = ["empty", "empty set", "the empty set", "no solution", "no solutions", "none", "∅", "{}", "dne", "does not exist", "no values", "never"];
+  var ALLREAL_WORDS = ["all reals", "all real numbers", "all real", "reals", "all real numbers.", "r", "ℝ", "all x", "any real number", "all numbers"];
+  function parseIntervalUnion(raw) {
+    if (raw === null || raw === undefined) return { intervals: [], invalid: true };
+    var str = normText(raw);
+    if (str === "") return { intervals: [], invalid: true };
+    var bare = str.replace(/[.\s]+$/, "");
+    if (EMPTY_WORDS.indexOf(bare) !== -1) return { intervals: [], invalid: false };
+    if (ALLREAL_WORDS.indexOf(bare) !== -1) {
+      return { intervals: [{ lo: -Infinity, loIncl: false, hi: Infinity, hiIncl: false }], invalid: false };
+    }
+    var re = /([\(\[])\s*([^,()\[\]]+?)\s*,\s*([^,()\[\]]+?)\s*([\)\]])/g;
+    var m, intervals = [];
+    while ((m = re.exec(str)) !== null) {
+      var lo = parseBoundToken(m[2]), hi = parseBoundToken(m[3]);
+      if (lo === null || hi === null) return { intervals: [], invalid: true };
+      intervals.push({
+        lo: lo, hi: hi,
+        loIncl: m[1] === "[" && lo !== -Infinity && lo !== Infinity,
+        hiIncl: m[4] === "]" && hi !== -Infinity && hi !== Infinity
+      });
+    }
+    if (intervals.length === 0) return { intervals: [], invalid: true };
+    // whatever is left between the intervals may only be union connectors
+    var rest = str.replace(re, " ").replace(/union|∪|\bu\b|\bor\b|[+,;&.\s]/g, "");
+    if (rest !== "") return { intervals: [], invalid: true };
+    return { intervals: intervals, invalid: false };
+  }
+  function cleanIv(a) { return { lo: a.lo, hi: a.hi, loIncl: !!a.loIncl && isFinite(a.lo), hiIncl: !!a.hiIncl && isFinite(a.hi) }; }
+  // union of intervals -> sorted, merged (touching/overlapping pieces fuse; empty pieces vanish)
+  function mergeIntervals(list) {
+    var L = list.map(cleanIv).filter(function (a) { return a.lo < a.hi || (a.lo === a.hi && a.loIncl && a.hiIncl); });
+    L.sort(function (a, b) {
+      if (a.lo !== b.lo) return a.lo < b.lo ? -1 : 1;
+      return (b.loIncl ? 1 : 0) - (a.loIncl ? 1 : 0);
+    });
+    var out = [];
+    L.forEach(function (a) {
+      var last = out[out.length - 1];
+      if (last && (a.lo < last.hi || (a.lo === last.hi && (last.hiIncl || a.loIncl)))) {
+        if (a.hi > last.hi) { last.hi = a.hi; last.hiIncl = a.hiIncl; }
+        else if (a.hi === last.hi) { last.hiIncl = last.hiIncl || a.hiIncl; }
+      } else out.push({ lo: a.lo, loIncl: a.loIncl, hi: a.hi, hiIncl: a.hiIncl });
+    });
+    return out;
+  }
+  function boundEqual(uv, uIncl, ev, eIncl) {
+    if (ev === -Infinity || ev === Infinity) return uv === ev;
+    return uv !== -Infinity && uv !== Infinity && Math.abs(uv - ev) < 0.01 && uIncl === eIncl;
+  }
+  function endpointsOnlyEqual(us, es) {
+    if (us.length !== es.length) return false;
+    for (var i = 0; i < us.length; i++) {
+      var a = us[i], b = es[i];
+      var loOk = (a.lo === b.lo) || (isFinite(a.lo) && isFinite(b.lo) && Math.abs(a.lo - b.lo) < 0.01);
+      var hiOk = (a.hi === b.hi) || (isFinite(a.hi) && isFinite(b.hi) && Math.abs(a.hi - b.hi) < 0.01);
+      if (!loOk || !hiOk) return false;
+    }
+    return true;
+  }
+  // expected: array of {lo,loIncl,hi,hiIncl} -- an empty array means the empty set
+  function intervalAnswerCorrect(parsed, expected) {
+    if (parsed.invalid) return false;
+    var us = mergeIntervals(parsed.intervals), es = mergeIntervals(expected);
+    if (us.length !== es.length) return false;
+    for (var i = 0; i < us.length; i++) {
+      if (!boundEqual(us[i].lo, us[i].loIncl, es[i].lo, es[i].loIncl)) return false;
+      if (!boundEqual(us[i].hi, us[i].hiIncl, es[i].hi, es[i].hiIncl)) return false;
+    }
+    return true;
+  }
+  function sameIntervals(a, b) {
+    var x = mergeIntervals(a), y = mergeIntervals(b);
+    if (x.length !== y.length) return false;
+    for (var i = 0; i < x.length; i++) {
+      if (!boundEqual(x[i].lo, x[i].loIncl, y[i].lo, y[i].loIncl) || !boundEqual(x[i].hi, x[i].hiIncl, y[i].hi, y[i].hiIncl)) return false;
+    }
+    return true;
+  }
+  var IV_HELP = "I could not read that as interval notation. Type it like (-3, 5] or (-inf, 2) U (4, inf), or write empty for no values.";
+  // result of grading one typed interval field -> { ok, msg }
+  function intervalCheck(raw, expected, extra) {
+    var parsed = parseIntervalUnion(raw);
+    if (parsed.invalid) {
+      return { ok: false, msg: normText(raw) === "" ? "Type your answer in the box first." : IV_HELP };
+    }
+    if (intervalAnswerCorrect(parsed, expected)) return { ok: true };
+    var msg = "";
+    var us = mergeIntervals(parsed.intervals), es = mergeIntervals(expected);
+    (extra || []).some(function (x) { if (sameIntervals(parsed.intervals, x.intervals)) { msg = x.msg; return true; } return false; });
+    if (!msg) {
+      if (endpointsOnlyEqual(us, es)) msg = "Your endpoints are right, but check which ones need parentheses and which need brackets.";
+      else if (us.length < es.length && es.length > 1) {
+        var covers = us.some(function (u) { return es.filter(function (e) { return e.lo >= u.lo && e.hi <= u.hi; }).length > 1; });
+        if (covers) msg = "One of your intervals runs straight across a value that is not allowed there. Check whether that value has to be left out (that makes a union).";
+      }
+    }
+    return { ok: false, msg: msg };
+  }
+  function oneIntervalNotation(iv) {
+    var loStr = iv.lo === -Infinity ? "&minus;&infin;" : fmtNum(iv.lo).replace("-", "&minus;");
+    var hiStr = iv.hi === Infinity ? "&infin;" : fmtNum(iv.hi).replace("-", "&minus;");
+    var loBrk = iv.lo === -Infinity ? "(" : (iv.loIncl ? "[" : "(");
+    var hiBrk = iv.hi === Infinity ? ")" : (iv.hiIncl ? "]" : ")");
+    return loBrk + loStr + ", " + hiStr + hiBrk;
+  }
+  function intervalNotation(expected) {
+    var es = mergeIntervals(expected);
+    if (es.length === 0) return "&empty; (empty set)";
+    return es.map(oneIntervalNotation).join(" &cup; ");
+  }
+  // plain ASCII form a student would type (used by the test harness and the page's own self-test hook)
+  function ivText(expected, style) {
+    var es = mergeIntervals(expected);
+    if (es.length === 0) return style === 1 ? "no solution" : "empty";
+    if (es.length === 1 && es[0].lo === -Infinity && es[0].hi === Infinity && style === 2) return "all real numbers";
+    return es.map(function (iv) {
+      var lo = iv.lo === -Infinity ? "-infinity" : fmtNum(iv.lo), hi = iv.hi === Infinity ? "infinity" : fmtNum(iv.hi);
+      if (style === 3) { lo = lo.replace("infinity", "inf"); hi = hi.replace("infinity", "inf"); }
+      return (iv.loIncl ? "[" : "(") + lo + ", " + hi + (iv.hiIncl ? "]" : ")");
+    }).join(style === 4 ? " u " : " U ");
+  }
+  function intervalTextInputHtml(cls, label, placeholder) {
+    return "<span class=\"field-label\">" + label + "</span><input type=\"text\" class=\"" + cls + "\" autocomplete=\"off\" autocapitalize=\"off\" spellcheck=\"false\" placeholder=\"" + (placeholder || "e.g. (-3, 5]") + "\" style=\"min-width:240px\">";
+  }
+  function numInputHtml(cls, label, placeholder) {
+    return "<span class=\"field-label\">" + label + "</span><input type=\"text\" class=\"" + cls + "\" inputmode=\"text\" autocomplete=\"off\" spellcheck=\"false\" placeholder=\"" + (placeholder || "a number") + "\">";
+  }
+  function escHtml(v) { return String(v).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
+  function fieldVal(card, sel) { var el = card.querySelector(sel); return el ? el.value : ""; }
+
+  // ============================================================
+  // Typed formulas: tiny expression parser (no eval) for f^-1(x)
+  // ============================================================
+  function tokenizeExpr(s) {
+    var pos = 0, toks = [], m;
+    while (pos < s.length) {
+      var ch = s.charAt(pos);
+      if (/[0-9.]/.test(ch)) {
+        m = /^(\d+\.?\d*|\.\d+)/.exec(s.slice(pos));
+        if (!m) return { error: "number" };
+        toks.push({ t: "num", v: parseFloat(m[1]) }); pos += m[1].length;
+      } else if (ch === "x") { toks.push({ t: "x" }); pos++; }
+      else if ("+-*/^()".indexOf(ch) !== -1) { toks.push({ t: ch }); pos++; }
+      else return { error: "char", ch: ch };
+    }
+    return { toks: toks };
+  }
+  function parseExpr(src) {
+    var s = normText(src).replace(/[×·⋅]/g, "*").replace(/÷/g, "/").replace(/\*\*/g, "^").replace(/\s+/g, "");
+    if (s === "") return { error: "empty" };
+    if (s.length > 120) return { error: "long" };
+    var tk = tokenizeExpr(s);
+    if (tk.error) return tk;
+    var toks = tk.toks, i = 0, depth = 0;
+    function peek() { return i < toks.length ? toks[i].t : null; }
+    function startsPrimary(t) { return t === "num" || t === "x" || t === "("; }
+    function parseExprP() {
+      var left = parseTerm();
+      while (peek() === "+" || peek() === "-") {
+        var op = toks[i++].t;
+        var right = parseTerm();
+        left = { k: "bin", op: op, a: left, b: right };
+      }
+      return left;
+    }
+    function parseTerm() {
+      var left = parseUnary();
+      for (;;) {
+        var t = peek();
+        if (t === "*" || t === "/") {
+          i++;
+          var r = parseUnary();
+          left = { k: "bin", op: t, a: left, b: r };
+        } else if (startsPrimary(t)) {
+          var r2 = parseUnary();
+          left = { k: "bin", op: "*", a: left, b: r2 };
+        } else break;
+      }
+      return left;
+    }
+    function parseUnary() {
+      var t = peek();
+      if (t === "-") { i++; return { k: "neg", a: parseUnary() }; }
+      if (t === "+") { i++; return parseUnary(); }
+      return parsePower();
+    }
+    function parsePower() {
+      var base = parsePrimary();
+      if (peek() === "^") { i++; var ex = parseUnary(); return { k: "bin", op: "^", a: base, b: ex }; }
+      return base;
+    }
+    function parsePrimary() {
+      var t = toks[i];
+      if (!t) throw new Error("end");
+      if (t.t === "num") { i++; return { k: "num", v: t.v }; }
+      if (t.t === "x") { i++; return { k: "x" }; }
+      if (t.t === "(") {
+        i++; depth++;
+        if (depth > 25) throw new Error("deep");
+        var e = parseExprP();
+        if (peek() !== ")") throw new Error("paren");
+        i++; depth--;
+        return e;
+      }
+      throw new Error("unexpected");
+    }
+    var ast;
+    try {
+      ast = parseExprP();
+      if (i !== toks.length) return { error: "syntax" };
+    } catch (e) { return { error: "syntax" }; }
+    return { ast: ast };
+  }
+  function evalAst(n, x) {
+    switch (n.k) {
+      case "num": return n.v;
+      case "x": return x;
+      case "neg": return -evalAst(n.a, x);
+      case "bin": {
+        var a = evalAst(n.a, x), b = evalAst(n.b, x);
+        if (n.op === "+") return a + b;
+        if (n.op === "-") return a - b;
+        if (n.op === "*") return a * b;
+        if (n.op === "/") return b === 0 ? NaN : a / b;
+        return Math.pow(a, b);
+      }
+    }
+    return NaN;
+  }
+  // student text -> { fn } or { error }
+  function parseFormula(raw) {
+    var s = normText(raw);
+    if (s === "") return { error: "empty" };
+    var eqs = s.split("=");
+    if (eqs.length > 2) return { error: "eq" };
+    if (eqs.length === 2) {
+      var left = eqs[0].replace(/\s+/g, "");
+      if (/^(y|[fgh][^=]*)$/.test(left)) s = eqs[1];
+      else return { error: "eq" };
+    }
+    if (/y/.test(s.replace(/\s+/g, ""))) return { error: "y" };
+    var p = parseExpr(s);
+    if (p.error) return p;
+    return { fn: function (x) { return evalAst(p.ast, x); } };
+  }
+  var TEST_XS = [-7, -3, -1.5, 0, 1, 2, 4.25, 9];
+  function formulaMatches(fn, ref) {
+    for (var i = 0; i < TEST_XS.length; i++) {
+      var a = fn(TEST_XS[i]), b = ref(TEST_XS[i]);
+      if (!isFinite(a) || !isFinite(b)) return false;
+      if (Math.abs(a - b) > 1e-6 * Math.max(1, Math.abs(b))) return false;
+    }
+    return true;
+  }
+  var FORMULA_HELP = "I could not read that as a formula in x. Use x as the variable, for example (x + 3)/2 or x/2 + 3/2 (write 2x for 2 times x).";
+
+  // ============================================================
+  // Canvas graph helpers
+  // ============================================================
+  function themeColor(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+  function setupCanvas(canvas) {
+    var cssW = canvas.clientWidth || 300, cssH = canvas.clientHeight || 200;
+    var dpr = window.devicePixelRatio || 1;
+    canvas.width = Math.round(cssW * dpr);
+    canvas.height = Math.round(cssH * dpr);
+    var ctx = canvas.getContext("2d");
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, cssW, cssH);
+    return { ctx: ctx, w: cssW, h: cssH };
+  }
+  function makeMapper(cssW, cssH, xMin, xMax, yMin, yMax, pad) {
+    pad = pad || 24;
+    var w = cssW - pad * 1.4, h = cssH - pad * 1.6;
+    var sx = w / (xMax - xMin), sy = h / (yMax - yMin);
+    var ox = pad, oy = cssH - pad * 0.9;
+    var f = function (x, y) { return [ox + (x - xMin) * sx, oy - (y - yMin) * sy]; };
+    f.sx = sx; f.sy = sy;
+    return f;
+  }
+  // grid at every integer, stronger lines at multiples of 5 on wide windows, axes, and numeric tick labels
+  // along the bottom/left edges (always visible, whether or not the window contains the origin).
+  function drawGrid(canvas, xMin, xMax, yMin, yMax, opts) {
+    opts = opts || {};
+    var pad = opts.pad || 24;
+    var setup = setupCanvas(canvas), ctx = setup.ctx, cssW = setup.w, cssH = setup.h;
+    var toPx = makeMapper(cssW, cssH, xMin, xMax, yMin, yMax, pad);
+    var gridColor = themeColor("--graph-grid"), axisColor = themeColor("--graph-axis"), labelColor = themeColor("--ink-soft");
+    var gx, gy;
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = gridColor;
+    ctx.beginPath();
+    for (gx = Math.ceil(xMin); gx <= Math.floor(xMax); gx++) {
+      var p0 = toPx(gx, yMin), p1 = toPx(gx, yMax);
+      ctx.moveTo(p0[0], p0[1]); ctx.lineTo(p1[0], p1[1]);
+    }
+    for (gy = Math.ceil(yMin); gy <= Math.floor(yMax); gy++) {
+      var q0 = toPx(xMin, gy), q1 = toPx(xMax, gy);
+      ctx.moveTo(q0[0], q0[1]); ctx.lineTo(q1[0], q1[1]);
+    }
+    ctx.stroke();
+    if (opts.major) {
+      ctx.save();
+      ctx.globalAlpha = 0.28; ctx.strokeStyle = axisColor; ctx.lineWidth = 1;
+      ctx.beginPath();
+      for (gx = Math.ceil(xMin / 5) * 5; gx <= xMax; gx += 5) { var m0 = toPx(gx, yMin), m1 = toPx(gx, yMax); ctx.moveTo(m0[0], m0[1]); ctx.lineTo(m1[0], m1[1]); }
+      for (gy = Math.ceil(yMin / 5) * 5; gy <= yMax; gy += 5) { var n0 = toPx(xMin, gy), n1 = toPx(xMax, gy); ctx.moveTo(n0[0], n0[1]); ctx.lineTo(n1[0], n1[1]); }
+      ctx.stroke();
+      ctx.restore();
+    }
+    ctx.lineWidth = 1.6;
+    ctx.strokeStyle = axisColor;
+    ctx.beginPath();
+    if (xMin <= 0 && xMax >= 0) { var a0 = toPx(0, yMin), a1 = toPx(0, yMax); ctx.moveTo(a0[0], a0[1]); ctx.lineTo(a1[0], a1[1]); }
+    if (yMin <= 0 && yMax >= 0) { var b0 = toPx(xMin, 0), b1 = toPx(xMax, 0); ctx.moveTo(b0[0], b0[1]); ctx.lineTo(b1[0], b1[1]); }
+    ctx.stroke();
+    if (!opts.noLabels) {
+      ctx.fillStyle = labelColor;
+      ctx.font = "10px 'JetBrains Mono', ui-monospace, monospace";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "top";
+      var steps = [1, 2, 5, 10], xStep = 10, yStep = 10, si;
+      for (si = 0; si < steps.length; si++) { if (toPx.sx * steps[si] >= 27) { xStep = steps[si]; break; } }
+      for (si = 0; si < steps.length; si++) { if (toPx.sy * steps[si] >= 15) { yStep = steps[si]; break; } }
+      for (var lx = Math.ceil(xMin / xStep) * xStep; lx <= Math.floor(xMax); lx += xStep) {
+        var lp = toPx(lx, yMin);
+        ctx.fillText(String(lx), Math.min(Math.max(lp[0], 12), cssW - 12), cssH - 13);
+      }
+      ctx.textAlign = "left";
+      ctx.textBaseline = "middle";
+      for (var ly = Math.ceil(yMin / yStep) * yStep; ly <= Math.floor(yMax); ly += yStep) {
+        var lq = toPx(xMin, ly);
+        ctx.fillText(String(ly), 4, Math.min(Math.max(lq[1], 10), cssH - 16));
+      }
+    }
+    var tl = toPx(xMin, yMax), br = toPx(xMax, yMin);
+    return {
+      ctx: ctx, toPx: toPx,
+      clipOn: function () { ctx.save(); ctx.beginPath(); ctx.rect(tl[0], tl[1], br[0] - tl[0], br[1] - tl[1]); ctx.clip(); },
+      clipOff: function () { ctx.restore(); }
+    };
+  }
+  function strokePath(ctx, toPx, pts, color, width) {
+    ctx.strokeStyle = color; ctx.lineWidth = width || 2.4; ctx.lineCap = "round"; ctx.lineJoin = "round";
+    ctx.beginPath();
+    pts.forEach(function (p, i) { var q = toPx(p[0], p[1]); if (i === 0) ctx.moveTo(q[0], q[1]); else ctx.lineTo(q[0], q[1]); });
+    ctx.stroke();
+  }
+  function drawSegment(ctx, toPx, x0, y0, x1, y1, color, width) { strokePath(ctx, toPx, [[x0, y0], [x1, y1]], color, width); }
+  function drawCircle(ctx, toPx, x, y, color, open) {
+    var p = toPx(x, y);
+    ctx.beginPath(); ctx.arc(p[0], p[1], 4.3, 0, Math.PI * 2);
+    if (open) {
+      ctx.fillStyle = themeColor("--card-bg");
+      ctx.fill(); ctx.lineWidth = 2; ctx.strokeStyle = color; ctx.stroke();
+    } else {
+      ctx.fillStyle = color; ctx.fill();
+    }
+  }
+  function drawArrowHead(ctx, toPx, x, y, dx, dy, color) {
+    var p = toPx(x, y), q = toPx(x + dx, y + dy);
+    var vx = q[0] - p[0], vy = q[1] - p[1], len = Math.sqrt(vx * vx + vy * vy) || 1;
+    vx /= len; vy /= len;
+    var L = 12, W = 5.4;
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.moveTo(p[0], p[1]);
+    ctx.lineTo(p[0] - vx * L + vy * W, p[1] - vy * L - vx * W);
+    ctx.lineTo(p[0] - vx * L - vy * W, p[1] - vy * L + vx * W);
+    ctx.closePath(); ctx.fill();
+  }
+
+  // ============================================================
+  // Smooth curves through chosen points: shape-preserving cubic Hermite (PCHIP).
+  // Slope is exactly 0 at every turning point, and the curve is strictly monotone between knots,
+  // so every turning point and zero sits exactly on a knot.
+  // ============================================================
+  function pchip(xs, ys) {
+    var n = xs.length, h = [], del = [], d = [], i;
+    for (i = 0; i < n - 1; i++) { h[i] = xs[i + 1] - xs[i]; del[i] = (ys[i + 1] - ys[i]) / h[i]; }
+    d[0] = del[0]; d[n - 1] = del[n - 2];
+    for (i = 1; i < n - 1; i++) {
+      if (del[i - 1] * del[i] <= 0) d[i] = 0;
+      else {
+        var w1 = 2 * h[i] + h[i - 1], w2 = h[i] + 2 * h[i - 1];
+        d[i] = (w1 + w2) / (w1 / del[i - 1] + w2 / del[i]);
+      }
+    }
+    return function (x) {
+      var k = 0;
+      if (x <= xs[0]) k = 0; else if (x >= xs[n - 1]) k = n - 2;
+      else { while (k < n - 2 && x > xs[k + 1]) k++; }
+      var t = (x - xs[k]) / h[k], t2 = t * t, t3 = t2 * t;
+      return (2 * t3 - 3 * t2 + 1) * ys[k] + (t3 - 2 * t2 + t) * h[k] * d[k] + (-2 * t3 + 3 * t2) * ys[k + 1] + (t3 - t2) * h[k] * d[k + 1];
+    };
+  }
+
+  // ============================================================
+  // Graph shapes for this walkthrough
+  // ============================================================
+  // A "shape" sh = { f, xMin, xMax, yMin, yMax, ext, knots, inc, dec, pos, neg, zeros, touches }
+  // inc/dec/pos/neg are arrays of open intervals {lo, loIncl:false, hi, hiIncl:false}.
+  function openIv(lo, hi) { return { lo: lo, loIncl: false, hi: hi, hiIncl: false }; }
+
+  // Build a smooth curve from its turning points. fx (optional) fixes the zero locations so a figure is reproducible:
+  // { zl, zr, mids: [x, ...] }  (zl/zr: first zero left/right of the turning points; mids: zero between sign-changing neighbours)
+  function buildCurve(ext, fx) {
+    var n = ext.length, i, knots = [], midIdx = 0;
+    var first = ext[0], last = ext[n - 1];
+    var dirL = first.t === "max" ? -1 : 1, dirR = last.t === "max" ? -1 : 1;
+    var minY = Infinity, maxY = -Infinity;
+    ext.forEach(function (e) { minY = Math.min(minY, e.y); maxY = Math.max(maxY, e.y); });
+    var yTop = Math.max(maxY, 0) + 1, yBot = Math.min(minY, 0) - 1;
+    while (yTop - yBot < 5) { yTop++; if (yTop - yBot < 5) yBot--; }
+    var zl = null, zr = null;
+    if ((first.y > 0 && dirL < 0) || (first.y < 0 && dirL > 0)) { zl = fx ? fx.zl : first.x - randInt(1, 2); }
+    if ((last.y > 0 && dirR < 0) || (last.y < 0 && dirR > 0)) { zr = fx ? fx.zr : last.x + randInt(1, 2); }
+    var leftEdge = (zl === null ? first.x : zl) - 1;
+    var rightEdge = (zr === null ? last.x : zr) + 1;
+    var need = Math.ceil(0.8 * (yTop - yBot));
+    while (rightEdge - leftEdge < need) { leftEdge--; if (rightEdge - leftEdge < need) rightEdge++; }
+    knots.push([leftEdge, dirL > 0 ? yTop + 4 : yBot - 4]);
+    if (zl !== null) knots.push([zl, 0]);
+    for (i = 0; i < n; i++) {
+      knots.push([ext[i].x, ext[i].y]);
+      if (i < n - 1 && ext[i].y * ext[i + 1].y < 0) {
+        knots.push([fx ? fx.mids[midIdx++] : randInt(ext[i].x + 1, ext[i + 1].x - 1), 0]);
+      }
+    }
+    if (zr !== null) knots.push([zr, 0]);
+    knots.push([rightEdge, dirR > 0 ? yTop + 4 : yBot - 4]);
+    if (rightEdge - leftEdge > 15 || yTop - yBot > 12) return null;
+    var xs = knots.map(function (k) { return k[0]; }), ys = knots.map(function (k) { return k[1]; });
+    for (i = 0; i < xs.length - 1; i++) if (xs[i + 1] <= xs[i]) return null;
+    var f = pchip(xs, ys);
+    var bounds = [-Infinity].concat(ext.map(function (e) { return e.x; })).concat([Infinity]);
+    var inc = [], dec = [];
+    for (i = 0; i < n + 1; i++) {
+      var rising = (i === 0) ? first.t === "max" : ext[i - 1].t === "min";
+      (rising ? inc : dec).push(openIv(bounds[i], bounds[i + 1]));
+    }
+    var zs = knots.filter(function (k) { return k[1] === 0 && k[0] > leftEdge && k[0] < rightEdge; }).map(function (k) { return k[0]; });
+    zs = zs.filter(function (v, idx) { return zs.indexOf(v) === idx; }).sort(function (a, b) { return a - b; });
+    var pos = [], neg = [], zb = [-Infinity].concat(zs).concat([Infinity]);
+    for (i = 0; i < zb.length - 1; i++) {
+      var mid = zb[i] === -Infinity ? (zs.length ? zs[0] - 0.5 : ext[0].x) : (zb[i + 1] === Infinity ? zb[i] + 0.5 : (zb[i] + zb[i + 1]) / 2);
+      var fv = f(mid);
+      if (Math.abs(fv) < 1e-9) return null;
+      (fv > 0 ? pos : neg).push(openIv(zb[i], zb[i + 1]));
+    }
+    var touches = ext.filter(function (e) { return e.y === 0; }).map(function (e) { return e.x; });
+    return { ext: ext, knots: knots, f: f, xMin: leftEdge, xMax: rightEdge, yMin: yBot, yMax: yTop, inc: inc, dec: dec, pos: pos, neg: neg, zeros: zs, touches: touches, kind: "curve" };
+  }
+  // straight line y = m (x - z): no turning points
+  function genLineShape() {
+    var m = randChoice([-2, -1, 1, 2]), z = randInt(-3, 3);
+    var f = function (x) { return m * (x - z); };
+    var xMin = z - 5, xMax = z + 5, span = Math.abs(m) * 5;
+    var yMin = -span, yMax = span;
+    if (yMax - yMin > 12) { yMax = 6; yMin = -6; }
+    var xz = z;
+    var pos = m > 0 ? [openIv(xz, Infinity)] : [openIv(-Infinity, xz)];
+    var neg = m > 0 ? [openIv(-Infinity, xz)] : [openIv(xz, Infinity)];
+    var inc = m > 0 ? [openIv(-Infinity, Infinity)] : [], dec = m < 0 ? [openIv(-Infinity, Infinity)] : [];
+    return { ext: [], knots: [[xMin, f(xMin)], [xMax, f(xMax)]], f: f, xMin: xMin, xMax: xMax, yMin: yMin, yMax: yMax, inc: inc, dec: dec, pos: pos, neg: neg, zeros: [xz], touches: [], kind: "line", slope: m };
+  }
+  // random smooth curve; level 1 = one turning point, level 2 = two, level 3 = anything (touches allowed)
+  function genCurveLevel(level) {
+    if (level === 0) return genLineShape();
+    for (var attempt = 0; attempt < 500; attempt++) {
+      var ext = [], i, x, n = level === 1 ? 1 : (level === 2 ? 2 : pickW([[1, 0.15], [2, 0.35], [3, 0.5]]));
+      var t0 = randBool() ? "max" : "min";
+      var touchAt = (level === 3 && Math.random() < 0.45) ? randInt(0, n - 1) : -1;
+      x = randInt(-3, 1) - (n - 1);
+      for (i = 0; i < n; i++) {
+        var t = (i % 2 === 0) ? t0 : (t0 === "max" ? "min" : "max");
+        var y = i === touchAt ? 0 : (t === "max" ? randInt(-2, 4) : randInt(-4, 2));
+        ext.push({ x: x, y: y, t: t });
+        x += randInt(2, 3);
+      }
+      var ok = true;
+      for (i = 0; i < n - 1; i++) {
+        var hi = ext[i].t === "max" ? ext[i] : ext[i + 1], lo = ext[i].t === "max" ? ext[i + 1] : ext[i];
+        if (hi.y - lo.y < 2) ok = false;
+      }
+      if (level === 1 && ext[0].y === 0) ok = false;
+      if (level === 2 && ext.some(function (e) { return e.y === 0; })) ok = false;   // level 2: always clean crossings
+      if (!ok) continue;
+      var s = buildCurve(ext);
+      if (s) return s;
+    }
+    return buildCurve([{ x: -1, y: 2, t: "max" }, { x: 2, y: -2, t: "min" }]);
+  }
+
+  // fixed figures used in the explanations
+  var FIG = {
+    cubic: function () { return buildCurve([{ x: -2, y: 3, t: "max" }, { x: 2, y: -3, t: "min" }], { zl: -4, zr: 4, mids: [0] }); },
+    parab: function () { return buildCurve([{ x: 1, y: -4, t: "min" }], { zl: -1, zr: 3 }); },
+    touch: function () { return buildCurve([{ x: -2, y: 2, t: "max" }, { x: 0, y: 0, t: "min" }, { x: 2, y: 2, t: "max" }], { zl: -4, zr: 4 }); },
+    wave: function () { return buildCurve([{ x: -3, y: 3, t: "max" }, { x: 0, y: -2, t: "min" }, { x: 3, y: 3, t: "max" }], { zl: -4, zr: 4, mids: [-2, 2] }); }
+  };
+
+  // interval-list helpers
+  function intersectIv(a, b) {
+    var out = [];
+    a.forEach(function (p) { b.forEach(function (q) {
+      var lo = Math.max(p.lo, q.lo), hi = Math.min(p.hi, q.hi);
+      if (lo < hi) out.push(openIv(lo, hi));
+    }); });
+    return mergeIntervals(out);
+  }
+  function stripIv(list) { return list.map(function (a) { return { lo: a.lo, loIncl: false, hi: a.hi, hiIncl: false }; }); }
+
+  // ============================================================
+  // Drawing
+  // ============================================================
+  function colPos() { return themeColor("--graph-stroke-b"); }       // teal: positive / increasing
+  function colNeg() { return themeColor("--bad"); }                  // coral: negative / decreasing
+  function colBase() { return themeColor("--graph-stroke-a"); }      // amber: the plain curve
+  function sampleCurve(sh, N) {
+    var pts = [], i; N = N || 420;
+    for (i = 0; i <= N; i++) { var x = sh.xMin + (sh.xMax - sh.xMin) * i / N; pts.push([x, sh.f(x)]); }
+    return pts;
+  }
+  // x-interval bar with open circles and arrows (drawn on the axis or along the bottom)
+  function drawBar(g, sh, iv, y, color) {
+    var lo = Math.max(iv.lo, sh.xMin), hi = Math.min(iv.hi, sh.xMax);
+    drawSegment(g.ctx, g.toPx, lo, y, hi, y, color, 5);
+    if (iv.lo > -Infinity) drawCircle(g.ctx, g.toPx, iv.lo, y, color, !iv.loIncl); else drawArrowHead(g.ctx, g.toPx, sh.xMin, y, -0.6, 0, color);
+    if (iv.hi < Infinity) drawCircle(g.ctx, g.toPx, iv.hi, y, color, !iv.hiIncl); else drawArrowHead(g.ctx, g.toPx, sh.xMax, y, 0.6, 0, color);
+  }
+  // mode: "plain" | "sign" | "dir" | "pos" | "neg" | "inc" | "dec"; opts.marks = [{x, label?}] dashed vertical + dot; opts.bars: draw interval bars
+  function drawShape(canvas, sh, mode, opts) {
+    opts = opts || {};
+    var g = drawGrid(canvas, sh.xMin, sh.xMax, sh.yMin, sh.yMax, {});
+    var pts = sampleCurve(sh), ctx = g.ctx, i;
+    g.clipOn();
+    if (mode === "plain" || !mode) {
+      strokePath(ctx, g.toPx, pts, colBase(), 2.8);
+    } else {
+      strokePath(ctx, g.toPx, pts, themeColor("--ink-soft"), 1.6);
+      var want = {
+        sign: function (x) { var v = sh.f(x); return v > 1e-9 ? 1 : (v < -1e-9 ? -1 : 0); },
+        dir: function (x) { var d = sh.f(x + 0.02) - sh.f(x - 0.02); return d > 1e-7 ? 1 : (d < -1e-7 ? -1 : 0); }
+      };
+      var fn = (mode === "sign" || mode === "pos" || mode === "neg") ? want.sign : want.dir;
+      var take = mode === "pos" || mode === "inc" ? 1 : (mode === "neg" || mode === "dec" ? -1 : 2);
+      var run = [], cur = null;
+      var flush = function () {
+        if (run.length > 1) {
+          var c = cur === 1 ? colPos() : colNeg();
+          strokePath(ctx, g.toPx, run, c, 4.4);
+        }
+        run = [];
+      };
+      for (i = 0; i < pts.length; i++) {
+        var s = fn(pts[i][0]);
+        var keep = (take === 2) ? s !== 0 : s === take;
+        if (!keep) { flush(); cur = null; continue; }
+        if (cur !== s) { flush(); cur = s; if (i > 0) run.push(pts[i - 1]); }
+        run.push(pts[i]);
+      }
+      flush();
+    }
+    g.clipOff();
+    if (opts.dots) opts.dots.forEach(function (d) { drawCircle(ctx, g.toPx, d[0], d[1], d[2] || themeColor("--ink"), !!d[3]); });
+    if (opts.bars) opts.bars.forEach(function (b) { drawBar(g, sh, b.iv, b.y, b.color); });
+    if (opts.marks) opts.marks.forEach(function (m) {
+      var p0 = g.toPx(m.x, sh.yMin), p1 = g.toPx(m.x, sh.yMax);
+      ctx.save(); ctx.setLineDash([5, 4]); ctx.strokeStyle = themeColor("--accent-strong"); ctx.lineWidth = 1.6;
+      ctx.beginPath(); ctx.moveTo(p0[0], p0[1]); ctx.lineTo(p1[0], p1[1]); ctx.stroke(); ctx.restore();
+      drawCircle(ctx, g.toPx, m.x, sh.f(m.x), themeColor("--accent-strong"), false);
+    });
+    // arrow heads where the graph leaves the window (it keeps going)
+    if (!opts.noArrows) {
+      var a = pts[0], b = pts[1], c = pts[pts.length - 2], d = pts[pts.length - 1];
+      var inWin = function (p) { return p[1] >= sh.yMin - 0.01 && p[1] <= sh.yMax + 0.01; };
+      if (inWin(a)) drawArrowHead(ctx, g.toPx, a[0], a[1], a[0] - b[0], a[1] - b[1], colBase());
+      if (inWin(d)) drawArrowHead(ctx, g.toPx, d[0], d[1], d[0] - c[0], d[1] - c[1], colBase());
+    }
+    return g;
+  }
+  // bars for an expected interval list: pos/neg sit on the x-axis, inc/dec ride along the bottom edge
+  function barsFor(sh, key, list) {
+    var onAxis = key === "pos" || key === "neg";
+    var y = onAxis ? 0 : sh.yMin + 0.45;
+    var color = (key === "pos" || key === "inc") ? colPos() : colNeg();
+    return list.map(function (iv) { return { iv: iv, y: y, color: color }; });
+  }
+  function shapeAspect(sh) { return clamp((sh.xMax - sh.xMin + 0.4) / (sh.yMax - sh.yMin + 0.5), 0.85, 1.7); }
+
+  // ============================================================
+  // Cards (parts). Each stage mounts a list of these by id.
+  // kind: "practice" (unscored, repeat as much as you like) | "cp" (stage checkpoint, first check locks) | "exam" | "bonus"
+  // ============================================================
+  var PBY = {};
+  function reg(p) { PBY[p.id] = p; return p; }
+  function mcRow(opts) {
+    return "<div class=\"mc-row\">" + opts.map(function (o) { return "<button type=\"button\" class=\"mc-opt\" data-val=\"" + o[0] + "\">" + o[1] + "</button>"; }).join("") + "</div>";
+  }
+  function mcAfter(card) {
+    card.querySelectorAll(".mc-row").forEach(function (row) {
+      var opts = row.querySelectorAll(".mc-opt");
+      opts.forEach(function (b) { b.addEventListener("click", function () { opts.forEach(function (x) { x.classList.remove("selected"); }); b.classList.add("selected"); }); });
+    });
+  }
+  function mcVal(card) { var b = card.querySelector(".mc-opt.selected"); return b ? b.getAttribute("data-val") : ""; }
+  function xs(n) { return mn(n); }
+  function plain(n) { return String(n).replace("-", "−"); }
+  var WORD = { pos: "positive", neg: "negative", inc: "increasing", dec: "decreasing" };
+  var OPP = { pos: "neg", neg: "pos", inc: "dec", dec: "inc" };
+  var HINT = {
+    pos: "Hint: positive means the graph is above the x-axis.",
+    neg: "Hint: negative means the graph is below the x-axis.",
+    inc: "Hint: increasing means the graph climbs as you move to the right.",
+    dec: "Hint: decreasing means the graph falls as you move to the right."
+  };
+  var IV_PH = { pos: "e.g. (-3, 0) U (2, inf)", neg: "e.g. (-inf, -3) U (0, 2)", inc: "e.g. (-inf, -2) U (1, 4)", dec: "e.g. (-2, 1) U (4, inf)" };
+
+  function sgn(v) { return v > 1e-9 ? 1 : (v < -1e-9 ? -1 : 0); }
+  function slopeAt(sh, x) { return sgn(sh.f(x + 0.03) - sh.f(x - 0.03)); }
+  function ivList(list) { return list.length ? intervalNotation(list) : "never (empty)"; }
+  function typedIv(list) { return list.length ? ivText(list, 0) : "empty"; }
+
+  // ---- grading of a typed interval list for pos / neg / inc / dec ----
+  function ivGrade(raw, sh, key) {
+    var parsed = parseIntervalUnion(raw);
+    if (parsed.invalid) return { ok: false, msg: normText(raw) === "" ? "Type your answer in the box first." : IV_HELP };
+    var expected = sh[key];
+    if (intervalAnswerCorrect(parsed, expected)) return { ok: true };
+    var stripped = { intervals: stripIv(parsed.intervals), invalid: false };
+    var bracketOnly = intervalAnswerCorrect(stripped, expected);
+    if (bracketOnly) {
+      if (key === "inc" || key === "dec") {
+        return { ok: true, note: "Your endpoints are right. Tip: use parentheses at a turning point. The graph changes direction there, so we leave the turning point out of the interval." };
+      }
+      return { ok: false, msg: "Your endpoints are right, but at a zero the function equals 0, which is neither positive nor negative. Use parentheses at those x-values." };
+    }
+    // reversed endpoints
+    var rev = parsed.intervals.some(function (a) { return a.lo > a.hi; });
+    if (rev) return { ok: false, msg: "Write the smaller number first, like (2, 5), reading the graph from left to right." };
+    // opposite question
+    var opp = sh[OPP[key]];
+    if (opp.length && intervalAnswerCorrect(stripped, opp)) return { ok: false, msg: "That is where the function is " + WORD[OPP[key]] + ", not " + WORD[key] + ". Re-read the question." };
+    // joined pieces
+    if (expected.length >= 2) {
+      var hull = [openIv(expected[0].lo, expected[expected.length - 1].hi)];
+      if (intervalAnswerCorrect(stripped, hull)) return { ok: false, msg: "That one interval runs straight across a stretch where the answer is different. Use a union (U) of separate intervals." };
+    }
+    // y-values instead of x-values
+    var finite = [];
+    parsed.intervals.forEach(function (a) { if (isFinite(a.lo)) finite.push(a.lo); if (isFinite(a.hi)) finite.push(a.hi); });
+    var yv = sh.ext.map(function (e) { return e.y; }), xv = sh.knots.map(function (k) { return k[0]; });
+    if (finite.length && sh.ext.length && finite.every(function (v) { return yv.indexOf(v) >= 0; }) && !finite.every(function (v) { return xv.indexOf(v) >= 0; })) {
+      return { ok: false, msg: "Those numbers look like heights (y-values). Intervals describe x-values, the left-to-right positions." };
+    }
+    var us = mergeIntervals(parsed.intervals), es = mergeIntervals(expected);
+    if (endpointsOnlyEqual(us, es)) return { ok: false, msg: "Your endpoints are right, but check which ones need parentheses and which need brackets." };
+    if (us.length < es.length && es.length > 1) return { ok: false, msg: "You may be missing one of the pieces. Check the whole graph, left to right." };
+    if (us.length > es.length) return { ok: false, msg: "You have more pieces than the graph shows. Check each interval against the graph." };
+    return { ok: false, msg: "" };
+  }
+
+  function ivSolution(sh, key) {
+    var list = sh[key], out = "<span class=\"sol-label\">Solution</span>";
+    if (key === "pos" || key === "neg") {
+      var above = key === "pos";
+      if (!sh.zeros.length) {
+        out += "<div class=\"step\">The graph never touches or crosses the x-axis.</div>";
+      } else {
+        out += "<div class=\"step\"><b>Step 1.</b> Find where the graph meets the x-axis: x = " + sh.zeros.map(xs).join(", ") + ". Those are the places the sign can change.</div>";
+      }
+      out += "<div class=\"step\"><b>Step 2.</b> " + (above ? "Positive means <i>above</i> the x-axis" : "Negative means <i>below</i> the x-axis") + ". " +
+        (list.length ? "The graph is " + (above ? "above" : "below") + " it on " + intervalNotation(list) + "." : "That never happens: the graph is never " + (above ? "above" : "below") + " the axis.") + "</div>";
+      if (sh.touches.length) out += "<div class=\"step\">At x = " + sh.touches.map(xs).join(", ") + " the graph only touches the x-axis and turns back without crossing. The function is 0 there, so that x-value is left out.</div>";
+      if (sh.kind === "line" || list.some(function (a) { return !isFinite(a.lo) || !isFinite(a.hi); })) out += "<div class=\"step nt\">Arrows mean the graph keeps going, so the interval runs to ∞ or −∞.</div>";
+    } else {
+      var up = key === "inc";
+      if (!sh.ext.length) {
+        out += "<div class=\"step\">A straight line never turns around. Its slope is " + (sh.slope > 0 ? "positive" : "negative") + ", so it is " + WORD[sh.slope > 0 ? "inc" : "dec"] + " everywhere.</div>";
+      } else {
+        out += "<div class=\"step\"><b>Step 1.</b> Find the turning points (peaks and valleys): " + sh.ext.map(function (e) { return "x = " + xs(e.x) + " (" + (e.t === "max" ? "peak" : "valley") + ")"; }).join(", ") + ".</div>";
+        out += "<div class=\"step\"><b>Step 2.</b> Read left to right between them. The graph is " + (up ? "climbing" : "falling") + " on " + ivList(list) + ".</div>";
+        out += "<div class=\"step nt\">The turning points themselves are left out, so we use parentheses.</div>";
+      }
+    }
+    return out + "<div class=\"final\">Answer: " + ivList(list) + "</div>";
+  }
+
+  // ---- own-graph typed-interval card ----
+  function ivPart(o) {
+    return reg({
+      id: o.id, kind: o.kind, points: o.points || (o.kind === "cp" ? 2 : 4), stage: o.stage, label: o.label || "",
+      hasGraph: true, graphSpec: { maxW: 460, aspect: shapeAspect },
+      gen: function () { return { sh: genCurveLevel(o.level), key: o.key }; },
+      drawGraph: function (canvas, s) { drawShape(canvas, s.sh, "plain"); },
+      prompt: function (s) { return "Where is <b>f</b> " + WORD[o.key] + "? Give your answer in interval notation. If there is no such interval, type <i>empty</i>." + (o.kind === "practice" ? "<div class=\"hintline\">" + HINT[o.key] + "</div>" : ""); },
+      inputsHtml: function () { return intervalTextInputHtml("ans-iv", WORD[o.key].charAt(0).toUpperCase() + WORD[o.key].slice(1) + " on:", IV_PH[o.key]); },
+      read: function (card) { return { iv: fieldVal(card, ".ans-iv") }; },
+      check: function (raw, s) { return ivGrade(raw.iv, s.sh, o.key); },
+      correctRaw: function (s) { return { iv: typedIv(s.sh[o.key]) }; },
+      solutionHtml: function (s) { return ivSolution(s.sh, o.key); },
+      solDraw: function (canvas, s) { drawShape(canvas, s.sh, o.key, { bars: barsFor(s.sh, o.key, s.sh[o.key]) }); }
+    });
+  }
+
+  // ---- shared-graph typed-interval card (4 parts per graph) ----
+  var SHARED = {};
+  function sharedGroup(id, level, title, note) {
+    SHARED[id] = { gen: function () { return genCurveLevel(level); }, draw: function (canvas, sh) { drawShape(canvas, sh, "plain"); }, maxW: 500, aspect: shapeAspect, title: title || "Graph of f", note: note || "Graph of f. Beyond the edges of the window, the graph keeps going the way it is heading." };
+  }
+  function ivShared(o) {
+    return reg({
+      id: o.id, kind: o.kind, points: o.points || 4, stage: o.stage, label: o.label, shared: o.group, hasGraph: false,
+      gen: function (sh) { return { sh: sh, key: o.key }; },
+      prompt: function () { return "Where is <b>f</b> " + WORD[o.key] + "? Give your answer in interval notation. If there is no such interval, type <i>empty</i>." + (o.kind === "practice" ? "<div class=\"hintline\">" + HINT[o.key] + "</div>" : ""); },
+      inputsHtml: function () { return intervalTextInputHtml("ans-iv", WORD[o.key].charAt(0).toUpperCase() + WORD[o.key].slice(1) + " on:", IV_PH[o.key]); },
+      read: function (card) { return { iv: fieldVal(card, ".ans-iv") }; },
+      check: function (raw, s) { return ivGrade(raw.iv, s.sh, o.key); },
+      correctRaw: function (s) { return { iv: typedIv(s.sh[o.key]) }; },
+      solutionHtml: function (s) { return ivSolution(s.sh, o.key); },
+      solDraw: function (canvas, s) { drawShape(canvas, s.sh, o.key, { bars: barsFor(s.sh, o.key, s.sh[o.key]) }); }
+    });
+  }
+
+  // ---- one point on the graph: sign / direction ----
+  function pickX(sh, avoidTurn) {
+    var c = [], x;
+    for (x = Math.ceil(sh.xMin) + 1; x <= Math.floor(sh.xMax) - 1; x++) c.push(x);
+    var turn = sh.ext.map(function (e) { return e.x; });
+    c = c.filter(function (v) { return !avoidTurn || turn.indexOf(v) < 0; });
+    return c;
+  }
+  function ptSign(o) {
+    return reg({
+      id: o.id, kind: o.kind, points: o.points || (o.kind === "cp" ? 2 : 4), stage: o.stage, label: o.label || "",
+      hasGraph: true, graphSpec: { maxW: 460, aspect: shapeAspect },
+      gen: function () {
+        for (var t = 0; t < 200; t++) {
+          var sh = genCurveLevel(o.level), want = Math.random() < 0.25, cands = pickX(sh, false);
+          var ok = cands.filter(function (v) { var fv = sh.f(v); return want ? Math.abs(fv) < 1e-9 : Math.abs(fv) > 0.7; });
+          if (!ok.length) continue;
+          var xk = randChoice(ok);
+          return { sh: sh, xk: xk, ans: sgn(sh.f(xk)) };
+        }
+        var s2 = genCurveLevel(2); return { sh: s2, xk: s2.ext[0].x, ans: sgn(s2.f(s2.ext[0].x)) };
+      },
+      drawGraph: function (canvas, s) { drawShape(canvas, s.sh, "plain", { marks: [{ x: s.xk }] }); },
+      prompt: function (s) { return "The dashed line marks <b>x = " + xs(s.xk) + "</b>. Is <b>f(" + xs(s.xk) + ")</b> positive, negative, or zero?" + (o.kind === "practice" ? "<div class=\"hintline\">Look at the dot: is it above the x-axis, below it, or on it?</div>" : ""); },
+      inputsHtml: function () { return mcRow([["1", "Positive"], ["-1", "Negative"], ["0", "Zero"]]); },
+      afterRender: mcAfter,
+      read: function (card) { return { v: mcVal(card) }; },
+      check: function (raw, s) { if (raw.v === "") return { ok: false, msg: "choose one of the three answers first." }; return +raw.v === s.ans ? { ok: true } : { ok: false, msg: "look at where the dot sits compared with the x-axis." }; },
+      correctRaw: function (s) { return { v: String(s.ans) }; },
+      solutionHtml: function (s) {
+        var w = s.ans > 0 ? "above the x-axis, so f(" + xs(s.xk) + ") is <b>positive</b>" : (s.ans < 0 ? "below the x-axis, so f(" + xs(s.xk) + ") is <b>negative</b>" : "exactly on the x-axis, so f(" + xs(s.xk) + ") = 0: <b>zero</b>, neither positive nor negative");
+        return "<span class=\"sol-label\">Solution</span><div class=\"step\">At x = " + xs(s.xk) + " the dot is " + w + ".</div><div class=\"final\">Answer: " + (s.ans > 0 ? "positive" : (s.ans < 0 ? "negative" : "zero")) + "</div>";
+      }
+    });
+  }
+  function ptDir(o) {
+    return reg({
+      id: o.id, kind: o.kind, points: o.points || (o.kind === "cp" ? 2 : 4), stage: o.stage, label: o.label || "",
+      hasGraph: true, graphSpec: { maxW: 460, aspect: shapeAspect },
+      gen: function () {
+        for (var t = 0; t < 200; t++) {
+          var sh = genCurveLevel(o.level), wantTurn = Math.random() < 0.22 && sh.ext.length > 0;
+          var xk;
+          if (wantTurn) xk = randChoice(sh.ext).x;
+          else { var c = pickX(sh, true).filter(function (v) { return slopeAt(sh, v) !== 0; }); if (!c.length) continue; xk = randChoice(c); }
+          var sl = wantTurn ? 0 : slopeAt(sh, xk);
+          if (xk <= sh.xMin || xk >= sh.xMax) continue;
+          return { sh: sh, xk: xk, ans: sl };
+        }
+        var s2 = genCurveLevel(2); var xx = pickX(s2, true)[0]; return { sh: s2, xk: xx, ans: slopeAt(s2, xx) };
+      },
+      drawGraph: function (canvas, s) { drawShape(canvas, s.sh, "plain", { marks: [{ x: s.xk }] }); },
+      prompt: function (s) { return "Reading left to right, what is the graph doing at <b>x = " + xs(s.xk) + "</b> (the dashed line)?" + (o.kind === "practice" ? "<div class=\"hintline\">Imagine walking along the graph from left to right. Are you going uphill, downhill, or at the very top or bottom?</div>" : ""); },
+      inputsHtml: function () { return mcRow([["1", "Rising (increasing)"], ["-1", "Falling (decreasing)"], ["0", "Turning around (peak or valley)"]]); },
+      afterRender: mcAfter,
+      read: function (card) { return { v: mcVal(card) }; },
+      check: function (raw, s) { if (raw.v === "") return { ok: false, msg: "choose one of the three answers first." }; return +raw.v === s.ans ? { ok: true } : { ok: false, msg: "imagine walking along the graph from left to right at that spot." }; },
+      correctRaw: function (s) { return { v: String(s.ans) }; },
+      solutionHtml: function (s) {
+        var w = s.ans > 0 ? "going uphill as you move right, so the graph is <b>rising (increasing)</b> there" : (s.ans < 0 ? "going downhill as you move right, so the graph is <b>falling (decreasing)</b> there" : "at a peak or valley, <b>turning around</b>: not rising and not falling for that instant");
+        return "<span class=\"sol-label\">Solution</span><div class=\"step\">At x = " + xs(s.xk) + " the graph is " + w + ".</div><div class=\"final\">Answer: " + (s.ans > 0 ? "rising" : (s.ans < 0 ? "falling" : "turning around")) + "</div>";
+      }
+    });
+  }
+
+  // ---- number line -> interval notation ----
+  function drawNumberLine(canvas, ivs) {
+    var setup = setupCanvas(canvas), ctx = setup.ctx, W = setup.w, H = setup.h;
+    var lo = -8, hi = 8, padL = 28, padR = 28, y = H * 0.55;
+    var X = function (v) { return padL + (v - lo) / (hi - lo) * (W - padL - padR); };
+    var axis = themeColor("--graph-axis"), lab = themeColor("--ink-soft"), col = themeColor("--graph-stroke-b");
+    ctx.strokeStyle = axis; ctx.lineWidth = 1.6;
+    ctx.beginPath(); ctx.moveTo(X(lo) - 10, y); ctx.lineTo(X(hi) + 10, y); ctx.stroke();
+    drawArrowHead(ctx, function (a, b) { return [X(a), y]; }, hi + 0.55, 0, 1, 0, axis);
+    drawArrowHead(ctx, function (a, b) { return [X(a), y]; }, lo - 0.55, 0, -1, 0, axis);
+    ctx.fillStyle = lab; ctx.font = "11px 'JetBrains Mono', ui-monospace, monospace"; ctx.textAlign = "center"; ctx.textBaseline = "top";
+    for (var v = lo; v <= hi; v++) {
+      ctx.strokeStyle = axis; ctx.beginPath(); ctx.moveTo(X(v), y - 5); ctx.lineTo(X(v), y + 5); ctx.stroke();
+      if (v % 2 === 0) ctx.fillText(String(v).replace("-", "−"), X(v), y + 10);
+    }
+    ivs.forEach(function (iv) {
+      var a = isFinite(iv.lo) ? iv.lo : lo - 0.4, b = isFinite(iv.hi) ? iv.hi : hi + 0.4;
+      ctx.strokeStyle = col; ctx.lineWidth = 6; ctx.lineCap = "round";
+      ctx.beginPath(); ctx.moveTo(X(a), y); ctx.lineTo(X(b), y); ctx.stroke();
+      var toPx = function (aa) { return [X(aa), y]; };
+      if (isFinite(iv.lo)) drawCircle(ctx, function (aa) { return [X(aa), y]; }, iv.lo, 0, col, !iv.loIncl);
+      else drawArrowHead(ctx, toPx, lo - 0.55, 0, -1, 0, col);
+      if (isFinite(iv.hi)) drawCircle(ctx, function (aa) { return [X(aa), y]; }, iv.hi, 0, col, !iv.hiIncl);
+      else drawArrowHead(ctx, toPx, hi + 0.55, 0, 1, 0, col);
+    });
+  }
+  function genNL(level) {
+    for (var t = 0; t < 100; t++) {
+      var ivs = [], a, b, c, d;
+      if (level === 1) {
+        a = randInt(-5, 5);
+        ivs = randBool() ? [{ lo: -Infinity, loIncl: false, hi: a, hiIncl: randBool() }] : [{ lo: a, loIncl: randBool(), hi: Infinity, hiIncl: false }];
+      } else if (level === 2) {
+        a = randInt(-6, 2); b = a + randInt(2, 6);
+        ivs = [{ lo: a, loIncl: randBool(), hi: b, hiIncl: randBool() }];
+      } else {
+        a = randInt(-6, -2); b = a + randInt(1, 3); c = b + randInt(2, 4); d = c + randInt(1, 3);
+        if (d > 7) continue;
+        if (randBool()) ivs = [{ lo: -Infinity, loIncl: false, hi: b, hiIncl: randBool() }, { lo: c, loIncl: randBool(), hi: Infinity, hiIncl: false }];
+        else ivs = [{ lo: a, loIncl: randBool(), hi: b, hiIncl: randBool() }, { lo: c, loIncl: randBool(), hi: d, hiIncl: randBool() }];
+      }
+      return { ivs: ivs };
+    }
+    return { ivs: [{ lo: 1, loIncl: false, hi: 4, hiIncl: true }] };
+  }
+  function nlSolution(ivs) {
+    var out = "<span class=\"sol-label\">Solution</span>";
+    ivs.forEach(function (iv, i) {
+      out += "<div class=\"step\"><b>Piece " + (ivs.length > 1 ? (i + 1) : "") + "</b> from " + (isFinite(iv.lo) ? xs(iv.lo) : "the left arrow (&minus;&infin;)") + " to " + (isFinite(iv.hi) ? xs(iv.hi) : "the right arrow (&infin;)") + ". " +
+        (isFinite(iv.lo) ? "At " + xs(iv.lo) + " the circle is " + (iv.loIncl ? "filled, so use a bracket <b>[</b>" : "open, so use a parenthesis <b>(</b>") + ". " : "Infinity always gets a parenthesis. ") +
+        (isFinite(iv.hi) ? "At " + xs(iv.hi) + " the circle is " + (iv.hiIncl ? "filled, so use a bracket <b>]</b>" : "open, so use a parenthesis <b>)</b>") + "." : "Infinity always gets a parenthesis.") + "</div>";
+    });
+    if (ivs.length > 1) out += "<div class=\"step\">Two separate shaded pieces are joined with a union sign: <b>U</b>.</div>";
+    return out + "<div class=\"final\">Answer: " + intervalNotation(ivs) + "</div>";
+  }
+  function nlPart(o) {
+    return reg({
+      id: o.id, kind: o.kind, points: o.points || (o.kind === "cp" ? 2 : 4), stage: o.stage, label: o.label || "",
+      hasGraph: true, graphSpec: { maxW: 560, aspect: function () { return 6; } },
+      gen: function () { return genNL(o.level); },
+      drawGraph: function (canvas, s) { drawNumberLine(canvas, s.ivs); },
+      prompt: function () { return "Write the shaded part of the number line in interval notation." + (o.kind === "practice" ? "<div class=\"hintline\">Filled circle: bracket. Open circle: parenthesis. Arrow: infinity with a parenthesis.</div>" : ""); },
+      inputsHtml: function () { return intervalTextInputHtml("ans-iv", "Shaded on:", "e.g. [-2, 5) or (-inf, 1] U (4, inf)"); },
+      read: function (card) { return { iv: fieldVal(card, ".ans-iv") }; },
+      check: function (raw, s) {
+        var res = intervalCheck(raw.iv, s.ivs, []);
+        if (!res.ok && !res.msg) res.msg = "check each end of each shaded piece: open or filled circle, and which number it sits on.";
+        return res;
+      },
+      correctRaw: function (s) { return { iv: ivText(s.ivs, 0) }; },
+      solutionHtml: function (s) { return nlSolution(s.ivs); },
+      solDraw: null
+    });
+  }
+
+  // ---- is the number in the interval? ----
+  function inoutPart(o) {
+    return reg({
+      id: o.id, kind: o.kind, points: o.points || (o.kind === "cp" ? 2 : 4), stage: o.stage, label: o.label || "",
+      hasGraph: false,
+      gen: function () {
+        var a = randInt(-5, 1), b = a + randInt(2, 6), loI = randBool(), hiI = randBool();
+        var iv = { lo: a, loIncl: loI, hi: b, hiIncl: hiI }, mode = randInt(0, 3), t;
+        if (mode === 0) t = a; else if (mode === 1) t = b; else if (mode === 2) t = randInt(a + 1, b - 1); else t = randChoice([a - 1, b + 1]);
+        var inside = (t > a && t < b) || (t === a && loI) || (t === b && hiI);
+        return { iv: iv, t: t, inside: inside };
+      },
+      prompt: function (s) { return "Is the number <b>" + xs(s.t) + "</b> in the interval <b>" + intervalNotation([s.iv]) + "</b>?" + (o.kind === "practice" ? "<div class=\"hintline\">A bracket includes its endpoint. A parenthesis does not.</div>" : ""); },
+      inputsHtml: function () { return mcRow([["1", "Yes, it is in the interval"], ["0", "No, it is not"]]); },
+      afterRender: mcAfter,
+      read: function (card) { return { v: mcVal(card) }; },
+      check: function (raw, s) { if (raw.v === "") return { ok: false, msg: "choose Yes or No first." }; return (raw.v === "1") === s.inside ? { ok: true } : { ok: false, msg: "check whether " + xs(s.t) + " is an endpoint, and whether that endpoint has a bracket or a parenthesis." }; },
+      correctRaw: function (s) { return { v: s.inside ? "1" : "0" }; },
+      solutionHtml: function (s) {
+        var iv = s.iv, why;
+        if (s.t === iv.lo) why = "It sits right on the left endpoint, which has a " + (iv.loIncl ? "bracket, so it is included" : "parenthesis, so it is not included") + ".";
+        else if (s.t === iv.hi) why = "It sits right on the right endpoint, which has a " + (iv.hiIncl ? "bracket, so it is included" : "parenthesis, so it is not included") + ".";
+        else if (s.inside) why = "It is between " + xs(iv.lo) + " and " + xs(iv.hi) + ".";
+        else why = "It is outside the interval, " + (s.t < iv.lo ? "to the left of " + xs(iv.lo) : "to the right of " + xs(iv.hi)) + ".";
+        return "<span class=\"sol-label\">Solution</span><div class=\"step\">" + why + "</div><div class=\"final\">Answer: " + (s.inside ? "yes" : "no") + "</div>";
+      }
+    });
+  }
+
+  // ---- both at once: positive AND increasing, etc. ----
+  var COMBOS = [["pos", "inc"], ["pos", "dec"], ["neg", "inc"], ["neg", "dec"]];
+  function comboPart(o) {
+    return reg({
+      id: o.id, kind: o.kind, points: o.points || (o.kind === "cp" ? 2 : 4), stage: o.stage, label: o.label || "",
+      hasGraph: true, graphSpec: { maxW: 460, aspect: shapeAspect },
+      gen: function () {
+        for (var t = 0; t < 300; t++) {
+          var sh = genCurveLevel(o.level), pair = o.pair || randChoice(COMBOS);
+          var ans = intersectIv(sh[pair[0]], sh[pair[1]]);
+          if (!ans.length && Math.random() < 0.75) continue;
+          return { sh: sh, pair: pair, ans: ans };
+        }
+        var s2 = genCurveLevel(2); return { sh: s2, pair: ["pos", "inc"], ans: intersectIv(s2.pos, s2.inc) };
+      },
+      drawGraph: function (canvas, s) { drawShape(canvas, s.sh, "plain"); },
+      prompt: function (s) { return "Where is <b>f</b> both <b>" + WORD[s.pair[0]] + "</b> and <b>" + WORD[s.pair[1]] + "</b>? Give your answer in interval notation. If it never happens, type <i>empty</i>." + (o.kind === "practice" ? "<div class=\"hintline\">Find where each is true, then keep only the x-values that are in both lists.</div>" : ""); },
+      inputsHtml: function () { return intervalTextInputHtml("ans-iv", "Both on:", "e.g. (-2, 1) or empty"); },
+      read: function (card) { return { iv: fieldVal(card, ".ans-iv") }; },
+      check: function (raw, s) {
+        var parsed = parseIntervalUnion(raw.iv);
+        if (parsed.invalid) return { ok: false, msg: normText(raw.iv) === "" ? "Type your answer in the box first." : IV_HELP };
+        if (intervalAnswerCorrect(parsed, s.ans)) return { ok: true };
+        var A = s.sh[s.pair[0]], B = s.sh[s.pair[1]], st = { intervals: stripIv(parsed.intervals), invalid: false };
+        if (sameIntervals(st.intervals, A)) return { ok: false, msg: "That is just where f is " + WORD[s.pair[0]] + ". It also has to be " + WORD[s.pair[1]] + "." };
+        if (sameIntervals(st.intervals, B)) return { ok: false, msg: "That is just where f is " + WORD[s.pair[1]] + ". It also has to be " + WORD[s.pair[0]] + "." };
+        if (mergeIntervals(A.concat(B)).length && sameIntervals(st.intervals, A.concat(B))) return { ok: false, msg: "You combined the two lists (union). 'Both' means only the x-values that appear in both lists." };
+        return { ok: false, msg: "" };
+      },
+      correctRaw: function (s) { return { iv: typedIv(s.ans) }; },
+      solutionHtml: function (s) {
+        var A = s.sh[s.pair[0]], B = s.sh[s.pair[1]];
+        return "<span class=\"sol-label\">Solution</span>" +
+          "<div class=\"step\"><b>Step 1.</b> " + WORD[s.pair[0]].charAt(0).toUpperCase() + WORD[s.pair[0]].slice(1) + " on: " + ivList(A) + "</div>" +
+          "<div class=\"step\"><b>Step 2.</b> " + WORD[s.pair[1]].charAt(0).toUpperCase() + WORD[s.pair[1]].slice(1) + " on: " + ivList(B) + "</div>" +
+          "<div class=\"step\"><b>Step 3.</b> Keep only the x-values that are in <i>both</i> lists" + (s.ans.length ? "." : ". There are none, so it never happens.") + "</div>" +
+          "<div class=\"final\">Answer: " + ivList(s.ans) + "</div>";
+      },
+      solDraw: function (canvas, s) {
+        drawShape(canvas, s.sh, s.pair[0], { bars: barsFor(s.sh, s.pair[0], s.sh[s.pair[0]]).concat(barsFor(s.sh, s.pair[1], s.sh[s.pair[1]])) });
+      }
+    });
+  }
+
+  // ---- spot the mistake (pooled; one of the options is "nothing wrong") ----
+  var DIAG_OPTS = [
+    ["ok", "Nothing is wrong: the answer is correct"],
+    ["yvals", "They wrote y-values (heights) instead of x-values"],
+    ["brk", "They used square brackets where parentheses are needed"],
+    ["hull", "They joined separate intervals into one big interval"],
+    ["opp", "They answered the opposite question (positive vs negative, or increasing vs decreasing)"]
+  ];
+  function diagPart(o) {
+    function build() {
+      for (var t = 0; t < 400; t++) {
+        var sh = genCurveLevel(randChoice([2, 2, 3])), key = randChoice(["pos", "neg", "inc", "dec"]), exp = sh[key];
+        if (!exp.length) continue;
+        var opts = ["ok", "opp"];
+        if (key === "pos" || key === "neg") opts.push("brk");
+        if (sh.ext.length) opts.push("yvals");
+        if (exp.length >= 2) opts.push("hull");
+        var arche = randChoice(opts), typed, list = null;
+        if (arche === "ok") list = exp;
+        else if (arche === "opp") { list = sh[OPP[key]]; if (!list.length) continue; }
+        else if (arche === "brk") {
+          list = exp.map(function (a) { return { lo: a.lo, loIncl: isFinite(a.lo), hi: a.hi, hiIncl: isFinite(a.hi) }; });
+          if (!list.some(function (a) { return a.loIncl || a.hiIncl; })) continue;
+        }
+        else if (arche === "hull") list = [openIv(exp[0].lo, exp[exp.length - 1].hi)];
+        else if (arche === "yvals") {
+          var ys = sh.ext.map(function (e) { return e.y; }), lo = Math.min.apply(null, ys), hi = Math.max.apply(null, ys);
+          if (lo === hi) continue;
+          list = [openIv(lo, hi)];
+          if (intervalAnswerCorrect({ intervals: list, invalid: false }, exp)) continue;
+        }
+        if (arche !== "ok" && intervalAnswerCorrect({ intervals: stripIv(list), invalid: false }, exp) && arche !== "brk") continue;
+        typed = ivText(list, 0);
+        return { sh: sh, key: key, arche: arche, typed: typed };
+      }
+      var sh0 = genCurveLevel(2); return { sh: sh0, key: "pos", arche: "ok", typed: ivText(sh0.pos, 0) };
+    }
+    return reg({
+      id: o.id, kind: o.kind, points: o.points || (o.kind === "cp" ? 2 : 4), stage: o.stage, label: o.label || "",
+      hasGraph: true, graphSpec: { maxW: 440, aspect: shapeAspect },
+      gen: build,
+      drawGraph: function (canvas, s) { drawShape(canvas, s.sh, "plain"); },
+      prompt: function (s) { return "A student looked at this graph and was asked: <b>“Where is f " + WORD[s.key] + "?”</b> They typed:<div class=\"stu\">" + escHtml(s.typed) + "</div>Compare their answer with the graph. What went wrong, if anything?"; },
+      inputsHtml: function () { return mcRow(DIAG_OPTS); },
+      afterRender: mcAfter,
+      read: function (card) { return { v: mcVal(card) }; },
+      check: function (raw, s) { if (raw.v === "") return { ok: false, msg: "choose one of the options first." }; return raw.v === s.arche ? { ok: true } : { ok: false, msg: "go back to the graph and check each number the student typed against where the " + (s.key === "pos" || s.key === "neg" ? "graph meets the x-axis" : "graph turns around") + "." }; },
+      correctRaw: function (s) { return { v: s.arche }; },
+      solutionHtml: function (s) {
+        var exp = s.sh[s.key], why = {
+          ok: "The student's answer matches the graph, so there is nothing wrong.",
+          yvals: "The student typed heights from the y-axis. An interval always describes <b>x-values</b>, the left-to-right positions.",
+          brk: "At a zero the function equals 0, which is neither positive nor negative. Those endpoints need parentheses, not brackets.",
+          hull: "The student drew one big interval across a stretch where the answer changes. The correct answer is a union of separate pieces.",
+          opp: "The student answered for the opposite question: " + WORD[OPP[s.key]] + " instead of " + WORD[s.key] + "."
+        }[s.arche];
+        return "<span class=\"sol-label\">Solution</span><div class=\"step\">" + why + "</div><div class=\"final\">Correct answer: " + ivList(exp) + "</div>";
+      },
+      solDraw: function (canvas, s) { drawShape(canvas, s.sh, s.key, { bars: barsFor(s.sh, s.key, s.sh[s.key]) }); }
+    });
+  }
+
+  // ---- bonus: tables of values ----
+  function tablePart(o) {
+    return reg({
+      id: o.id, kind: o.kind, points: o.points || 4, stage: o.stage, label: o.label || "",
+      hasGraph: false,
+      gen: function () {
+        var n = 5, x0 = randInt(-2, 2), type = randChoice(["inc", "dec", "none", "none"]), ys = [], i, v = randInt(-6, 4);
+        if (type === "inc") for (i = 0; i < n; i++) { ys.push(v); v += randInt(1, 4); }
+        else if (type === "dec") for (i = 0; i < n; i++) { ys.push(v); v -= randInt(1, 4); }
+        else {
+          var turn = randInt(1, 3), up = randBool();
+          for (i = 0; i < n; i++) { ys.push(v); v += (i < turn ? 1 : -1) * (up ? 1 : -1) * randInt(1, 3); }
+        }
+        var xs_ = [], i2; for (i2 = 0; i2 < n; i2++) xs_.push(x0 + i2);
+        // sign change location
+        var sc = -1; for (i2 = 0; i2 < n - 1; i2++) if (ys[i2] * ys[i2 + 1] < 0) { sc = i2; break; }
+        return { xs: xs_, ys: ys, type: type, variant: o.variant, sc: sc };
+      },
+      prompt: function (s) {
+        var tbl = "<table class=\"tbl-show\"><tr><th>x</th>" + s.xs.map(function (v) { return "<td>" + plain(v) + "</td>"; }).join("") + "</tr><tr><th>f(x)</th>" + s.ys.map(function (v) { return "<td>" + plain(v) + "</td>"; }).join("") + "</tr></table>";
+        if (s.variant === "dir") return tbl + "As x gets bigger across this table, is the function increasing, decreasing, or neither?";
+        return tbl + "The sign of f(x) changes somewhere in this table. Between which two x-values does the graph cross the x-axis? (If it never changes sign, choose that.)";
+      },
+      inputsHtml: function (s) {
+        if (s.variant === "dir") return mcRow([["inc", "Increasing"], ["dec", "Decreasing"], ["none", "Neither (it changes direction)"]]);
+        var opts = [], i;
+        for (i = 0; i < s.xs.length - 1; i++) opts.push([String(i), "Between " + plain(s.xs[i]) + " and " + plain(s.xs[i + 1])]);
+        opts.push(["-1", "It never changes sign"]);
+        return mcRow(opts);
+      },
+      afterRender: mcAfter,
+      read: function (card) { return { v: mcVal(card) }; },
+      check: function (raw, s) {
+        if (raw.v === "") return { ok: false, msg: "choose an answer first." };
+        if (s.variant === "dir") return raw.v === s.type ? { ok: true } : { ok: false, msg: "compare each f(x) with the one before it." };
+        return +raw.v === s.sc ? { ok: true } : { ok: false, msg: "look for the spot where f(x) goes from positive to negative, or negative to positive." };
+      },
+      correctRaw: function (s) { return { v: s.variant === "dir" ? s.type : String(s.sc) }; },
+      solutionHtml: function (s) {
+        if (s.variant === "dir") {
+          var diffs = []; for (var i = 1; i < s.ys.length; i++) diffs.push(s.ys[i] > s.ys[i - 1] ? "up" : "down");
+          return "<span class=\"sol-label\">Solution</span><div class=\"step\">Compare each f(x) with the one before it: " + diffs.join(", ") + ".</div><div class=\"final\">Answer: " + (s.type === "inc" ? "increasing (always up)" : (s.type === "dec" ? "decreasing (always down)" : "neither (it goes up and down)")) + "</div>";
+        }
+        return "<span class=\"sol-label\">Solution</span><div class=\"step\">" + (s.sc >= 0 ? "f(x) is " + plain(s.ys[s.sc]) + " at x = " + plain(s.xs[s.sc]) + " and " + plain(s.ys[s.sc + 1]) + " at x = " + plain(s.xs[s.sc + 1]) + ". The sign flips, so the graph crosses the x-axis between those x-values." : "Every f(x) has the same sign, so the graph never crosses the axis.") + "</div><div class=\"final\">Answer: " + (s.sc >= 0 ? "between " + plain(s.xs[s.sc]) + " and " + plain(s.xs[s.sc + 1]) : "it never changes sign") + "</div>";
+      }
+    });
+  }
+
+
+  // ============================================================
+  // Cards (registered by id), then stage content
+  // ============================================================
+  // ---- Stage 1: the big idea ----
+  ptSign({ id: "s1-p1", kind: "practice", stage: "s1", level: 1, label: "Practice 1" });
+  ptSign({ id: "s1-p2", kind: "practice", stage: "s1", level: 2, label: "Practice 2" });
+  ptDir({ id: "s1-p3", kind: "practice", stage: "s1", level: 1, label: "Practice 3" });
+  ptDir({ id: "s1-p4", kind: "practice", stage: "s1", level: 2, label: "Practice 4" });
+  ptSign({ id: "s1-c1", kind: "cp", stage: "s1", level: 2, label: "Checkpoint 1A" });
+  ptDir({ id: "s1-c2", kind: "cp", stage: "s1", level: 2, label: "Checkpoint 1B" });
+  // ---- Stage 2: interval notation ----
+  nlPart({ id: "s2-p1", kind: "practice", stage: "s2", level: 1, label: "Practice 1" });
+  nlPart({ id: "s2-p2", kind: "practice", stage: "s2", level: 2, label: "Practice 2" });
+  nlPart({ id: "s2-p3", kind: "practice", stage: "s2", level: 3, label: "Practice 3" });
+  inoutPart({ id: "s2-p4", kind: "practice", stage: "s2", label: "Practice 4" });
+  inoutPart({ id: "s2-p5", kind: "practice", stage: "s2", label: "Practice 5" });
+  nlPart({ id: "s2-c1", kind: "cp", stage: "s2", level: 2, label: "Checkpoint 2A" });
+  inoutPart({ id: "s2-c2", kind: "cp", stage: "s2", label: "Checkpoint 2B" });
+  // ---- Stage 3: positive / negative ----
+  ivPart({ id: "s3-p1", kind: "practice", stage: "s3", level: 0, key: "pos", label: "Practice 1" });
+  ivPart({ id: "s3-p2", kind: "practice", stage: "s3", level: 1, key: "neg", label: "Practice 2" });
+  ivPart({ id: "s3-p3", kind: "practice", stage: "s3", level: 2, key: "pos", label: "Practice 3" });
+  ivPart({ id: "s3-p4", kind: "practice", stage: "s3", level: 3, key: "neg", label: "Practice 4" });
+  ivPart({ id: "s3-c1", kind: "cp", stage: "s3", level: 2, key: "pos", label: "Checkpoint 3A" });
+  ivPart({ id: "s3-c2", kind: "cp", stage: "s3", level: 3, key: "neg", label: "Checkpoint 3B" });
+  // ---- Stage 4: increasing / decreasing ----
+  ivPart({ id: "s4-p1", kind: "practice", stage: "s4", level: 0, key: "inc", label: "Practice 1" });
+  ivPart({ id: "s4-p2", kind: "practice", stage: "s4", level: 1, key: "dec", label: "Practice 2" });
+  ivPart({ id: "s4-p3", kind: "practice", stage: "s4", level: 2, key: "inc", label: "Practice 3" });
+  ivPart({ id: "s4-p4", kind: "practice", stage: "s4", level: 3, key: "dec", label: "Practice 4" });
+  ivPart({ id: "s4-c1", kind: "cp", stage: "s4", level: 2, key: "inc", label: "Checkpoint 4A" });
+  ivPart({ id: "s4-c2", kind: "cp", stage: "s4", level: 3, key: "dec", label: "Checkpoint 4B" });
+  // ---- Stage 5: both at once ----
+  sharedGroup("g5", 2, "Graph of f", "The same graph for all four parts. Beyond the edges of the window, the graph keeps going the way it is heading.");
+  ["pos", "neg", "inc", "dec"].forEach(function (k, i) {
+    ivShared({ id: "s5-w" + (i + 1), kind: "practice", stage: "s5", group: "g5", key: k, label: "Warm-up " + "ABCD".charAt(i) });
+  });
+  comboPart({ id: "s5-p1", kind: "practice", stage: "s5", level: 2, label: "Practice 1" });
+  comboPart({ id: "s5-p2", kind: "practice", stage: "s5", level: 2, label: "Practice 2" });
+  comboPart({ id: "s5-c1", kind: "cp", stage: "s5", level: 2, label: "Checkpoint 5A" });
+  comboPart({ id: "s5-c2", kind: "cp", stage: "s5", level: 3, label: "Checkpoint 5B" });
+  // ---- Stage 6: spot the mistake ----
+  diagPart({ id: "s6-p1", kind: "practice", stage: "s6", label: "Practice 1" });
+  diagPart({ id: "s6-p2", kind: "practice", stage: "s6", label: "Practice 2" });
+  diagPart({ id: "s6-c1", kind: "cp", stage: "s6", label: "Checkpoint 6A" });
+  diagPart({ id: "s6-c2", kind: "cp", stage: "s6", label: "Checkpoint 6B" });
+  // ---- Stage 7: exam practice (two graphs, four parts each, 4 points each) ----
+  sharedGroup("g7a", 2, "Graph 1", "Graph 1. Beyond the edges of the window, the graph keeps going the way it is heading.");
+  sharedGroup("g7b", 3, "Graph 2", "Graph 2. Beyond the edges of the window, the graph keeps going the way it is heading.");
+  ["pos", "neg", "inc", "dec"].forEach(function (k, i) {
+    ivShared({ id: "s7a-" + k, kind: "exam", stage: "s7", group: "g7a", key: k, points: 4, label: "1" + "abcd".charAt(i) });
+    ivShared({ id: "s7b-" + k, kind: "exam", stage: "s7", group: "g7b", key: k, points: 4, label: "2" + "abcd".charAt(i) });
+  });
+  // ---- Bonus ----
+  tablePart({ id: "sb-1", kind: "bonus", stage: "sb", variant: "dir", points: 2, label: "Bonus 1" });
+  tablePart({ id: "sb-2", kind: "bonus", stage: "sb", variant: "sign", points: 2, label: "Bonus 2" });
+  tablePart({ id: "sb-3", kind: "bonus", stage: "sb", variant: "dir", points: 2, label: "Bonus 3" });
+  tablePart({ id: "sb-4", kind: "bonus", stage: "sb", variant: "sign", points: 2, label: "Bonus 4" });
+  comboPart({ id: "sb-5", kind: "bonus", stage: "sb", level: 3, points: 2, label: "Bonus 5" });
+  comboPart({ id: "sb-6", kind: "bonus", stage: "sb", level: 3, points: 2, label: "Bonus 6" });
+
+  var CP_NOTE = "These count toward your summary. Your <b>first</b> check is the one that is recorded, and viewing the solution before you check scores 0 for that part. Do the work on scratch paper first.";
+
+  var STAGES = [
+    // ------------------------------------------------------------
+    {
+      id: "s1", nav: "1 Big idea", kicker: "Stage 1 of 7", title: "The big idea", mins: 7,
+      goal: "Tell positive from negative and increasing from decreasing, one point at a time.",
+      blocks: [
+        { t: "p", html: "Every graph in this lesson is a picture of a function called <b>f</b>. Sideways is the input <b>x</b>. Up and down is the output, the height <b>f(x)</b>. To read a graph, you almost always <b>scan from left to right</b>, the same direction you read a sentence." },
+        { t: "p", html: "Two different questions can be asked about any spot on a graph. They sound alike, but they have nothing to do with each other, and most mistakes in this unit come from mixing them up." },
+        { t: "callout", cls: "key", title: "Two separate questions", html:
+          "<p><b>Question 1: where is the graph?</b> Is it above the x-axis, below it, or sitting on it? That is its <b>sign</b>: positive, negative, or zero.</p>" +
+          "<p><b>Question 2: where is it heading?</b> As you move to the right, is it climbing, falling, or turning around? That is its <b>direction</b>: increasing, decreasing, or a turning point.</p>" },
+        { t: "html", html:
+          "<table class=\"vocab\"><thead><tr><th>Word</th><th>What you see on the graph</th><th>Which question</th></tr></thead><tbody>" +
+          "<tr><td><b>Positive</b></td><td>The graph is <b>above</b> the x-axis. The height f(x) is a positive number.</td><td>Sign</td></tr>" +
+          "<tr><td><b>Negative</b></td><td>The graph is <b>below</b> the x-axis. The height f(x) is a negative number.</td><td>Sign</td></tr>" +
+          "<tr><td><b>Zero</b></td><td>The graph is exactly <b>on</b> the x-axis (an x-intercept). It is neither positive nor negative.</td><td>Sign</td></tr>" +
+          "<tr><td><b>Increasing</b></td><td>As you move right, the graph <b>climbs</b>. Uphill.</td><td>Direction</td></tr>" +
+          "<tr><td><b>Decreasing</b></td><td>As you move right, the graph <b>falls</b>. Downhill.</td><td>Direction</td></tr>" +
+          "<tr><td><b>Turning point</b></td><td>A peak or a valley, where the graph switches between climbing and falling. At that exact spot it is neither increasing nor decreasing.</td><td>Direction</td></tr>" +
+          "</tbody></table>" },
+        { t: "h", text: "Try it: the scanner" },
+        { t: "p", html: "Slide <b>x</b> from left to right and watch the two readouts at the bottom. Then use the three buttons to color the graph by sign, or by direction, and notice where the colors change." },
+        { t: "scanner" },
+        { t: "callout", cls: "warn", title: "The most common mix-up", html:
+          "<p><b>Negative does not mean going down.</b> Negative describes the <i>height</i>: the graph is below the axis. Going down describes the <i>direction</i>. A graph can be below the axis and climbing at the same time, and it can be above the axis and falling at the same time.</p>" },
+        { t: "p", html: "<b>Your turn with the scanner.</b> Find an x-value where the function is <b>negative and increasing</b>. Then find one where it is <b>positive and decreasing</b>. Say your two x-values out loud, then open the box to compare." },
+        { t: "details", summary: "Check my findings", html:
+          "<p>Several answers work. Negative and increasing: anywhere left of <b>x = &minus;4</b> (below the axis, still climbing), or anywhere between <b>x = 2 and x = 4</b> (the graph has bottomed out and is climbing back up toward the axis).</p>" +
+          "<p>Positive and decreasing: anywhere between <b>x = &minus;2 and x = 0</b> (above the axis, coming down from the peak).</p>" +
+          "<p>If your answers were different from these, check them against the readouts. Any x-value where the Sign tile and the Direction tile show what the question asks is correct.</p>" },
+        { t: "cards", title: "Practice", desc: "Not scored. Use the hints, ask for a new version as often as you like, and open the solution when you are stuck.", ids: ["s1-p1", "s1-p2", "s1-p3", "s1-p4"] },
+        { t: "cpbanner", title: "Checkpoint 1", html: CP_NOTE },
+        { t: "cards", ids: ["s1-c1", "s1-c2"] }
+      ]
+    },
+    // ------------------------------------------------------------
+    {
+      id: "s2", nav: "2 Intervals", kicker: "Stage 2 of 7", title: "Interval notation tune-up", mins: 8,
+      goal: "Write a stretch of the number line in interval notation, and tell whether a number is inside it.",
+      blocks: [
+        { t: "p", html: "Soon you will be asked, &ldquo;Where is the function positive?&rdquo; The answer is a stretch of the x-axis, sometimes two or three separate stretches. <b>Interval notation</b> is the short way to write a stretch of numbers. This stage makes sure you can read and write it comfortably before we put it to work on graphs." },
+        { t: "h", text: "Four rules" },
+        { t: "steps", items: [
+          "<b>Smaller number first.</b> An interval is written from left to right on the number line, like <b>(2, 5)</b>. Never <b>(5, 2)</b>.",
+          "<b>Parenthesis or bracket.</b> A <b>parenthesis</b> ( or ) means the endpoint is <i>not</i> included. It matches an <i>open</i> circle. A <b>bracket</b> [ or ] means the endpoint <i>is</i> included. It matches a <i>filled</i> circle.",
+          "<b>Infinity always gets a parenthesis.</b> The symbols &infin; and &minus;&infin; are not numbers you can reach, they just say &ldquo;keeps going.&rdquo; An arrow on a number line means infinity.",
+          "<b>Separate pieces are joined with a union sign, &cup;.</b> Write the pieces from left to right."
+        ] },
+        { t: "p", html: "Here are three examples. Read each number line, then read the caption to see how the answer was built." },
+        { t: "nl", ivs: [{ lo: -2, loIncl: true, hi: 5, hiIncl: false }], caption: "<b>[&minus;2, 5)</b>. The filled circle at &minus;2 gets a bracket. The open circle at 5 gets a parenthesis." },
+        { t: "nl", ivs: [{ lo: -Infinity, loIncl: false, hi: 1, hiIncl: true }], caption: "<b>(&minus;&infin;, 1]</b>. The arrow on the left becomes &minus;&infin; with a parenthesis. The filled circle at 1 gets a bracket." },
+        { t: "nl", ivs: [{ lo: -6, loIncl: false, hi: -3, hiIncl: false }, { lo: 1, loIncl: false, hi: Infinity, hiIncl: false }], caption: "<b>(&minus;6, &minus;3) &cup; (1, &infin;)</b>. Two separate pieces, joined with &cup;. The first has two open circles, the second ends in an arrow." },
+        { t: "h", text: "How to type it" },
+        { t: "html", html:
+          "<table class=\"vocab typing\"><thead><tr><th>You want to write</th><th>Type this</th></tr></thead><tbody>" +
+          "<tr><td>( ) and [ ]</td><td>the same keys on your keyboard</td></tr>" +
+          "<tr><td>the union sign &cup;</td><td>a capital <code>U</code> (a lowercase u also works)</td></tr>" +
+          "<tr><td>&infin;</td><td><code>inf</code> or <code>infinity</code></td></tr>" +
+          "<tr><td>&minus;&infin;</td><td><code>-inf</code></td></tr>" +
+          "<tr><td>no values at all</td><td><code>empty</code></td></tr>" +
+          "</tbody></table><p class=\"para small\">Spaces do not matter. Example: <code>(-6, -3) U (1, inf)</code> is read the same as &ldquo;(&minus;6, &minus;3) &cup; (1, &infin;)&rdquo;.</p>" },
+        { t: "callout", cls: "tip", title: "Looking ahead", html:
+          "<p>When you read intervals off a <i>graph</i> in the next stages, almost every endpoint will get a <b>parenthesis</b>. Zeros of the function are neither positive nor negative, and turning points are neither climbing nor falling, so those x-values are left out. Brackets are here so you can recognize them and use them when a problem has a filled circle.</p>" },
+        { t: "cards", title: "Practice", desc: "Not scored. Use the hints and keep going until it feels automatic.", ids: ["s2-p1", "s2-p2", "s2-p3", "s2-p4", "s2-p5"] },
+        { t: "cpbanner", title: "Checkpoint 2", html: CP_NOTE },
+        { t: "cards", ids: ["s2-c1", "s2-c2"] }
+      ]
+    },
+    // ------------------------------------------------------------
+    {
+      id: "s3", nav: "3 Pos / Neg", kicker: "Stage 3 of 7", title: "Positive and negative", mins: 11,
+      goal: "Read off where a function is positive and where it is negative, in interval notation.",
+      blocks: [
+        { t: "p", html: "<b>Positive</b> means the graph is <b>above</b> the x-axis. <b>Negative</b> means it is <b>below</b>. The only places where a graph can switch from one side of the axis to the other are the places where it <b>meets the x-axis</b>: the <b>zeros</b> (also called x-intercepts). So the zeros are the boundaries for every sign question." },
+        { t: "callout", cls: "key", title: "The four-step method for sign", html:
+          "<ol class=\"inl\"><li><b>Mark the zeros.</b> Find every x-value where the graph meets the x-axis.</li>" +
+          "<li><b>Cut the x-axis into pieces</b> at those x-values.</li>" +
+          "<li><b>Check each piece.</b> Above the axis is positive. Below the axis is negative.</li>" +
+          "<li><b>Write the intervals</b> with parentheses at the zeros, because f(x) = 0 there, and zero is neither positive nor negative.</li></ol>" },
+        { t: "worked", title: "Example 1: a graph that crosses the axis three times", fig: "cubic", intro: "Question: where is f positive, and where is it negative?", steps: [
+          { html: "<b>Mark the zeros.</b> The graph meets the x-axis at <b>x = &minus;4</b>, <b>x = 0</b>, and <b>x = 4</b>. Look at the x-axis, not the y-axis, for these numbers.", dots: "zeros" },
+          { html: "<b>Cut the x-axis into pieces.</b> Three zeros make four pieces: (&minus;&infin;, &minus;4), (&minus;4, 0), (0, 4), and (4, &infin;).", dots: "zeros" },
+          { html: "<b>Check each piece.</b> Left of &minus;4 the graph is below the axis (negative). From &minus;4 to 0 it is above (positive). From 0 to 4 it is below (negative). Right of 4 it is above (positive). The coral parts are negative and the teal parts are positive.", dots: "zeros", mode: "sign" },
+          { html: "<b>Write the positive intervals.</b> Teal pieces: <b>(&minus;4, 0) &cup; (4, &infin;)</b>. The two zeros use parentheses. The arrow on the right is &infin;, which always gets a parenthesis.", dots: "zeros", mode: "pos", bars: ["pos"] },
+          { html: "<b>Write the negative intervals.</b> Coral pieces: <b>(&minus;&infin;, &minus;4) &cup; (0, 4)</b>.", dots: "zeros", mode: "neg", bars: ["neg"] }
+        ] },
+        { t: "worked", title: "Example 2: a valley that dips below the axis", fig: "parab", intro: "Question: where is f negative, and where is it positive?", steps: [
+          { html: "<b>Mark the zeros.</b> The graph meets the x-axis at <b>x = &minus;1</b> and <b>x = 3</b>. The lowest point of the valley is at x = 1, but that is a turning point, not a zero, so it does not matter for sign.", dots: "zeros" },
+          { html: "<b>Cut the axis.</b> Two zeros make three pieces: (&minus;&infin;, &minus;1), (&minus;1, 3), and (3, &infin;).", dots: "zeros" },
+          { html: "<b>Check each piece.</b> The outside pieces are above the axis. The middle piece, where the valley dips down, is below the axis.", dots: "zeros", mode: "sign" },
+          { html: "<b>Answer.</b> Negative: <b>(&minus;1, 3)</b>. Positive: <b>(&minus;&infin;, &minus;1) &cup; (3, &infin;)</b>.", dots: "zeros", mode: "sign", bars: ["pos", "neg"] }
+        ] },
+        { t: "worked", title: "Example 3: a graph that touches the axis but does not cross", fig: "touch", intro: "This graph kisses the x-axis at x = 0 and turns back up. Watch what that does to the answer.", steps: [
+          { html: "<b>Mark the zeros.</b> The graph meets the axis at <b>x = &minus;4</b>, <b>x = 0</b>, and <b>x = 4</b>. At x = 0 it only touches.", dots: "zeros" },
+          { html: "<b>Check each piece.</b> Left of &minus;4: below (negative). From &minus;4 to 0: above (positive). From 0 to 4: <i>still above</i> (positive), because the graph bounced off the axis instead of crossing it. Right of 4: below (negative).", dots: "zeros", mode: "sign" },
+          { html: "<b>Write the positive intervals.</b> At x = 0 the function equals 0, so x = 0 is not positive and cannot be inside the interval. That splits the answer into two pieces: <b>(&minus;4, 0) &cup; (0, 4)</b>. It is not (&minus;4, 4).", dots: "zeros", mode: "pos", bars: ["pos"] },
+          { html: "<b>Write the negative intervals.</b> <b>(&minus;&infin;, &minus;4) &cup; (4, &infin;)</b>.", dots: "zeros", mode: "neg", bars: ["neg"] },
+          { html: "<b>Takeaway.</b> A touch is still a zero, so it still gets left out. But the sign does not change across it, so the pieces on both sides give the same answer.", dots: "zeros", mode: "sign" }
+        ] },
+        { t: "callout", cls: "tip", title: "What if the answer is &ldquo;never&rdquo;?", html:
+          "<p>Sometimes a graph never goes below the axis, so it is never negative. In that case type <b>empty</b>. You will see this on some practice problems, especially on graphs that sit entirely above or below the x-axis.</p>" },
+        { t: "callout", cls: "tip", title: "Arrows mean it keeps going", html:
+          "<p>If the graph runs off the edge of the window with an arrow, assume it continues in that direction forever. That is why the first or last interval so often goes to &minus;&infin; or &infin;.</p>" },
+        { t: "cards", title: "Practice", desc: "Not scored. The first one is a straight line, then the graphs get more interesting.", ids: ["s3-p1", "s3-p2", "s3-p3", "s3-p4"] },
+        { t: "cpbanner", title: "Checkpoint 3", html: CP_NOTE },
+        { t: "cards", ids: ["s3-c1", "s3-c2"] }
+      ]
+    },
+    // ------------------------------------------------------------
+    {
+      id: "s4", nav: "4 Inc / Dec", kicker: "Stage 4 of 7", title: "Increasing and decreasing", mins: 11,
+      goal: "Read off where a function is increasing and where it is decreasing, in interval notation.",
+      blocks: [
+        { t: "p", html: "Now the direction question. Picture a tiny hiker walking along the graph <b>from left to right</b>. Where the hiker is going uphill, the function is <b>increasing</b>. Where the hiker is going downhill, the function is <b>decreasing</b>." },
+        { t: "p", html: "The hiker only changes from uphill to downhill (or the other way) at a <b>peak</b> or a <b>valley</b>. These are the <b>turning points</b>, and they are the boundaries for every direction question, just like zeros were for sign." },
+        { t: "callout", cls: "key", title: "The four-step method for direction", html:
+          "<ol class=\"inl\"><li><b>Mark the turning points.</b> Find every peak and valley.</li>" +
+          "<li><b>Cut the x-axis</b> at the x-values of those turning points.</li>" +
+          "<li><b>Send the hiker through each piece</b>, left to right. Uphill is increasing. Downhill is decreasing.</li>" +
+          "<li><b>Write the intervals</b> with parentheses at the turning points. Use the <b>x-coordinate</b> of each turning point.</li></ol>" },
+        { t: "callout", cls: "warn", title: "x-values only", html:
+          "<p>A peak at the point <b>(&minus;2, 3)</b> contributes the number <b>&minus;2</b> to your interval, not 3. Intervals always describe positions along the x-axis. If a number in your answer came from the vertical axis, something has gone wrong.</p>" },
+        { t: "worked", title: "Example 1: a peak and a valley", fig: "cubic", intro: "Question: where is f increasing, and where is it decreasing?", steps: [
+          { html: "<b>Mark the turning points.</b> There is a peak at <b>x = &minus;2</b> and a valley at <b>x = 2</b>.", dots: "ext" },
+          { html: "<b>Send the hiker through.</b> Left of &minus;2 the hiker climbs. From &minus;2 to 2 the hiker descends into the valley. Right of 2 the hiker climbs again. Teal is climbing and coral is falling.", dots: "ext", mode: "dir" },
+          { html: "<b>Increasing:</b> <b>(&minus;&infin;, &minus;2) &cup; (2, &infin;)</b>.", dots: "ext", mode: "inc", bars: ["inc"] },
+          { html: "<b>Decreasing:</b> <b>(&minus;2, 2)</b>. Turning points use parentheses because at that exact spot the graph is neither climbing nor falling.", dots: "ext", mode: "dec", bars: ["dec"] }
+        ] },
+        { t: "worked", title: "Example 2: a single valley", fig: "parab", intro: "This is the same graph as Example 2 in Stage 3. Different question, different boundary.", steps: [
+          { html: "<b>Mark the turning point.</b> The only turning point is the valley at <b>x = 1</b>.", dots: "ext" },
+          { html: "<b>Send the hiker through.</b> Left of 1 the graph falls. Right of 1 it climbs.", dots: "ext", mode: "dir" },
+          { html: "<b>Answer.</b> Decreasing: <b>(&minus;&infin;, 1)</b>. Increasing: <b>(1, &infin;)</b>.", dots: "ext", mode: "dir", bars: ["inc", "dec"] },
+          { html: "<b>Notice</b> that the sign question for this graph used the boundaries &minus;1 and 3 (the zeros), while the direction question uses the boundary 1 (the turning point). Same graph, different boundaries. That is why the two questions have different answers.", dots: "ext", mode: "dir" }
+        ] },
+        { t: "worked", title: "Example 3: peak, valley, peak", fig: "wave", intro: "A longer trip for the hiker.", steps: [
+          { html: "<b>Mark the turning points.</b> Peak at <b>x = &minus;3</b>, valley at <b>x = 0</b>, peak at <b>x = 3</b>.", dots: "ext" },
+          { html: "<b>Send the hiker through.</b> Climbing, then falling, then climbing, then falling.", dots: "ext", mode: "dir" },
+          { html: "<b>Increasing:</b> <b>(&minus;&infin;, &minus;3) &cup; (0, 3)</b>. <b>Decreasing:</b> <b>(&minus;3, 0) &cup; (3, &infin;)</b>.", dots: "ext", mode: "dir", bars: ["inc", "dec"] },
+          { html: "<b>Check yourself:</b> the intervals should line up end to end with no gaps, except for the turning-point numbers themselves (&minus;3, 0, 3). That is a good way to catch a missing piece.", dots: "ext", mode: "dir", bars: ["inc", "dec"] }
+        ] },
+        { t: "callout", cls: "tip", title: "Parentheses or brackets at a turning point?", html:
+          "<p>Some textbooks put a bracket at a turning point, because the function is still defined there. The answer checker in this lesson will accept a bracket at a turning point and show you a short reminder, but <b>parentheses are the standard to aim for</b>. Zeros (for positive and negative) always get parentheses, with no exceptions.</p>" },
+        { t: "cards", title: "Practice", desc: "Not scored. A straight line first (it never turns around), then curves.", ids: ["s4-p1", "s4-p2", "s4-p3", "s4-p4"] },
+        { t: "cpbanner", title: "Checkpoint 4", html: CP_NOTE },
+        { t: "cards", ids: ["s4-c1", "s4-c2"] }
+      ]
+    },
+    // ------------------------------------------------------------
+    {
+      id: "s5", nav: "5 Both", kicker: "Stage 5 of 7", title: "Both questions at once", mins: 10,
+      goal: "Combine sign and direction on the same graph, including &ldquo;positive and decreasing&rdquo;.",
+      blocks: [
+        { t: "p", html: "Sign and direction are independent, so every graph can be sorted into four kinds of places. Each one answers a different pair of questions:" },
+        { t: "html", html:
+          "<table class=\"vocab combo\"><thead><tr><th></th><th>Increasing (climbing)</th><th>Decreasing (falling)</th></tr></thead><tbody>" +
+          "<tr><th>Positive (above the axis)</th><td>above the axis <b>and</b> climbing</td><td>above the axis <b>and</b> falling</td></tr>" +
+          "<tr><th>Negative (below the axis)</th><td>below the axis <b>and</b> climbing</td><td>below the axis <b>and</b> falling</td></tr>" +
+          "</tbody></table>" },
+        { t: "callout", cls: "key", title: "The overlap method", html:
+          "<p>When a question says &ldquo;positive <b>and</b> decreasing,&rdquo; do the two questions separately, then keep <b>only the x-values that appear in both lists</b>.</p>" +
+          "<ol class=\"inl\"><li>Find where the function is positive. (Use the zeros.)</li><li>Find where it is decreasing. (Use the turning points.)</li><li>Look for the overlap. Where both are true at once, that is your answer.</li></ol>" +
+          "<p>If the two lists do not overlap anywhere, the answer is <b>empty</b>.</p>" },
+        { t: "worked", title: "Example 1: positive and increasing", fig: "cubic", intro: "Question: where is f both positive and increasing?", steps: [
+          { html: "<b>Positive</b> (teal bars on the axis): (&minus;4, 0) &cup; (4, &infin;).", mode: "plain", bars: ["pos"] },
+          { html: "<b>Increasing</b> (teal bars along the bottom): (&minus;&infin;, &minus;2) &cup; (2, &infin;).", mode: "plain", bars: ["pos", "inc"] },
+          { html: "<b>Look for the overlap.</b> From &minus;4 to 0 and from &minus;&infin; to &minus;2 overlap on <b>(&minus;4, &minus;2)</b>. From 4 to &infin; and from 2 to &infin; overlap on <b>(4, &infin;)</b>. The amber bar marks the overlap.", mode: "plain", bars: ["pos", "inc"], overlap: ["pos", "inc"] },
+          { html: "<b>Answer:</b> <b>(&minus;4, &minus;2) &cup; (4, &infin;)</b>. On those stretches the graph is above the axis and climbing.", mode: "pos", bars: ["pos", "inc"], overlap: ["pos", "inc"] }
+        ] },
+        { t: "worked", title: "Example 2: positive and decreasing", fig: "cubic", intro: "Same graph, different pair. Where is f both positive and decreasing?", steps: [
+          { html: "<b>Positive:</b> (&minus;4, 0) &cup; (4, &infin;). <b>Decreasing:</b> (&minus;2, 2) (coral bar along the bottom).", mode: "plain", bars: ["pos", "dec"] },
+          { html: "<b>Overlap.</b> (&minus;4, 0) and (&minus;2, 2) share the stretch from &minus;2 to 0. (4, &infin;) and (&minus;2, 2) share nothing. So the answer is just <b>(&minus;2, 0)</b>.", mode: "plain", bars: ["pos", "dec"], overlap: ["pos", "dec"] }
+        ] },
+        { t: "callout", cls: "warn", title: "&ldquo;And&rdquo; means overlap, not &ldquo;add them together&rdquo;", html:
+          "<p>It is tempting to write every interval from both lists joined with &cup;. That answers a different question (&ldquo;positive <i>or</i> decreasing&rdquo;). For &ldquo;and,&rdquo; keep only the x-values that show up in both.</p>" },
+        { t: "cards", title: "Warm-up: all four questions on one graph", desc: "Not scored. This is the full skill set from Stages 3 and 4 on a single graph.", shared: "g5", ids: ["s5-w1", "s5-w2", "s5-w3", "s5-w4"] },
+        { t: "cards", title: "Practice: both at once", desc: "Not scored. Write both lists on scratch paper, then find the overlap.", ids: ["s5-p1", "s5-p2"] },
+        { t: "cpbanner", title: "Checkpoint 5", html: CP_NOTE },
+        { t: "cards", ids: ["s5-c1", "s5-c2"] }
+      ]
+    },
+    // ------------------------------------------------------------
+    {
+      id: "s6", nav: "6 Mistakes", kicker: "Stage 6 of 7", title: "Spot the mistake", mins: 6,
+      goal: "Recognize the four classic errors, so you can catch them in your own work.",
+      blocks: [
+        { t: "p", html: "After a few hundred of these problems, the same four mistakes show up again and again. If you can name them, you can catch them before they cost you points." },
+        { t: "html", html:
+          "<table class=\"vocab mistakes\"><thead><tr><th>The mistake</th><th>What it looks like</th><th>The fix</th></tr></thead><tbody>" +
+          "<tr><td><b>y-values instead of x-values</b></td><td>Writing something like <b>(&minus;2, 3)</b> because the peak is at the point (&minus;2, 3).</td><td>Intervals describe <b>x</b>. Use the left-to-right position, &minus;2, and ignore the height.</td></tr>" +
+          "<tr><td><b>Brackets at zeros</b></td><td>Writing <b>[&minus;4, 0]</b> for where the function is positive.</td><td>At a zero the function equals 0, which is not positive. Use parentheses.</td></tr>" +
+          "<tr><td><b>One big interval</b></td><td>Writing <b>(&minus;4, &infin;)</b> when the graph is positive, then negative, then positive.</td><td>If the answer changes in the middle, use a union of separate pieces.</td></tr>" +
+          "<tr><td><b>The opposite question</b></td><td>Giving the decreasing intervals when the question asked about increasing.</td><td>Circle the question word before you start. Positive vs negative, increasing vs decreasing.</td></tr>" +
+          "</tbody></table>" },
+        { t: "callout", cls: "tip", title: "A 10-second self-check before you press Check", html:
+          "<ol class=\"inl\"><li>Circle the question word: <i>positive, negative, increasing, or decreasing</i>.</li>" +
+          "<li>For each endpoint you wrote, say where it came from: a <b>zero</b> or a <b>turning point</b>.</li>" +
+          "<li>Pick one x-value inside each interval and test it on the graph. Is the graph really above/below, or climbing/falling there?</li></ol>" },
+        { t: "p", html: "In the practice below, a student has answered a question about a graph. Your job is not to solve it from scratch. Compare their answer with the graph and decide what, if anything, went wrong. Sometimes nothing did." },
+        { t: "cards", title: "Practice", desc: "Not scored. Solve the question yourself first, then compare with what the student typed.", ids: ["s6-p1", "s6-p2"] },
+        { t: "cpbanner", title: "Checkpoint 6", html: CP_NOTE },
+        { t: "cards", ids: ["s6-c1", "s6-c2"] }
+      ]
+    },
+    // ------------------------------------------------------------
+    {
+      id: "s7", nav: "7 Exam", kicker: "Stage 7 of 7", title: "Exam practice", mins: 13,
+      goal: "Put it all together with two full graphs and no hints.",
+      blocks: [
+        { t: "callout", cls: "key", title: "How this stage works", html:
+          "<p>This is what an exam question looks like: one graph, four parts. There are no hints and no new versions. Your <b>first check</b> on each part is recorded, and opening a solution before you check scores 0 for that part.</p>" +
+          "<p>Work each part on scratch paper first: mark the zeros, mark the turning points, then write the intervals. Take your time. Aim for about 6 minutes per graph.</p>" },
+        { t: "cards", title: "Graph 1", desc: "Find each of the following in interval notation.", shared: "g7a", ids: ["s7a-pos", "s7a-neg", "s7a-inc", "s7a-dec"] },
+        { t: "cards", title: "Graph 2", desc: "Find each of the following in interval notation. This graph may touch the x-axis without crossing it.", shared: "g7b", ids: ["s7b-pos", "s7b-neg", "s7b-inc", "s7b-dec"] },
+        { t: "callout", cls: "tip", title: "Finished early?", html:
+          "<p>Take the <b>Bonus stage</b>, which uses tables of values. It is extra and does not count toward your total. When you are done, or when time is up, go to the <b>Summary</b> and turn it in.</p>" }
+      ]
+    },
+    // ------------------------------------------------------------
+    {
+      id: "sb", nav: "Bonus", kicker: "Bonus", title: "Bonus: tables of values", mins: 10,
+      goal: "Read sign and direction from a table instead of a graph. Extra credit practice, not part of the core total.",
+      blocks: [
+        { t: "p", html: "Sometimes a problem gives you a table of values instead of a graph. A table is a handful of points sampled from a function. You can still answer the same two questions, but only about the points you are given." },
+        { t: "callout", cls: "key", title: "Reading a table", html:
+          "<p><b>Sign:</b> look at each f(x). Positive numbers are above the axis, negative numbers are below. If the sign flips between two neighboring x-values, the graph must have crossed the x-axis somewhere between them.</p>" +
+          "<p><b>Direction:</b> compare each f(x) with the one before it. If the numbers keep going up as x gets bigger, the function is increasing across the table. If they keep going down, it is decreasing. If they go up and then down (or down and then up), there is a turning point and the function is neither increasing nor decreasing across the whole table.</p>" },
+        { t: "html", html:
+          "<p class=\"para\">Example:</p><table class=\"tbl-show\"><tr><th>x</th><td>&minus;2</td><td>&minus;1</td><td>0</td><td>1</td><td>2</td></tr><tr><th>f(x)</th><td>&minus;5</td><td>&minus;1</td><td>3</td><td>4</td><td>6</td></tr></table>" +
+          "<p class=\"para\">Each f(x) is larger than the one before it, so the function is <b>increasing</b> across this table. The values go from &minus;1 to 3 between x = &minus;1 and x = 0, so the sign flips there: the graph crosses the x-axis <b>between &minus;1 and 0</b>.</p>" },
+        { t: "cards", title: "Bonus questions", desc: "Worth up to 2 points each. Your first check is recorded, but these do not count toward your core total.", ids: ["sb-1", "sb-2", "sb-3", "sb-4", "sb-5", "sb-6"] }
+      ]
+    }
+  ];
+
+
+  // ============================================================
+  // Engine: stages, figures, scanner, worked examples, cards, scoring, summary
+  // ============================================================
+  var SVG_REFRESH = "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M16 3h5v5\"/><path d=\"M4 20 21 3\"/><path d=\"M21 16v5h-5\"/><path d=\"M15 15l6 6\"/><path d=\"M4 4l5 5\"/></svg>";
+  var SVG_LOCK = "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"4\" y=\"10\" width=\"16\" height=\"10\" rx=\"2\"/><path d=\"M8 10V7a4 4 0 0 1 8 0v3\"/></svg>";
+  var SVG_OK = "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M20 6 9 17l-5-5\"/></svg>";
+  var SVG_X = "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\"><circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M15 9l-6 6M9 9l6 6\"/></svg>";
+
+  var A = { started: false, name: "", cur: "", secs: {}, built: {}, draws: {}, scores: {}, solViews: {} };
+  window.__IDPN = { PBY: PBY, SHARED: SHARED, STAGES: STAGES, FIG: FIG, A: A, lib: { genCurveLevel: genCurveLevel, ivGrade: ivGrade, intersectIv: intersectIv, buildCurve: buildCurve, parseIntervalUnion: parseIntervalUnion, intervalAnswerCorrect: intervalAnswerCorrect, ivText: ivText, mergeIntervals: mergeIntervals } };
+  window.__IDPN_STATE = {}; window.__IDPN_SHARED = {};
+  if (window.__IDPN_NOMOUNT) return;
+
+  function el(tag, cls, html) { var e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
+  function $(id) { return document.getElementById(id); }
+  function fmtClock(s) { var m = Math.floor(s / 60), r = s % 60; return m + ":" + (r < 10 ? "0" : "") + r; }
+  function sizeCanvas(canvas, maxW, aspect) {
+    canvas.style.maxWidth = Math.round(Math.min(maxW, 440 * aspect)) + "px";
+    canvas.style.aspectRatio = String(aspect);
+  }
+  function stageById(id) { for (var i = 0; i < STAGES.length; i++) if (STAGES[i].id === id) return STAGES[i]; return null; }
+  function addDraw(stId, fn) { (A.draws[stId] = A.draws[stId] || []).push(fn); }
+  function scoredParts(stId) {
+    return Object.keys(PBY).map(function (k) { return PBY[k]; }).filter(function (p) { return p.stage === stId && p.kind !== "practice"; });
+  }
+  function stageSummary(stId) {
+    var ps = scoredParts(stId), earned = 0, poss = 0, done = 0, peeked = 0;
+    ps.forEach(function (p) {
+      poss += p.points;
+      var r = A.scores[p.id];
+      if (r) { done++; earned += r.earned; if (r.peeked) peeked++; }
+    });
+    return { n: ps.length, done: done, earned: earned, poss: poss, peeked: peeked };
+  }
+
+  // ---------- figure drawing from a spec ----------
+  function drawSpec(canvas, sh, spec) {
+    spec = spec || {};
+    sizeCanvas(canvas, 520, shapeAspect(sh));
+    var bars = [], dots = [], ink = themeColor("--ink");
+    (spec.bars || []).forEach(function (k) { bars = bars.concat(barsFor(sh, k, sh[k])); });
+    if (spec.overlap) {
+      intersectIv(sh[spec.overlap[0]], sh[spec.overlap[1]]).forEach(function (iv) { bars.push({ iv: iv, y: sh.yMin + 0.95, color: themeColor("--accent-strong") }); });
+    }
+    if (spec.dots === "zeros") dots = sh.zeros.map(function (z) { return [z, 0, ink, false]; });
+    if (spec.dots === "ext") dots = sh.ext.map(function (e) { return [e.x, e.y, ink, false]; });
+    drawShape(canvas, sh, spec.mode || "plain", { bars: bars, dots: dots, marks: spec.marks });
+  }
+
+  // ---------- blocks ----------
+  function renderFig(b, body, st) {
+    var sh = FIG[b.fig](), wrap = el("figure", "fig");
+    wrap.innerHTML = "<div class=\"qgraph-wrap fit\"><canvas></canvas></div>" + (b.caption ? "<figcaption>" + b.caption + "</figcaption>" : "");
+    body.appendChild(wrap);
+    var cv = wrap.querySelector("canvas");
+    addDraw(st.id, function () { drawSpec(cv, sh, b); });
+  }
+  function renderNL(b, body, st) {
+    var wrap = el("figure", "fig nl");
+    wrap.innerHTML = "<div class=\"qgraph-wrap fit\"><canvas></canvas></div>" + (b.caption ? "<figcaption>" + b.caption + "</figcaption>" : "");
+    body.appendChild(wrap);
+    var cv = wrap.querySelector("canvas");
+    cv.style.maxWidth = "560px"; cv.style.aspectRatio = "6";
+    addDraw(st.id, function () { drawNumberLine(cv, b.ivs); });
+  }
+  function renderWorked(b, body, st) {
+    var sh = FIG[b.fig](), n = b.steps.length, shown = 0;
+    var box = el("div", "worked");
+    box.innerHTML = "<div class=\"worked-tag\">Worked example</div><h4>" + b.title + "</h4>" + (b.intro ? "<p class=\"worked-intro\">" + b.intro + "</p>" : "") +
+      "<div class=\"qgraph-wrap fit\"><canvas></canvas></div>" +
+      "<ol class=\"wsteps\"></ol>" +
+      "<div class=\"wbtns\"><button type=\"button\" class=\"btn-primary w-next\">Start the example</button><button type=\"button\" class=\"btn-secondary w-all\">Show everything</button><button type=\"button\" class=\"btn-secondary w-reset\">Start over</button></div>";
+    body.appendChild(box);
+    var cv = box.querySelector("canvas"), ol = box.querySelector(".wsteps"), nextB = box.querySelector(".w-next"), allB = box.querySelector(".w-all"), resetB = box.querySelector(".w-reset");
+    function draw() { drawSpec(cv, sh, shown > 0 ? b.steps[shown - 1] : (b.start || {})); }
+    function update() {
+      ol.innerHTML = b.steps.slice(0, shown).map(function (s, i) { return "<li" + (i === shown - 1 ? " class=\"cur\"" : "") + ">" + s.html + "</li>"; }).join("");
+      nextB.textContent = shown === 0 ? "Start the example" : (shown >= n ? "Example complete" : "Show next step (" + (shown + 1) + " of " + n + ")");
+      nextB.disabled = shown >= n; allB.disabled = shown >= n; resetB.classList.toggle("hidden", shown === 0);
+      draw();
+    }
+    nextB.addEventListener("click", function () { if (shown < n) { shown++; update(); } });
+    allB.addEventListener("click", function () { shown = n; update(); });
+    resetB.addEventListener("click", function () { shown = 0; update(); });
+    addDraw(st.id, draw);
+    update();
+  }
+  function renderScanner(b, body, st) {
+    var sh = FIG.cubic(), mode = "plain", x = -3;
+    var box = el("div", "scanner");
+    box.innerHTML = "<div class=\"scan-modes\" role=\"group\" aria-label=\"What to show on the graph\">" +
+      "<button type=\"button\" class=\"mc-opt selected\" data-m=\"plain\">Plain graph</button>" +
+      "<button type=\"button\" class=\"mc-opt\" data-m=\"sign\">Color by sign</button>" +
+      "<button type=\"button\" class=\"mc-opt\" data-m=\"dir\">Color by direction</button></div>" +
+      "<div class=\"qgraph-wrap fit\"><canvas></canvas></div>" +
+      "<div class=\"scan-slide\"><label for=\"scanx\">Move x:</label><input id=\"scanx\" type=\"range\" min=\"-4.5\" max=\"4.5\" step=\"0.5\" value=\"" + x + "\"></div>" +
+      "<div class=\"scan-read\"><div class=\"tile\"><span class=\"tl\">x</span><span class=\"tv sx\"></span></div><div class=\"tile\"><span class=\"tl\">Height f(x)</span><span class=\"tv sh\"></span></div>" +
+      "<div class=\"tile sg\"><span class=\"tl\">Sign (above or below the axis?)</span><span class=\"tv ss\"></span></div><div class=\"tile dr\"><span class=\"tl\">Direction (which way is it heading?)</span><span class=\"tv sd\"></span></div></div>";
+    body.appendChild(box);
+    var cv = box.querySelector("canvas"), slider = box.querySelector("#scanx");
+    function f1(v) { var r = Math.round(v * 10) / 10; if (r === 0) r = 0; return String(r.toFixed(1)).replace("-", "−"); }
+    function update() {
+      var fv = sh.f(x), xx = String(x.toFixed(1)).replace("-", "−");
+      box.querySelector(".sx").textContent = xx; box.querySelector(".sh").textContent = f1(fv);
+      var sg = box.querySelector(".sg"), dr = box.querySelector(".dr");
+      var s = Math.abs(fv) < 0.05 ? 0 : (fv > 0 ? 1 : -1), turn = sh.ext.some(function (e) { return Math.abs(e.x - x) < 0.01; });
+      var d = turn ? 0 : slopeAt(sh, x);
+      box.querySelector(".ss").textContent = s > 0 ? "Positive (above the axis)" : (s < 0 ? "Negative (below the axis)" : "Zero (on the axis)");
+      box.querySelector(".sd").textContent = turn ? "Turning point (peak or valley)" : (d > 0 ? "Increasing (climbing)" : "Decreasing (falling)");
+      sg.className = "tile sg " + (s > 0 ? "t-pos" : (s < 0 ? "t-neg" : "t-zero"));
+      dr.className = "tile dr " + (turn ? "t-zero" : (d > 0 ? "t-pos" : "t-neg"));
+      sizeCanvas(cv, 520, shapeAspect(sh));
+      drawShape(cv, sh, mode, { marks: [{ x: x }] });
+    }
+    slider.addEventListener("input", function () { x = parseFloat(slider.value); update(); });
+    box.querySelectorAll(".scan-modes .mc-opt").forEach(function (bt) {
+      bt.addEventListener("click", function () {
+        box.querySelectorAll(".scan-modes .mc-opt").forEach(function (o) { o.classList.remove("selected"); });
+        bt.classList.add("selected"); mode = bt.getAttribute("data-m"); update();
+      });
+    });
+    addDraw(st.id, update);
+    update();
+  }
+
+  // ---------- cards ----------
+  var redrawFns = [];
+  function mountStim(groupId, container, st, hideRegen) {
+    var spec = SHARED[groupId];
+    var card = el("div", "qcard stim");
+    card.innerHTML = "<div class=\"qcard-head\"><div class=\"qtitle\"><span class=\"qlabel\">" + spec.title + "</span></div>" +
+      (hideRegen ? "" : "<button class=\"icon-btn new-graph-btn\" type=\"button\" title=\"New graph, and new questions for every part below\">" + SVG_REFRESH + "New graph</button>") +
+      "</div><div class=\"qgraph-wrap fit\"><canvas></canvas></div><div class=\"stim-note\"></div>";
+    container.appendChild(card);
+    var canvas = card.querySelector("canvas"), noteEl = card.querySelector(".stim-note");
+    var ctl = { state: null, renders: [] };
+    function draw() { if (ctl.state) { sizeCanvas(canvas, spec.maxW, spec.aspect(ctl.state)); spec.draw(canvas, ctl.state); } }
+    ctl.regen = function () {
+      ctl.state = spec.gen(); window.__IDPN_SHARED[groupId] = ctl.state; noteEl.textContent = spec.note; draw();
+      ctl.renders.forEach(function (fn) { fn(); });
+    };
+    var nb = card.querySelector(".new-graph-btn");
+    if (nb) nb.addEventListener("click", ctl.regen);
+    addDraw(st.id, draw);
+    ctl.state = spec.gen(); window.__IDPN_SHARED[groupId] = ctl.state; noteEl.textContent = spec.note; draw();
+    return ctl;
+  }
+
+  var KIND_NAME = { practice: "Practice", cp: "Checkpoint", exam: "Exam", bonus: "Bonus" };
+  function mountCard(part, container, ctl, st) {
+    var scored = part.kind !== "practice";
+    var card = el("div", "qcard kind-" + part.kind);
+    card.setAttribute("data-id", part.id);
+    card.innerHTML = "<div class=\"qcard-head\"><div class=\"qtitle\">" +
+      (part.label ? "<span class=\"qlabel\">" + part.label + "</span>" : "") +
+      "<span class=\"kind-chip k-" + part.kind + "\">" + (scored ? KIND_NAME[part.kind] + " &middot; " + part.points + " pt" + (part.points === 1 ? "" : "s") : "Practice &middot; not scored") + "</span>" +
+      "<span class=\"exam-badge hidden\"></span></div>" +
+      (scored ? "" : "<button class=\"icon-btn new-version-btn\" type=\"button\">" + SVG_REFRESH + "New version</button>") +
+      "</div>" +
+      "<div class=\"qprompt\"></div>" +
+      (part.hasGraph ? "<div class=\"qgraph-wrap fit\"><canvas></canvas></div>" : "") +
+      "<div class=\"qinputs\"></div>" +
+      "<div class=\"qactions\"><button class=\"btn-primary check-btn\" type=\"button\">Check Answer</button><button class=\"btn-secondary solution-btn\" type=\"button\">Show Solution</button></div>" +
+      "<div class=\"qfeedback hidden\"></div><div class=\"qsolution hidden\"></div>";
+    container.appendChild(card);
+    var promptEl = card.querySelector(".qprompt"), inputsEl = card.querySelector(".qinputs"), feedbackEl = card.querySelector(".qfeedback");
+    var solutionEl = card.querySelector(".qsolution"), badgeEl = card.querySelector(".exam-badge"), canvasEl = part.hasGraph ? card.querySelector("canvas") : null;
+    var solBtn = card.querySelector(".solution-btn"), solArm = null, state, solCanvas = null;
+
+    function lock(pts, peeked) {
+      if (A.scores[part.id]) return;
+      A.scores[part.id] = { stage: st.id, kind: part.kind, points: part.points, earned: pts, peeked: !!peeked };
+      badgeEl.className = "exam-badge " + (pts >= part.points ? "exam-good" : "exam-bad");
+      badgeEl.innerHTML = SVG_LOCK + " Recorded: " + pts + "/" + part.points + (peeked ? " (viewed solution)" : "");
+      updateStatus();
+    }
+    function drawSol() {
+      if (solCanvas && part.solDraw && state) { sizeCanvas(solCanvas, 460, shapeAspect(state.sh)); part.solDraw(solCanvas, state); }
+    }
+    function drawOwn() {
+      if (part.hasGraph && state) { if (part.graphSpec) sizeCanvas(canvasEl, part.graphSpec.maxW, part.graphSpec.aspect(state)); part.drawGraph(canvasEl, state); }
+      if (!solutionEl.classList.contains("hidden")) drawSol();
+    }
+    function render() {
+      state = part.gen(ctl ? ctl.state : undefined);
+      window.__IDPN_STATE[part.id] = state;
+      promptEl.innerHTML = part.prompt(state);
+      inputsEl.innerHTML = part.inputsHtml(state, part.id);
+      feedbackEl.classList.add("hidden"); feedbackEl.innerHTML = "";
+      solutionEl.classList.add("hidden"); solutionEl.innerHTML = ""; solCanvas = null;
+      if (part.afterRender) part.afterRender(card, state);
+      if (part.hasGraph) { if (part.graphSpec) sizeCanvas(canvasEl, part.graphSpec.maxW, part.graphSpec.aspect(state)); part.drawGraph(canvasEl, state); }
+    }
+    var nv = card.querySelector(".new-version-btn");
+    if (nv) nv.addEventListener("click", function () { if (ctl) ctl.regen(); else render(); });
+    card.querySelector(".check-btn").addEventListener("click", function () {
+      var res = part.check(part.read(card), state), correct = !!res.ok;
+      feedbackEl.classList.remove("hidden");
+      if (correct) {
+        feedbackEl.className = "qfeedback good";
+        feedbackEl.innerHTML = SVG_OK + "<span>Correct!" + (res.note ? " <span class=\"fnote\">" + res.note + "</span>" : "") + "</span>";
+      } else {
+        feedbackEl.className = "qfeedback bad";
+        feedbackEl.innerHTML = SVG_X + "<span>Not quite" + (res.msg ? " — " + res.msg : " — check the solution below.") + "</span>";
+      }
+      if (scored) {
+        if (A.scores[part.id]) feedbackEl.innerHTML += "<span class=\"fnote\"> (Your first check is the one that counted.)</span>";
+        else lock(correct ? part.points : 0, false);
+      }
+    });
+    solBtn.addEventListener("click", function () {
+      if (scored && !A.scores[part.id] && !solArm) {
+        solBtn.textContent = "Click again: this scores 0";
+        solArm = setTimeout(function () { solArm = null; solBtn.textContent = "Show Solution"; }, 4000);
+        return;
+      }
+      if (solArm) { clearTimeout(solArm); solArm = null; solBtn.textContent = "Show Solution"; }
+      solutionEl.innerHTML = part.solutionHtml(state);
+      if (part.solDraw) { solutionEl.appendChild(el("div", "qgraph-wrap fit sol-fig", "<canvas></canvas>")); solCanvas = solutionEl.querySelector("canvas"); }
+      solutionEl.classList.remove("hidden");
+      drawSol();
+      if (scored) lock(0, true);
+    });
+    addDraw(st.id, drawOwn);
+    if (ctl) ctl.renders.push(render);
+    render();
+  }
+
+  function renderCards(b, body, st) {
+    if (b.title || b.desc) body.appendChild(el("div", "group-head", (b.title ? "<div class=\"gnum\">" + b.title + "</div>" : "") + (b.desc ? "<div class=\"gdesc\">" + b.desc + "</div>" : "")));
+    var box = el("div", "cards"); body.appendChild(box);
+    var ctl = null;
+    if (b.shared) ctl = mountStim(b.shared, box, st, PBY[b.ids[0]].kind !== "practice");
+    b.ids.forEach(function (id) { mountCard(PBY[id], box, PBY[id].shared ? ctl : null, st); });
+  }
+
+  function renderBlock(b, body, st) {
+    switch (b.t) {
+      case "h": body.appendChild(el("h3", "sec", b.text)); break;
+      case "p": body.appendChild(el("p", "para", b.html)); break;
+      case "html": body.appendChild(el("div", "raw", b.html)); break;
+      case "callout": body.appendChild(el("div", "callout c-" + (b.cls || "key"), (b.title ? "<div class=\"ct\">" + b.title + "</div>" : "") + b.html)); break;
+      case "steps": body.appendChild(el("ol", "method", b.items.map(function (i) { return "<li>" + i + "</li>"; }).join(""))); break;
+      case "details": body.appendChild(el("details", "reveal", "<summary>" + b.summary + "</summary><div class=\"reveal-body\">" + b.html + "</div>")); break;
+      case "fig": renderFig(b, body, st); break;
+      case "nl": renderNL(b, body, st); break;
+      case "worked": renderWorked(b, body, st); break;
+      case "scanner": renderScanner(b, body, st); break;
+      case "cards": renderCards(b, body, st); break;
+      case "cpbanner": body.appendChild(el("div", "cpbanner", "<div class=\"cpb-t\">" + (b.title || "Checkpoint") + "</div><div>" + b.html + "</div>")); break;
+      default: break;
+    }
+  }
+
+  // ---------- stage assembly & navigation ----------
+  function buildStage(st) {
+    var host = $("stage-" + st.id);
+    A.draws[st.id] = [];
+    host.innerHTML = "<div class=\"stage-head\"><div class=\"stage-kicker\">" + st.kicker + "</div><h2>" + st.title + "</h2>" +
+      "<div class=\"stage-meta\"><span class=\"time-chip\">about " + st.mins + " min</span><span class=\"goal\">" + st.goal + "</span></div></div>";
+    var body = el("div", "stage-body"); host.appendChild(body);
+    st.blocks.forEach(function (b) { renderBlock(b, body, st); });
+    var idx = STAGES.indexOf(st), foot = el("div", "stage-foot");
+    var prev = idx > 0 ? STAGES[idx - 1] : null, next = idx < STAGES.length - 1 ? STAGES[idx + 1] : null;
+    foot.innerHTML = (prev ? "<button type=\"button\" class=\"btn-secondary\" data-go=\"" + prev.id + "\">&larr; " + prev.nav + "</button>" : "<span></span>") +
+      "<span class=\"foot-mid\"></span>" +
+      (st.id === "s7" ? "<button type=\"button\" class=\"btn-secondary\" data-go=\"sum\">Skip to the summary</button><button type=\"button\" class=\"btn-primary\" data-go=\"sb\">Bonus stage &rarr;</button>"
+        : (next ? "<button type=\"button\" class=\"btn-primary\" data-go=\"" + next.id + "\">" + next.nav + " &rarr;</button>" : "<button type=\"button\" class=\"btn-primary\" data-go=\"sum\">Go to the summary &rarr;</button>"));
+    host.appendChild(foot);
+    A.built[st.id] = true;
+  }
+  function redrawCur() {
+    var fns = A.draws[A.cur] || [];
+    fns.forEach(function (fn) { try { fn(); } catch (e) { if (window.console) console.error(e); } });
+  }
+  function go(id) {
+    if (!A.started) return;
+    A.cur = id;
+    document.querySelectorAll(".stage").forEach(function (s) { s.classList.add("hidden"); });
+    var host = $("stage-" + id);
+    host.classList.remove("hidden");
+    if (id === "sum") renderSummaryScreen();
+    else { var st = stageById(id); if (!A.built[id]) buildStage(st); }
+    document.querySelectorAll(".stage-pill").forEach(function (p) { p.classList.toggle("current", p.getAttribute("data-go") === id); });
+    redrawCur();
+    updateStatus();
+    var nav = $("navbar"); window.scrollTo(0, 0);
+  }
+
+  // ---------- status bar (pills, score, clock) ----------
+  function updateStatus() {
+    var earned = 0, poss = 0, e7 = 0, p7 = 0;
+    STAGES.forEach(function (st) {
+      if (st.id === "sb") return;
+      var s = stageSummary(st.id);
+      if (st.id === "s7") { e7 += s.earned; p7 += s.poss; } else { earned += s.earned; poss += s.poss; }
+      var pill = document.querySelector(".stage-pill[data-go=\"" + st.id + "\"]");
+      if (pill) pill.classList.toggle("done", s.n > 0 && s.done === s.n);
+    });
+    var sb = stageSummary("sb"), pillB = document.querySelector(".stage-pill[data-go=\"sb\"]");
+    if (pillB) pillB.classList.toggle("done", sb.n > 0 && sb.done === sb.n);
+    $("stScore").textContent = (earned + e7) + " / " + (poss + p7);
+    var tot = 0; Object.keys(A.secs).forEach(function (k) { tot += A.secs[k]; });
+    $("stClock").textContent = fmtClock(tot);
+  }
+  setInterval(function () {
+    if (!A.started || document.hidden || !A.cur) return;
+    A.secs[A.cur] = (A.secs[A.cur] || 0) + 1;
+    var tot = 0; Object.keys(A.secs).forEach(function (k) { tot += A.secs[k]; });
+    $("stClock").textContent = fmtClock(tot);
+    if (A.cur === "sum") updateSummaryTimes();
+  }, 1000);
+
+  // ---------- summary ----------
+  function summaryData() {
+    var rows = [], earned = 0, poss = 0, totalSecs = 0;
+    STAGES.forEach(function (st) {
+      var s = stageSummary(st.id), t = A.secs[st.id] || 0;
+      totalSecs += t;
+      rows.push({ id: st.id, nav: st.nav, title: st.title, bonus: st.id === "sb", s: s, secs: t });
+      if (st.id !== "sb") { earned += s.earned; poss += s.poss; }
+    });
+    totalSecs += (A.secs.sum || 0);
+    return { rows: rows, earned: earned, poss: poss, totalSecs: totalSecs };
+  }
+  function dateStr() { var d = new Date(); return d.toLocaleDateString(undefined, { weekday: "long", year: "numeric", month: "long", day: "numeric" }); }
+  function summaryTableHtml(D) {
+    var h = "<table class=\"sumtbl\"><thead><tr><th>Stage</th><th>Score</th><th>Parts checked</th><th>Solution viewed first</th><th>Time</th></tr></thead><tbody>";
+    D.rows.forEach(function (r) {
+      var score = r.s.n ? r.s.earned + " / " + r.s.poss : "—";
+      var checked = r.s.n ? r.s.done + " of " + r.s.n : "—";
+      h += "<tr" + (r.bonus ? " class=\"bonus\"" : "") + "><td>" + r.title + "</td><td class=\"num\">" + score + (r.bonus ? " (extra)" : "") + "</td><td class=\"num\">" + checked + "</td><td class=\"num\">" + (r.s.n ? r.s.peeked : "—") + "</td><td class=\"num\" data-t=\"" + r.id + "\">" + fmtClock(r.secs) + "</td></tr>";
+    });
+    var pct = D.poss ? Math.round(100 * D.earned / D.poss) : 0;
+    h += "</tbody><tfoot><tr><td>Core total (bonus not included)</td><td class=\"num\">" + D.earned + " / " + D.poss + " (" + pct + "%)</td><td></td><td></td><td class=\"num\" data-t=\"total\">" + fmtClock(D.totalSecs) + "</td></tr></tfoot></table>";
+    return h;
+  }
+  function updateSummaryTimes() {
+    var D = summaryData();
+    D.rows.forEach(function (r) { var c = document.querySelector("#sumTable [data-t=\"" + r.id + "\"]"); if (c) c.textContent = fmtClock(r.secs); });
+    var tc = document.querySelector("#sumTable [data-t=\"total\"]"); if (tc) tc.textContent = fmtClock(D.totalSecs);
+  }
+  function summaryText() {
+    var D = summaryData(), lines = [];
+    lines.push("Positive, Negative, Increasing, Decreasing walkthrough");
+    lines.push("Student: " + A.name);
+    lines.push("Date: " + dateStr());
+    lines.push("");
+    D.rows.forEach(function (r) {
+      lines.push(r.title + ": " + (r.s.n ? r.s.earned + "/" + r.s.poss + " (" + r.s.done + " of " + r.s.n + " parts checked" + (r.s.peeked ? ", " + r.s.peeked + " solution(s) viewed first" : "") + ")" : "n/a") + "  time " + fmtClock(r.secs));
+    });
+    lines.push("");
+    lines.push("Core total: " + D.earned + "/" + D.poss + " (" + (D.poss ? Math.round(100 * D.earned / D.poss) : 0) + "%)   Total time: " + fmtClock(D.totalSecs));
+    return lines.join("\n");
+  }
+  function missingHtml() {
+    var out = [];
+    STAGES.forEach(function (st) {
+      if (st.id === "sb") return;
+      var s = stageSummary(st.id);
+      if (s.done < s.n) out.push("<li><button type=\"button\" class=\"linkbtn\" data-go=\"" + st.id + "\">" + st.title + "</button>: " + (s.n - s.done) + " scored part" + (s.n - s.done === 1 ? "" : "s") + " not checked yet</li>");
+    });
+    return out.length ? "<div class=\"callout c-warn\"><div class=\"ct\">Not finished yet</div><ul class=\"misslist\">" + out.join("") + "</ul>You can still go back and finish these before you turn this in.</div>" : "<div class=\"callout c-good\"><div class=\"ct\">Every scored part is checked.</div>Nice work. Save or print this page and turn it in.</div>";
+  }
+  function printHtml() {
+    var D = summaryData();
+    return "<h1>Positive, Negative, Increasing, Decreasing</h1><div class=\"ps-sub\">College Algebra &middot; walkthrough summary</div>" +
+      "<div class=\"ps-id\"><div><b>Student:</b> " + escHtml(A.name) + "</div><div><b>Date:</b> " + dateStr() + "</div></div>" + summaryTableHtml(D) +
+      "<p class=\"ps-note\">Scores count only the first time each checkpoint or exam part was checked. If a solution was viewed before checking, that part scored 0.</p>";
+  }
+  function renderSummaryScreen() {
+    var host = $("stage-sum"), D = summaryData();
+    host.innerHTML = "<div class=\"stage-head\"><div class=\"stage-kicker\">Turn-in</div><h2>Your summary</h2><div class=\"stage-meta\"><span class=\"goal\">This page is what you hand in. Check it over, then save it as a PDF or print it.</span></div></div>" +
+      "<div class=\"stage-body\"><div class=\"sumcard\"><div class=\"sum-id\"><div><span class=\"tl\">Student</span><div class=\"sum-name\">" + escHtml(A.name) + "</div></div><div><span class=\"tl\">Date</span><div>" + dateStr() + "</div></div></div>" +
+      "<div id=\"sumTable\">" + summaryTableHtml(D) + "</div></div>" + missingHtml() +
+      "<div class=\"sum-actions\"><button type=\"button\" class=\"btn-primary\" id=\"sumPrint\">Print / Save as PDF</button><button type=\"button\" class=\"btn-secondary\" id=\"sumCopy\">Copy summary text</button><span class=\"copied hidden\" id=\"sumCopied\">Copied!</span></div>" +
+      "<p class=\"para small\">Tip: in the print window, choose <b>Save as PDF</b> as the destination to get a file you can upload. Only the summary prints, not the whole lesson.</p></div>";
+    $("sumPrint").addEventListener("click", function () { fillPrint(); window.print(); });
+    $("sumCopy").addEventListener("click", function () {
+      var txt = summaryText(), done = function () { var c = $("sumCopied"); c.classList.remove("hidden"); setTimeout(function () { c.classList.add("hidden"); }, 1800); };
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(done, function () { fallbackCopy(txt); done(); });
+      else { fallbackCopy(txt); done(); }
+    });
+  }
+  function fallbackCopy(txt) {
+    var ta = document.createElement("textarea"); ta.value = txt; ta.style.position = "fixed"; ta.style.opacity = "0"; document.body.appendChild(ta); ta.select();
+    try { document.execCommand("copy"); } catch (e) {} document.body.removeChild(ta);
+  }
+  function fillPrint() { if (A.started) $("printSummary").innerHTML = printHtml(); }
+  window.addEventListener("beforeprint", fillPrint);
+
+  // ---------- start ----------
+  function buildNav() {
+    var nav = $("pills"); nav.innerHTML = "";
+    STAGES.forEach(function (st) {
+      var b = el("button", "stage-pill" + (st.id === "sb" ? " bonus" : ""), "<span class=\"dot\"></span>" + st.nav);
+      b.type = "button"; b.setAttribute("data-go", st.id); nav.appendChild(b);
+    });
+    var sb = el("button", "stage-pill sumpill", "<span class=\"dot\"></span>Summary"); sb.type = "button"; sb.setAttribute("data-go", "sum"); nav.appendChild(sb);
+    var holder = $("stages"); holder.innerHTML = "";
+    STAGES.concat([{ id: "sum" }]).forEach(function (st) { var s = el("section", "stage hidden"); s.id = "stage-" + st.id; holder.appendChild(s); });
+  }
+  document.addEventListener("click", function (e) {
+    var t = e.target.closest ? e.target.closest("[data-go]") : null;
+    if (t && A.started) go(t.getAttribute("data-go"));
+  });
+  function begin() {
+    var nm = $("stuName").value.replace(/^\s+|\s+$/g, "");
+    if (!nm) { $("nameErr").classList.remove("hidden"); $("stuName").focus(); return; }
+    A.name = nm; A.started = true;
+    $("nameErr").classList.add("hidden");
+    $("intro").classList.add("hidden"); $("lesson").classList.remove("hidden");
+    $("whoName").textContent = nm;
+    buildNav();
+    go(STAGES[0].id);
+  }
+  $("beginBtn").addEventListener("click", begin);
+  $("stuName").addEventListener("keydown", function (e) { if (e.key === "Enter") begin(); });
+  window.addEventListener("beforeunload", function (e) { if (A.started) { e.preventDefault(); e.returnValue = ""; return ""; } });
+
+  var rzTimer = null;
+  window.addEventListener("resize", function () { if (rzTimer) clearTimeout(rzTimer); rzTimer = setTimeout(redrawCur, 80); });
+  try {
+    if (window.matchMedia) {
+      var mq = window.matchMedia("(prefers-color-scheme: dark)");
+      if (mq.addEventListener) mq.addEventListener("change", function () { setTimeout(redrawCur, 30); });
+    }
+    if (window.MutationObserver) new MutationObserver(function () { setTimeout(redrawCur, 30); }).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+  } catch (e) {}
+
+})();
+</script>
+</body>
+</html>
