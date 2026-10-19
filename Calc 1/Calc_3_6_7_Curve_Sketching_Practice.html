@@ -222,7 +222,7 @@ svg.sketch{display:block;margin:.5rem auto 0}
 
 </div><!-- .parts -->
 <div class="score-bar" id="score-bar"></div>
-<button class="new-btn" onclick="newProblem()">New Problem (same function)</button>
+<button class="new-btn" onclick="newProblem()">New Problem</button>
 </div><!-- .container -->
 
 <script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
@@ -452,7 +452,7 @@ const PROBLEMS = [
   fbA_no:'Not quite. Try factoring out t first.',
   pqB:"Find all critical times in $(0,4)$. For each, state whether $s$ has a local max or local min, and give the position value. Enter the local maximum position (in meters):",
   hintB:'Differentiate $s(t)$, factor, and set equal to zero. Then use the First or Second Derivative Test.',
-  solB:'<p>$s\'(t)=3t^2-12t+9=3(t-1)(t-3)$. Critical times: $t=1,\\ 3$.</p><p>$s\'\'(t)=6t-12$. $s\'\'(1)=-6&lt;0$ \u2192 <strong>local max</strong> at $t=1$: $s(1)=\\mathbf{4}$\u00a0m.</p><p>$s\'\'(3)=6&gt;0$ \u2192 <strong>local min</strong> at $t=3$: $s(3)=\\mathbf{0}$\u00a0m.</p><p>Physically: particle moves forward to 4\u00a0m, reverses, returns to origin, then moves forward again.</p>',
+  solB:'<p>$s\'(t)=3t^2-12t+9=3(t-1)(t-3)$. Critical times: $t=1$ and $t=3$.</p><p>$s\'\'(t)=6t-12$. $s\'\'(1)=-6&lt;0$ \u2192 <strong>local max</strong> at $t=1$: $s(1)=\\mathbf{4}$\u00a0m.</p><p>$s\'\'(3)=6&gt;0$ \u2192 <strong>local min</strong> at $t=3$: $s(3)=\\mathbf{0}$\u00a0m.</p><p>Physically: particle moves forward to 4\u00a0m, reverses, returns to origin, then moves forward again.</p>',
   maxS:'4', maxT:'1',
   fbB_ok:'\u2713 Correct! Local max of 4\u00a0m at t\u00a0=\u00a01\u00a0s.',
   pqC:"Find the inflection point of $s(t)$ on $[0,4]$. Enter $t$ at the inflection point:",
@@ -486,7 +486,7 @@ const PROBLEMS = [
   fbA_no:'Not quite. Try substituting t\u00a0=\u00a01 into s(t) first.',
   pqB:"Find all critical times in $(1,5)$. For each, state whether $s$ has a local max or local min, and give the position value. Enter the local maximum position (in meters):",
   hintB:'Differentiate $s(t)$, factor, and set equal to zero. Then use the Second Derivative Test.',
-  solB:'<p>$s\'(t)=3t^2-18t+24=3(t-2)(t-4)$. Critical times: $t=2,\\ 4$.</p><p>$s\'\'(t)=6t-18$. $s\'\'(2)=-6&lt;0$ \u2192 <strong>local max</strong> at $t=2$: $s(2)=\\mathbf{4}$\u00a0m.</p><p>$s\'\'(4)=6&gt;0$ \u2192 <strong>local min</strong> at $t=4$: $s(4)=\\mathbf{0}$\u00a0m.</p><p>Physically: particle moves forward to 4\u00a0m, reverses, returns to starting position, then moves forward again.</p>',
+  solB:'<p>$s\'(t)=3t^2-18t+24=3(t-2)(t-4)$. Critical times: $t=2$ and $t=4$.</p><p>$s\'\'(t)=6t-18$. $s\'\'(2)=-6&lt;0$ \u2192 <strong>local max</strong> at $t=2$: $s(2)=\\mathbf{4}$\u00a0m.</p><p>$s\'\'(4)=6&gt;0$ \u2192 <strong>local min</strong> at $t=4$: $s(4)=\\mathbf{0}$\u00a0m.</p><p>Physically: particle moves forward to 4\u00a0m, reverses, returns to starting position, then moves forward again.</p>',
   maxS:'4', maxT:'2',
   fbB_ok:'\u2713 Correct! Local max of 4\u00a0m at t\u00a0=\u00a02\u00a0s.',
   pqC:"Find the inflection point of $s(t)$ on $[1,5]$. Enter $t$ at the inflection point:",
@@ -520,7 +520,7 @@ const PROBLEMS = [
   fbA_no:'Not quite. Try factoring out t first.',
   pqB:"Find all critical times in $(0,7)$. For each, state whether $s$ has a local max or local min, and give the position value. Enter the local maximum position (in meters):",
   hintB:'Differentiate $s(t)$, factor, and set equal to zero. Then use the Second Derivative Test.',
-  solB:'<p>$s\'(t)=3t^2-24t+36=3(t-2)(t-6)$. Critical times: $t=2,\\ 6$.</p><p>$s\'\'(t)=6t-24$. $s\'\'(2)=-12&lt;0$ \u2192 <strong>local max</strong> at $t=2$: $s(2)=\\mathbf{32}$\u00a0m.</p><p>$s\'\'(6)=12&gt;0$ \u2192 <strong>local min</strong> at $t=6$: $s(6)=\\mathbf{0}$\u00a0m.</p><p>Physically: particle moves forward to 32\u00a0m, reverses direction, returns to origin, then moves forward again.</p>',
+  solB:'<p>$s\'(t)=3t^2-24t+36=3(t-2)(t-6)$. Critical times: $t=2$ and $t=6$.</p><p>$s\'\'(t)=6t-24$. $s\'\'(2)=-12&lt;0$ \u2192 <strong>local max</strong> at $t=2$: $s(2)=\\mathbf{32}$\u00a0m.</p><p>$s\'\'(6)=12&gt;0$ \u2192 <strong>local min</strong> at $t=6$: $s(6)=\\mathbf{0}$\u00a0m.</p><p>Physically: particle moves forward to 32\u00a0m, reverses direction, returns to origin, then moves forward again.</p>',
   maxS:'32', maxT:'2',
   fbB_ok:'\u2713 Correct! Local max of 32\u00a0m at t\u00a0=\u00a02\u00a0s.',
   pqC:"Find the inflection point of $s(t)$ on $[0,7]$. Enter $t$ at the inflection point:",
