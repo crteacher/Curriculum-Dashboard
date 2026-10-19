@@ -1314,13 +1314,6 @@
       var hull = [openIv(expected[0].lo, expected[expected.length - 1].hi)];
       if (intervalAnswerCorrect(stripped, hull)) return { ok: false, msg: "That one interval runs straight across a stretch where the answer is different. Use a union (U) of separate intervals." };
     }
-    // y-values instead of x-values
-    var finite = [];
-    parsed.intervals.forEach(function (a) { if (isFinite(a.lo)) finite.push(a.lo); if (isFinite(a.hi)) finite.push(a.hi); });
-    var yv = sh.ext.map(function (e) { return e.y; }), xv = sh.knots.map(function (k) { return k[0]; });
-    if (finite.length && sh.ext.length && finite.every(function (v) { return yv.indexOf(v) >= 0; }) && !finite.every(function (v) { return xv.indexOf(v) >= 0; })) {
-      return { ok: false, msg: "Those numbers look like heights (y-values). Intervals describe x-values, the left-to-right positions." };
-    }
     var us = mergeIntervals(parsed.intervals), es = mergeIntervals(expected);
     if (endpointsOnlyEqual(us, es)) return { ok: false, msg: "Your endpoints are right, but check which ones need parentheses and which need brackets." };
     if (us.length < es.length && es.length > 1) return { ok: false, msg: "You may be missing one of the pieces. Check the whole graph, left to right." };
@@ -1606,7 +1599,6 @@
   // ---- spot the mistake (pooled; one of the options is "nothing wrong") ----
   var DIAG_OPTS = [
     ["ok", "Nothing is wrong: the answer is correct"],
-    ["yvals", "They wrote y-values (heights) instead of x-values"],
     ["brk", "They used square brackets where parentheses are needed"],
     ["hull", "They joined separate intervals into one big interval"],
     ["opp", "They answered the opposite question (positive vs negative, or increasing vs decreasing)"]
@@ -1618,7 +1610,6 @@
         if (!exp.length) continue;
         var opts = ["ok", "opp"];
         if (key === "pos" || key === "neg") opts.push("brk");
-        if (sh.ext.length) opts.push("yvals");
         if (exp.length >= 2) opts.push("hull");
         var arche = randChoice(opts), typed, list = null;
         if (arche === "ok") list = exp;
@@ -1628,14 +1619,16 @@
           if (!list.some(function (a) { return a.loIncl || a.hiIncl; })) continue;
         }
         else if (arche === "hull") list = [openIv(exp[0].lo, exp[exp.length - 1].hi)];
-        else if (arche === "yvals") {
-          var ys = sh.ext.map(function (e) { return e.y; }), lo = Math.min.apply(null, ys), hi = Math.max.apply(null, ys);
-          if (lo === hi) continue;
-          list = [openIv(lo, hi)];
-          if (intervalAnswerCorrect({ intervals: list, invalid: false }, exp)) continue;
-        }
         if (arche !== "ok" && intervalAnswerCorrect({ intervals: stripIv(list), invalid: false }, exp) && arche !== "brk") continue;
         typed = ivText(list, 0);
+        // validate: the typed answer must really show exactly the stated mistake
+        var pv = parseIntervalUnion(typed), pstrip = { intervals: stripIv(pv.intervals), invalid: false };
+        var exactOk = intervalAnswerCorrect(pv, exp), looseOk = intervalAnswerCorrect(pstrip, exp);
+        if (arche === "ok" && !exactOk) continue;
+        if (arche !== "ok" && exactOk) continue;
+        if (arche === "brk" && (!looseOk || mergeIntervals(list).length !== list.length)) continue;
+        if (arche === "opp" && !intervalAnswerCorrect(pstrip, sh[OPP[key]])) continue;
+        if (arche === "hull" && (looseOk || intervalAnswerCorrect(pstrip, sh[OPP[key]]))) continue;
         return { sh: sh, key: key, arche: arche, typed: typed };
       }
       var sh0 = genCurveLevel(2); return { sh: sh0, key: "pos", arche: "ok", typed: ivText(sh0.pos, 0) };
@@ -1654,7 +1647,6 @@
       solutionHtml: function (s) {
         var exp = s.sh[s.key], why = {
           ok: "The student's answer matches the graph, so there is nothing wrong.",
-          yvals: "The student typed heights from the y-axis. An interval always describes <b>x-values</b>, the left-to-right positions.",
           brk: "At a zero the function equals 0, which is neither positive nor negative. Those endpoints need parentheses, not brackets.",
           hull: "The student drew one big interval across a stretch where the answer changes. The correct answer is a union of separate pieces.",
           opp: "The student answered for the opposite question: " + WORD[OPP[s.key]] + " instead of " + WORD[s.key] + "."
@@ -1974,7 +1966,7 @@
           "<ol class=\"inl\"><li>Circle the question word: <i>positive, negative, increasing, or decreasing</i>.</li>" +
           "<li>For each endpoint you wrote, say where it came from: a <b>zero</b> or a <b>turning point</b>.</li>" +
           "<li>Pick one x-value inside each interval and test it on the graph. Is the graph really above/below, or climbing/falling there?</li></ol>" },
-        { t: "p", html: "In the practice below, a student has answered a question about a graph. Your job is not to solve it from scratch. Compare their answer with the graph and decide what, if anything, went wrong. Sometimes nothing did." },
+        { t: "p", html: "In the practice below, a student has answered a question about a graph. Your job is not to solve it from scratch. Compare their answer with the graph and decide what, if anything, went wrong. Sometimes nothing did. The practice uses the last three mistakes in the table (brackets at zeros, one big interval, the opposite question). The y-values slip is the one to watch for in your own work, so keep the self-check above handy." },
         { t: "cards", title: "Practice", desc: "Not scored. Solve the question yourself first, then compare with what the student typed.", ids: ["s6-p1", "s6-p2"] },
         { t: "cpbanner", title: "Checkpoint 6", html: CP_NOTE },
         { t: "cards", ids: ["s6-c1", "s6-c2"] }
