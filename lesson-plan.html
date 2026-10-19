@@ -81,6 +81,13 @@ details[open] .chevron{transform:rotate(90deg)}
 .chip.pc{color:#7a5c1e;border-color:#7a5c1e33;background:#f2ece0}.chip.pc:hover{background:#d8caa8}
 .state-msg{text-align:center;padding:3rem 1rem;color:#555555;font-size:.9rem;font-style:italic}
 .footer{text-align:center;font-size:.72rem;color:#55555555;padding:1rem;font-family:monospace}
+.std-chips{display:flex;flex-wrap:wrap;gap:.35rem .5rem;margin-top:.05rem}
+.std-chip{display:inline-flex;align-items:center;gap:.3rem;padding:.18rem .5rem;border-radius:6px;font-size:.72rem;font-weight:700;font-family:monospace;letter-spacing:.02em;cursor:default;border:1px solid;transition:background .12s}
+.std-chip.mls{background:#e8edf4;color:#1e3a5c;border-color:#1e3a5c33}
+.std-chip.mls:hover{background:#c2ccda}
+.std-chip.ap{background:#f2ece0;color:#7a5c1e;border-color:#7a5c1e33}
+.std-chip.ap:hover{background:#d8caa8}
+.std-desc{font-size:.78rem;color:#555555;line-height:1.55;margin-top:.25rem}
 </style>
 </head>
 <body>
@@ -138,6 +145,17 @@ function renderMath(text){
 }
 function mEl(t){const s=document.createElement('span');s.innerHTML=renderMath(t||'—');return s.outerHTML;}
 function grm(label,val){return`<div class="grm-row"><div class="grm-label">${label}</div><div class="grm-value">${val}</div></div>`;}
+function standardsHtml(arr){
+  if(!arr||!arr.length)return'';
+  const chips=arr.map(s=>{
+    const isAP=s.code.startsWith('AP·');
+    const cls=isAP?'ap':'mls';
+    const label=isAP?s.code.replace('AP·','AP '):'MLS '+s.code;
+    return`<span class="std-chip ${cls}" title="${s.desc}">${label}</span>`;
+  }).join('');
+  const descs=arr.map(s=>`<span style="display:block"><strong>${s.code.startsWith('AP·')?s.code.replace('AP·','AP '):s.code}:</strong> ${s.desc}</span>`).join('');
+  return`<div class="std-chips">${chips}</div><div class="std-desc">${descs}</div>`;
+}
 function exBlock(p,a,tech){
   const techHtml=tech?`<span class="ex-technique">⚑ ${tech}</span>`:'';
   return`<div class="ex-block">${techHtml}<span class="ex-prob">${mEl(p)}</span><span class="ex-ans">→ ${mEl(a)}</span></div>`;
@@ -170,6 +188,7 @@ function buildLessonCard(course,sec,dayNum,isOpen,schedItem){
     body+=`<div class="inline-quiz-banner"><span class="quiz-icon">✏️</span><span class="quiz-label">${q.title}</span><span class="quiz-note">Short quiz — first 10–15 min. Individual &amp; silent. Rest of lesson follows.</span></div>`;
   }
   body+=grm('SWBAT',mEl(sec.swbat||'—'));
+  const stdHtml=standardsHtml(sec.standards); if(stdHtml)body+=grm('Standards',stdHtml);
   const nl=notesLinks(course,sec); if(nl)body+=grm('Notes',nl);
   body+=grm('DO NOW',`<a href="${doNow}" class="do-now-link ${course}" target="_blank">Open Do Now →</a>`);
   // I Do: first 2 worked examples — teacher-led lecture demos
