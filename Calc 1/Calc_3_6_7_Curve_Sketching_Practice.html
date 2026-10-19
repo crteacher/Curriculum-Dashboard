@@ -78,7 +78,7 @@ svg.sketch{display:block;margin:.5rem auto 0}
 <div class="scenario">
   <strong>Scenario — Particle Motion</strong><br>
   A particle moves along a number line. Its position (in meters) at time $t$ seconds is:
-  <div class="fn">$s(t) = t^3 - 6t^2 + 9t, \quad t \in [0,\, 4]$</div>
+  <div class="fn" id="fn-display"></div>
   Use the curve-sketching checklist to fully analyze and sketch $s(t)$.
 </div>
 
@@ -87,7 +87,7 @@ svg.sketch{display:block;margin:.5rem auto 0}
 <!-- Part (a) -->
 <div class="part">
   <div class="part-label">Part (a) &mdash; Zeros &amp; Intercept</div>
-  <div class="part-q">
+  <div class="part-q" id="pq-a">
     Factor $s(t)$ completely. At what times in $[0,4]$ is the particle at position $s=0$?
     List all zeros (separate multiple answers with a comma).
   </div>
@@ -113,7 +113,7 @@ svg.sketch{display:block;margin:.5rem auto 0}
 <!-- Part (b) -->
 <div class="part">
   <div class="part-label">Part (b) &mdash; Critical Points</div>
-  <div class="part-q">
+  <div class="part-q" id="pq-b">
     Find all critical times in $(0,4)$. For each, state whether $s$ has a local max or local min,
     and give the position value.
     Enter the local maximum position (in meters):
@@ -145,7 +145,7 @@ svg.sketch{display:block;margin:.5rem auto 0}
 <!-- Part (c) -->
 <div class="part">
   <div class="part-label">Part (c) &mdash; Inflection &amp; Concavity</div>
-  <div class="part-q">
+  <div class="part-q" id="pq-c">
     Find the inflection point of $s(t)$ on $[0,4]$. Enter $t$ at the inflection point:
   </div>
   <div class="input-row">
@@ -172,10 +172,7 @@ svg.sketch{display:block;margin:.5rem auto 0}
 <!-- Part (d) -->
 <div class="part">
   <div class="part-label">Part (d) &mdash; Sketch</div>
-  <div class="part-q">
-    Using the features from (a)–(c), describe the complete shape of $s(t)$ on $[0,4]$:
-    Is $s$ increasing or decreasing on $(1,3)$? Enter <strong>increasing</strong> or <strong>decreasing</strong>:
-  </div>
+  <div class="part-q" id="pq-d"></div>
   <div class="input-row">
     <input class="ans-input" id="in-d" type="text" placeholder="" autocomplete="off" style="width:160px">
     <button class="check-btn" onclick="checkD()">Check</button>
@@ -225,7 +222,7 @@ svg.sketch{display:block;margin:.5rem auto 0}
 
 </div><!-- .parts -->
 <div class="score-bar" id="score-bar"></div>
-<button class="new-btn" onclick="location.reload()">New Problem (same function)</button>
+<button class="new-btn" onclick="newProblem()">New Problem (same function)</button>
 </div><!-- .container -->
 
 <script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
@@ -429,100 +426,207 @@ class SketchWidget {
 }
 
 // ── Problem: s(t) = t³ − 6t² + 9t ─────────────────────────
-const skProblem = {
+
+// ── Problem Variants ─────────────────────────────────────────────────────────
+const KO = {delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]};
+function remath(el){if(el&&window.renderMathInElement)renderMathInElement(el,KO);}
+
+const PROBLEMS = [
+{
+  id:'A',
+  fnDisplay:'$s(t) = t^3 - 6t^2 + 9t, \\quad t \\in [0,\\, 4]$',
   fn: t => t**3 - 6*t**2 + 9*t,
-  xMin: -0.4, xMax: 4.4, yMin: -0.8, yMax: 5.2,
-  tolerance: 0.38,
-  expected: {
-    zeros:       [{x:0, y:0, label:'t = 0, s = 0'}, {x:3, y:0, label:'t = 3, s = 0'}],
-    maxima:      [{x:1, y:4, label:'(t, s) = (1, 4)'}],
-    minima:      [{x:3, y:0, label:'(t, s) = (3, 0)'}],
-    inflections: [{x:2, y:2, label:'(t, s) = (2, 2)'}],
-  }
-};
-const skWidget = new SketchWidget('sketch-grid', 'sk-fb', skProblem);
-
-</script>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/contrib/auto-render.min.js"></script>
-<script>
-renderMathInElement(document.body, {
-  delimiters: [
-    {left:'$$',right:'$$',display:true},
-    {left:'$', right:'$', display:false}
-  ]
-});
-
-function tog(id) {
-  const el = document.getElementById(id);
-  el.style.display = el.style.display === 'block' ? 'none' : 'block';
+  xMin:-0.4, xMax:4.4, yMin:-0.8, yMax:5.2,
+  skExpected:{
+    zeros:[{x:0,y:0,label:'t = 0, s = 0'},{x:3,y:0,label:'t = 3, s = 0'}],
+    maxima:[{x:1,y:4,label:'(t, s) = (1, 4)'}],
+    minima:[{x:3,y:0,label:'(t, s) = (3, 0)'}],
+    inflections:[{x:2,y:2,label:'(t, s) = (2, 2)'}]
+  },
+  pqA:"Factor $s(t)$ completely. At what times in $[0,4]$ is the particle at position $s=0$? List all zeros (separate with a comma).",
+  phA:'e.g. 0, 3',
+  hintA:'Factor out $t$ first, then look at what remains as a perfect square.',
+  solA:'<p>$s(t)=t^3-6t^2+9t = t(t^2-6t+9) = t(t-3)^2$</p><p>Zeros at $t=0$ (simple) and $t=3$ (double \u2014 curve <em>touches</em> axis, does not cross).</p><p>$s(0)=0$: particle starts at origin. $s(3)=0$: returns to origin at $t=3$.</p>',
+  checkA:v=>{const s=v.replace(/[t=\s]/g,'').replace('and',',').split(',').sort().join(',');return s==='0,3';},
+  fbA_ok:'\u2713 Correct! Zeros at t\u00a0=\u00a00 and t\u00a0=\u00a03.',
+  fbA_no:'Not quite. Try factoring out t first.',
+  pqB:"Find all critical times in $(0,4)$. For each, state whether $s$ has a local max or local min, and give the position value. Enter the local maximum position (in meters):",
+  hintB:'Differentiate $s(t)$, factor, and set equal to zero. Then use the First or Second Derivative Test.',
+  solB:'<p>$s\'(t)=3t^2-12t+9=3(t-1)(t-3)$. Critical times: $t=1,\\ 3$.</p><p>$s\'\'(t)=6t-12$. $s\'\'(1)=-6&lt;0$ \u2192 <strong>local max</strong> at $t=1$: $s(1)=\\mathbf{4}$\u00a0m.</p><p>$s\'\'(3)=6&gt;0$ \u2192 <strong>local min</strong> at $t=3$: $s(3)=\\mathbf{0}$\u00a0m.</p><p>Physically: particle moves forward to 4\u00a0m, reverses, returns to origin, then moves forward again.</p>',
+  maxS:'4', maxT:'1',
+  fbB_ok:'\u2713 Correct! Local max of 4\u00a0m at t\u00a0=\u00a01\u00a0s.',
+  pqC:"Find the inflection point of $s(t)$ on $[0,4]$. Enter $t$ at the inflection point:",
+  hintC:"Set $s''(t)=0$ and verify the sign of $s''$ changes.",
+  solC:"<p>$s''(t)=6t-12=0 \\Rightarrow t=2$. $s(2)=2$\u00a0m.</p><p>Concave down on $(0,2)$, concave up on $(2,4)$.</p><p><strong>Physical meaning:</strong> at $t=2$ the acceleration changes sign \u2014 just before the particle reverses at $t=3$.</p>",
+  inflT:'2',
+  fbC_ok:'\u2713 Correct! Inflection at t\u00a0=\u00a02, s(2)\u00a0=\u00a02\u00a0m.',
+  pqD:"Is $s$ increasing or decreasing on $(1,3)$? Enter <strong>increasing</strong> or <strong>decreasing</strong>:",
+  hintD:"Check the sign of $s'(t)=3(t-1)(t-3)$ for a $t$ value between 1 and 3, say $t=2$.",
+  solD:"<p>$s'(2)=3(1)(-1)=-3&lt;0$ \u2192 $s$ is <strong>decreasing</strong> on $(1,3)$. The particle moves backward.</p><p><strong>Complete picture on $[0,4]$:</strong> Starts at $s(0)=0$. Rises to local max $s=4$ at $t=1$. Falls through inflection $(2,2)$. Returns to zero at $t=3$ (local min). Rises to $s(4)=4$ at right endpoint.</p><p><em>Use part\u00a0(e) to sketch on the interactive grid.</em></p>",
+  checkD:v=>v==='decreasing'||v==='dec',
+  fbD_ok:'\u2713 Correct! s is decreasing on (1,3) \u2014 the particle moves backward.',
+},
+{
+  id:'C',
+  fnDisplay:'$s(t) = t^3 - 9t^2 + 24t - 16, \\quad t \\in [1,\\, 5]$',
+  fn: t => t**3 - 9*t**2 + 24*t - 16,
+  xMin:0.6, xMax:5.4, yMin:-0.8, yMax:5.2,
+  skExpected:{
+    zeros:[{x:1,y:0,label:'t = 1, s = 0'},{x:4,y:0,label:'t = 4, s = 0'}],
+    maxima:[{x:2,y:4,label:'(t, s) = (2, 4)'}],
+    minima:[{x:4,y:0,label:'(t, s) = (4, 0)'}],
+    inflections:[{x:3,y:2,label:'(t, s) = (3, 2)'}]
+  },
+  pqA:"Factor $s(t)$ completely. At what times in $[1,5]$ is the particle at position $s=0$? List all zeros (separate with a comma).",
+  phA:'e.g. 1, 4',
+  hintA:'Try $t=1$: does $s(1)=0$? If so, $(t-1)$ is a factor. Factor what remains as a perfect square.',
+  solA:'<p>$s(1)=1-9+24-16=0$, so $(t-1)$ is a factor.</p><p>$s(t)=(t-1)(t^2-8t+16)=(t-1)(t-4)^2$</p><p>Zeros at $t=1$ (simple) and $t=4$ (double \u2014 curve <em>touches</em> axis, does not cross).</p>',
+  checkA:v=>{const s=v.replace(/[t=\s]/g,'').replace('and',',').split(',').sort().join(',');return s==='1,4';},
+  fbA_ok:'\u2713 Correct! Zeros at t\u00a0=\u00a01 and t\u00a0=\u00a04.',
+  fbA_no:'Not quite. Try substituting t\u00a0=\u00a01 into s(t) first.',
+  pqB:"Find all critical times in $(1,5)$. For each, state whether $s$ has a local max or local min, and give the position value. Enter the local maximum position (in meters):",
+  hintB:'Differentiate $s(t)$, factor, and set equal to zero. Then use the Second Derivative Test.',
+  solB:'<p>$s\'(t)=3t^2-18t+24=3(t-2)(t-4)$. Critical times: $t=2,\\ 4$.</p><p>$s\'\'(t)=6t-18$. $s\'\'(2)=-6&lt;0$ \u2192 <strong>local max</strong> at $t=2$: $s(2)=\\mathbf{4}$\u00a0m.</p><p>$s\'\'(4)=6&gt;0$ \u2192 <strong>local min</strong> at $t=4$: $s(4)=\\mathbf{0}$\u00a0m.</p><p>Physically: particle moves forward to 4\u00a0m, reverses, returns to starting position, then moves forward again.</p>',
+  maxS:'4', maxT:'2',
+  fbB_ok:'\u2713 Correct! Local max of 4\u00a0m at t\u00a0=\u00a02\u00a0s.',
+  pqC:"Find the inflection point of $s(t)$ on $[1,5]$. Enter $t$ at the inflection point:",
+  hintC:"Set $s''(t)=0$ and verify the sign of $s''$ changes.",
+  solC:"<p>$s''(t)=6t-18=0 \\Rightarrow t=3$. $s(3)=27-81+72-16=2$\u00a0m.</p><p>Concave down on $(1,3)$, concave up on $(3,5)$.</p><p><strong>Physical meaning:</strong> at $t=3$ the acceleration changes sign \u2014 just before the particle reverses at $t=4$.</p>",
+  inflT:'3',
+  fbC_ok:'\u2713 Correct! Inflection at t\u00a0=\u00a03, s(3)\u00a0=\u00a02\u00a0m.',
+  pqD:"Is $s$ increasing or decreasing on $(2,4)$? Enter <strong>increasing</strong> or <strong>decreasing</strong>:",
+  hintD:"Check the sign of $s'(t)=3(t-2)(t-4)$ for a $t$ value between 2 and 4, say $t=3$.",
+  solD:"<p>$s'(3)=3(1)(-1)=-3&lt;0$ \u2192 $s$ is <strong>decreasing</strong> on $(2,4)$. The particle moves backward.</p><p><strong>Complete picture on $[1,5]$:</strong> Starts at $s(1)=0$. Rises to local max $s=4$ at $t=2$. Falls through inflection $(3,2)$. Returns to zero at $t=4$ (local min). Rises to $s(5)=4$ at right endpoint.</p><p><em>Use part\u00a0(e) to sketch on the interactive grid.</em></p>",
+  checkD:v=>v==='decreasing'||v==='dec',
+  fbD_ok:'\u2713 Correct! s is decreasing on (2,4) \u2014 the particle moves backward.',
+},
+{
+  id:'D',
+  fnDisplay:'$s(t) = t^3 - 12t^2 + 36t, \\quad t \\in [0,\\, 7]$',
+  fn: t => t**3 - 12*t**2 + 36*t,
+  xMin:-0.4, xMax:7.4, yMin:-2, yMax:34,
+  skExpected:{
+    zeros:[{x:0,y:0,label:'t = 0, s = 0'},{x:6,y:0,label:'t = 6, s = 0'}],
+    maxima:[{x:2,y:32,label:'(t, s) = (2, 32)'}],
+    minima:[{x:6,y:0,label:'(t, s) = (6, 0)'}],
+    inflections:[{x:4,y:16,label:'(t, s) = (4, 16)'}]
+  },
+  pqA:"Factor $s(t)$ completely. At what times in $[0,7]$ is the particle at position $s=0$? List all zeros (separate with a comma).",
+  phA:'e.g. 0, 6',
+  hintA:'Factor out $t$ first, then look at what remains as a perfect square.',
+  solA:'<p>$s(t)=t^3-12t^2+36t = t(t^2-12t+36) = t(t-6)^2$</p><p>Zeros at $t=0$ (simple) and $t=6$ (double \u2014 curve <em>touches</em> axis, does not cross).</p>',
+  checkA:v=>{const s=v.replace(/[t=\s]/g,'').replace('and',',').split(',').sort().join(',');return s==='0,6';},
+  fbA_ok:'\u2713 Correct! Zeros at t\u00a0=\u00a00 and t\u00a0=\u00a06.',
+  fbA_no:'Not quite. Try factoring out t first.',
+  pqB:"Find all critical times in $(0,7)$. For each, state whether $s$ has a local max or local min, and give the position value. Enter the local maximum position (in meters):",
+  hintB:'Differentiate $s(t)$, factor, and set equal to zero. Then use the Second Derivative Test.',
+  solB:'<p>$s\'(t)=3t^2-24t+36=3(t-2)(t-6)$. Critical times: $t=2,\\ 6$.</p><p>$s\'\'(t)=6t-24$. $s\'\'(2)=-12&lt;0$ \u2192 <strong>local max</strong> at $t=2$: $s(2)=\\mathbf{32}$\u00a0m.</p><p>$s\'\'(6)=12&gt;0$ \u2192 <strong>local min</strong> at $t=6$: $s(6)=\\mathbf{0}$\u00a0m.</p><p>Physically: particle moves forward to 32\u00a0m, reverses direction, returns to origin, then moves forward again.</p>',
+  maxS:'32', maxT:'2',
+  fbB_ok:'\u2713 Correct! Local max of 32\u00a0m at t\u00a0=\u00a02\u00a0s.',
+  pqC:"Find the inflection point of $s(t)$ on $[0,7]$. Enter $t$ at the inflection point:",
+  hintC:"Set $s''(t)=0$ and verify the sign of $s''$ changes.",
+  solC:"<p>$s''(t)=6t-24=0 \\Rightarrow t=4$. $s(4)=64-192+144=16$\u00a0m.</p><p>Concave down on $(0,4)$, concave up on $(4,7)$.</p><p><strong>Physical meaning:</strong> at $t=4$ the acceleration changes sign \u2014 just before the particle reverses at $t=6$.</p>",
+  inflT:'4',
+  fbC_ok:'\u2713 Correct! Inflection at t\u00a0=\u00a04, s(4)\u00a0=\u00a016\u00a0m.',
+  pqD:"Is $s$ increasing or decreasing on $(2,6)$? Enter <strong>increasing</strong> or <strong>decreasing</strong>:",
+  hintD:"Check the sign of $s'(t)=3(t-2)(t-6)$ for a $t$ value between 2 and 6, say $t=3$.",
+  solD:"<p>$s'(3)=3(1)(-3)=-9&lt;0$ \u2192 $s$ is <strong>decreasing</strong> on $(2,6)$. The particle moves backward.</p><p><strong>Complete picture on $[0,7]$:</strong> Starts at $s(0)=0$. Rises to local max $s=32$ at $t=2$. Falls through inflection $(4,16)$. Returns to zero at $t=6$ (local min). Rises to $s(7)=7$ at right endpoint.</p><p><em>Use part\u00a0(e) to sketch on the interactive grid.</em></p>",
+  checkD:v=>v==='decreasing'||v==='dec',
+  fbD_ok:'\u2713 Correct! s is decreasing on (2,6) \u2014 the particle moves backward.',
 }
-function norm(s) { return s.trim().toLowerCase().replace(/\s+/g,''); }
+];
 
+let currentProb = null;
+let skWidget = null;
 let score = 0;
-function addPoint(id) {
-  document.getElementById('score-bar').textContent = `Score: ${score} / 5`;
+
+function buildProblem(prob){
+  currentProb = prob; score = 0;
+  document.getElementById('score-bar').textContent = 'Score: 0 / 5';
+  ['in-a','in-b1','in-b2','in-c','in-d'].forEach(id=>{
+    const el=document.getElementById(id);if(el){el.value='';el.className='ans-input';}
+  });
+  ['fb-a','fb-b','fb-c','fb-d'].forEach(id=>{
+    const el=document.getElementById(id);if(el)el.innerHTML='';
+  });
+  ['hint-a','sol-a','hint-b','sol-b','hint-c','sol-c','hint-d','sol-d'].forEach(id=>{
+    const el=document.getElementById(id);if(el)el.style.display='none';
+  });
+  // Update function display
+  const fnEl=document.getElementById('fn-display');
+  fnEl.innerHTML=prob.fnDisplay; remath(fnEl);
+  // Part A
+  const pqA=document.getElementById('pq-a');pqA.innerHTML=prob.pqA;remath(pqA);
+  document.getElementById('in-a').placeholder=prob.phA;
+  const hA=document.getElementById('hint-a');hA.innerHTML=prob.hintA;remath(hA);
+  const sA=document.getElementById('sol-a');sA.innerHTML=prob.solA;remath(sA);
+  // Part B
+  const pqB=document.getElementById('pq-b');pqB.innerHTML=prob.pqB;remath(pqB);
+  const hB=document.getElementById('hint-b');hB.innerHTML=prob.hintB;remath(hB);
+  const sB=document.getElementById('sol-b');sB.innerHTML=prob.solB;remath(sB);
+  // Part C
+  const pqC=document.getElementById('pq-c');pqC.innerHTML=prob.pqC;remath(pqC);
+  const hC=document.getElementById('hint-c');hC.innerHTML=prob.hintC;remath(hC);
+  const sC=document.getElementById('sol-c');sC.innerHTML=prob.solC;remath(sC);
+  // Part D
+  const pqD=document.getElementById('pq-d');pqD.innerHTML=prob.pqD;remath(pqD);
+  const hD=document.getElementById('hint-d');hD.innerHTML=prob.hintD;remath(hD);
+  const sD=document.getElementById('sol-d');sD.innerHTML=prob.solD;remath(sD);
+  // Rebuild sketch widget
+  skWidget = new SketchWidget('sketch-grid','sk-fb',{
+    fn:prob.fn, xMin:prob.xMin, xMax:prob.xMax, yMin:prob.yMin, yMax:prob.yMax,
+    tolerance:0.38, expected:prob.skExpected
+  });
 }
 
-function checkA() {
-  const v = norm(document.getElementById('in-a').value);
-  // accept "0,3" or "0 and 3" or "0, 3" etc
-  const ok = (v === '0,3') || (v === '0and3') || (v === 't=0,3') || (v === '0,t=3') || (v === '3,0') || v === '0,t=3' || v.replace(/[t= ]/g,'') === '0,3' || v.replace(/[t= ]/g,'') === '3,0';
-  const fb = document.getElementById('fb-a');
-  const inp = document.getElementById('in-a');
-  if (ok) {
-    inp.className='ans-input correct'; fb.className='feedback ok';
-    fb.textContent='✓ Correct! Zeros at t = 0 and t = 3.';
-    score++; document.getElementById('score-bar').textContent=`Score: ${score} / 5`;
-  } else {
-    inp.className='ans-input wrong'; fb.className='feedback no';
-    fb.textContent='Not quite. Try factoring out t first.';
-  }
+function newProblem(){
+  const choices=PROBLEMS.filter(p=>!currentProb||p.id!==currentProb.id);
+  buildProblem(choices[Math.floor(Math.random()*choices.length)]);
 }
-function checkB() {
-  const v1 = norm(document.getElementById('in-b1').value);
-  const v2 = norm(document.getElementById('in-b2').value);
-  const ok = (v1 === '4') && (v2 === '1');
-  const fb = document.getElementById('fb-b');
-  if (ok) {
-    document.getElementById('in-b1').className='ans-input correct';
+
+function tog(id){
+  const el=document.getElementById(id);
+  el.style.display=el.style.display==='block'?'none':'block';
+}
+function norm(s){return s.trim().toLowerCase().replace(/\s+/g,'');}
+
+function checkA(){
+  const v=norm(document.getElementById('in-a').value),ok=currentProb.checkA(v);
+  const fb=document.getElementById('fb-a'),inp=document.getElementById('in-a');
+  if(ok){inp.className='ans-input correct';fb.className='feedback ok';fb.textContent=currentProb.fbA_ok;
+    score++;document.getElementById('score-bar').textContent=`Score: ${score} / 5`;}
+  else{inp.className='ans-input wrong';fb.className='feedback no';fb.textContent=currentProb.fbA_no;}
+}
+function checkB(){
+  const v1=norm(document.getElementById('in-b1').value),v2=norm(document.getElementById('in-b2').value);
+  const ok=(v1===currentProb.maxS)&&(v2===currentProb.maxT);
+  const fb=document.getElementById('fb-b');
+  if(ok){document.getElementById('in-b1').className='ans-input correct';
     document.getElementById('in-b2').className='ans-input correct';
-    fb.className='feedback ok'; fb.textContent='✓ Correct! Local max of 4 m at t = 1 s.';
-    score++; document.getElementById('score-bar').textContent=`Score: ${score} / 5`;
-  } else {
-    document.getElementById('in-b1').className='ans-input wrong';
+    fb.className='feedback ok';fb.textContent=currentProb.fbB_ok;
+    score++;document.getElementById('score-bar').textContent=`Score: ${score} / 5`;}
+  else{document.getElementById('in-b1').className='ans-input wrong';
     document.getElementById('in-b2').className='ans-input wrong';
-    fb.className='feedback no'; fb.textContent='Check: differentiate s(t) and factor.';
-  }
+    fb.className='feedback no';fb.textContent='Check: differentiate s(t) and factor.';}
 }
-function checkC() {
-  const v = norm(document.getElementById('in-c').value);
-  const ok = v === '2';
-  const fb = document.getElementById('fb-c');
-  const inp = document.getElementById('in-c');
-  if (ok) {
-    inp.className='ans-input correct'; fb.className='feedback ok';
-    fb.textContent='✓ Correct! Inflection at t = 2, s(2) = 2 m.';
-    score++; document.getElementById('score-bar').textContent=`Score: ${score} / 5`;
-  } else {
-    inp.className='ans-input wrong'; fb.className='feedback no';
-    fb.textContent='Set s\'\'(t) = 0 and verify the sign changes.';
-  }
+function checkC(){
+  const v=norm(document.getElementById('in-c').value),ok=(v===currentProb.inflT);
+  const fb=document.getElementById('fb-c'),inp=document.getElementById('in-c');
+  if(ok){inp.className='ans-input correct';fb.className='feedback ok';fb.textContent=currentProb.fbC_ok;
+    score++;document.getElementById('score-bar').textContent=`Score: ${score} / 5`;}
+  else{inp.className='ans-input wrong';fb.className='feedback no';fb.textContent="Set s''(t)=0 and verify the sign changes.";}
 }
-function checkD() {
-  const v = norm(document.getElementById('in-d').value);
-  const ok = v === 'decreasing' || v === 'dec';
-  const fb = document.getElementById('fb-d');
-  const inp = document.getElementById('in-d');
-  if (ok) {
-    inp.className='ans-input correct'; fb.className='feedback ok';
-    fb.textContent='✓ Correct! s is decreasing on (1,3) — the particle moves backward.';
-    score++; document.getElementById('score-bar').textContent=`Score: ${score} / 5`;
-  } else {
-    inp.className='ans-input wrong'; fb.className='feedback no';
-    fb.textContent='Check the sign of s\'(t) between t=1 and t=3.';
-  }
+function checkD(){
+  const v=norm(document.getElementById('in-d').value),ok=currentProb.checkD(v);
+  const fb=document.getElementById('fb-d'),inp=document.getElementById('in-d');
+  if(ok){inp.className='ans-input correct';fb.className='feedback ok';fb.textContent=currentProb.fbD_ok;
+    score++;document.getElementById('score-bar').textContent=`Score: ${score} / 5`;}
+  else{inp.className='ans-input wrong';fb.className='feedback no';fb.textContent="Check the sign of s'(t) between the two critical points.";}
 }
-document.getElementById('score-bar').textContent = 'Score: 0 / 5';
+
+document.getElementById('score-bar').textContent='Score: 0 / 5';
+// Initialize with a random problem
+buildProblem(PROBLEMS[Math.floor(Math.random()*PROBLEMS.length)]);
 </script>
 </body>
 </html>
