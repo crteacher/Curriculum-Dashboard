@@ -195,8 +195,8 @@ function gen5() {
   const ans = isUp ? ['up','concave up'] : ['down','concave down'];
   // Control point is 2× desired arc so actual midpoint lands at correct position
   const pathD = isUp
-    ? `M 35,108 Q ${cx},12 ${W-35},108`    // U shape: starts/ends low, arcs up
-    : `M 35,22 Q ${cx},118 ${W-35},22`;    // ∩ shape: starts/ends high, arcs down
+    ? `M 35,22 Q ${cx},118 ${W-35},22`    // ∪ shape: ends near screen-top, arcs toward screen-bottom (SVG y-down)
+    : `M 35,108 Q ${cx},12 ${W-35},108`;  // ∩ shape: ends near screen-bottom, arcs toward screen-top
   const label = isUp ? 'concave up ∪' : 'concave down ∩';
   const svg = `<svg width="${W}" height="${H}" style="display:block;margin:6px auto;border-radius:6px;background:#f8fafc">`
     + `<path d="${pathD}" stroke="#2563eb" stroke-width="2.5" fill="none"/>`
