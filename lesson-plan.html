@@ -191,18 +191,23 @@ function buildLessonCard(course,sec,dayNum,isOpen,schedItem){
   const stdHtml=standardsHtml(sec.standards); if(stdHtml)body+=grm('Standards',stdHtml);
   const nl=notesLinks(course,sec); if(nl)body+=grm('Notes',nl);
   body+=grm('DO NOW',`<a href="${doNow}" class="do-now-link ${course}" target="_blank">Open Do Now →</a>`);
-  // I Do: first 2 worked examples — teacher-led lecture demos
-  const iDo=we.slice(0,2); if(iDo.length)body+=grm('I Do',exBlocks(iDo));
-  // We Do: next 2 worked examples — further into notes, guided together
-  const weDo=we.slice(2,4); if(weDo.length)body+=grm('We Do',exBlocks(weDo));
-  // You Do (Together): open the practice set for this section
+  // I Do: teacher narrative + first 2 worked examples
+  const iDo=we.slice(0,2);
+  const iDoInner=(sec.iDoText?`<div style="font-size:.83rem;color:#333;line-height:1.6;margin-bottom:${iDo.length?'.45rem':'0'}">${sec.iDoText}</div>`:'')+exBlocks(iDo);
+  if(sec.iDoText||iDo.length)body+=grm('I Do',iDoInner);
+  // We Do: optional guidance note + next 2 worked examples
+  const weDo=we.slice(2,4);
+  const weDoInner=(sec.weDoText?`<div style="font-size:.83rem;color:#333;line-height:1.6;margin-bottom:${weDo.length?'.45rem':'0'}">${sec.weDoText}</div>`:'')+exBlocks(weDo);
+  if(sec.weDoText||weDo.length)body+=grm('We Do',weDoInner);
+  // You Do (Together): practice worksheet — students work with each other
   const practiceSetLink=sec.reviewProblems?.length
     ?`<a href="./review.html?section=${sec.id}" class="do-now-link ${course}" target="_blank">Open Practice Set →</a> `
     :worksheetLink(course,sec);
-  body+=grm('You Do (Together)',practiceSetLink||'<span style="color:#555555;font-size:.83rem">No review set yet for this section.</span>');
-  // You Do (Alone): homework — practice worksheet if available
-  const pl=pracLink(course,sec);
-  body+=grm('You Do (Alone)',`<span style="color:#555555;font-size:.83rem">Assigned homework — MyOpenMath.</span>${pl?'<br>'+pl:''}`);
+  body+=grm('You Do (Together)',
+    (practiceSetLink||'<span style="color:#555555;font-size:.83rem">No practice set yet for this section.</span>')+
+    '<span style="display:block;font-size:.75rem;color:#888;margin-top:.3rem">Students work with a partner — compare approaches, catch errors together.</span>');
+  // You Do (Alone): MyOpenMath homework only
+  body+=grm('You Do (Alone)',`<a href="https://www.myopenmath.com" class="do-now-link ${course}" target="_blank">Open MyOpenMath →</a><span style="display:block;font-size:.75rem;color:#888;margin-top:.3rem">Individual homework assignment — independent, silent.</span>`);
   if(sec.exitTicket)body+=grm('Exit Ticket',mEl(sec.exitTicket));
   return`<details class="lesson-card ${course}"${isOpen?' open':''}><summary class="lesson-summary"><span class="day-badge ${course}">Day ${dayNum}</span><span class="lesson-title">§${sec.section} ${sec.title}</span><span class="lesson-date">Fall 2026</span><span class="chevron">›</span></summary><div class="lesson-body">${body}</div></details>`;
 }

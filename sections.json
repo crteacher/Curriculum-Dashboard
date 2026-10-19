@@ -898,7 +898,9 @@
           "code": "A1.IF.A.2",
           "desc": "Use function notation to evaluate functions for inputs in their domains"
         }
-      ]
+      ],
+      "iDoText": "Introduce function notation f(x) as an input-output machine. Model substituting a value for x and simplifying step by step. Emphasize that the output depends entirely on the input.",
+      "weDoText": "Work backwards together — given an output value, guide students to solve for the input."
     },
     {
       "id": "CA_3_1b",
@@ -1065,7 +1067,9 @@
           "code": "A2.IF.A.1",
           "desc": "Identify and interpret key characteristics of functions represented graphically, with tables, and algebraically"
         }
-      ]
+      ],
+      "iDoText": "Define domain as all allowed inputs and range as all possible outputs. Show how division by zero and square roots of negatives restrict the domain. Demonstrate reading domain and range from a graph.",
+      "weDoText": "Identify domain restrictions algebraically together, then check by reading the graph."
     },
     {
       "id": "CA_3_3",
@@ -1180,7 +1184,9 @@
           "code": "A2.BF.A.1",
           "desc": "Create new functions by applying the four arithmetic operations and composition of functions"
         }
-      ]
+      ],
+      "iDoText": "Introduce the formal definition of a function (one output per input) and the vertical line test. Demonstrate function operations: f+g, f−g, f·g, f/g. Define composition f(g(x)) and evaluate from the inside out.",
+      "weDoText": "Apply the vertical line test to ambiguous cases, then evaluate a composition at a specific input."
     },
     {
       "id": "CA_3_4",
@@ -1295,7 +1301,9 @@
           "code": "A2.IF.A.1",
           "desc": "Identify and interpret key characteristics of functions represented graphically, with tables, and algebraically"
         }
-      ]
+      ],
+      "iDoText": "Introduce increasing and decreasing using whether the graph rises or falls left to right. Introduce positive and negative using whether f(x) is above or below the x-axis. Show how to write each as an interval.",
+      "weDoText": "Read all four behaviors from a single graph together, connecting each to interval notation."
     },
     {
       "id": "CA_3_5",
@@ -3445,7 +3453,9 @@
           "code": "AP·FUN-3.E",
           "desc": "Calculate derivatives of inverse functions using the inverse function theorem"
         }
-      ]
+      ],
+      "iDoText": "Derive the inverse function derivative theorem: (f⁻¹)′(b) = 1 / f′(f⁻¹(b)). Apply it to arcsin, arccos, and arctan — derive each formula from scratch using implicit differentiation so students see where it comes from, not just memorize it.",
+      "weDoText": "Work through a problem connecting f′(a) to (f⁻¹)′(f(a)), making the reciprocal relationship concrete."
     },
     {
       "id": "Calc_3_4",
@@ -3460,7 +3470,9 @@
           "code": "AP·CHA-3.F",
           "desc": "Approximate function values using local linearity and linearization"
         }
-      ]
+      ],
+      "iDoText": "Show that near a point, a differentiable curve is indistinguishable from its tangent line. Build the linearization formula L(x) = f(a) + f′(a)(x − a). Use it to estimate a value (e.g., ∛8.1) and compare to the exact answer.",
+      "weDoText": "Estimate a second value together and discuss when linearization is a good approximation vs. when it breaks down."
     },
     {
       "id": "Calc_3_4_5",
@@ -3475,7 +3487,9 @@
           "code": "AP·LIM-4.A",
           "desc": "Determine the limit of a quotient in indeterminate form using L'Hôpital's Rule"
         }
-      ]
+      ],
+      "iDoText": "Identify indeterminate forms 0/0 and ∞/∞. State L'Hôpital's Rule: take derivatives of numerator and denominator separately, then retake the limit. Demonstrate a case where the rule applies and a case where it does not — students must check the form first.",
+      "weDoText": "Evaluate a limit that requires applying L'Hôpital's Rule twice, narrating each step."
     },
     {
       "id": "Calc_3_5",
@@ -3494,7 +3508,9 @@
           "code": "AP·FUN-1.B",
           "desc": "Apply the Extreme Value Theorem to guarantee extreme values on a closed interval"
         }
-      ]
+      ],
+      "iDoText": "Define critical points (f′(c) = 0 or undefined). State the Extreme Value Theorem: a continuous function on a closed interval [a,b] must attain both an absolute max and min. Demonstrate the closed-interval method: evaluate f at all critical points + endpoints.",
+      "weDoText": "Find the absolute extrema of a function on a closed interval together, checking every candidate."
     },
     {
       "id": "Calc_3_6",
@@ -3509,7 +3525,9 @@
           "code": "AP·FUN-1.C",
           "desc": "Determine intervals where a function is increasing or decreasing using the First Derivative Test"
         }
-      ]
+      ],
+      "iDoText": "Show that f′ > 0 means f is increasing, f′ < 0 means f is decreasing. Build a sign chart for f′ to classify critical points: a sign change from + to − is a local max; − to + is a local min; no sign change means neither.",
+      "weDoText": "Construct a sign chart together for a polynomial, then sketch the increasing/decreasing behavior."
     },
     {
       "id": "Calc_3_6_5",
@@ -3528,7 +3546,9 @@
           "code": "AP·FUN-4.A",
           "desc": "Apply the Second Derivative Test to classify critical points as local max/min"
         }
-      ]
+      ],
+      "iDoText": "Introduce concavity: f″ > 0 means the curve bends upward (∪, concave up); f″ < 0 means it bends downward (∩, concave down). Define inflection points where concavity changes. Show the Second Derivative Test as a shortcut at critical points where f″ ≠ 0.",
+      "weDoText": "Build a combined sign chart for both f′ and f″ to classify all critical points and inflection points on one function."
     },
     {
       "id": "Calc_3_6_7",
@@ -3543,7 +3563,9 @@
           "code": "AP·FUN-4.E",
           "desc": "Interpret key features of a function's graph using derivatives (curve sketching)"
         }
-      ]
+      ],
+      "iDoText": "Walk through a complete curve sketch from scratch: domain → intercepts → asymptotes → monotonicity from f′ → concavity from f″ → end behavior. Show how each piece constrains the shape of the graph.",
+      "weDoText": "Sketch a polynomial together at the board, narrating every decision and confirming against each derivative test."
     },
     {
       "id": "Calc_3_7",
@@ -3558,7 +3580,9 @@
           "code": "AP·FUN-4.B",
           "desc": "Solve optimization problems using derivatives to identify absolute or relative extrema"
         }
-      ]
+      ],
+      "iDoText": "Introduce the optimization framework: (1) draw a diagram, (2) write the objective function, (3) use the constraint to reduce to one variable, (4) differentiate and find critical points, (5) confirm max vs. min. Work through a classic example — box volume, fencing area, or revenue.",
+      "weDoText": "Set up a second optimization from scratch together, focusing on translating the constraint into an equation."
     },
     {
       "id": "Calc_3_8",
@@ -6178,7 +6202,9 @@
           "code": "A2.NQ.B.7",
           "desc": "Know and apply the Fundamental Theorem of Algebra"
         }
-      ]
+      ],
+      "iDoText": "Introduce i = √(−1) and the powers-of-i cycle (i, −1, −i, 1, repeat). Define complex numbers a + bi. Demonstrate addition and subtraction (combine like terms), multiplication (FOIL then replace i² = −1), and division (multiply numerator and denominator by the conjugate).",
+      "weDoText": "Work through a division by a complex number together — make sure students see why multiplying by the conjugate eliminates the imaginary part in the denominator."
     },
     {
       "id": "PC_3_2a",
@@ -6238,7 +6264,9 @@
           "code": "A1.IF.C.7",
           "desc": "Graph functions and identify and interpret key features of the graph"
         }
-      ]
+      ],
+      "iDoText": "Introduce vertex form a(x−h)²+k: read the vertex (h,k) and axis of symmetry x=h directly. Introduce factored form a(x−r₁)(x−r₂): read the zeros r₁, r₂ directly. Show how the sign of a controls direction (up/down) and its magnitude controls the width.",
+      "weDoText": "Given a graph, write both vertex form and factored form by reading what you see — vertex, zeros, and a third point to nail down a."
     },
     {
       "id": "PC_3_2b",
@@ -6294,7 +6322,9 @@
           "code": "A1.SSE.A.3b",
           "desc": "Find the maximum or minimum value of a quadratic function by completing the square"
         }
-      ]
+      ],
+      "iDoText": "Derive completing the square step by step: isolate x-terms, add (b/2)² to both sides, factor the perfect square trinomial, rewrite in vertex form. Handle a ≠ 1 by factoring a out of the x² and x terms before completing the square.",
+      "weDoText": "Work through a leading-coefficient-not-1 example together, watching for the common error of forgetting to multiply (b/2)² by a when moving it outside the parentheses."
     },
     {
       "id": "PC_3_2c",
@@ -6329,7 +6359,9 @@
           "code": "A2.NQ.B.6",
           "desc": "Add, subtract, multiply, and divide complex numbers"
         }
-      ]
+      ],
+      "iDoText": "Show how to choose the right form for each question: standard form for y-intercept, vertex form for max/min, factored form for zeros. Demonstrate converting between all three forms and explain why no single form answers everything.",
+      "weDoText": "Work through a projectile problem (launch height, max height, landing time) from standard form — each question calls for a different form or method."
     },
     {
       "id": "PC_3_3",
@@ -6385,7 +6417,9 @@
           "code": "A1.IF.B.3",
           "desc": "Interpret key characteristics of a function that models a relationship between two quantities"
         }
-      ]
+      ],
+      "iDoText": "Model a real-world optimization with a quadratic: set up the objective function, find the vertex for the optimum, and interpret the answer in context (units matter). Then briefly introduce parametric equations as a pair x(t), y(t) and show how to eliminate the parameter to get a Cartesian equation.",
+      "weDoText": "Set up a fencing/area optimization together — write the constraint, substitute to get one variable, find the vertex."
     },
     {
       "id": "PC_3_4",
