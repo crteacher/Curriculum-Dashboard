@@ -499,11 +499,11 @@
     <ol>
       <li>Answers about intervals are typed with the keyboard, like <code>(-3, 2) U (5, inf)</code>. Stage 2 shows exactly how.</li>
       <li>If you open a solution <i>before</i> you check a checkpoint, that part scores 0. Try it first.</li>
-      <li>Your page keeps a record of your scores and your time on each stage. At the end, go to <b>Summary</b> and press <b>Copy summary text</b>.</li>
+      <li>Your page keeps a record of your scores and your time on each stage. At the end, go to <b>Summary</b> and take a screenshot of it.</li>
       <li>Do not refresh or close this tab until you have turned in your summary. Your progress is not saved if the page reloads.</li>
       <li>Finished early? There is a Bonus stage after Stage 7.</li>
     </ol>
-    <div class="callout c-key"><div class="ct">When you finish</div><p><b>Copy and paste your summary into the Google Classroom assignment page immediately</b> after you finish. Do it before you close this tab, because nothing on this page is saved.</p></div>
+    <div class="callout c-key"><div class="ct">When you finish</div><p><b>Take a screenshot of your Summary screen and upload it to the Google Classroom assignment immediately</b> after you finish. Do it before you close this tab, because nothing on this page is saved.</p><p>On a Chromebook, press <b>Ctrl + Show windows</b> (the key in the top row that looks like a rectangle with two lines beside it). To capture just part of the screen, press <b>Ctrl + Shift + Show windows</b> and drag a box. Screenshots are saved in your Downloads folder. If the whole table does not fit on the screen, press <b>Ctrl</b> and <b>&minus;</b> to zoom out first. The Summary screen repeats these steps.</p></div>
     <div class="name-row"><label for="stuName">Your first and last name:</label><input id="stuName" type="text" autocomplete="off" maxlength="60"><button type="button" class="btn-primary" id="beginBtn">Begin</button></div>
     <div id="nameErr" class="err hidden">Type your name first so it appears on your summary.</div>
   </section>
@@ -2367,7 +2367,7 @@
       var s = stageSummary(st.id);
       if (s.done < s.n) out.push("<li><button type=\"button\" class=\"linkbtn\" data-go=\"" + st.id + "\">" + st.title + "</button>: " + (s.n - s.done) + " scored part" + (s.n - s.done === 1 ? "" : "s") + " not checked yet</li>");
     });
-    return out.length ? "<div class=\"callout c-warn\"><div class=\"ct\">Not finished yet</div><ul class=\"misslist\">" + out.join("") + "</ul>You can still go back and finish these before you turn this in.</div>" : "<div class=\"callout c-good\"><div class=\"ct\">Every scored part is checked.</div>Nice work. Press <b>Copy summary text</b> and paste it into the Google Classroom assignment page right away.</div>";
+    return out.length ? "<div class=\"callout c-warn\"><div class=\"ct\">Not finished yet</div><ul class=\"misslist\">" + out.join("") + "</ul>You can still go back and finish these before you turn this in.</div>" : "<div class=\"callout c-good\"><div class=\"ct\">Every scored part is checked.</div>Nice work. Take a screenshot of this page and upload it to the Google Classroom assignment right away. The steps are below.</div>";
   }
   function printHtml() {
     var D = summaryData();
@@ -2377,12 +2377,12 @@
   }
   function renderSummaryScreen() {
     var host = $("stage-sum"), D = summaryData();
-    host.innerHTML = "<div class=\"stage-head\"><div class=\"stage-kicker\">Turn-in</div><h2>Your summary</h2><div class=\"stage-meta\"><span class=\"goal\">This page is what you hand in. Check it over, then copy it and paste it into the Google Classroom assignment right away.</span></div></div>" +
+    host.innerHTML = "<div class=\"stage-head\"><div class=\"stage-kicker\">Turn-in</div><h2>Your summary</h2><div class=\"stage-meta\"><span class=\"goal\">This page is what you hand in. Check it over, then take a screenshot and upload it to the Google Classroom assignment right away.</span></div></div>" +
       "<div class=\"stage-body\"><div class=\"sumcard\"><div class=\"sum-id\"><div><span class=\"tl\">Student</span><div class=\"sum-name\">" + escHtml(A.name) + "</div></div><div><span class=\"tl\">Date</span><div>" + dateStr() + "</div></div></div>" +
       "<div id=\"sumTable\">" + summaryTableHtml(D) + "</div></div>" + missingHtml() +
-      "<div class=\"callout c-key\"><div class=\"ct\">Do this right now</div><p>Press <b>Copy summary text</b>, then <b>paste it into the Google Classroom assignment page</b> and turn it in. Do it as soon as you finish, before you close this tab.</p></div>" +
-      "<div class=\"sum-actions\"><button type=\"button\" class=\"btn-primary\" id=\"sumCopy\">Copy summary text</button><button type=\"button\" class=\"btn-secondary\" id=\"sumPrint\">Print / Save as PDF</button><span class=\"copied hidden\" id=\"sumCopied\">Copied!</span></div>" +
-      "<p class=\"para small\">Printing or saving a PDF is optional and only the summary prints. The pasted text in Google Classroom is what counts.</p></div>";
+      "<div class=\"callout c-key\"><div class=\"ct\">Do this right now</div><p>Take a <b>screenshot of this summary</b> and <b>upload it to the Google Classroom assignment</b> as soon as you finish, before you close this tab.</p><ol class=\"inl\"><li>Make sure your name and the whole table are on the screen. If they are not, press <b>Ctrl</b> and <b>&minus;</b> (minus) a few times to zoom out.</li><li>Press <b>Ctrl + Show windows</b> to take a screenshot. The Show windows key is in the top row of your Chromebook keyboard and looks like a rectangle with two lines beside it. To capture just part of the screen, press <b>Ctrl + Shift + Show windows</b> and drag a box around your summary.</li><li>Open the Google Classroom assignment, choose <b>Add or create</b>, then <b>File</b>, pick your screenshot (it is saved in your Downloads folder), and turn it in.</li></ol></div>" +
+      "<div class=\"sum-actions\"><button type=\"button\" class=\"btn-secondary\" id=\"sumCopy\">Copy summary text</button><button type=\"button\" class=\"btn-secondary\" id=\"sumPrint\">Print / Save as PDF</button><span class=\"copied hidden\" id=\"sumCopied\">Copied!</span></div>" +
+      "<p class=\"para small\">The two buttons above are optional backups. The screenshot you upload to Google Classroom is what counts.</p></div>";
     $("sumPrint").addEventListener("click", function () { fillPrint(); window.print(); });
     $("sumCopy").addEventListener("click", function () {
       var txt = summaryText(), done = function () { var c = $("sumCopied"); c.classList.remove("hidden"); setTimeout(function () { c.classList.add("hidden"); }, 1800); };
