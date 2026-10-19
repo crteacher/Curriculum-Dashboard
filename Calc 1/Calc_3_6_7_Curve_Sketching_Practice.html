@@ -226,6 +226,7 @@ svg.sketch{display:block;margin:.5rem auto 0}
 </div><!-- .container -->
 
 <script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/contrib/auto-render.min.js"></script>
 <script>
 // ── SketchWidget (embedded) ─────────────────────────────────
 class SketchWidget {
@@ -625,7 +626,8 @@ function checkD(){
 }
 
 document.getElementById('score-bar').textContent='Score: 0 / 5';
-// Initialize with a random problem
+// Render static math labels, then initialize with a random problem
+renderMathInElement(document.body, KO);
 buildProblem(PROBLEMS[Math.floor(Math.random()*PROBLEMS.length)]);
 </script>
 </body>
