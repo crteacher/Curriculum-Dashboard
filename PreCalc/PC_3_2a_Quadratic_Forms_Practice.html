@@ -28,12 +28,12 @@
   .reset-btn{font-size:12px;background:none;border:1px solid #bbb;border-radius:5px;
     padding:4px 10px;cursor:pointer;color:#666;font-family:sans-serif;white-space:nowrap}
   .reset-btn:hover{background:#eee}
-  .problems{display:grid;grid-template-columns:repeat(auto-fill,minmax(370px,1fr));gap:14px}
+  .problems{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:14px}
   .card{background:#fff;border:1.5px solid #ddd;border-radius:10px;overflow:hidden;transition:border-color .25s}
   .card.correct{border-color:#3a7a3a}.card.wrong{border-color:#b03030}.card.peeked{border-color:#b8860b}
   .card-body{padding:14px 16px}
   .card-meta{font-family:sans-serif;font-size:12px;color:#888;margin-bottom:4px}
-  .card-expr{font-size:17px;margin-bottom:12px;line-height:2.2;overflow-x:auto}
+  .card-expr{font-size:15px;margin-bottom:10px;line-height:2;overflow-x:auto}
   .katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}
   .input-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
   .ans-input{font-family:'Courier New',monospace;font-size:14px;border:1px solid #ccc;
@@ -45,7 +45,7 @@
   .check-btn{font-family:sans-serif;font-size:13px;background:#1a1a1a;color:#fff;
     border:none;border-radius:6px;padding:7px 14px;cursor:pointer}
   .check-btn:hover{background:#333}.check-btn:disabled{background:#aaa;cursor:default}
-  .hint{font-family:sans-serif;font-size:12px;color:#888;margin-top:7px}
+  .hint{font-family:sans-serif;font-size:12px;color:#777;margin-top:7px;font-style:italic}
   .feedback{font-family:sans-serif;font-size:13px;margin-top:10px;padding:8px 12px;
     border-radius:6px;display:none;line-height:1.5}
   .feedback.correct{display:block;background:#eaf5ea;color:#1a5a1a}
@@ -57,9 +57,17 @@
   .revealed-answer{display:none;margin-top:8px;font-family:sans-serif;font-size:13px;
     color:#444;background:#f5f3ef;border-radius:6px;padding:8px 11px;line-height:1.8;overflow-x:auto}
   code{font-family:'Courier New',monospace;background:#f0ede7;padding:1px 5px;border-radius:3px;font-size:12px}
-
-
-.hint{display:none!important}
+  /* SketchWidget */
+  .sk-wrap{margin:6px 0}
+  .sk-btns{display:flex;gap:6px;margin-bottom:5px}
+  .sk-btn{font-family:sans-serif;font-size:12px;border:1.5px solid #bbb;border-radius:5px;
+    padding:3px 9px;cursor:pointer;background:#fff;color:#555}
+  .sk-btn.sk-active{background:#1e3a5c;color:#fff;border-color:#1e3a5c}
+  .sk-svg{display:block;border:1.5px solid #ccc;border-radius:7px;background:#fafaf8;cursor:crosshair;max-width:100%}
+  .sk-check-btn{font-family:sans-serif;font-size:13px;background:#1a1a1a;color:#fff;
+    border:none;border-radius:6px;padding:6px 13px;cursor:pointer}
+  .sk-check-btn:hover{background:#333}.sk-check-btn:disabled{background:#aaa;cursor:default}
+  .sk-fb{font-family:sans-serif;font-size:12px;margin-top:5px;line-height:1.5}
 </style>
 </head>
 <body>
@@ -69,7 +77,6 @@
 
   <div class="section">
     <div class="section-title">Core Ideas</div>
-
   <div class="concept">
     <span class="concept-label">Three forms of a quadratic</span>
     <strong>Standard:</strong> $f(x)=ax^2+bx+c$ &nbsp;— reads off y-intercept $c$ and tells direction (sign of $a$).
@@ -84,15 +91,11 @@
     <br><strong>y-intercept:</strong> always $(0,\,c)$ — just set $x=0$.
     <br><strong>Zeros/x-intercepts:</strong> read from factored form, or solve $f(x)=0$.
   </div>
-
   </div>
 
   <div class="section">
     <div class="section-title">Practice Problems</div>
-    <p style="font-family:sans-serif;font-size:13px;color:#666;margin-bottom:1rem;">
-      Enter the vertex as <code>(h,k)</code>, zeros as <code>r1,r2</code>, intercepts as <code>(0,c)</code>, or <code>up</code>/<code>down</code> for orientation.
-      Press <strong>Check</strong> or hit Enter.
-    </p>
+    <p style="font-family:sans-serif;font-size:13px;color:#666;margin-bottom:1rem;">Problems 1–4: read the feature from the equation and type it. Problems 5–8: click the grid to mark key features, then press <strong>Check Sketch</strong>. Use the <strong>&#9670; Vertex</strong> button for the vertex and <strong>&#9679; Point</strong> for other features.</p>
     <div class="score-bar">
       <span class="score-label">Score:</span>
       <span class="score-display" id="score">0 / 8</span>
@@ -105,282 +108,492 @@
 </div>
 
 <script>
-// ── Crypto-quality RNG ────────────────────────────────────────────────────────
-function _rf() {
-  const b = new Uint32Array(1);
-  crypto.getRandomValues(b);
-  return b[0] / 4294967296;
-}
-function rInt(n)   { return Math.floor(_rf() * n); }
-function shuffle(arr) {
-  const a = [...arr];
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = rInt(i + 1);
-    [a[i], a[j]] = [a[j], a[i]];
-  }
-  return a;
-}
-// Pick one element at random from an array  e.g. choose([1,4,9])
-function choose(arr) { return arr[rInt(arr.length)]; }
 
-// ── Display helpers ───────────────────────────────────────────────────────────
-// Leading coefficient: 1→'', -1→'-', else the number as a string
-function fc(a) { if (a===1) return ''; if (a===-1) return '-'; return String(a); }
-// Subsequent term with sign: addT(-2,'x')→' - 2x', addT(3,'')→' + 3', addT(0,'x')→''
-function addT(n, v) {
-  if (n===0) return '';
-  const s = n>0?'+':'-', abs = Math.abs(n);
-  if (abs===1 && v) return ' ' + s + ' ' + v;
-  return ' ' + s + ' ' + abs + (v||'');
-}
+function _rf(){const b=new Uint32Array(1);crypto.getRandomValues(b);return b[0]/4294967296;}
+function rInt(n){return Math.floor(_rf()*n);}
+function choose(arr){return arr[Math.floor(_rf()*arr.length)];}
+function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(_rf()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
+function fc(a){return a===1?'':(a===-1?'-':String(a));}
+function addT(n,v){if(n===0)return '';const s=n<0?'-':'+';return s+(Math.abs(n)===1&&v?'':Math.abs(n))+v;}
+function norm(s){return s.trim().toLowerCase().replace(/\s+/g,'').replace(/[−–]/g,'-').replace(/∞/g,'inf').replace(/∪/g,'u');}
+function ok(user,acc){return acc.some(a=>norm(user)===norm(a));}
 
-// ── Problem generators (section-specific, injected below) ─────────────────────
 
+// gen1: vertex from vertex form
 function gen1(){
-  // Read vertex (h, k) from vertex form a(x-h)^2 + k
-  const a  = choose([-3,-2,-1,1,2,3]);
-  const h  = choose([-4,-3,-2,-1,0,1,2,3,4]);
-  const k  = choose([-5,-4,-3,-2,-1,0,1,2,3,4,5]);
-  const hS = h >= 0 ? `-${h}` : `+${-h}`;   // sign inside (x-h)
-  return {
-    latex: `f(x)=${fc(a)}(x${hS})^2${k!==0?addT(k,''):''},\\quad\\text{vertex}=`,
-    answer: [`(${h},${k})`, `(${h}, ${k})`],
-    hint: 'In vertex form, what ordered pair names the highest or lowest point of the parabola?',
-    step: `\\text{Vertex form }a(x-h)^2+k:\\;h=${h},\\;k=${k}.\\;\\text{Vertex}=(${h},${k})`
-  };
+  const a=choose([-3,-2,-1,1,2,3]),h=choose([-4,-3,-2,-1,0,1,2,3,4]),k=choose([-5,-4,-3,-2,-1,0,1,2,3,4,5]);
+  const hS=h>=0?`-${h}`:`+${-h}`;
+  return{latex:`f(x)=${fc(a)}(x${hS})^2${k!==0?addT(k,''):''},\\quad\\text{vertex}=`,
+    answer:[`(${h},${k})`,`(${h}, ${k})`],
+    hint:`In vertex form, what ordered pair names the highest or lowest point of the parabola?`,
+    step:`\\text{Vertex form }a(x-h)^2+k:\\;h=${h},\\;k=${k}.\\;\\text{Vertex}=(${h},${k})`};
 }
-
+// gen2: zeros from factored form
 function gen2(){
-  // Zeros from factored form f(x) = a(x-r1)(x-r2)
-  const a  = choose([-2,-1,1,2]);
-  const r1 = choose([-5,-4,-3,-2,-1,0,1,2,3,4,5]);
-  const r2vals = [-5,-4,-3,-2,-1,0,1,2,3,4,5].filter(v => v !== r1);
-  const r2 = choose(r2vals);
-  const r1S = r1 >= 0 ? `-${r1}` : `+${-r1}`;
-  const r2S = r2 >= 0 ? `-${r2}` : `+${-r2}`;
-  const aS  = fc(a);
-  // Sort zeros for display
-  const z1 = Math.min(r1,r2), z2 = Math.max(r1,r2);
-  return {
-    latex: `f(x)=${aS}(x${r1S})(x${r2S}),\\quad\\text{zeros}=`,
-    answer: [`${z1},${z2}`, `${z2},${z1}`, `${z1}, ${z2}`, `${z2}, ${z1}`],
-    hint: 'In factored form, what x-values make each linear factor equal to zero?',
-    step: `x${r1S}=0\\Rightarrow x=${r1};\\quad x${r2S}=0\\Rightarrow x=${r2}`
-  };
+  const a=choose([-2,-1,1,2]),r1=choose([-5,-4,-3,-2,-1,0,1,2,3,4,5]);
+  const r2vals=[-5,-4,-3,-2,-1,0,1,2,3,4,5].filter(v=>v!==r1);
+  const r2=choose(r2vals);
+  const r1S=r1>=0?`-${r1}`:`+${-r1}`,r2S=r2>=0?`-${r2}`:`+${-r2}`;
+  const z1=Math.min(r1,r2),z2=Math.max(r1,r2);
+  return{latex:`f(x)=${fc(a)}(x${r1S})(x${r2S}),\\quad\\text{zeros}=`,
+    answer:[`${z1},${z2}`,`${z2},${z1}`,`${z1}, ${z2}`,`${z2}, ${z1}`],
+    hint:`In factored form, what x-values make each linear factor equal to zero?`,
+    step:`x${r1S}=0\\Rightarrow x=${r1};\\quad x${r2S}=0\\Rightarrow x=${r2}`};
 }
-
+// gen3: y-intercept from standard form
 function gen3(){
-  // y-intercept from standard form ax^2+bx+c → (0, c)
-  const a = choose([-3,-2,-1,1,2,3]);
-  const b = choose([-5,-4,-3,-2,-1,0,1,2,3,4,5]);
-  const c = choose([-5,-4,-3,-2,-1,0,1,2,3,4,5]);
-  const bS = b !== 0 ? (b > 0 ? `+${b}` : `${b}`) : '';
-  const cS = c !== 0 ? (c > 0 ? `+${c}` : `${c}`) : '';
-  return {
-    latex: `f(x)=${fc(a)}x^2${bS}x${cS},\\quad\\text{y-intercept}=`,
-    answer: [`(0,${c})`, `(0, ${c})`],
-    hint: 'What do all x-terms contribute to a polynomial when x equals zero?',
-    step: `f(0)=${c}.\\;\\text{y-intercept}=(0,${c})`
-  };
+  const a=choose([-3,-2,-1,1,2,3]),b=choose([-5,-4,-3,-2,-1,0,1,2,3,4,5]),c=choose([-5,-4,-3,-2,-1,0,1,2,3,4,5]);
+  const bS=b!==0?(b>0?`+${b}`:`${b}`):'',cS=c!==0?(c>0?`+${c}`:`${c}`):'';
+  return{latex:`f(x)=${fc(a)}x^2${bS}x${cS},\\quad\\text{y-intercept}=`,
+    answer:[`(0,${c})`,`(0, ${c})`],
+    hint:`What do all x-terms contribute to a polynomial when x equals zero?`,
+    step:`f(0)=${c}.\\;\\text{y-intercept}=(0,${c})`};
 }
-
+// gen4: opens up or down
 function gen4(){
-  // Does parabola open up or down?
-  const a = choose([-4,-3,-2,-1,1,2,3,4]);
-  const b = choose([-4,-3,-2,-1,0,1,2,3,4]);
-  const c = choose([-5,-4,-3,-2,-1,0,1,2,3,4,5]);
-  const bS = b !== 0 ? (b > 0 ? `+${b}` : `${b}`) : '';
-  const cS = c !== 0 ? (c > 0 ? `+${c}` : `${c}`) : '';
-  const ans = a > 0 ? 'up' : 'down';
-  return {
-    latex: `f(x)=${fc(a)}x^2${bS}x${cS}.\\quad\\text{Parabola opens: up or down?}`,
-    answer: [ans],
-    hint: 'What does the sign of the leading coefficient reveal about the orientation of the parabola?',
-    step: `a=${a}${a>0?'>0\\Rightarrow\\text{opens up}':'<0\\Rightarrow\\text{opens down}'}`
-  };
+  const a=choose([-4,-3,-2,-1,1,2,3,4]),b=choose([-4,-3,-2,-1,0,1,2,3,4]),c=choose([-5,-4,-3,-2,-1,0,1,2,3,4,5]);
+  const bS=b!==0?(b>0?`+${b}`:`${b}`):'',cS=c!==0?(c>0?`+${c}`:`${c}`):'';
+  const ans=a>0?'up':'down';
+  return{latex:`f(x)=${fc(a)}x^2${bS}x${cS}.\\quad\\text{Parabola opens: up or down?}`,
+    answer:[ans],
+    hint:`What does the sign of the leading coefficient reveal about the orientation of the parabola?`,
+    step:`a=${a}${a>0?'>0\\Rightarrow\\text{opens up}':'<0\\Rightarrow\\text{opens down}'}`};
 }
 
+// gen5: SketchWidget — vertex form, mark vertex + y-intercept
 function gen5(){
-  // Vertex x-coordinate from standard form: x = -b/(2a), integer answer
-  // Guarantee integer: pick h and a, then choose b = -2*a*h
-  const a = choose([-2,-1,1,2]);
-  const h = choose([-4,-3,-2,-1,0,1,2,3,4]);
-  const b = -2 * a * h;
-  const c = choose([-5,-4,-3,-2,-1,0,1,2,3,4,5]);
-  const bS = b !== 0 ? (b > 0 ? `+${b}` : `${b}`) : '';
-  const cS = c !== 0 ? (c > 0 ? `+${c}` : `${c}`) : '';
-  return {
-    latex: `f(x)=${fc(a)}x^2${bS}x${cS}.\\quad\\text{x-coordinate of vertex}=`,
-    answer: [String(h)],
-    hint: 'What do the coefficients a and b together determine about the horizontal position of the vertex?',
-    step: `x=-\\dfrac{b}{2a}=-\\dfrac{${b}}{2(${a})}=${h}`
+  const a=choose([1,-1,2,-2]);
+  const h=choose([-3,-2,-1,0,1,2,3]);
+  const k=choose([-4,-3,-2,-1,0,1,2,3,4]);
+  const yInt=a*h*h+k;
+  const hS=h>=0?`-${h}`:`+${-h}`;
+  const kS=k===0?'':(k>0?`+${k}`:`${k}`);
+  return{
+    latex:`f(x)=${fc(a)}(x${hS})^2${kS}.\\quad\\text{Mark the vertex (}\\diamond\\text{) and y-intercept (}\\circ\\text{).}`,
+    sketchConfig:{
+      fn:function(x){return a*(x-h)*(x-h)+k;},
+      xMin:-6,xMax:6,yMin:-8,yMax:10,tStep:1,hStep:2,
+      types:['vertex','keypoint'],
+      expected:{
+        vertex:[{x:h,y:k,label:`vertex (${h},${k})`}],
+        keypoints:[{x:0,y:yInt,label:`y-int (0,${yInt})`}]
+      },
+      tolerance:0.09
+    },
+    hint:`In vertex form a(x-h)\u00b2+k, what does (h,k) represent? At x=0, what does f(0) equal?`,
+    step:`\\text{Vertex}=(${h},${k});\\quad f(0)=${a}(${-h})^2${kS}=${yInt}\\;\\Rightarrow\\text{y-int}:(0,${yInt})`
   };
 }
-
+// gen6: SketchWidget — factored form, mark two zeros + y-intercept
 function gen6(){
-  // Full vertex (h, k) from standard form — ordered pair answer
-  // Same setup as gen5, then k = f(h)
-  const a = choose([-2,-1,1,2]);
-  const h = choose([-3,-2,-1,0,1,2,3]);
-  const b = -2 * a * h;
-  const c = choose([-5,-4,-3,-2,-1,0,1,2,3,4,5]);
-  const k = a * h * h + b * h + c;
-  const bS = b !== 0 ? (b > 0 ? `+${b}` : `${b}`) : '';
-  const cS = c !== 0 ? (c > 0 ? `+${c}` : `${c}`) : '';
-  return {
-    latex: `f(x)=${fc(a)}x^2${bS}x${cS}.\\quad\\text{vertex}=`,
-    answer: [`(${h},${k})`, `(${h}, ${k})`],
-    hint: 'How are the x-coordinate and the minimum or maximum value of the function related to the vertex?',
-    step: `h=-\\dfrac{b}{2a}=${h};\\quad k=f(${h})=${a}(${h})^2${bS}(${h})${cS}=${k}.\\;\\text{Vertex}=(${h},${k})`
+  const a=choose([1,-1,2,-2]);
+  const r1=choose([-4,-3,-2,-1,1,2,3,4]);
+  const r2vals=[-4,-3,-2,-1,1,2,3,4].filter(v=>v!==r1&&v!==-r1);
+  const r2=choose(r2vals.length?r2vals:[-4,-3,-2,-1,1,2,3,4].filter(v=>v!==r1));
+  const yInt=a*(-r1)*(-r2);
+  const r1S=r1>=0?`-${r1}`:`+${-r1}`,r2S=r2>=0?`-${r2}`:`+${-r2}`;
+  return{
+    latex:`f(x)=${fc(a)}(x${r1S})(x${r2S}).\\quad\\text{Mark both zeros and the y-intercept (all }\\circ\\text{).}`,
+    sketchConfig:{
+      fn:function(x){return a*(x-r1)*(x-r2);},
+      xMin:-6,xMax:6,yMin:-12,yMax:12,tStep:1,hStep:3,
+      types:['keypoint'],
+      expected:{keypoints:[
+        {x:r1,y:0,label:`zero x=${r1}`},
+        {x:r2,y:0,label:`zero x=${r2}`},
+        {x:0,y:yInt,label:`y-int (0,${yInt})`}
+      ]},
+      tolerance:0.09
+    },
+    hint:`Each factor (x\u2212r)=0 gives an x-intercept. At x=0, what does a\u00b7(0\u2212r\u2081)\u00b7(0\u2212r\u2082) equal?`,
+    step:`x=${r1},\\;x=${r2};\\quad f(0)=${fc(a)}(${-r1})(${-r2})=${yInt}`
   };
 }
-
+// gen7: SketchWidget — vertex form with real zeros, mark vertex + two x-intercepts
 function gen7(){
-  // Zeros from vertex form: a(x-h)^2 - n^2 = 0 → x = h ± n (integers)
-  const a = choose([-2,-1,1,2]);
-  const h = choose([-3,-2,-1,0,1,2,3]);
-  const n = choose([1,2,3,4]);
-  const k = -a * n * n;   // ensures (x-h)^2 = n^2 exactly, regardless of |a|, so zeros are always h±n
-  const hS = h >= 0 ? `-${h}` : `+${-h}`;
-  const z1 = h - n, z2 = h + n;
-  const kS = k > 0 ? `+${k}` : `${k}`;
-  return {
-    latex: `f(x)=${fc(a)}(x${hS})^2${kS},\\quad\\text{zeros}=`,
-    answer: [`${z1},${z2}`, `${z2},${z1}`, `${z1}, ${z2}`, `${z2}, ${z1}`],
-    hint: 'What two x-values are symmetric about the vertex of a parabola with real zeros?',
-    step: `${fc(a)}(x-${h})^2=${-k},\\;(x-${h})^2=${-k/a},\\;x-${h}=\\pm${n},\\;x=${z1}\\text{ or }x=${z2}`
+  const a=choose([1,-1,2,-2]);
+  const h=choose([-2,-1,0,1,2]);
+  const d=choose([1,2,3]);
+  const k=-a*d*d;
+  const r1=h-d,r2=h+d;
+  const hS=h>=0?`-${h}`:`+${-h}`;
+  const kS=k===0?'':(k>0?`+${k}`:`${k}`);
+  return{
+    latex:`f(x)=${fc(a)}(x${hS})^2${kS}.\\quad\\text{Mark the vertex (}\\diamond\\text{) and both x-intercepts (}\\circ\\text{).}`,
+    sketchConfig:{
+      fn:function(x){return a*(x-h)*(x-h)+k;},
+      xMin:-6,xMax:6,yMin:-10,yMax:10,tStep:1,hStep:2,
+      types:['vertex','keypoint'],
+      expected:{
+        vertex:[{x:h,y:k,label:`vertex (${h},${k})`}],
+        keypoints:[
+          {x:r1,y:0,label:`zero (${r1},0)`},
+          {x:r2,y:0,label:`zero (${r2},0)`}
+        ]
+      },
+      tolerance:0.09
+    },
+    hint:`What point is the vertex in vertex form? If a(x\u2212h)\u00b2=\u2212k, what are the two values of (x\u2212h)?`,
+    step:`\\text{Vertex}=(${h},${k});\\;${fc(a)}(x-${h})^2=${-k}\\Rightarrow x-${h}=\\pm${d}\\Rightarrow x=${r1},${r2}`
   };
 }
-
+// gen8: SketchWidget — factored form, mark zeros + vertex
 function gen8(){
-  // y-intercept from factored form: evaluate at x=0 → a*(-r1)*(-r2) = a*r1*r2
-  const a  = choose([-2,-1,1,2]);
-  const r1 = choose([-4,-3,-2,-1,1,2,3,4]);
-  const r2vals = [-4,-3,-2,-1,1,2,3,4].filter(v => v !== r1);
-  const r2 = choose(r2vals);
-  const yint = a * (-r1) * (-r2);   // f(0) = a(0-r1)(0-r2)
-  const r1S = r1 >= 0 ? `-${r1}` : `+${-r1}`;
-  const r2S = r2 >= 0 ? `-${r2}` : `+${-r2}`;
-  return {
-    latex: `f(x)=${fc(a)}(x${r1S})(x${r2S}),\\quad\\text{y-intercept}=`,
-    answer: [`(0,${yint})`, `(0, ${yint})`],
-    hint: 'What does each factor in factored form simplify to when x equals zero?',
-    step: `f(0)=${fc(a)}(0${r1S})(0${r2S})=${a}\\cdot(${-r1})\\cdot(${-r2})=${yint}.\\;\\text{y-intercept}=(0,${yint})`
+  const a=choose([1,-1]);
+  const pairs=[[-3,1],[-3,3],[-1,1],[-1,3],[-4,2],[-4,4],[-2,2],[-2,4]];
+  const [r1,r2]=choose(pairs);
+  const h=(r1+r2)/2;
+  const k=a*(h-r1)*(h-r2);
+  const r1S=r1>=0?`-${r1}`:`+${-r1}`,r2S=r2>=0?`-${r2}`:`+${-r2}`;
+  const hStr=String(h),kStr=k>=0?(k===0?'':'+'+k):String(k);
+  return{
+    latex:`f(x)=${fc(a)}(x${r1S})(x${r2S}).\\quad\\text{Mark both zeros (}\\circ\\text{) and the vertex (}\\diamond\\text{).}`,
+    sketchConfig:{
+      fn:function(x){return a*(x-r1)*(x-r2);},
+      xMin:-6,xMax:6,yMin:-10,yMax:10,tStep:1,hStep:2,
+      types:['keypoint','vertex'],
+      expected:{
+        keypoints:[
+          {x:r1,y:0,label:`zero x=${r1}`},
+          {x:r2,y:0,label:`zero x=${r2}`}
+        ],
+        vertex:[{x:h,y:k,label:`vertex (${hStr},${k})`}]
+      },
+      tolerance:0.09
+    },
+    hint:`Zeros are at x=r\u2081 and x=r\u2082. The vertex x-coordinate is the midpoint of the two zeros.`,
+    step:`x=${r1},\\;x=${r2};\\quad h=\\dfrac{${r1}+${r2}}{2}=${hStr};\\quad k=f(${hStr})=${k}`
   };
 }
 
-const GENERATORS = [gen1, gen2, gen3, gen4, gen5, gen6, gen7, gen8];
+const GENERATORS=[gen1,gen2,gen3,gen4,gen5,gen6,gen7,gen8];
 
-
-// ── State ─────────────────────────────────────────────────────────────────────
-let ACTIVE, correct, flags, attempted, peeked;
-
-function norm(s) {
-  return s.trim().toLowerCase()
-    .replace(/\s+/g, '')
-    .replace(/[−–]/g, '-')
-    .replace(/∞/g, 'inf')
-    .replace(/∪/g, 'u');
+let ACTIVE,correct,flags,attempted,peeked,skWidgets;
+function init(){
+  ACTIVE=shuffle(GENERATORS.map(function(gen){return gen();}));
+  correct=0;
+  flags=Array(GENERATORS.length).fill(false);
+  attempted=Array(GENERATORS.length).fill(false);
+  peeked=Array(GENERATORS.length).fill(false);
+  skWidgets=Array(GENERATORS.length).fill(null);
 }
-function ok(user, acc) { return acc.some(a => norm(user) === norm(a)); }
-
-function init() {
-  ACTIVE    = shuffle(GENERATORS.map(gen => gen()));
-  correct   = 0;
-  flags     = Array(GENERATORS.length).fill(false);
-  attempted = Array(GENERATORS.length).fill(false);
-  peeked    = Array(GENERATORS.length).fill(false);
-}
-
-function buildCards() {
-  const wrap = document.getElementById('problems');
-  wrap.innerHTML = '';
-  ACTIVE.forEach((p, i) => {
-    const div = document.createElement('div');
-    div.className = 'card'; div.id = 'card-' + i;
-    div.innerHTML =
-      `<div class="card-body">
-        <div class="card-meta">Problem ${i + 1}</div>
-        <div class="card-expr" id="expr-${i}"></div>
-        <div class="input-row">
-          <input class="ans-input" id="ai-${i}" placeholder="answer" />
-          <button class="check-btn" id="chk-${i}" onclick="check(${i})">Check</button>
-        </div>
-        <div class="hint">${p.hint}</div>
-        <div class="feedback" id="fb-${i}"></div>
-        <span class="reveal-link" id="rl-${i}" onclick="reveal(${i})">Show solution</span>
-        <div class="revealed-answer" id="ra-${i}"></div>
-      </div>`;
-    wrap.appendChild(div);
-    document.getElementById('ai-' + i)
-      .addEventListener('keydown', e => { if (e.key === 'Enter') check(i); });
-    if (p.svg) {
-      document.getElementById('expr-' + i).innerHTML = p.svg;
+function buildCards(){
+  const wrap=document.getElementById('problems');wrap.innerHTML='';
+  ACTIVE.forEach(function(p,i){
+    const isSk=!!p.sketchConfig;
+    const div=document.createElement('div');div.className='card';div.id='card-'+i;
+    let inputHtml='';
+    if(isSk){
+      const types=(p.sketchConfig.types)||['keypoint'];
+      let btns='';
+      for(let t=0;t<types.length;t++){
+        const ty=types[t];
+        btns+='<button class="sk-btn'+(t===0?' sk-active':'')+'" data-sktype="'+ty+'">'+(ty==='vertex'?'&#9670; Vertex':'&#9679; Point')+'</button>';
+      }
+      inputHtml='<div class="sk-wrap" id="sk-wrap-'+i+'">'
+        +'<div class="sk-btns">'+btns+'</div>'
+        +'<svg class="sk-svg" id="sk-svg-'+i+'"></svg>'
+        +'<div style="margin-top:4px"><button class="sk-check-btn" id="sk-chk-'+i+'" onclick="skCheck('+i+')">Check Sketch</button></div>'
+        +'<div class="sk-fb" id="sk-fb-'+i+'"></div>'
+        +'</div>';
     } else {
-      katex.render(p.latex, document.getElementById('expr-' + i),
-        { throwOnError: false, displayMode: true });
+      inputHtml='<div class="input-row">'
+        +'<input class="ans-input" id="ai-'+i+'" placeholder="answer" />'
+        +'<button class="check-btn" id="chk-'+i+'" onclick="check('+i+')">Check</button>'
+        +'</div>';
+    }
+    div.innerHTML='<div class="card-body">'
+      +'<div class="card-meta">Problem '+(i+1)+'</div>'
+      +'<div class="card-expr" id="expr-'+i+'"></div>'
+      +inputHtml
+      +'<div class="hint">'+p.hint+'</div>'
+      +'<div class="feedback" id="fb-'+i+'"></div>'
+      +'<span class="reveal-link" id="rl-'+i+'" onclick="reveal('+i+')">Show solution</span>'
+      +'<div class="revealed-answer" id="ra-'+i+'"></div>'
+      +'</div>';
+    wrap.appendChild(div);
+    if(!isSk){
+      document.getElementById('ai-'+i).addEventListener('keydown',function(e){if(e.key==='Enter')check(i);});
+    }
+    if(p.svg){
+      document.getElementById('expr-'+i).innerHTML=p.svg;
+    } else {
+      katex.render(p.latex,document.getElementById('expr-'+i),{throwOnError:false,displayMode:true});
+    }
+    if(isSk){
+      skWidgets[i]=new SketchWidget('sk-svg-'+i,'sk-fb-'+i,p.sketchConfig);
     }
   });
 }
-
-function check(i) {
-  const p = ACTIVE[i], inp = document.getElementById('ai-'+i),
-        fb = document.getElementById('fb-'+i), card = document.getElementById('card-'+i),
-        good = ok(inp.value, p.answer);
-  inp.className = 'ans-input';
-  if (good) {
-    inp.className = 'ans-input ok'; fb.className = 'feedback correct';
-    fb.textContent = '✓ Correct!'; card.className = 'card correct';
-    if (!flags[i] && !attempted[i] && !peeked[i]) { flags[i]=true; correct++; updateScore(); }
-    attempted[i] = true;
-    document.getElementById('chk-'+i).disabled = true; inp.readOnly = true;
+function check(i){
+  const p=ACTIVE[i],inp=document.getElementById('ai-'+i),fb=document.getElementById('fb-'+i),card=document.getElementById('card-'+i);
+  const good=ok(inp.value,p.answer);
+  inp.className='ans-input';
+  if(good){
+    inp.className='ans-input ok';fb.className='feedback correct';fb.textContent='\u2713 Correct!';card.className='card correct';
+    if(!flags[i]&&!attempted[i]&&!peeked[i]){flags[i]=true;correct++;updateScore();}
+    attempted[i]=true;document.getElementById('chk-'+i).disabled=true;inp.readOnly=true;
   } else {
-    attempted[i] = true; inp.className = 'ans-input bad'; fb.className = 'feedback wrong';
-    fb.textContent = '✗ Not quite — try again or show the solution.';
-    card.className = peeked[i] ? 'card peeked' : 'card wrong';
+    attempted[i]=true;inp.className='ans-input bad';fb.className='feedback wrong';
+    fb.textContent='\u2717 Not quite \u2014 try again or show the solution.';
+    card.className=peeked[i]?'card peeked':'card wrong';
   }
 }
-
-function reveal(i) {
-  const p = ACTIVE[i], box = document.getElementById('ra-'+i),
-        lnk = document.getElementById('rl-'+i);
-  if (box.style.display === 'block') {
-    box.style.display = 'none'; lnk.textContent = 'Show solution';
+function skCheck(i){
+  if(!skWidgets[i])return;
+  const allCorrect=skWidgets[i].checkSketch();
+  document.getElementById('sk-chk-'+i).disabled=true;
+  const card=document.getElementById('card-'+i);
+  card.className='card '+(allCorrect?'correct':'wrong');
+  const fb=document.getElementById('fb-'+i);
+  if(allCorrect){
+    fb.className='feedback correct';fb.textContent='\u2713 All points correct!';
+    if(!flags[i]&&!attempted[i]&&!peeked[i]){flags[i]=true;correct++;updateScore();}
   } else {
-    if (!flags[i]) {
-      peeked[i] = true; document.getElementById('card-'+i).className = 'card peeked';
-      if (!attempted[i]) {
-        const fb = document.getElementById('fb-'+i);
-        fb.className = 'feedback peeked';
-        fb.textContent = '⚠ Solution revealed — no point awarded.';
+    fb.className='feedback wrong';
+  }
+  attempted[i]=true;
+}
+function reveal(i){
+  const p=ACTIVE[i],box=document.getElementById('ra-'+i),lnk=document.getElementById('rl-'+i);
+  if(box.style.display==='block'){
+    box.style.display='none';lnk.textContent='Show solution';
+  } else {
+    if(!flags[i]){
+      peeked[i]=true;document.getElementById('card-'+i).className='card peeked';
+      if(!attempted[i]){
+        const fb=document.getElementById('fb-'+i);fb.className='feedback peeked';
+        fb.textContent='\u26a0 Solution revealed \u2014 no point awarded.';
       }
     }
-    box.innerHTML = '<strong>Solution:</strong><br>';
-    const span = document.createElement('span'); box.appendChild(span);
-    katex.render(p.step, span, { throwOnError: false, displayMode: true });
-    box.style.display = 'block'; lnk.textContent = 'Hide solution';
+    if(p.sketchConfig&&skWidgets[i])skWidgets[i].showAnswer();
+    box.innerHTML='<strong>Solution:</strong><br>';
+    const span=document.createElement('span');box.appendChild(span);
+    katex.render(p.step,span,{throwOnError:false,displayMode:true});
+    box.style.display='block';lnk.textContent='Hide solution';
+  }
+}
+function updateScore(){
+  const n=ACTIVE.length;
+  document.getElementById('score').textContent=correct+' / '+n;
+  document.getElementById('prog').style.width=Math.round(correct/n*100)+'%';
+}
+function resetAll(){init();buildCards();updateScore();}
+
+
+// ── SketchWidget ──────────────────────────────────────────────────────────────
+class SketchWidget {
+  constructor(svgId, fbId, prob) {
+    this.svgEl=document.getElementById(svgId);
+    this.fbEl=document.getElementById(fbId);
+    this.prob=prob;
+    this.markers=[];this.nextId=0;this.checked=false;this.answered=false;
+    this.activeType=(prob.types&&prob.types[0])||'keypoint';
+    this.W=320;this.H=200;this.PL=40;this.PR=18;this.PT=16;this.PB=30;
+    this.IW=this.W-this.PL-this.PR;this.IH=this.H-this.PT-this.PB;
+    const wrapId=svgId.replace('sk-svg-','sk-wrap-');
+    const wrap=document.getElementById(wrapId);
+    if(wrap){
+      wrap.querySelectorAll('[data-sktype]').forEach(function(b){
+        b.addEventListener('click',function(){
+          const sw=document.getElementById(svgId).__sw;
+          if(!sw)return;
+          sw.activeType=b.dataset.sktype;
+          wrap.querySelectorAll('[data-sktype]').forEach(function(x){x.classList.remove('sk-active');});
+          b.classList.add('sk-active');
+        });
+      });
+    }
+    this.svgEl.__sw=this;
+    this._buildGrid();
+  }
+  tx(x){const{xMin,xMax}=this.prob;return this.PL+(x-xMin)/(xMax-xMin)*this.IW;}
+  ty(y){const{yMin,yMax}=this.prob;return this.PT+(yMax-y)/(yMax-yMin)*this.IH;}
+  fromSVG(sx,sy){const{xMin,xMax,yMin,yMax}=this.prob;
+    return{x:xMin+(sx-this.PL)/this.IW*(xMax-xMin),y:yMax-(sy-this.PT)/this.IH*(yMax-yMin)};}
+  _el(tag){return document.createElementNS('http://www.w3.org/2000/svg',tag);}
+  _ln(p,x1,y1,x2,y2,stroke,sw){const l=this._el('line');
+    l.setAttribute('x1',x1);l.setAttribute('y1',y1);l.setAttribute('x2',x2);l.setAttribute('y2',y2);
+    l.setAttribute('stroke',stroke);l.setAttribute('stroke-width',sw);p.appendChild(l);}
+  _txt(t,x,y,fs,fill,ff,anchor){const e=this._el('text');e.textContent=t;
+    e.setAttribute('x',x);e.setAttribute('y',y);e.setAttribute('font-size',fs);
+    e.setAttribute('fill',fill||'#999');if(ff)e.setAttribute('font-family',ff);
+    if(anchor)e.setAttribute('text-anchor',anchor);return e;}
+  _buildGrid(){
+    const svg=this.svgEl;svg.innerHTML='';
+    svg.setAttribute('width',this.W);svg.setAttribute('height',this.H);
+    svg.setAttribute('viewBox','0 0 '+this.W+' '+this.H);
+    const{xMin,xMax,yMin,yMax}=this.prob;
+    const clipId='sk-clip-'+this.svgEl.id;
+    const GRID='#e0e0e0',AXIS='rgba(30,58,92,0.6)',NAVY='#1e3a5c';
+    const defs=this._el('defs');const cp=this._el('clipPath');cp.id=clipId;
+    const cr=this._el('rect');cr.setAttribute('x',this.PL);cr.setAttribute('y',this.PT);
+    cr.setAttribute('width',this.IW);cr.setAttribute('height',this.IH);
+    cp.appendChild(cr);defs.appendChild(cp);svg.appendChild(defs);
+    const bg=this._el('rect');bg.setAttribute('x',this.PL);bg.setAttribute('y',this.PT);
+    bg.setAttribute('width',this.IW);bg.setAttribute('height',this.IH);
+    bg.setAttribute('fill','#fafaf8');svg.appendChild(bg);
+    const tStep=this.prob.tStep||1;
+    for(let x=Math.ceil(xMin/tStep)*tStep;x<=xMax+1e-9;x+=tStep){
+      this._ln(svg,this.tx(x),this.PT,this.tx(x),this.H-this.PB,GRID,1);
+      if(x!==0)svg.appendChild(this._txt(x,this.tx(x),this.H-this.PB+13,8,'#bbb','sans-serif','middle'));
+    }
+    const hStep=this.prob.hStep||1;
+    for(let y=Math.ceil(yMin/hStep)*hStep;y<=yMax+1e-9;y+=hStep){
+      this._ln(svg,this.PL,this.ty(y),this.W-this.PR,this.ty(y),GRID,1);
+      if(y!==0)svg.appendChild(this._txt(y,this.PL-5,this.ty(y)+3.5,8,'#bbb','sans-serif','end'));
+    }
+    const ay=this.ty(0),ax=this.tx(0);
+    this._ln(svg,this.PL,ay,this.W-this.PR,ay,AXIS,1.5);
+    if(ax>=this.PL&&ax<=this.W-this.PR)this._ln(svg,ax,this.PT,ax,this.H-this.PB,AXIS,1.5);
+    svg.appendChild(this._txt(this.prob.xLabel||'x',this.W-this.PR+4,ay+4,9,NAVY,'Georgia,serif','start'));
+    svg.appendChild(this._txt(this.prob.yLabel||'y',ax+3,this.PT-2,9,NAVY,'Georgia,serif','start'));
+    this.mg=this._el('g');svg.appendChild(this.mg);
+    const self=this;svg.addEventListener('click',function(e){self._click(e);});
+  }
+  _click(e){
+    if(this.checked)return;
+    const r=this.svgEl.getBoundingClientRect();
+    const sx=(e.clientX-r.left)*this.W/r.width,sy=(e.clientY-r.top)*this.H/r.height;
+    const hit=this._hit(sx,sy);if(hit!==null){this._rm(hit);return;}
+    if(sx<this.PL||sx>this.W-this.PR||sy<this.PT||sy>this.H-this.PB)return;
+    let{x,y}=this.fromSVG(sx,sy);
+    const{xMin,xMax,yMin,yMax}=this.prob;
+    x=Math.max(xMin+.01,Math.min(xMax-.01,x));y=Math.max(yMin+.01,Math.min(yMax-.01,y));
+    const id=this.nextId++;const svgX=this.tx(x),svgY=this.ty(y);
+    this.markers.push({id,type:this.activeType,mx:x,my:y,svgX,svgY,correct:null});
+    this._draw(id,this.activeType,svgX,svgY);
+    this._preview();
+  }
+  _hit(sx,sy){for(const m of this.markers){const dx=m.svgX-sx,dy=m.svgY-sy;if(dx*dx+dy*dy<196)return m.id;}return null;}
+  _rm(id){
+    this.markers=this.markers.filter(function(m){return m.id!==id;});
+    const el=this.mg.querySelector('[data-mid="'+id+'"]');if(el)el.remove();
+    this._preview();
+  }
+  _preview(){
+    const old=this.svgEl.querySelector('.sk-preview');if(old)old.remove();
+    if(this.markers.length<2)return;
+    const{xMin,xMax,yMin,yMax}=this.prob;
+    const pts=[...this.markers].sort(function(a,b){return a.mx-b.mx;}).map(function(m){
+      return{x:m.mx,y:m.my,s:(m.type==='vertex')?0:null};
+    });
+    for(let i=0;i<pts.length;i++){
+      if(pts[i].s!==null)continue;
+      const L=i>0?pts[i-1]:null,R=i<pts.length-1?pts[i+1]:null;
+      if(L&&R)pts[i].s=(R.y-L.y)/(R.x-L.x);
+      else if(L)pts[i].s=(pts[i].y-L.y)/(pts[i].x-L.x);
+      else if(R)pts[i].s=(R.y-pts[i].y)/(R.x-pts[i].x);
+      else pts[i].s=0;
+    }
+    const path=[];
+    const f=pts[0];path.push([xMin,f.y+f.s*(xMin-f.x)]);
+    for(let i=0;i<pts.length-1;i++){
+      const p0=pts[i],p1=pts[i+1],dt=p1.x-p0.x;if(Math.abs(dt)<1e-9)continue;
+      for(let j=0;j<=60;j++){
+        const t=j/60,h00=2*t*t*t-3*t*t+1,h10=t*t*t-2*t*t+t,h01=-2*t*t*t+3*t*t,h11=t*t*t-t*t;
+        path.push([p0.x+t*dt,h00*p0.y+h10*dt*p0.s+h01*p1.y+h11*dt*p1.s]);
+      }
+    }
+    const lp=pts[pts.length-1];path.push([xMax,lp.y+lp.s*(xMax-lp.x)]);
+    const ptStr=path.map(function(p){
+      return (Math.round(this.tx(p[0])*10)/10)+','+(Math.round(this.ty(Math.max(yMin-.5,Math.min(yMax+.5,p[1])))*10)/10);
+    }.bind(this)).join(' ');
+    const poly=this._el('polyline');poly.setAttribute('class','sk-preview');poly.setAttribute('points',ptStr);
+    poly.setAttribute('fill','none');poly.setAttribute('stroke','#7a5c1e');poly.setAttribute('stroke-width','1.8');
+    poly.setAttribute('stroke-dasharray','6,4');poly.setAttribute('opacity','.7');
+    poly.setAttribute('clip-path','url(#sk-clip-'+this.svgEl.id+')');
+    this.svgEl.insertBefore(poly,this.mg);
+  }
+  _draw(id,type,sx,sy,state){
+    const NAVY='#1e3a5c',GOLD='#7a5c1e',HIT='#3f7a52',MISS='#b3413a',ANS='rgba(30,58,92,0.22)';
+    const g=this._el('g');g.setAttribute('data-mid',id);g.style.cursor='pointer';
+    let el;
+    if(type==='vertex'){
+      const r=7;el=this._el('polygon');
+      el.setAttribute('points',sx+','+(sy-r)+' '+(+sx+r)+','+sy+' '+sx+','+(+sy+r)+' '+(sx-r)+','+sy);
+      el.setAttribute('fill',state==='hit'?HIT:state==='miss'?MISS:state==='answer'?ANS:GOLD);
+      el.setAttribute('stroke',state==='hit'?HIT:state==='miss'?MISS:GOLD);el.setAttribute('stroke-width','1.5');
+    } else {
+      el=this._el('circle');el.setAttribute('cx',sx);el.setAttribute('cy',sy);el.setAttribute('r',7);
+      el.setAttribute('fill','white');
+      el.setAttribute('stroke',state==='hit'?HIT:state==='miss'?MISS:state==='answer'?ANS:NAVY);
+      el.setAttribute('stroke-width',2.2);
+    }
+    g.appendChild(el);this.mg.appendChild(g);
+  }
+  checkSketch(){
+    if(this.checked)return null;this.checked=true;
+    const{expected,xMin,xMax,yMin,yMax}=this.prob;
+    const xRange=xMax-xMin,yRange=yMax-yMin;
+    const tol=this.prob.tolerance||0.09;
+    const tm={keypoints:'keypoint',vertex:'vertex'};
+    let correct=0,total=0;const results=[];
+    for(const key in expected){
+      const mt=tm[key];
+      for(let ei=0;ei<expected[key].length;ei++){
+        const ep=expected[key][ei];total++;
+        const cands=this.markers.filter(function(m){return m.type===mt;});
+        let best=Infinity,bestId=null;
+        for(let ci=0;ci<cands.length;ci++){
+          const m=cands[ci];
+          const dx=(m.mx-ep.x)/xRange,dy=(m.my-ep.y)/yRange;
+          const d=Math.sqrt(dx*dx+dy*dy);if(d<best){best=d;bestId=m.id;}
+        }
+        const hit=best<=tol;
+        if(hit){correct++;const m=this.markers.find(function(m){return m.id===bestId;});if(m)m.correct=true;}
+        results.push({ep,hit,label:ep.label||''});
+      }
+    }
+    for(let i=0;i<this.markers.length;i++)if(this.markers[i].correct===null)this.markers[i].correct=false;
+    this.mg.innerHTML='';
+    for(let i=0;i<this.markers.length;i++){
+      const m=this.markers[i];this._draw(m.id,m.type,m.svgX,m.svgY,m.correct?'hit':'miss');
+    }
+    this._drawCurve();
+    this._showFB(results,correct,total);
+    if(this.fbEl)this.fbEl.setAttribute('data-result',correct===total?'all':'partial');
+    return correct===total;
+  }
+  showAnswer(){
+    if(!this.checked)this.checkSketch();if(this.answered)return;this.answered=true;
+    const{expected}=this.prob;
+    const tm={keypoints:'keypoint',vertex:'vertex'};
+    let aid=10000;
+    for(const key in expected){
+      for(let i=0;i<expected[key].length;i++)
+        this._draw(aid++,tm[key],this.tx(expected[key][i].x),this.ty(expected[key][i].y),'answer');
+    }
+  }
+  _drawCurve(){
+    const old=this.svgEl.querySelector('.sk-preview');if(old)old.remove();
+    const{fn,xMin,xMax,yMin,yMax}=this.prob;if(!fn)return;
+    const N=300,pts=[];
+    for(let i=0;i<=N;i++){
+      const x=xMin+i/N*(xMax-xMin),y=fn(x);
+      if(y<yMin-2||y>yMax+2)continue;
+      pts.push((Math.round(this.tx(x)*10)/10)+','+(Math.round(this.ty(Math.max(yMin-.5,Math.min(yMax+.5,y)))*10)/10));
+    }
+    if(pts.length<2)return;
+    const p=this._el('polyline');p.setAttribute('points',pts.join(' '));p.setAttribute('class','sk-curve');
+    p.setAttribute('fill','none');p.setAttribute('stroke','#1e3a5c');p.setAttribute('stroke-width','2.2');
+    p.setAttribute('opacity','0.6');p.setAttribute('clip-path','url(#sk-clip-'+this.svgEl.id+')');
+    this.svgEl.insertBefore(p,this.mg);
+  }
+  _showFB(results,correct,total){
+    let html='<span style="font-weight:700;color:'+(correct===total?'#1a5a1a':'#7a1a1a')+'">'+correct+'/'+total+' points placed correctly</span>';
+    const missed=results.filter(function(r){return !r.hit;});
+    if(missed.length)html+='<br><span style="color:#7a1a1a">Missed: '+missed.map(function(r){return r.label||'a point';}).join(', ')+'</span>';
+    if(this.fbEl)this.fbEl.innerHTML=html;
   }
 }
 
-function updateScore() {
-  const n = ACTIVE.length;
-  document.getElementById('score').textContent = correct + ' / ' + n;
-  document.getElementById('prog').style.width = Math.round(correct / n * 100) + '%';
-}
-
-function resetAll() { init(); buildCards(); updateScore(); }
 </script>
-
 <script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/contrib/auto-render.min.js"></script>
 <script>
-  renderMathInElement(document.body, {
-    delimiters: [
-      {left: '$$', right: '$$', display: true},
-      {left: '$',  right: '$',  display: false}
-    ]
-  });
-  init(); buildCards(); updateScore();
+  renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});
+  init();buildCards();updateScore();
 </script>
 </body>
 </html>
