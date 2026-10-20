@@ -634,6 +634,71 @@ GEN['Calc_2_8'] = function() {
 };
 
 
+
+
+GEN['Calc_3_5'] = function() {
+  // Absolute extrema on a closed interval using EVT
+  const a  = pick([2, 3, 4]);           // vertex x = a
+  const k  = ri(5, 12);                 // vertex value (absolute max)
+  const rEnd = a + ri(2, 4);            // right endpoint > a → unique minimum
+  const fAt = x => -(x - a) * (x - a) + k;
+  const fL = fAt(0), fR = fAt(rEnd);
+  const absMin = Math.min(fL, fR);
+  const minX   = fL <= fR ? 0 : rEnd;
+  const fStr   = `-(x-${a})^2+${k}`;
+  return {
+    type: 'numeric',
+    html: `Find the absolute maximum value of ${kI(fStr)} on ${kI('[0,\\\\,'+rEnd+']')}:`,
+    answer: k,
+    solutionHtml:
+      kD(`f'(x)=-2(x-${a})=0\\\\Rightarrow x=${a}`) +
+      kD(`f(0)=${fL},\\\\quad f(${a})=${k},\\\\quad f(${rEnd})=${fR}`) +
+      kD(`\\\\text{Absolute maximum }=${k}\\\\text{ at }x=${a}`)
+  };
+};
+
+GEN['Calc_3_6'] = function() {
+  // First Derivative Test — MCQ classify critical point
+  const c = ri(1, 4);
+  const d = ri(-3, 3);
+  // f(x) = x^3 - 3c^2 x + d,  f'(x)=3(x-c)(x+c),  f''(x)=6x
+  const askMin = pick([true, false]); // true → ask about x=c (local min)
+  const xAsk = askMin ? c : -c;
+  const cIdx  = askMin ? 1 : 0;      // MCQ index: 0=max, 1=min, 2=neither
+  const s2Val = 6 * xAsk;
+  const c2Sign = s2Val > 0 ? '>' : '<';
+  const fConst = d === 0 ? '' : (d > 0 ? `+${d}` : `${d}`);
+  const fStr = `x^3-${3*c*c}x${fConst}`;
+  return {
+    type: 'mcq',
+    html: `Let ${kI('f(x)='+fStr)}. At ${kI('x='+xAsk)}, $f$ has a:`,
+    choices: ['Local maximum', 'Local minimum', 'Neither (saddle point)'],
+    correctIdx: cIdx,
+    solutionHtml:
+      kD(`f'(x)=3x^2-${3*c*c}=3(x-${c})(x+${c})`) +
+      kD(`f''(x)=6x`) +
+      kD(`f''(${xAsk})=${s2Val}${c2Sign}0\\\\Rightarrow \\\\text{local }${askMin ? '\\\\min' : '\\\\max'}\\\\text{ at }x=${xAsk}`)
+  };
+};
+
+GEN['Calc_3_6_5'] = function() {
+  // Concavity — find the inflection point x-coordinate
+  const m = ri(1, 4);   // inflection at x = m
+  // f(x) = x^3 - 3m x^2,  f''(x)=6x-6m=0 → x=m
+  const fStr = `x^3-${3*m}x^2`;
+  const fppLeft  = 6*(m-1) - 6*m;   // = -6 < 0 (concave down)
+  const fppRight = 6*(m+1) - 6*m;   //  = +6 > 0 (concave up)
+  return {
+    type: 'numeric',
+    html: `Find the ${kI('x')}-coordinate of the inflection point of ${kI('f(x)='+fStr)}:`,
+    answer: m,
+    solutionHtml:
+      kD(`f'(x)=3x^2-${6*m}x`) +
+      kD(`f''(x)=6x-${6*m}=0\\\\Rightarrow x=${m}`) +
+      kD(`f''(${m-1})=${fppLeft}<0,\\\\; f''(${m+1})=${fppRight}>0\\\\;\\\\checkmark\\\\text{ concavity changes}`)
+  };
+};
+
 /* ─────────────────────────────────────────────
    RENDERING
 ───────────────────────────────────────────── */
@@ -777,7 +842,7 @@ async function init() {
   const today = todayStr();
   document.getElementById('dateLabel').textContent = fmtDate(today);
 
-  let state, sections, calendar;
+  let state, sections, calendar, overrides;
   try {
     [state, sections, calendar] = await Promise.all([
       fetch(BASE + 'state.json?_=' + Date.now()).then(r => r.json()),
@@ -789,6 +854,9 @@ async function init() {
       `<div class="empty-state"><div class="icon">⚠️</div><h2>Couldn't load data</h2><p>Check your connection and refresh.</p></div>`;
     return;
   }
+  // Load optional daily overrides (fail silently if file missing)
+  overrides = {};
+  try { overrides = await fetch(BASE + 'donow-overrides.json?_=' + Date.now()).then(r=>r.json()); } catch(e) {}
 
   const isSchoolDay = calendar.aDays.includes(today) || calendar.bDays.includes(today);
   const label = isSchoolDay ? 'Do Now' : 'Review';
@@ -800,30 +868,37 @@ async function init() {
   const calc1State = state.courses?.calc1;
   const allSections = sections.calc1 || [];
   const completed = calc1State?.completedSections || [];
-  // Only pick sections that have a generator
-  const doneSections = allSections.filter(s => completed.includes(s.id) && GEN[s.id]);
-
-  if (doneSections.length === 0) {
-    document.getElementById('mainArea').innerHTML = `
-      <div class="empty-state">
-        <div class="icon">📚</div>
-        <h2>Nothing here yet</h2>
-        <p>Do Now problems appear once the first Calc 1 section is completed.<br>Check back after class!</p>
-      </div>`;
-    return;
+  // ── Daily override: pick specific sections for today if set ────────────────
+  // Edit donow-overrides.json to override: { "YYYY-MM-DD": ["SectionId1", ...] }
+  const todayOverride = overrides[today];
+  let secs;
+  if (todayOverride && Array.isArray(todayOverride) && todayOverride.length > 0) {
+    secs = todayOverride.map(id => allSections.find(s => s.id === id)).filter(Boolean);
+    if (secs.length === 0) secs = null; // fall through to random
   }
 
-  // Stable per (date × sectionID), recency-biased
-  const scored = doneSections.map((s, i) => {
-    const baseScore = hashStr(today + s.id) / 0xffffffff;
-    const recencyBoost = Math.pow(1.12, i);
-    return { sec: s, score: baseScore * recencyBoost };
-  });
-  scored.sort((a, b) => b.score - a.score);
-
-  const secs = scored.length === 1
-    ? [scored[0].sec, scored[0].sec]
-    : [scored[0].sec, scored[1].sec];
+  if (!secs) {
+    // Normal path: pick from completed sections with generators, recency-biased
+    const doneSections = allSections.filter(s => completed.includes(s.id) && GEN[s.id]);
+    if (doneSections.length === 0) {
+      document.getElementById('mainArea').innerHTML = `
+        <div class="empty-state">
+          <div class="icon">📚</div>
+          <h2>Nothing here yet</h2>
+          <p>Do Now problems appear once the first Calc 1 section is completed.<br>Check back after class!</p>
+        </div>`;
+      return;
+    }
+    const scored = doneSections.map((s, i) => {
+      const baseScore = hashStr(today + s.id) / 0xffffffff;
+      const recencyBoost = Math.pow(1.12, i);
+      return { sec: s, score: baseScore * recencyBoost };
+    });
+    scored.sort((a, b) => b.score - a.score);
+    secs = scored.length === 1
+      ? [scored[0].sec, scored[0].sec]
+      : [scored[0].sec, scored[1].sec];
+  }
 
   let html = '<div class="problems-grid">';
   secs.forEach((sec, idx) => {
@@ -850,4 +925,3 @@ init();
 </script>
 </body>
 </html>
-                                                         
