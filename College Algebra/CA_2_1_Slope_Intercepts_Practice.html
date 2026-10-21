@@ -257,6 +257,8 @@ function init(){
   peeked=Array(GENERATORS.length).fill(false);
   skWidgets=Array(GENERATORS.length).fill(null);
 }
+function _lth(s){let h='',r=s;while(r.length){const m=r.match(/^\\text\{([^}]*)\}/);if(m){h+=m[1];r=r.slice(m[0].length);}else{const n=r.indexOf('\\text{');if(n<0){h+=(r.trim()?'$'+r+'$':'');r='';}else{if(n>0)h+='$'+r.slice(0,n)+'$';r=r.slice(n);}}}return h;}
+function _re(p,i){const e=document.getElementById('expr-'+i),KO={delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false};if(p.svg){e.innerHTML=p.svg;}else if(p.html){e.innerHTML=p.html;renderMathInElement(e,KO);}else if(p.latex&&/\\text\{/.test(p.latex)){e.innerHTML=_lth(p.latex);renderMathInElement(e,KO);}else{katex.render(p.latex,e,{throwOnError:false,displayMode:true});}}
 function buildCards(){
   const wrap=document.getElementById('problems');wrap.innerHTML='';
   ACTIVE.forEach(function(p,i){
@@ -298,7 +300,7 @@ function buildCards(){
     if(p.svg){
       document.getElementById('expr-'+i).innerHTML=p.svg;
     } else {
-      katex.render(p.latex,document.getElementById('expr-'+i),{throwOnError:false,displayMode:true});
+      _re(p,i);
     }
     if(isSk){
       skWidgets[i]=new SketchWidget('sk-svg-'+i,'sk-fb-'+i,p.sketchConfig);
