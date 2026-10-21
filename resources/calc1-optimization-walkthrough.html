@@ -1,0 +1,2455 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Optimization: A Guided Walkthrough</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%20100%20100'%3E%3Ctext%20y%3D'.9em'%20font-size%3D'90'%3E%F0%9F%93%A6%3C%2Ftext%3E%3C%2Fsvg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=JetBrains+Mono:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #f6f1e4;
+    --paper-line: rgba(58, 74, 94, 0.14);
+    --paper-line-strong: rgba(58, 74, 94, 0.26);
+    --ink: #26313f;
+    --ink-soft: #5b6b7d;
+    --card-bg: #fffdf7;
+    --card-border: #ddd2b6;
+    --accent: #2f7d6b;
+    --accent-strong: #1f5c4e;
+    --accent-soft: rgba(47, 125, 107, 0.12);
+    --accent-ink: #f5fbf9;
+    --good: #3f7a52;
+    --good-soft: rgba(63, 122, 82, 0.14);
+    --bad: #b3413a;
+    --bad-soft: rgba(179, 65, 58, 0.12);
+    --shadow: rgba(38, 49, 63, 0.16);
+    --graph-grid: rgba(58, 74, 94, 0.14);
+    --graph-axis: rgba(38, 49, 63, 0.55);
+    --graph-stroke-a: #2f7d6b;
+    --graph-stroke-b: #c1483f;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #1b2330;
+      --paper-line: rgba(238, 242, 240, 0.07);
+      --paper-line-strong: rgba(238, 242, 240, 0.15);
+      --ink: #edf1ef;
+      --ink-soft: #a3aebb;
+      --card-bg: #232e3d;
+      --card-border: #3a4a61;
+      --accent: #5fd1b3;
+      --accent-strong: #86e0c8;
+      --accent-soft: rgba(95, 209, 179, 0.16);
+      --accent-ink: #0c2620;
+      --good: #7bc794;
+      --good-soft: rgba(123, 199, 148, 0.16);
+      --bad: #ff9a90;
+      --bad-soft: rgba(255, 154, 144, 0.14);
+      --shadow: rgba(0, 0, 0, 0.5);
+      --graph-grid: rgba(238, 242, 240, 0.10);
+      --graph-axis: rgba(238, 242, 240, 0.55);
+      --graph-stroke-a: #5fd1b3;
+      --graph-stroke-b: #ff9179;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #1b2330;
+    --paper-line: rgba(238, 242, 240, 0.07);
+    --paper-line-strong: rgba(238, 242, 240, 0.15);
+    --ink: #edf1ef;
+    --ink-soft: #a3aebb;
+    --card-bg: #232e3d;
+    --card-border: #3a4a61;
+    --accent: #5fd1b3;
+    --accent-strong: #86e0c8;
+    --accent-soft: rgba(95, 209, 179, 0.16);
+    --accent-ink: #0c2620;
+    --good: #7bc794;
+    --good-soft: rgba(123, 199, 148, 0.16);
+    --bad: #ff9a90;
+    --bad-soft: rgba(255, 154, 144, 0.14);
+    --shadow: rgba(0, 0, 0, 0.5);
+    --graph-grid: rgba(238, 242, 240, 0.10);
+    --graph-axis: rgba(238, 242, 240, 0.55);
+    --graph-stroke-a: #5fd1b3;
+    --graph-stroke-b: #ff9179;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background:
+      repeating-linear-gradient(0deg, var(--paper-line) 0, var(--paper-line) 1px, transparent 1px, transparent 32px),
+      repeating-linear-gradient(90deg, var(--paper-line) 0, var(--paper-line) 1px, transparent 1px, transparent 32px),
+      var(--paper);
+    color: var(--ink);
+    font-family: "Source Sans 3", ui-sans-serif, system-ui, sans-serif;
+    display: flex;
+    justify-content: center;
+    padding: clamp(20px, 4vw, 56px) 18px 80px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+  }
+
+  .wrap { width: 100%; max-width: 900px; }
+  header { text-align: center; margin-bottom: 22px; }
+
+  .eyebrow {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--accent); font-weight: 600;
+  }
+
+  h1 {
+    font-family: "Fraunces", Georgia, serif; font-weight: 600;
+    font-size: clamp(1.9rem, 5vw, 2.6rem); margin: 6px 0 8px; text-wrap: balance;
+  }
+
+  header p { color: var(--ink-soft); font-size: 1rem; max-width: 60ch; margin: 0 auto; line-height: 1.55; }
+
+  .toolbar {
+    position: sticky; top: 12px; z-index: 5;
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    margin: 22px 0 26px; padding: 12px 16px; flex-wrap: wrap;
+    background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 14px;
+    box-shadow: 0 10px 26px -16px var(--shadow);
+  }
+  .score-box { display: flex; align-items: baseline; gap: 8px; }
+  .score-num { font-family: "JetBrains Mono", monospace; font-size: 1.3rem; font-weight: 700; color: var(--accent-strong); font-variant-numeric: tabular-nums; }
+  .score-label { font-size: 0.78rem; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.06em; }
+  .score-group { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .score-divider { width: 1px; align-self: stretch; min-height: 24px; background: var(--card-border); }
+  .exam-score-box .score-num { color: var(--ink); }
+  .exam-score-box .score-label { display: flex; align-items: center; gap: 5px; }
+  .exam-score-box .score-label svg { width: 11px; height: 11px; flex-shrink: 0; }
+
+  .exam-badge {
+    display: inline-flex; align-items: center; gap: 5px; font-size: 0.68rem; font-weight: 700;
+    padding: 3px 9px; border-radius: 20px; letter-spacing: 0.02em; white-space: nowrap;
+  }
+  .exam-badge svg { width: 11px; height: 11px; flex-shrink: 0; }
+  .exam-badge.exam-good { background: var(--good-soft); color: var(--good); }
+  .exam-badge.exam-bad { background: var(--bad-soft); color: var(--bad); }
+
+  button { font-family: inherit; cursor: pointer; }
+  button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .icon-btn {
+    display: inline-flex; align-items: center; gap: 7px; background: var(--card-bg);
+    border: 1px solid var(--card-border); color: var(--ink); padding: 9px 14px;
+    border-radius: 9px; font-size: 0.86rem; font-weight: 600;
+    transition: border-color 0.15s ease, transform 0.1s ease;
+  }
+  .icon-btn:hover { border-color: var(--accent); }
+  .icon-btn:active { transform: translateY(1px); }
+  .icon-btn svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+  .group-head {
+    margin: 34px 0 14px; padding-bottom: 8px; border-bottom: 1.5px solid var(--paper-line-strong);
+  }
+  .group-head .gnum {
+    font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 1.3rem; color: var(--ink);
+  }
+  .group-head .gdesc { font-size: 0.92rem; color: var(--ink-soft); margin-top: 2px; }
+
+  .qcard {
+    background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px;
+    box-shadow: 0 14px 32px -22px var(--shadow), 0 2px 8px -2px var(--shadow);
+    padding: clamp(16px, 3vw, 24px); margin-bottom: 18px;
+  }
+
+  .qcard-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
+  .qcard-head .qtitle { display: flex; align-items: center; gap: 10px; }
+  .qlabel { font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 1.1rem; }
+  .qpoints {
+    font-family: "JetBrains Mono", monospace; font-size: 0.68rem; letter-spacing: 0.05em;
+    color: var(--ink-soft); background: var(--paper-line); padding: 2px 8px; border-radius: 20px;
+  }
+
+  .qprompt { font-size: 1rem; line-height: 1.7; margin-bottom: 14px; }
+  .qprompt .math { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 1.02rem; }
+  .qprompt .frac { display: inline-flex; flex-direction: column; vertical-align: middle; text-align: center; margin: 0 3px; line-height: 1.15; }
+  .qprompt .frac .num { border-bottom: 1.3px solid currentColor; padding: 0 3px 1px; }
+  .qprompt .frac .den { padding: 1px 3px 0; }
+
+  .qinputs { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin-bottom: 14px; }
+  .qinputs .field-label { font-size: 0.86rem; color: var(--ink-soft); font-weight: 600; }
+  .qinputs input[type="text"], .qinputs select {
+    font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 0.95rem;
+    background: var(--paper); border: 1.5px solid var(--card-border); border-radius: 8px;
+    padding: 8px 10px; color: var(--ink); min-width: 92px;
+  }
+  .qinputs select { font-family: "Source Sans 3", sans-serif; min-width: 190px; }
+  .qinputs input:focus, .qinputs select:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .qinputs .subrow {
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    padding: 8px 10px; border: 1.5px dashed var(--card-border); border-radius: 10px;
+  }
+  .qinputs label.chk { display: inline-flex; align-items: center; gap: 6px; font-size: 0.86rem; color: var(--ink-soft); font-weight: 600; }
+  .qinputs .hidden { display: none !important; }
+  .mc-row { display: flex; flex-wrap: wrap; gap: 8px; }
+  .mc-opt {
+    border: 1.5px solid var(--card-border); border-radius: 9px; padding: 8px 13px;
+    font-size: 0.88rem; background: var(--card-bg); color: var(--ink); font-weight: 600;
+    transition: border-color 0.15s ease, background 0.15s ease;
+  }
+  .mc-opt:hover { border-color: var(--accent); }
+  .mc-opt.selected { border-color: var(--accent); background: var(--accent-soft); color: var(--accent-strong); }
+
+  .qactions { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; }
+  .btn-primary {
+    background: var(--accent); color: var(--accent-ink); border: none; padding: 10px 20px;
+    border-radius: 10px; font-size: 0.92rem; font-weight: 700;
+    box-shadow: 0 8px 16px -8px var(--accent-strong); transition: transform 0.1s ease;
+  }
+  .btn-primary:active { transform: translateY(1px); }
+  .btn-secondary {
+    background: transparent; border: 1.5px solid var(--card-border); color: var(--ink);
+    padding: 9px 18px; border-radius: 10px; font-size: 0.92rem; font-weight: 700;
+    transition: border-color 0.15s ease;
+  }
+  .btn-secondary:hover { border-color: var(--accent); }
+
+  .qfeedback {
+    font-size: 0.9rem; font-weight: 700; padding: 9px 13px; border-radius: 9px; margin-bottom: 10px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .qfeedback.good { background: var(--good-soft); color: var(--good); }
+  .qfeedback.bad { background: var(--bad-soft); color: var(--bad); }
+  .qfeedback svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+  .qsolution {
+    background: var(--accent-soft); border: 1px solid var(--card-border); border-left: 4px solid var(--accent);
+    border-radius: 0 12px 12px 0; padding: 14px 16px; font-size: 0.92rem; line-height: 1.7;
+  }
+  .qsolution .sol-label {
+    font-family: "JetBrains Mono", monospace; font-size: 0.68rem; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--accent-strong); font-weight: 700; display: block; margin-bottom: 6px;
+  }
+  .qsolution .step { margin: 3px 0; }
+  .qsolution .final { margin-top: 8px; font-weight: 700; font-family: "JetBrains Mono", monospace; }
+
+  .hidden { display: none !important; }
+
+  /* ---- additions for this walkthrough ---- */
+  .qprompt .frac { display: inline-flex; flex-direction: column; vertical-align: middle; text-align: center; margin: 0 3px; line-height: 1.15; }
+  .qgraph-wrap { display: flex; justify-content: center; margin: 10px 0 16px; }
+  .qgraph-wrap canvas { width: 100%; max-width: 440px; height: auto; display: block; }
+  .stim .qcard-head { margin-bottom: 4px; }
+  .stim .qgraph-wrap { margin: 6px 0 4px; }
+  .stim-note { text-align: center; font-size: 0.85rem; color: var(--ink-soft); }
+  .qfeedback span { min-width: 0; }
+  .qfeedback .fnote { font-weight: 600; opacity: 0.9; }
+  .qcard-head, .qcard-head .qtitle { flex-wrap: wrap; row-gap: 8px; }
+  .hintline { margin-top: 8px; font-size: 0.88rem; color: var(--ink-soft); }
+  .stu { display: inline-block; margin: 8px 0 8px 6px; padding: 4px 12px; font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 0.98rem; background: var(--accent-soft); border: 1px dashed var(--card-border); border-radius: 8px; }
+  .qsolution .nt { color: var(--ink-soft); font-size: 0.88rem; }
+  .qsolution .sol-fig { margin: 12px 0 0; }
+  .tbl-show { border-collapse: collapse; margin: 8px 0 12px; font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 0.92rem; background: var(--paper); }
+  .tbl-show th, .tbl-show td { border: 1.5px solid var(--card-border); padding: 5px 12px; text-align: center; }
+  .tbl-show th { background: var(--accent-soft); color: var(--ink-soft); }
+  .mc-row { max-width: 100%; }
+  .mc-opt { text-align: left; }
+  .qinputs input[type="text"] { max-width: 100%; }
+
+  /* intro + name */
+  .howto { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: clamp(16px, 3vw, 26px); box-shadow: 0 14px 32px -22px var(--shadow); line-height: 1.65; }
+  .howto h2 { font-family: "Fraunces", Georgia, serif; font-size: 1.2rem; margin: 0 0 8px; }
+  .howto ol { margin: 8px 0 14px; padding-left: 22px; }
+  .howto li { margin: 5px 0; }
+  .loop { display: flex; flex-wrap: wrap; gap: 10px; margin: 14px 0 18px; }
+  .loop > div { flex: 1 1 150px; background: var(--paper); border: 1px solid var(--card-border); border-radius: 12px; padding: 10px 12px; font-size: 0.9rem; }
+  .loop b { display: block; font-family: "JetBrains Mono", monospace; font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent-strong); margin-bottom: 3px; }
+  .name-row { display: flex; flex-wrap: wrap; gap: 10px 12px; align-items: center; margin-top: 8px; }
+  .name-row label { font-weight: 700; font-size: 0.92rem; }
+  .name-row input { flex: 1 1 240px; max-width: 340px; font-size: 1rem; padding: 10px 12px; background: var(--paper); border: 1.5px solid var(--card-border); border-radius: 9px; color: var(--ink); font-family: inherit; }
+  .name-row input:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .err { color: var(--bad); font-weight: 700; font-size: 0.88rem; margin-top: 6px; }
+
+  /* sticky bar */
+  .topbar { position: sticky; top: 8px; z-index: 6; margin: 0 0 22px; padding: 10px 12px; background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 14px; box-shadow: 0 10px 26px -16px var(--shadow); display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; }
+  .pills { display: flex; flex-wrap: wrap; gap: 6px; flex: 1 1 420px; }
+  .stage-pill { display: inline-flex; align-items: center; gap: 6px; font-size: 0.76rem; font-weight: 700; padding: 6px 11px; border-radius: 20px; background: var(--paper-line); color: var(--ink-soft); border: 1px solid transparent; transition: background 0.2s ease, color 0.2s ease; }
+  .stage-pill .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--ink-soft); flex-shrink: 0; }
+  .stage-pill.done { background: var(--good-soft); color: var(--good); }
+  .stage-pill.done .dot { background: var(--good); }
+  .stage-pill.current { border-color: var(--accent); color: var(--ink); box-shadow: 0 0 0 1.5px var(--accent); }
+  .stage-pill.bonus { border-style: dashed; border-color: var(--card-border); }
+  .stage-pill:hover { border-color: var(--accent); }
+  .stats { display: flex; align-items: center; gap: 14px; margin-left: auto; font-family: "JetBrains Mono", monospace; font-size: 0.82rem; color: var(--ink-soft); }
+  .stats b { color: var(--accent-strong); font-size: 1.02rem; font-variant-numeric: tabular-nums; }
+  .stats .who { font-family: "Source Sans 3", sans-serif; font-weight: 600; max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  /* stage frame */
+  .stage-head { margin-bottom: 18px; }
+  .stage-kicker { font-family: "JetBrains Mono", monospace; font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); font-weight: 600; }
+  .stage-head h2 { font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: clamp(1.55rem, 4vw, 2.1rem); margin: 4px 0 8px; text-wrap: balance; }
+  .stage-meta { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 12px; color: var(--ink-soft); }
+  .time-chip { font-family: "JetBrains Mono", monospace; font-size: 0.72rem; background: var(--paper-line); border-radius: 20px; padding: 3px 10px; white-space: nowrap; }
+  .goal { font-size: 1rem; }
+  .stage-body { display: flex; flex-direction: column; gap: 14px; }
+  .stage-body > * { margin: 0; }
+  .para { font-size: 1.02rem; line-height: 1.7; max-width: 70ch; }
+  .para.small, .small { font-size: 0.9rem; color: var(--ink-soft); }
+  h3.sec { font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 1.25rem; margin: 8px 0 0; }
+  code { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 0.9em; background: var(--accent-soft); padding: 1px 6px; border-radius: 5px; color: var(--accent-strong); }
+  .stage-foot { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; margin-top: 34px; padding-top: 18px; border-top: 1.5px solid var(--paper-line-strong); }
+  .stage-foot .foot-mid { flex: 1; }
+
+  /* callouts */
+  .callout { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 14px; padding: 14px 18px; font-size: 0.98rem; line-height: 1.65; }
+  .callout p { margin: 6px 0; }
+  .callout .ct { font-family: "JetBrains Mono", monospace; font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; margin-bottom: 4px; }
+  .c-key { background: var(--accent-soft); border-color: var(--accent); }
+  .c-key .ct { color: var(--accent-strong); }
+  .c-warn { background: var(--bad-soft); border-color: var(--bad); }
+  .c-warn .ct { color: var(--bad); }
+  .c-tip { background: var(--card-bg); border-style: dashed; }
+  .c-tip .ct { color: var(--ink-soft); }
+  .c-good { background: var(--good-soft); border-color: var(--good); }
+  .c-good .ct { color: var(--good); }
+  ol.inl { margin: 6px 0 4px; padding-left: 22px; }
+  ol.inl li { margin: 4px 0; }
+  ol.method { counter-reset: m; list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; }
+  ol.method li { counter-increment: m; position: relative; padding: 12px 16px 12px 52px; background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; line-height: 1.6; }
+  ol.method li::before { content: counter(m); position: absolute; left: 14px; top: 11px; width: 26px; height: 26px; border-radius: 50%; background: var(--accent); color: var(--accent-ink); display: grid; place-items: center; font: 700 0.82rem "JetBrains Mono", monospace; }
+  .vocab { width: 100%; border-collapse: collapse; background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; overflow: hidden; font-size: 0.94rem; line-height: 1.5; }
+  .vocab th, .vocab td { padding: 9px 12px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--card-border); }
+  .vocab thead th { background: var(--accent-soft); font-family: "JetBrains Mono", monospace; font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent-strong); }
+  .vocab tbody tr:last-child td, .vocab tbody tr:last-child th { border-bottom: 0; }
+  .vocab.combo th[scope], .vocab.combo tbody th { background: var(--accent-soft); font-size: 0.9rem; }
+  .vocab.typing { width: auto; min-width: min(100%, 420px); }
+  @media (max-width: 560px) { .vocab th, .vocab td { padding: 7px 8px; font-size: 0.86rem; } }
+  .reveal { background: var(--card-bg); border: 1px dashed var(--card-border); border-radius: 12px; padding: 4px 16px; }
+  .reveal summary { cursor: pointer; font-weight: 700; padding: 10px 0; color: var(--accent-strong); }
+  .reveal-body { padding: 2px 0 12px; line-height: 1.65; }
+  .reveal-body p { margin: 6px 0; }
+  .cpbanner { display: flex; flex-direction: column; gap: 4px; padding: 12px 16px; border: 1.5px dashed var(--accent); border-radius: 12px; background: var(--accent-soft); font-size: 0.94rem; line-height: 1.55; margin-top: 10px !important; }
+  .cpbanner .cpb-t { font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 1.15rem; }
+
+  /* figures */
+  .fig { margin: 0; }
+  .fig figcaption { text-align: center; color: var(--ink-soft); font-size: 0.92rem; line-height: 1.5; max-width: 62ch; margin: 0 auto; }
+  .fig .qgraph-wrap { margin: 6px 0 4px; }
+
+  /* worked example */
+  .worked { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: clamp(14px, 3vw, 22px); box-shadow: 0 14px 32px -22px var(--shadow); }
+  .worked-tag { font-family: "JetBrains Mono", monospace; font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 700; color: var(--accent-strong); }
+  .worked h4 { font-family: "Fraunces", Georgia, serif; font-size: 1.2rem; margin: 2px 0 6px; }
+  .worked-intro { margin: 0 0 6px; color: var(--ink-soft); }
+  .wsteps { list-style: none; padding: 0; margin: 6px 0 10px; display: flex; flex-direction: column; gap: 8px; counter-reset: w; }
+  .wsteps:empty { display: none; }
+  .wsteps li { counter-increment: w; padding: 9px 12px 9px 44px; position: relative; border-radius: 10px; background: var(--paper); line-height: 1.6; font-size: 0.97rem; }
+  .wsteps li::before { content: counter(w); position: absolute; left: 12px; top: 9px; width: 22px; height: 22px; border-radius: 50%; background: var(--paper-line-strong); color: var(--ink); display: grid; place-items: center; font: 700 0.74rem "JetBrains Mono", monospace; }
+  .wsteps li.cur { background: var(--accent-soft); }
+  .wsteps li.cur::before { background: var(--accent); color: var(--accent-ink); }
+  .wbtns { display: flex; flex-wrap: wrap; gap: 10px; }
+  button:disabled { opacity: 0.5; cursor: default; }
+
+  /* scanner */
+  .scanner { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: clamp(14px, 3vw, 22px); box-shadow: 0 14px 32px -22px var(--shadow); }
+  .scan-modes { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+  .scan-slide { display: flex; align-items: center; gap: 12px; max-width: 520px; margin: 0 auto 14px; }
+  .scan-slide label { font-weight: 700; font-size: 0.92rem; white-space: nowrap; }
+  .scan-slide input[type="range"] { flex: 1; accent-color: var(--accent); height: 28px; }
+  .scan-read { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+  .scan-read .tile { background: var(--paper); border: 1.5px solid var(--card-border); border-radius: 12px; padding: 8px 12px; min-width: 0; }
+  .scan-read .tl { display: block; font-size: 0.72rem; color: var(--ink-soft); font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 2px; }
+  .scan-read .tv { font-family: "JetBrains Mono", monospace; font-weight: 700; font-size: 1.05rem; font-variant-numeric: tabular-nums; }
+  .scan-read .sg .tv, .scan-read .dr .tv { font-size: 0.92rem; font-family: "Source Sans 3", sans-serif; }
+  .tile.t-pos { background: var(--good-soft); border-color: var(--good); }
+  .tile.t-neg { background: var(--bad-soft); border-color: var(--bad); }
+  .tile.t-zero { background: var(--accent-soft); border-color: var(--accent); }
+  @media (max-width: 700px) { .scan-read { grid-template-columns: 1fr 1fr; } }
+
+  /* cards */
+  .cards { display: flex; flex-direction: column; }
+  .group-head { margin: 22px 0 12px; }
+  .kind-chip { font-family: "JetBrains Mono", monospace; font-size: 0.66rem; letter-spacing: 0.05em; padding: 3px 9px; border-radius: 20px; background: var(--paper-line); color: var(--ink-soft); white-space: nowrap; }
+  .kind-chip.k-cp, .kind-chip.k-exam { background: var(--accent-soft); color: var(--accent-strong); font-weight: 700; }
+  .kind-chip.k-bonus { background: var(--good-soft); color: var(--good); font-weight: 700; }
+
+  /* summary */
+  .sumcard { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: clamp(14px, 3vw, 24px); box-shadow: 0 14px 32px -22px var(--shadow); overflow-x: auto; }
+  .sum-id { display: flex; flex-wrap: wrap; gap: 8px 40px; margin-bottom: 14px; }
+  .sum-id .tl { font-size: 0.72rem; color: var(--ink-soft); font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
+  .sum-name { font-family: "Fraunces", Georgia, serif; font-size: 1.4rem; font-weight: 600; }
+  .sumtbl { width: 100%; border-collapse: collapse; font-size: 0.94rem; }
+  .sumtbl th, .sumtbl td { padding: 8px 10px; border-bottom: 1px solid var(--card-border); text-align: left; }
+  .sumtbl thead th { font-family: "JetBrains Mono", monospace; font-size: 0.68rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-soft); }
+  .sumtbl td.num { font-family: "JetBrains Mono", monospace; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .sumtbl tr.bonus td { color: var(--ink-soft); font-style: italic; }
+  .sumtbl tfoot td { font-weight: 700; border-bottom: 0; border-top: 2px solid var(--paper-line-strong); }
+  .sum-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+  .copied { color: var(--good); font-weight: 700; }
+  .misslist { margin: 4px 0 8px; padding-left: 20px; }
+  .linkbtn { background: none; border: 0; padding: 0; font: inherit; font-weight: 700; color: var(--accent-strong); text-decoration: underline; cursor: pointer; }
+
+  /* print: only the summary */
+  #printSummary { display: none; }
+  @media print {
+    html, body { background: #fff !important; }
+    body { display: block !important; padding: 0 !important; min-height: 0 !important; background-image: none !important; }
+    .wrap { display: none !important; }
+    #printSummary { display: block !important; color: #111; background: #fff; font-family: "Source Sans 3", Arial, sans-serif; padding: 0.4in 0.5in; }
+    #printSummary h1 { font-family: "Fraunces", Georgia, serif; font-size: 22pt; margin: 0; color: #111; }
+    #printSummary .ps-sub { color: #555; margin: 2px 0 16px; font-size: 11pt; }
+    #printSummary .ps-id { display: flex; gap: 40px; margin-bottom: 14px; font-size: 12pt; }
+    #printSummary .sumtbl { font-size: 11pt; }
+    #printSummary .sumtbl th, #printSummary .sumtbl td { border-bottom: 1px solid #bbb; color: #111; }
+    #printSummary .sumtbl thead th { color: #555; }
+    #printSummary .sumtbl tr.bonus td { color: #555; }
+    #printSummary .sumtbl tfoot td { border-top: 2px solid #333; }
+    #printSummary .ps-note { color: #555; font-size: 10pt; margin-top: 14px; }
+    @page { margin: 0.5in; }
+  }
+  @media (max-width: 640px) {
+    .topbar { position: static; }
+    .stats { margin-left: 0; width: 100%; justify-content: space-between; }
+  }
+
+  /* ---- optimization walkthrough additions ---- */
+  .mx { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 0.9em; background: var(--accent-soft); color: var(--ink); padding: 1px 6px; border-radius: 5px; overflow-wrap: anywhere; }
+  .mx sup { font-size: 0.72em; line-height: 0; }
+  .prob { display: block; }
+  .pstory { font-size: 1.04rem; line-height: 1.65; margin: 4px 0 8px; }
+  .pfig { display: flex; justify-content: center; margin: 4px 0 12px; }
+  .pfig:empty { display: none; }
+  .fsvg { width: 100%; max-width: 340px; height: auto; }
+  .sv-line { stroke: var(--ink); stroke-width: 1.6; fill: none; }
+  .sv-sheet { fill: var(--accent-soft); stroke: var(--ink); stroke-width: 1.8; }
+  .sv-cut { fill: var(--card-bg); stroke: var(--ink-soft); stroke-width: 1.4; stroke-dasharray: 4 3; }
+  .sv-fold { stroke: var(--ink-soft); stroke-width: 1.2; stroke-dasharray: 4 3; fill: none; }
+  .sv-side { fill: var(--paper-line-strong); stroke: var(--ink); stroke-width: 1.6; }
+  .sv-open { fill: var(--card-bg); stroke: var(--ink); stroke-width: 1.6; stroke-dasharray: 5 3; }
+  .sv-txt { fill: var(--ink); font-family: "JetBrains Mono", monospace; font-size: 13px; }
+  .sv-b { font-weight: 700; font-size: 15px; }
+  .sv-note { fill: var(--ink-soft); font-style: italic; font-family: "Source Sans 3", sans-serif; font-size: 12px; }
+  .sv-wall { fill: var(--paper-line-strong); stroke: var(--ink); stroke-width: 1.2; }
+  .sv-wallt { fill: var(--ink-soft); font-size: 10px; font-family: "Source Sans 3", sans-serif; text-anchor: middle; }
+  .sv-wallln { stroke: var(--ink); stroke-width: 4.5; }
+  .sv-fence { stroke: var(--accent-strong); stroke-width: 2.6; fill: var(--accent-soft); }
+  .sv-axis { stroke: var(--ink-soft); stroke-width: 1.2; }
+  .sv-curve { stroke: var(--accent-strong); stroke-width: 2.6; fill: none; }
+  .sv-dash { stroke: var(--bad); stroke-width: 1.8; stroke-dasharray: 5 4; }
+  .sv-pt { fill: var(--ink); }
+  .sv-pt2 { fill: var(--accent); stroke: var(--ink); stroke-width: 1.2; }
+
+  .typehelp { margin: 4px 0 10px; font-size: 0.9rem; }
+  .typehelp summary { cursor: pointer; color: var(--accent-strong); font-weight: 600; }
+  .typehelp ul { margin: 6px 0 2px; padding-left: 20px; line-height: 1.6; }
+  .psteps { display: flex; flex-direction: column; gap: 10px; margin-top: 4px; }
+  .pstep { border: 1px solid var(--card-border); border-radius: 12px; background: var(--paper); }
+  .pstep.locked { opacity: 0.55; }
+  .pstep.active { border-color: var(--accent); box-shadow: 0 0 0 1.5px var(--accent); background: var(--card-bg); }
+  .pstep.done { border-left: 4px solid var(--good); }
+  .phead { display: flex; align-items: center; gap: 10px; padding: 9px 12px; flex-wrap: wrap; }
+  .pnum { width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; background: var(--paper-line-strong); color: var(--ink); font-weight: 700; font-size: 0.85rem; flex: none; }
+  .pstep.active .pnum { background: var(--accent); color: var(--accent-ink); }
+  .pstep.done .pnum { background: var(--good); color: var(--accent-ink); }
+  .ptitle { font-weight: 700; }
+  .pbadge { margin-left: auto; font-size: 0.78rem; font-family: "JetBrains Mono", monospace; color: var(--ink-soft); }
+  .pbody { padding: 0 14px 14px; }
+  .pprompt { line-height: 1.65; margin: 2px 0 10px; }
+  .pfields { display: flex; flex-direction: column; gap: 10px; margin-bottom: 12px; }
+  .fld { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; }
+  .fld label { font-weight: 600; font-size: 0.93rem; flex: 0 1 15em; }
+  .fld input[type="text"], .fld select { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 0.98rem; padding: 8px 10px; border: 1.5px solid var(--card-border); border-radius: 9px; background: var(--card-bg); color: var(--ink); min-width: 12em; flex: 1 1 14em; max-width: 24em; }
+  .fld select { font-family: "Source Sans 3", sans-serif; }
+  .fld input:focus, .fld select:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .fld.ok input, .fld.ok select { border-color: var(--good); background: var(--good-soft); }
+  .fld.bad input, .fld.bad select { border-color: var(--bad); background: var(--bad-soft); }
+  .fmsg { flex-basis: 100%; font-size: 0.9rem; color: var(--bad); line-height: 1.5; }
+  .fld.ok .fmsg { color: var(--good); }
+  .pactions { display: flex; flex-wrap: wrap; gap: 8px; }
+  .pfeed { margin-top: 10px; }
+  .phint { margin-top: 10px; padding: 9px 13px; background: var(--accent-soft); border-radius: 10px; font-size: 0.96rem; line-height: 1.6; }
+  .phint .hline + .hline { margin-top: 6px; }
+  .pans { margin-top: 10px; padding: 10px 14px; background: var(--card-bg); border: 1px dashed var(--card-border); border-radius: 10px; line-height: 1.7; }
+  .pans p { margin: 4px 0; }
+  .pans ul { margin: 4px 0; padding-left: 20px; }
+  .pans .insight, .insight { font-style: italic; color: var(--ink-soft); }
+  .pdone { margin-top: 12px; padding: 10px 14px; border-radius: 10px; background: var(--good-soft); border: 1px solid var(--good); font-weight: 600; }
+  .pdone.part { background: var(--paper); border-color: var(--card-border); font-weight: 400; }
+  .worked .wsteps li .wt { font-weight: 700; display: block; margin-bottom: 2px; }
+  .worked .wstory { line-height: 1.65; margin: 4px 0 8px; }
+  .worked .wsteps li p { margin: 3px 0; }
+  .worked .wsteps li ul { margin: 3px 0; padding-left: 20px; }
+  .lt-intro p { margin: 6px 0; }
+  .wsteps li li { counter-increment: none; padding: 0; background: none; border-radius: 0; font-size: inherit; }
+  .wsteps li li::before { content: none; display: none; }
+  .pbadge svg, .pdone svg { width: 14px; height: 14px; vertical-align: -2px; flex: none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Calculus 1 &middot; Applications of the Derivative</div>
+    <h1>Optimization: A Guided Walkthrough</h1>
+    <p>A self-paced lesson. You start with a quick critical-point refresher, practice the optimization recipe on a simple problem, then work through four classic word problems: a box, a fenced pen, a cylinder, and the closest point on a curve. Everything you need is on this page.</p>
+  </header>
+
+  <section id="intro" class="howto">
+    <h2>How today works</h2>
+    <p>You will work through six short stages at your own pace. Plan on about <b>55 minutes</b>. Keep scratch paper, a pencil, and a calculator next to you. <b>Draw a picture on paper for every word problem.</b></p>
+    <div class="loop">
+      <div><b>1 Learn</b>Read the explanation and step through the worked example.</div>
+      <div><b>2 Practice</b>Unscored. Press <i>New version</i> as many times as you like.</div>
+      <div><b>3 Checkpoint</b>Scored, one point per step. Your first check on each step counts.</div>
+    </div>
+    <ol>
+      <li>Each problem is broken into steps. A step unlocks when you get the one before it. Type functions like <code>x(20-x)</code> or <code>2pir^2 + 700/r</code>, and intervals like <code>(0, 15)</code>. Stage 2 explains exactly how.</li>
+      <li><b>Hints are free.</b> Opening an answer <i>before</i> you check a checkpoint step scores 0 for that step, so try it first.</li>
+      <li>The page records your scores and your time on each stage. At the end, go to <b>Summary</b> and take a screenshot of it.</li>
+      <li>Do not refresh or close this tab until you have turned in your summary. Your progress is not saved if the page reloads.</li>
+    </ol>
+    <div class="callout c-key"><div class="ct">When you finish</div><p><b>Take a screenshot of your Summary screen and upload it to the Google Classroom assignment immediately</b> after you finish. Do it before you close this tab, because nothing on this page is saved.</p><p>On a Chromebook, press <b>Ctrl + Show windows</b> (the key in the top row that looks like a rectangle with two lines beside it). To capture just part of the screen, press <b>Ctrl + Shift + Show windows</b> and drag a box. Screenshots are saved in your Downloads folder. If the whole table does not fit on the screen, press <b>Ctrl</b> and <b>&minus;</b> to zoom out first. The Summary screen repeats these steps.</p></div>
+    <div class="name-row"><label for="stuName">Your first and last name:</label><input id="stuName" type="text" autocomplete="off" maxlength="60"><button type="button" class="btn-primary" id="beginBtn">Begin</button></div>
+    <div id="nameErr" class="err hidden">Type your name first so it appears on your summary.</div>
+  </section>
+
+  <div id="lesson" class="hidden">
+    <div id="navbar" class="topbar">
+      <div class="pills" id="pills"></div>
+      <div class="stats"><span class="who" id="whoName"></span><span title="Checkpoint points recorded so far">Score <b id="stScore">0 / 0</b></span><span title="Time since you began">Time <b id="stClock">0:00</b></span></div>
+    </div>
+    <div id="stages"></div>
+  </div>
+</div>
+<section id="printSummary"></section>
+
+<script>
+(function () {
+  "use strict";
+  // ============================================================
+  // Utilities (shared with the rest of the practice-test family)
+  // ============================================================
+  function randInt(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+  function randNonZeroInt(min, max) { var v; do { v = randInt(min, max); } while (v === 0); return v; }
+  function randIntExcluding(exclude, min, max) {
+    var v, tries = 0;
+    do { v = randInt(min, max); tries++; } while (exclude.indexOf(v) !== -1 && tries < 200);
+    return v;
+  }
+  function randChoice(arr) { return arr[randInt(0, arr.length - 1)]; }
+  function randBool() { return Math.random() < 0.5; }
+  function shuffle(arr) {
+    var a = arr.slice();
+    for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; }
+    return a;
+  }
+  // weighted pick: list of [value, weight]
+  function pickW(list) {
+    var total = 0, i;
+    for (i = 0; i < list.length; i++) total += list[i][1];
+    var r = Math.random() * total;
+    for (i = 0; i < list.length; i++) { r -= list[i][1]; if (r < 0) return list[i][0]; }
+    return list[list.length - 1][0];
+  }
+  function gcdInt(a, b) { a = Math.abs(a); b = Math.abs(b); while (b) { var t = b; b = a % b; a = t; } return a || 1; }
+  function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+
+  // ---- exact rationals (used for slopes / fractional answers) ----
+  function R(n, d) {
+    if (d === undefined) d = 1;
+    if (d < 0) { n = -n; d = -d; }
+    var g = gcdInt(n, d);
+    return { n: n / g, d: d / g };
+  }
+  function rAdd(a, b) { return R(a.n * b.d + b.n * a.d, a.d * b.d); }
+  function rSub(a, b) { return R(a.n * b.d - b.n * a.d, a.d * b.d); }
+  function rMul(a, b) { return R(a.n * b.n, a.d * b.d); }
+  function rDiv(a, b) { return R(a.n * b.d, a.d * b.n); }
+  function rVal(a) { return a.n / a.d; }
+  function rEq(a, b) { return a.n === b.n && a.d === b.d; }
+  function rIsInt(a) { return a.d === 1; }
+
+  // ---- HTML helpers ----
+  function frac(numHtml, denHtml) {
+    return "<span class=\"frac\"><span class=\"num\">" + numHtml + "</span><span class=\"den\">" + denHtml + "</span></span>";
+  }
+  function radical(innerHtml, index) {
+    var idx = index ? "<span class=\"idx\">" + index + "</span>" : "";
+    return "<span class=\"radical\">" + idx + "<span class=\"rsym\">&radic;</span><span class=\"rad-inner\">" + innerHtml + "</span></span>";
+  }
+  function mn(n) { return n < 0 ? "&minus;" + (-n) : String(n); }          // signed number as html
+  function par(n) { return n < 0 ? "(&minus;" + (-n) + ")" : String(n); }  // parenthesise negatives
+  function rHtml(a) {
+    if (a.d === 1) return mn(a.n);
+    return (a.n < 0 ? "&minus;" : "") + frac(String(Math.abs(a.n)), String(a.d));
+  }
+  function rPlain(a) { return a.d === 1 ? String(a.n) : a.n + "/" + a.d; }
+  // polynomial from [[coef, labelHtml], ...] (integer coefficients; zero terms skipped)
+  function poly(terms) {
+    var out = "", first = true;
+    terms.forEach(function (t) {
+      var c = t[0], l = t[1];
+      if (c === 0) return;
+      var a = Math.abs(c), cs = (a === 1 && l) ? "" : String(a);
+      if (first) { out += (c < 0 ? "&minus;" : "") + cs + l; first = false; }
+      else out += " " + (c < 0 ? "&minus;" : "+") + " " + cs + l;
+    });
+    return first ? "0" : out;
+  }
+  // m x + b with rational slope m (non-zero) and integer intercept b
+  function linHtml(m, b, v) {
+    v = v || "x";
+    var an = Math.abs(m.n), s;
+    if (m.d === 1) s = (m.n < 0 ? "&minus;" : "") + (an === 1 ? "" : an) + v;
+    else s = (m.n < 0 ? "&minus;" : "") + frac(String(an), String(m.d)) + v;
+    if (b !== 0) s += " " + (b < 0 ? "&minus;" : "+") + " " + Math.abs(b);
+    return s;
+  }
+  // "whiteboard" stack: lines = [[exprHtml, noteHtml], ...]
+  function wb(lines) {
+    return "<div class=\"wb\">" + lines.map(function (l) {
+      return "<div class=\"ln\"><span class=\"ex\">" + l[0] + "</span>" + (l[1] ? "<span class=\"nt\">" + l[1] + "</span>" : "") + "</div>";
+    }).join("") + "</div>";
+  }
+  // number -> exact-looking string ("2/3" if it is a small-denominator fraction, otherwise 2 decimals)
+  function fmtNum(v) {
+    if (v === Infinity) return "inf";
+    if (v === -Infinity) return "-inf";
+    for (var d = 1; d <= 24; d++) {
+      var n = Math.round(v * d);
+      if (Math.abs(v * d - n) < 1e-9) { var g = gcdInt(n, d); return (n / g) + (d / g === 1 ? "" : "/" + (d / g)); }
+    }
+    return String(Math.round(v * 100) / 100);
+  }
+
+  // ============================================================
+  // Number parsing (typed numeric answers)
+  // ============================================================
+  function normText(raw) {
+    return String(raw === null || raw === undefined ? "" : raw)
+      .replace(/[−‒–—]/g, "-").replace(/ /g, " ").trim().toLowerCase();
+  }
+  // -> { type: "number", value } or { type: "invalid" }.  Accepts 5, -5, +5, 5., .5, 1/2, -3/2, 1.5, "x = 4", "f(2) = -3"
+  function parseAnswer(raw) {
+    var str = normText(raw);
+    if (str === "") return { type: "invalid" };
+    var eq = str.indexOf("=");
+    if (eq !== -1) str = str.slice(eq + 1).trim();
+    str = str.replace(/\s+/g, "").replace(/,/g, "");
+    var m = str.match(/^([+-]?(?:\d+\.?\d*|\.\d+))\/([+-]?(?:\d+\.?\d*|\.\d+))$/);
+    if (m) {
+      var p = parseFloat(m[1]), q = parseFloat(m[2]);
+      if (q !== 0) return { type: "number", value: p / q };
+      return { type: "invalid" };
+    }
+    if (/^[+-]?(?:\d+\.?\d*|\.\d+)$/.test(str)) return { type: "number", value: parseFloat(str) };
+    return { type: "invalid" };
+  }
+  var NUM_HELP = "Type a number (a fraction like 3/2 or a decimal is fine).";
+  // numeric check: expected number, tolerance, optional diag list [{value, msg}] for targeted feedback
+  function numCheck(raw, expected, tol, diags) {
+    var u = parseAnswer(raw);
+    if (u.type === "invalid") return { ok: false, msg: String(raw === null || raw === undefined ? "" : raw).trim() === "" ? "Type your answer in the box first." : "I could not read that as a number. " + NUM_HELP };
+    if (Math.abs(u.value - expected) <= tol) return { ok: true };
+    var msg = "";
+    (diags || []).some(function (d) {
+      if (d.value !== null && d.value !== undefined && isFinite(d.value) && Math.abs(u.value - d.value) <= tol * 0.999 + 1e-9) { msg = d.msg; return true; }
+      return false;
+    });
+    return { ok: false, msg: msg };
+  }
+
+  // ============================================================
+  // Interval notation: hand-typed, parsed, merged, compared
+  // ============================================================
+  function parseBoundToken(raw) {
+    var s = normText(raw).replace(/\s+/g, "");
+    if (["-infinity", "-inf", "-oo", "-∞"].indexOf(s) !== -1) return -Infinity;
+    if (["infinity", "+infinity", "inf", "+inf", "oo", "+oo", "∞", "+∞"].indexOf(s) !== -1) return Infinity;
+    var m = s.match(/^([+-]?\d+(?:\.\d+)?|[+-]?\.\d+)\/([+-]?\d+(?:\.\d+)?)$/);
+    if (m) { var p = parseFloat(m[1]), q = parseFloat(m[2]); if (q !== 0) return p / q; return null; }
+    if (/^[+-]?(?:\d+\.?\d*|\.\d+)$/.test(s)) return parseFloat(s);
+    return null;
+  }
+  var EMPTY_WORDS = ["empty", "empty set", "the empty set", "no solution", "no solutions", "none", "∅", "{}", "dne", "does not exist", "no values", "never"];
+  var ALLREAL_WORDS = ["all reals", "all real numbers", "all real", "reals", "all real numbers.", "r", "ℝ", "all x", "any real number", "all numbers"];
+  function parseIntervalUnion(raw) {
+    if (raw === null || raw === undefined) return { intervals: [], invalid: true };
+    var str = normText(raw);
+    if (str === "") return { intervals: [], invalid: true };
+    var bare = str.replace(/[.\s]+$/, "");
+    if (EMPTY_WORDS.indexOf(bare) !== -1) return { intervals: [], invalid: false };
+    if (ALLREAL_WORDS.indexOf(bare) !== -1) {
+      return { intervals: [{ lo: -Infinity, loIncl: false, hi: Infinity, hiIncl: false }], invalid: false };
+    }
+    var re = /([\(\[])\s*([^,()\[\]]+?)\s*,\s*([^,()\[\]]+?)\s*([\)\]])/g;
+    var m, intervals = [];
+    while ((m = re.exec(str)) !== null) {
+      var lo = parseBoundToken(m[2]), hi = parseBoundToken(m[3]);
+      if (lo === null || hi === null) return { intervals: [], invalid: true };
+      intervals.push({
+        lo: lo, hi: hi,
+        loIncl: m[1] === "[" && lo !== -Infinity && lo !== Infinity,
+        hiIncl: m[4] === "]" && hi !== -Infinity && hi !== Infinity
+      });
+    }
+    if (intervals.length === 0) return { intervals: [], invalid: true };
+    // whatever is left between the intervals may only be union connectors
+    var rest = str.replace(re, " ").replace(/union|∪|\bu\b|\bor\b|[+,;&.\s]/g, "");
+    if (rest !== "") return { intervals: [], invalid: true };
+    return { intervals: intervals, invalid: false };
+  }
+  function cleanIv(a) { return { lo: a.lo, hi: a.hi, loIncl: !!a.loIncl && isFinite(a.lo), hiIncl: !!a.hiIncl && isFinite(a.hi) }; }
+  // union of intervals -> sorted, merged (touching/overlapping pieces fuse; empty pieces vanish)
+  function mergeIntervals(list) {
+    var L = list.map(cleanIv).filter(function (a) { return a.lo < a.hi || (a.lo === a.hi && a.loIncl && a.hiIncl); });
+    L.sort(function (a, b) {
+      if (a.lo !== b.lo) return a.lo < b.lo ? -1 : 1;
+      return (b.loIncl ? 1 : 0) - (a.loIncl ? 1 : 0);
+    });
+    var out = [];
+    L.forEach(function (a) {
+      var last = out[out.length - 1];
+      if (last && (a.lo < last.hi || (a.lo === last.hi && (last.hiIncl || a.loIncl)))) {
+        if (a.hi > last.hi) { last.hi = a.hi; last.hiIncl = a.hiIncl; }
+        else if (a.hi === last.hi) { last.hiIncl = last.hiIncl || a.hiIncl; }
+      } else out.push({ lo: a.lo, loIncl: a.loIncl, hi: a.hi, hiIncl: a.hiIncl });
+    });
+    return out;
+  }
+  function boundEqual(uv, uIncl, ev, eIncl) {
+    if (ev === -Infinity || ev === Infinity) return uv === ev;
+    return uv !== -Infinity && uv !== Infinity && Math.abs(uv - ev) < 0.01 && uIncl === eIncl;
+  }
+  function endpointsOnlyEqual(us, es) {
+    if (us.length !== es.length) return false;
+    for (var i = 0; i < us.length; i++) {
+      var a = us[i], b = es[i];
+      var loOk = (a.lo === b.lo) || (isFinite(a.lo) && isFinite(b.lo) && Math.abs(a.lo - b.lo) < 0.01);
+      var hiOk = (a.hi === b.hi) || (isFinite(a.hi) && isFinite(b.hi) && Math.abs(a.hi - b.hi) < 0.01);
+      if (!loOk || !hiOk) return false;
+    }
+    return true;
+  }
+  // expected: array of {lo,loIncl,hi,hiIncl} -- an empty array means the empty set
+  function intervalAnswerCorrect(parsed, expected) {
+    if (parsed.invalid) return false;
+    var us = mergeIntervals(parsed.intervals), es = mergeIntervals(expected);
+    if (us.length !== es.length) return false;
+    for (var i = 0; i < us.length; i++) {
+      if (!boundEqual(us[i].lo, us[i].loIncl, es[i].lo, es[i].loIncl)) return false;
+      if (!boundEqual(us[i].hi, us[i].hiIncl, es[i].hi, es[i].hiIncl)) return false;
+    }
+    return true;
+  }
+  function sameIntervals(a, b) {
+    var x = mergeIntervals(a), y = mergeIntervals(b);
+    if (x.length !== y.length) return false;
+    for (var i = 0; i < x.length; i++) {
+      if (!boundEqual(x[i].lo, x[i].loIncl, y[i].lo, y[i].loIncl) || !boundEqual(x[i].hi, x[i].hiIncl, y[i].hi, y[i].hiIncl)) return false;
+    }
+    return true;
+  }
+  var IV_HELP = "I could not read that as interval notation. Type it like (-3, 5] or (-inf, 2) U (4, inf), or write empty for no values.";
+  // result of grading one typed interval field -> { ok, msg }
+  function intervalCheck(raw, expected, extra) {
+    var parsed = parseIntervalUnion(raw);
+    if (parsed.invalid) {
+      return { ok: false, msg: normText(raw) === "" ? "Type your answer in the box first." : IV_HELP };
+    }
+    if (intervalAnswerCorrect(parsed, expected)) return { ok: true };
+    var msg = "";
+    var us = mergeIntervals(parsed.intervals), es = mergeIntervals(expected);
+    (extra || []).some(function (x) { if (sameIntervals(parsed.intervals, x.intervals)) { msg = x.msg; return true; } return false; });
+    if (!msg) {
+      if (endpointsOnlyEqual(us, es)) msg = "Your endpoints are right, but check which ones need parentheses and which need brackets.";
+      else if (us.length < es.length && es.length > 1) {
+        var covers = us.some(function (u) { return es.filter(function (e) { return e.lo >= u.lo && e.hi <= u.hi; }).length > 1; });
+        if (covers) msg = "One of your intervals runs straight across a value that is not allowed there. Check whether that value has to be left out (that makes a union).";
+      }
+    }
+    return { ok: false, msg: msg };
+  }
+  function oneIntervalNotation(iv) {
+    var loStr = iv.lo === -Infinity ? "&minus;&infin;" : fmtNum(iv.lo).replace("-", "&minus;");
+    var hiStr = iv.hi === Infinity ? "&infin;" : fmtNum(iv.hi).replace("-", "&minus;");
+    var loBrk = iv.lo === -Infinity ? "(" : (iv.loIncl ? "[" : "(");
+    var hiBrk = iv.hi === Infinity ? ")" : (iv.hiIncl ? "]" : ")");
+    return loBrk + loStr + ", " + hiStr + hiBrk;
+  }
+  function intervalNotation(expected) {
+    var es = mergeIntervals(expected);
+    if (es.length === 0) return "&empty; (empty set)";
+    return es.map(oneIntervalNotation).join(" &cup; ");
+  }
+  // plain ASCII form a student would type (used by the test harness and the page's own self-test hook)
+  function ivText(expected, style) {
+    var es = mergeIntervals(expected);
+    if (es.length === 0) return style === 1 ? "no solution" : "empty";
+    if (es.length === 1 && es[0].lo === -Infinity && es[0].hi === Infinity && style === 2) return "all real numbers";
+    return es.map(function (iv) {
+      var lo = iv.lo === -Infinity ? "-infinity" : fmtNum(iv.lo), hi = iv.hi === Infinity ? "infinity" : fmtNum(iv.hi);
+      if (style === 3) { lo = lo.replace("infinity", "inf"); hi = hi.replace("infinity", "inf"); }
+      return (iv.loIncl ? "[" : "(") + lo + ", " + hi + (iv.hiIncl ? "]" : ")");
+    }).join(style === 4 ? " u " : " U ");
+  }
+  function intervalTextInputHtml(cls, label, placeholder) {
+    return "<span class=\"field-label\">" + label + "</span><input type=\"text\" class=\"" + cls + "\" autocomplete=\"off\" autocapitalize=\"off\" spellcheck=\"false\" placeholder=\"" + (placeholder || "e.g. (-3, 5]") + "\" style=\"min-width:240px\">";
+  }
+  function numInputHtml(cls, label, placeholder) {
+    return "<span class=\"field-label\">" + label + "</span><input type=\"text\" class=\"" + cls + "\" inputmode=\"text\" autocomplete=\"off\" spellcheck=\"false\" placeholder=\"" + (placeholder || "a number") + "\">";
+  }
+  function escHtml(v) { return String(v).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
+  function fieldVal(card, sel) { var el = card.querySelector(sel); return el ? el.value : ""; }
+
+  // ============================================================
+  // Typed formulas: tiny expression parser (no eval) for f^-1(x)
+  // ============================================================
+  function tokenizeExpr(s) {
+    var pos = 0, toks = [], m;
+    while (pos < s.length) {
+      var ch = s.charAt(pos);
+      if (/[0-9.]/.test(ch)) {
+        m = /^(\d+\.?\d*|\.\d+)/.exec(s.slice(pos));
+        if (!m) return { error: "number" };
+        toks.push({ t: "num", v: parseFloat(m[1]) }); pos += m[1].length;
+      } else if (ch === "x") { toks.push({ t: "x" }); pos++; }
+      else if ("+-*/^()".indexOf(ch) !== -1) { toks.push({ t: ch }); pos++; }
+      else return { error: "char", ch: ch };
+    }
+    return { toks: toks };
+  }
+  function parseExpr(src) {
+    var s = normText(src).replace(/[×·⋅]/g, "*").replace(/÷/g, "/").replace(/\*\*/g, "^").replace(/\s+/g, "");
+    if (s === "") return { error: "empty" };
+    if (s.length > 120) return { error: "long" };
+    var tk = tokenizeExpr(s);
+    if (tk.error) return tk;
+    var toks = tk.toks, i = 0, depth = 0;
+    function peek() { return i < toks.length ? toks[i].t : null; }
+    function startsPrimary(t) { return t === "num" || t === "x" || t === "("; }
+    function parseExprP() {
+      var left = parseTerm();
+      while (peek() === "+" || peek() === "-") {
+        var op = toks[i++].t;
+        var right = parseTerm();
+        left = { k: "bin", op: op, a: left, b: right };
+      }
+      return left;
+    }
+    function parseTerm() {
+      var left = parseUnary();
+      for (;;) {
+        var t = peek();
+        if (t === "*" || t === "/") {
+          i++;
+          var r = parseUnary();
+          left = { k: "bin", op: t, a: left, b: r };
+        } else if (startsPrimary(t)) {
+          var r2 = parseUnary();
+          left = { k: "bin", op: "*", a: left, b: r2 };
+        } else break;
+      }
+      return left;
+    }
+    function parseUnary() {
+      var t = peek();
+      if (t === "-") { i++; return { k: "neg", a: parseUnary() }; }
+      if (t === "+") { i++; return parseUnary(); }
+      return parsePower();
+    }
+    function parsePower() {
+      var base = parsePrimary();
+      if (peek() === "^") { i++; var ex = parseUnary(); return { k: "bin", op: "^", a: base, b: ex }; }
+      return base;
+    }
+    function parsePrimary() {
+      var t = toks[i];
+      if (!t) throw new Error("end");
+      if (t.t === "num") { i++; return { k: "num", v: t.v }; }
+      if (t.t === "x") { i++; return { k: "x" }; }
+      if (t.t === "(") {
+        i++; depth++;
+        if (depth > 25) throw new Error("deep");
+        var e = parseExprP();
+        if (peek() !== ")") throw new Error("paren");
+        i++; depth--;
+        return e;
+      }
+      throw new Error("unexpected");
+    }
+    var ast;
+    try {
+      ast = parseExprP();
+      if (i !== toks.length) return { error: "syntax" };
+    } catch (e) { return { error: "syntax" }; }
+    return { ast: ast };
+  }
+  function evalAst(n, x) {
+    switch (n.k) {
+      case "num": return n.v;
+      case "x": return x;
+      case "neg": return -evalAst(n.a, x);
+      case "bin": {
+        var a = evalAst(n.a, x), b = evalAst(n.b, x);
+        if (n.op === "+") return a + b;
+        if (n.op === "-") return a - b;
+        if (n.op === "*") return a * b;
+        if (n.op === "/") return b === 0 ? NaN : a / b;
+        return Math.pow(a, b);
+      }
+    }
+    return NaN;
+  }
+  // student text -> { fn } or { error }
+  function parseFormula(raw) {
+    var s = normText(raw);
+    if (s === "") return { error: "empty" };
+    var eqs = s.split("=");
+    if (eqs.length > 2) return { error: "eq" };
+    if (eqs.length === 2) {
+      var left = eqs[0].replace(/\s+/g, "");
+      if (/^(y|[fgh][^=]*)$/.test(left)) s = eqs[1];
+      else return { error: "eq" };
+    }
+    if (/y/.test(s.replace(/\s+/g, ""))) return { error: "y" };
+    var p = parseExpr(s);
+    if (p.error) return p;
+    return { fn: function (x) { return evalAst(p.ast, x); } };
+  }
+  var TEST_XS = [-7, -3, -1.5, 0, 1, 2, 4.25, 9];
+  function formulaMatches(fn, ref) {
+    for (var i = 0; i < TEST_XS.length; i++) {
+      var a = fn(TEST_XS[i]), b = ref(TEST_XS[i]);
+      if (!isFinite(a) || !isFinite(b)) return false;
+      if (Math.abs(a - b) > 1e-6 * Math.max(1, Math.abs(b))) return false;
+    }
+    return true;
+  }
+  var FORMULA_HELP = "I could not read that as a formula in x. Use x as the variable, for example (x + 3)/2 or x/2 + 3/2 (write 2x for 2 times x).";
+
+  // ============================================================
+  // Canvas graph helpers
+  // ============================================================
+  function themeColor(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+  function setupCanvas(canvas) {
+    var cssW = canvas.clientWidth || 300, cssH = canvas.clientHeight || 200;
+    var dpr = window.devicePixelRatio || 1;
+    canvas.width = Math.round(cssW * dpr);
+    canvas.height = Math.round(cssH * dpr);
+    var ctx = canvas.getContext("2d");
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, cssW, cssH);
+    return { ctx: ctx, w: cssW, h: cssH };
+  }
+  function makeMapper(cssW, cssH, xMin, xMax, yMin, yMax, pad) {
+    pad = pad || 24;
+    var w = cssW - pad * 1.4, h = cssH - pad * 1.6;
+    var sx = w / (xMax - xMin), sy = h / (yMax - yMin);
+    var ox = pad, oy = cssH - pad * 0.9;
+    var f = function (x, y) { return [ox + (x - xMin) * sx, oy - (y - yMin) * sy]; };
+    f.sx = sx; f.sy = sy;
+    return f;
+  }
+  // grid at every integer, stronger lines at multiples of 5 on wide windows, axes, and numeric tick labels
+  // along the bottom/left edges (always visible, whether or not the window contains the origin).
+  function drawGrid(canvas, xMin, xMax, yMin, yMax, opts) {
+    opts = opts || {};
+    var pad = opts.pad || 24;
+    var setup = setupCanvas(canvas), ctx = setup.ctx, cssW = setup.w, cssH = setup.h;
+    var toPx = makeMapper(cssW, cssH, xMin, xMax, yMin, yMax, pad);
+    var gridColor = themeColor("--graph-grid"), axisColor = themeColor("--graph-axis"), labelColor = themeColor("--ink-soft");
+    var gx, gy;
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = gridColor;
+    ctx.beginPath();
+    for (gx = Math.ceil(xMin); gx <= Math.floor(xMax); gx++) {
+      var p0 = toPx(gx, yMin), p1 = toPx(gx, yMax);
+      ctx.moveTo(p0[0], p0[1]); ctx.lineTo(p1[0], p1[1]);
+    }
+    for (gy = Math.ceil(yMin); gy <= Math.floor(yMax); gy++) {
+      var q0 = toPx(xMin, gy), q1 = toPx(xMax, gy);
+      ctx.moveTo(q0[0], q0[1]); ctx.lineTo(q1[0], q1[1]);
+    }
+    ctx.stroke();
+    if (opts.major) {
+      ctx.save();
+      ctx.globalAlpha = 0.28; ctx.strokeStyle = axisColor; ctx.lineWidth = 1;
+      ctx.beginPath();
+      for (gx = Math.ceil(xMin / 5) * 5; gx <= xMax; gx += 5) { var m0 = toPx(gx, yMin), m1 = toPx(gx, yMax); ctx.moveTo(m0[0], m0[1]); ctx.lineTo(m1[0], m1[1]); }
+      for (gy = Math.ceil(yMin / 5) * 5; gy <= yMax; gy += 5) { var n0 = toPx(xMin, gy), n1 = toPx(xMax, gy); ctx.moveTo(n0[0], n0[1]); ctx.lineTo(n1[0], n1[1]); }
+      ctx.stroke();
+      ctx.restore();
+    }
+    ctx.lineWidth = 1.6;
+    ctx.strokeStyle = axisColor;
+    ctx.beginPath();
+    if (xMin <= 0 && xMax >= 0) { var a0 = toPx(0, yMin), a1 = toPx(0, yMax); ctx.moveTo(a0[0], a0[1]); ctx.lineTo(a1[0], a1[1]); }
+    if (yMin <= 0 && yMax >= 0) { var b0 = toPx(xMin, 0), b1 = toPx(xMax, 0); ctx.moveTo(b0[0], b0[1]); ctx.lineTo(b1[0], b1[1]); }
+    ctx.stroke();
+    if (!opts.noLabels) {
+      ctx.fillStyle = labelColor;
+      ctx.font = "10px 'JetBrains Mono', ui-monospace, monospace";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "top";
+      var steps = [1, 2, 5, 10], xStep = 10, yStep = 10, si;
+      for (si = 0; si < steps.length; si++) { if (toPx.sx * steps[si] >= 27) { xStep = steps[si]; break; } }
+      for (si = 0; si < steps.length; si++) { if (toPx.sy * steps[si] >= 15) { yStep = steps[si]; break; } }
+      for (var lx = Math.ceil(xMin / xStep) * xStep; lx <= Math.floor(xMax); lx += xStep) {
+        var lp = toPx(lx, yMin);
+        ctx.fillText(String(lx), Math.min(Math.max(lp[0], 12), cssW - 12), cssH - 13);
+      }
+      ctx.textAlign = "left";
+      ctx.textBaseline = "middle";
+      for (var ly = Math.ceil(yMin / yStep) * yStep; ly <= Math.floor(yMax); ly += yStep) {
+        var lq = toPx(xMin, ly);
+        ctx.fillText(String(ly), 4, Math.min(Math.max(lq[1], 10), cssH - 16));
+      }
+    }
+    var tl = toPx(xMin, yMax), br = toPx(xMax, yMin);
+    return {
+      ctx: ctx, toPx: toPx,
+      clipOn: function () { ctx.save(); ctx.beginPath(); ctx.rect(tl[0], tl[1], br[0] - tl[0], br[1] - tl[1]); ctx.clip(); },
+      clipOff: function () { ctx.restore(); }
+    };
+  }
+  function strokePath(ctx, toPx, pts, color, width) {
+    ctx.strokeStyle = color; ctx.lineWidth = width || 2.4; ctx.lineCap = "round"; ctx.lineJoin = "round";
+    ctx.beginPath();
+    pts.forEach(function (p, i) { var q = toPx(p[0], p[1]); if (i === 0) ctx.moveTo(q[0], q[1]); else ctx.lineTo(q[0], q[1]); });
+    ctx.stroke();
+  }
+  function drawSegment(ctx, toPx, x0, y0, x1, y1, color, width) { strokePath(ctx, toPx, [[x0, y0], [x1, y1]], color, width); }
+  function drawCircle(ctx, toPx, x, y, color, open) {
+    var p = toPx(x, y);
+    ctx.beginPath(); ctx.arc(p[0], p[1], 4.3, 0, Math.PI * 2);
+    if (open) {
+      ctx.fillStyle = themeColor("--card-bg");
+      ctx.fill(); ctx.lineWidth = 2; ctx.strokeStyle = color; ctx.stroke();
+    } else {
+      ctx.fillStyle = color; ctx.fill();
+    }
+  }
+  function drawArrowHead(ctx, toPx, x, y, dx, dy, color) {
+    var p = toPx(x, y), q = toPx(x + dx, y + dy);
+    var vx = q[0] - p[0], vy = q[1] - p[1], len = Math.sqrt(vx * vx + vy * vy) || 1;
+    vx /= len; vy /= len;
+    var L = 12, W = 5.4;
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.moveTo(p[0], p[1]);
+    ctx.lineTo(p[0] - vx * L + vy * W, p[1] - vy * L - vx * W);
+    ctx.lineTo(p[0] - vx * L - vy * W, p[1] - vy * L + vx * W);
+    ctx.closePath(); ctx.fill();
+  }
+
+  // ============================================================
+  // Smooth curves through chosen points: shape-preserving cubic Hermite (PCHIP).
+  // Slope is exactly 0 at every turning point, and the curve is strictly monotone between knots,
+  // so every turning point and zero sits exactly on a knot.
+  // ============================================================
+  function pchip(xs, ys) {
+    var n = xs.length, h = [], del = [], d = [], i;
+    for (i = 0; i < n - 1; i++) { h[i] = xs[i + 1] - xs[i]; del[i] = (ys[i + 1] - ys[i]) / h[i]; }
+    d[0] = del[0]; d[n - 1] = del[n - 2];
+    for (i = 1; i < n - 1; i++) {
+      if (del[i - 1] * del[i] <= 0) d[i] = 0;
+      else {
+        var w1 = 2 * h[i] + h[i - 1], w2 = h[i] + 2 * h[i - 1];
+        d[i] = (w1 + w2) / (w1 / del[i - 1] + w2 / del[i]);
+      }
+    }
+    return function (x) {
+      var k = 0;
+      if (x <= xs[0]) k = 0; else if (x >= xs[n - 1]) k = n - 2;
+      else { while (k < n - 2 && x > xs[k + 1]) k++; }
+      var t = (x - xs[k]) / h[k], t2 = t * t, t3 = t2 * t;
+      return (2 * t3 - 3 * t2 + 1) * ys[k] + (t3 - 2 * t2 + t) * h[k] * d[k] + (-2 * t3 + 3 * t2) * ys[k + 1] + (t3 - t2) * h[k] * d[k + 1];
+    };
+  }
+
+
+  // ============================================================
+  // Optimization walkthrough: expression parser, grading, formatting helpers
+  // ============================================================
+  var MINUS = "−";
+  function normExpr(raw) {
+    return String(raw === null || raw === undefined ? "" : raw)
+      .replace(/[−‒–—]/g, "-").replace(/[×·∙]/g, "*").replace(/÷/g, "/")
+      .replace(/π/g, "pi").replace(/²/g, "^2").replace(/³/g, "^3").replace(/√/g, "sqrt").replace(/ /g, " ")
+      .replace(/\*\*/g, "^").trim().toLowerCase();
+  }
+  function tokenizeExpr(s, vars) {
+    var names = ["sqrt", "abs", "pi"].concat(vars);
+    names.sort(function (a, b) { return b.length - a.length; });
+    var toks = [], i = 0, n = s.length, m;
+    while (i < n) {
+      var c = s.charAt(i);
+      if (c === " ") { i++; continue; }
+      if (/[0-9.]/.test(c)) {
+        m = /^(?:\d+\.?\d*|\.\d+)/.exec(s.slice(i));
+        if (!m) return { err: "I could not read the number near \"" + s.slice(i, i + 4) + "\"." };
+        toks.push({ t: "num", v: parseFloat(m[0]) }); i += m[0].length; continue;
+      }
+      if (/[a-z]/.test(c)) {
+        var hit = null;
+        for (var k = 0; k < names.length; k++) { if (s.substr(i, names[k].length) === names[k]) { hit = names[k]; break; } }
+        if (!hit) return { err: "I do not know what \"" + c + "\" means here." + (vars.length ? " Use only the variable " + vars.join(" and ") + ", pi for π, and sqrt( ) for a square root." : " Type just a number (pi and sqrt( ) are allowed).") };
+        toks.push({ t: hit === "pi" ? "pi" : (hit === "sqrt" || hit === "abs" ? "fn" : "var"), v: hit }); i += hit.length; continue;
+      }
+      if ("+-*/^(),".indexOf(c) !== -1) { toks.push({ t: "op", v: c }); i++; continue; }
+      return { err: "I do not understand the symbol \"" + c + "\"." };
+    }
+    return { toks: toks };
+  }
+  // returns { fn: function(env) -> number } or { err }
+  function compileExpr(raw, vars) {
+    var s = normExpr(raw);
+    if (s === "") return { err: "Type your answer in the box first." };
+    var tk = tokenizeExpr(s, vars || []);
+    if (tk.err) return { err: tk.err };
+    var toks = tk.toks, p = 0, bad = null;
+    function peek() { return toks[p]; }
+    function isOp(v) { var t = toks[p]; return t && t.t === "op" && t.v === v; }
+    function fail(msg) { if (!bad) bad = msg; return function () { return NaN; }; }
+    function parseExpr() {
+      var left = parseTerm();
+      while (isOp("+") || isOp("-")) {
+        var op = toks[p++].v, right = parseTerm();
+        left = (function (a, b, o) { return o === "+" ? function (e) { return a(e) + b(e); } : function (e) { return a(e) - b(e); }; })(left, right, op);
+      }
+      return left;
+    }
+    function startsFactor() {
+      var t = toks[p]; if (!t) return false;
+      return t.t === "num" || t.t === "var" || t.t === "pi" || t.t === "fn" || (t.t === "op" && t.v === "(");
+    }
+    function parseTerm() {
+      var left = parseUnary();
+      for (;;) {
+        if (isOp("*") || isOp("/")) {
+          var op = toks[p++].v, right = parseUnary();
+          left = (function (a, b, o) { return o === "*" ? function (e) { return a(e) * b(e); } : function (e) { return a(e) / b(e); }; })(left, right, op);
+        } else if (startsFactor()) {
+          var r2 = parseUnary();
+          left = (function (a, b) { return function (e) { return a(e) * b(e); }; })(left, r2);
+        } else break;
+      }
+      return left;
+    }
+    function parseUnary() {
+      if (isOp("-")) { p++; var u = parseUnary(); return function (e) { return -u(e); }; }
+      if (isOp("+")) { p++; return parseUnary(); }
+      return parsePower();
+    }
+    function parsePower() {
+      var base = parseAtom();
+      if (isOp("^")) {
+        p++;
+        var ex;
+        if (isOp("-")) { p++; var q = parsePowerOperand(); ex = function (e) { return -q(e); }; }
+        else ex = parsePowerOperand();
+        return function (e) { return Math.pow(base(e), ex(e)); };
+      }
+      return base;
+    }
+    function parsePowerOperand() { return parsePower(); }
+    function parseAtom() {
+      var t = toks[p];
+      if (!t) return fail("That ends too soon. Is something missing at the end?");
+      if (t.t === "num") { p++; var v = t.v; return function () { return v; }; }
+      if (t.t === "pi") { p++; return function () { return Math.PI; }; }
+      if (t.t === "var") { p++; var nm = t.v; return function (e) { return e[nm]; }; }
+      if (t.t === "fn") {
+        p++;
+        var inner;
+        if (isOp("(")) { p++; inner = parseExpr(); if (isOp(")")) p++; else return fail("A parenthesis is not closed."); }
+        else inner = parsePower();
+        var which = t.v;
+        return function (e) { var a = inner(e); return which === "sqrt" ? Math.sqrt(a) : Math.abs(a); };
+      }
+      if (t.t === "op" && t.v === "(") {
+        p++; var ex2 = parseExpr();
+        if (isOp(")")) { p++; return ex2; }
+        return fail("A parenthesis is not closed.");
+      }
+      return fail("I did not expect \"" + t.v + "\" there.");
+    }
+    var f = parseExpr();
+    if (!bad && p < toks.length) bad = "I could not read the end of that (near \"" + (toks[p].v) + "\").";
+    if (bad) return { err: bad };
+    return { fn: f };
+  }
+  function stripLhs(raw) {
+    var s = String(raw === null || raw === undefined ? "" : raw);
+    var i = s.lastIndexOf("=");
+    return i === -1 ? s : s.slice(i + 1);
+  }
+  var UNIT_RE = /\s*(?:sq\.?|square|cubic)?\s*(?:inches|inch|in|feet|foot|ft|meters|meter|m|centimeters|centimeter|cm|millimeters|mm|yards|yd|units|unit)\s*(?:\^?\s*[23]|²|³)?\s*\.?\s*$/i;
+  // typed number (decimals, fractions, sqrt, pi, units tolerated) -> number or null
+  function evalNum(raw) {
+    var s = stripLhs(raw);
+    s = String(s).replace(/^\s*\$/, "");
+    if (/^\s*[-+−]?\d{1,3}(,\d{3})+(\.\d+)?/.test(s)) s = s.replace(/,/g, "");
+    s = s.replace(UNIT_RE, "");
+    var c = compileExpr(s, []);
+    if (c.err) return null;
+    var v = c.fn({});
+    return isFinite(v) ? v : null;
+  }
+  function numTol(b) { return Math.max(0.011, 0.002 * Math.abs(b)); }
+  function near(a, b) { return Math.abs(a - b) <= numTol(b); }
+
+
+  // one interval, bounds may be numbers, fractions, sqrt(...), inf -> { lo, hi, loIncl, hiIncl } or { err }
+  function parseIv1(raw) {
+    var s = normExpr(raw).replace(/\s+/g, "");
+    var m = /^([\(\[])(.*)([\)\]])$/.exec(s);
+    if (!m) return { err: "I could not read that as interval notation. Type it like (0, 15) or [0, inf)." };
+    var inner = m[2], depth = 0, cut = -1;
+    for (var i = 0; i < inner.length; i++) {
+      var ch = inner.charAt(i);
+      if (ch === "(") depth++; else if (ch === ")") depth--; else if (ch === "," && depth === 0) { cut = i; break; }
+    }
+    if (cut < 0) return { err: "An interval needs two endpoints separated by a comma, like (0, 15)." };
+    function bound(t) {
+      if (/^[+]?(inf|infinity|oo|\u221e)$/.test(t)) return Infinity;
+      if (/^-(inf|infinity|oo|\u221e)$/.test(t)) return -Infinity;
+      var c = compileExpr(t, []);
+      if (c.err) return null;
+      var v = c.fn({});
+      return isFinite(v) ? v : null;
+    }
+    var lo = bound(inner.slice(0, cut)), hi = bound(inner.slice(cut + 1));
+    if (lo === null || hi === null) return { err: "I could not read one of the endpoints. Use numbers, fractions like 5/2, sqrt(48), or inf." };
+    return { lo: lo, hi: hi, loIncl: m[1] === "[" && isFinite(lo), hiIncl: m[3] === "]" && isFinite(hi) };
+  }
+
+  // ---------- grading one field ----------
+  var FN_HELP = "I could not read that. Use ^ for powers (x^2), * or just write 2x for multiplication, pi for π, sqrt( ) for a square root, and parentheses around a whole numerator or denominator.";
+  function gradeField(f, raw, vals) {
+    var v = (raw === null || raw === undefined) ? "" : String(raw);
+    if (f.kind === "sel") {
+      if (v === "") return { ok: false, msg: "Choose an option first." };
+      var exs = f.expectAny || [f.expect];
+      if (exs.map(String).indexOf(v) !== -1) return { ok: true };
+      return { ok: false, msg: (f.diag && f.diag[v]) || "" };
+    }
+    if (String(v).replace(/\s+/g, "") === "") return { ok: false, msg: "Type your answer in the box first." };
+    if (f.kind === "fn") {
+      var vars = f.vars || ["x"], c = compileExpr(stripLhs(v), vars);
+      if (c.err) return { ok: false, msg: c.err + " " + FN_HELP };
+      var fn = c.fn, ok = true;
+      (f.samples || [1, 2, 3, 4.5, 6]).forEach(function (s) {
+        var env = {}; env[vars[0]] = s;
+        var a = fn(env), b = f.expect(s);
+        if (!isFinite(a) || Math.abs(a - b) > 1e-6 * (1 + Math.abs(b))) ok = false;
+      });
+      if (ok) return { ok: true };
+      var msg = "";
+      (f.diag || []).some(function (d) {
+        var m = true;
+        (f.samples || [1, 2, 3, 4.5, 6]).forEach(function (s) {
+          var env = {}; env[vars[0]] = s;
+          var a = fn(env), b = d.fn(s);
+          if (!isFinite(a) || Math.abs(a - b) > 1e-6 * (1 + Math.abs(b))) m = false;
+        });
+        if (m) { msg = d.msg; return true; }
+        return false;
+      });
+      return { ok: false, msg: msg };
+    }
+    if (f.kind === "num") {
+      var u = evalNum(v);
+      if (u === null) return { ok: false, msg: "I could not read that as a number. Type a decimal, a fraction like 5/2, or something like sqrt(8)." };
+      if (f.tol ? Math.abs(u - f.expect) <= f.tol : near(u, f.expect)) return { ok: true };
+      var m2 = "";
+      (f.diag || []).some(function (d) { if (near(u, d.value)) { m2 = d.msg; return true; } return false; });
+      if (!m2 && f.round) m2 = "Round to " + f.round + " decimal places and check your arithmetic.";
+      return { ok: false, msg: m2 };
+    }
+    if (f.kind === "list") {
+      var parts = String(v).split(/[,;]|\band\b/i).map(function (t) { return t.replace(/^\s*[a-z]\s*=/i, "").trim(); }).filter(function (t) { return t !== ""; });
+      var nums = [];
+      for (var i = 0; i < parts.length; i++) {
+        var n = evalNum(parts[i]);
+        if (n === null) return { ok: false, msg: "I could not read \"" + parts[i] + "\" as a number. Separate answers with commas, like 2, 5." };
+        nums.push(n);
+      }
+      var need = f.expect.slice(), extra = [];
+      nums.forEach(function (n) {
+        var hit = -1;
+        need.forEach(function (e, j) { if (hit < 0 && near(n, e)) hit = j; });
+        if (hit >= 0) need.splice(hit, 1); else extra.push(n);
+      });
+      if (!need.length && !extra.length) return { ok: true };
+      var msg2 = "";
+      if (extra.length && f.outside) {
+        var bad = extra.filter(function (n) { return f.outside(n); });
+        if (bad.length) msg2 = f.outsideMsg ? f.outsideMsg(bad[0]) : "";
+      }
+      if (!msg2 && need.length && !extra.length) msg2 = "You are missing a critical number. Solve the derivative equation completely.";
+      if (!msg2 && extra.length && !need.length) msg2 = "One of those is not a critical number inside the domain. Check it by plugging it into the derivative.";
+      return { ok: false, msg: msg2 };
+    }
+    if (f.kind === "iv") {
+      var iv = parseIv1(v);
+      if (iv.err) return { ok: false, msg: iv.err };
+      var e = f.expect[0];
+      function bnd(a, b) { return (a === b) || (isFinite(a) && isFinite(b) && near(a, b)); }
+      var bothOk = bnd(iv.lo, e.lo) && bnd(iv.hi, e.hi);
+      if (bothOk && (f.loose || (iv.loIncl === !!e.loIncl && iv.hiIncl === !!e.hiIncl))) return { ok: true };
+      if (bothOk) return { ok: false, msg: "Your endpoints are right, but check which ones need parentheses and which need brackets. Is the endpoint itself allowed?" };
+      return { ok: false, msg: f.msg || "" };
+    }
+    return { ok: false, msg: "" };
+  }
+
+  // ---------- display helpers ----------
+  function M(s) { return "<span class=\"mx\">" + mathHtml(s) + "</span>"; }
+  function mathHtml(s) {
+    return String(s).replace(/\^\(([^)]+)\)/g, "<sup>$1</sup>").replace(/\^(-?[\d.]+)/g, "<sup>$1</sup>")
+      .replace(/\*/g, "·").replace(/-/g, MINUS).replace(/'/g, "′");
+  }
+  function rd(v, d) { var k = Math.pow(10, d == null ? 2 : d); return Math.round(v * k) / k; }
+  function nf(v, d) {
+    var r = rd(v, d == null ? 2 : d);
+    if (Math.abs(r) < 1e-9) r = 0;
+    return String(r).replace("-", "-");
+  }
+  function pn(v, d) { return nf(v, d); }            // plain number text
+  function dn(v, d) { return nf(v, d).replace("-", MINUS); } // display number text
+  function intervalText(iv) { return intervalNotation([iv]); }
+  function sgn(v) { return v > 0 ? 1 : (v < 0 ? -1 : 0); }
+  function ri(a, b) { return Math.floor(Math.random() * (b - a + 1)) + a; }
+  function rc(arr) { return arr[ri(0, arr.length - 1)]; }
+  function shuf(arr) { var a = arr.slice(); for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+  function spread(lo, hi, n) { var a = []; for (var i = 1; i <= n; i++) a.push(lo + (hi - lo) * i / (n + 1)); return a; }
+
+  // ---------- tiny SVG toolkit (colors come from CSS classes so both themes work) ----------
+  function svgWrap(w, h, inner, label) {
+    return "<svg class=\"fsvg\" viewBox=\"0 0 " + w + " " + h + "\" role=\"img\" aria-label=\"" + (label || "diagram") + "\" xmlns=\"http://www.w3.org/2000/svg\">" + inner + "</svg>";
+  }
+  function sLine(x1, y1, x2, y2, cls) { return "<line class=\"" + (cls || "sv-line") + "\" x1=\"" + x1 + "\" y1=\"" + y1 + "\" x2=\"" + x2 + "\" y2=\"" + y2 + "\"/>"; }
+  function sRect(x, y, w, h, cls) { return "<rect class=\"" + (cls || "sv-line") + "\" x=\"" + x + "\" y=\"" + y + "\" width=\"" + w + "\" height=\"" + h + "\"/>"; }
+  function sText(x, y, t, cls, anchor) { return "<text class=\"" + (cls || "sv-txt") + "\" x=\"" + x + "\" y=\"" + y + "\" text-anchor=\"" + (anchor || "middle") + "\">" + t + "</text>"; }
+
+
+  // ============================================================
+  // Problem families: generators, figures, and step lists
+  // ============================================================
+  var STEPN = { crit: 3, toy: 7, box: 7, fence: 5, can: 4, closest: 4 };
+  var LEVEL = { crit: 1, toy: 1, box: 1, fence: 2, can: 3, closest: 3 };
+  var FAM = {};
+  var LAST_VARIANT = {};
+  function pickAvoid(list, avoid) { var l = list.filter(function (v) { return v !== avoid; }); return rc(l.length ? l : list); }
+  function mkDom(lo, hi, li, hiI) { return { lo: lo, hi: hi, loIncl: !!li, hiIncl: !!hiI }; }
+  function inDom(d, n) {
+    var ok = (n > d.lo || (d.loIncl && Math.abs(n - d.lo) < 1e-9)) && (n < d.hi || (d.hiIncl && Math.abs(n - d.hi) < 1e-9));
+    return ok;
+  }
+  function polyStr(coefs, v) { // descending coefficients -> plain "x^3 - 3x^2 + 5"
+    var out = "", n = coefs.length - 1;
+    coefs.forEach(function (c, i) {
+      var e = n - i; if (c === 0) return;
+      var a = Math.abs(c), body;
+      if (e === 0) body = String(a); else body = (a === 1 ? "" : String(a)) + v + (e === 1 ? "" : "^" + e);
+      out += (out === "" ? (c < 0 ? "-" : "") : (c < 0 ? " - " : " + ")) + body;
+    });
+    return out || "0";
+  }
+  function H3() { return Array.prototype.slice.call(arguments); }
+  function comb(title, a, b) {
+    return { title: title, prompt: a.prompt + " " + b.prompt, fields: a.fields.concat(b.fields), ans: a.ans + b.ans, hints: a.hints.concat(b.hints) };
+  }
+
+  // ---------- shared step builders ----------
+  function fsym(P) { return P.fn + "(" + P.vn + ")"; }
+  function sFunc(P) {
+    return {
+      title: "Write one function",
+      prompt: P.funcPrompt,
+      fields: [{ id: "f", kind: "fn", label: P.fn + "(" + P.vn + ") =", vars: [P.vn], expect: P.f, samples: P.samples, diag: P.fDiag || [], ph: P.fPh }],
+      ans: P.funcAns, hints: P.funcHints
+    };
+  }
+  function sDomain(P) {
+    return {
+      title: "Domain",
+      prompt: "Which values of <b>" + P.vn + "</b> make sense in this story? Type the domain of " + M(fsym(P)) + " in interval notation.",
+      fields: [{ id: "dom", kind: "iv", label: "Domain:", expect: [P.domain], loose: !!P.domLoose, msg: P.domMsg, ph: P.domPh }],
+      ans: P.domAns, hints: P.domHints
+    };
+  }
+  function sDeriv(P) {
+    return {
+      title: "Differentiate",
+      prompt: "Find the derivative " + M(P.fn + "'(" + P.vn + ")") + ".",
+      fields: [{ id: "d1", kind: "fn", label: P.fn + "′(" + P.vn + ") =", vars: [P.vn], expect: P.f1, samples: P.samples, ph: P.d1Ph }],
+      ans: P.derivAns, hints: P.derivHints
+    };
+  }
+  function sCrit(P) {
+    return {
+      title: "Critical numbers",
+      prompt: "Solve " + M(P.fn + "'(" + P.vn + ") = 0") + ". Type every critical number that lies <b>inside the domain</b>, separated by commas." + (P.critRound ? " Round to 2 decimal places." : ""),
+      fields: [{ id: "crit", kind: "list", label: "Critical number(s):", expect: [P.c], outside: function (n) { return !inDom(P.domain, n); }, outsideMsg: function (n) { return M(P.vn + " = " + pn(n)) + " is not inside the domain " + intervalText(P.domain) + ". Only list critical numbers that fit the domain." + (P.outsideNote ? " " + P.outsideNote : ""); }, ph: P.critPh }],
+      ans: P.critAns, hints: P.critHints
+    };
+  }
+  function sJust(P) {
+    var d = 0.1 * Math.max(1, Math.abs(P.c));
+    var sl = sgn(P.f1(P.c - d)), sr = sgn(P.f1(P.c + d)), cv = pn(P.c);
+    var word = P.goal === "max" ? "maximum" : "minimum";
+    var okM = function (vals) { return vals.m && (vals.m !== "endpoints" || P.closedOK); };
+    var fields = [
+      { id: "m", kind: "sel", label: "Test you will use:", expectAny: P.closedOK ? ["second", "first", "endpoints"] : ["second", "first"],
+        options: [{ v: "second", t: "Second derivative test" }, { v: "first", t: "First derivative test (sign change of " + P.fn + "′)" }, { v: "endpoints", t: "Compare the endpoint values" }],
+        diag: { endpoints: "That test needs a closed interval with two actual endpoints to evaluate. " + P.noEndMsg + " Choose the first or second derivative test." } },
+      { id: "f2", kind: "num", label: P.fn + "″(" + cv + ") =", expect: P.f2(P.c), ph: "a number", showIf: function (v) { return v.m === "second"; }, round: 2 },
+      { id: "sl", kind: "sel", label: "Sign of " + P.fn + "′ just LEFT of " + P.vn + " = " + cv, expect: String(sl), options: [{ v: "1", t: "Positive (+)" }, { v: "-1", t: "Negative (−)" }], showIf: function (v) { return v.m === "first"; } },
+      { id: "sr", kind: "sel", label: "Sign of " + P.fn + "′ just RIGHT of " + P.vn + " = " + cv, expect: String(sr), options: [{ v: "1", t: "Positive (+)" }, { v: "-1", t: "Negative (−)" }], showIf: function (v) { return v.m === "first"; } }
+    ];
+    if (P.closedOK) {
+      fields.push({ id: "e0", kind: "num", label: P.fn + "(" + pn(P.edge.lo) + ") =", expect: P.f(P.edge.lo), ph: "value at the left end", showIf: function (v) { return v.m === "endpoints"; } });
+      fields.push({ id: "e1", kind: "num", label: P.fn + "(" + pn(P.edge.hi) + ") =", expect: P.f(P.edge.hi), ph: "value at the right end", showIf: function (v) { return v.m === "endpoints"; } });
+    }
+    fields.push({ id: "con", kind: "sel", label: "So " + P.vn + " = " + cv + " gives a:", expect: P.goal, options: [{ v: "max", t: "maximum" }, { v: "min", t: "minimum" }], showIf: okM,
+      diag: { max: "Check the evidence again. Which way does the function turn at this point?", min: "Check the evidence again. Which way does the function turn at this point?" } });
+    var ans = "<p>Use any one test. Here are all three.</p><ul>" +
+      "<li><b>Second derivative test:</b> " + M(P.fn + "''(" + cv + ") = " + pn(P.f2(P.c))) + ", which is " + (P.f2(P.c) > 0 ? "positive, so the graph is concave up: a <b>minimum</b>." : "negative, so the graph is concave down: a <b>maximum</b>.") + "</li>" +
+      "<li><b>First derivative test:</b> " + P.fn + "′ is " + (sl > 0 ? "positive" : "negative") + " just left of " + M(P.vn + " = " + cv) + " and " + (sr > 0 ? "positive" : "negative") + " just right, so the function goes " + (sl > 0 ? "up then down: a maximum." : "down then up: a minimum.") + "</li>" +
+      (P.closedOK ? "<li><b>Endpoints:</b> " + M(P.fn + "(" + pn(P.edge.lo) + ") = " + pn(P.f(P.edge.lo))) + " and " + M(P.fn + "(" + pn(P.edge.hi) + ") = " + pn(P.f(P.edge.hi))) + ", while " + M(P.fn + "(" + cv + ") = " + pn(P.best)) + " is " + (P.goal === "max" ? "larger" : "smaller") + ", so it is the " + word + ".</li>" : "<li><b>Endpoints:</b> not available. " + P.noEndMsg + "</li>") + "</ul>";
+    return {
+      title: "Prove it is the " + word,
+      prompt: "A critical number could be a max, a min, or neither. Pick a test and show the evidence that " + M(P.vn + " = " + cv) + " gives the " + word + " you want. Then state your conclusion.",
+      fields: fields, ans: ans,
+      hints: H3("Three tests can work here. Which ones do you have the information for? A test that compares endpoints only works when the domain has two actual endpoints.",
+        "Second derivative test: differentiate " + M(P.fn + "'(" + P.vn + ")") + " again and plug in " + M(cv) + ". First derivative test: plug a point a little left and a little right of " + M(cv) + " into " + M(P.fn + "'") + ".",
+        "A positive second derivative (or " + M("-") + " then " + M("+") + " on the first derivative) means a minimum. A negative second derivative (or " + M("+") + " then " + M("-") + ") means a maximum.")
+    };
+  }
+  function sAns(P, title, prompt, fields, ans, hints) {
+    return { title: title, prompt: prompt, fields: fields, ans: ans, hints: hints || H3("Look back at what the question asked for. Each answer needs its units.", "Plug your critical number into the function and into any dimension you wrote in terms of " + M(P.vn) + ".", "Use your exact critical number, not a rounded one, when you compute the other values.") };
+  }
+  function nfield(id, label, expect, ph, round) { return { id: id, kind: "num", label: label, expect: expect, ph: ph || "a number", round: round }; }
+
+  // =========================================================
+  // CRIT: critical-number refresher (closed interval method)
+  // =========================================================
+  FAM.crit = {
+    gen: function (o) {
+      var p, q, c0, lo, hi, f, cands, mx, mn, tries = 0, b, cc, fixed = !!(o && o.p !== undefined);
+      for (;;) {
+        if (fixed) { p = o.p; q = o.q; } else { p = ri(-3, 2); q = p + 2 * ri(1, 3); }
+        c0 = (o && o.c0 !== undefined) ? o.c0 : ri(-4, 8);
+        b = -3 * (p + q) / 2; cc = 3 * p * q;
+        lo = (o && o.lo !== undefined) ? o.lo : p - ri(1, 3); hi = (o && o.hi !== undefined) ? o.hi : q + ri(1, 3);
+        var bb = b, c3 = cc, cz = c0;
+        f = function (x) { return x * x * x + bb * x * x + c3 * x + cz; };
+        cands = [lo, p, q, hi].map(function (x) { return { x: x, y: f(x) }; });
+        var ys = cands.map(function (v) { return v.y; }).sort(function (u, w) { return u - w; });
+        var uniq = ys[0] < ys[1] && ys[2] < ys[3];
+        if (uniq || fixed || ++tries > 300) break;
+      }
+      mx = cands[0]; mn = cands[0];
+      cands.forEach(function (v) { if (v.y > mx.y) mx = v; if (v.y < mn.y) mn = v; });
+      var P = { fam: "crit", sig: "crit", vn: "x", fn: "f", p: p, q: q, lo: lo, hi: hi, cands: cands, mx: mx, mn: mn,
+        coefs: [1, b, cc, c0], samples: [-2, -1, 0.5, 2, 3.5], f: f,
+        f1: function (x) { return 3 * x * x + 2 * bb * x + c3; } };
+      P.fText = polyStr(P.coefs, "x");
+      P.f1Text = polyStr([3, 2 * b, cc], "x");
+      P.title = "Critical numbers and absolute extrema";
+      P.story = "Let " + M("f(x) = " + P.fText) + " on the closed interval " + M("[" + lo + ", " + hi + "]") + ".";
+      P.fig = "";
+      P.steps = FAM.crit.steps(P);
+      return P;
+    },
+    steps: function (P) {
+      var cn = P.cands.map(function (v) { return M("f(" + pn(v.x) + ") = " + pn(v.y)); }).join(", ");
+      var s1 = { title: "Critical numbers", prompt: "Find " + M("f'(x)") + ", then solve " + M("f'(x) = 0") + ". Type " + M("f'(x)") + " and then every critical number (inside the interval), separated by commas.",
+        fields: [{ id: "d1", kind: "fn", label: "f′(x) =", vars: ["x"], expect: P.f1, samples: P.samples, ph: "derivative of f" },
+          { id: "crit", kind: "list", label: "Critical numbers:", expect: [P.p, P.q], ph: "separate with commas" }],
+        ans: "<p>" + M("f'(x) = " + P.f1Text) + ". Divide by 3, then factor: " + M("f'(x) = 3(x - " + P.p + ")(x - " + P.q + ")").replace(/- -/g, "+ ") + ". Set each factor to zero: " + M("x = " + P.p) + " and " + M("x = " + P.q) + ". There is no place where " + M("f'") + " is undefined, so these are all of them, and both lie in " + M("[" + P.lo + ", " + P.hi + "]") + ".</p>",
+        hints: H3("Use the power rule term by term. The derivative of a constant is zero.", "To solve " + M("f'(x) = 0") + ", factor out the common factor, then factor the trinomial that is left.", "Set each factor equal to zero. Check that each answer is inside " + M("[" + P.lo + ", " + P.hi + "]") + ".") };
+      var cand = "<p>Make a table of the candidates: the two endpoints and the two critical numbers. " + cn + ".</p>";
+      var s2 = { title: "Absolute maximum", prompt: "Closed interval method: evaluate " + M("f") + " at both endpoints and at each critical number. The largest value is the <b>absolute maximum</b>. Where does it happen, and what is its value?",
+        fields: [nfield("x", "x =", P.mx.x, "where"), nfield("y", "Absolute max value =", P.mx.y, "the largest f value")],
+        ans: cand + "<p>The largest is " + M("f(" + pn(P.mx.x) + ") = " + pn(P.mx.y)) + ".</p>",
+        hints: H3("Candidates: the endpoints " + M(P.lo + " and " + P.hi) + " and the critical numbers " + M(P.p + " and " + P.q) + ". That is four values to compute.", "Plug each of the four x-values into " + M("f(x) = " + P.fText) + ".", "The absolute max is the biggest of the four " + M("f") + " values. Report the x where it happens and the value.") };
+      var s3 = { title: "Absolute minimum", prompt: "The smallest value among those candidates is the <b>absolute minimum</b>. Where does it happen, and what is its value?",
+        fields: [nfield("x", "x =", P.mn.x, "where"), nfield("y", "Absolute min value =", P.mn.y, "the smallest f value")],
+        ans: "<p>The smallest of the four values is " + M("f(" + pn(P.mn.x) + ") = " + pn(P.mn.y)) + ".</p>",
+        hints: H3("You already computed the four candidate values.", "Now pick the smallest, not the largest.", "Give both the x where it happens and the value of " + M("f") + " there.") };
+      return [s1, s2, s3];
+    },
+  };
+
+  // =========================================================
+  // TOY: two numbers
+  // =========================================================
+  FAM.toy = {
+    gen: function (o) {
+      var v = (o && o.variant) || pickAvoid(["t1", "t2", "t3"], LAST_VARIANT.toy);
+      var P = { fam: "toy", sig: "toy", variant: v, vn: "x", fig: "" };
+      var S, K;
+      if (v === "t1") {
+        S = (o && o.S) || rc([12, 16, 20, 24, 30, 36, 40, 50]);
+        P.fn = "P"; P.goal = "max"; P.S = S;
+        P.f = function (x) { return x * (S - x); }; P.f1 = function (x) { return S - 2 * x; }; P.f2 = function () { return -2; };
+        P.yfun = function (x) { return S - x; };
+        P.domain = mkDom(0, S, true, true); P.closedOK = true; P.edge = { lo: 0, hi: S };
+        P.c = S / 2; P.best = S * S / 4; P.samples = spread(1, S - 1, 5);
+        P.story = "Two non-negative numbers <b>x</b> and <b>y</b> add up to " + S + ". What should the numbers be so that their <b>product</b> is as large as possible?";
+        P.objOK = "Maximize the product " + M("xy"); P.objBad = ["Minimize the product " + M("xy"), "Maximize the sum " + M("x + y")];
+        P.yText = S + " - x"; P.fText = "x(" + S + " - x)";
+        P.conAns = M("x + y = " + S) + ", so " + M("y = " + S + " - x") + ".";
+        P.funcAns = "<p>Substitute " + M("y = " + S + " - x") + " into " + M("xy") + ": " + M("P(x) = x(" + S + " - x) = " + S + "x - x^2") + ".</p>";
+        P.domAns = "<p>Both numbers are non-negative: " + M("x >= 0") + " and " + M("y = " + S + " - x >= 0") + ", so " + M("0 <= x <= " + S) + ". Domain: " + intervalText(P.domain) + ".</p>";
+        P.derivAns = "<p>" + M("P(x) = " + S + "x - x^2") + ", so " + M("P'(x) = " + S + " - 2x") + ".</p>";
+        P.critAns = "<p>" + M(S + " - 2x = 0") + " gives " + M("x = " + (S / 2)) + ". It is inside " + intervalText(P.domain) + ".</p>";
+        P.noEndMsg = "";
+        P.ansTxt = "<p>" + M("x = " + (S / 2)) + ", " + M("y = " + S + " - " + (S / 2) + " = " + (S / 2)) + ", and the largest product is " + M((S / 2) + "*" + (S / 2) + " = " + (S * S / 4)) + ".</p>";
+        P.ansFields = [nfield("a", "x =", S / 2), nfield("b", "y =", S / 2), nfield("c", "Largest product =", S * S / 4)];
+        P.insight = "Whenever the sum is fixed, the product is biggest when the two numbers are equal.";
+        P.domWhy = "";
+        P.derivPh = "e.g. 20 - 2x"; P.fDiag = [];
+      } else if (v === "t2") {
+        S = (o && o.S) || rc([10, 14, 18, 20, 24, 30]);
+        P.fn = "Q"; P.goal = "min"; P.S = S;
+        P.f = function (x) { return x * x + (S - x) * (S - x); }; P.f1 = function (x) { return 4 * x - 2 * S; }; P.f2 = function () { return 4; };
+        P.yfun = function (x) { return S - x; };
+        P.domain = mkDom(0, S, true, true); P.closedOK = true; P.edge = { lo: 0, hi: S };
+        P.c = S / 2; P.best = S * S / 2; P.samples = spread(1, S - 1, 5);
+        P.story = "Two non-negative numbers <b>x</b> and <b>y</b> add up to " + S + ". What should the numbers be so that the <b>sum of their squares</b> is as small as possible?";
+        P.objOK = "Minimize the sum of squares " + M("x^2 + y^2"); P.objBad = ["Maximize the sum of squares " + M("x^2 + y^2"), "Minimize the sum " + M("x + y")];
+        P.yText = S + " - x"; P.fText = "x^2 + (" + S + " - x)^2";
+        P.conAns = M("x + y = " + S) + ", so " + M("y = " + S + " - x") + ".";
+        P.funcAns = "<p>Substitute " + M("y = " + S + " - x") + " into " + M("x^2 + y^2") + ": " + M("Q(x) = x^2 + (" + S + " - x)^2") + ".</p>";
+        P.domAns = "<p>Both numbers are non-negative, so " + M("0 <= x <= " + S) + ". Domain: " + intervalText(P.domain) + ".</p>";
+        P.derivAns = "<p>Use the chain rule on the second term: " + M("Q'(x) = 2x + 2(" + S + " - x)(-1) = 4x - " + (2 * S)) + ".</p>";
+        P.critAns = "<p>" + M("4x - " + (2 * S) + " = 0") + " gives " + M("x = " + (S / 2)) + ", which is inside " + intervalText(P.domain) + ".</p>";
+        P.noEndMsg = "";
+        P.ansTxt = "<p>" + M("x = " + (S / 2)) + ", " + M("y = " + (S / 2)) + ", and the smallest sum of squares is " + M((S / 2) + "^2 + " + (S / 2) + "^2 = " + (S * S / 2)) + ".</p>";
+        P.ansFields = [nfield("a", "x =", S / 2), nfield("b", "y =", S / 2), nfield("c", "Smallest sum of squares =", S * S / 2)];
+        P.fDiag = [{ fn: function (x) { return x * x + (S - x); }, msg: "You squared x but not y. Both numbers are squared: " + M("y^2") + " becomes " + M("(" + S + " - x)^2") + "." }];
+      } else {
+        K = (o && o.K) || rc([16, 25, 36, 49, 64, 81, 100, 144]);
+        var rt = Math.sqrt(K);
+        P.fn = "T"; P.goal = "min"; P.K = K;
+        P.f = function (x) { return x + K / x; }; P.f1 = function (x) { return 1 - K / (x * x); }; P.f2 = function (x) { return 2 * K / (x * x * x); };
+        P.yfun = function (x) { return K / x; };
+        P.domain = mkDom(0, Infinity, false, false); P.closedOK = false;
+        P.c = rt; P.best = 2 * rt; P.samples = [0.5, 1, 2.5, 4, 9];
+        P.story = "Two positive numbers <b>x</b> and <b>y</b> have a product of " + K + ". What should the numbers be so that their <b>sum</b> is as small as possible?";
+        P.objOK = "Minimize the sum " + M("x + y"); P.objBad = ["Maximize the sum " + M("x + y"), "Minimize the product " + M("xy")];
+        P.yText = K + "/x"; P.fText = "x + " + K + "/x";
+        P.conAns = M("xy = " + K) + ", so " + M("y = " + K + "/x") + ".";
+        P.funcAns = "<p>Substitute " + M("y = " + K + "/x") + " into " + M("x + y") + ": " + M("T(x) = x + " + K + "/x") + ".</p>";
+        P.domAns = "<p>Both numbers must be positive, so " + M("x > 0") + " (and then " + M("y = " + K + "/x > 0") + " automatically). There is no upper limit: " + intervalText(P.domain) + ".</p>";
+        P.derivAns = "<p>Write " + M(K + "/x = " + K + "x^-1") + " first. Then " + M("T'(x) = 1 - " + K + "x^-2 = 1 - " + K + "/x^2") + ".</p>";
+        P.critAns = "<p>" + M("1 - " + K + "/x^2 = 0") + " gives " + M("x^2 = " + K) + ", so " + M("x = " + rt) + " or " + M("x = -" + rt) + ". Only " + M("x = " + rt) + " is positive, so only it is in the domain.</p>";
+        P.noEndMsg = "The domain " + intervalText(P.domain) + " is open and goes on forever.";
+        P.ansTxt = "<p>" + M("x = " + rt) + ", " + M("y = " + K + "/" + rt + " = " + rt) + ", and the smallest sum is " + M(rt + " + " + rt + " = " + (2 * rt)) + ".</p>";
+        P.ansFields = [nfield("a", "x =", rt), nfield("b", "y =", rt), nfield("c", "Smallest sum =", 2 * rt)];
+        P.fDiag = [];
+      }
+      LAST_VARIANT.toy = v;
+      P.title = "Two numbers";
+      P.fPh = "function of x";
+      P.funcPrompt = "Write the quantity you are optimizing using <b>x only</b>, by substituting your formula for y. Type " + M(P.fn + "(x)") + ".";
+      P.funcHints = H3("You have " + M("y") + " in terms of " + M("x") + " from the last step. Put it wherever " + M("y") + " appears in the objective.", "The objective is " + (v === "t1" ? M("xy") : (v === "t2" ? M("x^2 + y^2") : M("x + y"))) + ". Replace " + M("y") + " with " + M(P.yText) + ".", "Your answer should look like " + M(P.fText) + " (any equivalent form is fine).");
+      P.domMsg = "Think about what each number is allowed to be. If " + M("x") + " were too big, what would happen to " + M("y") + "?";
+      P.domPh = "interval notation";
+      P.domHints = H3("Both numbers have to obey the story. What are the smallest and largest values " + M("x") + " can take?", "Use the constraint " + M("y = " + P.yText) + ". " + (P.closedOK ? "Both numbers are allowed to equal zero." : "Both numbers must be positive, and " + M("x") + " can be as large as you like."), "Decide whether each endpoint is allowed. Allowed endpoints get a bracket; excluded or infinite ones get a parenthesis.");
+      P.derivHints = H3("Differentiate term by term" + (v === "t3" ? ". Rewrite the fraction as a negative power first." : "; expand first if that is easier."), v === "t3" ? "The derivative of " + M(K + "x^-1") + " is " + M("-" + K + "x^-2") + "." : "Check your result by comparing the degree: the derivative should be one degree lower than " + M(P.fn + "(x)") + ".", "Your answer should simplify to " + M(polyHint(P)) + ".");
+      P.critHints = H3("Set your derivative equal to zero and solve for " + M("x") + ".", v === "t3" ? "Get " + M("x^2") + " alone, then take square roots. Remember both signs, then check the domain." : "This is a linear equation in " + M("x") + ".", "Make sure your answer(s) lie in " + intervalText(P.domain) + ".");
+      P.critPh = "";
+      P.d1Ph = "";
+      P.steps = FAM.toy.steps(P, 1);
+      return P;
+    },
+    steps: function (P, level) {
+      var objOpts = shuf([{ v: "ok", t: P.objOK }].concat(P.objBad.map(function (t, i) { return { v: "b" + i, t: t }; })));
+      var s1 = {
+        title: "Objective and constraint",
+        prompt: "Name <b>what you are optimizing</b> (the objective) and use the other fact in the story (the constraint) to solve for " + M("y") + " in terms of " + M("x") + ".",
+        fields: [
+          { id: "obj", kind: "sel", label: "Objective:", expect: "ok", options: objOpts, diag: { b0: "Check the wording of the question: which quantity is being made largest or smallest, and in which direction?", b1: "Check the wording of the question: which quantity is being made largest or smallest, and in which direction?", b2: "Check the wording of the question: which quantity is being made largest or smallest, and in which direction?" } },
+          { id: "y", kind: "fn", label: "Constraint: y =", vars: ["x"], expect: P.yfun, samples: P.samples, ph: "y in terms of x" }
+        ],
+        ans: "<p><b>Objective:</b> " + P.objOK + ". <b>Constraint:</b> " + P.conAns + "</p>",
+        hints: H3("The objective is the thing the question wants as big or as small as possible. The constraint is the other fact that ties the numbers together.", "Constraint: " + (P.variant === "t3" ? "the product is fixed" : "the sum is fixed") + ". Solve it for " + M("y") + ".", "Your constraint should come out as " + M("y = " + P.yText) + ".")
+      };
+      var s2 = sFunc(P);
+      var s6 = sJust(P);
+      var s7 = sAns(P, "Answer the question", "Answer what the problem asked: both numbers, and the " + (P.goal === "max" ? "largest" : "smallest") + " value.", P.ansFields, P.ansTxt + "<p class=\"insight\">" + P.insight + "</p>");
+      return [s1, s2, sDomain(P), sDeriv(P), sCrit(P), s6, s7];
+    }
+  };
+  function polyHint(P) { // short simplified-derivative hint text for toy
+    if (P.variant === "t1") return P.S + " - 2x";
+    if (P.variant === "t2") return "4x - " + (2 * P.S);
+    return "1 - " + P.K + "/x^2";
+  }
+  FAM.toy.insightPatch = function () {};
+
+  // =========================================================
+  // BOX
+  // =========================================================
+  var RECTS = (function () {
+    var out = [];
+    for (var a = 8; a <= 40; a++) for (var b = a + 1; b <= 60; b++) {
+      var D = a * a - a * b + b * b, r = Math.round(Math.sqrt(D));
+      if (r * r !== D) continue;
+      var r1 = ((a + b) - r) / 6;
+      if (r1 > 0 && r1 < a / 2 && Math.abs(2 * r1 - Math.round(2 * r1)) < 1e-9 && (a + b) % 1 === 0 && b <= 48 && ((a + b + r) / 6) > a / 2) out.push([a, b, r1, ((a + b) + r) / 6]);
+    }
+    return out;
+  })();
+  FAM.box = {
+    gen: function (o) {
+      var v = (o && o.variant) || pickAvoid(["b1", "b2", "b3"], LAST_VARIANT.box);
+      var P = { fam: "box", sig: "box", variant: v, vn: "x", fn: "V", goal: "max", closedOK: true };
+      if (v === "b1") {
+        var s = (o && o.s) || rc([12, 18, 24, 30, 36]);
+        P.s = s;
+        P.f = function (x) { return x * (s - 2 * x) * (s - 2 * x); };
+        P.f1 = function (x) { return (s - 2 * x) * (s - 6 * x); };
+        P.f2 = function (x) { return 24 * x - 8 * s; };
+        P.domain = mkDom(0, s / 2, false, false); P.edge = { lo: 0, hi: s / 2 }; P.c = s / 6; P.best = 2 * s * s * s / 27;
+        P.dims = [{ id: "len", label: "Length of the base =", ex: function (x) { return s - 2 * x; }, ph: "in terms of x" }, { id: "wid", label: "Width of the base =", ex: function (x) { return s - 2 * x; } }, { id: "hgt", label: "Height of the box =", ex: function (x) { return x; } }];
+        P.story = "A square sheet of cardboard is <b>" + s + " inches</b> on each side. A small square of side <b>x</b> is cut from each corner, and the four flaps are folded up to make a box with no top. What value of <b>x</b> gives the box with the greatest volume?";
+        P.sheet = { a: s, b: s };
+        P.fText = "x(" + s + " - 2x)^2";
+        P.dimsAns = "<p>Cutting " + M("x") + " from both ends of a " + s + "-inch side leaves " + M(s + " - 2x") + ". So the base is " + M("(" + s + " - 2x)") + " by " + M("(" + s + " - 2x)") + " and the height is the folded flap, " + M("x") + ".</p>";
+        P.funcAns = "<p>" + M("V = (length)(width)(height) = (" + s + " - 2x)(" + s + " - 2x)(x) = x(" + s + " - 2x)^2") + ".</p>";
+        P.domAns = "<p>You have to cut something, so " + M("x > 0") + ". The base side " + M(s + " - 2x") + " must stay positive, so " + M("x < " + (s / 2)) + ". Domain: " + intervalText(P.domain) + ". (Writing the ends as closed, " + M("[0, " + (s / 2) + "]") + ", is also fine since the volume is 0 there.)</p>";
+        P.derivAns = "<p>Product rule and chain rule (or expand first): " + M("V(x) = " + s * s + "x - " + 4 * s + "x^2 + 4x^3") + ", so " + M("V'(x) = " + s * s + " - " + 8 * s + "x + 12x^2 = (" + s + " - 2x)(" + s + " - 6x)") + ".</p>";
+        P.critAns = "<p>" + M("(" + s + " - 2x)(" + s + " - 6x) = 0") + " gives " + M("x = " + (s / 2)) + " or " + M("x = " + (s / 6)) + ". But " + M("x = " + (s / 2)) + " is the edge of the domain (no base left), so the only critical number inside is " + M("x = " + (s / 6)) + ".</p>";
+        P.outsideNote = "Hint: the other root of the derivative makes the base disappear.";
+        P.ansTxt = "<p>Cut squares of side " + M("x = " + (s / 6) + " in") + ". The base is " + M((s - s / 3) + " by " + (s - s / 3) + " in") + " and the box is " + M((s / 6) + " in") + " tall, so the largest volume is " + M("V(" + (s / 6) + ") = " + (2 * s * s * s / 27) + " in^3") + ".</p>";
+        P.ansFields = [nfield("a", "Cut size x (inches) =", s / 6), nfield("b", "Maximum volume (cubic inches) =", 2 * s * s * s / 27)];
+        P.derivPh = "";
+        P.samples = spread(0.5, s / 2 - 0.5, 5);
+        P.fDiag = [{ fn: function (x) { return x * (s - x) * (s - x); }, msg: "A cut of size x removes x from <i>both ends</i> of a side, so each base side is " + M(s + " - 2x") + ", not " + M(s + " - x") + "." }];
+        P.domLoose = true; P.domPh = "interval notation";
+        P.domMsg = "Think about the smallest cut that actually makes a box, and the biggest cut that still leaves a base.";
+      } else if (v === "b2") {
+        var R = (o && o.R) || rc(RECTS), a = R[0], b = R[1];
+        P.a = a; P.b = b; P.r2 = R[3];
+        P.f = function (x) { return x * (a - 2 * x) * (b - 2 * x); };
+        P.f1 = function (x) { return 12 * x * x - 4 * (a + b) * x + a * b; };
+        P.f2 = function (x) { return 24 * x - 4 * (a + b); };
+        P.domain = mkDom(0, a / 2, false, false); P.edge = { lo: 0, hi: a / 2 }; P.c = R[2]; P.best = P.f(P.c);
+        P.dims = [{ id: "len", label: "Length of the base =", ex: function (x) { return b - 2 * x; }, ph: "in terms of x" }, { id: "wid", label: "Width of the base =", ex: function (x) { return a - 2 * x; } }, { id: "hgt", label: "Height of the box =", ex: function (x) { return x; } }];
+        P.story = "A rectangular sheet of metal is <b>" + a + " cm by " + b + " cm</b>. A square of side <b>x</b> is cut from each corner and the four flaps are folded up to make a box with no top. What value of <b>x</b> gives the largest volume?";
+        P.sheet = { a: a, b: b };
+        P.fText = "x(" + a + " - 2x)(" + b + " - 2x)";
+        P.dimsAns = "<p>Each side loses " + M("x") + " at both ends. The " + b + " cm side leaves " + M(b + " - 2x") + ", the " + a + " cm side leaves " + M(a + " - 2x") + ", and the height is " + M("x") + ".</p>";
+        P.funcAns = "<p>" + M("V(x) = x(" + a + " - 2x)(" + b + " - 2x)") + ".</p>";
+        P.domAns = "<p>" + M("x > 0") + ", and the shorter side must keep a positive base: " + M(a + " - 2x > 0") + ", so " + M("x < " + (a / 2)) + ". Domain: " + intervalText(P.domain) + " (closed ends are also fine).</p>";
+        var ex = "x(" + a + " - 2x)(" + b + " - 2x)";
+        P.derivAns = "<p>Expand: " + M("V(x) = 4x^3 - " + 2 * (a + b) + "x^2 + " + a * b + "x") + ", so " + M("V'(x) = 12x^2 - " + 4 * (a + b) + "x + " + a * b) + ".</p>";
+        P.critAns = "<p>Solve " + M("12x^2 - " + 4 * (a + b) + "x + " + a * b + " = 0") + " with the quadratic formula (or by factoring) to get " + M("x = " + pn(R[2], 4)) + " and " + M("x = " + pn(R[3], 4)) + ". Only " + M("x = " + pn(R[2])) + " is in " + intervalText(P.domain) + ", because " + M(pn(R[3])) + " is more than half the short side.</p>";
+        P.outsideNote = "Hint: you cannot cut more than half of the shorter side.";
+        P.ansTxt = "<p>Cut squares of side " + M("x = " + pn(R[2]) + " cm") + ". The box is " + M(pn(b - 2 * R[2]) + " by " + pn(a - 2 * R[2]) + " by " + pn(R[2]) + " cm") + ", with maximum volume " + M("V(" + pn(R[2]) + ") = " + pn(P.best) + " cm^3") + ".</p>";
+        P.ansFields = [nfield("a", "Cut size x (cm) =", R[2]), nfield("b", "Maximum volume (cm³) =", P.best)];
+        P.samples = spread(0.5, a / 2 - 0.5, 5);
+        P.fDiag = [{ fn: function (x) { return x * (a - x) * (b - x); }, msg: "A cut of size x removes x from <i>both ends</i> of a side, so the sides become " + M(b + " - 2x") + " and " + M(a + " - 2x") + "." }];
+        P.domLoose = true; P.domPh = "interval notation";
+        P.domMsg = "The cut cannot be more than half of the <i>shorter</i> side, or there would be nothing left for the base.";
+      } else {
+        var k = (o && o.k) || rc([4, 5, 6, 7]), S = 3 * k * k, rS = Math.sqrt(S);
+        P.k = k; P.S = S;
+        P.f = function (x) { return (S * x - x * x * x) / 4; };
+        P.f1 = function (x) { return (S - 3 * x * x) / 4; };
+        P.f2 = function (x) { return -1.5 * x; };
+        P.domain = mkDom(0, rS, false, false); P.edge = { lo: 0, hi: rS }; P.c = k; P.best = k * k * k / 2;
+        P.dims = [{ id: "len", label: "Length of the base =", ex: function (x) { return x; }, ph: "in terms of x" }, { id: "wid", label: "Width of the base =", ex: function (x) { return x; } }, { id: "hgt", label: "Height h =", ex: function (x) { return (S - x * x) / (4 * x); }, ph: "h in terms of x" }];
+        P.story = "A storage box has a <b>square base</b> and <b>no top</b>. It is built from <b>" + S + " square feet</b> of material in total (the base and four sides). If the base has side <b>x</b>, find the dimensions that give the largest volume.";
+        P.fText = "x^2(" + S + " - x^2)/(4x)";
+        P.dimsAns = "<p>The base is " + M("x") + " by " + M("x") + ". Let the height be " + M("h") + ". Material: base " + M("x^2") + " plus four sides " + M("4xh") + ", so " + M("x^2 + 4xh = " + S) + ". Solve: " + M("h = (" + S + " - x^2)/(4x)") + ".</p>";
+        P.funcAns = "<p>" + M("V = (base area)(height) = x^2 * (" + S + " - x^2)/(4x) = (" + S + "x - x^3)/4") + ".</p>";
+        P.domAns = "<p>" + M("x > 0") + ". The height " + M("h = (" + S + " - x^2)/(4x)") + " must be positive, so " + M("x^2 < " + S) + ", which means " + M("x < sqrt(" + S + ") ≈ " + pn(rS)) + ". Domain: " + M("(0, " + pn(rS) + ")") + ". (Closed ends are also fine; the volume is 0 at both.)</p>";
+        P.derivAns = "<p>" + M("V(x) = (" + S + "x - x^3)/4") + ", so " + M("V'(x) = (" + S + " - 3x^2)/4") + ".</p>";
+        P.critAns = "<p>" + M(S + " - 3x^2 = 0") + " gives " + M("x^2 = " + (S / 3)) + ", so " + M("x = " + k) + " or " + M("x = -" + k) + ". A length cannot be negative, so only " + M("x = " + k) + " is in the domain.</p>";
+        P.ansTxt = "<p>Base " + M(k + " ft by " + k + " ft") + ", height " + M("h = (" + S + " - " + k * k + ")/(4*" + k + ") = " + pn((S - k * k) / (4 * k)) + " ft") + ", and the largest volume is " + M("V(" + k + ") = " + pn(k * k * k / 2) + " ft^3") + ".</p>";
+        P.ansFields = [nfield("a", "Base side x (feet) =", k), nfield("b", "Height h (feet) =", (S - k * k) / (4 * k)), nfield("c", "Maximum volume (cubic feet) =", k * k * k / 2)];
+        P.samples = spread(0.5, rS - 0.5, 5);
+        P.fDiag = [{ fn: function (x) { return x * x * (S - x * x) / 4; }, msg: "Check the height. It is " + M("h = (" + S + " - x^2)/(4x)") + ", so the volume is " + M("x^2 * h") + ", with the " + M("x") + " in the denominator cancelling one power of " + M("x") + "." }];
+        P.domLoose = true; P.domPh = "interval notation";
+        P.domMsg = "The height has to be positive. Find the largest x for which " + M("h = (" + S + " - x^2)/(4x)") + " is still positive.";
+        P.outsideNote = "";
+      }
+      LAST_VARIANT.box = v;
+      P.title = "Open-top box";
+      P.funcPrompt = "Use the dimensions to write the volume as a function of <b>x</b> alone: " + M("V(x) = (length)(width)(height)") + ".";
+      P.fPh = "function of x";
+      P.funcHints = H3("Volume of a box is length times width times height. You wrote all three in terms of " + M("x") + " in the first step.", "Multiply the three expressions. You do not need to expand it.", "A correct answer looks like " + M(P.fText) + " (any equivalent form is fine).");
+      P.domPh = P.domPh || "";
+      P.domHints = H3("Two things can go wrong: the cut could be too small to make a box, or too big to leave a base.", "Smallest possible: " + M("x > 0") + ". For the largest, find where a dimension of the base reaches zero.", "Write both endpoints in interval notation. Closed or open ends are both accepted here, because the volume is 0 at each.");
+      P.derivHints = H3("Expanding first can make this easier, or use the product rule and chain rule.", "The derivative of a degree-3 polynomial is degree 2.", "Try factoring the derivative. It will help in the next step.");
+      P.critHints = H3("Set " + M("V'(x) = 0") + " and solve. Factor if you can, or use the quadratic formula.", "A quadratic gives up to two roots. Check each against the domain " + intervalText(P.domain) + ".", "Keep only the root(s) that lie strictly inside the domain.");
+      P.critPh = "";
+      P.steps = FAM.box.steps(P, 1);
+      return P;
+    },
+    steps: function (P, level) {
+      var fields = P.dims.map(function (d) { return { id: d.id, kind: "fn", label: d.label, vars: ["x"], expect: d.ex, samples: P.samples, ph: d.ph || "" }; });
+      var s1 = { title: "Draw it and name the dimensions", prompt: "Look at the diagram. Write the length, width, and height of the finished box in terms of <b>x</b>.", fields: fields, ans: P.dimsAns,
+        hints: H3("Cutting a square of side " + M("x") + " from a corner shortens a side of the sheet by " + M("x") + " at <i>each</i> end.", "The height of the box is the part you fold up.", "Each base side is the original side minus " + M("2x") + " (one " + M("x") + " from each end).") };
+      if (P.variant === "b3") s1.hints = H3("The base is a square of side " + M("x") + ". The material is the base plus four rectangular sides.", "Base area " + M("x^2") + " plus four sides each " + M("x") + " by " + M("h") + " must total " + M(String(P.S)) + ". Solve for " + M("h") + ".", "You should get " + M("h = (" + P.S + " - x^2)/(4x)") + ".");
+      if (P.variant === "b3") s1.prompt = "Look at the diagram. The base is " + M("x") + " by " + M("x") + ". The material (base plus four sides) totals " + P.S + " square feet. Write the base length, base width, and height " + M("h") + " in terms of <b>x</b>.";
+      var s7 = sAns(P, "Answer the question", "Answer what the problem asked, with units.", P.ansFields, P.ansTxt);
+      return [s1, sFunc(P), sDomain(P), sDeriv(P), sCrit(P), sJust(P), s7];
+    }
+  };
+
+  // =========================================================
+  // FENCE
+  // =========================================================
+  FAM.fence = {
+    gen: function (o) {
+      var combos = [{ w: 1, k: 0 }, { w: 1, k: 1 }, { w: 1, k: 2 }, { w: 0, k: 1 }, { w: 0, k: 2 }];
+      var cb = (o && o.cb) || combos[ri(0, combos.length - 1)];
+      if (!(o && o.cb) && LAST_VARIANT.fence) { var tries = 0; while (("" + cb.w + cb.k) === LAST_VARIANT.fence && tries++ < 20) cb = combos[ri(0, combos.length - 1)]; }
+      var w = cb.w, k = cb.k, m = (o && o.m) || rc([8, 10, 12, 15, 20, 25, 30]);
+      var n = k + 2, cw = w ? 1 : 2, L = 2 * n * m;
+      var P = { fam: "fence", sig: "fence", variant: "" + w + k, w: w, k: k, L: L, m: m, vn: "x", fn: "A", goal: "max", closedOK: true, title: "Fencing" };
+      P.y = function (x) { return (L - n * x) / cw; };
+      P.f = function (x) { return x * (L - n * x) / cw; };
+      P.f1 = function (x) { return (L - 2 * n * x) / cw; };
+      P.f2 = function () { return -2 * n / cw; };
+      P.domain = mkDom(0, L / n, false, false); P.edge = { lo: 0, hi: L / n }; P.c = m; P.best = n * m * m / cw;
+      P.samples = spread(1, L / n - 1, 5);
+      var divTxt = k === 0 ? "" : (k === 1 ? " One fence <b>divider</b> parallel to the two short sides splits the pen into two equal parts." : " Two fence <b>dividers</b> parallel to the two short sides split the pen into three equal parts.");
+      P.story = "A farmer has <b>" + L + " feet</b> of fencing to build a rectangular pen" + (w ? " along the side of a long barn wall, so <b>no fence is needed on the wall side</b>." : " in an open field.") + divTxt + " The short sides have length <b>x</b> and the long sides have length <b>y</b>. What dimensions give the pen with the greatest area?";
+      var fencePieces = n + " segments of length " + "x" + (w ? " and one of length y" : " and two of length y");
+      P.conText = M(n + "x + " + (w ? "" : "2") + "y = " + L);
+      P.fText = "x(" + L + " - " + n + "x)" + (w ? "" : "/2");
+      P.yText = (w ? "" : "(") + L + " - " + n + "x" + (w ? "" : ")/2");
+      P.fPh = "function of x"; P.d1Ph = "";
+      P.fDiag = [{ fn: function (x) { return x * (L - 2 * x) / cw; }, msg: "Count the fence segments of length x: two ends" + (k ? " plus " + k + " divider" + (k > 1 ? "s" : "") : "") + ", so " + n + " in all." }];
+      P.yDiag = [{ fn: function (x) { return (L - 2 * x) / cw; }, msg: "Count the fence segments of length x: two ends" + (k ? " plus " + k + " divider" + (k > 1 ? "s" : "") : "") + ", so " + n + " in all." }];
+      P.domLoose = true; P.domPh = "interval notation";
+      P.domMsg = "x has to be positive, and the largest it can be is when y shrinks to zero.";
+      P.domAns = "<p>" + M("x > 0") + ". Also " + M("y > 0") + ": " + M("y = " + P.yText + " > 0") + " gives " + M("x < " + (L / n)) + ". Domain: " + intervalText(P.domain) + " (closed ends are also fine, since the area is 0 at each).</p>";
+      P.domHints = H3("x cannot be zero or negative. How big can x get before there is no fence left for y?", "The most x can be is when all the fence goes to the x-segments: " + M(n + "x = " + L) + ".", "Solve that for x to get the right endpoint of the domain.");
+      P.derivAns = "<p>" + M("A(x) = " + P.fText) + " = " + M((L / cw) + "x - " + (n / cw) + "x^2") + ", so " + M("A'(x) = " + (L / cw) + " - " + (2 * n / cw) + "x") + ".</p>";
+      P.derivHints = H3("Multiply out " + M(P.fText) + " first, or use the product rule.", "The derivative of a quadratic is linear.", "Your answer simplifies to " + M("A'(x) = " + (L / cw) + " - " + (2 * n / cw) + "x") + ".");
+      P.critAns = "<p>" + M((L / cw) + " - " + (2 * n / cw) + "x = 0") + " gives " + M("x = " + m) + ". It is inside " + intervalText(P.domain) + ".</p>";
+      P.critHints = H3("Set " + M("A'(x) = 0") + " and solve for " + M("x") + ".", "This is a linear equation.", "Check the answer is inside your domain.");
+      P.critPh = "";
+      P.ansTxt = "<p>" + M("x = " + m + " ft") + ", " + M("y = " + P.yText + " = " + pn(P.y(m)) + " ft") + ", and the largest area is " + M("A(" + m + ") = " + m + " * " + pn(P.y(m)) + " = " + pn(P.best) + " ft^2") + ".</p>";
+      P.ansFields = [nfield("a", "x (feet) =", m), nfield("b", "y (feet) =", P.y(m)), nfield("c", "Maximum area (square feet) =", P.best)];
+      P.sc = cw;
+      LAST_VARIANT.fence = P.variant;
+      P.steps = FAM.fence.steps(P, 2);
+      return P;
+    },
+    steps: function (P, level) {
+      var L = P.L, n = P.k + 2, w = P.w, cw = w ? 1 : 2;
+      var s1 = { title: "Constraint and area function",
+        prompt: "The fence segments must total " + L + " feet. First solve that constraint for <b>y</b> in terms of x, then write the area " + M("A = xy") + " as a function of <b>x</b> alone.",
+        fields: [{ id: "y", kind: "fn", label: "y =", vars: ["x"], expect: P.y, samples: P.samples, diag: P.yDiag, ph: "y in terms of x" },
+          { id: "f", kind: "fn", label: "A(x) =", vars: ["x"], expect: P.f, samples: P.samples, diag: P.fDiag, ph: "area in terms of x" }],
+        ans: "<p>Count fence: " + n + " segments of length " + M("x") + (w ? " and one of length " + M("y") + " (the wall covers the other long side)" : " and two of length " + M("y")) + ". So " + P.conText + ", which gives " + M("y = " + P.yText) + ". Then " + M("A(x) = xy = " + P.fText) + ".</p>",
+        hints: H3("Count every piece of fence: the two short ends, any dividers (each is length x), and the long side(s) that actually need fence.", "Total fence: " + M(n + "x") + " from the x-segments " + (w ? "plus " + M("y") + " (one long side)" : "plus " + M("2y") + " (two long sides)") + " equals " + L + ".", "Solve for " + M("y") + ", then multiply by " + M("x") + " to get the area.") };
+      var s3 = comb("Derivative and critical number", sDeriv(P), sCrit(P));
+      var s5 = sAns(P, "Answer the question", "Give both dimensions of the pen and the maximum area, with units.", P.ansFields, P.ansTxt);
+      return [s1, sDomain(P), s3, sJust(P), s5];
+    }
+  };
+
+  // =========================================================
+  // CAN
+  // =========================================================
+  FAM.can = {
+    gen: function (o) {
+      var open = (o && o.open !== undefined) ? o.open : (LAST_VARIANT.can === "closed" ? true : (LAST_VARIANT.can === "open" ? false : Math.random() < 0.5));
+      var V = (o && o.V) || rc([250, 330, 355, 400, 500, 750, 1000]);
+      var P = { fam: "can", sig: "can", variant: open ? "open" : "closed", vn: "r", fn: "S", goal: "min", closedOK: false, open: open, V: V, title: "Cylinder" };
+      var PI = Math.PI;
+      if (open) {
+        P.f = function (r) { return PI * r * r + 2 * V / r; };
+        P.f1 = function (r) { return 2 * PI * r - 2 * V / (r * r); };
+        P.f2 = function (r) { return 2 * PI + 4 * V / (r * r * r); };
+        P.c = Math.cbrt(V / PI);
+      } else {
+        P.f = function (r) { return 2 * PI * r * r + 2 * V / r; };
+        P.f1 = function (r) { return 4 * PI * r - 2 * V / (r * r); };
+        P.f2 = function (r) { return 4 * PI + 4 * V / (r * r * r); };
+        P.c = Math.cbrt(V / (2 * PI));
+      }
+      P.best = P.f(P.c); P.h = V / (PI * P.c * P.c);
+      P.domain = mkDom(0, Infinity, false, false);
+      P.samples = [1, 2, 3.5, 5, 8];
+      P.story = "A cylindrical " + (open ? "tank" : "can") + " " + (open ? "with an <b>open top</b> " : "(with a top and a bottom) ") + "must hold <b>" + V + " cm³</b>. Its radius is <b>r</b> and its height is <b>h</b>. What radius uses the <b>least material</b> (the smallest surface area)?";
+      var surf = open ? "πr² + 2πrh" : "2πr² + 2πrh";
+      P.fText = (open ? "pi r^2" : "2 pi r^2") + " + 2*" + V + "/r";
+      P.fPh = "use pi for \u03c0";
+      P.fDiag = [{ fn: function (r) { return (open ? 1 : 2) * PI * r * r + V / r; }, msg: "The side area is 2πrh. Replace h with " + M("h = " + V + "/(pi r^2)") + " and simplify: " + M("2 pi r h = 2*" + V + "/r") + "." }];
+      P.funcPrompt = "Write the surface area " + M("S") + " as a function of <b>r</b> alone. The surface area formula is " + M(open ? "S = pi r^2 + 2 pi r h" : "S = 2 pi r^2 + 2 pi r h") + ". Use the volume to eliminate " + M("h") + ".";
+      P.funcAns = "<p>Volume: " + M("pi r^2 h = " + V) + ", so " + M("h = " + V + "/(pi r^2)") + ". Surface area: " + M(open ? "S = pi r^2 + 2 pi r h" : "S = 2 pi r^2 + 2 pi r h") + ". Substitute: " + M("2 pi r h = 2 pi r * " + V + "/(pi r^2) = " + (2 * V) + "/r") + ". So " + M("S(r) = " + (open ? "pi r^2" : "2 pi r^2") + " + " + (2 * V) + "/r") + ".</p>";
+      P.funcHints = H3("You have two unknowns, " + M("r") + " and " + M("h") + ". The volume formula " + M("V = pi r^2 h") + " lets you write " + M("h") + " in terms of " + M("r") + ".", "Solve " + M("pi r^2 h = " + V) + " for " + M("h") + ", then put that into the surface area formula. The " + M("pi") + " cancels in the side area.", "You should get a term " + M("2*" + V + "/r") + " from the side. The full answer is " + M(P.fText) + ".");
+      P.domAns = "<p>A radius must be positive, and nothing stops it from being large: " + intervalText(P.domain) + ".</p>";
+      P.domMsg = "A radius has to be positive. Is there an upper limit in the story?";
+      P.domPh = "interval notation";
+      P.domHints = H3("What is the smallest a radius can be? What is the largest?", "A radius of 0 is not a cylinder, and the story gives no maximum.", "Use parentheses for an excluded endpoint and for infinity.");
+      P.derivAns = "<p>Rewrite " + M((2 * V) + "/r = " + (2 * V) + "r^-1") + ". Then " + M("S'(r) = " + (open ? "2 pi r" : "4 pi r") + " - " + (2 * V) + "/r^2") + ".</p>";
+      P.derivHints = H3("Rewrite the fraction as a power: " + M((2 * V) + "/r = " + (2 * V) + "r^-1") + ". Then use the power rule.", "The derivative of " + M("r^-1") + " is " + M("-r^-2") + ".", "Expect " + M("S'(r) = " + (open ? "2 pi r" : "4 pi r") + " - " + (2 * V) + "/r^2") + ".");
+      P.critAns = "<p>" + M((open ? "2 pi r" : "4 pi r") + " = " + (2 * V) + "/r^2") + ", so " + M("r^3 = " + (open ? (V + "/pi") : (V + "/(2 pi)"))) + " and " + M("r = " + pn(P.c, 4) + " ≈ " + pn(P.c)) + " cm. That is the only real solution, and it is positive.</p>";
+      P.critHints = H3("Set " + M("S'(r) = 0") + ". Move the fraction to the other side and multiply by " + M("r^2") + ".", "You get " + M("r^3 = ...") + ". Take the cube root with your calculator.", "Round to 2 decimal places.");
+      P.critRound = true; P.critPh = "";
+      P.noEndMsg = "The domain " + intervalText(P.domain) + " is open and unbounded.";
+      P.ansTxt = "<p>" + M("r ≈ " + pn(P.c) + " cm") + ", height " + M("h = " + V + "/(pi r^2) ≈ " + pn(P.h) + " cm") + ", and the least surface area is " + M("S(" + pn(P.c) + ") ≈ " + pn(P.best) + " cm^2") + ". " + (open ? "(Notice that h = r: the best open tank is as tall as it is wide.)" : "(Notice that h = 2r: the best can is as tall as it is wide.)") + "</p>";
+      P.ansFields = [nfield("a", "Height h (cm) =", P.h, "2 decimals", 2), nfield("b", "Minimum surface area (cm²) =", P.best, "2 decimals", 2)];
+      LAST_VARIANT.can = P.variant;
+      P.steps = FAM.can.steps(P, 3);
+      return P;
+    },
+    steps: function (P, level) {
+      var s1 = comb("Function and domain", sFunc(P), sDomain(P));
+      var s2 = comb("Derivative and critical number", sDeriv(P), sCrit(P));
+      var s4 = sAns(P, "Answer the question", "You already have r. Now give the height of the " + (P.open ? "tank" : "can") + " and the minimum surface area, rounded to 2 decimal places.", P.ansFields, P.ansTxt);
+      return [s1, s2, sJust(P), s4];
+    }
+  };
+
+  // =========================================================
+  // CLOSEST POINT
+  // =========================================================
+  FAM.closest = {
+    gen: function (o) {
+      var v = (o && o.variant) || (LAST_VARIANT.closest === "c2" ? "c1" : (Math.random() < 0.7 ? "c1" : "c2"));
+      var P = { fam: "closest", sig: "closest", variant: v, vn: "x", fn: "L", goal: "min", closedOK: false, title: "Closest point" };
+      if (v === "c1") {
+        var a = (o && o.a) || rc([2, 3, 4, 5, 6, 7, 8]);
+        P.a = a;
+        P.f = function (x) { return (x - a) * (x - a) + x; };
+        P.f1 = function (x) { return 2 * x - 2 * a + 1; };
+        P.f2 = function () { return 2; };
+        P.domain = mkDom(0, Infinity, true, false); P.c = a - 0.5; P.best = P.f(P.c);
+        P.pt = { x: a, y: 0 }; P.curveEq = "y = √x"; P.curveFn = Math.sqrt;
+        P.samples = [0.5, 1, 2, 4, 7];
+        P.story = "Find the point on the curve " + M("y = sqrt(x)") + " that is <b>closest</b> to the point <b>(" + a + ", 0)</b>.";
+        P.fText = "(x - " + a + ")^2 + x";
+        P.fDiag = [{ fn: function (x) { return (x - a) * (x - a) + Math.sqrt(x); }, msg: "The point on the curve is " + M("(x, sqrt(x))") + ". Its <i>squared</i> distance uses " + M("(sqrt(x))^2 = x") + " for the vertical part." }];
+        P.funcAns = "<p>A point on the curve is " + M("(x, sqrt(x))") + ". Its squared distance to " + M("(" + a + ", 0)") + " is " + M("L(x) = (x - " + a + ")^2 + (sqrt(x) - 0)^2 = (x - " + a + ")^2 + x") + ".</p>";
+        P.domAns = "<p>" + M("sqrt(x)") + " needs " + M("x >= 0") + ", and the curve goes on forever to the right. Domain: " + intervalText(P.domain) + ". (The point " + M("(0, 0)") + " is on the curve, so the bracket stays.)</p>";
+        P.domPh = "interval notation";
+        P.domMsg = "Where is " + M("sqrt(x)") + " defined? Is the left endpoint itself on the curve?";
+        P.derivAns = "<p>" + M("L(x) = (x - " + a + ")^2 + x") + ", so " + M("L'(x) = 2(x - " + a + ") + 1 = 2x - " + (2 * a - 1)) + ".</p>";
+        P.derivHints = H3("The chain rule on the first term gives " + M("2(x - " + a + ")") + ".", "The derivative of the second term, " + M("x") + ", is 1.", "Combine: " + M("2x - " + (2 * a) + " + 1") + ".");
+        P.critAns = "<p>" + M("2x - " + (2 * a - 1) + " = 0") + " gives " + M("x = " + (a - 0.5)) + ", which is inside " + intervalText(P.domain) + ".</p>";
+        P.critHints = H3("Set the derivative equal to zero.", "This is a linear equation.", "Check that your answer is inside the domain.");
+        P.critRound = false; P.critPh = "";
+        P.pointTxt = M("(" + (a - 0.5) + ", sqrt(" + (a - 0.5) + ")) ≈ (" + pn(P.c) + ", " + pn(Math.sqrt(P.c)) + ")");
+        P.ansFields = [nfield("a", "x of the point =", P.c, "", 2), nfield("b", "y of the point =", Math.sqrt(P.c), "2 decimals", 2), nfield("c", "Minimum distance =", Math.sqrt(P.best), "2 decimals", 2)];
+        P.ansTxt = "<p>The closest point is " + P.pointTxt + ". The minimum distance is " + M("sqrt(L(" + (a - 0.5) + ")) = sqrt(" + pn(P.best, 4) + ") ≈ " + pn(Math.sqrt(P.best))) + ". (The minimized quantity was the squared distance, so take a square root at the end.)</p>";
+        P.cr = (o && o.ptDraw) || null;
+      } else {
+        var p = (o && o.p) || rc([3, 18]);
+        P.p = p; P.a = p;
+        P.f = function (x) { return (x - p) * (x - p) + x * x * x * x; };
+        P.f1 = function (x) { return 4 * x * x * x + 2 * x - 2 * p; };
+        P.f2 = function (x) { return 12 * x * x + 2; };
+        P.domain = mkDom(-Infinity, Infinity, false, false); P.c = p === 3 ? 1 : 2; P.best = P.f(P.c);
+        P.pt = { x: p, y: 0 }; P.curveEq = "y = x²"; P.curveFn = function (x) { return x * x; };
+        P.samples = [-1.5, -0.5, 0.5, 1.5, 2.5];
+        P.story = "Find the point on the parabola " + M("y = x^2") + " that is <b>closest</b> to the point <b>(" + p + ", 0)</b>.";
+        P.fText = "(x - " + p + ")^2 + x^4";
+        P.fDiag = [{ fn: function (x) { return (x - p) * (x - p) + x * x; }, msg: "The point on the parabola is " + M("(x, x^2)") + ", so the vertical part of the distance is " + M("x^2") + " and its square is " + M("(x^2)^2 = x^4") + "." }];
+        P.funcAns = "<p>A point on the parabola is " + M("(x, x^2)") + ". Its squared distance to " + M("(" + p + ", 0)") + " is " + M("L(x) = (x - " + p + ")^2 + (x^2)^2 = (x - " + p + ")^2 + x^4") + ".</p>";
+        P.domAns = "<p>Every real " + M("x") + " gives a point on the parabola: " + intervalText(P.domain) + ".</p>";
+        P.domPh = "interval notation";
+        P.domMsg = "Is there any x for which the point on the parabola does not exist?";
+        P.derivAns = "<p>" + M("L'(x) = 2(x - " + p + ") + 4x^3 = 4x^3 + 2x - " + (2 * p)) + ".</p>";
+        P.derivHints = H3("Chain rule on the first term: " + M("2(x - " + p + ")") + ".", "The derivative of " + M("x^4") + " is " + M("4x^3") + ".", "Combine and simplify: " + M("4x^3 + 2x - " + (2 * p)) + ".");
+        var q = p === 3 ? "(x - 1)(2x^2 + 2x + 3)" : "(x - 2)(2x^2 + 4x + 9)";
+        P.critAns = "<p>Solve " + M("4x^3 + 2x - " + (2 * p) + " = 0") + ". Divide by 2: " + M("2x^3 + x - " + p + " = 0") + ". Try the rational roots: " + M("x = " + P.c) + " works (" + M("2*" + (P.c * P.c * P.c) + " + " + P.c + " - " + p + " = 0") + "). Factor: " + M(q.replace(/\+ /g, "+ ")) + " = 0 (check by expanding). The quadratic factor has no real roots (negative discriminant), so the only critical number is " + M("x = " + P.c) + ".</p>";
+        P.critHints = H3("Divide the equation by 2 first. You have a cubic. Try small whole-number values of x.", "Test " + M("x = 1") + ", " + M("x = 2") + " in " + M("2x^3 + x - " + p) + " until one gives 0.", "Once one root works, the remaining quadratic has no real roots.");
+        P.critRound = false; P.critPh = "";
+        P.ansFields = [nfield("a", "x of the point =", P.c, "", 2), nfield("b", "y of the point =", P.c * P.c, "", 2), nfield("c", "Minimum distance =", Math.sqrt(P.best), "2 decimals", 2)];
+        P.ansTxt = "<p>The closest point is " + M("(" + P.c + ", " + (P.c * P.c) + ")") + ". The minimum distance is " + M("sqrt(L(" + P.c + ")) = sqrt(" + pn(P.best, 4) + ") ≈ " + pn(Math.sqrt(P.best))) + ". (The minimized quantity was the squared distance, so take a square root at the end.)</p>";
+      }
+      LAST_VARIANT.closest = v;
+      P.fPh = "function of x";
+      P.funcPrompt = "Minimizing a distance is the same as minimizing its <b>square</b>, which avoids a messy square root. Write the squared distance " + M("L") + " from a general point on the curve to " + M("(" + P.pt.x + ", 0)") + " as a function of <b>x</b>. Use " + M("L = (x\u2082 - x\u2081)^2 + (y\u2082 - y\u2081)^2") + ".";
+      P.funcHints = H3("A general point on the curve has coordinates " + M(v === "c1" ? "(x, sqrt(x))" : "(x, x^2)") + ".", "Squared distance between " + M(v === "c1" ? "(x, sqrt(x))" : "(x, x^2)") + " and " + M("(" + P.pt.x + ", 0)") + ": horizontal gap squared plus vertical gap squared.", "Your answer is " + M(P.fText) + " (any equivalent form is fine).");
+      P.domHints = H3("What x-values are possible for points on this curve?", v === "c1" ? "The square root needs a non-negative input." : "A parabola is defined for every x.", "Decide whether the endpoint (if any) is on the curve.");
+      P.noEndMsg = "The domain " + intervalText(P.domain) + " " + (isFinite(P.domain.lo) ? "extends forever to the right, so there are not two endpoints." : "extends forever in both directions.");
+      P.outsideNote = "";
+      P.steps = FAM.closest.steps(P, 3);
+      return P;
+    },
+    steps: function (P, level) {
+      var s1 = comb("Function and domain", sFunc(P), sDomain(P));
+      var s2 = comb("Derivative and critical number", sDeriv(P), sCrit(P));
+      var s4 = sAns(P, "Answer the question", "Give the closest point (coordinates, rounded to 2 decimals if needed) and the minimum <b>distance</b> (not squared).", P.ansFields, P.ansTxt);
+      return [s1, s2, sJust(P), s4];
+    }
+  };
+
+  // =========================================================
+  // Figures
+  // =========================================================
+  function figBoxNet(P) {
+    var a = P.sheet.a, b = P.sheet.b, W = 230, Hh = Math.max(110, Math.round(W * a / b)), x0 = 55, y0 = 22, q = 30;
+    var s = sRect(x0, y0, W, Hh, "sv-sheet");
+    [[x0, y0], [x0 + W - q, y0], [x0, y0 + Hh - q], [x0 + W - q, y0 + Hh - q]].forEach(function (c) { s += sRect(c[0], c[1], q, q, "sv-cut"); });
+    s += sLine(x0 + q, y0, x0 + q, y0 + Hh, "sv-fold") + sLine(x0 + W - q, y0, x0 + W - q, y0 + Hh, "sv-fold") + sLine(x0, y0 + q, x0 + W, y0 + q, "sv-fold") + sLine(x0, y0 + Hh - q, x0 + W, y0 + Hh - q, "sv-fold");
+    s += sText(x0 + q / 2, y0 + q / 2 + 4, "x", "sv-txt sv-b") + sText(x0 + W / 2, y0 - 6, b + (P.fam === "box" && P.variant === "b1" ? " in" : " cm"), "sv-txt") + sText(x0 - 8, y0 + Hh / 2 + 4, a + (P.variant === "b1" ? " in" : " cm"), "sv-txt", "end");
+    s += sText(x0 + W / 2, y0 + Hh / 2 + 4, "fold up the flaps", "sv-note");
+    return svgWrap(x0 + W + 25, y0 + Hh + 22, s, "A flat sheet with a square of side x cut from each corner");
+  }
+  function figBox3d(P) {
+    var s = "";
+    var x0 = 70, y0 = 60, w = 120, h = 80, dx = 55, dy = -34;
+    s += "<polygon class=\"sv-sheet\" points=\"" + x0 + "," + y0 + " " + (x0 + w) + "," + y0 + " " + (x0 + w) + "," + (y0 + h) + " " + x0 + "," + (y0 + h) + "\"/>";
+    s += "<polygon class=\"sv-side\" points=\"" + (x0 + w) + "," + y0 + " " + (x0 + w + dx) + "," + (y0 + dy) + " " + (x0 + w + dx) + "," + (y0 + h + dy) + " " + (x0 + w) + "," + (y0 + h) + "\"/>";
+    s += "<polygon class=\"sv-open\" points=\"" + x0 + "," + y0 + " " + (x0 + dx) + "," + (y0 + dy) + " " + (x0 + w + dx) + "," + (y0 + dy) + " " + (x0 + w) + "," + y0 + "\"/>";
+    s += sText(x0 + w / 2, y0 + h + 18, "x", "sv-txt sv-b") + sText(x0 + w + dx + 10, y0 + h / 2 + dy / 2 + 4, "h", "sv-txt sv-b", "start") + sText(x0 + w + dx / 2 + 10, y0 + dy / 2 + 14, "x", "sv-txt sv-b", "start");
+    s += sText(x0 + w / 2 + dx / 2, y0 + dy / 2 + 4, "open top", "sv-note");
+    return svgWrap(300, 160, s, "A box with a square base and an open top");
+  }
+  function figFence(P) {
+    var k = P.k, w = P.w, x0 = 60, y0 = 30, W = 190, Hh = 90, s = "";
+    if (w) s += "<rect class=\"sv-wall\" x=\"" + (x0 - 8) + "\" y=\"" + (y0 + Hh) + "\" width=\"" + (W + 16) + "\" height=\"12\"/>" + sText(x0 + W / 2, y0 + Hh + 9, "barn wall", "sv-wallt");
+    s += sRect(x0, y0, W, Hh, "sv-fence");
+    for (var i = 1; i <= k; i++) s += sLine(x0 + W * i / (k + 1), y0, x0 + W * i / (k + 1), y0 + Hh, "sv-fence");
+    s += sText(x0 - 10, y0 + Hh / 2 + 4, "x", "sv-txt sv-b", "end") + sText(x0 + W / 2, y0 - 8, "y", "sv-txt sv-b");
+    if (w) { s += "<line class=\"sv-wallln\" x1=\"" + x0 + "\" y1=\"" + (y0 + Hh) + "\" x2=\"" + (x0 + W) + "\" y2=\"" + (y0 + Hh) + "\"/>"; }
+    else s += sText(x0 + W / 2, y0 + Hh + 18, "y", "sv-txt sv-b");
+    return svgWrap(x0 + W + 40, y0 + Hh + (w ? 26 : 28), s, "A rectangular pen" + (w ? " against a wall" : "") + " with " + k + " dividers");
+  }
+  function figCan(P) {
+    var cx = 130, top = 42, h = 92, rx = 52, ry = 15, s = "";
+    s += "<path class=\"sv-side\" d=\"M" + (cx - rx) + " " + top + " L" + (cx - rx) + " " + (top + h) + " A" + rx + " " + ry + " 0 0 0 " + (cx + rx) + " " + (top + h) + " L" + (cx + rx) + " " + top + " Z\"/>";
+    s += "<ellipse class=\"" + (P.open ? "sv-open" : "sv-sheet") + "\" cx=\"" + cx + "\" cy=\"" + top + "\" rx=\"" + rx + "\" ry=\"" + ry + "\"/>";
+    s += sLine(cx, top, cx + rx, top, "sv-fold") + sText(cx + rx / 2, top + 14, "r", "sv-txt sv-b") + sLine(cx + rx + 14, top, cx + rx + 14, top + h, "sv-fold") + sText(cx + rx + 26, top + h / 2 + 4, "h", "sv-txt sv-b", "start");
+    s += sText(cx, top + h / 2 + 4, P.V + " cm³", "sv-note");
+    return svgWrap(260, 170, s, "A cylinder with radius r and height h");
+  }
+  function figClosest(P) {
+    var W = 280, Hh = 170, ml = 34, mb = 26, mt = 12, mr = 14, xmin, xmax, ymin = 0, ymax;
+    if (P.variant === "c1") { xmin = -0.5; xmax = P.a + 1.5; ymax = Math.sqrt(xmax) + 0.6; }
+    else { xmin = -1.4; xmax = P.p + 1.4; ymax = Math.min(18, P.p === 3 ? 6 : 10); }
+    function X(x) { return ml + (x - xmin) / (xmax - xmin) * (W - ml - mr); }
+    function Y(y) { return Hh - mb - (y - ymin) / (ymax - ymin) * (Hh - mb - mt); }
+    var s = sLine(ml, Y(0), W - mr, Y(0), "sv-axis") + sLine(X(0), mt, X(0), Hh - mb, "sv-axis");
+    var pts = [], xs = P.variant === "c1" ? 0 : xmin;
+    for (var i = 0; i <= 120; i++) {
+      var x = xs + (xmax - xs) * i / 120, y = P.curveFn(x);
+      if (y > ymax || y < ymin) continue; pts.push(X(x).toFixed(1) + "," + Y(y).toFixed(1));
+    }
+    s += "<polyline class=\"sv-curve\" points=\"" + pts.join(" ") + "\"/>";
+    var qx = P.variant === "c1" ? P.a * 0.3 : 0.6, qy = P.curveFn(qx);
+    s += sLine(X(P.pt.x), Y(0), X(qx), Y(qy), "sv-dash");
+    s += "<circle class=\"sv-pt\" cx=\"" + X(P.pt.x) + "\" cy=\"" + Y(0) + "\" r=\"4.5\"/>" + sText(X(P.pt.x), Y(0) + 17, "(" + P.pt.x + ", 0)", "sv-txt");
+    s += "<circle class=\"sv-pt2\" cx=\"" + X(qx) + "\" cy=\"" + Y(qy) + "\" r=\"4.5\"/>";
+    s += sText(X(qx) + 7, Y(qy) - 8, "(x, " + (P.variant === "c1" ? "\u221ax" : "x\u00b2") + ")", "sv-txt", "start") + sText(W - mr - 4, mt + 12, P.curveEq, "sv-txt sv-b", "end");
+    return svgWrap(W, Hh, s, "The curve " + P.curveEq + " and the target point");
+  }
+  FAM.crit.figure = function () { return ""; };
+  FAM.toy.figure = function () { return ""; };
+  FAM.box.figure = function (P) { return P.variant === "b3" ? figBox3d(P) : figBoxNet(P); };
+  FAM.fence.figure = figFence;
+  FAM.can.figure = figCan;
+  FAM.closest.figure = function (P) { var f = figClosest(P); return f; };
+
+  // typed forms of the correct derivative / dimensions (used by the self-test)
+  function testTexts(P) {
+    var t = { d1: "", dims: [] };
+    if (P.fam === "crit") t.d1 = P.f1Text;
+    else if (P.fam === "toy") t.d1 = polyHint(P);
+    else if (P.fam === "box") {
+      if (P.variant === "b1") { t.d1 = "(" + P.s + "-2x)(" + P.s + "-6x)"; t.dims = [P.s + "-2x", P.s + "-2x", "x"]; }
+      else if (P.variant === "b2") { t.d1 = "12x^2-" + 4 * (P.a + P.b) + "x+" + P.a * P.b; t.dims = [P.b + "-2x", P.a + "-2x", "x"]; }
+      else { t.d1 = "(" + P.S + "-3x^2)/4"; t.dims = ["x", "x", "(" + P.S + "-x^2)/(4x)"]; }
+    }
+    else if (P.fam === "fence") t.d1 = "(" + P.L + "-" + 2 * (P.k + 2) + "x)/" + P.sc;
+    else if (P.fam === "can") t.d1 = (P.open ? "2" : "4") + "pi r-" + 2 * P.V + "/r^2";
+    else if (P.fam === "closest") t.d1 = P.variant === "c1" ? "2x-" + (2 * P.a - 1) : "4x^3+2x-" + 2 * P.p;
+    return t;
+  }
+  function genProblem(fam, o) {
+    var P = FAM[fam].gen(o || {});
+    P.fig = FAM[fam].figure(P);
+    P.tt = testTexts(P);
+    return P;
+  }
+
+
+  // ============================================================
+  // Stage content
+  // ============================================================
+  var HOWTYPE = "<ul><li>Powers: <code>x^2</code>. Multiplication: <code>*</code> or just write them together, like <code>3x</code> or <code>x(20-x)</code>.</li>" +
+    "<li>Put parentheses around a whole numerator or denominator: <code>500/(pi r^2)</code>, not <code>500/pi r^2</code>.</li>" +
+    "<li>Use <code>pi</code> for π and <code>sqrt(8)</code> for a square root. Any equivalent form of a function is accepted.</li>" +
+    "<li>Intervals: <code>(0, 15)</code>, <code>[0, inf)</code>, <code>(-inf, inf)</code>.</li>" +
+    "<li>Lists of critical numbers are separated by commas: <code>2, 5</code>. Round decimals to 2 places.</li></ul>";
+  var RECIPE = ["<b>Draw and label.</b> Sketch the situation. Name every quantity that can change.",
+    "<b>Objective.</b> What are you making as big or as small as possible? Write a formula for it.",
+    "<b>Constraint.</b> Use the other fact in the story to write one variable in terms of another.",
+    "<b>One variable.</b> Substitute so the objective is a function of a single variable, and state its <b>domain</b> from the story.",
+    "<b>Differentiate</b> and solve " + M("f'(x) = 0") + ". Keep the critical numbers that are in the domain.",
+    "<b>Prove it.</b> Use the first derivative test, the second derivative test, or compare endpoint values, to show you have a max or a min (whichever you wanted).",
+    "<b>Answer the question that was asked,</b> with units. Often this is not just " + M("x") + "."];
+  var STAGES = [
+    { id: "s1", nav: "1 Critical points", title: "Critical Point Refresher", kicker: "Stage 1", mins: 6, goal: "Find critical numbers and use the closed interval method.", fam: "crit",
+      blocks: [
+        { t: "p", html: "Optimization is a critical-point problem wearing a costume. Before the word problems, make sure this machinery is automatic." },
+        { t: "callout", cls: "key", title: "Critical number", html: "<p>A <b>critical number</b> of " + M("f") + " is a number " + M("c") + " in the domain of " + M("f") + " where " + M("f'(c) = 0") + " or " + M("f'(c)") + " does not exist. Local maxima and minima can only happen at critical numbers (or at endpoints of the interval).</p>" },
+        { t: "h", text: "The closed interval method" },
+        { t: "steps", items: ["Find " + M("f'(x)") + " and every critical number inside " + M("[a, b]") + ".", "Evaluate " + M("f") + " at each critical number <b>and at both endpoints</b> " + M("a") + " and " + M("b") + ".", "The largest value is the <b>absolute maximum</b>. The smallest value is the <b>absolute minimum</b>."] },
+        { t: "worked", fam: "crit", opts: { p: -1, q: 3, c0: 5, lo: -3, hi: 5 }, title: "Worked example", intro: "Watch each step, then try one yourself." },
+        { t: "h", text: "Try it" },
+        { t: "prob", id: "s1p", fam: "crit", kind: "practice", label: "Practice" },
+        { t: "cpbanner", title: "Checkpoint", html: "3 points. No hints needed, but they are free if you get stuck. Your <b>first check</b> on each step is the one that counts. Opening an answer before you check scores 0 for that step." },
+        { t: "prob", id: "s1c", fam: "crit", kind: "cp", label: "Checkpoint" }
+      ], cp: { id: "s1c", fam: "crit" } },
+    { id: "s2", nav: "2 Warm-up", title: "Warm-up: Two Numbers", kicker: "Stage 2", mins: 8, goal: "Learn the 7-step optimization recipe on a problem with no geometry.", fam: "toy",
+      blocks: [
+        { t: "p", html: "Every optimization problem follows the same recipe. Here it is. You will use it, step by step, on all five remaining stages." },
+        { t: "steps", items: RECIPE },
+        { t: "callout", cls: "key", title: "The big idea", html: "<p>A story gives you <b>two variables</b> and <b>one fact</b> that links them. Use that fact (the constraint) to eliminate one variable. Then you have an ordinary one-variable max/min problem, which you already know how to do.</p>" },
+        { t: "details", summary: "How to type your answers (open this once)", html: HOWTYPE },
+        { t: "worked", fam: "toy", opts: { variant: "t1", S: 20 }, title: "Worked example", intro: "Two numbers add to 20. Maximize the product." },
+        { t: "h", text: "Try it" },
+        { t: "prob", id: "s2p", fam: "toy", kind: "practice", label: "Practice" },
+        { t: "cpbanner", title: "Checkpoint", html: "7 points, one per step. The problem is a new random version." },
+        { t: "prob", id: "s2c", fam: "toy", kind: "cp", label: "Checkpoint" }
+      ], cp: { id: "s2c", fam: "toy" } },
+    { id: "s3", nav: "3 Open-top box", title: "The Open-Top Box", kicker: "Stage 3", mins: 11, goal: "Set up a geometric problem from a diagram and justify the maximum.", fam: "box",
+      blocks: [
+        { t: "p", html: "Now a classic with a picture. <b>Always draw it first</b> and label every length in terms of " + M("x") + ". The diagram in each problem is there to help with that." },
+        { t: "callout", cls: "warn", title: "Watch out", html: "<p>When you cut a square of side " + M("x") + " from a corner, each side of the sheet loses " + M("x") + " at <b>both</b> ends. A side of length " + M("L") + " leaves " + M("L - 2x") + ", not " + M("L - x") + ".</p>" },
+        { t: "callout", cls: "key", title: "The domain is part of the answer", html: "<p>The box only exists for some values of " + M("x") + ". The domain comes from the story, and a critical number only counts if it is <b>inside the domain</b>. Often the derivative has a second root that makes no sense for the box.</p>" },
+        { t: "worked", fam: "box", opts: { variant: "b1", s: 24 }, title: "Worked example" },
+        { t: "h", text: "Try it" },
+        { t: "prob", id: "s3p", fam: "box", kind: "practice", label: "Practice" },
+        { t: "cpbanner", title: "Checkpoint", html: "7 points. This version might be a different kind of box than the worked example." },
+        { t: "prob", id: "s3c", fam: "box", kind: "cp", label: "Checkpoint" }
+      ], cp: { id: "s3c", fam: "box" } },
+    { id: "s4", nav: "4 Fencing", title: "Fencing a Pen", kicker: "Stage 4", mins: 10, goal: "Build the constraint yourself, then optimize an area.", fam: "fence",
+      blocks: [
+        { t: "p", html: "Less hand-holding this time. The constraint and the area function are now <b>one step</b>: you work out " + M("y") + " in terms of " + M("x") + " and then the area." },
+        { t: "callout", cls: "key", title: "Count the fence, not the sides", html: "<p>Add up every <b>piece of fence</b> in the picture. A divider is a full piece of fence. A side along a wall needs no fence at all. Write “total fence = " + M("L") + "” as an equation, then solve it for " + M("y") + ".</p>" },
+        { t: "worked", fam: "fence", opts: { cb: { w: 1, k: 1 }, m: 10 }, title: "Worked example" },
+        { t: "h", text: "Try it" },
+        { t: "prob", id: "s4p", fam: "fence", kind: "practice", label: "Practice" },
+        { t: "cpbanner", title: "Checkpoint", html: "5 points. The wall and divider arrangement is random." },
+        { t: "prob", id: "s4c", fam: "fence", kind: "cp", label: "Checkpoint" }
+      ], cp: { id: "s4c", fam: "fence" } },
+    { id: "s5", nav: "5 Cylinder", title: "The Cylinder", kicker: "Stage 5", mins: 10, goal: "Minimize surface area with a volume constraint. Answers are rounded decimals.", fam: "can",
+      blocks: [
+        { t: "p", html: "Even less scaffolding: the first step is the <b>whole function and its domain</b>. Then you differentiate and find the critical number together. This one is a <b>minimum</b>, and the critical number is not a whole number, so use your calculator." },
+        { t: "callout", cls: "key", title: "Formulas you will need", html: "<p>Volume of a cylinder: " + M("V = pi r^2 h") + ". Lateral (side) area: " + M("2 pi r h") + ". Each circle (top or bottom): " + M("pi r^2") + ".</p><p>To solve " + M("r^3 = 56.5") + " for " + M("r") + ", raise to the " + M("1/3") + " power: type <code>56.5^(1/3)</code> in your calculator.</p>" },
+        { t: "worked", fam: "can", opts: { open: false, V: 355 }, title: "Worked example" },
+        { t: "h", text: "Try it" },
+        { t: "prob", id: "s5p", fam: "can", kind: "practice", label: "Practice" },
+        { t: "cpbanner", title: "Checkpoint", html: "4 points. Closed can or open-top tank, random volume." },
+        { t: "prob", id: "s5c", fam: "can", kind: "cp", label: "Checkpoint" }
+      ], cp: { id: "s5c", fam: "can" } },
+    { id: "s6", nav: "6 Closest point", title: "Closest Point on a Curve", kicker: "Stage 6", mins: 8, goal: "Minimize a distance by minimizing its square.", fam: "closest",
+      blocks: [
+        { t: "p", html: "Last one. The recipe is the same, but the quantity is a <b>distance</b>." },
+        { t: "callout", cls: "key", title: "Minimize the square of the distance", html: "<p>The distance " + M("D = sqrt((x\u2082 - x\u2081)^2 + (y\u2082 - y\u2081)^2)") + " is smallest exactly when " + M("D^2") + " is smallest, and " + M("D^2") + " has no square root to differentiate. So set up the <b>squared distance</b> " + M("L") + ", optimize it, and take a square root only at the very end for the distance.</p>" },
+        { t: "worked", fam: "closest", opts: { variant: "c1", a: 4 }, title: "Worked example" },
+        { t: "h", text: "Try it" },
+        { t: "prob", id: "s6p", fam: "closest", kind: "practice", label: "Practice" },
+        { t: "cpbanner", title: "Checkpoint", html: "4 points. The curve and the target point are random." },
+        { t: "prob", id: "s6c", fam: "closest", kind: "cp", label: "Checkpoint" }
+      ], cp: { id: "s6c", fam: "closest" } }
+  ];
+  STAGES.forEach(function (st) { st.n = STEPN[st.cp.fam]; });
+
+
+  // ============================================================
+  // Engine: stages, problem cards, worked examples, scoring, summary
+  // ============================================================
+  var SVG_OK = "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M20 6 9 17l-5-5\"/></svg>";
+  var SVG_X = "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\"><circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M15 9l-6 6M9 9l6 6\"/></svg>";
+  var SVG_LOCK = "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"4\" y=\"10\" width=\"16\" height=\"10\" rx=\"2\"/><path d=\"M8 10V7a4 4 0 0 1 8 0v3\"/></svg>";
+  var SVG_REFRESH = "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M16 3h5v5\"/><path d=\"M4 20 21 3\"/><path d=\"M21 16v5h-5\"/><path d=\"M15 15l6 6\"/><path d=\"M4 4l5 5\"/></svg>";
+
+  var A = { started: false, name: "", cur: "", secs: {}, built: {}, scores: {}, hints: {}, probs: {} };
+  window.__OPT = { A: A, STAGES: STAGES, FAM: FAM, genProblem: genProblem, gradeField: gradeField, STEPN: STEPN };
+  if (window.__OPT_NOMOUNT) return;
+
+  function el(tag, cls, html) { var e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
+  function $(id) { return document.getElementById(id); }
+  function fmtClock(s) { var m = Math.floor(s / 60), r = s % 60; return m + ":" + (r < 10 ? "0" : "") + r; }
+  function stageById(id) { for (var i = 0; i < STAGES.length; i++) if (STAGES[i].id === id) return STAGES[i]; return null; }
+  function stageSummary(stId) {
+    var st = stageById(stId), earned = 0, done = 0, peeked = 0, n = st.n;
+    for (var i = 0; i < n; i++) {
+      var r = A.scores[st.cp.id + "#" + i];
+      if (r) { done++; earned += r.earned; if (r.peeked) peeked++; }
+    }
+    return { n: n, done: done, earned: earned, poss: n, peeked: peeked, hints: A.hints[stId] || 0 };
+  }
+
+  // ---------- one field ----------
+  function fieldHtml(f, pid, si) {
+    var id = "f_" + pid + "_" + si + "_" + f.id;
+    var inner;
+    if (f.kind === "sel") {
+      inner = "<select id=\"" + id + "\" data-f=\"" + f.id + "\"><option value=\"\">Choose\u2026</option>" + f.options.map(function (o) { return "<option value=\"" + o.v + "\">" + optText(o.t) + "</option>"; }).join("") + "</select>";
+    } else {
+      inner = "<input type=\"text\" id=\"" + id + "\" data-f=\"" + f.id + "\" autocomplete=\"off\" autocapitalize=\"off\" spellcheck=\"false\" placeholder=\"" + (f.ph || "").replace(/"/g, "&quot;") + "\">";
+    }
+    return "<div class=\"fld\" data-fld=\"" + f.id + "\"><label for=\"" + id + "\">" + f.label + "</label>" + inner + "<div class=\"fmsg hidden\"></div></div>";
+  }
+  function optText(t) { return String(t).replace(/<sup>([^<]*)<\/sup>/g, "^$1").replace(/<[^>]+>/g, "").replace(/&/g, "&amp;").replace(/</g, "&lt;"); }
+
+  // ---------- problem card ----------
+  function mountProblem(b, body, st) {
+    var scored = b.kind === "cp";
+    var card = el("div", "qcard prob kind-" + b.kind);
+    card.setAttribute("data-id", b.id);
+    var head = "<div class=\"qcard-head\"><div class=\"qtitle\"><span class=\"qlabel\">" + b.label + "</span>" +
+      "<span class=\"kind-chip k-" + b.kind + "\">" + (scored ? "Checkpoint &middot; " + st.n + " pt" + (st.n === 1 ? "" : "s") : "Practice &middot; not scored") + "</span></div>" +
+      (scored ? "" : "<button class=\"icon-btn new-version-btn\" type=\"button\">" + SVG_REFRESH + "New version</button>") + "</div>";
+    card.innerHTML = head + "<div class=\"pstory\"></div><div class=\"pfig\"></div><details class=\"typehelp\"><summary>How to type your answers</summary>" + HOWTYPE + "</details><div class=\"psteps\"></div><div class=\"pdone hidden\"></div>";
+    body.appendChild(card);
+    var storyEl = card.querySelector(".pstory"), figEl = card.querySelector(".pfig"), stepsEl = card.querySelector(".psteps"), doneEl = card.querySelector(".pdone");
+    var P, steps, panels, resolved;
+
+    function lockScore(i, pts, peeked) {
+      var key = b.id + "#" + i;
+      if (!scored || A.scores[key]) return false;
+      A.scores[key] = { stage: st.id, kind: "cp", points: 1, earned: pts, peeked: !!peeked };
+      updateStatus();
+      return true;
+    }
+    function updateDone() {
+      var all = resolved.every(function (r) { return r; });
+      if (!all) { doneEl.classList.add("hidden"); return; }
+      doneEl.classList.remove("hidden");
+      if (scored) {
+        var s = stageSummary(st.id);
+        doneEl.className = "pdone";
+        doneEl.innerHTML = SVG_LOCK + " Checkpoint finished. Recorded so far: " + s.earned + " / " + s.poss + " points. Head to the next stage when you are ready.";
+      } else {
+        doneEl.className = "pdone part";
+        doneEl.innerHTML = "That is the whole recipe. Want more reps? Press <b>New version</b> for another random problem, or move on when you are ready.";
+      }
+    }
+    function unlock(i) {
+      resolved[i] = true;
+      panels[i].el.classList.remove("active"); panels[i].el.classList.add("done");
+      if (i + 1 < panels.length) { panels[i + 1].el.classList.remove("locked"); panels[i + 1].el.classList.add("active"); panels[i + 1].body.classList.remove("hidden"); }
+      updateDone();
+    }
+    function render() {
+      P = genProblem(b.fam, b.opts || {});
+      steps = P.steps; panels = []; resolved = steps.map(function () { return false; });
+      storyEl.innerHTML = P.story; figEl.innerHTML = P.fig || "";
+      var help = "";
+      stepsEl.innerHTML = "";
+      doneEl.classList.add("hidden");
+      steps.forEach(function (S, i) {
+        var pe = el("div", "pstep " + (i === 0 ? "active" : "locked"));
+        pe.innerHTML = "<div class=\"phead\"><span class=\"pnum\">" + (i + 1) + "</span><span class=\"ptitle\">" + S.title + "</span><span class=\"pbadge hidden\"></span></div>" +
+          "<div class=\"pbody" + (i === 0 ? "" : " hidden") + "\"><div class=\"pprompt\">" + S.prompt + "</div><div class=\"pfields\">" + S.fields.map(function (f) { return fieldHtml(f, b.id, i); }).join("") + "</div>" +
+          "<div class=\"pactions\"><button type=\"button\" class=\"btn-primary check-btn\">Check</button><button type=\"button\" class=\"btn-secondary hint-btn\">Hint (" + S.hints.length + ")</button><button type=\"button\" class=\"btn-secondary ans-btn\">Show answer</button></div>" +
+          "<div class=\"pfeed hidden\"></div><div class=\"phint hidden\"></div><div class=\"pans hidden\"></div></div>";
+        stepsEl.appendChild(pe);
+        var panel = { el: pe, body: pe.querySelector(".pbody"), hintN: 0, armed: null, peeked: false };
+        panels.push(panel);
+        wireStep(S, i, panel);
+      });
+      refreshVisibility();
+    }
+    function readVals(i) {
+      var v = {};
+      panels[i].el.querySelectorAll("[data-f]").forEach(function (inp) { v[inp.getAttribute("data-f")] = inp.value; });
+      return v;
+    }
+    function refreshVisibility() {
+      steps.forEach(function (S, i) {
+        var vals = readVals(i);
+        S.fields.forEach(function (f) {
+          var fl = panels[i].el.querySelector("[data-fld=\"" + f.id + "\"]");
+          var show = !f.showIf || f.showIf(vals);
+          fl.classList.toggle("hidden", !show);
+        });
+      });
+    }
+    function wireStep(S, i, panel) {
+      var pe = panel.el, feed = pe.querySelector(".pfeed"), hintBox = pe.querySelector(".phint"), ansBox = pe.querySelector(".pans"), badge = pe.querySelector(".pbadge");
+      var ansBtn = pe.querySelector(".ans-btn"), hintBtn = pe.querySelector(".hint-btn");
+      function setBadge() {
+        var r = A.scores[b.id + "#" + i];
+        if (!scored || !r) return;
+        badge.classList.remove("hidden");
+        badge.innerHTML = SVG_LOCK + " Recorded: " + r.earned + "/1" + (r.peeked ? " (answer viewed)" : "");
+      }
+      pe.querySelectorAll("input,select").forEach(function (inp) {
+        inp.addEventListener("input", refreshVisibility); inp.addEventListener("change", refreshVisibility);
+        inp.addEventListener("keydown", function (e) { if (e.key === "Enter") { e.preventDefault(); pe.querySelector(".check-btn").click(); } });
+      });
+      pe.querySelector(".check-btn").addEventListener("click", function () {
+        var vals = readVals(i), allOk = true, blank = false, msgs = [];
+        S.fields.forEach(function (f) {
+          var fl = pe.querySelector("[data-fld=\"" + f.id + "\"]");
+          if (fl.classList.contains("hidden")) return;
+          if (String(vals[f.id] || "").replace(/\s+/g, "") === "") blank = true;
+        });
+        if (blank) {
+          feed.classList.remove("hidden"); feed.className = "pfeed qfeedback bad";
+          feed.innerHTML = SVG_X + "<span>Fill in every box first. A blank check does not count against you.</span>";
+          return;
+        }
+        S.fields.forEach(function (f) {
+          var fl = pe.querySelector("[data-fld=\"" + f.id + "\"]"), mg = fl.querySelector(".fmsg");
+          if (fl.classList.contains("hidden")) return;
+          var r = gradeField(f, vals[f.id], vals);
+          fl.classList.toggle("ok", !!r.ok); fl.classList.toggle("bad", !r.ok);
+          mg.classList.toggle("hidden", !(r.msg || r.ok));
+          mg.innerHTML = r.ok ? "Correct" : (r.msg || "Not quite.");
+          if (!r.ok) allOk = false;
+        });
+        feed.classList.remove("hidden");
+        if (allOk) {
+          feed.className = "pfeed qfeedback good";
+          feed.innerHTML = SVG_OK + "<span>Correct!" + (scored && A.scores[b.id + "#" + i] ? " <span class=\"fnote\">(Your first check is the one that counted.)</span>" : "") + "</span>";
+        } else {
+          feed.className = "pfeed qfeedback bad";
+          feed.innerHTML = SVG_X + "<span>Not quite. Look at the boxes marked in red. Use a hint or fix and check again." + (scored && A.scores[b.id + "#" + i] ? " <span class=\"fnote\">(Your first check is the one that counted.)</span>" : "") + "</span>";
+        }
+        if (scored && !A.scores[b.id + "#" + i]) { lockScore(i, allOk ? 1 : 0, false); }
+        setBadge();
+        if (allOk && !resolved[i]) unlock(i);
+        updateDone();
+      });
+      hintBtn.addEventListener("click", function () {
+        if (panel.hintN >= S.hints.length) return;
+        panel.hintN++;
+        if (scored) A.hints[st.id] = (A.hints[st.id] || 0) + 1;
+        hintBox.classList.remove("hidden");
+        hintBox.innerHTML = S.hints.slice(0, panel.hintN).map(function (h, k) { return "<div class=\"hline\"><b>Hint " + (k + 1) + ":</b> " + h + "</div>"; }).join("");
+        hintBtn.textContent = panel.hintN >= S.hints.length ? "No more hints" : "Another hint (" + (S.hints.length - panel.hintN) + " left)";
+        hintBtn.disabled = panel.hintN >= S.hints.length;
+        if (A.cur === "sum") updateStatus();
+      });
+      ansBtn.addEventListener("click", function () {
+        var key = b.id + "#" + i;
+        if (scored && !A.scores[key] && !panel.armed) {
+          ansBtn.textContent = "Click again: this scores 0";
+          panel.armed = setTimeout(function () { panel.armed = null; ansBtn.textContent = "Show answer"; }, 4000);
+          return;
+        }
+        if (panel.armed) { clearTimeout(panel.armed); panel.armed = null; ansBtn.textContent = "Show answer"; }
+        ansBox.classList.remove("hidden"); ansBox.innerHTML = S.ans;
+        if (scored && !A.scores[key]) { lockScore(i, 0, true); setBadge(); }
+        if (!resolved[i]) unlock(i);
+      });
+    }
+    var nv = card.querySelector(".new-version-btn");
+    if (nv) nv.addEventListener("click", render);
+    render();
+    A.probs[b.id] = { get P() { return P; }, card: card };
+  }
+
+  // ---------- worked example ----------
+  function renderWorked(b, body, st) {
+    var P = genProblem(b.fam, b.opts || {}), steps = P.steps, n = steps.length, shown = 0;
+    var box = el("div", "worked");
+    box.innerHTML = "<div class=\"worked-tag\">Worked example</div><h4>" + (b.title === "Worked example" ? P.title : b.title) + "</h4>" + (b.intro ? "<p class=\"worked-intro\">" + b.intro + "</p>" : "") +
+      "<div class=\"wstory\">" + P.story + "</div><div class=\"pfig\">" + (P.fig || "") + "</div><ol class=\"wsteps\"></ol>" +
+      "<div class=\"wbtns\"><button type=\"button\" class=\"btn-primary w-next\">Start the example</button><button type=\"button\" class=\"btn-secondary w-all\">Show everything</button><button type=\"button\" class=\"btn-secondary w-reset\">Start over</button></div>";
+    body.appendChild(box);
+    var ol = box.querySelector(".wsteps"), nextB = box.querySelector(".w-next"), allB = box.querySelector(".w-all"), resetB = box.querySelector(".w-reset");
+    function update() {
+      ol.innerHTML = steps.slice(0, shown).map(function (s, i) { return "<li" + (i === shown - 1 ? " class=\"cur\"" : "") + "><span class=\"wt\">" + s.title + "</span>" + s.ans + "</li>"; }).join("");
+      nextB.textContent = shown === 0 ? "Start the example" : (shown >= n ? "Example complete" : "Show next step (" + (shown + 1) + " of " + n + ")");
+      nextB.disabled = shown >= n; allB.disabled = shown >= n; resetB.classList.toggle("hidden", shown === 0);
+    }
+    nextB.addEventListener("click", function () { if (shown < n) { shown++; update(); } });
+    allB.addEventListener("click", function () { shown = n; update(); });
+    resetB.addEventListener("click", function () { shown = 0; update(); });
+    update();
+  }
+
+  function renderBlock(b, body, st) {
+    switch (b.t) {
+      case "h": body.appendChild(el("h3", "sec", b.text)); break;
+      case "p": body.appendChild(el("p", "para", b.html)); break;
+      case "html": body.appendChild(el("div", "raw", b.html)); break;
+      case "callout": body.appendChild(el("div", "callout c-" + (b.cls || "key"), (b.title ? "<div class=\"ct\">" + b.title + "</div>" : "") + b.html)); break;
+      case "steps": body.appendChild(el("ol", "method", b.items.map(function (i) { return "<li>" + i + "</li>"; }).join(""))); break;
+      case "details": body.appendChild(el("details", "reveal", "<summary>" + b.summary + "</summary><div class=\"reveal-body\">" + b.html + "</div>")); break;
+      case "worked": renderWorked(b, body, st); break;
+      case "prob": mountProblem(b, body, st); break;
+      case "cpbanner": body.appendChild(el("div", "cpbanner", "<div class=\"cpb-t\">" + (b.title || "Checkpoint") + "</div><div>" + b.html + "</div>")); break;
+      default: break;
+    }
+  }
+
+  // ---------- stage assembly & navigation ----------
+  function buildStage(st) {
+    var host = $("stage-" + st.id);
+    host.innerHTML = "<div class=\"stage-head\"><div class=\"stage-kicker\">" + st.kicker + "</div><h2>" + st.title + "</h2>" +
+      "<div class=\"stage-meta\"><span class=\"time-chip\">about " + st.mins + " min</span><span class=\"goal\">" + st.goal + "</span></div></div>";
+    var body = el("div", "stage-body"); host.appendChild(body);
+    st.blocks.forEach(function (b) { renderBlock(b, body, st); });
+    var idx = STAGES.indexOf(st), foot = el("div", "stage-foot");
+    var prev = idx > 0 ? STAGES[idx - 1] : null, next = idx < STAGES.length - 1 ? STAGES[idx + 1] : null;
+    foot.innerHTML = (prev ? "<button type=\"button\" class=\"btn-secondary\" data-go=\"" + prev.id + "\">&larr; " + prev.nav + "</button>" : "<span></span>") +
+      "<span class=\"foot-mid\"></span>" +
+      (next ? "<button type=\"button\" class=\"btn-primary\" data-go=\"" + next.id + "\">" + next.nav + " &rarr;</button>" : "<button type=\"button\" class=\"btn-primary\" data-go=\"sum\">Go to the summary &rarr;</button>");
+    host.appendChild(foot);
+    A.built[st.id] = true;
+  }
+  function go(id) {
+    if (!A.started) return;
+    A.cur = id;
+    document.querySelectorAll(".stage").forEach(function (s) { s.classList.add("hidden"); });
+    var host = $("stage-" + id);
+    host.classList.remove("hidden");
+    if (id === "sum") renderSummaryScreen();
+    else { var st = stageById(id); if (!A.built[id]) buildStage(st); }
+    document.querySelectorAll(".stage-pill").forEach(function (p) { p.classList.toggle("current", p.getAttribute("data-go") === id); });
+    updateStatus();
+    window.scrollTo(0, 0);
+  }
+
+  // ---------- status bar ----------
+  function updateStatus() {
+    var earned = 0, poss = 0;
+    STAGES.forEach(function (st) {
+      var s = stageSummary(st.id);
+      earned += s.earned; poss += s.poss;
+      var pill = document.querySelector(".stage-pill[data-go=\"" + st.id + "\"]");
+      if (pill) pill.classList.toggle("done", s.n > 0 && s.done === s.n);
+    });
+    $("stScore").textContent = earned + " / " + poss;
+    var tot = 0; Object.keys(A.secs).forEach(function (k) { tot += A.secs[k]; });
+    $("stClock").textContent = fmtClock(tot);
+  }
+  setInterval(function () {
+    if (!A.started || document.hidden || !A.cur) return;
+    A.secs[A.cur] = (A.secs[A.cur] || 0) + 1;
+    var tot = 0; Object.keys(A.secs).forEach(function (k) { tot += A.secs[k]; });
+    $("stClock").textContent = fmtClock(tot);
+    if (A.cur === "sum") updateSummaryTimes();
+  }, 1000);
+
+  // ---------- summary ----------
+  function summaryData() {
+    var rows = [], earned = 0, poss = 0, totalSecs = 0, hints = 0;
+    STAGES.forEach(function (st) {
+      var s = stageSummary(st.id), t = A.secs[st.id] || 0;
+      totalSecs += t; hints += s.hints;
+      rows.push({ id: st.id, nav: st.nav, title: st.title, s: s, secs: t });
+      earned += s.earned; poss += s.poss;
+    });
+    totalSecs += (A.secs.sum || 0);
+    return { rows: rows, earned: earned, poss: poss, totalSecs: totalSecs, hints: hints };
+  }
+  function dateStr() { var d = new Date(); return d.toLocaleDateString(undefined, { weekday: "long", year: "numeric", month: "long", day: "numeric" }); }
+  function summaryTableHtml(D) {
+    var h = "<table class=\"sumtbl\"><thead><tr><th>Stage</th><th>Score</th><th>Steps checked</th><th>Answer viewed first</th><th>Hints used</th><th>Time</th></tr></thead><tbody>";
+    D.rows.forEach(function (r) {
+      h += "<tr><td>" + r.title + "</td><td class=\"num\">" + r.s.earned + " / " + r.s.poss + "</td><td class=\"num\">" + r.s.done + " of " + r.s.n + "</td><td class=\"num\">" + r.s.peeked + "</td><td class=\"num\">" + r.s.hints + "</td><td class=\"num\" data-t=\"" + r.id + "\">" + fmtClock(r.secs) + "</td></tr>";
+    });
+    var pct = D.poss ? Math.round(100 * D.earned / D.poss) : 0;
+    h += "</tbody><tfoot><tr><td>Total</td><td class=\"num\">" + D.earned + " / " + D.poss + " (" + pct + "%)</td><td></td><td></td><td class=\"num\">" + D.hints + "</td><td class=\"num\" data-t=\"total\">" + fmtClock(D.totalSecs) + "</td></tr></tfoot></table>";
+    return h;
+  }
+  function updateSummaryTimes() {
+    var D = summaryData();
+    D.rows.forEach(function (r) { var c = document.querySelector("#sumTable [data-t=\"" + r.id + "\"]"); if (c) c.textContent = fmtClock(r.secs); });
+    var tc = document.querySelector("#sumTable [data-t=\"total\"]"); if (tc) tc.textContent = fmtClock(D.totalSecs);
+  }
+  function summaryText() {
+    var D = summaryData(), lines = [];
+    lines.push("Optimization: A Guided Walkthrough");
+    lines.push("Student: " + A.name);
+    lines.push("Date: " + dateStr());
+    lines.push("");
+    D.rows.forEach(function (r) {
+      lines.push(r.title + ": " + r.s.earned + "/" + r.s.poss + " (" + r.s.done + " of " + r.s.n + " steps checked" + (r.s.peeked ? ", " + r.s.peeked + " answer(s) viewed first" : "") + (r.s.hints ? ", " + r.s.hints + " hint(s)" : "") + ")  time " + fmtClock(r.secs));
+    });
+    lines.push("");
+    lines.push("Total: " + D.earned + "/" + D.poss + " (" + (D.poss ? Math.round(100 * D.earned / D.poss) : 0) + "%)   Total time: " + fmtClock(D.totalSecs));
+    return lines.join("\n");
+  }
+  function missingHtml() {
+    var out = [];
+    STAGES.forEach(function (st) {
+      var s = stageSummary(st.id);
+      if (s.done < s.n) out.push("<li><button type=\"button\" class=\"linkbtn\" data-go=\"" + st.id + "\">" + st.title + "</button>: " + (s.n - s.done) + " checkpoint step" + (s.n - s.done === 1 ? "" : "s") + " not checked yet</li>");
+    });
+    return out.length ? "<div class=\"callout c-warn\"><div class=\"ct\">Not finished yet</div><ul class=\"misslist\">" + out.join("") + "</ul>You can still go back and finish these before you turn this in.</div>" : "<div class=\"callout c-good\"><div class=\"ct\">Every checkpoint step is checked.</div>Nice work. Take a screenshot of this page and upload it to the Google Classroom assignment right away. The steps are below.</div>";
+  }
+  function printHtml() {
+    var D = summaryData();
+    return "<h1>Optimization: A Guided Walkthrough</h1><div class=\"ps-sub\">Calculus 1 &middot; walkthrough summary</div>" +
+      "<div class=\"ps-id\"><div><b>Student:</b> " + escHtml(A.name) + "</div><div><b>Date:</b> " + dateStr() + "</div></div>" + summaryTableHtml(D) +
+      "<p class=\"ps-note\">Scores count only the first time each checkpoint step was checked. If an answer was viewed before checking, that step scored 0. Hints do not cost points.</p>";
+  }
+  function renderSummaryScreen() {
+    var host = $("stage-sum"), D = summaryData();
+    host.innerHTML = "<div class=\"stage-head\"><div class=\"stage-kicker\">Turn-in</div><h2>Your summary</h2><div class=\"stage-meta\"><span class=\"goal\">This page is what you hand in. Check it over, then take a screenshot and upload it to the Google Classroom assignment right away.</span></div></div>" +
+      "<div class=\"stage-body\"><div class=\"sumcard\"><div class=\"sum-id\"><div><span class=\"tl\">Student</span><div class=\"sum-name\">" + escHtml(A.name) + "</div></div><div><span class=\"tl\">Date</span><div>" + dateStr() + "</div></div></div>" +
+      "<div id=\"sumTable\">" + summaryTableHtml(D) + "</div></div>" + missingHtml() +
+      "<div class=\"callout c-key\"><div class=\"ct\">Do this right now</div><p>Take a <b>screenshot of this summary</b> and <b>upload it to the Google Classroom assignment</b> as soon as you finish, before you close this tab.</p><ol class=\"inl\"><li>Make sure your name and the whole table are on the screen. If they are not, press <b>Ctrl</b> and <b>&minus;</b> (minus) a few times to zoom out.</li><li>Press <b>Ctrl + Show windows</b> to take a screenshot. The Show windows key is in the top row of your Chromebook keyboard and looks like a rectangle with two lines beside it. To capture just part of the screen, press <b>Ctrl + Shift + Show windows</b> and drag a box around your summary.</li><li>Open the Google Classroom assignment, choose <b>Add or create</b>, then <b>File</b>, pick your screenshot (it is saved in your Downloads folder), and turn it in.</li></ol></div>" +
+      "<div class=\"sum-actions\"><button type=\"button\" class=\"btn-secondary\" id=\"sumCopy\">Copy summary text</button><button type=\"button\" class=\"btn-secondary\" id=\"sumPrint\">Print / Save as PDF</button><span class=\"copied hidden\" id=\"sumCopied\">Copied!</span></div>" +
+      "<p class=\"para small\">The two buttons above are optional backups. The screenshot you upload to Google Classroom is what counts.</p></div>";
+    $("sumPrint").addEventListener("click", function () { fillPrint(); window.print(); });
+    $("sumCopy").addEventListener("click", function () {
+      var txt = summaryText(), done = function () { var c = $("sumCopied"); c.classList.remove("hidden"); setTimeout(function () { c.classList.add("hidden"); }, 1800); };
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(done, function () { fallbackCopy(txt); done(); });
+      else { fallbackCopy(txt); done(); }
+    });
+  }
+  function fallbackCopy(txt) {
+    var ta = document.createElement("textarea"); ta.value = txt; ta.style.position = "fixed"; ta.style.opacity = "0"; document.body.appendChild(ta); ta.select();
+    try { document.execCommand("copy"); } catch (e) {} document.body.removeChild(ta);
+  }
+  function fillPrint() { if (A.started) $("printSummary").innerHTML = printHtml(); }
+  window.addEventListener("beforeprint", fillPrint);
+
+  // ---------- start ----------
+  function buildNav() {
+    var nav = $("pills"); nav.innerHTML = "";
+    STAGES.forEach(function (st) {
+      var b = el("button", "stage-pill", "<span class=\"dot\"></span>" + st.nav);
+      b.type = "button"; b.setAttribute("data-go", st.id); nav.appendChild(b);
+    });
+    var sb = el("button", "stage-pill sumpill", "<span class=\"dot\"></span>Summary"); sb.type = "button"; sb.setAttribute("data-go", "sum"); nav.appendChild(sb);
+    var holder = $("stages"); holder.innerHTML = "";
+    STAGES.concat([{ id: "sum" }]).forEach(function (st) { var s = el("section", "stage hidden"); s.id = "stage-" + st.id; holder.appendChild(s); });
+  }
+  document.addEventListener("click", function (e) {
+    var t = e.target.closest ? e.target.closest("[data-go]") : null;
+    if (t && A.started) go(t.getAttribute("data-go"));
+  });
+  function begin() {
+    var nm = $("stuName").value.replace(/^\s+|\s+$/g, "");
+    if (!nm) { $("nameErr").classList.remove("hidden"); $("stuName").focus(); return; }
+    A.name = nm; A.started = true;
+    $("nameErr").classList.add("hidden");
+    $("intro").classList.add("hidden"); $("lesson").classList.remove("hidden");
+    $("whoName").textContent = nm;
+    buildNav();
+    go(STAGES[0].id);
+  }
+  $("beginBtn").addEventListener("click", begin);
+  $("stuName").addEventListener("keydown", function (e) { if (e.key === "Enter") begin(); });
+  window.addEventListener("beforeunload", function (e) { if (A.started) { e.preventDefault(); e.returnValue = ""; return ""; } });
+
+})();
+</script>
+</body>
+</html>
