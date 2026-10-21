@@ -156,6 +156,24 @@ details[open]>.mistake-toggle{color:#1e3a5c}
 </div>
 </div>
 
+<div class="section-head">Pure Examples &mdash; Algebra of Optimization</div>
+<div class="examples-grid">
+<div class="ex-block">
+  <div class="ex-label">Example A &nbsp;&mdash;&nbsp; Maximize a product</div>
+  <div class="ex-body">Two positive numbers sum to $20$. Find the numbers that maximize their product.</div>
+  <textarea class="st-work" placeholder="Work it out..."></textarea>
+  <button class="st-btn" onclick="toggleAns(this)">Show answer</button>
+  <div class="st-ans-hidden">Objective: $P=xy$. Constraint: $x+y=20\Rightarrow y=20-x$.<br>$P(x)=x(20-x)=20x-x^2$, domain $(0,20)$.<br>$P'(x)=20-2x=0\Rightarrow x=10,\;y=10$.<br>Endpoints: $P(0)=P(20)=0$. Maximum product $=\mathbf{100}$.</div>
+</div>
+<div class="ex-block">
+  <div class="ex-label">Example B &nbsp;&mdash;&nbsp; Minimize a sum</div>
+  <div class="ex-body">Two positive numbers have a product of $36$. Find the numbers that minimize their sum.</div>
+  <textarea class="st-work" placeholder="Work it out..."></textarea>
+  <button class="st-btn" onclick="toggleAns(this)">Show answer</button>
+  <div class="st-ans-hidden">Objective: $S=x+y$. Constraint: $xy=36\Rightarrow y=\tfrac{36}{x}$.<br>$S(x)=x+\tfrac{36}{x}$, domain $(0,\infty)$.<br>$S'(x)=1-\tfrac{36}{x^2}=0\Rightarrow x^2=36\Rightarrow x=6,\;y=6$.<br>$S''(x)=\tfrac{72}{x^3}&gt;0$ (concave up &rarr; minimum). Min sum $=\mathbf{12}$.</div>
+</div>
+</div>
+
 <div class="section-head">Worked Examples</div>
 <div class="examples-grid">
 <div class="ex-block">
