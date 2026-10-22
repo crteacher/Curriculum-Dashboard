@@ -993,7 +993,15 @@ async function init() {
   const secMap = {};
   pcSections.forEach(s => secMap[s.id] = s);
 
-  const todaySecs = todayIds.map(id => secMap[id]).filter(Boolean).slice(0,2);
+  // Load optional daily overrides (fail silently)
+  let overrides = {};
+  try { overrides = await fetch(BASE + 'donow-overrides.json?_=' + Date.now()).then(r => r.json()); } catch(e) {}
+  const todayEntry = overrides[today];
+  const overrideIds = todayEntry && Array.isArray(todayEntry.precalc) ? todayEntry.precalc : null;
+
+  const todaySecs = overrideIds
+    ? overrideIds.map(id => secMap[id]).filter(Boolean)
+    : todayIds.map(id => secMap[id]).filter(Boolean).slice(0, 2);
 
   if (todaySecs.length === 0) {
     document.getElementById('mainArea').innerHTML = `
