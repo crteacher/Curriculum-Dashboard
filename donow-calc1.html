@@ -870,7 +870,7 @@ async function init() {
   const completed = calc1State?.completedSections || [];
   // ── Daily override: pick specific sections for today if set ────────────────
   // Edit donow-overrides.json to override: { "YYYY-MM-DD": ["SectionId1", ...] }
-  const const todayEntry = overrides[today];
+  const todayEntry = overrides[today];
   const todayOverride = Array.isArray(todayEntry) ? todayEntry
     : (todayEntry && todayEntry.calc1 ? todayEntry.calc1 : null);
   let secs;
