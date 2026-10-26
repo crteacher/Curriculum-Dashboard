@@ -1530,7 +1530,7 @@
     return { p: p, q: q };
   }
   function genDomRational() {
-    var kind = pickW([["lin", 0.4], ["diff", 0.15], ["quad", 0.22], ["none", 0.23]]);
+    var kind = pickW([["lin", 0.7], ["none", 0.3]]);
     var num = numeratorLinear(), tries = 0;
     var s = { kind: kind, p: num.p, q: num.q };
     if (kind === "lin") {
@@ -1554,8 +1554,7 @@
       s.factored = randBool();
       s.excluded = [s.e1, s.e2];
     } else {
-      if (randBool()) { s.sub = "sq"; s.c = randChoice([1, 2, 3, 4, 5, 9, 16]); }
-      else { s.sub = "tri"; s.bq = randChoice([-4, -3, -2, 2, 3, 4]); s.c = Math.floor(s.bq * s.bq / 4) + randInt(1, 4); }
+      s.sub = "sq"; s.c = randChoice([1, 2, 3, 4, 5, 9, 16]);
       s.excluded = [];
     }
     s.expected = domainFromExcluded(s.excluded);
