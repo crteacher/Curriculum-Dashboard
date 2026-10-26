@@ -320,7 +320,7 @@
   <header>
     <div class="eyebrow">PreCalc &middot; Quadratics</div>
     <h1>Quadratics Practice Test</h1>
-    <p>Every part regenerates its own random version — work it out on paper, type your answer, and check yourself. Click "New version" on any part as many times as you want to drill it again with different numbers. Type fractions like 3/2 or decimals; when an answer is not a whole number or a simple fraction, round to 2 decimal places. If a question has no answer (no real zeros, no minimum, no intersection, ...) type <strong>none</strong>. Q5 and Q6 ask you to invent your own functions — the page checks that what you typed really does the job. Your <strong>Exam Score</strong> locks in the first time you check each part (or peek its solution) — everything after that is just practice. Use "Reset exam" any time for a brand-new attempt.</p>
+    <p>Every part regenerates its own random version — work it out on paper, type your answer, and check yourself. Click "New version" on any part as many times as you want to drill it again with different numbers. Type fractions like 3/2 or decimals; when an answer is not a whole number or a simple fraction, round to 2 decimal places. If a question has no answer (no real zeros, no minimum, no intersection, ...) type <strong>none</strong>. Q5 asks you to invent two functions of your own — the page checks that what you typed really does the job. Your <strong>Exam Score</strong> locks in the first time you check each part (or peek its solution) — everything after that is just practice. Use "Reset exam" any time for a brand-new attempt.</p>
   </header>
 
   <div class="toolbar">
@@ -899,7 +899,7 @@
     return s + "</svg>";
   }
 
-  // ---- quadratic formula worked out (Q3, Q7b) ----
+  // ---- quadratic formula worked out (Q3, Q6b) ----
   function qfWork(a, b, c) {
     var D = b * b - 4 * a * c, out = "";
     out += wb(["a = " + M(a) + ",   b = " + M(b) + ",   c = " + M(c)]);
@@ -1246,7 +1246,7 @@
   });
 
   // ============================================================
-  // Free-text quadratics (Q5, Q6): parse + verify properties
+  // Free-text quadratics (Q5): parse + verify properties
   // ============================================================
   function readQuad(str) {
     if (String(str === null || str === undefined ? "" : str).trim() === "") return { ok: false, msg: "type a function first." };
@@ -1396,73 +1396,26 @@
   });
 
   // ============================================================
-  // 6: a quadratic with two distinct zeros that opens up
-  // ============================================================
-  PARTS.push({
-    id: "6", group: "6", label: "", points: 4,
-    gen: function () {
-      var r1 = randInt(-5, 4), r2 = r1 + randInt(1, 6), a = randChoice([1, 1, 2, 3]);
-      var b = -a * (r1 + r2), c = a * r1 * r2;
-      return { ex: { a: a, r1: r1, r2: r2, b: b, c: c } };
-    },
-    prompt: function () {
-      return "Give a quadratic function with two distinct zeros that opens up." +
-        "<div class=\"field-note\">Type it in any form: standard <span class=\"math\">x^2 - 3x + 2</span>, vertex <span class=\"math\">2(x-1)^2 - 3</span> or factored <span class=\"math\">(x-1)(x+2)</span>. Use ^ for powers.</div>";
-    },
-    inputsHtml: function () { return "<span class=\"field-label\">f(x) =</span>" + inputHtml("ans-f", "your quadratic", "wide"); },
-    readAnswer: function (card) { return { f: val(card, ".ans-f") }; },
-    isCorrect: function (ua) {
-      var r = readQuad(ua.f);
-      if (!r.ok) return bad(r.msg.charAt(0).toUpperCase() + r.msg.slice(1));
-      var co = r.co, D = fsub(fsq(co.b), fmul(F(4), fmul(co.a, co.c)));
-      if (D.n < 0) return bad("It opens up, but b² − 4ac = " + ft(D) + " is negative, so it has no real zeros. Move the vertex below the x-axis.");
-      if (D.n === 0) return bad("It opens up, but b² − 4ac = 0, so it has only one (repeated) zero, x = " + fpl(fdiv(fneg(co.b), fmul(F(2), co.a))) + ". You need two distinct zeros.");
-      var zs;
-      if (isSq(D.n) && isSq(D.d)) {
-        var sF = F(Math.round(Math.sqrt(D.n)), Math.round(Math.sqrt(D.d))), tw = fmul(F(2), co.a);
-        zs = [fdiv(fsub(fneg(co.b), sF), tw), fdiv(fadd(fneg(co.b), sF), tw)].map(function (z) { return "= " + fpl(z); });
-      } else {
-        var sq = Math.sqrt(D.n / D.d), tn = 2 * fnum(co.a), bn = fnum(co.b);
-        zs = [(-bn - sq) / tn, (-bn + sq) / tn].map(function (z) { return "\u2248 " + z.toFixed(2).replace("-", "\u2212"); });
-      }
-      return good("It opens up and has two distinct zeros: x " + zs[0] + " and x " + zs[1] + ".");
-    },
-    solutionHtml: function (s) {
-      var e = s.ex, out = solLabel();
-      out += step("<strong>Idea:</strong> pick two zeros first, then build the function. If the zeros are r<sub>1</sub> and r<sub>2</sub>, then f(x) = a(x &minus; r<sub>1</sub>)(x &minus; r<sub>2</sub>), and a &gt; 0 makes it open up.");
-      out += step("Example: zeros at x = " + M(e.r1) + " and x = " + M(e.r2) + ", with a = " + e.a + ".");
-      var f1 = e.r1 === 0 ? "x" : "(x " + (e.r1 > 0 ? "&minus; " + e.r1 : "+ " + (-e.r1)) + ")", f2 = e.r2 === 0 ? "x" : "(x " + (e.r2 > 0 ? "&minus; " + e.r2 : "+ " + (-e.r2)) + ")";
-      var A = e.a === 1 ? "" : e.a;
-      out += wb(["f(x) = " + A + f1 + f2, "= " + polyH([e.a, e.b, e.c])]);
-      out += step("<strong>Check both requirements:</strong>");
-      var D = e.b * e.b - 4 * e.a * e.c;
-      out += wb(["a = " + e.a + " &gt; 0  &rarr;  opens up", "b<sup>2</sup> &minus; 4ac = " + pnum(e.b) + "<sup>2</sup> &minus; 4(" + e.a + ")(" + M(e.c) + ") = " + M(D) + " &gt; 0  &rarr;  two distinct real zeros"]);
-      out += step("Any a &gt; 0 with b<sup>2</sup> &minus; 4ac &gt; 0 works. In vertex form a(x &minus; h)<sup>2</sup> + k with a &gt; 0, put the vertex <em>below</em> the x-axis (k &lt; 0), for example (x &minus; 1)<sup>2</sup> &minus; 4, whose zeros are &minus;1 and 3.");
-      return out + finalH("e.g. f(x) = " + polyH([e.a, e.b, e.c]) + " (zeros " + M(e.r1) + " and " + M(e.r2) + ")");
-    }
-  });
-
-  // ============================================================
-  // 7: football  h(t) = -g t^2 + V t + H
+  // 6: football  x(t) = vx t,  y(t) = -g t^2 + V t + H   (parametric)
   // ============================================================
   var FB = [
-    { g: 5, unit: "meters", u: "m", vs: [10, 15, 20, 25, 30], hs: [1, 2, 5, 10, 15, 20] },
-    { g: 4.9, unit: "meters", u: "m", vs: [10, 12, 14, 15, 16, 18, 20, 22, 25, 28], hs: [1, 2, 3, 5, 8, 10, 15] },
-    { g: 16, unit: "feet", u: "ft", vs: [24, 32, 40, 48, 56, 64, 72, 80], hs: [3, 4, 5, 6, 8, 10, 12] }
+    { g: 5, unit: "meters", u: "m", vs: [10, 15, 20, 25, 30], hs: [5, 8, 10, 12, 15, 20], vxs: [6, 8, 10, 10, 12, 15] },
+    { g: 4.9, unit: "meters", u: "m", vs: [10, 12, 14, 15, 16, 18, 20, 22, 25], hs: [5, 8, 10, 12, 15], vxs: [6, 8, 10, 12, 15] },
+    { g: 16, unit: "feet", u: "ft", vs: [24, 32, 40, 48, 56, 64, 72], hs: [10, 12, 15, 20, 25, 30], vxs: [20, 25, 30, 40, 50] }
   ];
   function genFootball() {
-    var v = randChoice(FB), V = randChoice(v.vs), H = randChoice(v.hs), g = v.g;
-    var D = V * V + 4 * g * H;
-    return { g: g, V: V, H: H, unit: v.unit, u: v.u, verb: randChoice(["thrown", "thrown", "kicked"]), D: D,
-      tmax: V / (2 * g), hmax: H + V * V / (4 * g), tpos: (V + Math.sqrt(D)) / (2 * g), tneg: (V - Math.sqrt(D)) / (2 * g) };
+    var v = randChoice(FB), V = randChoice(v.vs), H = randChoice(v.hs), g = v.g, vx = randChoice(v.vxs);
+    var D = V * V + 4 * g * H, tpos = (V + Math.sqrt(D)) / (2 * g);
+    return { g: g, V: V, H: H, vx: vx, unit: v.unit, u: v.u, D: D,
+      tmax: V / (2 * g), hmax: H + V * V / (4 * g), tpos: tpos, tneg: (V - Math.sqrt(D)) / (2 * g), X: vx * tpos };
   }
-  function fbFn(s) { return "<span class=\"math\">h(t) = &minus;" + s.g + "t<sup>2</sup> + " + s.V + "t + " + s.H + "</span>"; }
-  function fbIntro(s) { return "The height of a football from the moment it is " + s.verb + " is given as " + fbFn(s) + ", where t is in seconds and h is in " + s.unit + "."; }
+  function fbFn(s) { return "<span class=\"math\">x(t) = " + s.vx + "t, &nbsp;&nbsp; y(t) = &minus;" + s.g + "t<sup>2</sup> + " + s.V + "t + " + s.H + "</span>"; }
+  function fbIntro(s) { return "A football is thrown from a balcony, and its position (in " + s.unit + ") t seconds after the throw is given by " + fbFn(s) + ", where x is the horizontal distance from the thrower and y is the height above the ground."; }
   function trimNum(v) { return String(Math.round(v * 10000) / 10000); }
   function numApprox(v) { var r = Math.round(v * 10000) / 10000; return (Math.abs(r - v) < 1e-9 ? "= " : "&asymp; ") + trimNum(r); }
   var ROUND_NOTE = "<div class=\"field-note\">Round to 2 decimal places if needed.</div>";
   PARTS.push({
-    id: "7a", group: "7", label: "(a)", points: 4,
+    id: "6a", group: "6", label: "(a)", points: 4,
     gen: genFootball,
     prompt: function (s) { return fbIntro(s) + " Find the maximum height of the football." + ROUND_NOTE; },
     inputsHtml: function (s) { return "<span class=\"field-label\">max height =</span>" + inputHtml("ans-main", "e.g. 30.5") + "<span class=\"field-label\">" + s.unit + "</span>"; },
@@ -1471,19 +1424,19 @@
       var r = parseVal(ua.main);
       if (r.empty) return bad("Type your answer first.");
       if (r.error) return bad(r.error);
-      if (r.none) return bad("The football does reach a highest point. Find the vertex.");
+      if (r.none) return bad("The football does reach a highest point. Find the vertex of y(t).");
       if (close(r.v, s.hmax, 0.02)) return good();
       if (close(r.v, s.tmax, 0.02)) return bad("That is the time (in seconds) when it reaches its highest point. The question asks for the height at that moment.");
       if (close(r.v, s.H, 0.02)) return bad("That is the starting height (t = 0). The ball keeps rising after that.");
-      return bad("Not quite. The maximum height is the y-value of the vertex.");
+      return bad("Not quite. The maximum height is the y-value of the vertex of y(t). The x(t) equation is not needed for this part.");
     },
     solutionHtml: function (s) {
       var g = s.g, V = s.V, H = s.H, out = solLabel();
-      out += step("h(t) = &minus;" + g + "t<sup>2</sup> + " + V + "t + " + H + " opens down (a = &minus;" + g + " &lt; 0), so its vertex is the highest point.");
+      out += step("Height is given by y(t) = &minus;" + g + "t<sup>2</sup> + " + V + "t + " + H + ". It opens down (a = &minus;" + g + " &lt; 0), so its vertex is the highest point. (The horizontal equation x(t) is not needed here.)");
       out += step("The vertex is at t = &minus;b / (2a):");
       out += wb(["t = &minus;" + V + " / (2 &middot; (&minus;" + g + "))", "= " + V + " / " + trimNum(2 * g), numApprox(s.tmax) + " seconds"]);
-      out += step("For the height, substitute back. (To avoid rounding t first, use h<sub>max</sub> = c &minus; b<sup>2</sup> / (4a).)");
-      out += wb(["h<sub>max</sub> = " + H + " &minus; " + V + "<sup>2</sup> / (4 &middot; (&minus;" + g + "))",
+      out += step("For the height, substitute back. (To avoid rounding t first, use y<sub>max</sub> = c &minus; b<sup>2</sup> / (4a).)");
+      out += wb(["y<sub>max</sub> = " + H + " &minus; " + V + "<sup>2</sup> / (4 &middot; (&minus;" + g + "))",
         "= " + H + " + " + (V * V) + " / " + trimNum(4 * g),
         "= " + H + " + " + trimNum(V * V / (4 * g)),
         numApprox(s.hmax)]);
@@ -1491,24 +1444,26 @@
     }
   });
   PARTS.push({
-    id: "7b", group: "7", label: "(b)", points: 4,
+    id: "6b", group: "6", label: "(b)", points: 4,
     gen: genFootball,
-    prompt: function (s) { return fbIntro(s) + " When does the football hit the ground?" + ROUND_NOTE; },
-    inputsHtml: function () { return "<span class=\"field-label\">t =</span>" + inputHtml("ans-main", "e.g. 4.45") + "<span class=\"field-label\">seconds</span>"; },
+    prompt: function (s) { return fbIntro(s) + " How far from the thrower is the football when it hits the ground?" + ROUND_NOTE; },
+    inputsHtml: function (s) { return "<span class=\"field-label\">distance =</span>" + inputHtml("ans-main", "e.g. 44.5") + "<span class=\"field-label\">" + s.unit + "</span>"; },
     readAnswer: function (card) { return { main: val(card, ".ans-main") }; },
     isCorrect: function (ua, s) {
       var r = parseVal(ua.main);
       if (r.empty) return bad("Type your answer first.");
       if (r.error) return bad(r.error);
-      if (r.none) return bad("The football does come back down: it lands when the height is 0.");
-      if (close(r.v, s.tpos, 0.02)) return good();
-      if (close(r.v, s.tneg, 0.02)) return bad("That is the other solution of h(t) = 0, but time can't be negative. Use the positive one.");
-      if (close(r.v, s.tmax, 0.02)) return bad("That is when it reaches its highest point. It hits the ground when the height is 0: solve h(t) = 0.");
-      return bad("Not quite. It hits the ground when h(t) = 0: solve the equation with the quadratic formula and keep the positive time.");
+      if (r.none) return bad("The football does come back down and land somewhere. Find when y(t) = 0, then use x(t).");
+      if (close(r.v, s.X, s.vx * 0.0051 + 0.01)) return good();
+      if (close(r.v, s.tpos, 0.02)) return bad("That is the time when it lands (in seconds). The question asks how far it has traveled horizontally: put that time into x(t) = " + s.vx + "t.");
+      if (close(r.v, Math.abs(s.vx * s.tneg), s.vx * 0.0051 + 0.01)) return bad("You used the negative solution of y(t) = 0. Time can't be negative here. Use the positive time, then put it into x(t).");
+      if (close(r.v, s.vx * s.tmax, s.vx * 0.0051 + 0.01)) return bad("That is how far it has gone when it is at its highest point. It keeps flying until y(t) = 0.");
+      if (close(r.v, s.hmax, 0.02)) return bad("That is the maximum height. The question asks for the horizontal distance when it lands.");
+      return bad("Not quite. Solve y(t) = 0 with the quadratic formula, keep the positive time, then plug it into x(t) = " + s.vx + "t.");
     },
     solutionHtml: function (s) {
       var g = s.g, V = s.V, H = s.H, out = solLabel(), Ds = trimNum(s.D), rt = Math.sqrt(s.D), den = trimNum(2 * g);
-      out += step("The ball is on the ground when its height is 0, so solve h(t) = 0:");
+      out += step("The ball hits the ground when its height is 0, so solve y(t) = 0 to find <em>when</em>:");
       out += wb(["&minus;" + g + "t<sup>2</sup> + " + V + "t + " + H + " = 0"]);
       out += step("a = &minus;" + g + ", b = " + V + ", c = " + H + ". Discriminant:");
       out += wb(["b<sup>2</sup> &minus; 4ac = " + V + "<sup>2</sup> &minus; 4(&minus;" + g + ")(" + H + ")", "= " + (V * V) + " + " + trimNum(4 * g * H), "= " + Ds]);
@@ -1517,8 +1472,10 @@
         sqrtH(Ds) + " &asymp; " + rt.toFixed(4),
         "t = " + frac("&minus;" + V + " + " + rt.toFixed(4), "&minus;" + den) + " &asymp; " + d2(s.tneg),
         "t = " + frac("&minus;" + V + " &minus; " + rt.toFixed(4), "&minus;" + den) + " &asymp; " + d2(s.tpos)]);
-      out += step("A negative time would be before the ball was " + s.verb + ", so it doesn't make sense here. Keep the positive solution.");
-      return out + finalH("t &asymp; " + d2(s.tpos) + " seconds");
+      out += step("A negative time would be before the ball was thrown, so keep the positive solution, t &asymp; " + d2(s.tpos) + " seconds.");
+      out += step("Now use the horizontal equation x(t) = " + s.vx + "t to find <em>how far</em> the ball has traveled by that time. (Use the unrounded t to avoid rounding error.)");
+      out += wb(["x(" + trimNum(Math.round(s.tpos * 10000) / 10000) + ") = " + s.vx + " &middot; " + trimNum(Math.round(s.tpos * 10000) / 10000), numApprox(s.X) + " " + s.unit]);
+      return out + finalH(d2(s.X) + " " + s.unit + " from the thrower");
     }
   });
 
@@ -1531,8 +1488,7 @@
     "3": { num: "3.", desc: "Find the zero(s) of the quadratic function." },
     "4": { num: "4.", desc: "Find the zero(s) of the function given in vertex form." },
     "5": { num: "5.", desc: "Two quadratics of your own: verified automatically, then find where they intersect." },
-    "6": { num: "6.", desc: "Build a quadratic with two distinct zeros that opens up." },
-    "7": { num: "7.", desc: "Quadratic models: a football thrown into the air." }
+    "6": { num: "6.", desc: "Quadratic models: a football thrown from a balcony. Its position is given by x(t) (horizontal) and y(t) (height)." }
   };
   // ============================================================
   // Engine: mount cards
