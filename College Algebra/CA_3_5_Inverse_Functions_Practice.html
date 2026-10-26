@@ -235,7 +235,144 @@ function gen8() {
   };
 }
 
-const GENERATORS = [gen1, gen2, gen3, gen4, gen5, gen6, gen7, gen8];
+
+// gen9: read f⁻¹(k) from a labeled graph of f(x) = x + b
+function gen9() {
+  const b = choose([1, 2, 3]);
+  const vis = [1,2,3].filter(ix => ix + b <= 5);
+  const askX = choose(vis);
+  const askY = askX + b;
+  const OX=60, OY=175, S=30;
+  const px = x => OX + x*S;
+  const py = y => OY - y*S;
+  let g='';
+  for(let gx=-1;gx<=4;gx++) g+=`<line x1="${px(gx)}" y1="${py(-1)}" x2="${px(gx)}" y2="${py(5)}" stroke="#ddd" stroke-width="0.7"/>`;
+  for(let gy=0;gy<=5;gy++) g+=`<line x1="${px(-1)}" y1="${py(gy)}" x2="${px(4)}" y2="${py(gy)}" stroke="#ddd" stroke-width="0.7"/>`;
+  g+=`<line x1="${px(-1)}" y1="${py(0)}" x2="${px(4.2)}" y2="${py(0)}" stroke="#444" stroke-width="1.5"/>`;
+  g+=`<line x1="${px(0)}" y1="${py(-0.5)}" x2="${px(0)}" y2="${py(5.2)}" stroke="#444" stroke-width="1.5"/>`;
+  g+=`<polygon points="${px(4.2)+2},${py(0)-4} ${px(4.2)+2},${py(0)+4} ${px(4.2)+8},${py(0)}" fill="#444"/>`;
+  g+=`<polygon points="${px(0)-4},${py(5.2)+2} ${px(0)+4},${py(5.2)+2} ${px(0)},${py(5.2)-6}" fill="#444"/>`;
+  g+=`<text x="${px(4.2)+10}" y="${py(0)+4}" fill="#444" font-size="12" font-style="italic">x</text>`;
+  g+=`<text x="${px(0)+5}" y="${py(5.2)-3}" fill="#444" font-size="12" font-style="italic">y</text>`;
+  for(let gx=1;gx<=4;gx++){
+    g+=`<line x1="${px(gx)}" y1="${py(0)-3}" x2="${px(gx)}" y2="${py(0)+3}" stroke="#444" stroke-width="1"/>`;
+    g+=`<text x="${px(gx)}" y="${py(0)+15}" text-anchor="middle" fill="#555" font-size="10">${gx}</text>`;
+  }
+  g+=`<line x1="${px(-1)}" y1="${py(0)-3}" x2="${px(-1)}" y2="${py(0)+3}" stroke="#444" stroke-width="1"/>`;
+  g+=`<text x="${px(-1)}" y="${py(0)+15}" text-anchor="middle" fill="#555" font-size="10">-1</text>`;
+  for(let gy=1;gy<=5;gy++){
+    g+=`<line x1="${px(0)-3}" y1="${py(gy)}" x2="${px(0)+3}" y2="${py(gy)}" stroke="#444" stroke-width="1"/>`;
+    g+=`<text x="${px(0)-7}" y="${py(gy)+4}" text-anchor="end" fill="#555" font-size="10">${gy}</text>`;
+  }
+  const lx2=Math.min(4, 5-b);
+  g+=`<line x1="${px(-1)}" y1="${py(b-1)}" x2="${px(lx2)}" y2="${py(lx2+b)}" stroke="#1e3a5c" stroke-width="2.5"/>`;
+  vis.forEach(ix=>{
+    const iy=ix+b;
+    const isAsk=ix===askX;
+    g+=`<circle cx="${px(ix)}" cy="${py(iy)}" r="${isAsk?6:4}" fill="${isAsk?'#7a5c1e':'white'}" stroke="${isAsk?'#7a5c1e':'#1e3a5c'}" stroke-width="1.5"/>`;
+    const labelX=ix>=3?-1:1;
+    g+=`<text x="${px(ix)+labelX*8}" y="${py(iy)-6}" fill="#333" font-size="9" text-anchor="${ix>=3?'end':'start'}">(${ix},${iy})</text>`;
+  });
+  const svg=`<svg viewBox="0 0 260 220" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:250px;display:block;margin:.3rem auto" font-family="sans-serif">${g}</svg><p style="text-align:center;font-size:.9rem;margin:.25rem 0">Graph of <em>f</em> is shown. Find <em>f</em>&thinsp;<sup>&minus;1</sup>(${askY}).</p>`;
+  return {
+    svg,
+    answer:[String(askX)],
+    hint:`f⁻¹(${askY}) asks: what x makes f(x) = ${askY}? Find the labeled point with y-coordinate ${askY} and read its x-value.`,
+    step:`f(${askX})=${askX}+${b}=${askY},\\text{ so }f^{-1}(${askY})=${askX}`
+  };
+}
+
+// gen10: parabola fails HLT — does it have an inverse?
+function gen10() {
+  const h=choose([0,1]), k=choose([0,1]);
+  const excess=choose([1,2,3,4]);
+  const lineY=k+excess;
+  const OX=70, OY=160, S=30;
+  const px=x=>OX+x*S;
+  const py=y=>OY-y*S;
+  let g='';
+  for(let gx=-2;gx<=4;gx++) g+=`<line x1="${px(gx)}" y1="${py(-1)}" x2="${px(gx)}" y2="${py(5)}" stroke="#ddd" stroke-width="0.7"/>`;
+  for(let gy=0;gy<=5;gy++) g+=`<line x1="${px(-2)}" y1="${py(gy)}" x2="${px(4)}" y2="${py(gy)}" stroke="#ddd" stroke-width="0.7"/>`;
+  g+=`<line x1="${px(-2)}" y1="${py(0)}" x2="${px(4.2)}" y2="${py(0)}" stroke="#444" stroke-width="1.5"/>`;
+  g+=`<line x1="${px(0)}" y1="${py(-0.5)}" x2="${px(0)}" y2="${py(5.2)}" stroke="#444" stroke-width="1.5"/>`;
+  g+=`<polygon points="${px(4.2)+2},${py(0)-4} ${px(4.2)+2},${py(0)+4} ${px(4.2)+8},${py(0)}" fill="#444"/>`;
+  g+=`<polygon points="${px(0)-4},${py(5.2)+2} ${px(0)+4},${py(5.2)+2} ${px(0)},${py(5.2)-6}" fill="#444"/>`;
+  g+=`<text x="${px(4.2)+10}" y="${py(0)+4}" fill="#444" font-size="12" font-style="italic">x</text>`;
+  g+=`<text x="${px(0)+5}" y="${py(5.2)-3}" fill="#444" font-size="12" font-style="italic">y</text>`;
+  for(let gx=-2;gx<=4;gx++) if(gx!==0){
+    g+=`<text x="${px(gx)}" y="${py(0)+15}" text-anchor="middle" fill="#555" font-size="10">${gx}</text>`;
+  }
+  for(let gy=1;gy<=5;gy++){
+    g+=`<text x="${px(0)-7}" y="${py(gy)+4}" text-anchor="end" fill="#555" font-size="10">${gy}</text>`;
+  }
+  // parabola y=(x-h)^2+k
+  let pts=[];
+  for(let t=-25;t<=25;t++){
+    const cx=h+t/10, cy=(cx-h)*(cx-h)+k;
+    if(cy>=-0.5&&cy<=5.5&&cx>=-2.3&&cx<=4.3) pts.push(`${px(cx).toFixed(1)},${py(cy).toFixed(1)}`);
+  }
+  g+=`<polyline points="${pts.join(' ')}" fill="none" stroke="#1e3a5c" stroke-width="2.5" stroke-linejoin="round"/>`;
+  // dashed horizontal test line
+  if(lineY<=5){
+    g+=`<line x1="${px(-2)}" y1="${py(lineY)}" x2="${px(4)}" y2="${py(lineY)}" stroke="#b03000" stroke-width="1.5" stroke-dasharray="7,4"/>`;
+    const sq=Math.sqrt(lineY-k);
+    [h-sq,h+sq].forEach(ix=>{
+      if(ix>=-2&&ix<=4) g+=`<circle cx="${px(ix).toFixed(1)}" cy="${py(lineY)}" r="5" fill="#b03000"/>`;
+    });
+  }
+  const svg=`<svg viewBox="0 0 260 220" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:250px;display:block;margin:.3rem auto" font-family="sans-serif">${g}</svg><p style="text-align:center;font-size:.9rem;margin:.25rem 0">Does this function have an inverse? Enter <em>yes</em> or <em>no</em>.</p>`;
+  return {
+    svg,
+    answer:['no'],
+    hint:`Apply the horizontal line test — can a single horizontal line hit this graph at more than one point? What does that mean for inverses?`,
+    step:`\\text{The dashed line crosses the graph twice → fails HLT → function is not one-to-one → no inverse.}`
+  };
+}
+
+// gen11: point on f → corresponding point on f⁻¹
+function gen11() {
+  const bv=choose([1,2,3]);
+  const maxA=5-bv;
+  const pa=rInt(maxA)+1;
+  const pb=pa+bv;
+  const OX=60, OY=175, S=30;
+  const px=x=>OX+x*S;
+  const py=y=>OY-y*S;
+  let g='';
+  for(let gx=-1;gx<=4;gx++) g+=`<line x1="${px(gx)}" y1="${py(-1)}" x2="${px(gx)}" y2="${py(5)}" stroke="#ddd" stroke-width="0.7"/>`;
+  for(let gy=0;gy<=5;gy++) g+=`<line x1="${px(-1)}" y1="${py(gy)}" x2="${px(4)}" y2="${py(gy)}" stroke="#ddd" stroke-width="0.7"/>`;
+  g+=`<line x1="${px(-1)}" y1="${py(0)}" x2="${px(4.2)}" y2="${py(0)}" stroke="#444" stroke-width="1.5"/>`;
+  g+=`<line x1="${px(0)}" y1="${py(-0.5)}" x2="${px(0)}" y2="${py(5.2)}" stroke="#444" stroke-width="1.5"/>`;
+  g+=`<polygon points="${px(4.2)+2},${py(0)-4} ${px(4.2)+2},${py(0)+4} ${px(4.2)+8},${py(0)}" fill="#444"/>`;
+  g+=`<polygon points="${px(0)-4},${py(5.2)+2} ${px(0)+4},${py(5.2)+2} ${px(0)},${py(5.2)-6}" fill="#444"/>`;
+  g+=`<text x="${px(4.2)+10}" y="${py(0)+4}" fill="#444" font-size="12" font-style="italic">x</text>`;
+  g+=`<text x="${px(0)+5}" y="${py(5.2)-3}" fill="#444" font-size="12" font-style="italic">y</text>`;
+  for(let gx=1;gx<=4;gx++){
+    g+=`<text x="${px(gx)}" y="${py(0)+15}" text-anchor="middle" fill="#555" font-size="10">${gx}</text>`;
+  }
+  for(let gy=1;gy<=5;gy++){
+    g+=`<text x="${px(0)-7}" y="${py(gy)+4}" text-anchor="end" fill="#555" font-size="10">${gy}</text>`;
+  }
+  const lx2=Math.min(4,5-bv);
+  g+=`<line x1="${px(-1)}" y1="${py(bv-1)}" x2="${px(lx2)}" y2="${py(lx2+bv)}" stroke="#1e3a5c" stroke-width="2"/>`;
+  // dashed drop lines
+  g+=`<line x1="${px(pa)}" y1="${py(pb)}" x2="${px(pa)}" y2="${py(0)}" stroke="#888" stroke-width="1" stroke-dasharray="4,3"/>`;
+  g+=`<line x1="${px(pa)}" y1="${py(pb)}" x2="${px(0)}" y2="${py(pb)}" stroke="#888" stroke-width="1" stroke-dasharray="4,3"/>`;
+  // gold dot
+  g+=`<circle cx="${px(pa)}" cy="${py(pb)}" r="6" fill="#7a5c1e"/>`;
+  const labelX=pa<=2?8:-8;
+  const anchor=pa<=2?'start':'end';
+  g+=`<text x="${px(pa)+labelX}" y="${py(pb)-7}" fill="#1e3a5c" font-size="10" font-weight="bold" text-anchor="${anchor}">(${pa}, ${pb})</text>`;
+  const svg=`<svg viewBox="0 0 260 220" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:250px;display:block;margin:.3rem auto" font-family="sans-serif">${g}</svg><p style="text-align:center;font-size:.9rem;margin:.25rem 0">The point (${pa}, ${pb}) is on <em>f</em>. What point is on <em>f</em>&thinsp;<sup>&minus;1</sup>? Enter as (x, y).</p>`;
+  return {
+    svg,
+    answer:[`(${pb},${pa})`,`(${pb}, ${pa})`],
+    hint:`f(${pa}) = ${pb} means f⁻¹(${pb}) = ${pa}. What ordered pair does that put on the graph of f⁻¹?`,
+    step:`f(${pa})=${pb}\\Rightarrow f^{-1}(${pb})=${pa},\\text{ so }(${pb},${pa})\\text{ is on }f^{-1}`
+  };
+}
+
+const GENERATORS = [gen1, gen2, gen3, gen4, gen5, gen6, gen7, gen8, gen9, gen10, gen11];
 
 
 // ── State ─────────────────────────────────────────────────────────────────────
