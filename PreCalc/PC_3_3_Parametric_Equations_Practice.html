@@ -170,9 +170,6 @@ function gen2(){
 function gen3(){
   // Eliminate parameter from linear: x=a*t, y=b*t → y=(b/a)x → slope b/a (integer)
   const a = choose([1,2,3]);
-  const b = choose([2,3,4,6]).filter(v => v % a === 0 && v !== a);
-  const slope = (b.length ? b[rInt(b.length)] : 2*a) / a;
-  // safe choice: just pick slope directly
   const sl = choose([2,3,4,5]);
   const ax = choose([1,2,3]);
   const ay = sl * ax;
