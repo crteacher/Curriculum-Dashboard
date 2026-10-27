@@ -1311,6 +1311,12 @@ async function init() {
   const completed = caState?.completedSections || [];
   // Only pick sections that have a generator (skip fallback-only sections)
   const doneSections = allSections.filter(s => completed.includes(s.id) && GEN[s.id]);
+  const secMap = Object.fromEntries(doneSections.map(s => [s.id, s]));
+
+  let overrides = {};
+  try { overrides = await fetch(BASE + 'donow-overrides.json?_=' + Date.now()).then(r => r.json()); } catch(e) {}
+  const todayEntry = overrides[today];
+  const overrideIds = todayEntry && Array.isArray(todayEntry.ca) ? todayEntry.ca : null;
 
   if (doneSections.length === 0) {
     document.getElementById('mainArea').innerHTML = `
@@ -1330,6 +1336,9 @@ async function init() {
   if (lockedSection) {
     secs = [lockedSection, lockedSection];
     document.getElementById('subtitle').textContent = `Review: §${lockedSection.section} — ${lockedSection.title}`;
+  } else if (overrideIds && overrideIds.length > 0) {
+    secs = overrideIds.map(id => secMap[id]).filter(Boolean).slice(0, 2);
+    if (secs.length === 1) secs = [secs[0], secs[0]];
   } else {
     // Pick 2 sections — stable per (date × sectionID), recency-biased.
     const scored = doneSections.map((s, i) => {
