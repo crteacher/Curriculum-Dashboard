@@ -1,0 +1,2327 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Summation Notation: A Guided Walkthrough</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%20100%20100'%3E%3Ctext%20y%3D'.9em'%20font-size%3D'90'%3E%CE%A3%3C%2Ftext%3E%3C%2Fsvg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=JetBrains+Mono:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #f6f1e4;
+    --paper-line: rgba(58, 74, 94, 0.14);
+    --paper-line-strong: rgba(58, 74, 94, 0.26);
+    --ink: #26313f;
+    --ink-soft: #5b6b7d;
+    --card-bg: #fffdf7;
+    --card-border: #ddd2b6;
+    --accent: #2f7d6b;
+    --accent-strong: #1f5c4e;
+    --accent-soft: rgba(47, 125, 107, 0.12);
+    --accent-ink: #f5fbf9;
+    --good: #3f7a52;
+    --good-soft: rgba(63, 122, 82, 0.14);
+    --bad: #b3413a;
+    --bad-soft: rgba(179, 65, 58, 0.12);
+    --shadow: rgba(38, 49, 63, 0.16);
+    --graph-grid: rgba(58, 74, 94, 0.14);
+    --graph-axis: rgba(38, 49, 63, 0.55);
+    --graph-stroke-a: #2f7d6b;
+    --graph-stroke-b: #c1483f;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #1b2330;
+      --paper-line: rgba(238, 242, 240, 0.07);
+      --paper-line-strong: rgba(238, 242, 240, 0.15);
+      --ink: #edf1ef;
+      --ink-soft: #a3aebb;
+      --card-bg: #232e3d;
+      --card-border: #3a4a61;
+      --accent: #5fd1b3;
+      --accent-strong: #86e0c8;
+      --accent-soft: rgba(95, 209, 179, 0.16);
+      --accent-ink: #0c2620;
+      --good: #7bc794;
+      --good-soft: rgba(123, 199, 148, 0.16);
+      --bad: #ff9a90;
+      --bad-soft: rgba(255, 154, 144, 0.14);
+      --shadow: rgba(0, 0, 0, 0.5);
+      --graph-grid: rgba(238, 242, 240, 0.10);
+      --graph-axis: rgba(238, 242, 240, 0.55);
+      --graph-stroke-a: #5fd1b3;
+      --graph-stroke-b: #ff9179;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #1b2330;
+    --paper-line: rgba(238, 242, 240, 0.07);
+    --paper-line-strong: rgba(238, 242, 240, 0.15);
+    --ink: #edf1ef;
+    --ink-soft: #a3aebb;
+    --card-bg: #232e3d;
+    --card-border: #3a4a61;
+    --accent: #5fd1b3;
+    --accent-strong: #86e0c8;
+    --accent-soft: rgba(95, 209, 179, 0.16);
+    --accent-ink: #0c2620;
+    --good: #7bc794;
+    --good-soft: rgba(123, 199, 148, 0.16);
+    --bad: #ff9a90;
+    --bad-soft: rgba(255, 154, 144, 0.14);
+    --shadow: rgba(0, 0, 0, 0.5);
+    --graph-grid: rgba(238, 242, 240, 0.10);
+    --graph-axis: rgba(238, 242, 240, 0.55);
+    --graph-stroke-a: #5fd1b3;
+    --graph-stroke-b: #ff9179;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background:
+      repeating-linear-gradient(0deg, var(--paper-line) 0, var(--paper-line) 1px, transparent 1px, transparent 32px),
+      repeating-linear-gradient(90deg, var(--paper-line) 0, var(--paper-line) 1px, transparent 1px, transparent 32px),
+      var(--paper);
+    color: var(--ink);
+    font-family: "Source Sans 3", ui-sans-serif, system-ui, sans-serif;
+    display: flex;
+    justify-content: center;
+    padding: clamp(20px, 4vw, 56px) 18px 80px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+  }
+
+  .wrap { width: 100%; max-width: 900px; }
+  header { text-align: center; margin-bottom: 22px; }
+
+  .eyebrow {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--accent); font-weight: 600;
+  }
+
+  h1 {
+    font-family: "Fraunces", Georgia, serif; font-weight: 600;
+    font-size: clamp(1.9rem, 5vw, 2.6rem); margin: 6px 0 8px; text-wrap: balance;
+  }
+
+  header p { color: var(--ink-soft); font-size: 1rem; max-width: 60ch; margin: 0 auto; line-height: 1.55; }
+
+  .toolbar {
+    position: sticky; top: 12px; z-index: 5;
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    margin: 22px 0 26px; padding: 12px 16px; flex-wrap: wrap;
+    background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 14px;
+    box-shadow: 0 10px 26px -16px var(--shadow);
+  }
+  .score-box { display: flex; align-items: baseline; gap: 8px; }
+  .score-num { font-family: "JetBrains Mono", monospace; font-size: 1.3rem; font-weight: 700; color: var(--accent-strong); font-variant-numeric: tabular-nums; }
+  .score-label { font-size: 0.78rem; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.06em; }
+  .score-group { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .score-divider { width: 1px; align-self: stretch; min-height: 24px; background: var(--card-border); }
+  .exam-score-box .score-num { color: var(--ink); }
+  .exam-score-box .score-label { display: flex; align-items: center; gap: 5px; }
+  .exam-score-box .score-label svg { width: 11px; height: 11px; flex-shrink: 0; }
+
+  .exam-badge {
+    display: inline-flex; align-items: center; gap: 5px; font-size: 0.68rem; font-weight: 700;
+    padding: 3px 9px; border-radius: 20px; letter-spacing: 0.02em; white-space: nowrap;
+  }
+  .exam-badge svg { width: 11px; height: 11px; flex-shrink: 0; }
+  .exam-badge.exam-good { background: var(--good-soft); color: var(--good); }
+  .exam-badge.exam-bad { background: var(--bad-soft); color: var(--bad); }
+
+  button { font-family: inherit; cursor: pointer; }
+  button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .icon-btn {
+    display: inline-flex; align-items: center; gap: 7px; background: var(--card-bg);
+    border: 1px solid var(--card-border); color: var(--ink); padding: 9px 14px;
+    border-radius: 9px; font-size: 0.86rem; font-weight: 600;
+    transition: border-color 0.15s ease, transform 0.1s ease;
+  }
+  .icon-btn:hover { border-color: var(--accent); }
+  .icon-btn:active { transform: translateY(1px); }
+  .icon-btn svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+  .group-head {
+    margin: 34px 0 14px; padding-bottom: 8px; border-bottom: 1.5px solid var(--paper-line-strong);
+  }
+  .group-head .gnum {
+    font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 1.3rem; color: var(--ink);
+  }
+  .group-head .gdesc { font-size: 0.92rem; color: var(--ink-soft); margin-top: 2px; }
+
+  .qcard {
+    background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px;
+    box-shadow: 0 14px 32px -22px var(--shadow), 0 2px 8px -2px var(--shadow);
+    padding: clamp(16px, 3vw, 24px); margin-bottom: 18px;
+  }
+
+  .qcard-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
+  .qcard-head .qtitle { display: flex; align-items: center; gap: 10px; }
+  .qlabel { font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 1.1rem; }
+  .qpoints {
+    font-family: "JetBrains Mono", monospace; font-size: 0.68rem; letter-spacing: 0.05em;
+    color: var(--ink-soft); background: var(--paper-line); padding: 2px 8px; border-radius: 20px;
+  }
+
+  .qprompt { font-size: 1rem; line-height: 1.7; margin-bottom: 14px; }
+  .qprompt .math { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 1.02rem; }
+  .qprompt .frac { display: inline-flex; flex-direction: column; vertical-align: middle; text-align: center; margin: 0 3px; line-height: 1.15; }
+  .qprompt .frac .num { border-bottom: 1.3px solid currentColor; padding: 0 3px 1px; }
+  .qprompt .frac .den { padding: 1px 3px 0; }
+
+  .qinputs { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin-bottom: 14px; }
+  .qinputs .field-label { font-size: 0.86rem; color: var(--ink-soft); font-weight: 600; }
+  .qinputs input[type="text"], .qinputs select {
+    font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 0.95rem;
+    background: var(--paper); border: 1.5px solid var(--card-border); border-radius: 8px;
+    padding: 8px 10px; color: var(--ink); min-width: 92px;
+  }
+  .qinputs select { font-family: "Source Sans 3", sans-serif; min-width: 190px; }
+  .qinputs input:focus, .qinputs select:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .qinputs .subrow {
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    padding: 8px 10px; border: 1.5px dashed var(--card-border); border-radius: 10px;
+  }
+  .qinputs label.chk { display: inline-flex; align-items: center; gap: 6px; font-size: 0.86rem; color: var(--ink-soft); font-weight: 600; }
+  .qinputs .hidden { display: none !important; }
+  .mc-row { display: flex; flex-wrap: wrap; gap: 8px; }
+  .mc-opt {
+    border: 1.5px solid var(--card-border); border-radius: 9px; padding: 8px 13px;
+    font-size: 0.88rem; background: var(--card-bg); color: var(--ink); font-weight: 600;
+    transition: border-color 0.15s ease, background 0.15s ease;
+  }
+  .mc-opt:hover { border-color: var(--accent); }
+  .mc-opt.selected { border-color: var(--accent); background: var(--accent-soft); color: var(--accent-strong); }
+
+  .qactions { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; }
+  .btn-primary {
+    background: var(--accent); color: var(--accent-ink); border: none; padding: 10px 20px;
+    border-radius: 10px; font-size: 0.92rem; font-weight: 700;
+    box-shadow: 0 8px 16px -8px var(--accent-strong); transition: transform 0.1s ease;
+  }
+  .btn-primary:active { transform: translateY(1px); }
+  .btn-secondary {
+    background: transparent; border: 1.5px solid var(--card-border); color: var(--ink);
+    padding: 9px 18px; border-radius: 10px; font-size: 0.92rem; font-weight: 700;
+    transition: border-color 0.15s ease;
+  }
+  .btn-secondary:hover { border-color: var(--accent); }
+
+  .qfeedback {
+    font-size: 0.9rem; font-weight: 700; padding: 9px 13px; border-radius: 9px; margin-bottom: 10px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .qfeedback.good { background: var(--good-soft); color: var(--good); }
+  .qfeedback.bad { background: var(--bad-soft); color: var(--bad); }
+  .qfeedback svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+  .qsolution {
+    background: var(--accent-soft); border: 1px solid var(--card-border); border-left: 4px solid var(--accent);
+    border-radius: 0 12px 12px 0; padding: 14px 16px; font-size: 0.92rem; line-height: 1.7;
+  }
+  .qsolution .sol-label {
+    font-family: "JetBrains Mono", monospace; font-size: 0.68rem; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--accent-strong); font-weight: 700; display: block; margin-bottom: 6px;
+  }
+  .qsolution .step { margin: 3px 0; }
+  .qsolution .final { margin-top: 8px; font-weight: 700; font-family: "JetBrains Mono", monospace; }
+
+  .hidden { display: none !important; }
+
+  /* ---- additions for this walkthrough ---- */
+  .qprompt .frac { display: inline-flex; flex-direction: column; vertical-align: middle; text-align: center; margin: 0 3px; line-height: 1.15; }
+  .qgraph-wrap { display: flex; justify-content: center; margin: 10px 0 16px; }
+  .qgraph-wrap canvas { width: 100%; max-width: 440px; height: auto; display: block; }
+  .stim .qcard-head { margin-bottom: 4px; }
+  .stim .qgraph-wrap { margin: 6px 0 4px; }
+  .stim-note { text-align: center; font-size: 0.85rem; color: var(--ink-soft); }
+  .qfeedback span { min-width: 0; }
+  .qfeedback .fnote { font-weight: 600; opacity: 0.9; }
+  .qcard-head, .qcard-head .qtitle { flex-wrap: wrap; row-gap: 8px; }
+  .hintline { margin-top: 8px; font-size: 0.88rem; color: var(--ink-soft); }
+  .stu { display: inline-block; margin: 8px 0 8px 6px; padding: 4px 12px; font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 0.98rem; background: var(--accent-soft); border: 1px dashed var(--card-border); border-radius: 8px; }
+  .qsolution .nt { color: var(--ink-soft); font-size: 0.88rem; }
+  .qsolution .sol-fig { margin: 12px 0 0; }
+  .tbl-show { border-collapse: collapse; margin: 8px 0 12px; font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 0.92rem; background: var(--paper); }
+  .tbl-show th, .tbl-show td { border: 1.5px solid var(--card-border); padding: 5px 12px; text-align: center; }
+  .tbl-show th { background: var(--accent-soft); color: var(--ink-soft); }
+  .mc-row { max-width: 100%; }
+  .mc-opt { text-align: left; }
+  .qinputs input[type="text"] { max-width: 100%; }
+
+  /* intro + name */
+  .howto { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: clamp(16px, 3vw, 26px); box-shadow: 0 14px 32px -22px var(--shadow); line-height: 1.65; }
+  .howto h2 { font-family: "Fraunces", Georgia, serif; font-size: 1.2rem; margin: 0 0 8px; }
+  .howto ol { margin: 8px 0 14px; padding-left: 22px; }
+  .howto li { margin: 5px 0; }
+  .loop { display: flex; flex-wrap: wrap; gap: 10px; margin: 14px 0 18px; }
+  .loop > div { flex: 1 1 150px; background: var(--paper); border: 1px solid var(--card-border); border-radius: 12px; padding: 10px 12px; font-size: 0.9rem; }
+  .loop b { display: block; font-family: "JetBrains Mono", monospace; font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent-strong); margin-bottom: 3px; }
+  .name-row { display: flex; flex-wrap: wrap; gap: 10px 12px; align-items: center; margin-top: 8px; }
+  .name-row label { font-weight: 700; font-size: 0.92rem; }
+  .name-row input { flex: 1 1 240px; max-width: 340px; font-size: 1rem; padding: 10px 12px; background: var(--paper); border: 1.5px solid var(--card-border); border-radius: 9px; color: var(--ink); font-family: inherit; }
+  .name-row input:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .err { color: var(--bad); font-weight: 700; font-size: 0.88rem; margin-top: 6px; }
+
+  /* sticky bar */
+  .topbar { position: sticky; top: 8px; z-index: 6; margin: 0 0 22px; padding: 10px 12px; background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 14px; box-shadow: 0 10px 26px -16px var(--shadow); display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; }
+  .pills { display: flex; flex-wrap: wrap; gap: 6px; flex: 1 1 420px; }
+  .stage-pill { display: inline-flex; align-items: center; gap: 6px; font-size: 0.76rem; font-weight: 700; padding: 6px 11px; border-radius: 20px; background: var(--paper-line); color: var(--ink-soft); border: 1px solid transparent; transition: background 0.2s ease, color 0.2s ease; }
+  .stage-pill .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--ink-soft); flex-shrink: 0; }
+  .stage-pill.done { background: var(--good-soft); color: var(--good); }
+  .stage-pill.done .dot { background: var(--good); }
+  .stage-pill.current { border-color: var(--accent); color: var(--ink); box-shadow: 0 0 0 1.5px var(--accent); }
+  .stage-pill.bonus { border-style: dashed; border-color: var(--card-border); }
+  .stage-pill:hover { border-color: var(--accent); }
+  .stats { display: flex; align-items: center; gap: 14px; margin-left: auto; font-family: "JetBrains Mono", monospace; font-size: 0.82rem; color: var(--ink-soft); }
+  .stats b { color: var(--accent-strong); font-size: 1.02rem; font-variant-numeric: tabular-nums; }
+  .stats .who { font-family: "Source Sans 3", sans-serif; font-weight: 600; max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  /* stage frame */
+  .stage-head { margin-bottom: 18px; }
+  .stage-kicker { font-family: "JetBrains Mono", monospace; font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); font-weight: 600; }
+  .stage-head h2 { font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: clamp(1.55rem, 4vw, 2.1rem); margin: 4px 0 8px; text-wrap: balance; }
+  .stage-meta { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 12px; color: var(--ink-soft); }
+  .time-chip { font-family: "JetBrains Mono", monospace; font-size: 0.72rem; background: var(--paper-line); border-radius: 20px; padding: 3px 10px; white-space: nowrap; }
+  .goal { font-size: 1rem; }
+  .stage-body { display: flex; flex-direction: column; gap: 14px; }
+  .stage-body > * { margin: 0; }
+  .para { font-size: 1.02rem; line-height: 1.7; max-width: 70ch; }
+  .para.small, .small { font-size: 0.9rem; color: var(--ink-soft); }
+  h3.sec { font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 1.25rem; margin: 8px 0 0; }
+  code { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 0.9em; background: var(--accent-soft); padding: 1px 6px; border-radius: 5px; color: var(--accent-strong); }
+  .stage-foot { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; margin-top: 34px; padding-top: 18px; border-top: 1.5px solid var(--paper-line-strong); }
+  .stage-foot .foot-mid { flex: 1; }
+
+  /* callouts */
+  .callout { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 14px; padding: 14px 18px; font-size: 0.98rem; line-height: 1.65; }
+  .callout p { margin: 6px 0; }
+  .callout .ct { font-family: "JetBrains Mono", monospace; font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; margin-bottom: 4px; }
+  .c-key { background: var(--accent-soft); border-color: var(--accent); }
+  .c-key .ct { color: var(--accent-strong); }
+  .c-warn { background: var(--bad-soft); border-color: var(--bad); }
+  .c-warn .ct { color: var(--bad); }
+  .c-tip { background: var(--card-bg); border-style: dashed; }
+  .c-tip .ct { color: var(--ink-soft); }
+  .c-good { background: var(--good-soft); border-color: var(--good); }
+  .c-good .ct { color: var(--good); }
+  ol.inl { margin: 6px 0 4px; padding-left: 22px; }
+  ol.inl li { margin: 4px 0; }
+  ol.method { counter-reset: m; list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; }
+  ol.method li { counter-increment: m; position: relative; padding: 12px 16px 12px 52px; background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; line-height: 1.6; }
+  ol.method li::before { content: counter(m); position: absolute; left: 14px; top: 11px; width: 26px; height: 26px; border-radius: 50%; background: var(--accent); color: var(--accent-ink); display: grid; place-items: center; font: 700 0.82rem "JetBrains Mono", monospace; }
+  .vocab { width: 100%; border-collapse: collapse; background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; overflow: hidden; font-size: 0.94rem; line-height: 1.5; }
+  .vocab th, .vocab td { padding: 9px 12px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--card-border); }
+  .vocab thead th { background: var(--accent-soft); font-family: "JetBrains Mono", monospace; font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent-strong); }
+  .vocab tbody tr:last-child td, .vocab tbody tr:last-child th { border-bottom: 0; }
+  .vocab.combo th[scope], .vocab.combo tbody th { background: var(--accent-soft); font-size: 0.9rem; }
+  .vocab.typing { width: auto; min-width: min(100%, 420px); }
+  @media (max-width: 560px) { .vocab th, .vocab td { padding: 7px 8px; font-size: 0.86rem; } }
+  .reveal { background: var(--card-bg); border: 1px dashed var(--card-border); border-radius: 12px; padding: 4px 16px; }
+  .reveal summary { cursor: pointer; font-weight: 700; padding: 10px 0; color: var(--accent-strong); }
+  .reveal-body { padding: 2px 0 12px; line-height: 1.65; }
+  .reveal-body p { margin: 6px 0; }
+  .cpbanner { display: flex; flex-direction: column; gap: 4px; padding: 12px 16px; border: 1.5px dashed var(--accent); border-radius: 12px; background: var(--accent-soft); font-size: 0.94rem; line-height: 1.55; margin-top: 10px !important; }
+  .cpbanner .cpb-t { font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 1.15rem; }
+
+  /* figures */
+  .fig { margin: 0; }
+  .fig figcaption { text-align: center; color: var(--ink-soft); font-size: 0.92rem; line-height: 1.5; max-width: 62ch; margin: 0 auto; }
+  .fig .qgraph-wrap { margin: 6px 0 4px; }
+
+  /* worked example */
+  .worked { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: clamp(14px, 3vw, 22px); box-shadow: 0 14px 32px -22px var(--shadow); }
+  .worked-tag { font-family: "JetBrains Mono", monospace; font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 700; color: var(--accent-strong); }
+  .worked h4 { font-family: "Fraunces", Georgia, serif; font-size: 1.2rem; margin: 2px 0 6px; }
+  .worked-intro { margin: 0 0 6px; color: var(--ink-soft); }
+  .wsteps { list-style: none; padding: 0; margin: 6px 0 10px; display: flex; flex-direction: column; gap: 8px; counter-reset: w; }
+  .wsteps:empty { display: none; }
+  .wsteps li { counter-increment: w; padding: 9px 12px 9px 44px; position: relative; border-radius: 10px; background: var(--paper); line-height: 1.6; font-size: 0.97rem; }
+  .wsteps li::before { content: counter(w); position: absolute; left: 12px; top: 9px; width: 22px; height: 22px; border-radius: 50%; background: var(--paper-line-strong); color: var(--ink); display: grid; place-items: center; font: 700 0.74rem "JetBrains Mono", monospace; }
+  .wsteps li.cur { background: var(--accent-soft); }
+  .wsteps li.cur::before { background: var(--accent); color: var(--accent-ink); }
+  .wbtns { display: flex; flex-wrap: wrap; gap: 10px; }
+  button:disabled { opacity: 0.5; cursor: default; }
+
+  /* scanner */
+  .scanner { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: clamp(14px, 3vw, 22px); box-shadow: 0 14px 32px -22px var(--shadow); }
+  .scan-modes { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+  .scan-slide { display: flex; align-items: center; gap: 12px; max-width: 520px; margin: 0 auto 14px; }
+  .scan-slide label { font-weight: 700; font-size: 0.92rem; white-space: nowrap; }
+  .scan-slide input[type="range"] { flex: 1; accent-color: var(--accent); height: 28px; }
+  .scan-read { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+  .scan-read .tile { background: var(--paper); border: 1.5px solid var(--card-border); border-radius: 12px; padding: 8px 12px; min-width: 0; }
+  .scan-read .tl { display: block; font-size: 0.72rem; color: var(--ink-soft); font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 2px; }
+  .scan-read .tv { font-family: "JetBrains Mono", monospace; font-weight: 700; font-size: 1.05rem; font-variant-numeric: tabular-nums; }
+  .scan-read .sg .tv, .scan-read .dr .tv { font-size: 0.92rem; font-family: "Source Sans 3", sans-serif; }
+  .tile.t-pos { background: var(--good-soft); border-color: var(--good); }
+  .tile.t-neg { background: var(--bad-soft); border-color: var(--bad); }
+  .tile.t-zero { background: var(--accent-soft); border-color: var(--accent); }
+  @media (max-width: 700px) { .scan-read { grid-template-columns: 1fr 1fr; } }
+
+  /* cards */
+  .cards { display: flex; flex-direction: column; }
+  .group-head { margin: 22px 0 12px; }
+  .kind-chip { font-family: "JetBrains Mono", monospace; font-size: 0.66rem; letter-spacing: 0.05em; padding: 3px 9px; border-radius: 20px; background: var(--paper-line); color: var(--ink-soft); white-space: nowrap; }
+  .kind-chip.k-cp, .kind-chip.k-exam { background: var(--accent-soft); color: var(--accent-strong); font-weight: 700; }
+  .kind-chip.k-bonus { background: var(--good-soft); color: var(--good); font-weight: 700; }
+
+  /* summary */
+  .sumcard { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: clamp(14px, 3vw, 24px); box-shadow: 0 14px 32px -22px var(--shadow); overflow-x: auto; }
+  .sum-id { display: flex; flex-wrap: wrap; gap: 8px 40px; margin-bottom: 14px; }
+  .sum-id .tl { font-size: 0.72rem; color: var(--ink-soft); font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
+  .sum-name { font-family: "Fraunces", Georgia, serif; font-size: 1.4rem; font-weight: 600; }
+  .sumtbl { width: 100%; border-collapse: collapse; font-size: 0.94rem; }
+  .sumtbl th, .sumtbl td { padding: 8px 10px; border-bottom: 1px solid var(--card-border); text-align: left; }
+  .sumtbl thead th { font-family: "JetBrains Mono", monospace; font-size: 0.68rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-soft); }
+  .sumtbl td.num { font-family: "JetBrains Mono", monospace; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .sumtbl tr.bonus td { color: var(--ink-soft); font-style: italic; }
+  .sumtbl tfoot td { font-weight: 700; border-bottom: 0; border-top: 2px solid var(--paper-line-strong); }
+  .sum-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+  .copied { color: var(--good); font-weight: 700; }
+  .misslist { margin: 4px 0 8px; padding-left: 20px; }
+  .linkbtn { background: none; border: 0; padding: 0; font: inherit; font-weight: 700; color: var(--accent-strong); text-decoration: underline; cursor: pointer; }
+
+  /* print: only the summary */
+  #printSummary { display: none; }
+  @media print {
+    html, body { background: #fff !important; }
+    body { display: block !important; padding: 0 !important; min-height: 0 !important; background-image: none !important; }
+    .wrap { display: none !important; }
+    #printSummary { display: block !important; color: #111; background: #fff; font-family: "Source Sans 3", Arial, sans-serif; padding: 0.4in 0.5in; }
+    #printSummary h1 { font-family: "Fraunces", Georgia, serif; font-size: 22pt; margin: 0; color: #111; }
+    #printSummary .ps-sub { color: #555; margin: 2px 0 16px; font-size: 11pt; }
+    #printSummary .ps-id { display: flex; gap: 40px; margin-bottom: 14px; font-size: 12pt; }
+    #printSummary .sumtbl { font-size: 11pt; }
+    #printSummary .sumtbl th, #printSummary .sumtbl td { border-bottom: 1px solid #bbb; color: #111; }
+    #printSummary .sumtbl thead th { color: #555; }
+    #printSummary .sumtbl tr.bonus td { color: #555; }
+    #printSummary .sumtbl tfoot td { border-top: 2px solid #333; }
+    #printSummary .ps-note { color: #555; font-size: 10pt; margin-top: 14px; }
+    @page { margin: 0.5in; }
+  }
+  @media (max-width: 640px) {
+    .topbar { position: static; }
+    .stats { margin-left: 0; width: 100%; justify-content: space-between; }
+  }
+
+  /* ---- optimization walkthrough additions ---- */
+  .mx { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 0.9em; background: var(--accent-soft); color: var(--ink); padding: 1px 6px; border-radius: 5px; overflow-wrap: anywhere; }
+  .mx sup { font-size: 0.72em; line-height: 0; }
+  .prob { display: block; }
+  .pstory { font-size: 1.04rem; line-height: 1.65; margin: 4px 0 8px; }
+  .pfig { display: flex; justify-content: center; margin: 4px 0 12px; }
+  .pfig:empty { display: none; }
+  .fsvg { width: 100%; max-width: 340px; height: auto; }
+  .sv-line { stroke: var(--ink); stroke-width: 1.6; fill: none; }
+  .sv-sheet { fill: var(--accent-soft); stroke: var(--ink); stroke-width: 1.8; }
+  .sv-cut { fill: var(--card-bg); stroke: var(--ink-soft); stroke-width: 1.4; stroke-dasharray: 4 3; }
+  .sv-fold { stroke: var(--ink-soft); stroke-width: 1.2; stroke-dasharray: 4 3; fill: none; }
+  .sv-side { fill: var(--paper-line-strong); stroke: var(--ink); stroke-width: 1.6; }
+  .sv-open { fill: var(--card-bg); stroke: var(--ink); stroke-width: 1.6; stroke-dasharray: 5 3; }
+  .sv-txt { fill: var(--ink); font-family: "JetBrains Mono", monospace; font-size: 13px; }
+  .sv-b { font-weight: 700; font-size: 15px; }
+  .sv-note { fill: var(--ink-soft); font-style: italic; font-family: "Source Sans 3", sans-serif; font-size: 12px; }
+  .sv-wall { fill: var(--paper-line-strong); stroke: var(--ink); stroke-width: 1.2; }
+  .sv-wallt { fill: var(--ink-soft); font-size: 10px; font-family: "Source Sans 3", sans-serif; text-anchor: middle; }
+  .sv-wallln { stroke: var(--ink); stroke-width: 4.5; }
+  .sv-fence { stroke: var(--accent-strong); stroke-width: 2.6; fill: var(--accent-soft); }
+  .sv-axis { stroke: var(--ink-soft); stroke-width: 1.2; }
+  .sv-curve { stroke: var(--accent-strong); stroke-width: 2.6; fill: none; }
+  .sv-dash { stroke: var(--bad); stroke-width: 1.8; stroke-dasharray: 5 4; }
+  .sv-pt { fill: var(--ink); }
+  .sv-pt2 { fill: var(--accent); stroke: var(--ink); stroke-width: 1.2; }
+
+  .typehelp { margin: 4px 0 10px; font-size: 0.9rem; }
+  .typehelp summary { cursor: pointer; color: var(--accent-strong); font-weight: 600; }
+  .typehelp ul { margin: 6px 0 2px; padding-left: 20px; line-height: 1.6; }
+  .psteps { display: flex; flex-direction: column; gap: 10px; margin-top: 4px; }
+  .pstep { border: 1px solid var(--card-border); border-radius: 12px; background: var(--paper); }
+  .pstep.locked { opacity: 0.55; }
+  .pstep.active { border-color: var(--accent); box-shadow: 0 0 0 1.5px var(--accent); background: var(--card-bg); }
+  .pstep.done { border-left: 4px solid var(--good); }
+  .phead { display: flex; align-items: center; gap: 10px; padding: 9px 12px; flex-wrap: wrap; }
+  .pnum { width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; background: var(--paper-line-strong); color: var(--ink); font-weight: 700; font-size: 0.85rem; flex: none; }
+  .pstep.active .pnum { background: var(--accent); color: var(--accent-ink); }
+  .pstep.done .pnum { background: var(--good); color: var(--accent-ink); }
+  .ptitle { font-weight: 700; }
+  .pbadge { margin-left: auto; font-size: 0.78rem; font-family: "JetBrains Mono", monospace; color: var(--ink-soft); }
+  .pbody { padding: 0 14px 14px; }
+  .pprompt { line-height: 1.65; margin: 2px 0 10px; }
+  .pfields { display: flex; flex-direction: column; gap: 10px; margin-bottom: 12px; }
+  .fld { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; }
+  .fld label { font-weight: 600; font-size: 0.93rem; flex: 0 1 15em; }
+  .fld input[type="text"], .fld select { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 0.98rem; padding: 8px 10px; border: 1.5px solid var(--card-border); border-radius: 9px; background: var(--card-bg); color: var(--ink); min-width: 12em; flex: 1 1 14em; max-width: 24em; }
+  .fld select { font-family: "Source Sans 3", sans-serif; }
+  .fld input:focus, .fld select:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .fld.ok input, .fld.ok select { border-color: var(--good); background: var(--good-soft); }
+  .fld.bad input, .fld.bad select { border-color: var(--bad); background: var(--bad-soft); }
+  .fmsg { flex-basis: 100%; font-size: 0.9rem; color: var(--bad); line-height: 1.5; }
+  .fld.ok .fmsg { color: var(--good); }
+  .pactions { display: flex; flex-wrap: wrap; gap: 8px; }
+  .pfeed { margin-top: 10px; }
+  .phint { margin-top: 10px; padding: 9px 13px; background: var(--accent-soft); border-radius: 10px; font-size: 0.96rem; line-height: 1.6; }
+  .phint .hline + .hline { margin-top: 6px; }
+  .pans { margin-top: 10px; padding: 10px 14px; background: var(--card-bg); border: 1px dashed var(--card-border); border-radius: 10px; line-height: 1.7; }
+  .pans p { margin: 4px 0; }
+  .pans ul { margin: 4px 0; padding-left: 20px; }
+  .pans .insight, .insight { font-style: italic; color: var(--ink-soft); }
+  .pdone { margin-top: 12px; padding: 10px 14px; border-radius: 10px; background: var(--good-soft); border: 1px solid var(--good); font-weight: 600; }
+  .pdone.part { background: var(--paper); border-color: var(--card-border); font-weight: 400; }
+  .worked .wsteps li .wt { font-weight: 700; display: block; margin-bottom: 2px; }
+  .worked .wstory { line-height: 1.65; margin: 4px 0 8px; }
+  .worked .wsteps li p { margin: 3px 0; }
+  .worked .wsteps li ul { margin: 3px 0; padding-left: 20px; }
+  .lt-intro p { margin: 6px 0; }
+  .wsteps li li { counter-increment: none; padding: 0; background: none; border-radius: 0; font-size: inherit; }
+  .wsteps li li::before { content: none; display: none; }
+  .pbadge svg, .pdone svg { width: 14px; height: 14px; vertical-align: -2px; flex: none; }
+
+  /* ---- summation walkthrough additions ---- */
+  .sg { display: inline-flex; flex-direction: column; align-items: center; vertical-align: middle; margin: 0 5px 0 3px; line-height: 1; }
+  .sg-top, .sg-bot { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 0.72em; white-space: nowrap; }
+  .sg-s { font-family: "Fraunces", Georgia, serif; font-size: 2.1em; line-height: 0.95; }
+  .sg-t { vertical-align: middle; margin-left: 2px; }
+  .sgbox { margin: 8px 0; padding: 8px 14px; background: var(--accent-soft); border-radius: 10px; font-size: 1.12rem; text-align: center; overflow-x: auto; line-height: 1.9; }
+  .sgbox.inl { display: inline-block; padding: 2px 10px; margin: 0 2px; font-size: 1em; vertical-align: middle; line-height: 1.5; }
+  .sgbox.big { font-size: 1.5rem; padding: 14px 18px; }
+  .anat { display: grid; gap: 7px; margin: 6px 0 10px; font-size: 0.97rem; line-height: 1.55; }
+  .anat > div { padding: 7px 12px; background: var(--paper); border: 1px solid var(--card-border); border-radius: 9px; }
+  .formbox { margin: 8px 0 12px; padding: 12px 16px; border: 2px solid var(--accent); border-radius: 12px; background: var(--card-bg); }
+  .formbox .ft { font-family: "JetBrains Mono", monospace; font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 700; color: var(--accent-strong); margin-bottom: 4px; }
+  table.fmtbl { border-collapse: collapse; margin: 4px 0 6px; }
+  table.fmtbl td { padding: 6px 14px; border-bottom: 1px solid var(--card-border); font-size: 1.1rem; }
+  table.fmtbl tr:last-child td { border-bottom: none; }
+  .bonusrow td { font-style: italic; color: var(--ink-soft); }
+  .pfig svg.fsvg { max-width: 360px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Calculus 1 &middot; Getting Ready for Chapter 4</div>
+    <h1>Summation Notation: A Guided Walkthrough</h1>
+    <p>A self-paced lesson on sigma notation, the shorthand for adding up long lists of numbers. You will read it, expand it, write it, shift it, simplify it with rules, and use it to estimate area with rectangles. No limits today. Everything you need is on this page.</p>
+  </header>
+
+  <section id="intro" class="howto">
+    <h2>How today works</h2>
+    <p>You will work through seven short stages at your own pace, plus an optional bonus stage. Plan on about <b>65 minutes</b>. Keep scratch paper, a pencil, and a calculator next to you.</p>
+    <div class="loop">
+      <div><b>1 Learn</b>Read the explanation and step through the worked example.</div>
+      <div><b>2 Practice</b>Unscored. Press <i>New version</i> as many times as you like.</div>
+      <div><b>3 Checkpoint</b>Scored, one point per step. Your first check on each step counts.</div>
+    </div>
+    <ol>
+      <li>Each problem is broken into steps. A step unlocks when you get the one before it. Type formulas like <code>2i+1</code> or <code>(-1)^i</code>. Stage 2 explains exactly how.</li>
+      <li><b>Hints are free.</b> Opening an answer <i>before</i> you check a checkpoint step scores 0 for that step, so try it first.</li>
+      <li>The page records your scores and your time on each stage. At the end, go to <b>Summary</b> and take a screenshot of it.</li>
+      <li>Do not refresh or close this tab until you have turned in your summary. Your progress is not saved if the page reloads.</li>
+    </ol>
+    <div class="callout c-key"><div class="ct">When you finish</div><p><b>Take a screenshot of your Summary screen and upload it to the Google Classroom assignment immediately</b> after you finish. Do it before you close this tab, because nothing on this page is saved.</p><p>On a Chromebook, press <b>Ctrl + Show windows</b> (the key in the top row that looks like a rectangle with two lines beside it). To capture just part of the screen, press <b>Ctrl + Shift + Show windows</b> and drag a box. Screenshots are saved in your Downloads folder. If the whole table does not fit on the screen, press <b>Ctrl</b> and <b>&minus;</b> to zoom out first. The Summary screen repeats these steps.</p></div>
+    <div class="name-row"><label for="stuName">Your first and last name:</label><input id="stuName" type="text" autocomplete="off" maxlength="60"><button type="button" class="btn-primary" id="beginBtn">Begin</button></div>
+    <div id="nameErr" class="err hidden">Type your name first so it appears on your summary.</div>
+  </section>
+
+  <div id="lesson" class="hidden">
+    <div id="navbar" class="topbar">
+      <div class="pills" id="pills"></div>
+      <div class="stats"><span class="who" id="whoName"></span><span title="Checkpoint points recorded so far">Score <b id="stScore">0 / 0</b></span><span title="Time since you began">Time <b id="stClock">0:00</b></span></div>
+    </div>
+    <div id="stages"></div>
+  </div>
+</div>
+<section id="printSummary"></section>
+
+<script>
+(function () {
+  "use strict";
+  // ============================================================
+  // Utilities (shared with the rest of the practice-test family)
+  // ============================================================
+  function randInt(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+  function randNonZeroInt(min, max) { var v; do { v = randInt(min, max); } while (v === 0); return v; }
+  function randIntExcluding(exclude, min, max) {
+    var v, tries = 0;
+    do { v = randInt(min, max); tries++; } while (exclude.indexOf(v) !== -1 && tries < 200);
+    return v;
+  }
+  function randChoice(arr) { return arr[randInt(0, arr.length - 1)]; }
+  function randBool() { return Math.random() < 0.5; }
+  function shuffle(arr) {
+    var a = arr.slice();
+    for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; }
+    return a;
+  }
+  // weighted pick: list of [value, weight]
+  function pickW(list) {
+    var total = 0, i;
+    for (i = 0; i < list.length; i++) total += list[i][1];
+    var r = Math.random() * total;
+    for (i = 0; i < list.length; i++) { r -= list[i][1]; if (r < 0) return list[i][0]; }
+    return list[list.length - 1][0];
+  }
+  function gcdInt(a, b) { a = Math.abs(a); b = Math.abs(b); while (b) { var t = b; b = a % b; a = t; } return a || 1; }
+  function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+
+  // ---- exact rationals (used for slopes / fractional answers) ----
+  function R(n, d) {
+    if (d === undefined) d = 1;
+    if (d < 0) { n = -n; d = -d; }
+    var g = gcdInt(n, d);
+    return { n: n / g, d: d / g };
+  }
+  function rAdd(a, b) { return R(a.n * b.d + b.n * a.d, a.d * b.d); }
+  function rSub(a, b) { return R(a.n * b.d - b.n * a.d, a.d * b.d); }
+  function rMul(a, b) { return R(a.n * b.n, a.d * b.d); }
+  function rDiv(a, b) { return R(a.n * b.d, a.d * b.n); }
+  function rVal(a) { return a.n / a.d; }
+  function rEq(a, b) { return a.n === b.n && a.d === b.d; }
+  function rIsInt(a) { return a.d === 1; }
+
+  // ---- HTML helpers ----
+  function frac(numHtml, denHtml) {
+    return "<span class=\"frac\"><span class=\"num\">" + numHtml + "</span><span class=\"den\">" + denHtml + "</span></span>";
+  }
+  function radical(innerHtml, index) {
+    var idx = index ? "<span class=\"idx\">" + index + "</span>" : "";
+    return "<span class=\"radical\">" + idx + "<span class=\"rsym\">&radic;</span><span class=\"rad-inner\">" + innerHtml + "</span></span>";
+  }
+  function mn(n) { return n < 0 ? "&minus;" + (-n) : String(n); }          // signed number as html
+  function par(n) { return n < 0 ? "(&minus;" + (-n) + ")" : String(n); }  // parenthesise negatives
+  function rHtml(a) {
+    if (a.d === 1) return mn(a.n);
+    return (a.n < 0 ? "&minus;" : "") + frac(String(Math.abs(a.n)), String(a.d));
+  }
+  function rPlain(a) { return a.d === 1 ? String(a.n) : a.n + "/" + a.d; }
+  // polynomial from [[coef, labelHtml], ...] (integer coefficients; zero terms skipped)
+  function poly(terms) {
+    var out = "", first = true;
+    terms.forEach(function (t) {
+      var c = t[0], l = t[1];
+      if (c === 0) return;
+      var a = Math.abs(c), cs = (a === 1 && l) ? "" : String(a);
+      if (first) { out += (c < 0 ? "&minus;" : "") + cs + l; first = false; }
+      else out += " " + (c < 0 ? "&minus;" : "+") + " " + cs + l;
+    });
+    return first ? "0" : out;
+  }
+  // m x + b with rational slope m (non-zero) and integer intercept b
+  function linHtml(m, b, v) {
+    v = v || "x";
+    var an = Math.abs(m.n), s;
+    if (m.d === 1) s = (m.n < 0 ? "&minus;" : "") + (an === 1 ? "" : an) + v;
+    else s = (m.n < 0 ? "&minus;" : "") + frac(String(an), String(m.d)) + v;
+    if (b !== 0) s += " " + (b < 0 ? "&minus;" : "+") + " " + Math.abs(b);
+    return s;
+  }
+  // "whiteboard" stack: lines = [[exprHtml, noteHtml], ...]
+  function wb(lines) {
+    return "<div class=\"wb\">" + lines.map(function (l) {
+      return "<div class=\"ln\"><span class=\"ex\">" + l[0] + "</span>" + (l[1] ? "<span class=\"nt\">" + l[1] + "</span>" : "") + "</div>";
+    }).join("") + "</div>";
+  }
+  // number -> exact-looking string ("2/3" if it is a small-denominator fraction, otherwise 2 decimals)
+  function fmtNum(v) {
+    if (v === Infinity) return "inf";
+    if (v === -Infinity) return "-inf";
+    for (var d = 1; d <= 24; d++) {
+      var n = Math.round(v * d);
+      if (Math.abs(v * d - n) < 1e-9) { var g = gcdInt(n, d); return (n / g) + (d / g === 1 ? "" : "/" + (d / g)); }
+    }
+    return String(Math.round(v * 100) / 100);
+  }
+
+  // ============================================================
+  // Number parsing (typed numeric answers)
+  // ============================================================
+  function normText(raw) {
+    return String(raw === null || raw === undefined ? "" : raw)
+      .replace(/[−‒–—]/g, "-").replace(/ /g, " ").trim().toLowerCase();
+  }
+  // -> { type: "number", value } or { type: "invalid" }.  Accepts 5, -5, +5, 5., .5, 1/2, -3/2, 1.5, "x = 4", "f(2) = -3"
+  function parseAnswer(raw) {
+    var str = normText(raw);
+    if (str === "") return { type: "invalid" };
+    var eq = str.indexOf("=");
+    if (eq !== -1) str = str.slice(eq + 1).trim();
+    str = str.replace(/\s+/g, "").replace(/,/g, "");
+    var m = str.match(/^([+-]?(?:\d+\.?\d*|\.\d+))\/([+-]?(?:\d+\.?\d*|\.\d+))$/);
+    if (m) {
+      var p = parseFloat(m[1]), q = parseFloat(m[2]);
+      if (q !== 0) return { type: "number", value: p / q };
+      return { type: "invalid" };
+    }
+    if (/^[+-]?(?:\d+\.?\d*|\.\d+)$/.test(str)) return { type: "number", value: parseFloat(str) };
+    return { type: "invalid" };
+  }
+  var NUM_HELP = "Type a number (a fraction like 3/2 or a decimal is fine).";
+  // numeric check: expected number, tolerance, optional diag list [{value, msg}] for targeted feedback
+  function numCheck(raw, expected, tol, diags) {
+    var u = parseAnswer(raw);
+    if (u.type === "invalid") return { ok: false, msg: String(raw === null || raw === undefined ? "" : raw).trim() === "" ? "Type your answer in the box first." : "I could not read that as a number. " + NUM_HELP };
+    if (Math.abs(u.value - expected) <= tol) return { ok: true };
+    var msg = "";
+    (diags || []).some(function (d) {
+      if (d.value !== null && d.value !== undefined && isFinite(d.value) && Math.abs(u.value - d.value) <= tol * 0.999 + 1e-9) { msg = d.msg; return true; }
+      return false;
+    });
+    return { ok: false, msg: msg };
+  }
+
+  // ============================================================
+  // Interval notation: hand-typed, parsed, merged, compared
+  // ============================================================
+  function parseBoundToken(raw) {
+    var s = normText(raw).replace(/\s+/g, "");
+    if (["-infinity", "-inf", "-oo", "-∞"].indexOf(s) !== -1) return -Infinity;
+    if (["infinity", "+infinity", "inf", "+inf", "oo", "+oo", "∞", "+∞"].indexOf(s) !== -1) return Infinity;
+    var m = s.match(/^([+-]?\d+(?:\.\d+)?|[+-]?\.\d+)\/([+-]?\d+(?:\.\d+)?)$/);
+    if (m) { var p = parseFloat(m[1]), q = parseFloat(m[2]); if (q !== 0) return p / q; return null; }
+    if (/^[+-]?(?:\d+\.?\d*|\.\d+)$/.test(s)) return parseFloat(s);
+    return null;
+  }
+  var EMPTY_WORDS = ["empty", "empty set", "the empty set", "no solution", "no solutions", "none", "∅", "{}", "dne", "does not exist", "no values", "never"];
+  var ALLREAL_WORDS = ["all reals", "all real numbers", "all real", "reals", "all real numbers.", "r", "ℝ", "all x", "any real number", "all numbers"];
+  function parseIntervalUnion(raw) {
+    if (raw === null || raw === undefined) return { intervals: [], invalid: true };
+    var str = normText(raw);
+    if (str === "") return { intervals: [], invalid: true };
+    var bare = str.replace(/[.\s]+$/, "");
+    if (EMPTY_WORDS.indexOf(bare) !== -1) return { intervals: [], invalid: false };
+    if (ALLREAL_WORDS.indexOf(bare) !== -1) {
+      return { intervals: [{ lo: -Infinity, loIncl: false, hi: Infinity, hiIncl: false }], invalid: false };
+    }
+    var re = /([\(\[])\s*([^,()\[\]]+?)\s*,\s*([^,()\[\]]+?)\s*([\)\]])/g;
+    var m, intervals = [];
+    while ((m = re.exec(str)) !== null) {
+      var lo = parseBoundToken(m[2]), hi = parseBoundToken(m[3]);
+      if (lo === null || hi === null) return { intervals: [], invalid: true };
+      intervals.push({
+        lo: lo, hi: hi,
+        loIncl: m[1] === "[" && lo !== -Infinity && lo !== Infinity,
+        hiIncl: m[4] === "]" && hi !== -Infinity && hi !== Infinity
+      });
+    }
+    if (intervals.length === 0) return { intervals: [], invalid: true };
+    // whatever is left between the intervals may only be union connectors
+    var rest = str.replace(re, " ").replace(/union|∪|\bu\b|\bor\b|[+,;&.\s]/g, "");
+    if (rest !== "") return { intervals: [], invalid: true };
+    return { intervals: intervals, invalid: false };
+  }
+  function cleanIv(a) { return { lo: a.lo, hi: a.hi, loIncl: !!a.loIncl && isFinite(a.lo), hiIncl: !!a.hiIncl && isFinite(a.hi) }; }
+  // union of intervals -> sorted, merged (touching/overlapping pieces fuse; empty pieces vanish)
+  function mergeIntervals(list) {
+    var L = list.map(cleanIv).filter(function (a) { return a.lo < a.hi || (a.lo === a.hi && a.loIncl && a.hiIncl); });
+    L.sort(function (a, b) {
+      if (a.lo !== b.lo) return a.lo < b.lo ? -1 : 1;
+      return (b.loIncl ? 1 : 0) - (a.loIncl ? 1 : 0);
+    });
+    var out = [];
+    L.forEach(function (a) {
+      var last = out[out.length - 1];
+      if (last && (a.lo < last.hi || (a.lo === last.hi && (last.hiIncl || a.loIncl)))) {
+        if (a.hi > last.hi) { last.hi = a.hi; last.hiIncl = a.hiIncl; }
+        else if (a.hi === last.hi) { last.hiIncl = last.hiIncl || a.hiIncl; }
+      } else out.push({ lo: a.lo, loIncl: a.loIncl, hi: a.hi, hiIncl: a.hiIncl });
+    });
+    return out;
+  }
+  function boundEqual(uv, uIncl, ev, eIncl) {
+    if (ev === -Infinity || ev === Infinity) return uv === ev;
+    return uv !== -Infinity && uv !== Infinity && Math.abs(uv - ev) < 0.01 && uIncl === eIncl;
+  }
+  function endpointsOnlyEqual(us, es) {
+    if (us.length !== es.length) return false;
+    for (var i = 0; i < us.length; i++) {
+      var a = us[i], b = es[i];
+      var loOk = (a.lo === b.lo) || (isFinite(a.lo) && isFinite(b.lo) && Math.abs(a.lo - b.lo) < 0.01);
+      var hiOk = (a.hi === b.hi) || (isFinite(a.hi) && isFinite(b.hi) && Math.abs(a.hi - b.hi) < 0.01);
+      if (!loOk || !hiOk) return false;
+    }
+    return true;
+  }
+  // expected: array of {lo,loIncl,hi,hiIncl} -- an empty array means the empty set
+  function intervalAnswerCorrect(parsed, expected) {
+    if (parsed.invalid) return false;
+    var us = mergeIntervals(parsed.intervals), es = mergeIntervals(expected);
+    if (us.length !== es.length) return false;
+    for (var i = 0; i < us.length; i++) {
+      if (!boundEqual(us[i].lo, us[i].loIncl, es[i].lo, es[i].loIncl)) return false;
+      if (!boundEqual(us[i].hi, us[i].hiIncl, es[i].hi, es[i].hiIncl)) return false;
+    }
+    return true;
+  }
+  function sameIntervals(a, b) {
+    var x = mergeIntervals(a), y = mergeIntervals(b);
+    if (x.length !== y.length) return false;
+    for (var i = 0; i < x.length; i++) {
+      if (!boundEqual(x[i].lo, x[i].loIncl, y[i].lo, y[i].loIncl) || !boundEqual(x[i].hi, x[i].hiIncl, y[i].hi, y[i].hiIncl)) return false;
+    }
+    return true;
+  }
+  var IV_HELP = "I could not read that as interval notation. Type it like (-3, 5] or (-inf, 2) U (4, inf), or write empty for no values.";
+  // result of grading one typed interval field -> { ok, msg }
+  function intervalCheck(raw, expected, extra) {
+    var parsed = parseIntervalUnion(raw);
+    if (parsed.invalid) {
+      return { ok: false, msg: normText(raw) === "" ? "Type your answer in the box first." : IV_HELP };
+    }
+    if (intervalAnswerCorrect(parsed, expected)) return { ok: true };
+    var msg = "";
+    var us = mergeIntervals(parsed.intervals), es = mergeIntervals(expected);
+    (extra || []).some(function (x) { if (sameIntervals(parsed.intervals, x.intervals)) { msg = x.msg; return true; } return false; });
+    if (!msg) {
+      if (endpointsOnlyEqual(us, es)) msg = "Your endpoints are right, but check which ones need parentheses and which need brackets.";
+      else if (us.length < es.length && es.length > 1) {
+        var covers = us.some(function (u) { return es.filter(function (e) { return e.lo >= u.lo && e.hi <= u.hi; }).length > 1; });
+        if (covers) msg = "One of your intervals runs straight across a value that is not allowed there. Check whether that value has to be left out (that makes a union).";
+      }
+    }
+    return { ok: false, msg: msg };
+  }
+  function oneIntervalNotation(iv) {
+    var loStr = iv.lo === -Infinity ? "&minus;&infin;" : fmtNum(iv.lo).replace("-", "&minus;");
+    var hiStr = iv.hi === Infinity ? "&infin;" : fmtNum(iv.hi).replace("-", "&minus;");
+    var loBrk = iv.lo === -Infinity ? "(" : (iv.loIncl ? "[" : "(");
+    var hiBrk = iv.hi === Infinity ? ")" : (iv.hiIncl ? "]" : ")");
+    return loBrk + loStr + ", " + hiStr + hiBrk;
+  }
+  function intervalNotation(expected) {
+    var es = mergeIntervals(expected);
+    if (es.length === 0) return "&empty; (empty set)";
+    return es.map(oneIntervalNotation).join(" &cup; ");
+  }
+  // plain ASCII form a student would type (used by the test harness and the page's own self-test hook)
+  function ivText(expected, style) {
+    var es = mergeIntervals(expected);
+    if (es.length === 0) return style === 1 ? "no solution" : "empty";
+    if (es.length === 1 && es[0].lo === -Infinity && es[0].hi === Infinity && style === 2) return "all real numbers";
+    return es.map(function (iv) {
+      var lo = iv.lo === -Infinity ? "-infinity" : fmtNum(iv.lo), hi = iv.hi === Infinity ? "infinity" : fmtNum(iv.hi);
+      if (style === 3) { lo = lo.replace("infinity", "inf"); hi = hi.replace("infinity", "inf"); }
+      return (iv.loIncl ? "[" : "(") + lo + ", " + hi + (iv.hiIncl ? "]" : ")");
+    }).join(style === 4 ? " u " : " U ");
+  }
+  function intervalTextInputHtml(cls, label, placeholder) {
+    return "<span class=\"field-label\">" + label + "</span><input type=\"text\" class=\"" + cls + "\" autocomplete=\"off\" autocapitalize=\"off\" spellcheck=\"false\" placeholder=\"" + (placeholder || "e.g. (-3, 5]") + "\" style=\"min-width:240px\">";
+  }
+  function numInputHtml(cls, label, placeholder) {
+    return "<span class=\"field-label\">" + label + "</span><input type=\"text\" class=\"" + cls + "\" inputmode=\"text\" autocomplete=\"off\" spellcheck=\"false\" placeholder=\"" + (placeholder || "a number") + "\">";
+  }
+  function escHtml(v) { return String(v).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
+  function fieldVal(card, sel) { var el = card.querySelector(sel); return el ? el.value : ""; }
+
+  // ============================================================
+  // Typed formulas: tiny expression parser (no eval) for f^-1(x)
+  // ============================================================
+  function tokenizeExpr(s) {
+    var pos = 0, toks = [], m;
+    while (pos < s.length) {
+      var ch = s.charAt(pos);
+      if (/[0-9.]/.test(ch)) {
+        m = /^(\d+\.?\d*|\.\d+)/.exec(s.slice(pos));
+        if (!m) return { error: "number" };
+        toks.push({ t: "num", v: parseFloat(m[1]) }); pos += m[1].length;
+      } else if (ch === "x") { toks.push({ t: "x" }); pos++; }
+      else if ("+-*/^()".indexOf(ch) !== -1) { toks.push({ t: ch }); pos++; }
+      else return { error: "char", ch: ch };
+    }
+    return { toks: toks };
+  }
+  function parseExpr(src) {
+    var s = normText(src).replace(/[×·⋅]/g, "*").replace(/÷/g, "/").replace(/\*\*/g, "^").replace(/\s+/g, "");
+    if (s === "") return { error: "empty" };
+    if (s.length > 120) return { error: "long" };
+    var tk = tokenizeExpr(s);
+    if (tk.error) return tk;
+    var toks = tk.toks, i = 0, depth = 0;
+    function peek() { return i < toks.length ? toks[i].t : null; }
+    function startsPrimary(t) { return t === "num" || t === "x" || t === "("; }
+    function parseExprP() {
+      var left = parseTerm();
+      while (peek() === "+" || peek() === "-") {
+        var op = toks[i++].t;
+        var right = parseTerm();
+        left = { k: "bin", op: op, a: left, b: right };
+      }
+      return left;
+    }
+    function parseTerm() {
+      var left = parseUnary();
+      for (;;) {
+        var t = peek();
+        if (t === "*" || t === "/") {
+          i++;
+          var r = parseUnary();
+          left = { k: "bin", op: t, a: left, b: r };
+        } else if (startsPrimary(t)) {
+          var r2 = parseUnary();
+          left = { k: "bin", op: "*", a: left, b: r2 };
+        } else break;
+      }
+      return left;
+    }
+    function parseUnary() {
+      var t = peek();
+      if (t === "-") { i++; return { k: "neg", a: parseUnary() }; }
+      if (t === "+") { i++; return parseUnary(); }
+      return parsePower();
+    }
+    function parsePower() {
+      var base = parsePrimary();
+      if (peek() === "^") { i++; var ex = parseUnary(); return { k: "bin", op: "^", a: base, b: ex }; }
+      return base;
+    }
+    function parsePrimary() {
+      var t = toks[i];
+      if (!t) throw new Error("end");
+      if (t.t === "num") { i++; return { k: "num", v: t.v }; }
+      if (t.t === "x") { i++; return { k: "x" }; }
+      if (t.t === "(") {
+        i++; depth++;
+        if (depth > 25) throw new Error("deep");
+        var e = parseExprP();
+        if (peek() !== ")") throw new Error("paren");
+        i++; depth--;
+        return e;
+      }
+      throw new Error("unexpected");
+    }
+    var ast;
+    try {
+      ast = parseExprP();
+      if (i !== toks.length) return { error: "syntax" };
+    } catch (e) { return { error: "syntax" }; }
+    return { ast: ast };
+  }
+  function evalAst(n, x) {
+    switch (n.k) {
+      case "num": return n.v;
+      case "x": return x;
+      case "neg": return -evalAst(n.a, x);
+      case "bin": {
+        var a = evalAst(n.a, x), b = evalAst(n.b, x);
+        if (n.op === "+") return a + b;
+        if (n.op === "-") return a - b;
+        if (n.op === "*") return a * b;
+        if (n.op === "/") return b === 0 ? NaN : a / b;
+        return Math.pow(a, b);
+      }
+    }
+    return NaN;
+  }
+  // student text -> { fn } or { error }
+  function parseFormula(raw) {
+    var s = normText(raw);
+    if (s === "") return { error: "empty" };
+    var eqs = s.split("=");
+    if (eqs.length > 2) return { error: "eq" };
+    if (eqs.length === 2) {
+      var left = eqs[0].replace(/\s+/g, "");
+      if (/^(y|[fgh][^=]*)$/.test(left)) s = eqs[1];
+      else return { error: "eq" };
+    }
+    if (/y/.test(s.replace(/\s+/g, ""))) return { error: "y" };
+    var p = parseExpr(s);
+    if (p.error) return p;
+    return { fn: function (x) { return evalAst(p.ast, x); } };
+  }
+  var TEST_XS = [-7, -3, -1.5, 0, 1, 2, 4.25, 9];
+  function formulaMatches(fn, ref) {
+    for (var i = 0; i < TEST_XS.length; i++) {
+      var a = fn(TEST_XS[i]), b = ref(TEST_XS[i]);
+      if (!isFinite(a) || !isFinite(b)) return false;
+      if (Math.abs(a - b) > 1e-6 * Math.max(1, Math.abs(b))) return false;
+    }
+    return true;
+  }
+  var FORMULA_HELP = "I could not read that as a formula in x. Use x as the variable, for example (x + 3)/2 or x/2 + 3/2 (write 2x for 2 times x).";
+
+  // ============================================================
+  // Canvas graph helpers
+  // ============================================================
+  function themeColor(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+  function setupCanvas(canvas) {
+    var cssW = canvas.clientWidth || 300, cssH = canvas.clientHeight || 200;
+    var dpr = window.devicePixelRatio || 1;
+    canvas.width = Math.round(cssW * dpr);
+    canvas.height = Math.round(cssH * dpr);
+    var ctx = canvas.getContext("2d");
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, cssW, cssH);
+    return { ctx: ctx, w: cssW, h: cssH };
+  }
+  function makeMapper(cssW, cssH, xMin, xMax, yMin, yMax, pad) {
+    pad = pad || 24;
+    var w = cssW - pad * 1.4, h = cssH - pad * 1.6;
+    var sx = w / (xMax - xMin), sy = h / (yMax - yMin);
+    var ox = pad, oy = cssH - pad * 0.9;
+    var f = function (x, y) { return [ox + (x - xMin) * sx, oy - (y - yMin) * sy]; };
+    f.sx = sx; f.sy = sy;
+    return f;
+  }
+  // grid at every integer, stronger lines at multiples of 5 on wide windows, axes, and numeric tick labels
+  // along the bottom/left edges (always visible, whether or not the window contains the origin).
+  function drawGrid(canvas, xMin, xMax, yMin, yMax, opts) {
+    opts = opts || {};
+    var pad = opts.pad || 24;
+    var setup = setupCanvas(canvas), ctx = setup.ctx, cssW = setup.w, cssH = setup.h;
+    var toPx = makeMapper(cssW, cssH, xMin, xMax, yMin, yMax, pad);
+    var gridColor = themeColor("--graph-grid"), axisColor = themeColor("--graph-axis"), labelColor = themeColor("--ink-soft");
+    var gx, gy;
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = gridColor;
+    ctx.beginPath();
+    for (gx = Math.ceil(xMin); gx <= Math.floor(xMax); gx++) {
+      var p0 = toPx(gx, yMin), p1 = toPx(gx, yMax);
+      ctx.moveTo(p0[0], p0[1]); ctx.lineTo(p1[0], p1[1]);
+    }
+    for (gy = Math.ceil(yMin); gy <= Math.floor(yMax); gy++) {
+      var q0 = toPx(xMin, gy), q1 = toPx(xMax, gy);
+      ctx.moveTo(q0[0], q0[1]); ctx.lineTo(q1[0], q1[1]);
+    }
+    ctx.stroke();
+    if (opts.major) {
+      ctx.save();
+      ctx.globalAlpha = 0.28; ctx.strokeStyle = axisColor; ctx.lineWidth = 1;
+      ctx.beginPath();
+      for (gx = Math.ceil(xMin / 5) * 5; gx <= xMax; gx += 5) { var m0 = toPx(gx, yMin), m1 = toPx(gx, yMax); ctx.moveTo(m0[0], m0[1]); ctx.lineTo(m1[0], m1[1]); }
+      for (gy = Math.ceil(yMin / 5) * 5; gy <= yMax; gy += 5) { var n0 = toPx(xMin, gy), n1 = toPx(xMax, gy); ctx.moveTo(n0[0], n0[1]); ctx.lineTo(n1[0], n1[1]); }
+      ctx.stroke();
+      ctx.restore();
+    }
+    ctx.lineWidth = 1.6;
+    ctx.strokeStyle = axisColor;
+    ctx.beginPath();
+    if (xMin <= 0 && xMax >= 0) { var a0 = toPx(0, yMin), a1 = toPx(0, yMax); ctx.moveTo(a0[0], a0[1]); ctx.lineTo(a1[0], a1[1]); }
+    if (yMin <= 0 && yMax >= 0) { var b0 = toPx(xMin, 0), b1 = toPx(xMax, 0); ctx.moveTo(b0[0], b0[1]); ctx.lineTo(b1[0], b1[1]); }
+    ctx.stroke();
+    if (!opts.noLabels) {
+      ctx.fillStyle = labelColor;
+      ctx.font = "10px 'JetBrains Mono', ui-monospace, monospace";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "top";
+      var steps = [1, 2, 5, 10], xStep = 10, yStep = 10, si;
+      for (si = 0; si < steps.length; si++) { if (toPx.sx * steps[si] >= 27) { xStep = steps[si]; break; } }
+      for (si = 0; si < steps.length; si++) { if (toPx.sy * steps[si] >= 15) { yStep = steps[si]; break; } }
+      for (var lx = Math.ceil(xMin / xStep) * xStep; lx <= Math.floor(xMax); lx += xStep) {
+        var lp = toPx(lx, yMin);
+        ctx.fillText(String(lx), Math.min(Math.max(lp[0], 12), cssW - 12), cssH - 13);
+      }
+      ctx.textAlign = "left";
+      ctx.textBaseline = "middle";
+      for (var ly = Math.ceil(yMin / yStep) * yStep; ly <= Math.floor(yMax); ly += yStep) {
+        var lq = toPx(xMin, ly);
+        ctx.fillText(String(ly), 4, Math.min(Math.max(lq[1], 10), cssH - 16));
+      }
+    }
+    var tl = toPx(xMin, yMax), br = toPx(xMax, yMin);
+    return {
+      ctx: ctx, toPx: toPx,
+      clipOn: function () { ctx.save(); ctx.beginPath(); ctx.rect(tl[0], tl[1], br[0] - tl[0], br[1] - tl[1]); ctx.clip(); },
+      clipOff: function () { ctx.restore(); }
+    };
+  }
+  function strokePath(ctx, toPx, pts, color, width) {
+    ctx.strokeStyle = color; ctx.lineWidth = width || 2.4; ctx.lineCap = "round"; ctx.lineJoin = "round";
+    ctx.beginPath();
+    pts.forEach(function (p, i) { var q = toPx(p[0], p[1]); if (i === 0) ctx.moveTo(q[0], q[1]); else ctx.lineTo(q[0], q[1]); });
+    ctx.stroke();
+  }
+  function drawSegment(ctx, toPx, x0, y0, x1, y1, color, width) { strokePath(ctx, toPx, [[x0, y0], [x1, y1]], color, width); }
+  function drawCircle(ctx, toPx, x, y, color, open) {
+    var p = toPx(x, y);
+    ctx.beginPath(); ctx.arc(p[0], p[1], 4.3, 0, Math.PI * 2);
+    if (open) {
+      ctx.fillStyle = themeColor("--card-bg");
+      ctx.fill(); ctx.lineWidth = 2; ctx.strokeStyle = color; ctx.stroke();
+    } else {
+      ctx.fillStyle = color; ctx.fill();
+    }
+  }
+  function drawArrowHead(ctx, toPx, x, y, dx, dy, color) {
+    var p = toPx(x, y), q = toPx(x + dx, y + dy);
+    var vx = q[0] - p[0], vy = q[1] - p[1], len = Math.sqrt(vx * vx + vy * vy) || 1;
+    vx /= len; vy /= len;
+    var L = 12, W = 5.4;
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.moveTo(p[0], p[1]);
+    ctx.lineTo(p[0] - vx * L + vy * W, p[1] - vy * L - vx * W);
+    ctx.lineTo(p[0] - vx * L - vy * W, p[1] - vy * L + vx * W);
+    ctx.closePath(); ctx.fill();
+  }
+
+  // ============================================================
+  // Smooth curves through chosen points: shape-preserving cubic Hermite (PCHIP).
+  // Slope is exactly 0 at every turning point, and the curve is strictly monotone between knots,
+  // so every turning point and zero sits exactly on a knot.
+  // ============================================================
+  function pchip(xs, ys) {
+    var n = xs.length, h = [], del = [], d = [], i;
+    for (i = 0; i < n - 1; i++) { h[i] = xs[i + 1] - xs[i]; del[i] = (ys[i + 1] - ys[i]) / h[i]; }
+    d[0] = del[0]; d[n - 1] = del[n - 2];
+    for (i = 1; i < n - 1; i++) {
+      if (del[i - 1] * del[i] <= 0) d[i] = 0;
+      else {
+        var w1 = 2 * h[i] + h[i - 1], w2 = h[i] + 2 * h[i - 1];
+        d[i] = (w1 + w2) / (w1 / del[i - 1] + w2 / del[i]);
+      }
+    }
+    return function (x) {
+      var k = 0;
+      if (x <= xs[0]) k = 0; else if (x >= xs[n - 1]) k = n - 2;
+      else { while (k < n - 2 && x > xs[k + 1]) k++; }
+      var t = (x - xs[k]) / h[k], t2 = t * t, t3 = t2 * t;
+      return (2 * t3 - 3 * t2 + 1) * ys[k] + (t3 - 2 * t2 + t) * h[k] * d[k] + (-2 * t3 + 3 * t2) * ys[k + 1] + (t3 - t2) * h[k] * d[k + 1];
+    };
+  }
+
+
+  // ============================================================
+  // Summation walkthrough: expression parser, grading, formatting helpers
+  // ============================================================
+  var MINUS = "−";
+  function normExpr(raw) {
+    return String(raw === null || raw === undefined ? "" : raw)
+      .replace(/[−‒–—]/g, "-").replace(/[×·∙]/g, "*").replace(/÷/g, "/")
+      .replace(/π/g, "pi").replace(/²/g, "^2").replace(/³/g, "^3").replace(/√/g, "sqrt").replace(/ /g, " ")
+      .replace(/\*\*/g, "^").trim().toLowerCase();
+  }
+  function tokenizeExpr(s, vars) {
+    var names = ["sqrt", "abs", "pi"].concat(vars);
+    names.sort(function (a, b) { return b.length - a.length; });
+    var toks = [], i = 0, n = s.length, m;
+    while (i < n) {
+      var c = s.charAt(i);
+      if (c === " ") { i++; continue; }
+      if (/[0-9.]/.test(c)) {
+        m = /^(?:\d+\.?\d*|\.\d+)/.exec(s.slice(i));
+        if (!m) return { err: "I could not read the number near \"" + s.slice(i, i + 4) + "\"." };
+        toks.push({ t: "num", v: parseFloat(m[0]) }); i += m[0].length; continue;
+      }
+      if (/[a-z]/.test(c)) {
+        var hit = null;
+        for (var k = 0; k < names.length; k++) { if (s.substr(i, names[k].length) === names[k]) { hit = names[k]; break; } }
+        if (!hit) return { err: "I do not know what \"" + c + "\" means here." + (vars.length ? " Use only the variable " + vars.join(" and ") + ", pi for π, and sqrt( ) for a square root." : " Type just a number (pi and sqrt( ) are allowed).") };
+        toks.push({ t: hit === "pi" ? "pi" : (hit === "sqrt" || hit === "abs" ? "fn" : "var"), v: hit }); i += hit.length; continue;
+      }
+      if ("+-*/^(),".indexOf(c) !== -1) { toks.push({ t: "op", v: c }); i++; continue; }
+      return { err: "I do not understand the symbol \"" + c + "\"." };
+    }
+    return { toks: toks };
+  }
+  // returns { fn: function(env) -> number } or { err }
+  function compileExpr(raw, vars) {
+    var s = normExpr(raw);
+    if (s === "") return { err: "Type your answer in the box first." };
+    var tk = tokenizeExpr(s, vars || []);
+    if (tk.err) return { err: tk.err };
+    var toks = tk.toks, p = 0, bad = null;
+    function peek() { return toks[p]; }
+    function isOp(v) { var t = toks[p]; return t && t.t === "op" && t.v === v; }
+    function fail(msg) { if (!bad) bad = msg; return function () { return NaN; }; }
+    function parseExpr() {
+      var left = parseTerm();
+      while (isOp("+") || isOp("-")) {
+        var op = toks[p++].v, right = parseTerm();
+        left = (function (a, b, o) { return o === "+" ? function (e) { return a(e) + b(e); } : function (e) { return a(e) - b(e); }; })(left, right, op);
+      }
+      return left;
+    }
+    function startsFactor() {
+      var t = toks[p]; if (!t) return false;
+      return t.t === "num" || t.t === "var" || t.t === "pi" || t.t === "fn" || (t.t === "op" && t.v === "(");
+    }
+    function parseTerm() {
+      var left = parseUnary();
+      for (;;) {
+        if (isOp("*") || isOp("/")) {
+          var op = toks[p++].v, right = parseUnary();
+          left = (function (a, b, o) { return o === "*" ? function (e) { return a(e) * b(e); } : function (e) { return a(e) / b(e); }; })(left, right, op);
+        } else if (startsFactor()) {
+          var r2 = parseUnary();
+          left = (function (a, b) { return function (e) { return a(e) * b(e); }; })(left, r2);
+        } else break;
+      }
+      return left;
+    }
+    function parseUnary() {
+      if (isOp("-")) { p++; var u = parseUnary(); return function (e) { return -u(e); }; }
+      if (isOp("+")) { p++; return parseUnary(); }
+      return parsePower();
+    }
+    function parsePower() {
+      var base = parseAtom();
+      if (isOp("^")) {
+        p++;
+        var ex;
+        if (isOp("-")) { p++; var q = parsePowerOperand(); ex = function (e) { return -q(e); }; }
+        else ex = parsePowerOperand();
+        return function (e) { return Math.pow(base(e), ex(e)); };
+      }
+      return base;
+    }
+    function parsePowerOperand() { return parsePower(); }
+    function parseAtom() {
+      var t = toks[p];
+      if (!t) return fail("That ends too soon. Is something missing at the end?");
+      if (t.t === "num") { p++; var v = t.v; return function () { return v; }; }
+      if (t.t === "pi") { p++; return function () { return Math.PI; }; }
+      if (t.t === "var") { p++; var nm = t.v; return function (e) { return e[nm]; }; }
+      if (t.t === "fn") {
+        p++;
+        var inner;
+        if (isOp("(")) { p++; inner = parseExpr(); if (isOp(")")) p++; else return fail("A parenthesis is not closed."); }
+        else inner = parsePower();
+        var which = t.v;
+        return function (e) { var a = inner(e); return which === "sqrt" ? Math.sqrt(a) : Math.abs(a); };
+      }
+      if (t.t === "op" && t.v === "(") {
+        p++; var ex2 = parseExpr();
+        if (isOp(")")) { p++; return ex2; }
+        return fail("A parenthesis is not closed.");
+      }
+      return fail("I did not expect \"" + t.v + "\" there.");
+    }
+    var f = parseExpr();
+    if (!bad && p < toks.length) bad = "I could not read the end of that (near \"" + (toks[p].v) + "\").";
+    if (bad) return { err: bad };
+    return { fn: f };
+  }
+  function stripLhs(raw) {
+    var s = String(raw === null || raw === undefined ? "" : raw);
+    var i = s.lastIndexOf("=");
+    return i === -1 ? s : s.slice(i + 1);
+  }
+  var UNIT_RE = /\s*(?:sq\.?|square|cubic)?\s*(?:inches|inch|in|feet|foot|ft|meters|meter|m|centimeters|centimeter|cm|millimeters|mm|yards|yd|units|unit)\s*(?:\^?\s*[23]|²|³)?\s*\.?\s*$/i;
+  // typed number (decimals, fractions, sqrt, pi, units tolerated) -> number or null
+  function evalNum(raw) {
+    var s = stripLhs(raw);
+    s = String(s).replace(/^\s*\$/, "");
+    if (/^\s*[-+−]?\d{1,3}(,\d{3})+(\.\d+)?/.test(s)) s = s.replace(/,/g, "");
+    s = s.replace(UNIT_RE, "");
+    var c = compileExpr(s, []);
+    if (c.err) return null;
+    var v = c.fn({});
+    return isFinite(v) ? v : null;
+  }
+  function numTol(b) { return Math.max(0.011, 0.002 * Math.abs(b)); }
+  function near(a, b) { return Math.abs(a - b) <= numTol(b); }
+
+
+  // one interval, bounds may be numbers, fractions, sqrt(...), inf -> { lo, hi, loIncl, hiIncl } or { err }
+  function parseIv1(raw) {
+    var s = normExpr(raw).replace(/\s+/g, "");
+    var m = /^([\(\[])(.*)([\)\]])$/.exec(s);
+    if (!m) return { err: "I could not read that as interval notation. Type it like (0, 15) or [0, inf)." };
+    var inner = m[2], depth = 0, cut = -1;
+    for (var i = 0; i < inner.length; i++) {
+      var ch = inner.charAt(i);
+      if (ch === "(") depth++; else if (ch === ")") depth--; else if (ch === "," && depth === 0) { cut = i; break; }
+    }
+    if (cut < 0) return { err: "An interval needs two endpoints separated by a comma, like (0, 15)." };
+    function bound(t) {
+      if (/^[+]?(inf|infinity|oo|\u221e)$/.test(t)) return Infinity;
+      if (/^-(inf|infinity|oo|\u221e)$/.test(t)) return -Infinity;
+      var c = compileExpr(t, []);
+      if (c.err) return null;
+      var v = c.fn({});
+      return isFinite(v) ? v : null;
+    }
+    var lo = bound(inner.slice(0, cut)), hi = bound(inner.slice(cut + 1));
+    if (lo === null || hi === null) return { err: "I could not read one of the endpoints. Use numbers, fractions like 5/2, sqrt(48), or inf." };
+    return { lo: lo, hi: hi, loIncl: m[1] === "[" && isFinite(lo), hiIncl: m[3] === "]" && isFinite(hi) };
+  }
+
+  // ---------- grading one field ----------
+  var FN_HELP = "I could not read that. Use ^ for powers (x^2), * or just write 2x for multiplication, pi for π, sqrt( ) for a square root, and parentheses around a whole numerator or denominator.";
+  function gradeField(f, raw, vals) {
+    var v = (raw === null || raw === undefined) ? "" : String(raw);
+    if (f.kind === "sel") {
+      if (v === "") return { ok: false, msg: "Choose an option first." };
+      var exs = f.expectAny || [f.expect];
+      if (exs.map(String).indexOf(v) !== -1) return { ok: true };
+      return { ok: false, msg: (f.diag && f.diag[v]) || "" };
+    }
+    if (String(v).replace(/\s+/g, "") === "") return { ok: false, msg: "Type your answer in the box first." };
+    if (f.kind === "fn") {
+      var vars = f.vars || ["x"], c = compileExpr(stripLhs(v), vars);
+      if (c.err) return { ok: false, msg: c.err + " " + FN_HELP };
+      var fn = c.fn, ok = true;
+      (f.samples || [1, 2, 3, 4.5, 6]).forEach(function (s) {
+        var env = {}; env[vars[0]] = s;
+        var a = fn(env), b = f.expect(s);
+        if (!isFinite(a) || Math.abs(a - b) > 1e-6 * (1 + Math.abs(b))) ok = false;
+      });
+      if (ok) return { ok: true };
+      var msg = "";
+      if (f.showCheck) {
+        var s0 = (f.samples || [1, 2, 3, 4.5, 6]);
+        for (var q = 0; q < s0.length && !msg; q++) {
+          var env0 = {}; env0[vars[0]] = s0[q];
+          var a0 = fn(env0), b0 = f.expect(s0[q]);
+          if (!isFinite(a0) || Math.abs(a0 - b0) > 1e-6 * (1 + Math.abs(b0))) {
+            msg = "Test your formula. With " + vars[0] + " = " + s0[q] + " it gives " + (isFinite(a0) ? rd(a0, 4) : "something undefined") + ", but it should give " + rd(b0, 4) + ".";
+          }
+        }
+      }
+      (f.diag || []).some(function (d) {
+        var m = true;
+        (f.samples || [1, 2, 3, 4.5, 6]).forEach(function (s) {
+          var env = {}; env[vars[0]] = s;
+          var a = fn(env), b = d.fn(s);
+          if (!isFinite(a) || Math.abs(a - b) > 1e-6 * (1 + Math.abs(b))) m = false;
+        });
+        if (m) { msg = d.msg; return true; }
+        return false;
+      });
+      return { ok: false, msg: msg };
+    }
+    if (f.kind === "num") {
+      var u = evalNum(v);
+      if (u === null) return { ok: false, msg: "I could not read that as a number. Type a decimal, a fraction like 5/2, or something like sqrt(8)." };
+      if (f.tol ? Math.abs(u - f.expect) <= f.tol : near(u, f.expect)) return { ok: true };
+      var m2 = "";
+      (f.diag || []).some(function (d) { if (near(u, d.value)) { m2 = d.msg; return true; } return false; });
+      if (!m2 && f.round) m2 = "Round to " + f.round + " decimal places and check your arithmetic.";
+      return { ok: false, msg: m2 };
+    }
+    if (f.kind === "list") {
+      var parts = String(v).split(/[,;]|\band\b/i).map(function (t) { return t.replace(/^\s*[a-z]\s*=/i, "").trim(); }).filter(function (t) { return t !== ""; });
+      var nums = [];
+      for (var i = 0; i < parts.length; i++) {
+        var n = evalNum(parts[i]);
+        if (n === null) return { ok: false, msg: "I could not read \"" + parts[i] + "\" as a number. Separate answers with commas, like 2, 5." };
+        nums.push(n);
+      }
+      var need = f.expect.slice(), extra = [];
+      var nr = f.tol ? function (a, b) { return Math.abs(a - b) <= f.tol; } : near;
+      nums.forEach(function (n) {
+        var hit = -1;
+        need.forEach(function (e, j) { if (hit < 0 && nr(n, e)) hit = j; });
+        if (hit >= 0) need.splice(hit, 1); else extra.push(n);
+      });
+      if (!need.length && !extra.length) return { ok: true };
+      var msg2 = "";
+      if (extra.length && f.outside) {
+        var bad = extra.filter(function (n) { return f.outside(n); });
+        if (bad.length) msg2 = f.outsideMsg ? f.outsideMsg(bad[0]) : "";
+      }
+      if (!msg2 && need.length && !extra.length) msg2 = f.missMsg || "You are missing a value. Check that you listed one value for every term.";
+      if (!msg2 && extra.length && !need.length) msg2 = f.extraMsg || "You have one more value than there are terms. Check how many terms the sum has.";
+      if (!msg2 && need.length && extra.length) msg2 = f.wrongMsg || "At least one value is off. Plug each integer value of the index into the term, one at a time.";
+      return { ok: false, msg: msg2 };
+    }
+    if (f.kind === "iv") {
+      var iv = parseIv1(v);
+      if (iv.err) return { ok: false, msg: iv.err };
+      var e = f.expect[0];
+      function bnd(a, b) { return (a === b) || (isFinite(a) && isFinite(b) && near(a, b)); }
+      var bothOk = bnd(iv.lo, e.lo) && bnd(iv.hi, e.hi);
+      if (bothOk && (f.loose || (iv.loIncl === !!e.loIncl && iv.hiIncl === !!e.hiIncl))) return { ok: true };
+      if (bothOk) return { ok: false, msg: "Your endpoints are right, but check which ones need parentheses and which need brackets. Is the endpoint itself allowed?" };
+      return { ok: false, msg: f.msg || "" };
+    }
+    return { ok: false, msg: "" };
+  }
+
+  // ---------- display helpers ----------
+  function M(s) { return "<span class=\"mx\">" + mathHtml(s) + "</span>"; }
+  function mathHtml(s) {
+    return String(s).replace(/\^\(([^)]+)\)/g, "<sup>$1</sup>").replace(/\^(-?[\d.]+)/g, "<sup>$1</sup>").replace(/\^([a-z])/g, "<sup>$1</sup>")
+      .replace(/\*/g, "·").replace(/-/g, MINUS).replace(/'/g, "′");
+  }
+  function rd(v, d) { var k = Math.pow(10, d == null ? 2 : d); return Math.round(v * k) / k; }
+  function nf(v, d) {
+    var r = rd(v, d == null ? 2 : d);
+    if (Math.abs(r) < 1e-9) r = 0;
+    return String(r).replace("-", "-");
+  }
+  function pn(v, d) { return nf(v, d); }            // plain number text
+  function dn(v, d) { return nf(v, d).replace("-", MINUS); } // display number text
+  function intervalText(iv) { return intervalNotation([iv]); }
+  function sgn(v) { return v > 0 ? 1 : (v < 0 ? -1 : 0); }
+  function ri(a, b) { return Math.floor(Math.random() * (b - a + 1)) + a; }
+  function rc(arr) { return arr[ri(0, arr.length - 1)]; }
+  function shuf(arr) { var a = arr.slice(); for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+  function spread(lo, hi, n) { var a = []; for (var i = 1; i <= n; i++) a.push(lo + (hi - lo) * i / (n + 1)); return a; }
+
+  // ---------- tiny SVG toolkit (colors come from CSS classes so both themes work) ----------
+  function svgWrap(w, h, inner, label) {
+    return "<svg class=\"fsvg\" viewBox=\"0 0 " + w + " " + h + "\" role=\"img\" aria-label=\"" + (label || "diagram") + "\" xmlns=\"http://www.w3.org/2000/svg\">" + inner + "</svg>";
+  }
+  function sLine(x1, y1, x2, y2, cls) { return "<line class=\"" + (cls || "sv-line") + "\" x1=\"" + x1 + "\" y1=\"" + y1 + "\" x2=\"" + x2 + "\" y2=\"" + y2 + "\"/>"; }
+  function sRect(x, y, w, h, cls) { return "<rect class=\"" + (cls || "sv-line") + "\" x=\"" + x + "\" y=\"" + y + "\" width=\"" + w + "\" height=\"" + h + "\"/>"; }
+  function sText(x, y, t, cls, anchor) { return "<text class=\"" + (cls || "sv-txt") + "\" x=\"" + x + "\" y=\"" + y + "\" text-anchor=\"" + (anchor || "middle") + "\">" + t + "</text>"; }
+
+  // ============================================================
+  // Problem families for the summation notation walkthrough
+  // ============================================================
+  var STEPN = { parts: 3, expand: 3, write: 3, shift: 3, rules: 3, closed: 4, rect: 5, grow: 4 };
+  var FAM = {};
+  var LAST_VARIANT = {};
+  function pickAvoid(list, avoid) { var l = list.filter(function (v) { return v !== avoid; }); return rc(l.length ? l : list); }
+  function polyStr(coefs, v) { // descending coefficients -> plain "x^3 - 3x^2 + 5"
+    var out = "", n = coefs.length - 1;
+    coefs.forEach(function (c, i) {
+      var e = n - i; if (c === 0) return;
+      var a = Math.abs(c), body;
+      if (e === 0) body = String(a); else body = (a === 1 ? "" : String(a)) + v + (e === 1 ? "" : "^" + e);
+      out += (out === "" ? (c < 0 ? "-" : "") : (c < 0 ? " - " : " + ")) + body;
+    });
+    return out || "0";
+  }
+  function H3() { return Array.prototype.slice.call(arguments); }
+  function nfield(id, label, expect, ph) { return { id: id, kind: "num", label: label, expect: expect, ph: ph || "a whole number", tol: 0.0005 }; }
+  function dfield(id, label, expect, ph) { return { id: id, kind: "num", label: label, expect: expect, ph: ph || "a number" }; }
+  function sgn0(v) { return v < 0 ? -1 : 1; }
+  function sp(v) { return v < 0 ? "(" + v + ")" : String(v); }
+  function sumTo(n, f) { var t = 0; for (var i = 1; i <= n; i++) t += f(i); return t; }
+  function pnum(v) { return String(rd(v, 4)); }
+  function dnum(v) { return pnum(v).replace("-", MINUS); }
+
+  // sigma display: stacked limits and a term
+  function SG(lo, hi, txt) {
+    return "<span class=\"sg\"><span class=\"sg-top\">" + hi + "</span><span class=\"sg-s\">Σ</span><span class=\"sg-bot\">" + "i&thinsp;=&thinsp;" + lo + "</span></span><span class=\"sg-t\">" + M(txt) + "</span>";
+  }
+  function paren(txt) { return "(" + txt + ")"; }
+  function sub(txt, arg) { return txt.replace(/i/g, "(" + arg + ")"); } // replace the index by an expression
+  function plainNum(v) { return String(v); }
+
+  // ---------- term makers: each returns { txt, f } where f(i) is the numeric term ----------
+  function termLin(o) {
+    var a = rc([2, 3, 4, 5, -2, -1]), b = rc([-3, -2, -1, 1, 2, 3, 4, 5]);
+    if (o && o.a !== undefined) { a = o.a; b = o.b; }
+    return { kind: "lin", txt: polyStr([a, b], "i"), f: function (i) { return a * i + b; }, wrap: true };
+  }
+  function termSq(o) {
+    var a = rc([1, 1, 2, 3]), c = rc([0, 0, 1, -1, 2, -2, 3]);
+    if (o && o.a !== undefined) { a = o.a; c = o.c; }
+    return { kind: "sq", txt: polyStr([a, 0, c], "i"), f: function (i) { return a * i * i + c; }, wrap: c !== 0 };
+  }
+  function termGeo(o) {
+    var base = rc([2, 2, 3]); if (o && o.base) base = o.base;
+    return { kind: "geo", txt: base + "^i", f: function (i) { return Math.pow(base, i); }, plug: function (k) { return base + "^" + k; }, wrap: false };
+  }
+  function termAlt(o) {
+    var s = rc([1, -1]); if (o && o.s) s = o.s;
+    var txt = s === 1 ? "(-1)^i*i" : "(-1)^(i+1)*i";
+    return { kind: "alt", txt: txt, f: function (i) { return (s === 1 ? 1 : -1) * Math.pow(-1, i) * i; }, plug: function (k) { return s === 1 ? "(-1)^" + k + "*" + k : "(-1)^(" + k + "+1)*" + k; }, wrap: false };
+  }
+  function termCube(o) { return { kind: "cube", txt: "i^3", f: function (i) { return i * i * i; }, wrap: false }; }
+  function termShow(T) { return T.wrap ? paren(T.txt) : T.txt; }
+  function expandVals(T, lo, hi) { var a = []; for (var i = lo; i <= hi; i++) a.push(T.f(i)); return a; }
+  function addUp(a) { return a.reduce(function (s, v) { return s + v; }, 0); }
+  function dlist(a) { return a.map(function (v) { return dnum(v); }).join(" + ").replace(/\+ −/g, "− "); }
+  function plug(T, i) { return T.plug ? T.plug(i) : sub(T.txt, i); }
+
+  // =========================================================
+  // PARTS: read the parts of a sigma
+  // =========================================================
+  FAM.parts = {
+    gen: function (o) {
+      var lo = (o && o.lo !== undefined) ? o.lo : rc([1, 1, 2, 3]);
+      var cnt = (o && o.cnt) || ri(5, 8), hi = lo + cnt - 1;
+      var T = (o && o.term) || rc([termLin, termSq])();
+      var c = (o && o.c) || ri(2, 9);
+      var P = { fam: "parts", lo: lo, hi: hi, T: T, c: c, cnt: cnt, title: "Reading a sum" };
+      P.story = "Here is a sum written in sigma notation: <div class=\"sgbox\">" + SG(lo, hi, T.txt) + "</div>";
+      var first = T.f(lo), last = T.f(hi);
+      P.steps = [
+        { title: "Count the terms", prompt: "How many terms are being added?",
+          fields: [nfield("n", "Number of terms:", cnt)],
+          ans: "<p>The index " + M("i") + " starts at " + lo + " and goes up by 1 until it reaches " + hi + ". That is " + M(hi + " - " + lo + " + 1 = " + cnt) + " terms.</p><p class=\"insight\">Count the numbers from the bottom to the top, including both ends.</p>",
+          hints: H3("The letter " + M("i") + " is a counter. It takes every whole-number value from the bottom number up to the top number.", "List the values of " + M("i") + ": " + lo + ", " + (lo + 1) + ", " + (lo + 2) + ", and so on up to " + hi + ".", "Count the values you listed. (Top minus bottom, plus 1, gives the same count.)") },
+        { title: "First and last term", prompt: "Plug the first value of " + M("i") + " into the term to get the <b>first term</b>, and the last value of " + M("i") + " to get the <b>last term</b>.",
+          fields: [nfield("a", "First term (i = " + lo + "):", first), nfield("b", "Last term (i = " + hi + "):", last)],
+          ans: "<p>First term: " + M("i = " + lo) + " gives " + M(plug(T, lo) + " = " + pnum(first)) + ".</p><p>Last term: " + M("i = " + hi) + " gives " + M(plug(T, hi) + " = " + pnum(last)) + ".</p>",
+          hints: H3("The expression to the right of " + M("Σ") + " is the rule for each term. Replace the letter " + M("i") + " with a number.", "For the first term, replace every " + M("i") + " with " + lo + ". Use parentheses if it helps: " + M(plug(T, lo)) + ".", "For the last term, replace every " + M("i") + " with " + hi + ".") },
+        { title: "A sum with no i in it", prompt: "Now a different sum, with the same top and bottom: <div class=\"sgbox\">" + SG(lo, hi, String(c)) + "</div>The term is just the number " + c + ", with no " + M("i") + " in it. What is the value of this sum?",
+          fields: [nfield("v", "Value of the sum:", c * cnt)],
+          ans: "<p>The index still counts " + lo + " to " + hi + ", so there are " + cnt + " terms. Every term is " + c + ", so the sum is " + M(c + " + " + c + " + ... + " + c) + " (" + cnt + " times) " + M("= " + c + " * " + cnt + " = " + (c * cnt)) + ".</p><p class=\"insight\">When the term has no " + M("i") + ", the sum is (the number) times (how many terms).</p>",
+          hints: H3("The term is " + c + " every time, no matter what " + M("i") + " is. The index only tells you how many times to add it.", "How many terms are there? Use the same count as in step 1.", "Add " + c + " that many times, which is " + M(c + " * " + cnt) + ".") }
+      ];
+      P.typed = {};
+      return P;
+    }
+  };
+
+  // =========================================================
+  // EXPAND: write out the terms and add
+  // =========================================================
+  FAM.expand = {
+    gen: function (o) {
+      var v = (o && o.variant) || pickAvoid(["lin", "sq", "geo", "alt"], LAST_VARIANT.expand);
+      LAST_VARIANT.expand = v;
+      var lo, cnt, T;
+      if (v === "lin") { lo = rc([1, 1, 2, 0]); cnt = ri(4, 6); T = termLin(); }
+      else if (v === "sq") { lo = rc([1, 1, 2]); cnt = ri(4, 6); T = termSq(); }
+      else if (v === "geo") { lo = rc([0, 1]); cnt = ri(4, 5); T = termGeo(); }
+      else { lo = 1; cnt = ri(5, 7); T = termAlt(); }
+      if (o && o.lo !== undefined) { lo = o.lo; cnt = o.cnt; T = o.term; }
+      var hi = lo + cnt - 1, vals = expandVals(T, lo, hi), total = addUp(vals);
+      var more = total + T.f(hi + 1);
+      var P = { fam: "expand", variant: v, lo: lo, hi: hi, T: T, total: total, title: "Expand and add" };
+      P.story = "Evaluate this sum: <div class=\"sgbox\">" + SG(lo, hi, T.txt) + "</div>";
+      var plugs = []; for (var i = lo; i <= hi; i++) plugs.push(M(plug(T, i) + " = " + pnum(T.f(i))));
+      P.steps = [
+        { title: "Write out the terms", prompt: "Plug in each value of " + M("i") + ", from " + lo + " to " + hi + ", and list the terms in order. Separate them with commas.",
+          fields: [{ id: "terms", kind: "list", label: "The " + vals.length + " terms:", expect: vals, tol: 0.0005, ph: "separate with commas",
+            missMsg: "You are missing a term. There should be " + vals.length + " of them, one for each value of i from " + lo + " to " + hi + ".",
+            extraMsg: "You have too many terms. The sum has " + vals.length + " terms.",
+            wrongMsg: "At least one term is off. Plug each value of i in separately, and watch signs and powers." }],
+          ans: "<p>" + plugs.join("<br>") + "</p>",
+          hints: H3("Start with " + M("i = " + lo) + ", then " + M("i = " + (lo + 1)) + ", and keep going until " + M("i = " + hi) + ".", "Put each number in parentheses when you substitute, like " + M(plug(T, lo)) + ", so signs and powers stay correct.", "You should end up with " + vals.length + " numbers. The first term is " + dnum(vals[0]) + ".") },
+        { title: "Add them", prompt: "Add your terms. What is the value of the sum?",
+          fields: [nfield("t", "Value of the sum:", total)],
+          ans: "<p>" + M(vals.map(pnum).join(" + ").replace(/\+ -/g, "- ")) + " = <b>" + dnum(total) + "</b>.</p>",
+          hints: H3("Add the terms from your list, left to right.", "Combine the positive terms and the negative terms separately if that is easier.", "Double-check by adding in a different order.") },
+        { title: "One more term", prompt: "Now the top number goes up by one, so the sum is <div class=\"sgbox\">" + SG(lo, hi + 1, T.txt) + "</div>You do not need to start over. What is its value?",
+          fields: [nfield("m", "Value of the new sum:", more)],
+          ans: "<p>The new sum has the same terms as before plus one more, the term for " + M("i = " + (hi + 1)) + ", which is " + M(plug(T, hi + 1) + " = " + pnum(T.f(hi + 1))) + ".</p><p>" + M(dnum(total).replace(MINUS, "-") + " + " + (T.f(hi + 1) < 0 ? "(" + pnum(T.f(hi + 1)) + ")" : pnum(T.f(hi + 1))) + " = " + pnum(more)) + ".</p>",
+          hints: H3("Everything you added before is still there. Only one new term appears.", "The new term is the one with " + M("i = " + (hi + 1)) + ".", "Add that term to your answer from the last step.") }
+      ];
+      P.typed = {};
+      return P;
+    }
+  };
+
+  // =========================================================
+  // WRITE: turn a list of terms into sigma notation
+  // =========================================================
+  FAM.write = {
+    gen: function (o) {
+      var v = (o && o.variant) || pickAvoid(["arith", "sq", "geo", "alt", "arith"], LAST_VARIANT.write);
+      LAST_VARIANT.write = v;
+      var cnt = ri(4, 6), T, termsTxt;
+      if (v === "arith") { var a = rc([2, 3, 4, 5]), b = rc([-3, -2, -1, 1, 2, 3]); if (o && o.a) { a = o.a; b = o.b; } T = termLin({ a: a, b: b }); }
+      else if (v === "sq") { var a2 = rc([1, 1, 2, 3]), c2 = rc([0, 0, 1, -1, 2]); T = termSq({ a: a2, c: c2 }); }
+      else if (v === "geo") { T = rc([termGeo, termGeo])(); if (rb()) { var m = rc([3, 5]), base = rc([2, 3]); T = { kind: "geo2", txt: m + "*" + base + "^i", f: function (i) { return m * Math.pow(base, i); }, plug: function (k) { return m + "*" + base + "^" + k; }, wrap: false }; } }
+      else { T = termAlt(); }
+      if (o && o.cnt) cnt = o.cnt;
+      var vals = expandVals(T, 1, cnt);
+      var P = { fam: "write", variant: v, T: T, cnt: cnt, title: "Write it in sigma notation" };
+      var listTxt = vals.map(function (x, k) { return k === 0 ? dnum(x) : (x < 0 ? "\u2212 " + pnum(-x) : "+ " + pnum(x)); }).join(" ");
+      P.story = "Write this sum in sigma notation, <b>starting at i = 1</b>: <div class=\"sgbox\">" + listTxt + "</div>";
+      var next = T.f(cnt + 1), samples = [1, 2, 3, 4, 5];
+      var patternHint = {
+        arith: "Look at how much the terms go up each time. That number is multiplied by " + M("i") + ".",
+        sq: "Look at the terms. Do they look like perfect squares, or multiples of squares, or squares plus something?",
+        geo: "Each term is a multiple of the one before it. What do you multiply by each time? That number is the base of a power.",
+        alt: "The signs switch back and forth, and the sizes go 1, 2, 3, and so on. A factor like " + M("(-1)^i") + " flips the sign."
+      }[v === "geo" ? "geo" : v];
+      var formulaAns = {
+        arith: function () { var d = vals[1] - vals[0]; return "<p>The terms go up by " + d + " each time, so the rule starts with " + M(d + "i") + ". At " + M("i = 1") + " that gives " + d + ", but the first term is " + pnum(vals[0]) + ", so adjust by " + (vals[0] - d) + ": " + M("f(i) = " + T.txt) + ".</p>"; },
+        sq: function () { return "<p>The terms are squares" + (T.txt === "i^2" ? "" : ", scaled or shifted") + ": " + M("f(i) = " + T.txt) + ". Check: " + M("i = 1") + " gives " + pnum(T.f(1)) + " and " + M("i = 2") + " gives " + pnum(T.f(2)) + ".</p>"; },
+        geo: function () { return "<p>Each term is " + (vals[1] / vals[0]) + " times the one before, so the base is " + (vals[1] / vals[0]) + ". The rule is " + M("f(i) = " + T.txt) + ". Check: " + M("i = 1") + " gives " + pnum(T.f(1)) + ".</p>"; },
+        alt: function () { return "<p>The sizes are " + M("1, 2, 3, ...") + " so the rule contains " + M("i") + ". The sign flips every term; " + M("(-1)^i") + " is " + M("-1") + " when " + M("i") + " is odd and " + M("+1") + " when " + M("i") + " is even. The first term here is " + dnum(vals[0]) + ", so use " + M(T.txt) + ".</p>"; }
+      }[v];
+      P.steps = [
+        { title: "The rule for each term", prompt: "Find a formula for the <b>i-th term</b> that gives the first term when " + M("i = 1") + ", the second when " + M("i = 2") + ", and so on.",
+          fields: [{ id: "f", kind: "fn", label: "Term =", vars: ["i"], expect: T.f, samples: samples, showCheck: true, ph: "a formula in i" }],
+          ans: formulaAns(),
+          hints: H3(patternHint, "Test your formula: plug in " + M("i = 1") + ", then " + M("i = 2") + ". You should get the first two terms.", "The first term is " + dnum(vals[0]) + " and the second is " + dnum(vals[1]) + ".") },
+        { title: "Where it stops", prompt: "The sum has " + cnt + " terms and the index starts at 1. What number goes on <b>top</b> of the sigma?",
+          fields: [nfield("n", "Top number:", cnt)],
+          ans: "<p>Starting at 1 and counting up by 1, the " + cnt + "th term has " + M("i = " + cnt) + ", so the top number is " + cnt + ".</p><p>Written out: <span class=\"sgbox inl\">" + SG(1, cnt, T.txt) + "</span></p>",
+          hints: H3("When the index starts at 1, the last index value equals the number of terms.", "Count the terms in the list.", "Top number: " + cnt + ".") },
+        { title: "Does the pattern continue?", prompt: "If the sum kept going, what would the <b>next term</b> be, the one with " + M("i = " + (cnt + 1)) + "? Use your formula.",
+          fields: [nfield("x", "Next term:", next)],
+          ans: "<p>" + M(plug(T, cnt + 1) + " = " + pnum(next)) + ".</p>",
+          hints: H3("Use the formula you found in step 1.", "Replace " + M("i") + " with " + (cnt + 1) + ".", "Be careful with signs and exponents. Put " + (cnt + 1) + " in parentheses first.") }
+      ];
+      P.typed = { f: T.txt };
+      return P;
+    }
+  };
+  function rb() { return Math.random() < 0.5; }
+
+  // =========================================================
+  // SHIFT: change where the index starts (multiple choice)
+  // =========================================================
+  function optStr(lo, hi, txt) { return "Σ from i = " + lo + " to " + hi + " of  " + txt; }
+  FAM.shift = {
+    gen: function (o) {
+      var v = (o && o.variant) || pickAvoid(["sq", "lin", "geo", "cube"], LAST_VARIANT.shift);
+      LAST_VARIANT.shift = v;
+      var T = v === "sq" ? termSq({ a: rc([1, 2]), c: rc([0, 0, 1, -1]) }) : (v === "lin" ? termLin() : (v === "geo" ? termGeo() : termCube()));
+      if (o && o.term) T = o.term;
+      var n = (o && o.n) || ri(4, 6);
+      var original = addUp(expandVals(T, 1, n));
+      var P = { fam: "shift", variant: v, T: T, n: n, total: original, title: "Shifting the index" };
+      P.story = "Here is a sum that starts at <b>i = 1</b>: <div class=\"sgbox\">" + SG(1, n, T.txt) + "</div>You will rewrite it so the index starts somewhere else, without changing the sum.";
+      function build(newStart) {
+        var d = newStart - 1, cands = [];
+        var argOk = d === 0 ? "i" : (d > 0 ? "i - " + d : "i + " + (-d)), argBad = d === 0 ? "i" : (d > 0 ? "i + " + d : "i - " + (-d));
+        function termTxt(arg) { return arg === "i" ? T.txt : sub(T.txt, arg); }
+        function value(lo, hi, arg) { // numeric total of the option
+          var s = 0; for (var j = lo; j <= hi; j++) { var ii = arg === "i" ? j : (arg === argOk ? j - d : j + d); s += T.f(ii); }
+          return s;
+        }
+        cands.push({ lo: newStart, hi: n + d, txt: termTxt(argOk), arg: argOk, ok: true });
+        cands.push({ lo: newStart, hi: n, txt: termTxt(argOk), arg: argOk, ok: false, msg: "The term is right, but the top number has to shift too. If the index starts " + (d > 0 ? "higher" : "lower") + ", it must also end " + (d > 0 ? "higher" : "lower") + " to keep the same number of terms." });
+        cands.push({ lo: newStart, hi: n + d, txt: termTxt(argBad), arg: argBad, ok: false, msg: "The limits are right, but the term shifted the wrong way. Test it: put the new starting number " + newStart + " into the term. Do you get the first term of the original sum, " + pnum(T.f(1)) + "?" });
+        cands.push({ lo: newStart, hi: n + d, txt: T.txt, arg: "i", ok: false, msg: "The limits changed but the term did not. The index is now a different number, so the term has to change to match." });
+        // verify: exactly one candidate matches the original total
+        var good = 0;
+        cands.forEach(function (c) { c.val = value(c.lo, c.hi, c.arg); if (Math.abs(c.val - original) < 1e-9) good++; });
+        var dupTxt = {}; var uniq = true;
+        cands.forEach(function (c) { var k = c.lo + "|" + c.hi + "|" + c.txt; if (dupTxt[k]) uniq = false; dupTxt[k] = 1; });
+        return { cands: cands, good: good, uniq: uniq };
+      }
+      function makeSel(newStart) {
+        var tries = 0, b;
+        do { b = build(newStart); tries++; } while ((b.good !== 1 || !b.uniq) && tries < 1);
+        return b;
+      }
+      var steps = [];
+      var starts = (o && o.starts) || [0, rc([2, 3])];
+      var picks = starts.map(function (s) { return makeSel(s); });
+      var ok = picks.every(function (p) { return p.good === 1 && p.uniq; });
+      P.valid = ok; P.picks = picks;
+      picks.forEach(function (p, k) {
+        var ns = starts[k], d = ns - 1;
+        var order = shuf([0, 1, 2, 3]);
+        var options = order.map(function (ci, pos) { var c = p.cands[ci]; return { v: String(pos), t: optStr(c.lo, c.hi, c.txt) }; });
+        var expect = String(order.indexOf(0));
+        var diag = {};
+        order.forEach(function (ci, pos) { if (ci !== 0) diag[String(pos)] = p.cands[ci].msg; });
+        var co = p.cands[0];
+        steps.push({
+          title: "Start at i = " + ns,
+          prompt: "Rewrite the sum so that the index starts at <b>" + ns + "</b>. Choose the sum that has exactly the same terms as the original.",
+          fields: [{ id: "c" + k, kind: "sel", label: "Equivalent sum:", expect: expect, options: options, diag: diag }],
+          ans: "<p>The index moves from starting at 1 to starting at " + ns + ", a change of " + (d > 0 ? "+" : "−") + Math.abs(d) + ". The new " + M("i") + " is " + Math.abs(d) + " " + (d > 0 ? "bigger" : "smaller") + " than the old one, so the old " + M("i") + " is " + M(d > 0 ? "i - " + d : "i + " + (-d)) + ".</p><p>Replace every " + M("i") + " in the term with " + M(paren(d > 0 ? "i - " + d : "i + " + (-d))) + ", and move the limits the same way: " + ns + " to " + (n + d) + ".</p><p>Answer: <span class=\"sgbox inl\">" + SG(ns, n + d, co.txt) + "</span></p>",
+          hints: H3("Both limits move by the same amount as the starting point, so the sum keeps the same number of terms.", "The new starting number is " + (d > 0 ? d + " higher" : (-d) + " lower") + ", so the new ending number is " + (d > 0 ? d + " higher" : (-d) + " lower") + " too: " + (n + d) + ".", "Check the first term: put the new starting number in the new term. It should equal the first term of the original sum, " + pnum(T.f(1)) + ".")
+        });
+      });
+      steps.push({ title: "Same sum, same value", prompt: "A shifted sum is just a different way of writing the same terms. What is the value of the original sum <span class=\"sgbox inl\">" + SG(1, n, T.txt) + "</span> (it is the same for all of the forms)?",
+        fields: [nfield("t", "Value of the sum:", original)],
+        ans: "<p>Write out the terms: " + M(expandVals(T, 1, n).map(pnum).join(" + ").replace(/\+ -/g, "- ")) + " = <b>" + pnum(original) + "</b>.</p>",
+        hints: H3("Use the original sum, starting at 1. It is the easiest to expand.", "Plug in " + M("i = 1") + " through " + M("i = " + n) + " and write out the terms.", "Add them up.") });
+      P.steps = steps;
+      P.typed = {};
+      return P;
+    }
+  };
+
+  FAM.shift.gen0 = FAM.shift.gen;
+  FAM.shift.gen = function (o) {
+    var P, tries = 0;
+    do { P = FAM.shift.gen0(o); tries++; } while (!P.valid && tries < 40);
+    return P;
+  };
+
+  // =========================================================
+  // RULES: constants and splitting a sum
+  // =========================================================
+  FAM.rules = {
+    gen: function (o) {
+      var v = (o && o.variant) || pickAvoid(["lin", "sqlin", "sqc"], LAST_VARIANT.rules);
+      LAST_VARIANT.rules = v;
+      var a = rc([2, 3, 4, 5, -2, -3]), b = rc([-4, -3, -2, 2, 3, 4, 5]), n = (o && o.n) || ri(4, 6);
+      if (o && o.a !== undefined) { a = o.a; b = o.b; }
+      var main, second, mainTxt, secTxt, f;
+      if (v === "lin") { mainTxt = "i"; secTxt = "1"; f = function (i) { return a * i + b; }; main = sumTo(n, function (i) { return i; }); second = n; }
+      else if (v === "sqlin") { mainTxt = "i^2"; secTxt = "i"; f = function (i) { return a * i * i + b * i; }; main = sumTo(n, function (i) { return i * i; }); second = sumTo(n, function (i) { return i; }); }
+      else { mainTxt = "i^2"; secTxt = "1"; f = function (i) { return a * i * i + b; }; main = sumTo(n, function (i) { return i * i; }); second = n; }
+      var termTxt = v === "lin" ? polyStr([a, b], "i") : (v === "sqlin" ? polyStr([a, b, 0], "i") : polyStr([a, 0, b], "i"));
+      var total = a * main + b * second;
+      var P = { fam: "rules", variant: v, a: a, b: b, n: n, title: "Splitting a sum" };
+      P.story = "Evaluate this sum by splitting it up: <div class=\"sgbox\">" + SG(1, n, "(" + termTxt + ")") + "</div>";
+      var secSym = secTxt === "1" ? "1" : secTxt;
+      P.steps = [
+        { title: "Split and pull out constants", prompt: "Use the two sum rules to write it as " + M("A") + " times one sum plus " + M("B") + " times another: <div class=\"sgbox\">" + SG(1, n, "(" + termTxt + ")") + " = A" + SG(1, n, mainTxt) + " + B" + SG(1, n, secSym) + "</div>Find <b>A</b> and <b>B</b>.",
+          fields: [nfield("A", "A =", a), nfield("B", "B =", b)],
+          ans: "<p>Split the sum across the plus sign, then pull each constant out front:</p><p class=\"sgbox inl\">" + SG(1, n, "(" + termTxt + ")") + " = " + M(a) + SG(1, n, mainTxt) + " + " + M(b < 0 ? "(" + b + ")" : b) + SG(1, n, secSym) + "</p><p>So " + M("A = " + a) + " and " + M("B = " + b) + ".</p>",
+          hints: H3("Rule 1: a sum of two pieces is the sum of each piece. Rule 2: a constant multiplier comes out front.", "Look at the number multiplying " + M(mainTxt) + " in the original term. That is A.", "The other piece is the leftover number or term, " + (secTxt === "1" ? "a constant, so it is the number times " + M("Σ 1") : "multiplied by the number in front of " + M("i")) + ". That number is B.") },
+        { title: "Evaluate each piece", prompt: "Now find the two smaller sums. Write out the terms and add if you need to.<div class=\"sgbox\">" + SG(1, n, mainTxt) + " = ?  &nbsp;&nbsp; " + SG(1, n, secSym) + " = ?</div>",
+          fields: [nfield("p", "First sum:", main), nfield("q", "Second sum:", second)],
+          ans: "<p>" + SG(1, n, mainTxt) + " = " + M(expandVals({ f: function (i) { return v === "lin" ? i : i * i; } }, 1, n).join(" + ") + " = " + main) + "</p><p>" + SG(1, n, secSym) + " = " + (secTxt === "1" ? M("1 + 1 + ... + 1") + " (" + n + " ones) " + M("= " + n) : M(expandVals({ f: function (i) { return i; } }, 1, n).join(" + ") + " = " + second)) + "</p>",
+          hints: H3("Each of these is a sum you can expand: plug in " + M("i = 1") + " through " + M("i = " + n) + ".", secTxt === "1" ? "The second sum adds the number 1, " + n + " times." : "The second sum is " + M("1 + 2 + ... + " + n) + ".", "Add carefully. Write the terms out first.") },
+        { title: "Combine", prompt: "Put it together: " + M("A * (first sum) + B * (second sum)") + ". What is the value of the original sum?",
+          fields: [nfield("t", "Value of the sum:", total)],
+          ans: "<p>" + M(a + " * " + main + " + " + sp(b) + " * " + second + " = " + sp(a * main) + " + " + sp(b * second) + " = " + total) + ".</p>",
+          hints: H3("Multiply A by the first sum, and B by the second sum.", "A = " + a + ", first sum = " + main + ", B = " + b + ", second sum = " + second + ".", "Add the two products. Watch the signs.") }
+      ];
+      P.typed = {};
+      return P;
+    }
+  };
+
+  // =========================================================
+  // CLOSED: closed formulas for large sums
+  // =========================================================
+  FAM.closed = {
+    gen: function (o) {
+      var v = (o && o.variant) || pickAvoid(["sq3", "cube", "sq2"], LAST_VARIANT.closed);
+      LAST_VARIANT.closed = v;
+      var n = (o && o.n) || rc([10, 12, 15, 20]);
+      var a = rc([2, 3, 4, 6, -2]), b = rc([-5, -3, -2, 2, 3, 5]), c = rc([-4, -2, 3, 5, 7]);
+      if (o && o.a !== undefined) { a = o.a; b = o.b; c = o.c; }
+      var S1 = n * (n + 1) / 2, S2 = n * (n + 1) * (2 * n + 1) / 6, S3 = S1 * S1;
+      var main, mainName, termTxt, total, hasC = v === "sq3";
+      if (v === "sq3") { main = S2; mainName = "i^2"; termTxt = polyStr([a, b, c], "i"); total = a * S2 + b * S1 + c * n; }
+      else if (v === "cube") { main = S3; mainName = "i^3"; termTxt = polyStr([a, 0, b, 0], "i"); total = a * S3 + b * S1; }
+      else { main = S2; mainName = "i^2"; termTxt = polyStr([a, b, 0], "i"); total = a * S2 + b * S1; }
+      var P = { fam: "closed", variant: v, n: n, a: a, b: b, c: c, title: "Big sums with formulas" };
+      P.story = "Find the value of this sum <b>without writing out the terms</b>: <div class=\"sgbox\">" + SG(1, n, "(" + termTxt + ")") + "</div>";
+      var formulas = { "i^2": "n(n+1)(2n+1)/6", "i^3": "(n(n+1)/2)^2" };
+      var optsRaw = mainName === "i^2" ? [["n(n+1)(2n+1)/6", true], ["n(n+1)/2", false, "That is the formula for the sum of i, not i²."], ["(n(n+1)/2)^2", false, "That one is the formula for the sum of i³."], ["n(n+1)(2n+1)/3", false, "Close, but check the denominator. It is 6."]]
+        : [["(n(n+1)/2)^2", true], ["n(n+1)(2n+1)/6", false, "That is the formula for the sum of i²."], ["n(n+1)/2", false, "That is the formula for the sum of i, not i³."], ["n^2(n+1)^2/2", false, "Close, but check the denominator. It should be 4, or you can square n(n+1)/2."]];
+      var order = shuf([0, 1, 2, 3]), exp0 = String(order.indexOf(0)), diag = {};
+      var options = order.map(function (ci, pos) { var r = optsRaw[ci]; if (!r[1]) diag[String(pos)] = r[2]; return { v: String(pos), t: r[0] }; });
+      var s1txt = "<p>" + SG(1, n, mainName) + " = " + M(formulas[mainName].replace("n", "n")) + ", so with " + M("n = " + n) + " it is " + M(mainName === "i^2" ? n + "(" + (n + 1) + ")(" + (2 * n + 1) + ")/6 = " + S2 : "(" + n + "*" + (n + 1) + "/2)^2 = " + S1 + "^2 = " + S3) + ".</p>";
+      var step3 = hasC
+        ? { title: "The other pieces", prompt: "Find " + SG(1, n, "i") + " and " + SG(1, n, "1") + " for " + M("n = " + n) + ".", fields: [nfield("s1", "Sum of i:", S1), nfield("s0", "Sum of 1:", n)],
+            ans: "<p>" + SG(1, n, "i") + " = " + M("n(n+1)/2 = " + n + "(" + (n + 1) + ")/2 = " + S1) + ".</p><p>" + SG(1, n, "1") + " = " + M("n = " + n) + ".</p>",
+            hints: H3("Use " + M("Σ i = n(n+1)/2") + " and " + M("Σ 1 = n") + ".", "With " + M("n = " + n) + ": " + M(n + "(" + (n + 1) + ")/2") + ".", "The sum of 1 is just " + n + ".") }
+        : { title: "The other piece", prompt: "Find " + SG(1, n, "i") + " for " + M("n = " + n) + ".", fields: [nfield("s1", "Sum of i:", S1)],
+            ans: "<p>" + SG(1, n, "i") + " = " + M("n(n+1)/2 = " + n + "(" + (n + 1) + ")/2 = " + S1) + ".</p>",
+            hints: H3("Use " + M("Σ i = n(n+1)/2") + ".", "With " + M("n = " + n) + ": " + M(n + "(" + (n + 1) + ")/2") + ".", "Compute " + n + " times " + (n + 1) + " first, then divide by 2.") };
+      P.steps = [
+        { title: "Choose the formula", prompt: "The main piece is " + SG(1, n, mainName) + ". Which closed formula gives it? Use the formula box at the top of this stage if you need it.",
+          fields: [{ id: "f", kind: "sel", label: "Formula for " + (mainName === "i^2" ? "Σ i²" : "Σ i³") + ":", expect: exp0, options: options, diag: diag }],
+          ans: "<p>The formula for " + SG(1, n, mainName) + " is " + M(formulas[mainName]) + ".</p>",
+          hints: H3("There is one closed formula for each power of " + M("i") + ": 1, " + M("i") + ", " + M("i^2") + ", " + M("i^3") + ".", "The formula for " + M("i^2") + " has three factors on top and a 6 on the bottom. The formula for " + M("i^3") + " is the square of the formula for " + M("i") + ".", "Look for the one that matches the power in this sum.") },
+        { title: "Use it", prompt: "Evaluate that formula for " + M("n = " + n) + ".",
+          fields: [nfield("m", (mainName === "i^2" ? "Sum of i²:" : "Sum of i³:"), main)],
+          ans: s1txt,
+          hints: H3("Replace every " + M("n") + " in the formula with " + n + ".", mainName === "i^2" ? M(n + " * " + (n + 1) + " * " + (2 * n + 1)) + " first, then divide by 6." : "Do " + M(n + "(" + (n + 1) + ")/2") + " first, then square the result.", "Use a calculator for the multiplication if you like, but write the setup.") },
+        step3,
+        { title: "Put it together", prompt: "Use the rules: pull out the constants and combine the pieces. What is the value of the whole sum?",
+          fields: [nfield("t", "Value of the sum:", total)],
+          ans: hasC ? "<p>" + M(a + "(" + S2 + ") + " + sp(b) + "(" + S1 + ") + " + sp(c) + "(" + n + ") = " + sp(a * S2) + " + " + sp(b * S1) + " + " + sp(c * n) + " = " + total) + ".</p>" : "<p>" + M(a + "(" + main + ") + " + sp(b) + "(" + S1 + ") = " + sp(a * main) + " + " + sp(b * S1) + " = " + total) + ".</p>",
+          hints: H3("Multiply each constant by its sum: " + (hasC ? "A, B, and C times the three sums." : "A and B times the two sums."), "The constants are " + (hasC ? a + ", " + b + ", and " + c + "." : a + " and " + b + "."), "Add the products. Watch the signs.") }
+      ];
+      P.typed = {};
+      return P;
+    }
+  };
+
+  // =========================================================
+  // RECT: right-endpoint rectangle sums (the destination)
+  // =========================================================
+  var RECT_BANK = [
+    { txt: "x^2", f: function (x) { return x * x; }, inc: true, opts: [{ a: 0, b: 2, n: 4 }, { a: 0, b: 3, n: 3 }, { a: 0, b: 2, n: 8 }] },
+    { txt: "x^2 + 1", f: function (x) { return x * x + 1; }, inc: true, opts: [{ a: 1, b: 3, n: 4 }, { a: 0, b: 2, n: 4 }, { a: 0, b: 3, n: 3 }] },
+    { txt: "x^3", f: function (x) { return x * x * x; }, inc: true, opts: [{ a: 0, b: 2, n: 4 }, { a: 0, b: 2, n: 8 }] },
+    { txt: "2x + 1", f: function (x) { return 2 * x + 1; }, inc: true, opts: [{ a: 0, b: 4, n: 4 }, { a: 1, b: 4, n: 3 }, { a: 0, b: 3, n: 6 }] },
+    { txt: "9 - x^2", f: function (x) { return 9 - x * x; }, inc: false, opts: [{ a: 0, b: 3, n: 3 }, { a: 0, b: 3, n: 6 }] },
+    { txt: "16 - x^2", f: function (x) { return 16 - x * x; }, inc: false, opts: [{ a: 0, b: 4, n: 4 }, { a: 0, b: 4, n: 8 }] }
+  ];
+  function figRect(P) {
+    var W = 300, Hh = 190, ml = 30, mr = 14, mt = 16, mb = 30;
+    var span = P.b - P.a, xmin = P.a - 0.12 * span, xmax = P.b + 0.1 * span, ymin = 0, ymax = 1.12 * Math.max(P.F(P.a), P.F(P.b), P.F((P.a + P.b) / 2));
+    function X(x) { return ml + (x - xmin) / (xmax - xmin) * (W - ml - mr); }
+    function Y(y) { return Hh - mb - (y - ymin) / (ymax - ymin) * (Hh - mb - mt); }
+    var s = "";
+    for (var i = 1; i <= P.n; i++) {
+      var x0 = P.a + (i - 1) * P.dx, x1 = P.a + i * P.dx, h = P.F(x1);
+      s += sRect(X(x0).toFixed(1), Y(h).toFixed(1), (X(x1) - X(x0)).toFixed(1), (Y(0) - Y(h)).toFixed(1), "sv-sheet");
+    }
+    var pts = [];
+    for (var k = 0; k <= 100; k++) { var xx = P.a + (P.b - P.a) * k / 100; pts.push(X(xx).toFixed(1) + "," + Y(P.F(xx)).toFixed(1)); }
+    s += "<polyline class=\"sv-curve\" points=\"" + pts.join(" ") + "\"/>";
+    s += sLine(ml, Y(0), W - mr, Y(0), "sv-axis") + sLine(xmin < 0 ? X(0) : X(xmin), mt, xmin < 0 ? X(0) : X(xmin), Hh - mb, "sv-axis");
+    for (var j = 1; j <= P.n; j++) { var xe = P.a + j * P.dx; s += "<circle class=\"sv-pt2\" cx=\"" + X(xe).toFixed(1) + "\" cy=\"" + Y(P.F(xe)).toFixed(1) + "\" r=\"3.6\"/>"; }
+    s += sText(X(P.a), Y(0) + 15, String(P.a), "sv-txt") + sText(X(P.b), Y(0) + 15, String(P.b), "sv-txt");
+    s += sText((X(P.a) + X(P.a + P.dx)) / 2, Y(0) + 27, "Δx", "sv-txt sv-b");
+    s += sText(W - mr - 4, mt + 6, "y = " + P.txt.replace(/\^2/g, "²").replace(/\^3/g, "³").replace(/ - /g, " − "), "sv-txt sv-b", "end");
+    return svgWrap(W, Hh, s, "A curve with " + P.n + " rectangles under it");
+  }
+  FAM.rect = {
+    gen: function (o) {
+      var bank = (o && o.fi !== undefined) ? RECT_BANK[o.fi] : rc(RECT_BANK);
+      var opt = (o && o.oi !== undefined) ? bank.opts[o.oi] : rc(bank.opts);
+      var a = opt.a, b = opt.b, n = opt.n, dx = (b - a) / n;
+      var F = bank.f, xi = function (i) { return a + i * dx; }, term = function (i) { return F(xi(i)) * dx; };
+      var total = 0; for (var i = 1; i <= n; i++) total += term(i);
+      var P = { fam: "rect", txt: bank.txt, F: F, a: a, b: b, n: n, dx: dx, total: total, inc: bank.inc, title: "Rectangles under a curve" };
+      P.fig = figRect(P);
+      var fnm = "f(x) = " + bank.txt;
+      P.story = "Estimate the area under " + M(fnm) + " from " + M("x = " + a) + " to " + M("x = " + b) + " with <b>" + n + " rectangles</b> of equal width. Each rectangle's height is the value of " + M("f") + " at the <b>right-hand end</b> of its base.";
+      var dxTxt = pnum(dx), vals = []; for (var k = 1; k <= n; k++) vals.push(pnum(term(k)));
+      var xiTxt = a === 0 ? (dx === 1 ? "i" : dxTxt + "i") : (a + (dx >= 0 ? " + " : " - ") + (dx === 1 ? "i" : dxTxt + "i"));
+      var typedXi = a === 0 ? (dx === 1 ? "i" : dxTxt + "i") : (a + "+" + (dx === 1 ? "i" : dxTxt + "i"));
+      var typedTerm = "(" + bank.txt.replace(/x/g, "(" + typedXi + ")") + ")*" + dxTxt;
+      P.typed = { x: typedXi, t: typedTerm };
+      var overUnder = bank.inc ? "over" : "under";
+      P.steps = [
+        { title: "Width of each rectangle", prompt: "The base runs from " + M(a) + " to " + M(b) + " and is split into " + n + " equal pieces. Find the width " + M("Δx") + " of each rectangle.",
+          fields: [dfield("dx", "Δx =", dx, "a number")],
+          ans: "<p>" + M("Δx = (b - a)/n = (" + b + " - " + a + ")/" + n + " = " + dxTxt) + ".</p>",
+          hints: H3("The total width is the right end minus the left end.", "Total width: " + M(b + " - " + a + " = " + (b - a)) + ".", "Divide by the number of rectangles, " + n + ".") },
+        { title: "Right-hand ends", prompt: "The right-hand end of the <b>i-th</b> rectangle is " + M("xᵢ") + ". The first rectangle ends at " + M(xiOf(a, dx, 1)) + ", the second at " + M(xiOf(a, dx, 2)) + ", and so on. Write " + M("xᵢ") + " as a formula in " + M("i") + ".",
+          fields: [{ id: "x", kind: "fn", label: "xᵢ =", vars: ["i"], expect: xi, samples: [1, 2, 3, 4], showCheck: true, ph: "a formula in i" }],
+          ans: "<p>Start at " + M(a) + " and move over one width, " + M(dxTxt) + ", for each rectangle: " + M("x\u1d62 = " + (a === 0 ? "" : a + " + ") + (dx === 1 ? "i" : dxTxt + " i")) + ".</p><p>Check: for the last rectangle, " + M("i = " + n) + ", the formula gives " + pnum(xi(n)) + ", the right end of the base.</p>",
+          hints: H3("The first right-hand end is the left end plus one width.", "The second is the left end plus two widths. Each rectangle adds one more width.", "So " + M("xᵢ") + " = (left end) + " + M("i") + " times (width).") },
+        { title: "Area of the i-th rectangle", prompt: "The area of one rectangle is (height) times (width), which is " + M("f(xᵢ) Δx") + ". Write the area of the " + M("i") + "-th rectangle as a formula in " + M("i") + ".",
+          fields: [{ id: "t", kind: "fn", label: "f(xᵢ)Δx =", vars: ["i"], expect: term, samples: [1, 2, 3, 4], showCheck: true, ph: "a formula in i" }],
+          ans: "<p>Height: " + M("f(x\u1d62) = f(" + xiTxt + ")") + ". Width: " + M(dxTxt) + ". So the area is " + M("f(" + xiTxt + ") * " + dxTxt) + ".</p><p>As a sum: " + SG(1, n, "f(" + xiTxt + ") * " + dxTxt) + ".</p>",
+          hints: H3("Height comes from " + M("f(x)") + " using the right-hand end as the input.", "Put your formula for " + M("xᵢ") + " into " + M("f") + ", then multiply by " + M(dxTxt) + ".", "Test it: for " + M("i = 1") + " you should get the area of the first rectangle, " + vals[0] + ".") },
+        { title: "Add the rectangles", prompt: "Add the areas of all " + n + " rectangles: " + SG(1, n, "f(xᵢ)Δx") + ". What is the total?",
+          fields: [dfield("S", "Total area of the rectangles:", total)],
+          ans: "<p>Areas: " + M(vals.join(", ")) + ". Add them: " + M(vals.join(" + ") + " = " + pnum(total)) + ".</p>",
+          hints: H3("Use your formula from step 3 for " + M("i = 1") + ", " + M("i = 2") + ", up to " + M("i = " + n) + ".", "That gives " + n + " areas. The first is " + vals[0] + ".", "Add all " + n + " areas. A decimal to two places is fine.") },
+        { title: "Over or under?", prompt: "Look at the picture. Is the total of the rectangles bigger or smaller than the true area under the curve?",
+          fields: [{ id: "ou", kind: "sel", label: "The estimate is:", expect: overUnder, options: [{ v: "over", t: "Too big (overestimate)" }, { v: "under", t: "Too small (underestimate)" }, { v: "exact", t: "Exactly right" }],
+            diag: { exact: "Rectangles almost never fit a curve exactly. Look at the corners of the rectangles in the picture.", over: bank.inc ? "" : "Look again. The curve is going down. The top-right corner of each rectangle touches the curve, and the rectangle sits below the curve to its left.", under: bank.inc ? "Look again. The curve is going up. The top-right corner of each rectangle touches the curve, and the rest of the top edge sticks out above it." : "" } }],
+          ans: bank.inc ? "<p>The curve is going <b>up</b>, so on each base the curve is lower to the left of the right-hand end. The rectangle's top edge sticks out above the curve. The estimate is an <b>overestimate</b>.</p><p class=\"insight\">More, thinner rectangles would hug the curve more closely.</p>" : "<p>The curve is going <b>down</b>, so on each base the curve is higher to the left of the right-hand end. The rectangle's top edge sits below the curve. The estimate is an <b>underestimate</b>.</p><p class=\"insight\">More, thinner rectangles would hug the curve more closely.</p>",
+          hints: H3("The top-right corner of each rectangle is on the curve. What does the curve do to the left of that corner?", "If the curve is lower to the left, the rectangle sticks out above it.", "If the curve is higher to the left, the rectangle falls short of it.") }
+      ];
+      return P;
+    }
+  };
+  function xiOf(a, dx, i) { return pnum(a + i * dx); }
+
+  // =========================================================
+  // GROW: what happens as n gets large (bonus)
+  // =========================================================
+  FAM.grow = {
+    gen: function (o) {
+      var b = (o && o.b) || rc([2, 3, 4]);
+      var K = b * b * b, nn = [10, 100];
+      var s10 = K * 10 * 11 * 21 / 6 / 1000, s100 = K * 100 * 101 * 201 / 6 / 1000000, lim = K / 3;
+      var P = { fam: "grow", b: b, K: K, title: "What happens with more rectangles?" };
+      P.story = "Use right-hand ends to estimate the area under " + M("f(x) = x^2") + " from " + M("x = 0") + " to " + M("x = " + b) + " with <b>n</b> rectangles. Then " + M("Δx = " + b + "/n") + " and " + M("xᵢ = " + b + "i/n") + ", and the total is <div class=\"sgbox\">" + SG(1, "n", "(" + b + "i/n)^2 * " + b + "/n") + "</div>";
+      P.fig = "";
+      P.steps = [
+        { title: "Pull out the constants", prompt: "Inside the sum, " + M("(" + b + "i/n)^2 * " + b + "/n") + " simplifies to " + M("K i^2/n^3") + ". Neither " + M("K") + " nor " + M("n") + " changes as " + M("i") + " changes, so the total is " + M("(K/n^3)") + " times " + SG(1, "n", "i^2") + ". Find " + M("K") + ".",
+          fields: [nfield("K", "K =", K)],
+          ans: "<p>" + M("(" + b + "i/n)^2 * " + b + "/n = " + b + "^2 i^2/n^2 * " + b + "/n = " + K + " i^2/n^3") + ", so " + M("K = " + K) + ".</p>",
+          hints: H3("Square the top and bottom: " + M("(" + b + "i/n)^2 = " + (b * b) + "i^2/n^2") + ".", "Now multiply by " + M(b + "/n") + ". Multiply the numbers " + (b * b) + " and " + b + ".", "Powers of n combine: " + M("n^2 * n = n^3") + ".") },
+        { title: "10 rectangles", prompt: "Let " + M("n = 10") + ". Use " + SG(1, "n", "i^2") + " = " + M("n(n+1)(2n+1)/6") + " to find the total " + M("(" + K + "/10^3)") + " times that sum. Give it to 2 decimal places.",
+          fields: [dfield("s10", "Total for n = 10:", s10)],
+          ans: "<p>" + M("Σ i^2 = 10(11)(21)/6 = 385") + ". Total: " + M(K + " * 385/1000 = " + pnum(s10)) + ".</p>",
+          hints: H3("First find the sum of squares for " + M("n = 10") + ": " + M("10 * 11 * 21/6") + ".", "That is 385.", "Multiply by " + K + " and divide by " + M("10^3 = 1000") + ".") },
+        { title: "100 rectangles", prompt: "Now " + M("n = 100") + ". Use the same formula to find the total, to 2 decimal places.",
+          fields: [dfield("s100", "Total for n = 100:", s100)],
+          ans: "<p>" + M("Σ i^2 = 100(101)(201)/6 = 338350") + ". Total: " + M(K + " * 338350/1000000 = " + pnum(s100)) + ".</p>",
+          hints: H3("Sum of squares for " + M("n = 100") + ": " + M("100 * 101 * 201/6") + ". Use a calculator.", "That is 338,350.", "Multiply by " + K + " and divide by " + M("100^3 = 1,000,000") + ".") },
+        { title: "Where is it heading?", prompt: "Compare your totals. They are " + dnum(s10) + " with 10 rectangles and " + dnum(s100) + " with 100 rectangles. The totals keep getting closer to one number as " + M("n") + " grows. Which number? (Hint: it is " + M("K") + " divided by 3.)",
+          fields: [dfield("lim", "The totals approach:", lim, "a number")],
+          ans: "<p>" + M("K/3 = " + K + "/3 = " + pnum(lim)) + ". As " + M("n") + " grows, the rectangles get thinner and fit the curve better, and the total settles toward this number. That number is the <b>exact area</b> under " + M("x^2") + " from 0 to " + b + ".</p><p class=\"insight\">Getting from \"closer and closer\" to \"exactly\" is what limits do. That is the next chapter.</p>",
+          hints: H3("Look at the two totals. Each is a bit above the number they are approaching.", "The hint says " + M("K") + " divided by 3.", M(K + "/3") + ", rounded to 2 decimal places if needed.") }
+      ];
+      P.typed = {};
+      return P;
+    }
+  };
+
+  FAM.parts.figure = function () { return ""; };
+  FAM.expand.figure = function () { return ""; };
+  FAM.write.figure = function () { return ""; };
+  FAM.shift.figure = function () { return ""; };
+  FAM.rules.figure = function () { return ""; };
+  FAM.closed.figure = function () { return ""; };
+  FAM.rect.figure = function (P) { return P.fig; };
+  FAM.grow.figure = function () { return ""; };
+
+  function genProblem(fam, o) {
+    var P = FAM[fam].gen(o || {});
+    P.fig = FAM[fam].figure(P);
+    P.tt = P.typed || {};
+    return P;
+  }
+
+  // ============================================================
+  // Stage content
+  // ============================================================
+  var HOWTYPE = "<ul><li>Powers: <code>i^2</code>, <code>2^i</code>. Multiplication: <code>*</code> or just write them together, like <code>3i</code> or <code>2(i+1)</code>.</li>" +
+    "<li>Put parentheses around a whole exponent: <code>2^(i+1)</code>, and around a negative base: <code>(-1)^i</code>.</li>" +
+    "<li>Whole-number answers: type just the number, like <code>385</code> or <code>-12</code>. Where a decimal is expected, round to 2 places (a fraction like <code>7/4</code> is fine too).</li>" +
+    "<li>Lists of terms are separated by commas: <code>3, 5, 7, 9</code>.</li></ul>";
+  var FORMULAS = "<table class=\"fmtbl\"><tbody>" +
+    "<tr><td>" + SG(1, "n", "1") + "</td><td>" + M("= n") + "</td></tr>" +
+    "<tr><td>" + SG(1, "n", "i") + "</td><td>" + M("= n(n+1)/2") + "</td></tr>" +
+    "<tr><td>" + SG(1, "n", "i^2") + "</td><td>" + M("= n(n+1)(2n+1)/6") + "</td></tr>" +
+    "<tr><td>" + SG(1, "n", "i^3") + "</td><td>" + M("= (n(n+1)/2)^2") + "</td></tr></tbody></table>";
+  var EXAMPLE_FIG = FAM.rect.gen({ fi: 0, oi: 0 }).fig;
+  var STAGES = [
+    { id: "s1", nav: "1 Reading Σ", title: "Reading Sigma Notation", kicker: "Stage 1", mins: 8, goal: "Read the pieces of a sum written with Σ.", fam: "parts",
+      blocks: [
+        { t: "p", html: "Sometimes you need to add a long list of numbers that follow a pattern: 3, 5, 7, 9, and so on for 100 terms. Writing them all out is slow. <b>Sigma notation</b> is a short way to say “add up all of these.”" },
+        { t: "html", html: "<div class=\"sgbox big\">" + SG(1, 5, "(2i + 1)") + "</div><div class=\"anat\"><div><b>Σ</b> is the Greek capital letter sigma. It means <b>add up</b>.</div><div><b>The bottom</b> says where the counter starts: <b>i = 1</b>. The letter " + M("i") + " is called the <b>index</b>. It is just a counter.</div><div><b>The top</b> says where the counter stops: <b>5</b>.</div><div><b>The term</b> on the right, " + M("2i + 1") + ", is the rule for each number in the sum. Plug in the current value of " + M("i") + ".</div></div>" },
+        { t: "callout", cls: "key", title: "How to read it", html: "<p>Let " + M("i") + " count up by 1 from the bottom number to the top number. For each value of " + M("i") + ", plug it into the term. Then <b>add</b> all the results.</p><p>Number of terms = (top) − (bottom) + 1.</p>" },
+        { t: "worked", fam: "parts", opts: { lo: 2, cnt: 5, c: 4, term: termLin({ a: 2, b: 1 }) }, title: "Worked example", intro: "Watch each step, then try one yourself." },
+        { t: "h", text: "Try it" },
+        { t: "prob", id: "s1p", fam: "parts", kind: "practice", label: "Practice" },
+        { t: "cpbanner", title: "Checkpoint", html: "3 points. Hints are free. Your <b>first check</b> on each step is the one that counts. Opening an answer before you check scores 0 for that step." },
+        { t: "prob", id: "s1c", fam: "parts", kind: "cp", label: "Checkpoint" }
+      ], cp: { id: "s1c", fam: "parts" } },
+    { id: "s2", nav: "2 Expand", title: "Expanding and Evaluating", kicker: "Stage 2", mins: 8, goal: "Write out the terms of a sum and add them.", fam: "expand",
+      blocks: [
+        { t: "p", html: "To <b>expand</b> a sum means to write out every term. To <b>evaluate</b> it means to find the total. The method is the same every time." },
+        { t: "steps", items: ["List every value of " + M("i") + ", from the bottom number to the top number.", "Plug each value into the term. <b>Use parentheses</b> when you substitute, like " + M("(3)^2") + " or " + M("2(3) + 1") + ", so signs and powers stay right.", "Add the results."] },
+        { t: "callout", cls: "warn", title: "Watch out", html: "<p>The index does not have to start at 1. A sum that starts at " + M("i = 0") + " has a term for " + M("i = 0") + ". And terms like " + M("(-1)^i") + " change sign: " + M("(-1)^i") + " is " + M("-1") + " when " + M("i") + " is odd and " + M("1") + " when " + M("i") + " is even.</p>" },
+        { t: "worked", fam: "expand", opts: { lo: 1, cnt: 5, term: termSq({ a: 1, c: 0 }) }, title: "Worked example" },
+        { t: "h", text: "Try it" },
+        { t: "details", summary: "How to type your answers (open this once)", html: HOWTYPE },
+        { t: "prob", id: "s2p", fam: "expand", kind: "practice", label: "Practice" },
+        { t: "cpbanner", title: "Checkpoint", html: "3 points. The sum is a new random version." },
+        { t: "prob", id: "s2c", fam: "expand", kind: "cp", label: "Checkpoint" }
+      ], cp: { id: "s2c", fam: "expand" } },
+    { id: "s3", nav: "3 Write Σ", title: "Writing a Sum in Sigma Notation", kicker: "Stage 3", mins: 10, goal: "Go the other way: from a list of terms to Σ notation.", fam: "write",
+      blocks: [
+        { t: "p", html: "Now go backwards. You are given a pattern, and you write the sum with Σ. There are three things to find: the <b>rule for the i-th term</b>, where the index <b>starts</b>, and where it <b>stops</b>. In this stage the index always starts at 1." },
+        { t: "callout", cls: "key", title: "Patterns to recognize", html: "<ul><li><b>Goes up by the same amount each time</b> (like 3, 5, 7, 9): the rule is " + M("(amount)i + (adjustment)") + ". Check the first term.</li><li><b>Perfect squares</b> (1, 4, 9, 16): " + M("i^2") + ", possibly times a number or plus a number.</li><li><b>Multiplied by the same number each time</b> (2, 4, 8, 16): a power like " + M("2^i") + ".</li><li><b>Signs that alternate</b> (−1, 2, −3, 4): " + M("(-1)^i") + " times the size.</li></ul><p>Always <b>test your rule</b> by plugging in " + M("i = 1") + " and " + M("i = 2") + ".</p>" },
+        { t: "worked", fam: "write", opts: { variant: "arith", a: 3, b: -1, cnt: 5 }, title: "Worked example" },
+        { t: "h", text: "Try it" },
+        { t: "prob", id: "s3p", fam: "write", kind: "practice", label: "Practice" },
+        { t: "cpbanner", title: "Checkpoint", html: "3 points. The pattern is new and may be a different kind from the worked example." },
+        { t: "prob", id: "s3c", fam: "write", kind: "cp", label: "Checkpoint" }
+      ], cp: { id: "s3c", fam: "write" } },
+    { id: "s4", nav: "4 Shifts", title: "Shifting the Index", kicker: "Stage 4", mins: 9, goal: "Rewrite a sum so the index starts somewhere else.", fam: "shift",
+      blocks: [
+        { t: "p", html: "The same list of numbers can be written with different starting points. This matters a lot later: some formulas want the index to start at 0, and some want it to start at 1. Shifting the start does not change the sum, so the <b>term</b> has to change to make up for it." },
+        { t: "callout", cls: "key", title: "The shifting rule", html: "<p>To start the index <b>k</b> higher, replace each " + M("i") + " in the term with " + M("(i - k)") + ", and add " + M("k") + " to <b>both</b> limits. To start it <b>k</b> lower, replace each " + M("i") + " with " + M("(i + k)") + ", and subtract " + M("k") + " from both limits.</p><p>Quick check: put the new starting number into the new term. You should get the first term of the original sum.</p>" },
+        { t: "html", html: "<div class=\"sgbox big\">" + SG(1, 4, "i^2") + " &nbsp;=&nbsp; " + SG(0, 3, "(i + 1)^2") + "</div><p class=\"para small\">Both are " + M("1 + 4 + 9 + 16") + ". The counter now starts at 0, so each " + M("i") + " in the term became " + M("(i + 1)") + ", and the limits went down by 1.</p>" },
+        { t: "worked", fam: "shift", opts: { variant: "sq", term: termSq({ a: 1, c: 0 }), n: 5, starts: [0, 3] }, title: "Worked example" },
+        { t: "h", text: "Try it" },
+        { t: "prob", id: "s4p", fam: "shift", kind: "practice", label: "Practice" },
+        { t: "cpbanner", title: "Checkpoint", html: "3 points. These are multiple choice, so use the quick check before you pick." },
+        { t: "prob", id: "s4c", fam: "shift", kind: "cp", label: "Checkpoint" }
+      ], cp: { id: "s4c", fam: "shift" } },
+    { id: "s5", nav: "5 Rules", title: "Rules for Sums", kicker: "Stage 5", mins: 9, goal: "Pull out constants and split sums into easier pieces.", fam: "rules",
+      blocks: [
+        { t: "p", html: "Sums behave nicely. These two rules let you break a complicated sum into simple pieces." },
+        { t: "callout", cls: "key", title: "The sum rules", html: "<p><b>Constants come out front:</b> " + SG(1, "n", "c * a\u1d62") + " = " + M("c") + " " + SG(1, "n", "a\u1d62") + "</p><p><b>A sum splits across plus and minus:</b> " + SG(1, "n", "(a\u1d62 + b\u1d62)") + " = " + SG(1, "n", "a\u1d62") + " + " + SG(1, "n", "b\u1d62") + "</p><p><b>A constant term:</b> " + SG(1, "n", "c") + " = " + M("c * n") + " (add " + M("c") + ", " + M("n") + " times).</p>" },
+        { t: "worked", fam: "rules", opts: { variant: "lin", a: 3, b: 2, n: 5 }, title: "Worked example" },
+        { t: "h", text: "Try it" },
+        { t: "prob", id: "s5p", fam: "rules", kind: "practice", label: "Practice" },
+        { t: "cpbanner", title: "Checkpoint", html: "3 points." },
+        { t: "prob", id: "s5c", fam: "rules", kind: "cp", label: "Checkpoint" }
+      ], cp: { id: "s5c", fam: "rules" } },
+    { id: "s6", nav: "6 Formulas", title: "Closed Formulas for Big Sums", kicker: "Stage 6", mins: 10, goal: "Add up 20 or 100 terms without writing them out.", fam: "closed",
+      blocks: [
+        { t: "p", html: "Writing out 100 terms is not realistic. Mathematicians found <b>closed formulas</b> that give these sums instantly, just by plugging in " + M("n") + ", the top number. These four are the ones you need. They only work when the index <b>starts at 1</b>." },
+        { t: "html", html: "<div class=\"formbox\"><div class=\"ft\">Formula box</div>" + FORMULAS + "<p class=\"para small\">Use these with the sum rules from Stage 5: split the sum, pull out constants, then apply a formula to each piece.</p></div>" },
+        { t: "callout", cls: "warn", title: "Keep the formulas separate", html: "<p>" + SG(1, "n", "i^2") + " is <b>not</b> " + M("(n(n+1)/2)^2") + ". The square of the sum of " + M("i") + " is the formula for the sum of " + M("i^3") + ". Match the formula to the power.</p>" },
+        { t: "worked", fam: "closed", opts: { variant: "sq3", n: 10, a: 3, b: 2, c: -4 }, title: "Worked example" },
+        { t: "h", text: "Try it" },
+        { t: "prob", id: "s6p", fam: "closed", kind: "practice", label: "Practice" },
+        { t: "cpbanner", title: "Checkpoint", html: "4 points. A calculator is fine for the arithmetic." },
+        { t: "prob", id: "s6c", fam: "closed", kind: "cp", label: "Checkpoint" }
+      ], cp: { id: "s6c", fam: "closed" } },
+    { id: "s7", nav: "7 Rectangles", title: "Where This Is Going: Area", kicker: "Stage 7", mins: 12, goal: "Use sigma notation to estimate the area under a curve with rectangles.", fam: "rect",
+      blocks: [
+        { t: "p", html: "Why bother with all this? Because of a big question in calculus: <b>how do you find the area under a curve?</b> Curves are hard, but rectangles are easy. So we cover the region with thin rectangles and add up their areas. Adding up a long list of similar numbers is exactly what sigma notation is for." },
+        { t: "html", html: "<div class=\"pfig\">" + EXAMPLE_FIG + "</div><p class=\"para small\">Here is " + M("y = x^2") + " from 0 to 2 with 4 rectangles. The top-right corner of each rectangle touches the curve.</p>" },
+        { t: "callout", cls: "key", title: "The setup", html: "<ul><li><b>Width of each rectangle:</b> " + M("Δx = (b - a)/n") + ", the total width divided by the number of rectangles.</li><li><b>Right-hand end of the i-th rectangle:</b> " + M("xᵢ = a + iΔx") + ". (The first ends one width from " + M("a") + ", the second two widths, and so on.)</li><li><b>Height</b> of the i-th rectangle: " + M("f(xᵢ)") + ". <b>Area</b> of the i-th rectangle: " + M("f(xᵢ)Δx") + ".</li><li><b>Total:</b> " + SG(1, "n", "f(xᵢ)Δx") + "</li></ul><p>That last line is everything you practiced today: a sum that starts at 1 and runs to " + M("n") + ". The closed formulas from Stage 6 will let you handle any " + M("n") + " at once.</p>" },
+        { t: "worked", fam: "rect", opts: { fi: 0, oi: 0 }, title: "Worked example" },
+        { t: "h", text: "Try it" },
+        { t: "prob", id: "s7p", fam: "rect", kind: "practice", label: "Practice" },
+        { t: "cpbanner", title: "Checkpoint", html: "5 points. The function, the interval, and the number of rectangles are random." },
+        { t: "prob", id: "s7c", fam: "rect", kind: "cp", label: "Checkpoint" }
+      ], cp: { id: "s7c", fam: "rect" } },
+    { id: "s8", nav: "Bonus", title: "Bonus: More and More Rectangles", kicker: "Bonus", mins: 8, goal: "For early finishers. See what happens to the total as n gets large.", fam: "grow", bonus: true,
+      blocks: [
+        { t: "p", html: "<b>This stage is optional.</b> It is for students who finish early. Its points are listed separately and are not part of your main total." },
+        { t: "p", html: "Here is the big idea: the more rectangles you use, the thinner they are, and the better they fit the curve. Let the number of rectangles be a letter, " + M("n") + ", and use the formulas from Stage 6 to see what happens when " + M("n") + " is 10, then 100." },
+        { t: "worked", fam: "grow", opts: { b: 3 }, title: "Worked example" },
+        { t: "h", text: "Your turn" },
+        { t: "cpbanner", title: "Bonus checkpoint", html: "4 bonus points. Same rules as the other checkpoints." },
+        { t: "prob", id: "s8c", fam: "grow", kind: "cp", label: "Checkpoint" }
+      ], cp: { id: "s8c", fam: "grow" } }
+  ];
+  STAGES.forEach(function (st) { st.n = STEPN[st.cp.fam]; });
+
+
+  // ============================================================
+  // Engine: stages, problem cards, worked examples, scoring, summary
+  // ============================================================
+  var SVG_OK = "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M20 6 9 17l-5-5\"/></svg>";
+  var SVG_X = "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\"><circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M15 9l-6 6M9 9l6 6\"/></svg>";
+  var SVG_LOCK = "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"4\" y=\"10\" width=\"16\" height=\"10\" rx=\"2\"/><path d=\"M8 10V7a4 4 0 0 1 8 0v3\"/></svg>";
+  var SVG_REFRESH = "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M16 3h5v5\"/><path d=\"M4 20 21 3\"/><path d=\"M21 16v5h-5\"/><path d=\"M15 15l6 6\"/><path d=\"M4 4l5 5\"/></svg>";
+
+  var A = { started: false, name: "", cur: "", secs: {}, built: {}, scores: {}, hints: {}, probs: {} };
+  window.__SIG = { A: A, STAGES: STAGES, FAM: FAM, genProblem: genProblem, gradeField: gradeField, STEPN: STEPN };
+  if (window.__SIG_NOMOUNT) return;
+
+  function el(tag, cls, html) { var e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
+  function $(id) { return document.getElementById(id); }
+  function fmtClock(s) { var m = Math.floor(s / 60), r = s % 60; return m + ":" + (r < 10 ? "0" : "") + r; }
+  function stageById(id) { for (var i = 0; i < STAGES.length; i++) if (STAGES[i].id === id) return STAGES[i]; return null; }
+  function stageSummary(stId) {
+    var st = stageById(stId), earned = 0, done = 0, peeked = 0, n = st.n;
+    for (var i = 0; i < n; i++) {
+      var r = A.scores[st.cp.id + "#" + i];
+      if (r) { done++; earned += r.earned; if (r.peeked) peeked++; }
+    }
+    return { n: n, done: done, earned: earned, poss: n, peeked: peeked, hints: A.hints[stId] || 0 };
+  }
+
+  // ---------- one field ----------
+  function fieldHtml(f, pid, si) {
+    var id = "f_" + pid + "_" + si + "_" + f.id;
+    var inner;
+    if (f.kind === "sel") {
+      inner = "<select id=\"" + id + "\" data-f=\"" + f.id + "\"><option value=\"\">Choose\u2026</option>" + f.options.map(function (o) { return "<option value=\"" + o.v + "\">" + optText(o.t) + "</option>"; }).join("") + "</select>";
+    } else {
+      inner = "<input type=\"text\" id=\"" + id + "\" data-f=\"" + f.id + "\" autocomplete=\"off\" autocapitalize=\"off\" spellcheck=\"false\" placeholder=\"" + (f.ph || "").replace(/"/g, "&quot;") + "\">";
+    }
+    return "<div class=\"fld\" data-fld=\"" + f.id + "\"><label for=\"" + id + "\">" + f.label + "</label>" + inner + "<div class=\"fmsg hidden\"></div></div>";
+  }
+  function optText(t) { return String(t).replace(/<sup>([^<]*)<\/sup>/g, "^$1").replace(/<[^>]+>/g, "").replace(/&/g, "&amp;").replace(/</g, "&lt;"); }
+
+  // ---------- problem card ----------
+  function mountProblem(b, body, st) {
+    var scored = b.kind === "cp";
+    var card = el("div", "qcard prob kind-" + b.kind);
+    card.setAttribute("data-id", b.id);
+    var head = "<div class=\"qcard-head\"><div class=\"qtitle\"><span class=\"qlabel\">" + b.label + "</span>" +
+      "<span class=\"kind-chip k-" + b.kind + "\">" + (scored ? "Checkpoint &middot; " + st.n + " pt" + (st.n === 1 ? "" : "s") : "Practice &middot; not scored") + "</span></div>" +
+      (scored ? "" : "<button class=\"icon-btn new-version-btn\" type=\"button\">" + SVG_REFRESH + "New version</button>") + "</div>";
+    card.innerHTML = head + "<div class=\"pstory\"></div><div class=\"pfig\"></div><details class=\"typehelp\"><summary>How to type your answers</summary>" + HOWTYPE + "</details><div class=\"psteps\"></div><div class=\"pdone hidden\"></div>";
+    body.appendChild(card);
+    var storyEl = card.querySelector(".pstory"), figEl = card.querySelector(".pfig"), stepsEl = card.querySelector(".psteps"), doneEl = card.querySelector(".pdone");
+    var P, steps, panels, resolved;
+
+    function lockScore(i, pts, peeked) {
+      var key = b.id + "#" + i;
+      if (!scored || A.scores[key]) return false;
+      A.scores[key] = { stage: st.id, kind: "cp", points: 1, earned: pts, peeked: !!peeked };
+      updateStatus();
+      return true;
+    }
+    function updateDone() {
+      var all = resolved.every(function (r) { return r; });
+      if (!all) { doneEl.classList.add("hidden"); return; }
+      doneEl.classList.remove("hidden");
+      if (scored) {
+        var s = stageSummary(st.id);
+        doneEl.className = "pdone";
+        doneEl.innerHTML = SVG_LOCK + " Checkpoint finished. Recorded so far: " + s.earned + " / " + s.poss + " points. Head to the next stage when you are ready.";
+      } else {
+        doneEl.className = "pdone part";
+        doneEl.innerHTML = "That is the whole recipe. Want more reps? Press <b>New version</b> for another random problem, or move on when you are ready.";
+      }
+    }
+    function unlock(i) {
+      resolved[i] = true;
+      panels[i].el.classList.remove("active"); panels[i].el.classList.add("done");
+      if (i + 1 < panels.length) { panels[i + 1].el.classList.remove("locked"); panels[i + 1].el.classList.add("active"); panels[i + 1].body.classList.remove("hidden"); }
+      updateDone();
+    }
+    function render() {
+      P = genProblem(b.fam, b.opts || {});
+      steps = P.steps; panels = []; resolved = steps.map(function () { return false; });
+      storyEl.innerHTML = P.story; figEl.innerHTML = P.fig || "";
+      var help = "";
+      stepsEl.innerHTML = "";
+      doneEl.classList.add("hidden");
+      steps.forEach(function (S, i) {
+        var pe = el("div", "pstep " + (i === 0 ? "active" : "locked"));
+        pe.innerHTML = "<div class=\"phead\"><span class=\"pnum\">" + (i + 1) + "</span><span class=\"ptitle\">" + S.title + "</span><span class=\"pbadge hidden\"></span></div>" +
+          "<div class=\"pbody" + (i === 0 ? "" : " hidden") + "\"><div class=\"pprompt\">" + S.prompt + "</div><div class=\"pfields\">" + S.fields.map(function (f) { return fieldHtml(f, b.id, i); }).join("") + "</div>" +
+          "<div class=\"pactions\"><button type=\"button\" class=\"btn-primary check-btn\">Check</button><button type=\"button\" class=\"btn-secondary hint-btn\">Hint (" + S.hints.length + ")</button><button type=\"button\" class=\"btn-secondary ans-btn\">Show answer</button></div>" +
+          "<div class=\"pfeed hidden\"></div><div class=\"phint hidden\"></div><div class=\"pans hidden\"></div></div>";
+        stepsEl.appendChild(pe);
+        var panel = { el: pe, body: pe.querySelector(".pbody"), hintN: 0, armed: null, peeked: false };
+        panels.push(panel);
+        wireStep(S, i, panel);
+      });
+      refreshVisibility();
+    }
+    function readVals(i) {
+      var v = {};
+      panels[i].el.querySelectorAll("[data-f]").forEach(function (inp) { v[inp.getAttribute("data-f")] = inp.value; });
+      return v;
+    }
+    function refreshVisibility() {
+      steps.forEach(function (S, i) {
+        var vals = readVals(i);
+        S.fields.forEach(function (f) {
+          var fl = panels[i].el.querySelector("[data-fld=\"" + f.id + "\"]");
+          var show = !f.showIf || f.showIf(vals);
+          fl.classList.toggle("hidden", !show);
+        });
+      });
+    }
+    function wireStep(S, i, panel) {
+      var pe = panel.el, feed = pe.querySelector(".pfeed"), hintBox = pe.querySelector(".phint"), ansBox = pe.querySelector(".pans"), badge = pe.querySelector(".pbadge");
+      var ansBtn = pe.querySelector(".ans-btn"), hintBtn = pe.querySelector(".hint-btn");
+      function setBadge() {
+        var r = A.scores[b.id + "#" + i];
+        if (!scored || !r) return;
+        badge.classList.remove("hidden");
+        badge.innerHTML = SVG_LOCK + " Recorded: " + r.earned + "/1" + (r.peeked ? " (answer viewed)" : "");
+      }
+      pe.querySelectorAll("input,select").forEach(function (inp) {
+        inp.addEventListener("input", refreshVisibility); inp.addEventListener("change", refreshVisibility);
+        inp.addEventListener("keydown", function (e) { if (e.key === "Enter") { e.preventDefault(); pe.querySelector(".check-btn").click(); } });
+      });
+      pe.querySelector(".check-btn").addEventListener("click", function () {
+        var vals = readVals(i), allOk = true, blank = false, msgs = [];
+        S.fields.forEach(function (f) {
+          var fl = pe.querySelector("[data-fld=\"" + f.id + "\"]");
+          if (fl.classList.contains("hidden")) return;
+          if (String(vals[f.id] || "").replace(/\s+/g, "") === "") blank = true;
+        });
+        if (blank) {
+          feed.classList.remove("hidden"); feed.className = "pfeed qfeedback bad";
+          feed.innerHTML = SVG_X + "<span>Fill in every box first. A blank check does not count against you.</span>";
+          return;
+        }
+        S.fields.forEach(function (f) {
+          var fl = pe.querySelector("[data-fld=\"" + f.id + "\"]"), mg = fl.querySelector(".fmsg");
+          if (fl.classList.contains("hidden")) return;
+          var r = gradeField(f, vals[f.id], vals);
+          fl.classList.toggle("ok", !!r.ok); fl.classList.toggle("bad", !r.ok);
+          mg.classList.toggle("hidden", !(r.msg || r.ok));
+          mg.innerHTML = r.ok ? "Correct" : (r.msg || "Not quite.");
+          if (!r.ok) allOk = false;
+        });
+        feed.classList.remove("hidden");
+        if (allOk) {
+          feed.className = "pfeed qfeedback good";
+          feed.innerHTML = SVG_OK + "<span>Correct!" + (scored && A.scores[b.id + "#" + i] ? " <span class=\"fnote\">(Your first check is the one that counted.)</span>" : "") + "</span>";
+        } else {
+          feed.className = "pfeed qfeedback bad";
+          feed.innerHTML = SVG_X + "<span>Not quite. Look at the boxes marked in red. Use a hint or fix and check again." + (scored && A.scores[b.id + "#" + i] ? " <span class=\"fnote\">(Your first check is the one that counted.)</span>" : "") + "</span>";
+        }
+        if (scored && !A.scores[b.id + "#" + i]) { lockScore(i, allOk ? 1 : 0, false); }
+        setBadge();
+        if (allOk && !resolved[i]) unlock(i);
+        updateDone();
+      });
+      hintBtn.addEventListener("click", function () {
+        if (panel.hintN >= S.hints.length) return;
+        panel.hintN++;
+        if (scored) A.hints[st.id] = (A.hints[st.id] || 0) + 1;
+        hintBox.classList.remove("hidden");
+        hintBox.innerHTML = S.hints.slice(0, panel.hintN).map(function (h, k) { return "<div class=\"hline\"><b>Hint " + (k + 1) + ":</b> " + h + "</div>"; }).join("");
+        hintBtn.textContent = panel.hintN >= S.hints.length ? "No more hints" : "Another hint (" + (S.hints.length - panel.hintN) + " left)";
+        hintBtn.disabled = panel.hintN >= S.hints.length;
+        if (A.cur === "sum") updateStatus();
+      });
+      ansBtn.addEventListener("click", function () {
+        var key = b.id + "#" + i;
+        if (scored && !A.scores[key] && !panel.armed) {
+          ansBtn.textContent = "Click again: this scores 0";
+          panel.armed = setTimeout(function () { panel.armed = null; ansBtn.textContent = "Show answer"; }, 4000);
+          return;
+        }
+        if (panel.armed) { clearTimeout(panel.armed); panel.armed = null; ansBtn.textContent = "Show answer"; }
+        ansBox.classList.remove("hidden"); ansBox.innerHTML = S.ans;
+        if (scored && !A.scores[key]) { lockScore(i, 0, true); setBadge(); }
+        if (!resolved[i]) unlock(i);
+      });
+    }
+    var nv = card.querySelector(".new-version-btn");
+    if (nv) nv.addEventListener("click", render);
+    render();
+    A.probs[b.id] = { get P() { return P; }, card: card };
+  }
+
+  // ---------- worked example ----------
+  function renderWorked(b, body, st) {
+    var P = genProblem(b.fam, b.opts || {}), steps = P.steps, n = steps.length, shown = 0;
+    var box = el("div", "worked");
+    box.innerHTML = "<div class=\"worked-tag\">Worked example</div><h4>" + (b.title === "Worked example" ? P.title : b.title) + "</h4>" + (b.intro ? "<p class=\"worked-intro\">" + b.intro + "</p>" : "") +
+      "<div class=\"wstory\">" + P.story + "</div><div class=\"pfig\">" + (P.fig || "") + "</div><ol class=\"wsteps\"></ol>" +
+      "<div class=\"wbtns\"><button type=\"button\" class=\"btn-primary w-next\">Start the example</button><button type=\"button\" class=\"btn-secondary w-all\">Show everything</button><button type=\"button\" class=\"btn-secondary w-reset\">Start over</button></div>";
+    body.appendChild(box);
+    var ol = box.querySelector(".wsteps"), nextB = box.querySelector(".w-next"), allB = box.querySelector(".w-all"), resetB = box.querySelector(".w-reset");
+    function update() {
+      ol.innerHTML = steps.slice(0, shown).map(function (s, i) { return "<li" + (i === shown - 1 ? " class=\"cur\"" : "") + "><span class=\"wt\">" + s.title + "</span>" + s.ans + "</li>"; }).join("");
+      nextB.textContent = shown === 0 ? "Start the example" : (shown >= n ? "Example complete" : "Show next step (" + (shown + 1) + " of " + n + ")");
+      nextB.disabled = shown >= n; allB.disabled = shown >= n; resetB.classList.toggle("hidden", shown === 0);
+    }
+    nextB.addEventListener("click", function () { if (shown < n) { shown++; update(); } });
+    allB.addEventListener("click", function () { shown = n; update(); });
+    resetB.addEventListener("click", function () { shown = 0; update(); });
+    update();
+  }
+
+  function renderBlock(b, body, st) {
+    switch (b.t) {
+      case "h": body.appendChild(el("h3", "sec", b.text)); break;
+      case "p": body.appendChild(el("p", "para", b.html)); break;
+      case "html": body.appendChild(el("div", "raw", b.html)); break;
+      case "callout": body.appendChild(el("div", "callout c-" + (b.cls || "key"), (b.title ? "<div class=\"ct\">" + b.title + "</div>" : "") + b.html)); break;
+      case "steps": body.appendChild(el("ol", "method", b.items.map(function (i) { return "<li>" + i + "</li>"; }).join(""))); break;
+      case "details": body.appendChild(el("details", "reveal", "<summary>" + b.summary + "</summary><div class=\"reveal-body\">" + b.html + "</div>")); break;
+      case "worked": renderWorked(b, body, st); break;
+      case "prob": mountProblem(b, body, st); break;
+      case "cpbanner": body.appendChild(el("div", "cpbanner", "<div class=\"cpb-t\">" + (b.title || "Checkpoint") + "</div><div>" + b.html + "</div>")); break;
+      default: break;
+    }
+  }
+
+  // ---------- stage assembly & navigation ----------
+  function buildStage(st) {
+    var host = $("stage-" + st.id);
+    host.innerHTML = "<div class=\"stage-head\"><div class=\"stage-kicker\">" + st.kicker + "</div><h2>" + st.title + "</h2>" +
+      "<div class=\"stage-meta\"><span class=\"time-chip\">about " + st.mins + " min</span><span class=\"goal\">" + st.goal + "</span></div></div>";
+    var body = el("div", "stage-body"); host.appendChild(body);
+    st.blocks.forEach(function (b) { renderBlock(b, body, st); });
+    var idx = STAGES.indexOf(st), foot = el("div", "stage-foot");
+    var prev = idx > 0 ? STAGES[idx - 1] : null, next = idx < STAGES.length - 1 ? STAGES[idx + 1] : null;
+    foot.innerHTML = (prev ? "<button type=\"button\" class=\"btn-secondary\" data-go=\"" + prev.id + "\">&larr; " + prev.nav + "</button>" : "<span></span>") +
+      "<span class=\"foot-mid\"></span>" +
+      (next ? "<button type=\"button\" class=\"btn-primary\" data-go=\"" + next.id + "\">" + next.nav + " &rarr;</button>" : "<button type=\"button\" class=\"btn-primary\" data-go=\"sum\">Go to the summary &rarr;</button>");
+    host.appendChild(foot);
+    A.built[st.id] = true;
+  }
+  function go(id) {
+    if (!A.started) return;
+    A.cur = id;
+    document.querySelectorAll(".stage").forEach(function (s) { s.classList.add("hidden"); });
+    var host = $("stage-" + id);
+    host.classList.remove("hidden");
+    if (id === "sum") renderSummaryScreen();
+    else { var st = stageById(id); if (!A.built[id]) buildStage(st); }
+    document.querySelectorAll(".stage-pill").forEach(function (p) { p.classList.toggle("current", p.getAttribute("data-go") === id); });
+    updateStatus();
+    window.scrollTo(0, 0);
+  }
+
+  // ---------- status bar ----------
+  function updateStatus() {
+    var earned = 0, poss = 0;
+    STAGES.forEach(function (st) {
+      var s = stageSummary(st.id);
+      if (!st.bonus) { earned += s.earned; poss += s.poss; }
+      var pill = document.querySelector(".stage-pill[data-go=\"" + st.id + "\"]");
+      if (pill) pill.classList.toggle("done", s.n > 0 && s.done === s.n);
+    });
+    $("stScore").textContent = earned + " / " + poss;
+    var tot = 0; Object.keys(A.secs).forEach(function (k) { tot += A.secs[k]; });
+    $("stClock").textContent = fmtClock(tot);
+  }
+  setInterval(function () {
+    if (!A.started || document.hidden || !A.cur) return;
+    A.secs[A.cur] = (A.secs[A.cur] || 0) + 1;
+    var tot = 0; Object.keys(A.secs).forEach(function (k) { tot += A.secs[k]; });
+    $("stClock").textContent = fmtClock(tot);
+    if (A.cur === "sum") updateSummaryTimes();
+  }, 1000);
+
+  // ---------- summary ----------
+  function summaryData() {
+    var rows = [], earned = 0, poss = 0, totalSecs = 0, hints = 0, bEarned = 0, bPoss = 0;
+    STAGES.forEach(function (st) {
+      var s = stageSummary(st.id), t = A.secs[st.id] || 0;
+      totalSecs += t; hints += s.hints;
+      rows.push({ id: st.id, nav: st.nav, title: st.title, s: s, secs: t, bonus: !!st.bonus });
+      if (st.bonus) { bEarned += s.earned; bPoss += s.poss; } else { earned += s.earned; poss += s.poss; }
+    });
+    totalSecs += (A.secs.sum || 0);
+    return { rows: rows, earned: earned, poss: poss, totalSecs: totalSecs, hints: hints, bEarned: bEarned, bPoss: bPoss };
+  }
+  function dateStr() { var d = new Date(); return d.toLocaleDateString(undefined, { weekday: "long", year: "numeric", month: "long", day: "numeric" }); }
+  function summaryTableHtml(D) {
+    var h = "<table class=\"sumtbl\"><thead><tr><th>Stage</th><th>Score</th><th>Steps checked</th><th>Answer viewed first</th><th>Hints used</th><th>Time</th></tr></thead><tbody>";
+    D.rows.forEach(function (r) {
+      h += "<tr" + (r.bonus ? " class=\"bonusrow\"" : "") + "><td>" + r.title + (r.bonus ? " (optional)" : "") + "</td><td class=\"num\">" + r.s.earned + " / " + r.s.poss + "</td><td class=\"num\">" + r.s.done + " of " + r.s.n + "</td><td class=\"num\">" + r.s.peeked + "</td><td class=\"num\">" + r.s.hints + "</td><td class=\"num\" data-t=\"" + r.id + "\">" + fmtClock(r.secs) + "</td></tr>";
+    });
+    var pct = D.poss ? Math.round(100 * D.earned / D.poss) : 0;
+    h += "</tbody><tfoot><tr><td>Total (without the bonus)</td><td class=\"num\">" + D.earned + " / " + D.poss + " (" + pct + "%)</td><td></td><td></td><td class=\"num\">" + D.hints + "</td><td class=\"num\" data-t=\"total\">" + fmtClock(D.totalSecs) + "</td></tr>" + (D.bPoss ? "<tr class=\"bonusrow\"><td>Bonus points (not in the total)</td><td class=\"num\">" + D.bEarned + " / " + D.bPoss + "</td><td></td><td></td><td></td><td></td></tr>" : "") + "</tfoot></table>";
+    return h;
+  }
+  function updateSummaryTimes() {
+    var D = summaryData();
+    D.rows.forEach(function (r) { var c = document.querySelector("#sumTable [data-t=\"" + r.id + "\"]"); if (c) c.textContent = fmtClock(r.secs); });
+    var tc = document.querySelector("#sumTable [data-t=\"total\"]"); if (tc) tc.textContent = fmtClock(D.totalSecs);
+  }
+  function summaryText() {
+    var D = summaryData(), lines = [];
+    lines.push("Summation Notation: A Guided Walkthrough");
+    lines.push("Student: " + A.name);
+    lines.push("Date: " + dateStr());
+    lines.push("");
+    D.rows.forEach(function (r) {
+      lines.push(r.title + ": " + r.s.earned + "/" + r.s.poss + " (" + r.s.done + " of " + r.s.n + " steps checked" + (r.s.peeked ? ", " + r.s.peeked + " answer(s) viewed first" : "") + (r.s.hints ? ", " + r.s.hints + " hint(s)" : "") + ")  time " + fmtClock(r.secs));
+    });
+    lines.push("");
+    if (D.bPoss) lines.push("Bonus (not in the total): " + D.bEarned + "/" + D.bPoss);
+    lines.push("Total: " + D.earned + "/" + D.poss + " (" + (D.poss ? Math.round(100 * D.earned / D.poss) : 0) + "%)   Total time: " + fmtClock(D.totalSecs));
+    return lines.join("\n");
+  }
+  function missingHtml() {
+    var out = [];
+    STAGES.forEach(function (st) {
+      var s = stageSummary(st.id);
+      if (!st.bonus && s.done < s.n) out.push("<li><button type=\"button\" class=\"linkbtn\" data-go=\"" + st.id + "\">" + st.title + "</button>: " + (s.n - s.done) + " checkpoint step" + (s.n - s.done === 1 ? "" : "s") + " not checked yet</li>");
+    });
+    return out.length ? "<div class=\"callout c-warn\"><div class=\"ct\">Not finished yet</div><ul class=\"misslist\">" + out.join("") + "</ul>You can still go back and finish these before you turn this in.</div>" : "<div class=\"callout c-good\"><div class=\"ct\">Every checkpoint step is checked.</div>Nice work. Take a screenshot of this page and upload it to the Google Classroom assignment right away. The steps are below.</div>";
+  }
+  function printHtml() {
+    var D = summaryData();
+    return "<h1>Summation Notation: A Guided Walkthrough</h1><div class=\"ps-sub\">Calculus 1 &middot; walkthrough summary</div>" +
+      "<div class=\"ps-id\"><div><b>Student:</b> " + escHtml(A.name) + "</div><div><b>Date:</b> " + dateStr() + "</div></div>" + summaryTableHtml(D) +
+      "<p class=\"ps-note\">Scores count only the first time each checkpoint step was checked. If an answer was viewed before checking, that step scored 0. Hints do not cost points.</p>";
+  }
+  function renderSummaryScreen() {
+    var host = $("stage-sum"), D = summaryData();
+    host.innerHTML = "<div class=\"stage-head\"><div class=\"stage-kicker\">Turn-in</div><h2>Your summary</h2><div class=\"stage-meta\"><span class=\"goal\">This page is what you hand in. Check it over, then take a screenshot and upload it to the Google Classroom assignment right away.</span></div></div>" +
+      "<div class=\"stage-body\"><div class=\"sumcard\"><div class=\"sum-id\"><div><span class=\"tl\">Student</span><div class=\"sum-name\">" + escHtml(A.name) + "</div></div><div><span class=\"tl\">Date</span><div>" + dateStr() + "</div></div></div>" +
+      "<div id=\"sumTable\">" + summaryTableHtml(D) + "</div></div>" + missingHtml() +
+      "<div class=\"callout c-key\"><div class=\"ct\">Do this right now</div><p>Take a <b>screenshot of this summary</b> and <b>upload it to the Google Classroom assignment</b> as soon as you finish, before you close this tab.</p><ol class=\"inl\"><li>Make sure your name and the whole table are on the screen. If they are not, press <b>Ctrl</b> and <b>&minus;</b> (minus) a few times to zoom out.</li><li>Press <b>Ctrl + Show windows</b> to take a screenshot. The Show windows key is in the top row of your Chromebook keyboard and looks like a rectangle with two lines beside it. To capture just part of the screen, press <b>Ctrl + Shift + Show windows</b> and drag a box around your summary.</li><li>Open the Google Classroom assignment, choose <b>Add or create</b>, then <b>File</b>, pick your screenshot (it is saved in your Downloads folder), and turn it in.</li></ol></div>" +
+      "<div class=\"sum-actions\"><button type=\"button\" class=\"btn-secondary\" id=\"sumCopy\">Copy summary text</button><button type=\"button\" class=\"btn-secondary\" id=\"sumPrint\">Print / Save as PDF</button><span class=\"copied hidden\" id=\"sumCopied\">Copied!</span></div>" +
+      "<p class=\"para small\">The two buttons above are optional backups. The screenshot you upload to Google Classroom is what counts.</p></div>";
+    $("sumPrint").addEventListener("click", function () { fillPrint(); window.print(); });
+    $("sumCopy").addEventListener("click", function () {
+      var txt = summaryText(), done = function () { var c = $("sumCopied"); c.classList.remove("hidden"); setTimeout(function () { c.classList.add("hidden"); }, 1800); };
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(done, function () { fallbackCopy(txt); done(); });
+      else { fallbackCopy(txt); done(); }
+    });
+  }
+  function fallbackCopy(txt) {
+    var ta = document.createElement("textarea"); ta.value = txt; ta.style.position = "fixed"; ta.style.opacity = "0"; document.body.appendChild(ta); ta.select();
+    try { document.execCommand("copy"); } catch (e) {} document.body.removeChild(ta);
+  }
+  function fillPrint() { if (A.started) $("printSummary").innerHTML = printHtml(); }
+  window.addEventListener("beforeprint", fillPrint);
+
+  // ---------- start ----------
+  function buildNav() {
+    var nav = $("pills"); nav.innerHTML = "";
+    STAGES.forEach(function (st) {
+      var b = el("button", "stage-pill", "<span class=\"dot\"></span>" + st.nav);
+      b.type = "button"; b.setAttribute("data-go", st.id); nav.appendChild(b);
+    });
+    var sb = el("button", "stage-pill sumpill", "<span class=\"dot\"></span>Summary"); sb.type = "button"; sb.setAttribute("data-go", "sum"); nav.appendChild(sb);
+    var holder = $("stages"); holder.innerHTML = "";
+    STAGES.concat([{ id: "sum" }]).forEach(function (st) { var s = el("section", "stage hidden"); s.id = "stage-" + st.id; holder.appendChild(s); });
+  }
+  document.addEventListener("click", function (e) {
+    var t = e.target.closest ? e.target.closest("[data-go]") : null;
+    if (t && A.started) go(t.getAttribute("data-go"));
+  });
+  function begin() {
+    var nm = $("stuName").value.replace(/^\s+|\s+$/g, "");
+    if (!nm) { $("nameErr").classList.remove("hidden"); $("stuName").focus(); return; }
+    A.name = nm; A.started = true;
+    $("nameErr").classList.add("hidden");
+    $("intro").classList.add("hidden"); $("lesson").classList.remove("hidden");
+    $("whoName").textContent = nm;
+    buildNav();
+    go(STAGES[0].id);
+  }
+  $("beginBtn").addEventListener("click", begin);
+  $("stuName").addEventListener("keydown", function (e) { if (e.key === "Enter") begin(); });
+  window.addEventListener("beforeunload", function (e) { if (A.started) { e.preventDefault(); e.returnValue = ""; return ""; } });
+
+})();
+</script>
+</body>
+</html>
