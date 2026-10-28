@@ -148,69 +148,87 @@ function makeSVG(inner){
   return '<svg viewBox="0 0 430 230" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:430px;display:block;margin:.3rem auto">'+makeAxes()+inner+'</svg>';
 }
 
-function gen1(){
-  var peakA=choose([3,4,4,5]),valB=choose([1,1,2]),peakC=choose([2,3,3]);
+// Shared curve builder: 2 peaks (x=2, x=5.5), 1 valley (x=4)
+function makeTwoPeakCurve(peakA, valB, peakC){
   var p='M '+xp(0)+','+yp(peakA-0.5)+' C '+xp(0.5)+','+yp(peakA-0.2)+' '+xp(1.5)+','+yp(peakA)+' '+xp(2)+','+yp(peakA)+' C '+xp(2.5)+','+yp(peakA)+' '+xp(3.5)+','+yp(valB)+' '+xp(4)+','+yp(valB)+' C '+xp(4.5)+','+yp(valB)+' '+xp(5)+','+yp(peakC)+' '+xp(5.5)+','+yp(peakC)+' C '+xp(6)+','+yp(peakC)+' '+xp(6.7)+','+yp(valB+0.3)+' '+xp(7)+','+yp(valB+0.3);
-  var inner='<path d="'+p+'" fill="none" stroke="#1e3a5c" stroke-width="2.5" stroke-linejoin="round"/>'+
+  return '<path d="'+p+'" fill="none" stroke="#1e3a5c" stroke-width="2.5" stroke-linejoin="round"/>'+
     '<circle cx="'+Math.round(xp(2))+'" cy="'+Math.round(yp(peakA))+'" r="5" fill="#1e3a5c"/>'+
     '<circle cx="'+Math.round(xp(4))+'" cy="'+Math.round(yp(valB))+'" r="5" fill="#7a5c1e"/>'+
     '<circle cx="'+Math.round(xp(5.5))+'" cy="'+Math.round(yp(peakC))+'" r="5" fill="#1e3a5c"/>'+
     '<circle cx="'+Math.round(xp(0))+'" cy="'+Math.round(yp(peakA-0.5))+'" r="4" fill="white" stroke="#1e3a5c" stroke-width="1.5"/>'+
     '<circle cx="'+Math.round(xp(7))+'" cy="'+Math.round(yp(valB+0.3))+'" r="4" fill="white" stroke="#1e3a5c" stroke-width="1.5"/>';
-  return {svg:qWrap(makeSVG(inner),'How many local maxima and how many local minima does this function have on (0, 7)?'),answer:['2 local maxima, 1 local minimum','2 local max, 1 local min'],hint:'Count peaks (local max) and valleys (local min) on the interior of the graph.',step:'Peaks at $x=2$ and $x=5.5$ give 2 local maxima; valley at $x=4$ gives 1 local minimum.'};
 }
 
+// gen1: Count local MAXIMA only (answer is a single number)
+function gen1(){
+  var peakA=choose([3,4,4,5]),valB=choose([1,1,2]),peakC=choose([2,3,3]);
+  var inner=makeTwoPeakCurve(peakA,valB,peakC);
+  return {svg:qWrap(makeSVG(inner),'How many <strong>local maxima</strong> (navy dots) does this function have on the open interval (0,&nbsp;7)?<br><em style="font-size:11px;color:#666">Enter a whole number.</em>'),answer:['2'],hint:'Count the navy filled dots — each is a peak where the function switches from increasing to decreasing.',step:'There are 2 local maxima: one at $x=2$ and one at $x=5.5$.'};
+}
+
+// gen2: Count local MINIMA only (answer is a single number)
 function gen2(){
+  var peakA=choose([3,4,4,5]),valB=choose([1,1,2]),peakC=choose([2,3,3]);
+  var inner=makeTwoPeakCurve(peakA,valB,peakC);
+  return {svg:qWrap(makeSVG(inner),'How many <strong>local minima</strong> (gold dots) does this function have on the open interval (0,&nbsp;7)?<br><em style="font-size:11px;color:#666">Enter a whole number.</em>'),answer:['1'],hint:'Count the gold filled dots — each is a valley where the function switches from decreasing to increasing.',step:'There is 1 local minimum: the valley at $x=4$.'};
+}
+
+// gen3: Identify x-value of the local minimum
+function gen3(){
   var xmin=choose([3,4,4,5]),ymin=choose([1,1,2]),ypkL=ymin+choose([2,3]),ypkR=ymin+choose([1,2]);
   var xv=xmin+choose([1,1.5,2]);
   var p='M '+xp(0)+','+yp(ypkL)+' C '+xp(xmin*0.4)+','+yp(ypkL)+' '+xp(xmin*0.8)+','+yp(ymin)+' '+xp(xmin)+','+yp(ymin)+' C '+xp(xmin+0.5)+','+yp(ymin)+' '+xp(xv-0.5)+','+yp(ypkR)+' '+xp(xv)+','+yp(ypkR)+' C '+xp(xv+0.3)+','+yp(ypkR)+' '+xp(7)+','+yp(ymin+0.5);
   var inner='<path d="'+p+'" fill="none" stroke="#1e3a5c" stroke-width="2.5" stroke-linejoin="round"/>'+
     '<circle cx="'+Math.round(xp(xmin))+'" cy="'+Math.round(yp(ymin))+'" r="5" fill="#7a5c1e"/>'+
     '<text x="'+(Math.round(xp(xmin))+8)+'" y="'+(Math.round(yp(ymin))-6)+'" font-family="sans-serif" font-size="11" font-weight="bold" fill="#7a5c1e">?</text>';
-  return {svg:qWrap(makeSVG(inner),'At what x-value does the local minimum (gold dot) occur?'),answer:['x = '+xmin,'x='+xmin],hint:'Find the valley (lowest local point) and read its x-coordinate.',step:'The gold valley is the local minimum at $x='+xmin+'$.'};
+  return {svg:qWrap(makeSVG(inner),'At what x-value does the local minimum (gold dot) occur?<br><em style="font-size:11px;color:#666">Enter as: x = 4</em>'),answer:['x = '+xmin,'x='+xmin,'x= '+xmin],hint:'Find the valley (lowest local point) and read its x-coordinate.',step:'The gold valley is the local minimum at $x='+xmin+'$.'};
 }
 
-function gen3(){
+// gen4: What is the local maximum VALUE (y-value)?
+function gen4(){
   var xpk=choose([2,3,4]),ypk=choose([3,4,4,5]),yv=choose([1,2]),xv=xpk+choose([1,1.5,2]);
   var p='M '+xp(0)+','+yp(ypk-1)+' C '+xp(xpk*0.5)+','+yp(ypk-0.5)+' '+xp(xpk*0.8)+','+yp(ypk)+' '+xp(xpk)+','+yp(ypk)+' C '+xp(xpk+0.5)+','+yp(ypk)+' '+xp(xv-0.5)+','+yp(yv)+' '+xp(xv)+','+yp(yv)+' C '+xp(xv+0.3)+','+yp(yv)+' '+xp(7)+','+yp(yv+0.2);
   var inner='<path d="'+p+'" fill="none" stroke="#1e3a5c" stroke-width="2.5" stroke-linejoin="round"/>'+
     '<circle cx="'+Math.round(xp(xpk))+'" cy="'+Math.round(yp(ypk))+'" r="5" fill="#1e3a5c"/>'+
     '<line x1="'+Math.round(xp(xpk))+'" y1="'+Math.round(yp(ypk))+'" x2="'+Math.round(xp(0))+'" y2="'+Math.round(yp(ypk))+'" stroke="#aaa" stroke-width="0.8" stroke-dasharray="4,3"/>'+
     '<text x="'+(Math.round(xp(0))-4)+'" y="'+(Math.round(yp(ypk))+4)+'" text-anchor="end" font-family="sans-serif" font-size="11" font-weight="bold" fill="#1e3a5c">'+ypk+'</text>';
-  return {svg:qWrap(makeSVG(inner),'What is the local maximum <em>value</em> (the y-value at the navy peak)?'),answer:[String(ypk)],hint:'The dashed line shows the height of the peak. Read the y-value on the y-axis.',step:'The local maximum value is $f(x)='+ypk+'$ (the y-coordinate of the navy peak).'};
+  return {svg:qWrap(makeSVG(inner),'What is the local maximum <strong>value</strong> (the y-value at the navy peak)?<br><em style="font-size:11px;color:#666">Enter a number — the y-value, not the x-value.</em>'),answer:[String(ypk)],hint:'The dashed line shows the height of the peak. Read the y-value on the y-axis.',step:'The local maximum value is $f(x)='+ypk+'$ (the y-coordinate of the navy peak).'};
 }
 
-function gen4(){
+// gen5: On [0,7], global max is at the left endpoint
+function gen5(){
   var yEnd=choose([4,5,5]),ypk=yEnd-choose([1,2]),yv=choose([1,2]),xpk2=choose([2,3]);
   var p='M '+xp(0)+','+yp(yEnd)+' C '+xp(xpk2*0.5)+','+yp(yEnd-0.3)+' '+xp(xpk2*0.8)+','+yp(ypk)+' '+xp(xpk2)+','+yp(ypk)+' C '+xp(xpk2+0.5)+','+yp(ypk)+' '+xp(4)+','+yp(yv)+' '+xp(4.5)+','+yp(yv)+' C '+xp(5)+','+yp(yv)+' '+xp(6.5)+','+yp(yv+0.5)+' '+xp(7)+','+yp(yv+0.5);
   var inner='<path d="'+p+'" fill="none" stroke="#1e3a5c" stroke-width="2.5" stroke-linejoin="round"/>'+
     '<circle cx="'+Math.round(xp(0))+'" cy="'+Math.round(yp(yEnd))+'" r="5" fill="#b03000"/>'+
     '<circle cx="'+Math.round(xp(xpk2))+'" cy="'+Math.round(yp(ypk))+'" r="4" fill="#1e3a5c"/>'+
     '<text x="'+(Math.round(xp(0))+8)+'" y="'+(Math.round(yp(yEnd))-6)+'" font-family="sans-serif" font-size="9" fill="#b03000">endpoint</text>';
-  return {svg:qWrap(makeSVG(inner),'On [0, 7], at what x-value does the <strong>global maximum</strong> occur? (Don\'t forget the endpoints.)'),answer:['x = 0','x=0','left endpoint'],hint:'Is the red endpoint higher or lower than the navy interior peak?',step:'Left endpoint (red, height '+yEnd+') > interior peak (height '+ypk+'). Global max at $x=0$.'};
+  return {svg:qWrap(makeSVG(inner),'On [0,&nbsp;7], at what x-value does the <strong>global maximum</strong> occur?<br><em style="font-size:11px;color:#666">Enter as: x = 0 &nbsp;&mdash;&nbsp; check the red endpoint too, not just the interior peak.</em>'),answer:['x = 0','x=0','x= 0'],hint:'Is the red endpoint higher or lower than the navy interior peak?',step:'Left endpoint (red, height '+yEnd+') > interior peak (height '+ypk+'). Global max at $x=0$.'};
 }
 
-function gen5(){
+// gen6: On [0,7], global min is at the right endpoint
+function gen6(){
   var yEndR=choose([0,1,1]),yv=yEndR+choose([1,1.5]),ypk2=yEndR+choose([2,3]);
   var p='M '+xp(0)+','+yp(ypk2+1)+' C '+xp(1)+','+yp(ypk2+0.5)+' '+xp(1.5)+','+yp(ypk2)+' '+xp(2)+','+yp(ypk2)+' C '+xp(2.5)+','+yp(ypk2)+' '+xp(3.5)+','+yp(yv)+' '+xp(4)+','+yp(yv)+' C '+xp(4.5)+','+yp(yv)+' '+xp(5.5)+','+yp(ypk2-0.5)+' '+xp(6)+','+yp(ypk2-0.5)+' C '+xp(6.3)+','+yp(ypk2-0.5)+' '+xp(6.8)+','+yp(yEndR)+' '+xp(7)+','+yp(yEndR);
   var inner='<path d="'+p+'" fill="none" stroke="#1e3a5c" stroke-width="2.5" stroke-linejoin="round"/>'+
     '<circle cx="'+Math.round(xp(4))+'" cy="'+Math.round(yp(yv))+'" r="4" fill="#7a5c1e"/>'+
     '<circle cx="'+Math.round(xp(7))+'" cy="'+Math.round(yp(yEndR))+'" r="5" fill="#b03000"/>'+
     '<text x="'+(Math.round(xp(7))-8)+'" y="'+(Math.round(yp(yEndR))+18)+'" text-anchor="end" font-family="sans-serif" font-size="9" fill="#b03000">endpoint</text>';
-  return {svg:qWrap(makeSVG(inner),'On [0, 7], at what x-value does the <strong>global minimum</strong> occur? (Don\'t forget the endpoints.)'),answer:['x = 7','x=7','right endpoint'],hint:'Is the red endpoint lower or higher than the gold local minimum?',step:'Right endpoint (red, height '+yEndR+') < local min (height '+yv+'). Global min at $x=7$.'};
+  return {svg:qWrap(makeSVG(inner),'On [0,&nbsp;7], at what x-value does the <strong>global minimum</strong> occur?<br><em style="font-size:11px;color:#666">Enter as: x = 7 &nbsp;&mdash;&nbsp; check the red endpoint too, not just the gold valley.</em>'),answer:['x = 7','x=7','x= 7'],hint:'Is the red endpoint lower or higher than the gold local minimum?',step:'Right endpoint (red, height '+yEndR+') < local min (height '+yv+'). Global min at $x=7$.'};
 }
 
-function gen6(){
+// gen7: Single peak — local max is also the global max
+function gen7(){
   var xpk3=choose([3,3,4]),ypk3=choose([4,4,5]),yL=choose([2,3]),yR=choose([1,2]);
   var p='M '+xp(0)+','+yp(yL)+' C '+xp(xpk3*0.4)+','+yp(yL)+' '+xp(xpk3*0.8)+','+yp(ypk3)+' '+xp(xpk3)+','+yp(ypk3)+' C '+xp(xpk3+0.5)+','+yp(ypk3)+' '+xp(xpk3+1.5)+','+yp(yR)+' '+xp(7)+','+yp(yR);
   var inner='<path d="'+p+'" fill="none" stroke="#1e3a5c" stroke-width="2.5" stroke-linejoin="round"/>'+
     '<circle cx="'+Math.round(xp(xpk3))+'" cy="'+Math.round(yp(ypk3))+'" r="5" fill="#1e3a5c"/>'+
     '<circle cx="'+Math.round(xp(0))+'" cy="'+Math.round(yp(yL))+'" r="4" fill="white" stroke="#1e3a5c" stroke-width="1.5"/>'+
     '<circle cx="'+Math.round(xp(7))+'" cy="'+Math.round(yp(yR))+'" r="4" fill="white" stroke="#1e3a5c" stroke-width="1.5"/>';
-  return {svg:qWrap(makeSVG(inner),'On [0, 7], at what x-value does the <strong>global maximum</strong> occur?'),answer:['x = '+xpk3,'x='+xpk3],hint:'Compare the peak height to both endpoint heights. Which point is highest overall?',step:'Peak at $x='+xpk3+'$ (height '+ypk3+') exceeds both endpoints ('+yL+' and '+yR+'). Global max at $x='+xpk3+'$.'};
+  return {svg:qWrap(makeSVG(inner),'On [0,&nbsp;7], at what x-value does the <strong>global maximum</strong> occur?<br><em style="font-size:11px;color:#666">Enter as: x = 3</em>'),answer:['x = '+xpk3,'x='+xpk3,'x= '+xpk3],hint:'Compare the peak height to both endpoint heights. Which point is highest overall?',step:'Peak at $x='+xpk3+'$ (height '+ypk3+') exceeds both endpoints ('+yL+' and '+yR+'). Global max at $x='+xpk3+'$.'};
 }
 
-const GENERATORS = [gen1, gen2, gen3, gen4, gen5, gen6];
+const GENERATORS = [gen1, gen2, gen3, gen4, gen5, gen6, gen7];
 
 
 // ── State ─────────────────────────────────────────────────────────────────────
