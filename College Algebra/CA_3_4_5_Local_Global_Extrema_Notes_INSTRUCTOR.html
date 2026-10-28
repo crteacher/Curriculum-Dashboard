@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Local and Global Extrema &mdash; Notes</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75;font-size:15px}
+.container{max-width:900px;margin:0 auto;padding:2rem 1.5rem 4rem}
+
+/* ── Header ── */
+.page-title{font-size:28px;font-weight:700;margin-bottom:4px}
+.page-sub{font-family:sans-serif;font-size:13px;color:#666;margin-bottom:1.6rem}
+
+/* ── Opening question ── */
+.opening-q{background:#eef3f9;border-left:4px solid #1e3a5c;
+  border-radius:0 8px 8px 0;padding:1rem 1.2rem;font-size:15px;
+  margin-bottom:1.5rem;font-style:italic;line-height:1.75}
+.hook-question{margin:0}
+.hook-graph{text-align:center;margin:.7rem 0 .3rem;font-style:normal}
+.hook-graph svg{max-width:100%;height:auto}
+.hook-reveal{margin-top:.5rem;font-style:normal}
+.hook-reveal-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;
+  color:#1e3a5c;text-transform:uppercase;letter-spacing:.07em;list-style:none;user-select:none;display:block}
+.hook-reveal-toggle::-webkit-details-marker{display:none}
+.hook-reveal-body{margin-top:.5rem;font-size:14px;line-height:1.75;padding-top:.5rem;
+  border-top:1px solid #c8d8ec}
+
+/* ── Section heading ── */
+.section-head{font-family:sans-serif;font-size:11px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.08em;color:#1e3a5c;
+  margin-top:1.4rem;margin-bottom:.6rem;
+  border-bottom:1px solid #c8d8ec;padding-bottom:4px}
+
+/* ── Protect math from text-transform on headings/labels ── */
+.katex,.katex *{text-transform:none;letter-spacing:normal}
+
+/* ── Accent box ── */
+.accent-box{background:#d9e8f5;border-left:4px solid #1e3a5c;
+  border-radius:0 8px 8px 0;padding:.9rem 1.1rem;font-size:14px;
+  margin-bottom:.85rem;line-height:1.95}
+.accent-box ul{margin-left:1.3rem;margin-top:.3rem}
+.accent-box li{margin-bottom:.15rem}
+.accent-box p{margin-bottom:.4rem}
+
+/* ── Body text ── */
+.body-text{font-size:14px;line-height:1.75;margin-bottom:.85rem}
+
+/* ── Spacer ── */
+.spacer{height:1rem}
+
+/* ── Two-column layout ── */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:.5rem}
+.col{min-width:0}
+
+/* ── Worked examples 2-col grid ── */
+.examples-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem}
+.ex-block{border:1.5px solid #ddd;border-radius:9px;padding:1rem 1.1rem;background:#fff}
+.ex-label{font-family:sans-serif;font-size:11px;font-weight:700;color:#1e3a5c;
+  text-transform:uppercase;letter-spacing:.05em;margin-bottom:.45rem}
+.ex-body{font-size:14px;line-height:1.75;margin-bottom:.5rem}
+.ex-answer.instructor{background:#fef9e7;border-left:3px solid #7a5c1e;
+  border-radius:0 6px 6px 0;padding:.6rem .9rem;font-size:13.5px;
+  color:#5a3e00;line-height:1.85}
+.ex-answer.student{height:4.5rem;border-bottom:1.5px solid #bbb;margin-top:.4rem}
+
+/* ── Practice section ── */
+.practice{margin-bottom:1.5rem}
+.pr-row{display:grid;grid-template-columns:1.6rem 1fr 210px;gap:.75rem;
+  align-items:start;padding:.6rem 0;border-bottom:1px solid #ece8e0}
+.pr-num{font-family:sans-serif;font-weight:700;font-size:14px;color:#1e3a5c;padding-top:2px}
+.pr-prob{font-size:14px;line-height:1.75}
+.pr-ans.instructor{font-size:13px;color:#5a3e00;background:#fef9e7;
+  border-radius:5px;padding:4px 9px;line-height:1.75}
+.pr-ans.student{border-bottom:1.5px solid #bbb;min-height:2.2rem}
+
+/* ── Student interactive ── */
+.st-work{width:100%;min-height:3rem;border:1px solid #ccc;border-radius:5px;
+  padding:.35rem .5rem;font-family:Georgia,serif;font-size:13px;resize:vertical;
+  background:#fafafa;display:block;margin-bottom:.3rem}
+.st-work-sm{width:100%;min-height:1.5rem;border:1px solid #ccc;border-radius:4px;
+  padding:.2rem .4rem;font-family:Georgia,serif;font-size:12px;resize:vertical;
+  background:#fafafa;display:block;margin-bottom:.2rem}
+.st-btn{font-family:sans-serif;font-size:10px;font-weight:700;color:#1e3a5c;
+  background:none;border:1.5px solid #1e3a5c;border-radius:4px;
+  padding:2px 9px;cursor:pointer;margin-bottom:.2rem;display:inline-block}
+.st-btn-sm{font-family:sans-serif;font-size:9px;font-weight:700;color:#1e3a5c;
+  background:none;border:1px solid #1e3a5c;border-radius:3px;
+  padding:1px 6px;cursor:pointer;margin-bottom:.15rem;display:inline-block}
+.st-btn:hover,.st-btn-sm:hover{background:#eef3f9}
+.st-ans-hidden{display:none;background:#fef9e7;border-left:3px solid #7a5c1e;
+  border-radius:0 5px 5px 0;padding:.4rem .7rem;font-size:13px;
+  color:#5a3e00;line-height:1.85}
+.st-ans-hidden.visible{display:block}
+
+/* ── SVG figures ── */
+.svg-figure{text-align:center;margin:.4rem 0 .6rem}
+.svg-figure svg{max-width:100%;height:auto}
+.svg-caption{font-family:sans-serif;font-size:11px;color:#555;
+  margin-top:.2rem;font-style:italic}
+
+/* ── KaTeX overflow ── */
+.katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}
+
+/* ── Print styles ── */
+@media print{
+  body{background:white;font-size:10pt;line-height:1.5}
+  .container{padding:0;max-width:none}
+  .page-sub{margin-bottom:.8rem}
+  .opening-q{padding:.5rem .8rem;margin-bottom:.8rem;font-size:10pt;line-height:1.5;break-inside:avoid}
+  .section-head{margin-top:.7rem;margin-bottom:.35rem}
+  .spacer{height:.3rem}
+  .accent-box{padding:.5rem .75rem;margin-bottom:.5rem;font-size:10pt;line-height:1.55;
+    background:#e8f0f8 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .accent-box p{margin-bottom:.2rem}
+  .body-text{font-size:10pt;line-height:1.5;margin-bottom:.5rem}
+  .two-col{gap:1rem;margin-bottom:.3rem;break-inside:avoid}
+  .examples-grid{gap:.6rem;margin-bottom:.8rem;break-inside:avoid}
+  .ex-block{padding:.55rem .75rem;border:1px solid #ccc;break-inside:avoid}
+  .ex-label{margin-bottom:.25rem}
+  .ex-body{font-size:10pt;line-height:1.5;margin-bottom:.3rem}
+  .ex-answer.instructor{padding:.35rem .7rem;font-size:9.5pt;line-height:1.55;
+    background:#fef9e7 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .ex-answer.student{height:2.8rem}
+  .practice{margin-bottom:.8rem}
+  .pr-row{padding:.3rem 0;break-inside:avoid}
+  .pr-prob{font-size:10pt;line-height:1.5}
+  .pr-ans.instructor{font-size:9.5pt;padding:2px 7px;line-height:1.55;
+    background:#fef9e7 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .pr-ans.student{min-height:1.6rem}
+  .st-work{background:none;border:none;border-bottom:1.5px solid #bbb;
+    border-radius:0;min-height:2.6rem;resize:none}
+  .st-work-sm{background:none;border:none;border-bottom:1.5px solid #bbb;
+    border-radius:0;min-height:1.3rem;resize:none}
+  .st-btn,.st-btn-sm{display:none}
+  .st-ans-hidden{display:none !important}
+  .opening-q{
+    background:#eef3f9 !important;
+    -webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .hook-graph{margin:.4rem 0 .2rem}
+  details.hook-reveal:not([open]){display:none}
+  .svg-figure{margin:.25rem 0 .4rem}
+  .svg-figure svg{max-width:100%;height:auto}
+  .svg-caption{font-size:9pt}
+}
+@page{margin:.55in .65in;size:letter}
+
+.proof-panel{margin:.4rem 0 1.1rem;border-left:3px solid #7a9a6a;border-radius:0 6px 6px 0;background:#f5f7f3}
+.proof-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#5a7a4a;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.proof-toggle::-webkit-details-marker{display:none}
+details[open]>.proof-toggle{color:#1e3a5c}
+.proof-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #c8d8b8}
+.proof-body p{margin-bottom:.45rem}
+.proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
+@media print{.proof-panel{break-inside:avoid}}
+.mistake-panel{margin:.4rem 0 1.1rem;border-left:3px solid #b8860b;border-radius:0 6px 6px 0;background:#fdf8e8}
+.mistake-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#9a6a00;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.mistake-toggle::-webkit-details-marker{display:none}
+details[open]>.mistake-toggle{color:#1e3a5c}
+.mistake-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #e8d8a8}
+.mistake-body p{margin-bottom:.45rem}
+.panel-row{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.1rem}
+.panel-row>.proof-panel,.panel-row>.mistake-panel{margin:0;min-width:0}
+.panel-row:has(.proof-panel):has(.mistake-panel){grid-template-columns:1fr}
+@media print{
+  .panel-row{break-inside:avoid}
+  .mistake-panel{break-inside:avoid}
+  details.mistake-panel:not([open]){display:none}
+}
+</style>
+</head>
+<body>
+<div class="container">
+<h1 class="page-title">Local and Global Extrema</h1>
+<p class="page-sub">College Algebra &nbsp;&middot;&nbsp; &sect;3.4.5 &nbsp;&middot;&nbsp; Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026 &nbsp;&middot;&nbsp; <strong>INSTRUCTOR</strong></p>
+<div class="opening-q">On $[0,7]$ a graph has peaks at $x=2$ (height 4.2) and $x=5.5$ (height 3.0), and it starts at height 4.8. Where is the global maximum &mdash; at one of the peaks, or somewhere else? What should you always check besides the interior peaks?</div><div class="two-col"><div class="col"><div class="section-head">Local (Relative) Extrema</div><div class="accent-box"><p>A <strong>local maximum</strong> is a point where the function value is higher than all nearby points &mdash; the function switches from <em>increasing</em> to <em>decreasing</em>.</p><p>A <strong>local minimum</strong> is a point where the function value is lower than all nearby points &mdash; the function switches from <em>decreasing</em> to <em>increasing</em>.</p><p>Think of them as <strong>peaks</strong> (local max) and <strong>valleys</strong> (local min) of the graph.</p><ul><li>We say <em>&ldquo;local max/min at $x=c$&rdquo;</em> (the x-value) or <em>&ldquo;local max/min value of $f(c)$&rdquo;</em> (the y-value)</li><li>A function can have <strong>multiple</strong> local maxima and minima</li></ul></div><details class="mistake-panel"><summary class="mistake-toggle">&#9658; Common Mistake</summary><div class="mistake-body"><p>Students often say "the local max <em>is</em> 3" when they mean the local max <em>occurs at</em> $x=3$, or that the local max <em>value is</em> some $y$-number. Be precise: there are two separate pieces of information &mdash; the $x$-value where the extremum occurs, and the $f(x)$ value there.</p><p>Also: a local max does <strong>not</strong> have to be the highest point on the whole graph. It just has to be higher than the points immediately around it.</p></div></details></div><div class="col"><div class="section-head">Global (Absolute) Extrema</div><div class="accent-box"><p>The <strong>global maximum</strong> is the single highest output value over the entire domain or interval &mdash; the tallest point on the whole graph.</p><p>The <strong>global minimum</strong> is the single lowest output value.</p><p><strong>On a closed interval $[a, b]$:</strong> global extrema occur at one of:</p><ul><li>A local maximum or minimum in the interior, <em>or</em></li><li>An <strong>endpoint</strong> of the interval</li></ul><p style="margin-top:.4rem">Always check the endpoints &mdash; the global max/min may not be at a peak or valley.</p></div></div></div><div class="section-head">Reading the Graph</div><div style="text-align:center;margin:.5rem 0 .3rem"><svg viewBox="0 0 440 235" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:440px;display:inline-block"><line x1="45" y1="202" x2="45" y2="10" stroke="#e8e8e8" stroke-width="0.8"/><line x1="97" y1="202" x2="97" y2="10" stroke="#e8e8e8" stroke-width="0.8"/><line x1="149" y1="202" x2="149" y2="10" stroke="#e8e8e8" stroke-width="0.8"/><line x1="201" y1="202" x2="201" y2="10" stroke="#e8e8e8" stroke-width="0.8"/><line x1="253" y1="202" x2="253" y2="10" stroke="#e8e8e8" stroke-width="0.8"/><line x1="305" y1="202" x2="305" y2="10" stroke="#e8e8e8" stroke-width="0.8"/><line x1="357" y1="202" x2="357" y2="10" stroke="#e8e8e8" stroke-width="0.8"/><line x1="409" y1="202" x2="409" y2="10" stroke="#e8e8e8" stroke-width="0.8"/><line x1="39" y1="195" x2="419" y2="195" stroke="#e8e8e8" stroke-width="0.8"/><line x1="39" y1="158" x2="419" y2="158" stroke="#e8e8e8" stroke-width="0.8"/><line x1="39" y1="121" x2="419" y2="121" stroke="#e8e8e8" stroke-width="0.8"/><line x1="39" y1="84" x2="419" y2="84" stroke="#e8e8e8" stroke-width="0.8"/><line x1="39" y1="47" x2="419" y2="47" stroke="#e8e8e8" stroke-width="0.8"/><line x1="39" y1="10" x2="419" y2="10" stroke="#e8e8e8" stroke-width="0.8"/><line x1="39" y1="195" x2="424" y2="195" stroke="#444" stroke-width="1.5"/><line x1="45" y1="2" x2="45" y2="206" stroke="#444" stroke-width="1.5"/><polygon points="427,191 427,199 433,195" fill="#444"/><text x="435" y="199" font-family="sans-serif" font-size="12" font-style="italic" fill="#444">x</text><text x="49" y="3" font-family="sans-serif" font-size="12" font-style="italic" fill="#444">y</text><line x1="97" y1="192" x2="97" y2="198" stroke="#555" stroke-width="1"/><text x="97" y="210" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#555">1</text><line x1="149" y1="192" x2="149" y2="198" stroke="#555" stroke-width="1"/><text x="149" y="210" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#555">2</text><line x1="201" y1="192" x2="201" y2="198" stroke="#555" stroke-width="1"/><text x="201" y="210" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#555">3</text><line x1="253" y1="192" x2="253" y2="198" stroke="#555" stroke-width="1"/><text x="253" y="210" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#555">4</text><line x1="305" y1="192" x2="305" y2="198" stroke="#555" stroke-width="1"/><text x="305" y="210" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#555">5</text><line x1="357" y1="192" x2="357" y2="198" stroke="#555" stroke-width="1"/><text x="357" y="210" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#555">6</text><line x1="409" y1="192" x2="409" y2="198" stroke="#555" stroke-width="1"/><text x="409" y="210" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#555">7</text><line x1="42" y1="158" x2="48" y2="158" stroke="#555" stroke-width="1"/><text x="39" y="162" text-anchor="end" font-family="sans-serif" font-size="10" fill="#555">1</text><line x1="42" y1="121" x2="48" y2="121" stroke="#555" stroke-width="1"/><text x="39" y="125" text-anchor="end" font-family="sans-serif" font-size="10" fill="#555">2</text><line x1="42" y1="84" x2="48" y2="84" stroke="#555" stroke-width="1"/><text x="39" y="88" text-anchor="end" font-family="sans-serif" font-size="10" fill="#555">3</text><line x1="42" y1="47" x2="48" y2="47" stroke="#555" stroke-width="1"/><text x="39" y="51" text-anchor="end" font-family="sans-serif" font-size="10" fill="#555">4</text><line x1="42" y1="10" x2="48" y2="10" stroke="#555" stroke-width="1"/><text x="39" y="14" text-anchor="end" font-family="sans-serif" font-size="10" fill="#555">5</text><path d="M 45,17 C 71,25 123,40 149,40 C 175,40 227,158 253,158 C 279,158 305,84 331,84 C 357,84 393,184 409,184" fill="none" stroke="#1e3a5c" stroke-width="2.5" stroke-linejoin="round"/><circle cx="45" cy="17" r="5" fill="white" stroke="#1e3a5c" stroke-width="2"/><circle cx="409" cy="184" r="5" fill="white" stroke="#1e3a5c" stroke-width="2"/><circle cx="149" cy="40" r="5" fill="#1e3a5c"/><text x="149" y="30" text-anchor="middle" font-family="sans-serif" font-size="9" font-weight="bold" fill="#1e3a5c">local max</text><circle cx="253" cy="158" r="5" fill="#7a5c1e"/><text x="253" y="176" text-anchor="middle" font-family="sans-serif" font-size="9" font-weight="bold" fill="#7a5c1e">local min</text><circle cx="331" cy="84" r="5" fill="#1e3a5c"/><text x="331" y="74" text-anchor="middle" font-family="sans-serif" font-size="9" font-weight="bold" fill="#1e3a5c">local max</text><circle cx="45" cy="17" r="3" fill="#b03000"/><text x="55" y="9" font-family="sans-serif" font-size="9" font-weight="bold" fill="#b03000">global max (endpoint!)</text><circle cx="409" cy="184" r="3" fill="#b03000"/><text x="399" y="202" text-anchor="end" font-family="sans-serif" font-size="9" font-weight="bold" fill="#b03000">global min (endpoint!)</text><text x="227" y="222" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#666" font-style="italic">domain: [0, 7]</text></svg></div><p style="font-size:13px;margin:.3rem 0 1rem;line-height:1.5">On $[0,7]$: two <strong>local maxima</strong> (at $x=2$ and $x=5.5$) and one <strong>local minimum</strong> (at $x=4$). The <span style="color:#b03000"><strong>global max</strong></span> is at the <em>left endpoint</em> $x=0$ &mdash; even though $x=2$ looks like a peak, the starting value is higher. The <span style="color:#b03000"><strong>global min</strong></span> is at the <em>right endpoint</em> $x=7$ &mdash; lower than the local min at $x=4$.</p><div class="section-head">Worked Examples</div><div class="examples-grid"><div class="ex-block"><div class="ex-label">Example 1 &mdash; Reading local extrema</div><div class="ex-body">A function increases on $(-\infty, 3)$, decreases on $(3, 7)$, and increases on $(7, \infty)$. Identify any local extrema.</div><div class="ex-answer instructor">Local max at $x=3$ (switches &uarr;&darr;). Local min at $x=7$ (switches &darr;&uarr;). No global max/min on all of $\mathbb{R}$.</div></div><div class="ex-block"><div class="ex-label">Example 2 &mdash; Global extrema can be at endpoints</div><div class="ex-body">On $[0, 6]$, a function has a local max value of $5$ at $x=2$, and $f(0)=7$, $f(6)=1$. What is the global maximum value?</div><div class="ex-answer instructor">Check all candidates: local max $=5$, left endpoint $f(0)=7$, right endpoint $f(6)=1$. Global max $=\mathbf{7}$ at $x=0$. The endpoint beats the interior peak.</div></div><div class="ex-block"><div class="ex-label">Example 3 &mdash; No local extrema</div><div class="ex-body">$f(x)=3x-2$ on $[-1, 4]$. Does this function have any local maxima or minima? What about global?</div><div class="ex-answer instructor">A line never changes direction &mdash; <strong>no local extrema</strong>. Global max at right endpoint: $f(4)=10$. Global min at left endpoint: $f(-1)=-5$.</div></div><div class="ex-block"><div class="ex-label">Example 4 &mdash; Value vs. location</div><div class="ex-body">A function has a local min at $x=4$ with $f(4)=2$. State: (a) where the local min is, (b) what the local min value is.</div><div class="ex-answer instructor">(a) The local min <em>occurs at</em> $x=4$ &mdash; this is an $x$-value (location).<br>(b) The local min <em>value</em> is $f(4)=2$ &mdash; this is a $y$-value (height).</div></div></div><div class="section-head">Practice Problems</div><div class="practice"><div class="pr-row"><div class="pr-num">1.</div><div class="pr-prob">A function decreases on $(-\infty,5)$ and increases on $(5,\infty)$. Is $x=5$ a local max or local min?</div><div class="pr-ans instructor">Local min (function switches from decreasing to increasing)</div></div><div class="pr-row"><div class="pr-num">2.</div><div class="pr-prob">On $[-2, 8]$, $f$ has a local max value of $10$ at $x=3$, and $f(-2)=12$, $f(8)=4$. Find the global max and global min values.</div><div class="pr-ans instructor">Global max $=12$ at endpoint $x=-2$; global min $=4$ at endpoint $x=8$</div></div><div class="pr-row"><div class="pr-num">3.</div><div class="pr-prob">Describe the difference between &ldquo;local max at $x=2$&rdquo; and &ldquo;local max value of $6$.&rdquo;</div><div class="pr-ans instructor">$x=2$ is the <em>location</em> (input); $6=f(2)$ is the <em>value</em> (output/height)</div></div><div class="pr-row"><div class="pr-num">4.</div><div class="pr-prob">Can a global max also be a local max? Give an example.</div><div class="pr-ans instructor">Yes &mdash; e.g., $f(x)=-(x-3)^2$ has one peak at $x=3$, which is both a local and global max on $(-\infty,\infty)$.</div></div><div class="pr-row"><div class="pr-num">5.</div><div class="pr-prob">$f(x) = -(x-2)^2 + 9$ on $[0,5]$. The vertex is at $(2,9)$. Evaluate at the endpoints and state the global max and global min.</div><div class="pr-ans instructor">$f(0)=5$, $f(2)=9$ (global max), $f(5)=0$ (global min)</div></div><div class="pr-row"><div class="pr-num">6.</div><div class="pr-prob">How many local maxima can a function have on its entire domain?</div><div class="pr-ans instructor">Any number (zero, one, two, ...) &mdash; a function can have multiple local maxima</div></div></div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/contrib/auto-render.min.js"></script>
+<script>
+function toggleAns(btn) {
+  if (!btn.dataset.orig) btn.dataset.orig = btn.textContent;
+  var ans = btn.nextElementSibling;
+  var showing = ans.classList.toggle('visible');
+  btn.textContent = showing ? 'Hide' : btn.dataset.orig;
+}
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left: '$$', right: '$$', display: true},
+      {left: '$',  right: '$',  display: false}
+    ],
+    throwOnError: false
+  });
+</script>
+</body>
+</html>
