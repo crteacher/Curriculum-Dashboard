@@ -141,8 +141,10 @@ class SketchWidget {
     const pts=[...this.markers].sort((a,b)=>a.mx-b.mx).map(m=>({
       x:m.mx, y:m.my, s:(m.type==='vertex')?0:null
     }));
+    // Catmull-Rom slopes: use (p[i+1].y - p[i-1].y) / (p[i+1].x - p[i-1].x)
+    // for interior keypoints; endpoints use one-sided difference
     for(let i=0;i<pts.length;i++){
-      if(pts[i].s!==null) continue;
+      if(pts[i].s!==null) continue; // vertex already locked to 0
       const L=i>0?pts[i-1]:null, R=i<pts.length-1?pts[i+1]:null;
       if(L&&R) pts[i].s=(R.y-L.y)/(R.x-L.x);
       else if(L) pts[i].s=(pts[i].y-L.y)/(pts[i].x-L.x);
@@ -153,9 +155,11 @@ class SketchWidget {
     const f=pts[0]; path.push([xMin, f.y+f.s*(xMin-f.x)]);
     for(let i=0;i<pts.length-1;i++){
       const p0=pts[i],p1=pts[i+1],dt=p1.x-p0.x; if(Math.abs(dt)<1e-9) continue;
+      // Scale slopes by segment length (Catmull-Rom convention) to avoid overshooting
+      const s0=p0.s*dt, s1=p1.s*dt;
       for(let j=0;j<=60;j++){
         const t=j/60,h00=2*t**3-3*t**2+1,h10=t**3-2*t**2+t,h01=-2*t**3+3*t**2,h11=t**3-t**2;
-        path.push([p0.x+t*dt, h00*p0.y+h10*dt*p0.s+h01*p1.y+h11*dt*p1.s]);
+        path.push([p0.x+t*dt, h00*p0.y+h10*s0+h01*p1.y+h11*s1]);
       }
     }
     const lp=pts[pts.length-1]; path.push([xMax, lp.y+lp.s*(xMax-lp.x)]);
