@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sketching the Derivative &mdash; Notes</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75;font-size:15px}
+.container{max-width:900px;margin:0 auto;padding:2rem 1.5rem 4rem}
+
+/* ── Header ── */
+.page-title{font-size:28px;font-weight:700;margin-bottom:4px}
+.page-sub{font-family:sans-serif;font-size:13px;color:#666;margin-bottom:1.6rem}
+
+/* ── Opening question ── */
+.opening-q{background:#eef3f9;border-left:4px solid #1e3a5c;
+  border-radius:0 8px 8px 0;padding:1rem 1.2rem;font-size:15px;
+  margin-bottom:1.5rem;font-style:italic;line-height:1.75}
+.hook-question{margin:0}
+.hook-graph{text-align:center;margin:.7rem 0 .3rem;font-style:normal}
+.hook-graph svg{max-width:100%;height:auto}
+.hook-reveal{margin-top:.5rem;font-style:normal}
+.hook-reveal-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;
+  color:#1e3a5c;text-transform:uppercase;letter-spacing:.07em;list-style:none;user-select:none;display:block}
+.hook-reveal-toggle::-webkit-details-marker{display:none}
+.hook-reveal-body{margin-top:.5rem;font-size:14px;line-height:1.75;padding-top:.5rem;
+  border-top:1px solid #c8d8ec}
+
+/* ── Section heading ── */
+.section-head{font-family:sans-serif;font-size:11px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.08em;color:#1e3a5c;
+  margin-top:1.4rem;margin-bottom:.6rem;
+  border-bottom:1px solid #c8d8ec;padding-bottom:4px}
+
+/* ── Protect math from text-transform on headings/labels ── */
+.katex,.katex *{text-transform:none;letter-spacing:normal}
+
+/* ── Accent box ── */
+.accent-box{background:#d9e8f5;border-left:4px solid #1e3a5c;
+  border-radius:0 8px 8px 0;padding:.9rem 1.1rem;font-size:14px;
+  margin-bottom:.85rem;line-height:1.95}
+.accent-box ul{margin-left:1.3rem;margin-top:.3rem}
+.accent-box li{margin-bottom:.15rem}
+.accent-box p{margin-bottom:.4rem}
+
+/* ── Body text ── */
+.body-text{font-size:14px;line-height:1.75;margin-bottom:.85rem}
+
+/* ── Spacer ── */
+.spacer{height:1rem}
+
+/* ── Two-column layout ── */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:.5rem}
+.col{min-width:0}
+
+/* ── Worked examples 2-col grid ── */
+.examples-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem}
+.ex-block{border:1.5px solid #ddd;border-radius:9px;padding:1rem 1.1rem;background:#fff}
+.ex-label{font-family:sans-serif;font-size:11px;font-weight:700;color:#1e3a5c;
+  text-transform:uppercase;letter-spacing:.05em;margin-bottom:.45rem}
+.ex-body{font-size:14px;line-height:1.75;margin-bottom:.5rem}
+.ex-answer.instructor{background:#fef9e7;border-left:3px solid #7a5c1e;
+  border-radius:0 6px 6px 0;padding:.6rem .9rem;font-size:13.5px;
+  color:#5a3e00;line-height:1.85}
+.ex-answer.student{height:4.5rem;border-bottom:1.5px solid #bbb;margin-top:.4rem}
+
+/* ── Practice section ── */
+.practice{margin-bottom:1.5rem}
+.pr-row{display:grid;grid-template-columns:1.6rem 1fr 210px;gap:.75rem;
+  align-items:start;padding:.6rem 0;border-bottom:1px solid #ece8e0}
+.pr-num{font-family:sans-serif;font-weight:700;font-size:14px;color:#1e3a5c;padding-top:2px}
+.pr-prob{font-size:14px;line-height:1.75}
+.pr-ans.instructor{font-size:13px;color:#5a3e00;background:#fef9e7;
+  border-radius:5px;padding:4px 9px;line-height:1.75}
+.pr-ans.student{border-bottom:1.5px solid #bbb;min-height:2.2rem}
+
+/* ── Student interactive ── */
+.st-work{width:100%;min-height:3rem;border:1px solid #ccc;border-radius:5px;
+  padding:.35rem .5rem;font-family:Georgia,serif;font-size:13px;resize:vertical;
+  background:#fafafa;display:block;margin-bottom:.3rem}
+.st-work-sm{width:100%;min-height:1.5rem;border:1px solid #ccc;border-radius:4px;
+  padding:.2rem .4rem;font-family:Georgia,serif;font-size:12px;resize:vertical;
+  background:#fafafa;display:block;margin-bottom:.2rem}
+.st-btn{font-family:sans-serif;font-size:10px;font-weight:700;color:#1e3a5c;
+  background:none;border:1.5px solid #1e3a5c;border-radius:4px;
+  padding:2px 9px;cursor:pointer;margin-bottom:.2rem;display:inline-block}
+.st-btn-sm{font-family:sans-serif;font-size:9px;font-weight:700;color:#1e3a5c;
+  background:none;border:1px solid #1e3a5c;border-radius:3px;
+  padding:1px 6px;cursor:pointer;margin-bottom:.15rem;display:inline-block}
+.st-btn:hover,.st-btn-sm:hover{background:#eef3f9}
+.st-ans-hidden{display:none;background:#fef9e7;border-left:3px solid #7a5c1e;
+  border-radius:0 5px 5px 0;padding:.4rem .7rem;font-size:13px;
+  color:#5a3e00;line-height:1.85}
+.st-ans-hidden.visible{display:block}
+
+/* ── SVG figures ── */
+.svg-figure{text-align:center;margin:.4rem 0 .6rem}
+.svg-figure svg{max-width:100%;height:auto}
+.svg-caption{font-family:sans-serif;font-size:11px;color:#555;
+  margin-top:.2rem;font-style:italic}
+
+/* ── KaTeX overflow ── */
+.katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}
+
+/* ── Print styles ── */
+@media print{
+  body{background:white;font-size:10pt;line-height:1.5}
+  .container{padding:0;max-width:none}
+  .page-sub{margin-bottom:.8rem}
+  .opening-q{padding:.5rem .8rem;margin-bottom:.8rem;font-size:10pt;line-height:1.5;break-inside:avoid}
+  .section-head{margin-top:.7rem;margin-bottom:.35rem}
+  .spacer{height:.3rem}
+  .accent-box{padding:.5rem .75rem;margin-bottom:.5rem;font-size:10pt;line-height:1.55;
+    background:#e8f0f8 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .accent-box p{margin-bottom:.2rem}
+  .body-text{font-size:10pt;line-height:1.5;margin-bottom:.5rem}
+  .two-col{gap:1rem;margin-bottom:.3rem;break-inside:avoid}
+  .examples-grid{gap:.6rem;margin-bottom:.8rem;break-inside:avoid}
+  .ex-block{padding:.55rem .75rem;border:1px solid #ccc;break-inside:avoid}
+  .ex-label{margin-bottom:.25rem}
+  .ex-body{font-size:10pt;line-height:1.5;margin-bottom:.3rem}
+  .ex-answer.instructor{padding:.35rem .7rem;font-size:9.5pt;line-height:1.55;
+    background:#fef9e7 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .ex-answer.student{height:2.8rem}
+  .practice{margin-bottom:.8rem}
+  .pr-row{padding:.3rem 0;break-inside:avoid}
+  .pr-prob{font-size:10pt;line-height:1.5}
+  .pr-ans.instructor{font-size:9.5pt;padding:2px 7px;line-height:1.55;
+    background:#fef9e7 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .pr-ans.student{min-height:1.6rem}
+  .st-work{background:none;border:none;border-bottom:1.5px solid #bbb;
+    border-radius:0;min-height:2.6rem;resize:none}
+  .st-work-sm{background:none;border:none;border-bottom:1.5px solid #bbb;
+    border-radius:0;min-height:1.3rem;resize:none}
+  .st-btn,.st-btn-sm{display:none}
+  .st-ans-hidden{display:none !important}
+  .opening-q{
+    background:#eef3f9 !important;
+    -webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .hook-graph{margin:.4rem 0 .2rem}
+  details.hook-reveal:not([open]){display:none}
+  .svg-figure{margin:.25rem 0 .4rem}
+  .svg-figure svg{max-width:100%;height:auto}
+  .svg-caption{font-size:9pt}
+}
+@page{margin:.55in .65in;size:letter}
+
+.proof-panel{margin:.4rem 0 1.1rem;border-left:3px solid #7a9a6a;border-radius:0 6px 6px 0;background:#f5f7f3}
+.proof-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#5a7a4a;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.proof-toggle::-webkit-details-marker{display:none}
+details[open]>.proof-toggle{color:#1e3a5c}
+.proof-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #c8d8b8}
+.proof-body p{margin-bottom:.45rem}
+.proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
+@media print{.proof-panel{break-inside:avoid}}
+.mistake-panel{margin:.4rem 0 1.1rem;border-left:3px solid #b8860b;border-radius:0 6px 6px 0;background:#fdf8e8}
+.mistake-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#9a6a00;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.mistake-toggle::-webkit-details-marker{display:none}
+details[open]>.mistake-toggle{color:#1e3a5c}
+.mistake-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #e8d8a8}
+.mistake-body p{margin-bottom:.45rem}
+.panel-row{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.1rem}
+.panel-row>.proof-panel,.panel-row>.mistake-panel{margin:0;min-width:0}
+.panel-row:has(.proof-panel):has(.mistake-panel){grid-template-columns:1fr}
+@media print{
+  .panel-row{break-inside:avoid}
+  .mistake-panel{break-inside:avoid}
+  details.mistake-panel:not([open]){display:none}
+}
+</style>
+</head>
+<body>
+<div class="container">
+<h1 class="page-title">Sketching the Derivative</h1>
+<p class="page-sub">Calculus I &nbsp;&middot;&nbsp; &sect;2.2.7 &nbsp;&middot;&nbsp; Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026 &nbsp;&middot;&nbsp; <strong>STUDENT</strong></p>
+<div class="opening-q"><p class="hook-question">The graph of $f$ is shown below. <em>Without calculating anything</em>, where do you think $f'(x) = 0$?  Where is $f'$ positive?  Negative?</p><div class="hook-graph"><svg width="320" height="180" viewBox="0 0 320 180" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:4px auto"><defs><clipPath id="hclip"><rect x="28" y="28" width="264" height="124"/></clipPath></defs><rect x="28" y="28" width="264" height="124" fill="#fafaf8" rx="2"/><line x1="65.7" y1="28" x2="65.7" y2="152" stroke="#ddd" stroke-width="1"/>
+<line x1="112.9" y1="28" x2="112.9" y2="152" stroke="#ddd" stroke-width="1"/>
+<line x1="160.0" y1="28" x2="160.0" y2="152" stroke="#ddd" stroke-width="1"/>
+<line x1="207.1" y1="28" x2="207.1" y2="152" stroke="#ddd" stroke-width="1"/>
+<line x1="254.3" y1="28" x2="254.3" y2="152" stroke="#ddd" stroke-width="1"/>
+<line x1="28" y1="124.4" x2="292" y2="124.4" stroke="#ddd" stroke-width="1"/>
+<line x1="28" y1="90.0" x2="292" y2="90.0" stroke="#ddd" stroke-width="1"/>
+<line x1="28" y1="55.6" x2="292" y2="55.6" stroke="#ddd" stroke-width="1"/>
+<line x1="28" y1="90.0" x2="292" y2="90.0" stroke="#888" stroke-width="1.5"/>
+<line x1="160.0" y1="28" x2="160.0" y2="152" stroke="#888" stroke-width="1.5"/>
+<text x="65.7" y="102.0" text-anchor="middle" font-size="9" fill="#888" font-family="sans-serif">-2</text>
+<text x="112.9" y="102.0" text-anchor="middle" font-size="9" fill="#888" font-family="sans-serif">-1</text>
+<text x="207.1" y="102.0" text-anchor="middle" font-size="9" fill="#888" font-family="sans-serif">1</text>
+<text x="254.3" y="102.0" text-anchor="middle" font-size="9" fill="#888" font-family="sans-serif">2</text>
+<polyline points="28.0,206.7 29.3,201.8 30.6,197.0 32.0,192.4 33.3,187.8 34.6,183.4 35.9,179.0 37.2,174.8 38.6,170.6 39.9,166.6 41.2,162.7 42.5,158.9 43.8,155.2 45.2,151.5 46.5,148.0 47.8,144.6 49.1,141.3 50.4,138.0 51.8,134.9 53.1,131.9 54.4,128.9 55.7,126.1 57.0,123.3 58.4,120.6 59.7,118.0 61.0,115.5 62.3,113.1 63.6,110.7 65.0,108.5 66.3,106.3 67.6,104.2 68.9,102.2 70.2,100.3 71.6,98.4 72.9,96.6 74.2,94.9 75.5,93.3 76.8,91.7 78.2,90.2 79.5,88.8 80.8,87.4 82.1,86.1 83.4,84.9 84.8,83.8 86.1,82.7 87.4,81.7 88.7,80.7 90.0,79.8 91.4,79.0 92.7,78.2 94.0,77.5 95.3,76.8 96.6,76.2 98.0,75.6 99.3,75.1 100.6,74.7 101.9,74.3 103.2,73.9 104.6,73.6 105.9,73.4 107.2,73.2 108.5,73.0 109.8,72.9 111.2,72.8 112.5,72.8 113.8,72.8 115.1,72.8 116.4,72.9 117.8,73.0 119.1,73.2 120.4,73.4 121.7,73.6 123.0,73.9 124.4,74.2 125.7,74.5 127.0,74.9 128.3,75.3 129.6,75.7 131.0,76.1 132.3,76.6 133.6,77.0 134.9,77.6 136.2,78.1 137.6,78.6 138.9,79.2 140.2,79.8 141.5,80.4 142.8,81.0 144.2,81.6 145.5,82.3 146.8,83.0 148.1,83.6 149.4,84.3 150.8,85.0 152.1,85.7 153.4,86.4 154.7,87.1 156.0,87.8 157.4,88.6 158.7,89.3 160.0,90.0 161.3,90.7 162.6,91.4 164.0,92.2 165.3,92.9 166.6,93.6 167.9,94.3 169.2,95.0 170.6,95.7 171.9,96.4 173.2,97.0 174.5,97.7 175.8,98.4 177.2,99.0 178.5,99.6 179.8,100.2 181.1,100.8 182.4,101.4 183.8,101.9 185.1,102.4 186.4,103.0 187.7,103.4 189.0,103.9 190.4,104.3 191.7,104.7 193.0,105.1 194.3,105.5 195.6,105.8 197.0,106.1 198.3,106.4 199.6,106.6 200.9,106.8 202.2,107.0 203.6,107.1 204.9,107.2 206.2,107.2 207.5,107.2 208.8,107.2 210.2,107.1 211.5,107.0 212.8,106.8 214.1,106.6 215.4,106.4 216.8,106.1 218.1,105.7 219.4,105.3 220.7,104.9 222.0,104.4 223.4,103.8 224.7,103.2 226.0,102.5 227.3,101.8 228.6,101.0 230.0,100.2 231.3,99.3 232.6,98.3 233.9,97.3 235.2,96.2 236.6,95.1 237.9,93.9 239.2,92.6 240.5,91.2 241.8,89.8 243.2,88.3 244.5,86.7 245.8,85.1 247.1,83.4 248.4,81.6 249.8,79.7 251.1,77.8 252.4,75.8 253.7,73.7 255.0,71.5 256.4,69.3 257.7,66.9 259.0,64.5 260.3,62.0 261.6,59.4 263.0,56.7 264.3,53.9 265.6,51.1 266.9,48.1 268.2,45.1 269.6,42.0 270.9,38.7 272.2,35.4 273.5,32.0 274.8,28.5 276.2,24.8 277.5,21.1 278.8,17.3 280.1,13.4 281.4,9.4 282.8,5.2 284.1,1.0 285.4,-3.4 286.7,-7.8 288.0,-12.4 289.4,-17.0 290.7,-21.8 292.0,-26.7" fill="none" stroke="#1e3a5c" stroke-width="2.5" stroke-linejoin="round" clip-path="url(#hclip)"/>
+<circle cx="112.9" cy="72.8" r="4.5" fill="#1e3a5c"/>
+<text x="118.9" y="66.8" font-size="10" fill="#1e3a5c" font-family="sans-serif">local max</text>
+<circle cx="207.1" cy="107.2" r="4.5" fill="#7a5c1e"/>
+<text x="213.1" y="121.2" font-size="10" fill="#7a5c1e" font-family="sans-serif">local min</text>
+<text x="295" y="94.0" font-size="10" fill="#555" font-family="sans-serif">x</text>
+<text x="163.0" y="26" font-size="10" fill="#555" font-family="sans-serif">y</text></svg></div></div>
+<div class="two-col">
+<div class="col"><div class="section-head">Reading f′ from the Graph of f</div>
+<div class="accent-box"><p><strong>The key idea:</strong> the <em>height</em> of the $f'$ graph at $x$ equals the <em>slope</em> of the $f$ graph at $x$.</p><ul>  <li>$f$ <strong>increasing</strong> on $(a,b)$ &nbsp;&Leftrightarrow;&nbsp; $f'(x) > 0$ on $(a,b)$ &nbsp;(graph of $f'$ is <em>above</em> $x$-axis)</li>  <li>$f$ <strong>decreasing</strong> on $(a,b)$ &nbsp;&Leftrightarrow;&nbsp; $f'(x) < 0$ on $(a,b)$ &nbsp;(graph of $f'$ is <em>below</em> $x$-axis)</li>  <li>$f$ has a <strong>local max or min</strong> at $x=c$ &nbsp;&Leftrightarrow;&nbsp; $f'(c) = 0$ &nbsp;($f'$ crosses the $x$-axis at $c$)</li>  <li>$f$ has a <strong>corner</strong> at $x=c$ &nbsp;&Rightarrow;&nbsp; $f'(c)$ is <em>undefined</em></li>  <li>Steeper slope of $f$ &nbsp;&Rightarrow;&nbsp; $f'$ is farther from the $x$-axis</li></ul></div>
+</div>
+<div class="col"><div class="section-head">Common Mistake</div>
+<div class="accent-box"><p><strong style='color:#b03030'>&#10008; &ldquo;$f'$ has the same zeros as $f$.&rdquo;</strong></p><p>This is <strong>false</strong>. The zeros of <em>$f'$</em> are where $f$ has a <strong>horizontal tangent</strong> — i.e., a local max or min.</p><p>The zeros of $f$ (where $f$ crosses the $x$-axis) have <em>nothing special</em> to do with $f'$.</p><p><strong style='color:#3f7a52'>&#10004; Remember:</strong> &nbsp;$f'(c) = 0$ &nbsp;&hArr;&nbsp; slope of $f$ is zero at $c$.</p></div>
+<p class="body-text"><strong>Quick checklist for sketching $f'$:</strong><br>1. Mark every local max/min of $f$ &rarr; those become <em>zeros</em> of $f'$.<br>2. Shade where $f$ increases &rarr; $f'$ is <em>positive</em> there.<br>3. Shade where $f$ decreases &rarr; $f'$ is <em>negative</em> there.<br>4. Note any corners on $f$ &rarr; $f'$ is <em>undefined</em> there.</p>
+</div>
+</div>
+<div class="section-head">Worked Examples</div>
+<div class="examples-grid">
+<div class="ex-block">
+  <div class="ex-label">Example 1 &nbsp;&mdash;&nbsp; Downward parabola</div>
+  <div class="ex-body">Sketch $f'$ given $f(x) = -\tfrac{x^2}{4} + 1$.</div>
+  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">$f'(x) = -\tfrac{x}{2}$ — a <strong>line with negative slope</strong> through the origin.<br>Check: $f$ has a local max at $x=0$ &rarr; $f'(0)=0$ &#10004;<br>For $x<0$: $f$ is increasing, so $f'>0$ &#10004;<br>For $x>0$: $f$ is decreasing, so $f'<0$ &#10004;<br><br><svg width="260" height="180" viewBox="0 0 260 180" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;margin:0 6px"><defs><clipPath id="e1a"><rect x="26" y="26" width="208" height="128"/></clipPath></defs><rect x="26" y="26" width="208" height="128" fill="#fafaf8" rx="2"/><line x1="26.0" y1="26" x2="26.0" y2="154" stroke="#ddd" stroke-width="1"/><line x1="60.7" y1="26" x2="60.7" y2="154" stroke="#ddd" stroke-width="1"/><line x1="95.3" y1="26" x2="95.3" y2="154" stroke="#ddd" stroke-width="1"/><line x1="130.0" y1="26" x2="130.0" y2="154" stroke="#ddd" stroke-width="1"/><line x1="164.7" y1="26" x2="164.7" y2="154" stroke="#ddd" stroke-width="1"/><line x1="199.3" y1="26" x2="199.3" y2="154" stroke="#ddd" stroke-width="1"/><line x1="234.0" y1="26" x2="234.0" y2="154" stroke="#ddd" stroke-width="1"/><line x1="26" y1="154.0" x2="234" y2="154.0" stroke="#ddd" stroke-width="1"/><line x1="26" y1="122.0" x2="234" y2="122.0" stroke="#ddd" stroke-width="1"/><line x1="26" y1="90.0" x2="234" y2="90.0" stroke="#ddd" stroke-width="1"/><line x1="26" y1="58.0" x2="234" y2="58.0" stroke="#ddd" stroke-width="1"/><line x1="26" y1="26.0" x2="234" y2="26.0" stroke="#ddd" stroke-width="1"/><line x1="26" y1="90.0" x2="234" y2="90.0" stroke="#888" stroke-width="1.5"/><line x1="130.0" y1="26" x2="130.0" y2="154" stroke="#888" stroke-width="1.5"/><text x="60.7" y="101.0" text-anchor="middle" font-size="8" fill="#888" font-family="sans-serif">-2</text><text x="95.3" y="101.0" text-anchor="middle" font-size="8" fill="#888" font-family="sans-serif">-1</text><text x="164.7" y="101.0" text-anchor="middle" font-size="8" fill="#888" font-family="sans-serif">1</text><text x="199.3" y="101.0" text-anchor="middle" font-size="8" fill="#888" font-family="sans-serif">2</text><text x="126.0" y="125.0" text-anchor="end" font-size="8" fill="#888" font-family="sans-serif">-1</text><text x="126.0" y="61.0" text-anchor="end" font-size="8" fill="#888" font-family="sans-serif">1</text><polyline points="26.0,130.0 27.7,127.6 29.5,125.3 31.2,123.0 32.9,120.7 34.7,118.5 36.4,116.3 38.1,114.2 39.9,112.1 41.6,110.0 43.3,108.0 45.1,106.0 46.8,104.1 48.5,102.2 50.3,100.3 52.0,98.5 53.7,96.7 55.5,95.0 57.2,93.3 58.9,91.6 60.7,90.0 62.4,88.4 64.1,86.9 65.9,85.4 67.6,83.9 69.3,82.5 71.1,81.1 72.8,79.8 74.5,78.5 76.3,77.2 78.0,76.0 79.7,74.8 81.5,73.7 83.2,72.6 84.9,71.5 86.7,70.5 88.4,69.5 90.1,68.6 91.9,67.7 93.6,66.8 95.3,66.0 97.1,65.2 98.8,64.5 100.5,63.8 102.3,63.1 104.0,62.5 105.7,61.9 107.5,61.4 109.2,60.9 110.9,60.4 112.7,60.0 114.4,59.6 116.1,59.3 117.9,59.0 119.6,58.7 121.3,58.5 123.1,58.3 124.8,58.2 126.5,58.1 128.3,58.0 130.0,58.0 131.7,58.0 133.5,58.1 135.2,58.2 136.9,58.3 138.7,58.5 140.4,58.7 142.1,59.0 143.9,59.3 145.6,59.6 147.3,60.0 149.1,60.4 150.8,60.9 152.5,61.4 154.3,61.9 156.0,62.5 157.7,63.1 159.5,63.8 161.2,64.5 162.9,65.2 164.7,66.0 166.4,66.8 168.1,67.7 169.9,68.6 171.6,69.5 173.3,70.5 175.1,71.5 176.8,72.6 178.5,73.7 180.3,74.8 182.0,76.0 183.7,77.2 185.5,78.5 187.2,79.8 188.9,81.1 190.7,82.5 192.4,83.9 194.1,85.4 195.9,86.9 197.6,88.4 199.3,90.0 201.1,91.6 202.8,93.3 204.5,95.0 206.3,96.7 208.0,98.5 209.7,100.3 211.5,102.2 213.2,104.1 214.9,106.0 216.7,108.0 218.4,110.0 220.1,112.1 221.9,114.2 223.6,116.3 225.3,118.5 227.1,120.7 228.8,123.0 230.5,125.3 232.3,127.6 234.0,130.0" fill="none" stroke="#1e3a5c" stroke-width="2.2" stroke-linejoin="round" clip-path="url(#e1a)"/><circle cx="130.0" cy="58.0" r="4" fill="#1e3a5c"/><text x="136.0" y="54.0" font-size="9" fill="#1e3a5c" font-family="sans-serif">local max</text><text x="30" y="38" font-size="10" fill="#1e3a5c" font-family="sans-serif" font-weight="bold">f</text><text x="236" y="94.0" font-size="9" fill="#555" font-family="sans-serif">x</text><text x="133.0" y="25" font-size="9" fill="#555" font-family="sans-serif">y</text></svg><svg width="260" height="180" viewBox="0 0 260 180" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;margin:0 6px"><defs><clipPath id="e1b"><rect x="26" y="26" width="208" height="128"/></clipPath></defs><rect x="26" y="26" width="208" height="128" fill="#fafaf8" rx="2"/><line x1="26.0" y1="26" x2="26.0" y2="154" stroke="#ddd" stroke-width="1"/><line x1="60.7" y1="26" x2="60.7" y2="154" stroke="#ddd" stroke-width="1"/><line x1="95.3" y1="26" x2="95.3" y2="154" stroke="#ddd" stroke-width="1"/><line x1="130.0" y1="26" x2="130.0" y2="154" stroke="#ddd" stroke-width="1"/><line x1="164.7" y1="26" x2="164.7" y2="154" stroke="#ddd" stroke-width="1"/><line x1="199.3" y1="26" x2="199.3" y2="154" stroke="#ddd" stroke-width="1"/><line x1="234.0" y1="26" x2="234.0" y2="154" stroke="#ddd" stroke-width="1"/><line x1="26" y1="154.0" x2="234" y2="154.0" stroke="#ddd" stroke-width="1"/><line x1="26" y1="122.0" x2="234" y2="122.0" stroke="#ddd" stroke-width="1"/><line x1="26" y1="90.0" x2="234" y2="90.0" stroke="#ddd" stroke-width="1"/><line x1="26" y1="58.0" x2="234" y2="58.0" stroke="#ddd" stroke-width="1"/><line x1="26" y1="26.0" x2="234" y2="26.0" stroke="#ddd" stroke-width="1"/><line x1="26" y1="90.0" x2="234" y2="90.0" stroke="#888" stroke-width="1.5"/><line x1="130.0" y1="26" x2="130.0" y2="154" stroke="#888" stroke-width="1.5"/><text x="60.7" y="101.0" text-anchor="middle" font-size="8" fill="#888" font-family="sans-serif">-2</text><text x="95.3" y="101.0" text-anchor="middle" font-size="8" fill="#888" font-family="sans-serif">-1</text><text x="164.7" y="101.0" text-anchor="middle" font-size="8" fill="#888" font-family="sans-serif">1</text><text x="199.3" y="101.0" text-anchor="middle" font-size="8" fill="#888" font-family="sans-serif">2</text><text x="126.0" y="125.0" text-anchor="end" font-size="8" fill="#888" font-family="sans-serif">-1</text><text x="126.0" y="61.0" text-anchor="end" font-size="8" fill="#888" font-family="sans-serif">1</text><polyline points="26.0,130.0 27.7,127.6 29.5,125.3 31.2,123.0 32.9,120.7 34.7,118.5 36.4,116.3 38.1,114.2 39.9,112.1 41.6,110.0 43.3,108.0 45.1,106.0 46.8,104.1 48.5,102.2 50.3,100.3 52.0,98.5 53.7,96.7 55.5,95.0 57.2,93.3 58.9,91.6 60.7,90.0 62.4,88.4 64.1,86.9 65.9,85.4 67.6,83.9 69.3,82.5 71.1,81.1 72.8,79.8 74.5,78.5 76.3,77.2 78.0,76.0 79.7,74.8 81.5,73.7 83.2,72.6 84.9,71.5 86.7,70.5 88.4,69.5 90.1,68.6 91.9,67.7 93.6,66.8 95.3,66.0 97.1,65.2 98.8,64.5 100.5,63.8 102.3,63.1 104.0,62.5 105.7,61.9 107.5,61.4 109.2,60.9 110.9,60.4 112.7,60.0 114.4,59.6 116.1,59.3 117.9,59.0 119.6,58.7 121.3,58.5 123.1,58.3 124.8,58.2 126.5,58.1 128.3,58.0 130.0,58.0 131.7,58.0 133.5,58.1 135.2,58.2 136.9,58.3 138.7,58.5 140.4,58.7 142.1,59.0 143.9,59.3 145.6,59.6 147.3,60.0 149.1,60.4 150.8,60.9 152.5,61.4 154.3,61.9 156.0,62.5 157.7,63.1 159.5,63.8 161.2,64.5 162.9,65.2 164.7,66.0 166.4,66.8 168.1,67.7 169.9,68.6 171.6,69.5 173.3,70.5 175.1,71.5 176.8,72.6 178.5,73.7 180.3,74.8 182.0,76.0 183.7,77.2 185.5,78.5 187.2,79.8 188.9,81.1 190.7,82.5 192.4,83.9 194.1,85.4 195.9,86.9 197.6,88.4 199.3,90.0 201.1,91.6 202.8,93.3 204.5,95.0 206.3,96.7 208.0,98.5 209.7,100.3 211.5,102.2 213.2,104.1 214.9,106.0 216.7,108.0 218.4,110.0 220.1,112.1 221.9,114.2 223.6,116.3 225.3,118.5 227.1,120.7 228.8,123.0 230.5,125.3 232.3,127.6 234.0,130.0" fill="none" stroke="#1e3a5c" stroke-width="2.2" stroke-linejoin="round" clip-path="url(#e1b)"/><polyline points="26.0,42.0 27.7,42.8 29.5,43.6 31.2,44.4 32.9,45.2 34.7,46.0 36.4,46.8 38.1,47.6 39.9,48.4 41.6,49.2 43.3,50.0 45.1,50.8 46.8,51.6 48.5,52.4 50.3,53.2 52.0,54.0 53.7,54.8 55.5,55.6 57.2,56.4 58.9,57.2 60.7,58.0 62.4,58.8 64.1,59.6 65.9,60.4 67.6,61.2 69.3,62.0 71.1,62.8 72.8,63.6 74.5,64.4 76.3,65.2 78.0,66.0 79.7,66.8 81.5,67.6 83.2,68.4 84.9,69.2 86.7,70.0 88.4,70.8 90.1,71.6 91.9,72.4 93.6,73.2 95.3,74.0 97.1,74.8 98.8,75.6 100.5,76.4 102.3,77.2 104.0,78.0 105.7,78.8 107.5,79.6 109.2,80.4 110.9,81.2 112.7,82.0 114.4,82.8 116.1,83.6 117.9,84.4 119.6,85.2 121.3,86.0 123.1,86.8 124.8,87.6 126.5,88.4 128.3,89.2 130.0,90.0 131.7,90.8 133.5,91.6 135.2,92.4 136.9,93.2 138.7,94.0 140.4,94.8 142.1,95.6 143.9,96.4 145.6,97.2 147.3,98.0 149.1,98.8 150.8,99.6 152.5,100.4 154.3,101.2 156.0,102.0 157.7,102.8 159.5,103.6 161.2,104.4 162.9,105.2 164.7,106.0 166.4,106.8 168.1,107.6 169.9,108.4 171.6,109.2 173.3,110.0 175.1,110.8 176.8,111.6 178.5,112.4 180.3,113.2 182.0,114.0 183.7,114.8 185.5,115.6 187.2,116.4 188.9,117.2 190.7,118.0 192.4,118.8 194.1,119.6 195.9,120.4 197.6,121.2 199.3,122.0 201.1,122.8 202.8,123.6 204.5,124.4 206.3,125.2 208.0,126.0 209.7,126.8 211.5,127.6 213.2,128.4 214.9,129.2 216.7,130.0 218.4,130.8 220.1,131.6 221.9,132.4 223.6,133.2 225.3,134.0 227.1,134.8 228.8,135.6 230.5,136.4 232.3,137.2 234.0,138.0" fill="none" stroke="#7a5c1e" stroke-width="2" stroke-dasharray="6,3" stroke-linejoin="round" clip-path="url(#e1b)"/><circle cx="130.0" cy="90.0" r="4" fill="#7a5c1e"/><text x="136.0" y="85.0" font-size="9" fill="#7a5c1e" font-family="sans-serif">f'=0</text><text x="30" y="38" font-size="10" fill="#1e3a5c" font-family="sans-serif" font-weight="bold">f</text><text x="30" y="51" font-size="10" fill="#7a5c1e" font-family="sans-serif" font-weight="bold">f'</text><text x="236" y="94.0" font-size="9" fill="#555" font-family="sans-serif">x</text><text x="133.0" y="25" font-size="9" fill="#555" font-family="sans-serif">y</text></svg><p style="font-size:12px;color:#555;text-align:center">Left: $f$. &ensp; Right: $f$ (navy) with $f'$ (gold dashed).</p></div></div>
+</div>
+<div class="ex-block">
+  <div class="ex-label">Example 2 &nbsp;&mdash;&nbsp; Cubic — two turning points</div>
+  <div class="ex-body">Sketch $f'$ given $f(x) = \tfrac{x^3-3x}{4}$.</div>
+  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">$f'(x) = \tfrac{3x^2-3}{4} = \tfrac{3}{4}(x^2-1)$ — an <strong>upward parabola</strong> with zeros at $x=\pm 1$.<br>$f$ has a local max at $x=-1$ and local min at $x=1$, so $f'(-1)=f'(1)=0$ &#10004;<br>$f'<0$ between $x=-1$ and $x=1$ (where $f$ is decreasing) &#10004;<br>$f'>0$ outside $[-1,1]$ (where $f$ is increasing) &#10004;<br><div style="text-align:center;margin:.5rem 0"><svg width="250" height="180" viewBox="0 0 250 180" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;margin:0 4px"><defs><clipPath id="e2f"><rect x="26" y="26" width="198" height="128"/></clipPath></defs><rect x="26" y="26" width="198" height="128" fill="#fafaf8" rx="2"/><line x1="45.8" y1="26" x2="45.8" y2="154" stroke="#ddd" stroke-width="1"/><line x1="85.4" y1="26" x2="85.4" y2="154" stroke="#ddd" stroke-width="1"/><line x1="125.0" y1="26" x2="125.0" y2="154" stroke="#ddd" stroke-width="1"/><line x1="164.6" y1="26" x2="164.6" y2="154" stroke="#ddd" stroke-width="1"/><line x1="204.2" y1="26" x2="204.2" y2="154" stroke="#ddd" stroke-width="1"/><line x1="26" y1="154.0" x2="224" y2="154.0" stroke="#ddd" stroke-width="1"/><line x1="26" y1="128.4" x2="224" y2="128.4" stroke="#ddd" stroke-width="1"/><line x1="26" y1="102.8" x2="224" y2="102.8" stroke="#ddd" stroke-width="1"/><line x1="26" y1="77.2" x2="224" y2="77.2" stroke="#ddd" stroke-width="1"/><line x1="26" y1="51.6" x2="224" y2="51.6" stroke="#ddd" stroke-width="1"/><line x1="26" y1="26.0" x2="224" y2="26.0" stroke="#ddd" stroke-width="1"/><line x1="26" y1="102.8" x2="224" y2="102.8" stroke="#888" stroke-width="1.5"/><line x1="125.0" y1="26" x2="125.0" y2="154" stroke="#888" stroke-width="1.5"/><text x="45.8" y="113.8" text-anchor="middle" font-size="8" fill="#888" font-family="sans-serif">-2</text><text x="85.4" y="113.8" text-anchor="middle" font-size="8" fill="#888" font-family="sans-serif">-1</text><text x="164.6" y="113.8" text-anchor="middle" font-size="8" fill="#888" font-family="sans-serif">1</text><text x="204.2" y="113.8" text-anchor="middle" font-size="8" fill="#888" font-family="sans-serif">2</text><polyline points="26.0,154.8 27.6,150.7 29.3,146.7 30.9,142.9 32.6,139.3 34.3,135.8 35.9,132.5 37.5,129.3 39.2,126.3 40.9,123.4 42.5,120.7 44.2,118.1 45.8,115.6 47.5,113.3 49.1,111.1 50.8,109.0 52.4,107.0 54.0,105.2 55.7,103.5 57.3,101.9 59.0,100.4 60.6,99.1 62.3,97.8 64.0,96.7 65.6,95.6 67.2,94.6 68.9,93.8 70.6,93.0 72.2,92.4 73.8,91.8 75.5,91.3 77.2,90.9 78.8,90.6 80.5,90.3 82.1,90.1 83.8,90.0 85.4,90.0 87.1,90.0 88.7,90.1 90.4,90.3 92.0,90.5 93.7,90.8 95.3,91.1 97.0,91.5 98.6,91.9 100.2,92.4 101.9,92.9 103.5,93.4 105.2,94.0 106.8,94.6 108.5,95.3 110.1,95.9 111.8,96.6 113.4,97.4 115.1,98.1 116.8,98.9 118.4,99.6 120.0,100.4 121.7,101.2 123.3,102.0 125.0,102.8 126.6,103.6 128.3,104.4 129.9,105.2 131.6,106.0 133.2,106.7 134.9,107.5 136.6,108.2 138.2,109.0 139.8,109.7 141.5,110.3 143.2,111.0 144.8,111.6 146.4,112.2 148.1,112.7 149.8,113.2 151.4,113.7 153.1,114.1 154.7,114.5 156.3,114.8 158.0,115.1 159.7,115.3 161.3,115.5 162.9,115.6 164.6,115.6 166.2,115.6 167.9,115.5 169.5,115.3 171.2,115.0 172.8,114.7 174.5,114.3 176.2,113.8 177.8,113.2 179.5,112.6 181.1,111.8 182.8,111.0 184.4,110.0 186.1,108.9 187.7,107.8 189.3,106.5 191.0,105.2 192.6,103.7 194.3,102.1 195.9,100.4 197.6,98.6 199.2,96.6 200.9,94.5 202.6,92.3 204.2,90.0 205.9,87.5 207.5,84.9 209.2,82.2 210.8,79.3 212.4,76.3 214.1,73.1 215.8,69.8 217.4,66.3 219.0,62.7 220.7,58.9 222.4,54.9 224.0,50.8" fill="none" stroke="#1e3a5c" stroke-width="2.2" stroke-linejoin="round" clip-path="url(#e2f)"/><circle cx="85.4" cy="90.0" r="4" fill="#1e3a5c"/><text x="79.4" y="85.0" text-anchor="end" font-size="9" fill="#1e3a5c" font-family="sans-serif">max</text><circle cx="164.6" cy="115.6" r="4" fill="#7a5c1e"/><text x="169.6" y="128.6" font-size="9" fill="#7a5c1e" font-family="sans-serif">min</text><text x="30" y="38" font-size="10" fill="#1e3a5c" font-family="sans-serif" font-weight="bold">f</text><text x="226" y="106.8" font-size="9" fill="#555" font-family="sans-serif">x</text></svg><svg width="250" height="180" viewBox="0 0 250 180" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;margin:0 4px"><defs><clipPath id="e2fp"><rect x="26" y="26" width="198" height="128"/></clipPath></defs><rect x="26" y="26" width="198" height="128" fill="#fafaf8" rx="2"/><line x1="45.8" y1="26" x2="45.8" y2="154" stroke="#ddd" stroke-width="1"/><line x1="85.4" y1="26" x2="85.4" y2="154" stroke="#ddd" stroke-width="1"/><line x1="125.0" y1="26" x2="125.0" y2="154" stroke="#ddd" stroke-width="1"/><line x1="164.6" y1="26" x2="164.6" y2="154" stroke="#ddd" stroke-width="1"/><line x1="204.2" y1="26" x2="204.2" y2="154" stroke="#ddd" stroke-width="1"/><line x1="26" y1="154.0" x2="224" y2="154.0" stroke="#ddd" stroke-width="1"/><line x1="26" y1="128.4" x2="224" y2="128.4" stroke="#ddd" stroke-width="1"/><line x1="26" y1="102.8" x2="224" y2="102.8" stroke="#ddd" stroke-width="1"/><line x1="26" y1="77.2" x2="224" y2="77.2" stroke="#ddd" stroke-width="1"/><line x1="26" y1="51.6" x2="224" y2="51.6" stroke="#ddd" stroke-width="1"/><line x1="26" y1="26.0" x2="224" y2="26.0" stroke="#ddd" stroke-width="1"/><line x1="26" y1="102.8" x2="224" y2="102.8" stroke="#888" stroke-width="1.5"/><line x1="125.0" y1="26" x2="125.0" y2="154" stroke="#888" stroke-width="1.5"/><text x="45.8" y="113.8" text-anchor="middle" font-size="8" fill="#888" font-family="sans-serif">-2</text><text x="85.4" y="113.8" text-anchor="middle" font-size="8" fill="#888" font-family="sans-serif">-1</text><text x="164.6" y="113.8" text-anchor="middle" font-size="8" fill="#888" font-family="sans-serif">1</text><text x="204.2" y="113.8" text-anchor="middle" font-size="8" fill="#888" font-family="sans-serif">2</text><polyline points="26.0,20.9 27.6,20.9 29.3,20.9 30.9,20.9 32.6,20.9 34.3,21.2 35.9,24.8 37.5,28.4 39.2,31.9 40.9,35.3 42.5,38.7 44.2,42.0 45.8,45.2 47.5,48.4 49.1,51.5 50.8,54.5 52.4,57.5 54.0,60.4 55.7,63.2 57.3,66.0 59.0,68.7 60.6,71.3 62.3,73.9 64.0,76.4 65.6,78.8 67.2,81.2 68.9,83.5 70.6,85.7 72.2,87.9 73.8,90.0 75.5,92.0 77.2,94.0 78.8,95.9 80.5,97.7 82.1,99.5 83.8,101.2 85.4,102.8 87.1,104.4 88.7,105.9 90.4,107.3 92.0,108.7 93.7,110.0 95.3,111.2 97.0,112.4 98.6,113.5 100.2,114.5 101.9,115.5 103.5,116.4 105.2,117.2 106.8,118.0 108.5,118.7 110.1,119.3 111.8,119.9 113.4,120.4 115.1,120.8 116.8,121.2 118.4,121.5 120.0,121.7 121.7,121.9 123.3,122.0 125.0,122.0 126.6,122.0 128.3,121.9 129.9,121.7 131.6,121.5 133.2,121.2 134.9,120.8 136.6,120.4 138.2,119.9 139.8,119.3 141.5,118.7 143.2,118.0 144.8,117.2 146.4,116.4 148.1,115.5 149.8,114.5 151.4,113.5 153.1,112.4 154.7,111.2 156.3,110.0 158.0,108.7 159.7,107.3 161.3,105.9 162.9,104.4 164.6,102.8 166.2,101.2 167.9,99.5 169.5,97.7 171.2,95.9 172.8,94.0 174.5,92.0 176.2,90.0 177.8,87.9 179.5,85.7 181.1,83.5 182.8,81.2 184.4,78.8 186.1,76.4 187.7,73.9 189.3,71.3 191.0,68.7 192.6,66.0 194.3,63.2 195.9,60.4 197.6,57.5 199.2,54.5 200.9,51.5 202.6,48.4 204.2,45.2 205.9,42.0 207.5,38.7 209.2,35.3 210.8,31.9 212.4,28.4 214.1,24.8 215.8,21.2 217.4,20.9 219.0,20.9 220.7,20.9 222.4,20.9 224.0,20.9" fill="none" stroke="#7a5c1e" stroke-width="2" stroke-dasharray="6,3" stroke-linejoin="round" clip-path="url(#e2fp)"/><circle cx="85.4" cy="102.8" r="4" fill="#7a5c1e"/><circle cx="164.6" cy="102.8" r="4" fill="#7a5c1e"/><text x="81.4" y="116.8" text-anchor="end" font-size="9" fill="#7a5c1e" font-family="sans-serif">f'=0</text><text x="168.6" y="116.8" font-size="9" fill="#7a5c1e" font-family="sans-serif">f'=0</text><circle cx="125.0" cy="122.0" r="3.5" fill="#7a5c1e" opacity=".6"/><text x="30" y="38" font-size="10" fill="#7a5c1e" font-family="sans-serif" font-weight="bold">f'</text><text x="226" y="106.8" font-size="9" fill="#555" font-family="sans-serif">x</text></svg></div><p style="font-size:12px;color:#555;text-align:center;margin-top:2px">Left: graph of $f$. &ensp; Right: graph of $f'$ (dashed gold).</p></div></div>
+</div>
+<div class="ex-block">
+  <div class="ex-label">Example 3 &nbsp;&mdash;&nbsp; Corner function — f' undefined</div>
+  <div class="ex-body">Sketch $f'$ given $f(x) = |x|$.</div>
+  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">For $x<0$: slope of $f$ is $-1$, so $f'(x)=-1$.<br>For $x>0$: slope of $f$ is $+1$, so $f'(x)=1$.<br>At $x=0$: left slope $\neq$ right slope &nbsp;&Rightarrow;&nbsp; $f'(0)$ is <strong>undefined</strong> (corner).<br><br><svg width="520" height="160" viewBox="0 0 520 160" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:.5rem auto"><rect x="26" y="26" width="208" height="108" fill="#fafaf8" rx="2"/>
+<line x1="46.8" y1="26" x2="46.8" y2="134" stroke="#ddd" stroke-width="1"/>
+<line x1="88.4" y1="26" x2="88.4" y2="134" stroke="#ddd" stroke-width="1"/>
+<line x1="130.0" y1="26" x2="130.0" y2="134" stroke="#ddd" stroke-width="1"/>
+<line x1="171.6" y1="26" x2="171.6" y2="134" stroke="#ddd" stroke-width="1"/>
+<line x1="213.2" y1="26" x2="213.2" y2="134" stroke="#ddd" stroke-width="1"/>
+<line x1="26" y1="116.0" x2="234" y2="116.0" stroke="#ddd" stroke-width="1"/>
+<line x1="26" y1="80.0" x2="234" y2="80.0" stroke="#ddd" stroke-width="1"/>
+<line x1="26" y1="44.0" x2="234" y2="44.0" stroke="#ddd" stroke-width="1"/>
+<line x1="26" y1="116.0" x2="234" y2="116.0" stroke="#888" stroke-width="1.5"/>
+<line x1="130.0" y1="26" x2="130.0" y2="134" stroke="#888" stroke-width="1.5"/>
+<polyline points="26.0,26.0 130.0,116.0 234.0,26.0" fill="none" stroke="#1e3a5c" stroke-width="2.5" stroke-linejoin="miter"/>
+<circle cx="130.0" cy="116.0" r="4" fill="#1e3a5c"/>
+<text x="134.0" y="130.0" font-size="9" fill="#1e3a5c" font-family="sans-serif">corner at x=0</text>
+<text x="30" y="37" font-size="10" fill="#1e3a5c" font-family="sans-serif" font-weight="bold">f</text>
+<text x="236" y="120.0" font-size="9" fill="#555" font-family="sans-serif">x</text>
+<rect x="286" y="26" width="208" height="108" fill="#fafaf8" rx="2"/>
+<line x1="306.8" y1="26" x2="306.8" y2="134" stroke="#ddd" stroke-width="1"/>
+<line x1="348.4" y1="26" x2="348.4" y2="134" stroke="#ddd" stroke-width="1"/>
+<line x1="390.0" y1="26" x2="390.0" y2="134" stroke="#ddd" stroke-width="1"/>
+<line x1="431.6" y1="26" x2="431.6" y2="134" stroke="#ddd" stroke-width="1"/>
+<line x1="473.2" y1="26" x2="473.2" y2="134" stroke="#ddd" stroke-width="1"/>
+<line x1="286" y1="134.0" x2="494" y2="134.0" stroke="#ddd" stroke-width="1"/>
+<line x1="286" y1="116.0" x2="494" y2="116.0" stroke="#ddd" stroke-width="1"/>
+<line x1="286" y1="80.0" x2="494" y2="80.0" stroke="#ddd" stroke-width="1"/>
+<line x1="286" y1="80.0" x2="494" y2="80.0" stroke="#888" stroke-width="1.5"/>
+<line x1="390.0" y1="26" x2="390.0" y2="134" stroke="#888" stroke-width="1.5"/>
+<line x1="286.0" y1="116.0" x2="390.0" y2="116.0" stroke="#7a5c1e" stroke-width="2.2" stroke-dasharray="6,3"/>
+<line x1="390.0" y1="44.0" x2="494.0" y2="44.0" stroke="#7a5c1e" stroke-width="2.2" stroke-dasharray="6,3"/>
+<circle cx="390.0" cy="116.0" r="4" fill="white" stroke="#7a5c1e" stroke-width="2"/>
+<circle cx="390.0" cy="44.0" r="4" fill="white" stroke="#7a5c1e" stroke-width="2"/>
+<text x="386.0" y="119.0" text-anchor="end" font-size="8" fill="#888" font-family="sans-serif">-1</text>
+<text x="386.0" y="47.0" text-anchor="end" font-size="8" fill="#888" font-family="sans-serif">1</text>
+<text x="290" y="37" font-size="10" fill="#7a5c1e" font-family="sans-serif" font-weight="bold">f'</text>
+<text x="390.0" y="100.0" text-anchor="middle" font-size="9" fill="#b03030" font-family="sans-serif">undefined</text>
+<text x="496" y="84.0" font-size="9" fill="#555" font-family="sans-serif">x</text></svg><p style="font-size:12px;color:#555;text-align:center;margin-top:2px">Left: $f(x)=|x|$ — a corner at $x=0$. &ensp; Right: $f'$ jumps from $-1$ to $1$; undefined at $x=0$.</p></div></div>
+</div>
+<div class="ex-block">
+  <div class="ex-label">Example 4 &nbsp;&mdash;&nbsp; Reverse: graph of f′ given — describe f</div>
+  <div class="ex-body">The graph of $f'$ is shown. It is a line: $f'(x) = 2x - 2$. What does the graph of $f$ look like?<svg width="240" height="160" viewBox="0 0 240 160" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:4px auto"><defs><clipPath id="gvp5"><rect x="26" y="26" width="188" height="108"/></clipPath></defs><rect x="26" y="26" width="188" height="108" fill="#fafaf8" rx="2"/><line x1="26.0" y1="26" x2="26.0" y2="134" stroke="#ddd" stroke-width="1"/><line x1="73.0" y1="26" x2="73.0" y2="134" stroke="#ddd" stroke-width="1"/><line x1="120.0" y1="26" x2="120.0" y2="134" stroke="#ddd" stroke-width="1"/><line x1="167.0" y1="26" x2="167.0" y2="134" stroke="#ddd" stroke-width="1"/><line x1="214.0" y1="26" x2="214.0" y2="134" stroke="#ddd" stroke-width="1"/><line x1="26" y1="134.0" x2="214" y2="134.0" stroke="#ddd" stroke-width="1"/><line x1="26" y1="116.0" x2="214" y2="116.0" stroke="#ddd" stroke-width="1"/><line x1="26" y1="98.0" x2="214" y2="98.0" stroke="#ddd" stroke-width="1"/><line x1="26" y1="80.0" x2="214" y2="80.0" stroke="#ddd" stroke-width="1"/><line x1="26" y1="62.0" x2="214" y2="62.0" stroke="#ddd" stroke-width="1"/><line x1="26" y1="44.0" x2="214" y2="44.0" stroke="#ddd" stroke-width="1"/><line x1="26" y1="26.0" x2="214" y2="26.0" stroke="#ddd" stroke-width="1"/><line x1="26" y1="80.0" x2="214" y2="80.0" stroke="#555" stroke-width="1.5"/><line x1="73.0" y1="26" x2="73.0" y2="134" stroke="#555" stroke-width="1.5"/><line x1="26.0" y1="77.0" x2="26.0" y2="83.0" stroke="#555" stroke-width="1"/><text x="26.0" y="92.0" text-anchor="middle" font-size="8" fill="#888" font-family="sans-serif">-1</text><line x1="120.0" y1="77.0" x2="120.0" y2="83.0" stroke="#555" stroke-width="1"/><text x="120.0" y="92.0" text-anchor="middle" font-size="8" fill="#888" font-family="sans-serif">1</text><line x1="167.0" y1="77.0" x2="167.0" y2="83.0" stroke="#555" stroke-width="1"/><text x="167.0" y="92.0" text-anchor="middle" font-size="8" fill="#888" font-family="sans-serif">2</text><line x1="214.0" y1="77.0" x2="214.0" y2="83.0" stroke="#555" stroke-width="1"/><text x="214.0" y="92.0" text-anchor="middle" font-size="8" fill="#888" font-family="sans-serif">3</text><line x1="70.0" y1="134.0" x2="76.0" y2="134.0" stroke="#555" stroke-width="1"/><text x="68.0" y="137.0" text-anchor="end" font-size="8" fill="#888" font-family="sans-serif">-3</text><line x1="70.0" y1="116.0" x2="76.0" y2="116.0" stroke="#555" stroke-width="1"/><text x="68.0" y="119.0" text-anchor="end" font-size="8" fill="#888" font-family="sans-serif">-2</text><line x1="70.0" y1="98.0" x2="76.0" y2="98.0" stroke="#555" stroke-width="1"/><text x="68.0" y="101.0" text-anchor="end" font-size="8" fill="#888" font-family="sans-serif">-1</text><line x1="70.0" y1="62.0" x2="76.0" y2="62.0" stroke="#555" stroke-width="1"/><text x="68.0" y="65.0" text-anchor="end" font-size="8" fill="#888" font-family="sans-serif">1</text><line x1="70.0" y1="44.0" x2="76.0" y2="44.0" stroke="#555" stroke-width="1"/><text x="68.0" y="47.0" text-anchor="end" font-size="8" fill="#888" font-family="sans-serif">2</text><line x1="70.0" y1="26.0" x2="76.0" y2="26.0" stroke="#555" stroke-width="1"/><text x="68.0" y="29.0" text-anchor="end" font-size="8" fill="#888" font-family="sans-serif">3</text><text x="217" y="84.0" font-size="10" fill="#555" font-family="sans-serif">x</text><text x="76.0" y="24" font-size="10" fill="#555" font-family="sans-serif">y</text><line x1="49.5" y1="134.0" x2="190.5" y2="26.0" stroke="#7a5c1e" stroke-width="2" clip-path="url(#gvp5)"/><text x="186.5" y="20.0" font-size="10" fill="#7a5c1e" font-family="sans-serif" font-weight="bold">f'</text><circle cx="120.0" cy="80.0" r="4" fill="#7a5c1e" stroke="white" stroke-width="1.5"/><text x="120.0" y="70.0" text-anchor="middle" font-size="10" fill="#7a5c1e" font-family="sans-serif" font-weight="bold">(1, 0)</text></svg></div>
+  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">$f'(x) = 2x-2 = 0$ when $x=1$ &nbsp;&Rightarrow;&nbsp; <strong>$f$ has a local extremum at $x=1$</strong>.<br>$f'<0$ for $x<1$ &nbsp;&Rightarrow;&nbsp; $f$ is <strong>decreasing</strong> on $(-\infty,1)$.<br>$f'>0$ for $x>1$ &nbsp;&Rightarrow;&nbsp; $f$ is <strong>increasing</strong> on $(1,\infty)$.<br>Since $f$ goes from decreasing to increasing, $x=1$ is a <strong>local minimum</strong>.<br><em>Note: we cannot say the exact value or shape of $f$ without integrating — many functions share this $f'$.</em></div></div>
+</div>
+<div class="ex-block">
+  <div class="ex-label">Example 5 &nbsp;&mdash;&nbsp; Stretch — sketch both f′ and f″</div>
+  <div class="ex-body">For $f(x) = \tfrac{x^3-3x}{4}$: (a) sketch $f'$, &nbsp;(b) sketch $f''$ from your $f'$ sketch.</div>
+  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">(a) $f'(x)=\tfrac{3}{4}(x^2-1)$ — upward parabola, zeros at $x=\pm1$, min at $(0,-\tfrac{3}{4})$.<br>(b) $f''(x)=\tfrac{3}{4}(2x)=\tfrac{3x}{2}$ — a line through the origin, positive for $x>0$, negative for $x<0$, zero at $x=0$.<br>$f''=0$ at $x=0$ means $f'$ has a local min there &nbsp;&Rightarrow;&nbsp; $f$ has an <strong>inflection point</strong> at $x=0$.</div></div>
+</div>
+<div class="ex-block">
+  <div class="ex-label">Example 6 &nbsp;&mdash;&nbsp; Stretch — match three graphs</div>
+  <div class="ex-body">Three graphs are shown below. One is $f$, one is $f'$, one is $f''$. Which is which?<br><div style="display:flex;gap:8px;justify-content:center;margin:.5rem 0"><svg width="175" height="130" viewBox="0 0 175 130" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:4px auto"><defs><clipPath id="gvp6"><rect x="26" y="26" width="123" height="78"/></clipPath></defs><rect x="26" y="26" width="123" height="78" fill="#fafaf8" rx="2"/><line x1="38.3" y1="26" x2="38.3" y2="104" stroke="#ddd" stroke-width="1"/><line x1="62.9" y1="26" x2="62.9" y2="104" stroke="#ddd" stroke-width="1"/><line x1="87.5" y1="26" x2="87.5" y2="104" stroke="#ddd" stroke-width="1"/><line x1="112.1" y1="26" x2="112.1" y2="104" stroke="#ddd" stroke-width="1"/><line x1="136.7" y1="26" x2="136.7" y2="104" stroke="#ddd" stroke-width="1"/><line x1="26" y1="104.0" x2="149" y2="104.0" stroke="#ddd" stroke-width="1"/><line x1="26" y1="88.4" x2="149" y2="88.4" stroke="#ddd" stroke-width="1"/><line x1="26" y1="72.8" x2="149" y2="72.8" stroke="#ddd" stroke-width="1"/><line x1="26" y1="57.2" x2="149" y2="57.2" stroke="#ddd" stroke-width="1"/><line x1="26" y1="41.6" x2="149" y2="41.6" stroke="#ddd" stroke-width="1"/><line x1="26" y1="26.0" x2="149" y2="26.0" stroke="#ddd" stroke-width="1"/><line x1="26" y1="72.8" x2="149" y2="72.8" stroke="#555" stroke-width="1.5"/><line x1="87.5" y1="26" x2="87.5" y2="104" stroke="#555" stroke-width="1.5"/><line x1="38.3" y1="69.8" x2="38.3" y2="75.8" stroke="#555" stroke-width="1"/><text x="38.3" y="84.8" text-anchor="middle" font-size="8" fill="#888" font-family="sans-serif">-2</text><line x1="62.9" y1="69.8" x2="62.9" y2="75.8" stroke="#555" stroke-width="1"/><text x="62.9" y="84.8" text-anchor="middle" font-size="8" fill="#888" font-family="sans-serif">-1</text><line x1="112.1" y1="69.8" x2="112.1" y2="75.8" stroke="#555" stroke-width="1"/><text x="112.1" y="84.8" text-anchor="middle" font-size="8" fill="#888" font-family="sans-serif">1</text><line x1="136.7" y1="69.8" x2="136.7" y2="75.8" stroke="#555" stroke-width="1"/><text x="136.7" y="84.8" text-anchor="middle" font-size="8" fill="#888" font-family="sans-serif">2</text><line x1="84.5" y1="104.0" x2="90.5" y2="104.0" stroke="#555" stroke-width="1"/><text x="82.5" y="107.0" text-anchor="end" font-size="8" fill="#888" font-family="sans-serif">-2</text><line x1="84.5" y1="88.4" x2="90.5" y2="88.4" stroke="#555" stroke-width="1"/><text x="82.5" y="91.4" text-anchor="end" font-size="8" fill="#888" font-family="sans-serif">-1</text><line x1="84.5" y1="57.2" x2="90.5" y2="57.2" stroke="#555" stroke-width="1"/><text x="82.5" y="60.2" text-anchor="end" font-size="8" fill="#888" font-family="sans-serif">1</text><line x1="84.5" y1="41.6" x2="90.5" y2="41.6" stroke="#555" stroke-width="1"/><text x="82.5" y="44.6" text-anchor="end" font-size="8" fill="#888" font-family="sans-serif">2</text><line x1="84.5" y1="26.0" x2="90.5" y2="26.0" stroke="#555" stroke-width="1"/><text x="82.5" y="29.0" text-anchor="end" font-size="8" fill="#888" font-family="sans-serif">3</text><text x="152" y="76.8" font-size="10" fill="#555" font-family="sans-serif">x</text><text x="90.5" y="24" font-size="10" fill="#555" font-family="sans-serif">y</text><polyline points="26.0,104.5 27.0,102.0 28.1,99.6 29.1,97.3 30.1,95.0 31.1,92.9 32.1,90.9 33.2,89.0 34.2,87.1 35.2,85.4 36.2,83.7 37.3,82.1 38.3,80.6 39.3,79.2 40.4,77.8 41.4,76.6 42.4,75.4 43.4,74.3 44.5,73.2 45.5,72.3 46.5,71.4 47.5,70.5 48.5,69.8 49.6,69.1 50.6,68.4 51.6,67.8 52.7,67.3 53.7,66.9 54.7,66.4 55.7,66.1 56.8,65.8 57.8,65.5 58.8,65.3 59.8,65.2 60.9,65.1 61.9,65.0 62.9,65.0 63.9,65.0 64.9,65.1 66.0,65.2 67.0,65.3 68.0,65.5 69.0,65.7 70.1,65.9 71.1,66.2 72.1,66.4 73.2,66.7 74.2,67.1 75.2,67.4 76.2,67.8 77.2,68.2 78.3,68.6 79.3,69.0 80.3,69.5 81.3,69.9 82.4,70.4 83.4,70.9 84.4,71.3 85.4,71.8 86.5,72.3 87.5,72.8 88.5,73.3 89.6,73.8 90.6,74.3 91.6,74.7 92.6,75.2 93.7,75.7 94.7,76.1 95.7,76.6 96.7,77.0 97.8,77.4 98.8,77.8 99.8,78.2 100.8,78.5 101.9,78.9 102.9,79.2 103.9,79.4 104.9,79.7 106.0,79.9 107.0,80.1 108.0,80.3 109.0,80.4 110.0,80.5 111.1,80.6 112.1,80.6 113.1,80.6 114.2,80.5 115.2,80.4 116.2,80.3 117.2,80.1 118.2,79.8 119.3,79.5 120.3,79.2 121.3,78.7 122.3,78.3 123.4,77.8 124.4,77.2 125.4,76.5 126.5,75.8 127.5,75.1 128.5,74.2 129.5,73.3 130.6,72.4 131.6,71.3 132.6,70.2 133.6,69.0 134.6,67.8 135.7,66.4 136.7,65.0 137.7,63.5 138.8,61.9 139.8,60.2 140.8,58.5 141.8,56.6 142.8,54.7 143.9,52.7 144.9,50.6 145.9,48.3 146.9,46.0 148.0,43.6 149.0,41.1" fill="none" stroke="#1e3a5c" stroke-width="2" stroke-linejoin="round" clip-path="url(#gvp6)"/><circle cx="62.9" cy="65.0" r="3" fill="#1e3a5c" stroke="white" stroke-width="1.5"/><text x="62.9" y="56.0" text-anchor="middle" font-size="10" fill="#1e3a5c" font-family="sans-serif" font-weight="bold">A</text></svg><svg width="175" height="130" viewBox="0 0 175 130" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:4px auto"><defs><clipPath id="gvp7"><rect x="26" y="26" width="123" height="78"/></clipPath></defs><rect x="26" y="26" width="123" height="78" fill="#fafaf8" rx="2"/><line x1="38.3" y1="26" x2="38.3" y2="104" stroke="#ddd" stroke-width="1"/><line x1="62.9" y1="26" x2="62.9" y2="104" stroke="#ddd" stroke-width="1"/><line x1="87.5" y1="26" x2="87.5" y2="104" stroke="#ddd" stroke-width="1"/><line x1="112.1" y1="26" x2="112.1" y2="104" stroke="#ddd" stroke-width="1"/><line x1="136.7" y1="26" x2="136.7" y2="104" stroke="#ddd" stroke-width="1"/><line x1="26" y1="104.0" x2="149" y2="104.0" stroke="#ddd" stroke-width="1"/><line x1="26" y1="88.4" x2="149" y2="88.4" stroke="#ddd" stroke-width="1"/><line x1="26" y1="72.8" x2="149" y2="72.8" stroke="#ddd" stroke-width="1"/><line x1="26" y1="57.2" x2="149" y2="57.2" stroke="#ddd" stroke-width="1"/><line x1="26" y1="41.6" x2="149" y2="41.6" stroke="#ddd" stroke-width="1"/><line x1="26" y1="26.0" x2="149" y2="26.0" stroke="#ddd" stroke-width="1"/><line x1="26" y1="72.8" x2="149" y2="72.8" stroke="#555" stroke-width="1.5"/><line x1="87.5" y1="26" x2="87.5" y2="104" stroke="#555" stroke-width="1.5"/><line x1="38.3" y1="69.8" x2="38.3" y2="75.8" stroke="#555" stroke-width="1"/><text x="38.3" y="84.8" text-anchor="middle" font-size="8" fill="#888" font-family="sans-serif">-2</text><line x1="62.9" y1="69.8" x2="62.9" y2="75.8" stroke="#555" stroke-width="1"/><text x="62.9" y="84.8" text-anchor="middle" font-size="8" fill="#888" font-family="sans-serif">-1</text><line x1="112.1" y1="69.8" x2="112.1" y2="75.8" stroke="#555" stroke-width="1"/><text x="112.1" y="84.8" text-anchor="middle" font-size="8" fill="#888" font-family="sans-serif">1</text><line x1="136.7" y1="69.8" x2="136.7" y2="75.8" stroke="#555" stroke-width="1"/><text x="136.7" y="84.8" text-anchor="middle" font-size="8" fill="#888" font-family="sans-serif">2</text><line x1="84.5" y1="104.0" x2="90.5" y2="104.0" stroke="#555" stroke-width="1"/><text x="82.5" y="107.0" text-anchor="end" font-size="8" fill="#888" font-family="sans-serif">-2</text><line x1="84.5" y1="88.4" x2="90.5" y2="88.4" stroke="#555" stroke-width="1"/><text x="82.5" y="91.4" text-anchor="end" font-size="8" fill="#888" font-family="sans-serif">-1</text><line x1="84.5" y1="57.2" x2="90.5" y2="57.2" stroke="#555" stroke-width="1"/><text x="82.5" y="60.2" text-anchor="end" font-size="8" fill="#888" font-family="sans-serif">1</text><line x1="84.5" y1="41.6" x2="90.5" y2="41.6" stroke="#555" stroke-width="1"/><text x="82.5" y="44.6" text-anchor="end" font-size="8" fill="#888" font-family="sans-serif">2</text><line x1="84.5" y1="26.0" x2="90.5" y2="26.0" stroke="#555" stroke-width="1"/><text x="82.5" y="29.0" text-anchor="end" font-size="8" fill="#888" font-family="sans-serif">3</text><text x="152" y="76.8" font-size="10" fill="#555" font-family="sans-serif">x</text><text x="90.5" y="24" font-size="10" fill="#555" font-family="sans-serif">y</text><polyline points="26.0,11.4 27.0,13.8 28.1,16.2 29.1,18.5 30.1,20.8 31.1,23.1 32.1,25.3 33.2,27.4 34.2,29.6 35.2,31.7 36.2,33.7 37.3,35.7 38.3,37.7 39.3,39.6 40.4,41.5 41.4,43.4 42.4,45.2 43.4,46.9 44.5,48.7 45.5,50.4 46.5,52.0 47.5,53.6 48.5,55.2 49.6,56.7 50.6,58.2 51.6,59.6 52.7,61.0 53.7,62.4 54.7,63.7 55.7,65.0 56.8,66.2 57.8,67.4 58.8,68.6 59.8,69.7 60.9,70.8 61.9,71.8 62.9,72.8 63.9,73.8 64.9,74.7 66.0,75.5 67.0,76.4 68.0,77.2 69.0,77.9 70.1,78.6 71.1,79.3 72.1,79.9 73.2,80.5 74.2,81.1 75.2,81.6 76.2,82.0 77.2,82.5 78.3,82.9 79.3,83.2 80.3,83.5 81.3,83.8 82.4,84.0 83.4,84.2 84.4,84.3 85.4,84.4 86.5,84.5 87.5,84.5 88.5,84.5 89.6,84.4 90.6,84.3 91.6,84.2 92.6,84.0 93.7,83.8 94.7,83.5 95.7,83.2 96.7,82.9 97.8,82.5 98.8,82.0 99.8,81.6 100.8,81.1 101.9,80.5 102.9,79.9 103.9,79.3 104.9,78.6 106.0,77.9 107.0,77.2 108.0,76.4 109.0,75.5 110.0,74.7 111.1,73.8 112.1,72.8 113.1,71.8 114.2,70.8 115.2,69.7 116.2,68.6 117.2,67.4 118.2,66.2 119.3,65.0 120.3,63.7 121.3,62.4 122.3,61.0 123.4,59.6 124.4,58.2 125.4,56.7 126.5,55.2 127.5,53.6 128.5,52.0 129.5,50.4 130.6,48.7 131.6,46.9 132.6,45.2 133.6,43.4 134.6,41.5 135.7,39.6 136.7,37.7 137.7,35.7 138.8,33.7 139.8,31.7 140.8,29.6 141.8,27.4 142.8,25.3 143.9,23.1 144.9,20.8 145.9,18.5 146.9,16.2 148.0,13.8 149.0,11.4" fill="none" stroke="#7a5c1e" stroke-width="2" stroke-linejoin="round" clip-path="url(#gvp7)"/><circle cx="87.5" cy="84.5" r="3" fill="#7a5c1e" stroke="white" stroke-width="1.5"/><text x="87.5" y="75.5" text-anchor="middle" font-size="10" fill="#7a5c1e" font-family="sans-serif" font-weight="bold">B</text></svg><svg width="175" height="130" viewBox="0 0 175 130" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:4px auto"><defs><clipPath id="gvp8"><rect x="26" y="26" width="123" height="78"/></clipPath></defs><rect x="26" y="26" width="123" height="78" fill="#fafaf8" rx="2"/><line x1="38.3" y1="26" x2="38.3" y2="104" stroke="#ddd" stroke-width="1"/><line x1="62.9" y1="26" x2="62.9" y2="104" stroke="#ddd" stroke-width="1"/><line x1="87.5" y1="26" x2="87.5" y2="104" stroke="#ddd" stroke-width="1"/><line x1="112.1" y1="26" x2="112.1" y2="104" stroke="#ddd" stroke-width="1"/><line x1="136.7" y1="26" x2="136.7" y2="104" stroke="#ddd" stroke-width="1"/><line x1="26" y1="104.0" x2="149" y2="104.0" stroke="#ddd" stroke-width="1"/><line x1="26" y1="88.4" x2="149" y2="88.4" stroke="#ddd" stroke-width="1"/><line x1="26" y1="72.8" x2="149" y2="72.8" stroke="#ddd" stroke-width="1"/><line x1="26" y1="57.2" x2="149" y2="57.2" stroke="#ddd" stroke-width="1"/><line x1="26" y1="41.6" x2="149" y2="41.6" stroke="#ddd" stroke-width="1"/><line x1="26" y1="26.0" x2="149" y2="26.0" stroke="#ddd" stroke-width="1"/><line x1="26" y1="72.8" x2="149" y2="72.8" stroke="#555" stroke-width="1.5"/><line x1="87.5" y1="26" x2="87.5" y2="104" stroke="#555" stroke-width="1.5"/><line x1="38.3" y1="69.8" x2="38.3" y2="75.8" stroke="#555" stroke-width="1"/><text x="38.3" y="84.8" text-anchor="middle" font-size="8" fill="#888" font-family="sans-serif">-2</text><line x1="62.9" y1="69.8" x2="62.9" y2="75.8" stroke="#555" stroke-width="1"/><text x="62.9" y="84.8" text-anchor="middle" font-size="8" fill="#888" font-family="sans-serif">-1</text><line x1="112.1" y1="69.8" x2="112.1" y2="75.8" stroke="#555" stroke-width="1"/><text x="112.1" y="84.8" text-anchor="middle" font-size="8" fill="#888" font-family="sans-serif">1</text><line x1="136.7" y1="69.8" x2="136.7" y2="75.8" stroke="#555" stroke-width="1"/><text x="136.7" y="84.8" text-anchor="middle" font-size="8" fill="#888" font-family="sans-serif">2</text><line x1="84.5" y1="104.0" x2="90.5" y2="104.0" stroke="#555" stroke-width="1"/><text x="82.5" y="107.0" text-anchor="end" font-size="8" fill="#888" font-family="sans-serif">-2</text><line x1="84.5" y1="88.4" x2="90.5" y2="88.4" stroke="#555" stroke-width="1"/><text x="82.5" y="91.4" text-anchor="end" font-size="8" fill="#888" font-family="sans-serif">-1</text><line x1="84.5" y1="57.2" x2="90.5" y2="57.2" stroke="#555" stroke-width="1"/><text x="82.5" y="60.2" text-anchor="end" font-size="8" fill="#888" font-family="sans-serif">1</text><line x1="84.5" y1="41.6" x2="90.5" y2="41.6" stroke="#555" stroke-width="1"/><text x="82.5" y="44.6" text-anchor="end" font-size="8" fill="#888" font-family="sans-serif">2</text><line x1="84.5" y1="26.0" x2="90.5" y2="26.0" stroke="#555" stroke-width="1"/><text x="82.5" y="29.0" text-anchor="end" font-size="8" fill="#888" font-family="sans-serif">3</text><text x="152" y="76.8" font-size="10" fill="#555" font-family="sans-serif">x</text><text x="90.5" y="24" font-size="10" fill="#555" font-family="sans-serif">y</text><line x1="54.7" y1="104.0" x2="136.7" y2="26.0" stroke="#3f7a52" stroke-width="2" clip-path="url(#gvp8)"/><text x="132.7" y="20.0" font-size="10" fill="#3f7a52" font-family="sans-serif" font-weight="bold">C</text></svg></div></div>
+  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden"><strong>A is $f$</strong>: cubic shape with local max and min.<br><strong>B is $f'$</strong>: upward parabola, zeros at local max/min of A ($x=\pm1$).<br><strong>C is $f''$</strong>: line through origin (derivative of B, which is a parabola).<br>Cross-check: $f''=0$ at $x=0$ &#10004; — and B has its minimum at $x=0$ &#10004;</div></div>
+</div>
+</div>
+<div class="section-head">Practice Problems</div>
+<div class="practice">
+<div class="pr-row">
+  <div class="pr-num">1.</div>
+  <div class="pr-prob">$f$ is <strong>decreasing</strong> on $(-3,1)$ and <strong>increasing</strong> on $(1,5)$. What is the sign of $f'$ on each interval, and what is $f'(1)$?</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$f'<0$ on $(-3,1)$; &nbsp;$f'>0$ on $(1,5)$; &nbsp;$f'(1)=0$ (local min of $f$).</div></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">2.</div>
+  <div class="pr-prob">$f(x)=x^2-4x$. Without computing $f'$, determine where $f'(x)=0$ from the graph.</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$f(x)=x^2-4x=x(x-4)$ has vertex at $x=2$ (local min). So $f'(2)=0$.</div></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">3.</div>
+  <div class="pr-prob">A function $f$ has a corner at $x=-2$. What can you say about $f'(-2)$?</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$f'(-2)$ is <strong>undefined</strong>. The left and right slopes exist but differ.</div></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">4.</div>
+  <div class="pr-prob">$f'(x)=x^2-4$. On what intervals is $f$ increasing? Where does $f$ have local extrema?</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$f'>0$ when $x^2>4$, i.e. $x<-2$ or $x>2$. Local max at $x=-2$, local min at $x=2$.</div></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">5.</div>
+  <div class="pr-prob">The graph of $f'$ passes through $(0,3)$ and $(2,0)$ (decreasing line). What does this tell you about $f$?</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$f$ is increasing for $x<2$ (since $f'>0$), has a local max at $x=2$ ($f'=0$), and is decreasing for $x>2$ ($f'<0$).</div></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">6.</div>
+  <div class="pr-prob"><strong>Stretch:</strong> $f$ has an inflection point at $x=4$. What does this tell you about $f'$ at $x=4$? About $f''$?</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">At an inflection point, $f'$ has a local max or min (changes from increasing to decreasing or vice versa). $f''(4)=0$.</div></div>
+</div>
+</div>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/contrib/auto-render.min.js"></script>
+<script>
+function toggleAns(btn) {
+  if (!btn.dataset.orig) btn.dataset.orig = btn.textContent;
+  var ans = btn.nextElementSibling;
+  var showing = ans.classList.toggle('visible');
+  btn.textContent = showing ? 'Hide' : btn.dataset.orig;
+}
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left: '$$', right: '$$', display: true},
+      {left: '$',  right: '$',  display: false}
+    ],
+    throwOnError: false
+  });
+</script>
+</body>
+</html>
