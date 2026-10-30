@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FTC &mdash; Accumulation Graphs &mdash; Practice</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.css">
+<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
+<script src="../js/sketch-widget.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.7}
+.container{max-width:820px;margin:0 auto;padding:2rem 1.5rem 4rem}
+h1{font-size:26px;font-weight:700;margin-bottom:4px}
+.subtitle{font-size:14px;color:#666;margin-bottom:2rem;font-family:sans-serif}
+.concept{background:#d9e8f5;border-left:4px solid #1e3a5c;border-radius:0 8px 8px 0;
+  padding:.85rem 1.1rem;font-size:14px;margin-bottom:1.5rem}
+.concept-label{font-family:sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;
+  letter-spacing:.07em;color:#1e3a5c;display:block;margin-bottom:.35rem}
+.direction-tag{display:inline-block;font-family:sans-serif;font-size:10px;font-weight:700;
+  padding:2px 8px;border-radius:10px;letter-spacing:.05em;vertical-align:middle;margin-left:6px}
+.tag-accum{background:#e8f0f8;color:#1e3a5c;border:1px solid #b0c8e0}
+.tag-stretch{background:#7a5c1e;color:#fff}
+.card{background:#fff;border:1.5px solid #ddd;border-radius:10px;padding:1.2rem 1.4rem;margin-bottom:2rem}
+.card-num{font-family:sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;
+  letter-spacing:.06em;color:#7a5c1e;margin-bottom:.5rem}
+.card-question{font-size:14.5px;margin-bottom:.9rem;line-height:1.75}
+.sk-toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:.8rem;align-items:center}
+.sk-type{font-family:sans-serif;font-size:12px;padding:4px 12px;border-radius:16px;
+  border:1.5px solid #1e3a5c;background:#fff;color:#1e3a5c;cursor:pointer;transition:all .15s}
+.sk-type.sk-active,.sk-type:hover{background:#1e3a5c;color:#fff}
+.sk-type[data-sktype="vertex"]{border-color:#7a5c1e;color:#7a5c1e}
+.sk-type[data-sktype="vertex"].sk-active,.sk-type[data-sktype="vertex"]:hover{background:#7a5c1e;color:#fff}
+.sk-note{font-family:sans-serif;font-size:11.5px;color:#666;flex:1;min-width:160px}
+.sk-actions{display:flex;gap:8px;margin-top:.8rem;flex-wrap:wrap}
+.sk-act{font-family:sans-serif;font-size:13px;padding:6px 18px;border-radius:6px;
+  border:none;cursor:pointer;font-weight:600;transition:all .15s}
+.sk-act.primary{background:#1e3a5c;color:#fff}
+.sk-act.primary:hover{background:#2a4e78}
+.sk-act.secondary{background:#eee;color:#333}
+.sk-act.secondary:hover{background:#ddd}
+.sk-fb{margin-top:.8rem;font-family:sans-serif;font-size:13px;min-height:1.5rem}
+.sk-feat{display:flex;gap:.5rem;padding:.15rem 0;line-height:1.4}
+.sk-feat.hit{color:#3f7a52}
+.sk-feat.miss{color:#b3413a}
+.sk-feat span:first-child{font-weight:700;min-width:1.2em}
+.nav-row{display:flex;gap:10px;justify-content:center;margin-top:.5rem;flex-wrap:wrap}
+.nav-btn{font-family:sans-serif;font-size:13px;padding:7px 20px;border-radius:7px;
+  border:1.5px solid #1e3a5c;background:#fff;color:#1e3a5c;cursor:pointer;font-weight:600}
+.nav-btn:hover{background:#1e3a5c;color:#fff}
+.problem-counter{font-family:sans-serif;font-size:13px;color:#888;text-align:center;margin-top:.5rem}
+svg{display:block;margin:.5rem auto;border:1px solid #e8e4dc;border-radius:6px;background:#fafaf8}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>FTC &mdash; Accumulation Graphs</h1>
+<p class="subtitle">Calculus I &nbsp;&middot;&nbsp; &sect;4.7.2 &nbsp;&middot;&nbsp;
+Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026</p>
+
+<div class="concept">
+  <span class="concept-label">How to use this practice</span>
+  The <strong>navy</strong> curve is the <em>rate function \(f\)</em>. Sketch the <em>accumulation function</em>
+  \(F(x) = \int_a^x f(t)\,dt\), which always starts at \(F(a) = 0\).<br>
+  &bull; <strong>Vertex</strong> (diamond) &mdash; place where \(F\) has slope 0 (where \(f = 0\): a max or min of \(F\))<br>
+  &bull; <strong>Key Point</strong> (circle) &mdash; place any other guiding point on the \(F\) curve<br>
+  Problems 1&ndash;5: given \(f\), sketch \(F\). &nbsp; Problem 6: stretch &mdash; given \(F\), sketch \(f\).
+</div>
+
+<div class="card" id="prob-card">
+  <div class="card-num" id="prob-num">Problem 1 of 6</div>
+  <div class="card-question" id="prob-q"></div>
+
+  <div class="sk-toolbar" id="sk-toolbar">
+    <button class="sk-type sk-active" data-sktype="keypoint">&#9675; Key Point</button>
+    <button class="sk-type" data-sktype="vertex">&#9670; Vertex &nbsp;<small>(slope&nbsp;=&nbsp;0)</small></button>
+    <span class="sk-note" id="sk-hint-text">Click the grid to place markers &bull; Click a marker to remove it</span>
+  </div>
+
+  <svg id="sk-svg" width="480" height="280" viewBox="0 0 480 280"></svg>
+
+  <div class="sk-actions">
+    <button class="sk-act primary" onclick="doCheck()">Check Sketch</button>
+    <button class="sk-act secondary" onclick="doAnswer()">Show Answer</button>
+    <button class="sk-act secondary" onclick="doReset()">Reset</button>
+  </div>
+  <div class="sk-fb" id="sk-fb"></div>
+</div>
+
+<div class="nav-row">
+  <button class="nav-btn" onclick="goPrev()">&#8592; Prev</button>
+  <button class="nav-btn" onclick="goNext()">Next &#8594;</button>
+</div>
+<div class="problem-counter" id="prob-counter"></div>
+</div>
+
+<script>
+// ── Problem definitions ───────────────────────────────────────────────────────
+// Accumulation problems (1–5):
+//   staticFn = f(t)  — the rate function, shown in navy
+//   fn       = F(x)  — the accumulation function, F(a) = 0
+//   Vertex markers go where F has slope 0 (i.e., where f = 0)
+//   Key Point markers anchor the starting point or other guide points
+//
+// Stretch (6):
+//   staticFn = F(x)  — the accumulation function, shown in navy
+//   fn       = f(t)  — student sketches the rate function f = F′
+
+const PROBLEMS = [
+
+  // ── 1. f = 2−t  →  F = 2x − x²/2  (rises to max at x=2, falls back to 0 at x=4)
+  {
+    label: 'Problem 1 of 6',
+    tag:   'accum',
+    question: 'The navy line is \\(f(t) = 2 - t\\). Starting at \\(F(0) = 0\\), '
+            + 'sketch \\(F(x) = \\int_0^x f(t)\\,dt\\). '
+            + 'Place a <strong>Vertex</strong> where \\(F\\) reaches its maximum.',
+    hint: 'f > 0 on (0, 2) → F rising. f = 0 at t = 2 → Vertex (max of F). f < 0 on (2, 4) → F falling.',
+    prob: {
+      staticFn:    x => 2 - x,
+      staticColor: '#1e3a5c',
+      fn:          x => 2*x - x*x/2,
+      xMin: 0, xMax: 4, yMin: -0.5, yMax: 2.5,
+      tStep: 1, hStep: 1, tolerance: 0.1,
+      expected: {
+        vertex:    [{x: 2,  y: 2,  label: 'F has local max at x = 2  (f goes + → 0 → −)'}],
+        keypoints: [{x: 0,  y: 0,  label: 'F(0) = 0: the starting anchor'}]
+      }
+    }
+  },
+
+  // ── 2. f = t−2  →  F = x²/2 − 2x  (falls to min at x=2, rises back to 0 at x=4)
+  {
+    label: 'Problem 2 of 6',
+    tag:   'accum',
+    question: 'The navy line is \\(f(t) = t - 2\\). Starting at \\(F(0) = 0\\), '
+            + 'sketch \\(F(x) = \\int_0^x f(t)\\,dt\\). '
+            + 'Place a <strong>Vertex</strong> where \\(F\\) reaches its minimum.',
+    hint: 'f < 0 on (0, 2) → F falling. f = 0 at t = 2 → Vertex (min of F). f > 0 on (2, 4) → F rising.',
+    prob: {
+      staticFn:    x => x - 2,
+      staticColor: '#1e3a5c',
+      fn:          x => x*x/2 - 2*x,
+      xMin: 0, xMax: 4, yMin: -2.5, yMax: 0.5,
+      tStep: 1, hStep: 1, tolerance: 0.1,
+      expected: {
+        vertex:    [{x: 2,  y: -2, label: 'F has local min at x = 2  (f goes − → 0 → +)'}],
+        keypoints: [{x: 0,  y: 0,  label: 'F(0) = 0: the starting anchor'}]
+      }
+    }
+  },
+
+  // ── 3. f = −t/2  →  F = −x²/4 + 9/4  (downward parabola, max at x=0, F(±3)=0)
+  //       Starting point: F(−3) = 0
+  {
+    label: 'Problem 3 of 6',
+    tag:   'accum',
+    question: 'The navy line is \\(f(t) = -\\tfrac{t}{2}\\). Starting at \\(F(-3) = 0\\), '
+            + 'sketch \\(F(x) = \\int_{-3}^x f(t)\\,dt\\). '
+            + 'Place a <strong>Vertex</strong> where \\(F\\) reaches its maximum.',
+    hint: 'f > 0 on (−3, 0) → F rising. f = 0 at t = 0 → Vertex (max of F). f < 0 on (0, 3) → F falling.',
+    prob: {
+      staticFn:    x => -x/2,
+      staticColor: '#1e3a5c',
+      fn:          x => -x*x/4 + 2.25,
+      xMin: -3, xMax: 3, yMin: -0.5, yMax: 2.5,
+      tStep: 1, hStep: 1, tolerance: 0.1,
+      expected: {
+        vertex:    [{x: 0,  y: 2.25, label: 'F has local max at x = 0  (f goes + → 0 → −)'}],
+        keypoints: [{x: -3, y: 0,    label: 'F(−3) = 0: the starting anchor'}]
+      }
+    }
+  },
+
+  // ── 4. f = sin(πx/4) on [0,8]  →  F = (4/π)(1 − cos(πx/4))
+  //       F(0)=0, max at x=4 (F=8/π≈2.55), back to 0 at x=8
+  {
+    label: 'Problem 4 of 6',
+    tag:   'accum',
+    question: 'The navy curve is \\(f(t) = \\sin\\!\\left(\\tfrac{\\pi t}{4}\\right)\\). '
+            + 'Starting at \\(F(0) = 0\\), sketch \\(F(x) = \\int_0^x f(t)\\,dt\\). '
+            + 'Place a <strong>Vertex</strong> where \\(F\\) reaches its maximum.',
+    hint: 'f > 0 on (0, 4) → F rising. f = 0 at t = 4 → Vertex (max of F). f < 0 on (4, 8) → F falling, returning to 0 at x = 8.',
+    prob: {
+      staticFn:    x => Math.sin(Math.PI * x / 4),
+      staticColor: '#1e3a5c',
+      fn:          x => (4 / Math.PI) * (1 - Math.cos(Math.PI * x / 4)),
+      xMin: 0, xMax: 8, yMin: -0.5, yMax: 3,
+      tStep: 2, hStep: 1, tolerance: 0.15,
+      expected: {
+        vertex:    [{x: 4, y: 8 / Math.PI, label: 'F has max at x = 4  (f = 0 there; f goes + → −)'}],
+        keypoints: [{x: 0, y: 0,           label: 'F(0) = 0: the starting anchor'}]
+      }
+    }
+  },
+
+  // ── 5. f = 0.3(x²−4) on [−3, 3], F(−3)=0  →  F = 0.1x³ − 1.2x − 0.9
+  //       local max at (−2, 0.7), local min at (2, −2.5)
+  {
+    label: 'Problem 5 of 6',
+    tag:   'accum',
+    question: 'The navy curve is \\(f(t) = 0.3(t^2 - 4)\\). Starting at \\(F(-3) = 0\\), '
+            + 'sketch \\(F(x) = \\int_{-3}^x f(t)\\,dt\\). '
+            + 'Place <strong>Vertices</strong> at both critical points of \\(F\\).',
+    hint: 'f = 0 at t = ±2. On (−3, −2): f > 0 → F rising. On (−2, 2): f < 0 → F falling. On (2, 3): f > 0 → F rising again.',
+    prob: {
+      staticFn:    x => 0.3 * (x*x - 4),
+      staticColor: '#1e3a5c',
+      fn:          x => 0.1*x*x*x - 1.2*x - 0.9,
+      xMin: -3, xMax: 3, yMin: -3, yMax: 1.2,
+      tStep: 1, hStep: 1, tolerance: 0.15,
+      passThreshold: 1,
+      expected: {
+        vertex: [
+          {x: -2, y:  0.7,  label: 'local max at x = −2  (f goes + → 0 → −)'},
+          {x:  2, y: -2.5,  label: 'local min at x = 2   (f goes − → 0 → +)'}
+        ],
+        keypoints: [{x: -3, y: 0, label: 'F(−3) = 0: the starting anchor'}]
+      }
+    }
+  },
+
+  // ── 6. STRETCH: given F = 2x − x²/2 (navy), sketch f = F′ = 2 − x  (linear, descending)
+  {
+    label: 'Problem 6 of 6 — Stretch',
+    tag:   'stretch',
+    question: '<strong>Stretch: reverse direction.</strong> '
+            + 'The navy curve is the accumulation function \\(F(x) = 2x - \\tfrac{x^2}{2}\\). '
+            + 'Sketch the <em>rate function</em> \\(f = F\'\\). '
+            + 'Is it linear or curved? Where does it cross zero?',
+    hint: 'Read the slope of F at each x to get f. F rises steeply at x = 0 (f is large), has a horizontal tangent at x = 2 (f = 0), then falls (f is negative).',
+    prob: {
+      staticFn:    x => 2*x - x*x/2,
+      staticColor: '#1e3a5c',
+      fn:          x => 2 - x,
+      xMin: 0, xMax: 4, yMin: -2.5, yMax: 2.5,
+      tStep: 1, hStep: 1, tolerance: 0.12,
+      expected: {
+        keypoints: [
+          {x: 0, y:  2,  label: 'f(0) = F\'(0) = 2  (slope of F at the left edge)'},
+          {x: 2, y:  0,  label: 'f(2) = 0  (F has a horizontal tangent at its peak)'},
+          {x: 4, y: -2,  label: 'f(4) = F\'(4) = −2  (slope of F at the right edge)'}
+        ]
+      }
+    }
+  }
+
+];
+
+// ── State ─────────────────────────────────────────────────────────────────────
+let currentIdx = 0;
+let widget = null;
+
+function loadProblem(idx) {
+  currentIdx = idx;
+  const p = PROBLEMS[idx];
+  document.getElementById('prob-num').textContent = p.label;
+  document.getElementById('prob-q').innerHTML = p.question;
+  document.getElementById('prob-counter').textContent = (idx + 1) + ' / ' + PROBLEMS.length;
+  document.getElementById('sk-fb').innerHTML = '';
+  document.getElementById('sk-hint-text').textContent = p.hint || 'Click the grid to place markers';
+
+  // Render KaTeX in question
+  if (typeof renderMathInElement !== 'undefined') {
+    renderMathInElement(document.getElementById('prob-q'),
+      {delimiters:[{left:'\\(',right:'\\)',display:false}], throwOnError:false});
+  }
+
+  const toolbar = document.getElementById('sk-toolbar');
+  toolbar.querySelectorAll('[data-sktype]').forEach(b => b.classList.remove('sk-active'));
+  toolbar.querySelector('[data-sktype="keypoint"]').classList.add('sk-active');
+
+  widget = new SketchWidget('sk-svg', 'sk-fb', p.prob, toolbar);
+}
+
+function doCheck()  { if (widget) widget.checkSketch(); }
+function doAnswer() { if (widget) widget.showAnswer(); }
+function doReset()  { if (widget) widget.reset(); }
+function goNext()   { loadProblem((currentIdx + 1) % PROBLEMS.length); }
+function goPrev()   { loadProblem((currentIdx - 1 + PROBLEMS.length) % PROBLEMS.length); }
+
+document.addEventListener('DOMContentLoaded', () => { loadProblem(0); });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'\\\\(',right:'\\\\)',display:false},{left:'\\\\[',right:'\\\\]',display:true}],throwOnError:false})">
+</script>
+</body>
+</html>
