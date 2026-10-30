@@ -16,16 +16,7 @@ header h1{font-size:1.15rem;font-weight:700;flex:1;color:#fff}
 .hbadge.ca{background:rgba(255,255,255,.15);color:#c8f0d4;border:1px solid rgba(255,255,255,.3)}
 .hbadge.c2{background:rgba(255,255,255,.15);color:#c8d8f0;border:1px solid rgba(255,255,255,.3)}
 .hbadge.pc{background:rgba(255,255,255,.15);color:#fddcaa;border:1px solid rgba(255,255,255,.3)}
-.et-tile{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;max-width:1400px;margin:1.25rem auto 0;padding:0 1.25rem}
-@media(max-width:900px){.et-tile{grid-template-columns:1fr 1fr}}
-@media(max-width:600px){.et-tile{grid-template-columns:1fr}}
-.et-card{background:#fff;border:1px solid #e0e0e0;border-radius:10px;padding:1rem 1.2rem}
-.et-card.ca{border-color:#2e533944}.et-card.c2{border-color:#1e3a5c44}.et-card.pc{border-color:#7a5c1e44}
-.et-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;margin-bottom:.4rem}
-.et-card.ca .et-label{color:#2e5339}.et-card.c2 .et-label{color:#1e3a5c}.et-card.pc .et-label{color:#7a5c1e}
-.et-day{font-size:.75rem;color:#555555;margin-bottom:.35rem}
-.et-q{font-size:.92rem;line-height:1.7}
-.et-none{color:#555555;font-style:italic;font-size:.85rem}
+/* exit-ticket tile removed */
 .main-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.25rem;max-width:1400px;margin:1.25rem auto 0;padding:0 1.25rem 3rem}
 @media(max-width:1000px){.main-grid{grid-template-columns:1fr 1fr}}
 @media(max-width:600px){.main-grid{grid-template-columns:1fr}}
@@ -99,23 +90,6 @@ details[open] .chevron{transform:rotate(90deg)}
   <span class="hbadge pc" id="hbPC">PC</span>
 </header>
 
-<div class="et-tile">
-  <div class="et-card ca">
-    <div class="et-label">Today's Exit Ticket — College Algebra</div>
-    <div class="et-day" id="etCaDay">&nbsp;</div>
-    <div class="et-q" id="etCaQ"><span class="et-none">Loading…</span></div>
-  </div>
-  <div class="et-card c2">
-    <div class="et-label">Today's Exit Ticket — Calculus 1</div>
-    <div class="et-day" id="etC2Day">&nbsp;</div>
-    <div class="et-q" id="etC2Q"><span class="et-none">Loading…</span></div>
-  </div>
-  <div class="et-card pc">
-    <div class="et-label">Today's Exit Ticket — PreCalc</div>
-    <div class="et-day" id="etPCDay">&nbsp;</div>
-    <div class="et-q" id="etPCQ"><span class="et-none">Loading…</span></div>
-  </div>
-</div>
 
 <div class="main-grid">
   <div id="caCol"><div class="state-msg">Loading…</div></div>
@@ -200,15 +174,12 @@ function buildLessonCard(course,sec,dayNum,isOpen,schedItem){
   const weDoInner=(sec.weDoText?`<div style="font-size:.83rem;color:#333;line-height:1.6;margin-bottom:${weDo.length?'.45rem':'0'}">${sec.weDoText}</div>`:'')+exBlocks(weDo);
   if(sec.weDoText||weDo.length)body+=grm('We Do',weDoInner);
   // You Do (Together): practice worksheet — students work with each other
-  const practiceSetLink=sec.reviewProblems?.length
-    ?`<a href="./review.html?section=${sec.id}" class="do-now-link ${course}" target="_blank">Open Practice Set →</a> `
-    :worksheetLink(course,sec);
+  const practiceSetLink = worksheetLink(course, sec);
   body+=grm('You Do (Together)',
-    (practiceSetLink||'<span style="color:#555555;font-size:.83rem">No practice set yet for this section.</span>')+
+    (practiceSetLink||'<span style="color:#555555;font-size:.83rem">No practice page yet for this section.</span>')+
     '<span style="display:block;font-size:.75rem;color:#888;margin-top:.3rem">Students work with a partner — compare approaches, catch errors together.</span>');
   // You Do (Alone): MyOpenMath homework only
   body+=grm('You Do (Alone)',`<a href="https://www.myopenmath.com" class="do-now-link ${course}" target="_blank">Open MyOpenMath →</a><span style="display:block;font-size:.75rem;color:#888;margin-top:.3rem">Individual homework assignment — independent, silent.</span>`);
-  if(sec.exitTicket)body+=grm('Exit Ticket',mEl(sec.exitTicket));
   return`<details class="lesson-card ${course}"${isOpen?' open':''}><summary class="lesson-summary"><span class="day-badge ${course}">Day ${dayNum}</span><span class="lesson-title">§${sec.section} ${sec.title}</span><span class="lesson-date">Fall 2026</span><span class="chevron">›</span></summary><div class="lesson-body">${body}</div></details>`;
 }
 
@@ -224,8 +195,9 @@ function buildSetupCard(course,day,item){
 }
 
 function buildQuizCard(course,day,item,secMap){
-  const chips=(item.sections||[]).map(id=>{const s=secMap[id];if(!s)return'';
-    return`<a href="./review.html?section=${id}" class="chip ${course}" target="_blank">§${s.section} ${s.title}</a>`;
+  const chips=(item.sections||[]).map(id=>{const s=secMap[id];if(!s||!s.hasPractice||!s.practiceFile)return'';
+    const folder=course==='ca'?'./College%20Algebra':course==='pc'?'./PreCalc':'./Calc%201';
+    return`<a href="${folder}/${s.practiceFile}" class="chip ${course}" target="_blank">§${s.section} ${s.title}</a>`;
   }).filter(Boolean).join('');
   let body=grm('Format','<span style="font-size:.83rem;color:#555555">Short quiz — individual, silent. Equation cards and calculators permitted.</span>');
   if(chips)body+=grm('Review sections',`<div class="chips-wrap">${chips}</div>`);
@@ -246,22 +218,34 @@ function renderSchedule(colEl,course,schedule,currentId,secMap){
   colEl.innerHTML=html;
 }
 
+function practiceExamLink(course,item){
+  if(!item?.practiceExamFile)return'';
+  const folder=course==='ca'?'./College%20Algebra':course==='pc'?'./PreCalc':'./Calc%201';
+  return`<a href="${folder}/${item.practiceExamFile}" class="do-now-link ${course}" target="_blank">Open Practice Exam →</a>`;
+}
+
 function buildReviewCard(course,dayNum,item,secMap){
   const doNow=course==='ca'?'./donow-ca.html':course==='pc'?'./donow-precalc.html':'./donow.html';
   const secs=item.sections||[];
-  const chips=secs.map(id=>{const s=secMap[id];if(!s||!s.reviewProblems?.length)return'';
-    return`<a href="./review.html?section=${id}" class="chip ${course}" target="_blank">§${s.section} ${s.title}</a>`;}).filter(Boolean).join('');
-  let body='<div class="review-intro">Students review exam-style problems by section. Click a chip to open that section\'s review set.</div>';
+  const chips=secs.map(id=>{const s=secMap[id];if(!s||!s.hasPractice||!s.practiceFile)return'';
+    const folder=course==='ca'?'./College%20Algebra':course==='pc'?'./PreCalc':'./Calc%201';
+    return`<a href="${folder}/${s.practiceFile}" class="chip ${course}" target="_blank">§${s.section} ${s.title}</a>`;}).filter(Boolean).join('');
+  let body='<div class="review-intro">Practice pages for each section covered on the exam. Click a chip to open that section\'s practice.</div>';
   body+=grm('DO NOW',`<a href="${doNow}" class="do-now-link ${course}" target="_blank">Open Do Now →</a>`);
-  if(chips)body+=grm('Sections',`<div class="chips-wrap">${chips}</div>`);
-  body+=grm('Structure','<span style="color:#8b949e;font-size:.83rem">Students work through 5-problem sets from each section. Shuffle for a new set. Whole-class debrief on common errors.</span>');
+  const pel=practiceExamLink(course,item);
+  if(pel)body+=grm('Practice Exam',pel+'<span style="display:block;font-size:.75rem;color:#888;margin-top:.3rem">Full-length exam practice — individual, timed.</span>');
+  if(chips)body+=grm('By Section',`<div class="chips-wrap">${chips}</div>`);
+  body+=grm('Structure','<span style="color:#8b949e;font-size:.83rem">Students work through practice pages by section. Whole-class debrief on common errors.</span>');
   const label=item.title||'Exam Review';
   return`<details class="lesson-card ${course} review-day"><summary class="lesson-summary"><span class="day-badge review">Day ${dayNum}</span><span class="lesson-title">📚 ${label}</span><span class="lesson-date">Fall 2026</span><span class="chevron">›</span></summary><div class="lesson-body">${body}</div></details>`;
 }
 
 function buildExamCard(course,dayNum,item){
   const label=item?.title||'Exam Day';
-  const body=grm('Structure','<span style="color:#8b949e;font-size:.83rem">Silent individual assessment. Full period. Equation cards and calculators only — no notes. Collect before bell.</span>');
+  let body='';
+  const pel=practiceExamLink(course,item);
+  if(pel)body+=grm('Practice Exam',pel+'<span style="display:block;font-size:.75rem;color:#888;margin-top:.3rem">Students can use this to review the night before.</span>');
+  body+=grm('Structure','<span style="color:#8b949e;font-size:.83rem">Silent individual assessment. Full period. Equation cards and calculators only — no notes. Collect before bell.</span>');
   return`<details class="lesson-card ${course} exam-day"><summary class="lesson-summary"><span class="day-badge exam">Day ${dayNum}</span><span class="lesson-title">✏️ ${label}</span><span class="lesson-date">Fall 2026</span><span class="chevron">›</span></summary><div class="lesson-body">${body}</div></details>`;
 }
 
@@ -280,16 +264,7 @@ function renderColumn(colEl,course,currentId,unit,secMap){
   colEl.innerHTML=html;
 }
 
-function renderExitTile(caId,caMap,c2Id,c2Map,pcId,pcMap){
-  function fill(secId,secMap,dayId,qId){
-    const sec=secMap[secId],dayEl=document.getElementById(dayId),qEl=document.getElementById(qId);
-    if(sec&&sec.exitTicket){if(dayEl)dayEl.textContent='§'+sec.section+' — '+sec.title;if(qEl)qEl.innerHTML=renderMath(sec.exitTicket);}
-    else if(qEl)qEl.innerHTML='<span class="et-none">No exit ticket for current section.</span>';
-  }
-  fill(caId,caMap,'etCaDay','etCaQ');
-  fill(c2Id,c2Map,'etC2Day','etC2Q');
-  fill(pcId,pcMap,'etPCDay','etPCQ');
-}
+/* renderExitTile removed */
 
 Promise.all([
   fetch('./state.json').then(r=>r.json()),
@@ -302,7 +277,6 @@ Promise.all([
   (sections.collegeAlgebra||[]).forEach(s=>caMap[s.id]=s);
   (sections.calc1||[]).forEach(s=>c2Map[s.id]=s);
   (sections.preCalc||[]).forEach(s=>pcMap[s.id]=s);
-  renderExitTile(caId,caMap,c2Id,c2Map,pcId,pcMap);
   const sched=state?.schedule;
   if(sched?.active){
     renderSchedule(document.getElementById('caCol'),'ca',sched.collegeAlgebra||[],caId,caMap);
