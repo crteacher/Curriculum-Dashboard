@@ -79,6 +79,17 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;min-height:100vh
 .prob-text{font-size:16px;line-height:2;overflow-x:auto}
 .katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}
 .sec-card.res-card{background:#f5f3ef;border-style:dashed}
+.exam-block{margin-bottom:1.75rem}
+.exam-block-label{font-family:sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;
+  letter-spacing:.08em;color:#7a5c1e;margin-bottom:.6rem;padding-bottom:5px;
+  border-bottom:2px solid #7a5c1e33}
+.exam-card{background:#fff8ee;border:2px solid #7a5c1e55;border-radius:10px;padding:.9rem 1rem;
+  cursor:pointer;transition:border-color .18s,box-shadow .18s;font-family:sans-serif}
+.exam-card:hover{border-color:#7a5c1e;box-shadow:0 0 0 3px rgba(122,92,30,.12)}
+.exam-card-eyebrow{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;
+  color:#7a5c1e;margin-bottom:3px}
+.exam-card-title{font-size:14px;font-weight:700;color:#1a1a1a;margin-bottom:4px}
+.exam-card-meta{font-size:11px;color:#7a5c1e;line-height:1.5}
 </style>
 </head>
 <body>
@@ -277,6 +288,58 @@ function setCourse(course) {
   showGrid();
 }
 
+// ── Practice exams ───────────────────────────────────────────────────────────
+// Reads practiceExamFile + sections from state.json schedule items.
+// Only surfaces exams whose sections overlap with material the class has covered.
+// Add "practiceExamFile": "Calc 1/Calc1_Unit4_Practice_Exam.html" (and optionally
+// "sections": ["Calc_4_1","Calc_4_2",...]) to any review/exam item in state.json.
+function getPracticeExams(courseKey, allIds) {
+  const schedKey = courseKey === 'collegeAlgebra' ? 'collegeAlgebra'
+                 : courseKey === 'preCalc' ? 'preCalc'
+                 : courseKey === 'calc1' ? 'calc1' : 'calc2';
+  const schedule = _state?.schedule?.[schedKey] || [];
+  return schedule
+    .filter(item => item.practiceExamFile && (item.type === 'review' || item.type === 'exam'))
+    .map(item => {
+      const coveredSections = (item.sections || []).filter(id => allIds.includes(id));
+      const sectionObjs = coveredSections.map(id => _secMap[id]).filter(Boolean);
+      return { ...item, coveredSections, sectionObjs };
+    })
+    // Relevant if: no sections specified (always show), or at least one covered section matches
+    .filter(item => !item.sections?.length || item.coveredSections.length > 0);
+}
+
+function practiceExamsHtml(cls, courseKey, allIds) {
+  const exams = getPracticeExams(courseKey, allIds);
+  if (!exams.length) return '';
+  const folder = _currentCourse === 'ca' ? './College%20Algebra'
+               : _currentCourse === 'pc' ? './PreCalc' : './Calc%201';
+  const cards = exams.map(exam => {
+    const href = exam.practiceExamFile.includes('/') ? exam.practiceExamFile
+               : `${folder}/${exam.practiceExamFile}`;
+    const title = exam.title || 'Practice Exam';
+    // Build context line from covered section titles
+    let meta = '';
+    if (exam.sectionObjs.length) {
+      const nums = exam.sectionObjs.map(s => '§' + s.section).join(', ');
+      meta = `Covers ${nums}`;
+    } else if (exam.sections?.length) {
+      meta = `Covers ${exam.sections.length} sections`;
+    } else {
+      meta = 'Full practice exam';
+    }
+    return `<div class="exam-card" onclick="window.open('${href}','_blank')">
+      <div class="exam-card-eyebrow">📝 Practice Exam</div>
+      <div class="exam-card-title">${title}</div>
+      <div class="exam-card-meta">${meta} · opens in new tab</div>
+    </div>`;
+  }).join('');
+  return `<div class="exam-block">
+    <div class="exam-block-label">📝 Practice Exams</div>
+    <div class="section-grid">${cards}</div>
+  </div>`;
+}
+
 // ── Build section grid ───────────────────────────────────────────────────────
 function buildGrid() {
   const courseKey = courseKeyOf(_currentCourse);
@@ -312,8 +375,10 @@ function buildGrid() {
         <div class="sec-card-count">18 questions — strengths &amp; review links</div>
       </div>` : '';
 
+  const examHtml = practiceExamsHtml(cls, courseKey, allIds);
+
   if (!pool.length) {
-    if (!prereq && !day1) {
+    if (!prereq && !day1 && !examHtml) {
       document.getElementById('gridIntro').textContent =
         'No section review problems yet — but study resources are always available.';
       container.innerHTML = printablesHtml(cls) + resourcesHtml(cls);
@@ -321,7 +386,7 @@ function buildGrid() {
     }
     document.getElementById('gridIntro').textContent =
       'No section review problems yet — but these are always ready.';
-    container.innerHTML = `<div class="unit-block">
+    container.innerHTML = examHtml + `<div class="unit-block">
       <div class="unit-label">Quick Start</div>
       <div class="section-grid">${prereqCard}${day1Card}</div>
     </div>` + printablesHtml(cls) + resourcesHtml(cls);
@@ -331,7 +396,7 @@ function buildGrid() {
   document.getElementById('gridIntro').textContent =
     'Pick a section to practice, or grab a random one.';
 
-  let html = `<div class="unit-block">
+  let html = examHtml + `<div class="unit-block">
     <div class="unit-label">Quick Start</div>
     <div class="section-grid">
       <div class="sec-card random-card ${cls}" onclick="loadRandom()">
