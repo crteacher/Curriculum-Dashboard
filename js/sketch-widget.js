@@ -42,6 +42,7 @@ class SketchWidget {
     this.prob   = prob;
     this.markers = []; this.nextId = 0;
     this.checked = false; this.answered = false;
+    this._sketchPath = null;
     this.activeType = 'keypoint';
     this.W=480; this.H=280; this.PL=44; this.PR=22; this.PT=20; this.PB=38;
     this.IW = this.W - this.PL - this.PR;
@@ -137,7 +138,7 @@ class SketchWidget {
   // ── Spline through placed markers ──────────────────────────────────────────
   _sketchFromMarkers() {
     const old=this.svgEl.querySelector('#sk-sketch-'+this.svgEl.id); if(old) old.remove();
-    if(this.markers.length<2) return;
+    if(this.markers.length<2){this._sketchPath=null;return;}
     const pts=[...this.markers].sort((a,b)=>a.mx-b.mx).map(m=>({
       x:m.mx, y:m.my, s:(m.type==='vertex')?0:null
     }));
@@ -163,6 +164,8 @@ class SketchWidget {
       }
     }
     const lp=pts[pts.length-1]; path.push([xMax, lp.y+lp.s*(xMax-lp.x)]);
+    // Store math-coordinate path for curve sampling in checkSketch
+    this._sketchPath = path;
     const ptStr=path.map(([x,y])=>this.tx(x).toFixed(1)+','+this.ty(Math.max(yMin-.5,Math.min(yMax+.5,y))).toFixed(1)).join(' ');
     const p=this._el('polyline');
     p.setAttribute('id','sk-sketch-'+this.svgEl.id);
@@ -171,6 +174,44 @@ class SketchWidget {
     p.setAttribute('stroke-dasharray','7,4'); p.setAttribute('opacity','.8');
     p.setAttribute('clip-path','url(#sk-clip-'+this.svgEl.id+')'); p.setAttribute('stroke-linejoin','round');
     this.svgEl.insertBefore(p,this.mg);
+  }
+
+  // ── Curve-shape sampling ───────────────────────────────────────────────────
+  // Interpolate the stored sketch path at a given math x-coordinate.
+  _sampleSketch(x) {
+    const path=this._sketchPath; if(!path||path.length<2) return null;
+    if(x<path[0][0]||x>path[path.length-1][0]) return null;
+    for(let i=0;i<path.length-1;i++){
+      if(path[i][0]<=x&&x<=path[i+1][0]){
+        const dx=path[i+1][0]-path[i][0];
+        if(Math.abs(dx)<1e-9) return path[i][1];
+        const t=(x-path[i][0])/dx;
+        return path[i][1]+t*(path[i+1][1]-path[i][1]);
+      }
+    }
+    return null;
+  }
+
+  // Sample sketch against fn at N evenly-spaced x-values.
+  // Returns {hits, total, frac, pass} or null if fn/path unavailable.
+  // curveTolerance (prob field, default 0.25): fraction of yRange allowed as error per point.
+  // curvePassFrac  (prob field, default 0.60): fraction of sample points that must pass.
+  _checkCurve() {
+    const{fn,xMin,xMax,yMin,yMax}=this.prob;
+    if(!fn||!this._sketchPath||this._sketchPath.length<2) return null;
+    const yRange=yMax-yMin;
+    const tol=yRange*(this.prob.curveTolerance!=null?this.prob.curveTolerance:0.25);
+    const needed=this.prob.curvePassFrac!=null?this.prob.curvePassFrac:0.60;
+    const N=16; let hits=0,total=0;
+    for(let i=1;i<=N;i++){
+      const x=xMin+i/(N+1)*(xMax-xMin);
+      const ey=fn(x); if(!isFinite(ey)||ey<yMin-yRange||ey>yMax+yRange) continue;
+      const sy=this._sampleSketch(x); if(sy===null) continue;
+      total++;
+      if(Math.abs(sy-ey)<=tol) hits++;
+    }
+    if(total===0) return null;
+    return{hits,total,frac:hits/total,pass:(hits/total)>=needed};
   }
 
   // ── Marker rendering ───────────────────────────────────────────────────────
@@ -215,9 +256,11 @@ class SketchWidget {
       }
     }
     for(const m of this.markers) if(m.correct===null) m.correct=false;
+    // Check curve shape BEFORE _curve() removes the sketch
+    const curveResult=this._checkCurve();
     this.mg.innerHTML='';
     for(const m of this.markers) this._draw(m.id,m.type,m.svgX,m.svgY,m.correct===true?'hit':'miss');
-    this._curve(); this._showFB(results,correct,total);
+    this._curve(); this._showFB(results,correct,total,curveResult);
   }
 
   showAnswer() {
@@ -250,19 +293,32 @@ class SketchWidget {
   }
 
   // ── Feedback ───────────────────────────────────────────────────────────────
-  _showFB(results,correct,total) {
+  _showFB(results,correct,total,curveResult) {
     const kl={keypoints:'Key Point',vertex:'Vertex'};
     let html='<div style="margin-bottom:.4rem;font-weight:700;color:#1e3a5c">'+correct+'/'+total+' key features identified</div>';
     for(const r of results)
       html+='<div class="sk-feat '+(r.hit?'hit':'miss')+'"><span>'+(r.hit?'✓':'✗')+'</span><span><strong>'+kl[r.key]+':</strong> '+r.ep.label+'</span></div>';
-    const threshold=this.prob.passThreshold||2;
-    if(correct>=threshold) html+='<div style="margin-top:.45rem;color:#3f7a52;font-weight:700">✓ Well done — major features placed!</div>';
+    // Curve shape row — only shown when fn is defined and sketch has ≥2 markers
+    if(curveResult!==null){
+      const pct=Math.round(curveResult.frac*100);
+      if(curveResult.pass)
+        html+='<div class="sk-feat hit"><span>✓</span><span><strong>Curve shape:</strong> '+curveResult.hits+'/'+curveResult.total+' sampled points match ('+pct+'%)</span></div>';
+      else
+        html+='<div class="sk-feat miss"><span>✗</span><span><strong>Curve shape:</strong> only '+curveResult.hits+'/'+curveResult.total+' sampled points within tolerance ('+pct+'%) — adjust your curve</span></div>';
+    }
+    // "Well done" requires all expected markers AND curve shape (if checkable)
+    const threshold=this.prob.passThreshold!=null?this.prob.passThreshold:total;
+    const curveOk=curveResult===null||curveResult.pass;
+    if(correct>=threshold&&curveOk)
+      html+='<div style="margin-top:.45rem;color:#3f7a52;font-weight:700">✓ Well done!</div>';
+    else if(correct>=threshold&&!curveOk)
+      html+='<div style="margin-top:.45rem;color:#b3413a;font-weight:700">Markers correct — but adjust the curve shape.</div>';
     this.fbEl.innerHTML=html;
   }
 
   reset() {
     this.markers=[]; this.nextId=0; this.checked=false; this.answered=false;
-    this.fbEl.innerHTML=''; this._buildGrid();
+    this._sketchPath=null; this.fbEl.innerHTML=''; this._buildGrid();
   }
 
   // ── SVG helpers ────────────────────────────────────────────────────────────
