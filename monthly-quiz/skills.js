@@ -249,7 +249,7 @@
       html = lin(a, b) + ' = ' + mi(c); meta = { lhs: function (z) { return a * z + b; }, rhs: function () { return c; } };
     } else if (v === 2) {
       a = r.pick([2, 3, 4, 5, -2, -3, -4]); b = r.nz(-9, 9); t = r.nz(-6, 6); x = a * t; c = t + b;
-      html = frac('<i>x</i>', mi(a)) + (b < 0 ? ' − ' + (-b) : ' + ' + b) + ' = ' + mi(c);
+      html = (a < 0 ? '\u2212' : '') + frac('<i>x</i>', Math.abs(a)) + (b < 0 ? ' − ' + (-b) : ' + ' + b) + ' = ' + mi(c);
       meta = { lhs: function (z) { return z / a + b; }, rhs: function () { return c; } };
     } else {
       a = r.pick([2, 3, 4, 5]); b = r.nz(-12, 12); x = r.nz(-8, 8); c = b - a * x;
@@ -267,8 +267,8 @@
       s += '<line class="gp-grid" x1="' + X(i) + '" y1="' + Y(-5) + '" x2="' + X(i) + '" y2="' + Y(5) + '"/>';
       s += '<line class="gp-grid" x1="' + X(-5) + '" y1="' + Y(i) + '" x2="' + X(5) + '" y2="' + Y(i) + '"/>';
     }
-    s += '<line class="gp-axis" x1="' + X(-5.4) + '" y1="' + Y(0) + '" x2="' + X(5.4) + '" y2="' + Y(0) + '"/>';
-    s += '<line class="gp-axis" x1="' + X(0) + '" y1="' + Y(-5.4) + '" x2="' + X(0) + '" y2="' + Y(5.4) + '"/>';
+    s += '<line class="gp-axis" x1="' + X(-5) + '" y1="' + Y(0) + '" x2="' + X(5) + '" y2="' + Y(0) + '"/>';
+    s += '<line class="gp-axis" x1="' + X(0) + '" y1="' + Y(-5) + '" x2="' + X(0) + '" y2="' + Y(5) + '"/>';
     for (i = -5; i <= 5; i++) {
       s += '<text x="' + X(i) + '" y="' + (Y(-5) + 15) + '" text-anchor="middle">' + mi(i) + '</text>';
       s += '<text x="' + (X(-5) - 6) + '" y="' + (Y(i) + 4) + '" text-anchor="end">' + mi(i) + '</text>';
