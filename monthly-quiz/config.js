@@ -9,6 +9,9 @@ window.MQ_CONFIG = {
   /* After submitting, show students the correct answers? (true/false) */
   showAnswers: true,
 
+  /* Teachers shown in the Teacher picker (recorded in the Sheet). */
+  teachers: ['Halverson', 'Ofori', 'Stock', 'Adams', 'Bedard'],
+
   /* Course names shown in the course picker. */
   courses: {
     alg: 'College Algebra',
