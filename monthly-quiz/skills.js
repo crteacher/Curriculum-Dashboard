@@ -28,7 +28,10 @@
 
   /* ---------- answer reading + grading ---------- */
   MQ.parseNum = function (s) {
-    s = String(s == null ? '' : s).replace(/[−–]/g, '-').replace(/\s+/g, '');
+    s = String(s == null ? '' : s).replace(/[\u2212\u2013]/g, '-').trim().replace(/%$/, '');
+    var mx = s.match(/^([+-]?)(\d+)\s+(\d+)\s*\/\s*(\d+)$/);            // mixed number: 1 1/12
+    if (mx) { var dd = parseFloat(mx[4]); return dd === 0 ? NaN : (mx[1] === '-' ? -1 : 1) * (parseFloat(mx[2]) + parseFloat(mx[3]) / dd); }
+    s = s.replace(/\s+/g, '');
     if (!s) return NaN;
     var m = s.match(/^([+-]?\d+(?:\.\d+)?)\/([+-]?\d+(?:\.\d+)?)$/);
     if (m) { var d = parseFloat(m[2]); return d === 0 ? NaN : parseFloat(m[1]) / d; }
@@ -188,5 +191,113 @@
       '<span class="nw">' + a + ' (' + frac(s === 1 ? '1' : '−1', m) + ')<sup><i>n</i></sup></span>',
       f[0] / f[1], fshow(f[0], f[1]),
       { term: function (n) { return a * Math.pow(s / m, n); } });
+  });
+  /* =====================================================================
+     NOVEMBER FUNDAMENTALS (same five for every class)
+     ===================================================================== */
+  MQ.def('ns.fracadd', 'core', 'Add and subtract fractions', function (r) {
+    var ds = [2, 3, 4, 5, 6, 8, 10, 12], b, d, n1, n2, op, num, den, tries = 0;
+    do {
+      b = r.pick(ds); d = r.pick(ds);
+      n1 = r.int(1, b - 1); n2 = r.int(1, d - 1); op = r.pick(['+', '−']);
+      if (op === '−' && n1 * d < n2 * b) { var t = n1; n1 = n2; n2 = t; t = b; b = d; d = t; }   // keep the answer positive
+      num = op === '+' ? n1 * d + n2 * b : n1 * d - n2 * b; den = b * d; tries++;
+    } while ((b === d || num <= 0) && tries < 200);
+    var f = reduce(num, den), q = numQ(frac(n1, b) + ' ' + op + ' ' + frac(n2, d), f[0] / f[1], fshow(f[0], f[1]),
+      { n1: n1, b: b, n2: n2, d: d, op: op });
+    q.html = 'Compute.<div class="eq">' + q.html + '</div>';
+    q.hint = 'Enter a fraction like 7/12 (or a mixed number like 1 1/12), or a decimal rounded to at least 2 places.';
+    return q;
+  });
+
+  MQ.def('ns.orderops', 'core', 'Order of operations with negatives', function (r) {
+    var t = r.int(1, 3), a, b, c, d, e, html, ans;
+    if (t === 1) {
+      a = r.int(2, 9); b = r.int(2, 6); c = r.int(2, 6); d = r.int(2, 5);
+      html = a + ' − ' + b + '·(−' + c + ') + ' + d + '<sup>2</sup>'; ans = a + b * c + d * d;
+    } else if (t === 2) {
+      do { a = r.int(1, 9); b = r.int(1, 9); } while (a === b);
+      c = r.int(2, 6); e = r.int(2, 5); d = e * r.int(2, 6);
+      html = '(' + a + ' − ' + b + ')·(−' + c + ') + ' + d + ' ÷ ' + e; ans = (a - b) * (-c) + d / e;
+    } else {
+      a = r.int(2, 6); b = r.int(2, 5); do { c = r.int(1, 9); d = r.int(1, 9); } while (c === d);
+      html = '−' + a + '<sup>2</sup> + ' + b + '·(' + c + ' − ' + d + ')'; ans = -a * a + b * (c - d);
+    }
+    return numQ('Evaluate.<div class="eq">' + html + '</div>', ans, null, { html: html });
+  });
+
+  MQ.def('ns.percent', 'core', 'Percents: part of a number and percent change', function (r) {
+    var v = r.int(1, 3), q, p, N, old, nw;
+    if (v === 1) {
+      p = r.pick([10, 15, 20, 25, 30, 35, 40, 60, 75, 80]); N = 20 * r.int(2, 12);
+      q = numQ('What is ' + p + '% of ' + N + '?', p * N / 100, null, { p: p, N: N, v: v });
+    } else {
+      old = r.pick([20, 40, 60, 80, 100, 120, 200]);
+      if (v === 2) { p = r.pick([5, 10, 15, 20, 25, 50, 75]); nw = old + old * p / 100; }
+      else { p = r.pick([5, 10, 15, 20, 25, 50]); nw = old - old * p / 100; }
+      q = numQ('The price of a jacket ' + (v === 2 ? 'went up' : 'dropped') + ' from $' + old + ' to $' + nw + '. By what percent did the price ' +
+        (v === 2 ? 'increase' : 'decrease') + '?', p, null, { old: old, nw: nw, v: v });
+    }
+    q.hint = 'Enter a number (the % sign is optional).';
+    return q;
+  });
+
+  MQ.def('alg.twostep', 'core', 'Solve a two-step equation', function (r) {
+    var v = r.int(1, 3), a, b, c, x, t, html, meta;
+    if (v === 1) {
+      a = r.pick([2, 3, 4, 5, -2, -3, -4]); b = r.nz(-12, 12); x = r.nz(-8, 8); c = a * x + b;
+      html = lin(a, b) + ' = ' + mi(c); meta = { lhs: function (z) { return a * z + b; }, rhs: function () { return c; } };
+    } else if (v === 2) {
+      a = r.pick([2, 3, 4, 5, -2, -3, -4]); b = r.nz(-9, 9); t = r.nz(-6, 6); x = a * t; c = t + b;
+      html = frac('<i>x</i>', mi(a)) + (b < 0 ? ' − ' + (-b) : ' + ' + b) + ' = ' + mi(c);
+      meta = { lhs: function (z) { return z / a + b; }, rhs: function () { return c; } };
+    } else {
+      a = r.pick([2, 3, 4, 5]); b = r.nz(-12, 12); x = r.nz(-8, 8); c = b - a * x;
+      html = mi(b) + ' − ' + a + '<i>x</i> = ' + mi(c); meta = { lhs: function (z) { return b - a * z; }, rhs: function () { return c; } };
+    }
+    return numQ('Solve for <i>x</i>.<div class="eq">' + html + '</div>', x, null, meta);
+  });
+
+  /* ---------- easy graph reading: labeled grid + line-segment graph through lattice points ---------- */
+  function graphSvg(pts) {
+    var W = 360, H = 360, u = 30, ox = W / 2, oy = H / 2, i, s;
+    function X(x) { return ox + x * u; } function Y(y) { return oy - y * u; }
+    s = '<svg class="gp" viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Graph of y equals f of x on a grid from negative 5 to 5">';
+    for (i = -5; i <= 5; i++) {
+      s += '<line class="gp-grid" x1="' + X(i) + '" y1="' + Y(-5) + '" x2="' + X(i) + '" y2="' + Y(5) + '"/>';
+      s += '<line class="gp-grid" x1="' + X(-5) + '" y1="' + Y(i) + '" x2="' + X(5) + '" y2="' + Y(i) + '"/>';
+    }
+    s += '<line class="gp-axis" x1="' + X(-5.4) + '" y1="' + Y(0) + '" x2="' + X(5.4) + '" y2="' + Y(0) + '"/>';
+    s += '<line class="gp-axis" x1="' + X(0) + '" y1="' + Y(-5.4) + '" x2="' + X(0) + '" y2="' + Y(5.4) + '"/>';
+    for (i = -5; i <= 5; i++) {
+      s += '<text x="' + X(i) + '" y="' + (Y(-5) + 15) + '" text-anchor="middle">' + mi(i) + '</text>';
+      s += '<text x="' + (X(-5) - 6) + '" y="' + (Y(i) + 4) + '" text-anchor="end">' + mi(i) + '</text>';
+    }
+    s += '<text class="gp-l" x="' + (X(5.4) - 4) + '" y="' + (Y(0) - 6) + '" text-anchor="end">x</text><text class="gp-l" x="' + (X(0) + 8) + '" y="' + (Y(5.4) + 8) + '">y</text>';
+    s += '<polyline class="gp-line" points="' + pts.map(function (p) { return X(p[0]) + ',' + Y(p[1]); }).join(' ') + '"/>';
+    pts.forEach(function (p) { s += '<circle class="gp-dot" cx="' + X(p[0]) + '" cy="' + Y(p[1]) + '" r="4.2"/>'; });
+    return s + '</svg>';
+  }
+
+  MQ.def('gr.readvalue', 'core', 'Read a value from a graph', function (r) {
+    var ys = [r.int(-3, 3)], i, y, tries;
+    for (i = 1; i < 9; i++) {
+      tries = 0; do { y = ys[i - 1] + r.pick([-3, -2, -1, 1, 2, 3]); tries++; } while ((y < -5 || y > 5) && tries < 50);
+      if (y < -5 || y > 5) y = ys[i - 1] + (ys[i - 1] > 0 ? -1 : 1);
+      ys.push(y);
+    }
+    var pts = ys.map(function (v, k) { return [k - 4, v]; });
+    function hits(m) { var c = 0; for (var k = 0; k < 9; k++) { if (ys[k] === m) c++; if (k < 8 && (ys[k] - m) * (ys[k + 1] - m) < 0) c++; } return c; }
+    var cand = []; for (i = 0; i < 9; i++) if (hits(ys[i]) === 1) cand.push(i);
+    var fig = '<div class="fig">' + graphSvg(pts) + '</div>', q;
+    if (cand.length && r.f() < 0.5) {
+      var j = r.pick(cand);
+      q = numQ('The graph of <i>y</i> = <i>f</i>(<i>x</i>) is shown. For what value of <i>x</i> is <i>f</i>(<i>x</i>) = ' + mi(ys[j]) + '?' + fig, j - 4, null, { pts: pts, mode: 'x', m: ys[j] });
+    } else {
+      var k = r.int(-4, 4);
+      q = numQ('The graph of <i>y</i> = <i>f</i>(<i>x</i>) is shown. What is <i>f</i>(' + mi(k) + ')?' + fig, ys[k + 4], null, { pts: pts, mode: 'val', k: k });
+    }
+    q.hint = 'Enter a number. Read it from the grid; the dots sit on grid intersections.';
+    return q;
   });
 })();

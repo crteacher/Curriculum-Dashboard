@@ -16,11 +16,11 @@ window.MQ_CONFIG = {
   sections: ['A1', 'A2', 'A3', 'A4', 'B5', 'B6', 'B7', 'B8'],
 
   /* Each month: one list of 5 skill IDs, the same for every class (skills live in skills.js).
-     SAMPLE skills for now — swap in the assistant principal's real list when it arrives. */
+     November: fractions, order of operations, percents, reading a graph, two-step equations. */
   months: {
     '2026-11': {
       label: 'November 2026',
-      skills: ['alg.linear', 'pc.logeval', 'c1.power', 'c1.chain', 'c2.integral']
+      skills: ['ns.fracadd', 'ns.orderops', 'ns.percent', 'gr.readvalue', 'alg.twostep']
     }
   }
 };
