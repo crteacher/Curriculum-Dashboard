@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Definite Integral &amp; FTC Part 2 &mdash; Notes</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75;font-size:15px}
+.container{max-width:900px;margin:0 auto;padding:2rem 1.5rem 4rem}
+
+/* ── Header ── */
+.page-title{font-size:28px;font-weight:700;margin-bottom:4px}
+.page-sub{font-family:sans-serif;font-size:13px;color:#666;margin-bottom:1.6rem}
+
+/* ── Opening question ── */
+.opening-q{background:#eef3f9;border-left:4px solid #1e3a5c;
+  border-radius:0 8px 8px 0;padding:1rem 1.2rem;font-size:15px;
+  margin-bottom:1.5rem;font-style:italic;line-height:1.75}
+.hook-question{margin:0}
+.hook-graph{text-align:center;margin:.7rem 0 .3rem;font-style:normal}
+.hook-graph svg{max-width:100%;height:auto}
+.hook-reveal{margin-top:.5rem;font-style:normal}
+.hook-reveal-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;
+  color:#1e3a5c;text-transform:uppercase;letter-spacing:.07em;list-style:none;user-select:none;display:block}
+.hook-reveal-toggle::-webkit-details-marker{display:none}
+.hook-reveal-body{margin-top:.5rem;font-size:14px;line-height:1.75;padding-top:.5rem;
+  border-top:1px solid #c8d8ec}
+
+/* ── Section heading ── */
+.section-head{font-family:sans-serif;font-size:11px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.08em;color:#1e3a5c;
+  margin-top:1.4rem;margin-bottom:.6rem;
+  border-bottom:1px solid #c8d8ec;padding-bottom:4px}
+
+/* ── Protect math from text-transform on headings/labels ── */
+.katex,.katex *{text-transform:none;letter-spacing:normal}
+
+/* ── Accent box ── */
+.accent-box{background:#d9e8f5;border-left:4px solid #1e3a5c;
+  border-radius:0 8px 8px 0;padding:.9rem 1.1rem;font-size:14px;
+  margin-bottom:.85rem;line-height:1.95}
+.accent-box ul{margin-left:1.3rem;margin-top:.3rem}
+.accent-box li{margin-bottom:.15rem}
+.accent-box p{margin-bottom:.4rem}
+
+/* ── Body text ── */
+.body-text{font-size:14px;line-height:1.75;margin-bottom:.85rem}
+
+/* ── Spacer ── */
+.spacer{height:1rem}
+
+/* ── Two-column layout ── */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:.5rem}
+.col{min-width:0}
+
+/* ── Worked examples 2-col grid ── */
+.examples-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem}
+.ex-block{border:1.5px solid #ddd;border-radius:9px;padding:1rem 1.1rem;background:#fff}
+.ex-label{font-family:sans-serif;font-size:11px;font-weight:700;color:#1e3a5c;
+  text-transform:uppercase;letter-spacing:.05em;margin-bottom:.45rem}
+.ex-body{font-size:14px;line-height:1.75;margin-bottom:.5rem}
+.ex-answer.instructor{background:#fef9e7;border-left:3px solid #7a5c1e;
+  border-radius:0 6px 6px 0;padding:.6rem .9rem;font-size:13.5px;
+  color:#5a3e00;line-height:1.85}
+.ex-answer.student{height:4.5rem;border-bottom:1.5px solid #bbb;margin-top:.4rem}
+
+/* ── Practice section ── */
+.practice{margin-bottom:1.5rem}
+.pr-row{display:grid;grid-template-columns:1.6rem 1fr 210px;gap:.75rem;
+  align-items:start;padding:.6rem 0;border-bottom:1px solid #ece8e0}
+.pr-num{font-family:sans-serif;font-weight:700;font-size:14px;color:#1e3a5c;padding-top:2px}
+.pr-prob{font-size:14px;line-height:1.75}
+.pr-ans.instructor{font-size:13px;color:#5a3e00;background:#fef9e7;
+  border-radius:5px;padding:4px 9px;line-height:1.75}
+.pr-ans.student{border-bottom:1.5px solid #bbb;min-height:2.2rem}
+
+/* ── Student interactive ── */
+.st-work{width:100%;min-height:3rem;border:1px solid #ccc;border-radius:5px;
+  padding:.35rem .5rem;font-family:Georgia,serif;font-size:13px;resize:vertical;
+  background:#fafafa;display:block;margin-bottom:.3rem}
+.st-work-sm{width:100%;min-height:1.5rem;border:1px solid #ccc;border-radius:4px;
+  padding:.2rem .4rem;font-family:Georgia,serif;font-size:12px;resize:vertical;
+  background:#fafafa;display:block;margin-bottom:.2rem}
+.st-btn{font-family:sans-serif;font-size:10px;font-weight:700;color:#1e3a5c;
+  background:none;border:1.5px solid #1e3a5c;border-radius:4px;
+  padding:2px 9px;cursor:pointer;margin-bottom:.2rem;display:inline-block}
+.st-btn-sm{font-family:sans-serif;font-size:9px;font-weight:700;color:#1e3a5c;
+  background:none;border:1px solid #1e3a5c;border-radius:3px;
+  padding:1px 6px;cursor:pointer;margin-bottom:.15rem;display:inline-block}
+.st-btn:hover,.st-btn-sm:hover{background:#eef3f9}
+.st-ans-hidden{display:none;background:#fef9e7;border-left:3px solid #7a5c1e;
+  border-radius:0 5px 5px 0;padding:.4rem .7rem;font-size:13px;
+  color:#5a3e00;line-height:1.85}
+.st-ans-hidden.visible{display:block}
+
+/* ── SVG figures ── */
+.svg-figure{text-align:center;margin:.4rem 0 .6rem}
+.svg-figure svg{max-width:100%;height:auto}
+.svg-caption{font-family:sans-serif;font-size:11px;color:#555;
+  margin-top:.2rem;font-style:italic}
+
+/* ── KaTeX overflow ── */
+.katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}
+
+/* ── Print styles ── */
+@media print{
+  body{background:white;font-size:10pt;line-height:1.5}
+  .container{padding:0;max-width:none}
+  .page-sub{margin-bottom:.8rem}
+  .opening-q{padding:.5rem .8rem;margin-bottom:.8rem;font-size:10pt;line-height:1.5;break-inside:avoid}
+  .section-head{margin-top:.7rem;margin-bottom:.35rem}
+  .spacer{height:.3rem}
+  .accent-box{padding:.5rem .75rem;margin-bottom:.5rem;font-size:10pt;line-height:1.55;
+    background:#e8f0f8 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .accent-box p{margin-bottom:.2rem}
+  .body-text{font-size:10pt;line-height:1.5;margin-bottom:.5rem}
+  .two-col{gap:1rem;margin-bottom:.3rem;break-inside:avoid}
+  .examples-grid{gap:.6rem;margin-bottom:.8rem;break-inside:avoid}
+  .ex-block{padding:.55rem .75rem;border:1px solid #ccc;break-inside:avoid}
+  .ex-label{margin-bottom:.25rem}
+  .ex-body{font-size:10pt;line-height:1.5;margin-bottom:.3rem}
+  .ex-answer.instructor{padding:.35rem .7rem;font-size:9.5pt;line-height:1.55;
+    background:#fef9e7 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .ex-answer.student{height:2.8rem}
+  .practice{margin-bottom:.8rem}
+  .pr-row{padding:.3rem 0;break-inside:avoid}
+  .pr-prob{font-size:10pt;line-height:1.5}
+  .pr-ans.instructor{font-size:9.5pt;padding:2px 7px;line-height:1.55;
+    background:#fef9e7 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .pr-ans.student{min-height:1.6rem}
+  .st-work{background:none;border:none;border-bottom:1.5px solid #bbb;
+    border-radius:0;min-height:2.6rem;resize:none}
+  .st-work-sm{background:none;border:none;border-bottom:1.5px solid #bbb;
+    border-radius:0;min-height:1.3rem;resize:none}
+  .st-btn,.st-btn-sm{display:none}
+  .st-ans-hidden{display:none !important}
+  .opening-q{
+    background:#eef3f9 !important;
+    -webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .hook-graph{margin:.4rem 0 .2rem}
+  details.hook-reveal:not([open]){display:none}
+  .svg-figure{margin:.25rem 0 .4rem}
+  .svg-figure svg{max-width:100%;height:auto}
+  .svg-caption{font-size:9pt}
+}
+@page{margin:.55in .65in;size:letter}
+
+.proof-panel{margin:.4rem 0 1.1rem;border-left:3px solid #7a9a6a;border-radius:0 6px 6px 0;background:#f5f7f3}
+.proof-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#5a7a4a;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.proof-toggle::-webkit-details-marker{display:none}
+details[open]>.proof-toggle{color:#1e3a5c}
+.proof-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #c8d8b8}
+.proof-body p{margin-bottom:.45rem}
+.proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
+@media print{.proof-panel{break-inside:avoid}}
+.mistake-panel{margin:.4rem 0 1.1rem;border-left:3px solid #b8860b;border-radius:0 6px 6px 0;background:#fdf8e8}
+.mistake-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#9a6a00;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.mistake-toggle::-webkit-details-marker{display:none}
+details[open]>.mistake-toggle{color:#1e3a5c}
+.mistake-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #e8d8a8}
+.mistake-body p{margin-bottom:.45rem}
+.panel-row{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.1rem}
+.panel-row>.proof-panel,.panel-row>.mistake-panel{margin:0;min-width:0}
+.panel-row:has(.proof-panel):has(.mistake-panel){grid-template-columns:1fr}
+@media print{
+  .panel-row{break-inside:avoid}
+  .mistake-panel{break-inside:avoid}
+  details.mistake-panel:not([open]){display:none}
+}
+</style>
+</head>
+<body>
+<div class="container">
+<h1 class="page-title">The Definite Integral &amp; FTC Part 2</h1>
+<p class="page-sub">Calculus I &nbsp;&middot;&nbsp; &sect;4.3 &nbsp;&middot;&nbsp; Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026 &nbsp;&middot;&nbsp; <strong>STUDENT</strong></p>
+<div class="opening-q">In &sect;4.2 you computed $R_n$ for $f(x)=x^2$ on $[0,1]$ and found $R_n = \dfrac{n(n+1)(2n+1)}{6n^3}$. As $n\to\infty$ this approaches $\tfrac{1}{3}$. But there&rsquo;s a one-line shortcut: the antiderivative $F(x)=\tfrac{x^3}{3}$ gives $F(1)-F(0)=\tfrac{1}{3}$ instantly. Why should an <em>antiderivative</em> tell you the exact area?</div>
+<div class="two-col">
+<div class="col"><div class="section-head">The Definite Integral</div>
+<div class="accent-box"><p>The <strong>definite integral</strong> of $f$ on $[a,b]$ is the limit of any Riemann sum as the number of rectangles grows without bound:</p><p>$$\int_a^b f(x)\,dx = \lim_{n\to\infty}\sum_{i=1}^{n}f(x_i)\,\Delta x$$</p><p>where $\Delta x=\dfrac{b-a}{n}$ and $x_i=a+i\,\Delta x$.</p><p>The symbol $\int$ is an elongated S for &ldquo;sum.&rdquo; $a,b$ are the <strong>limits of integration</strong>; $f(x)$ is the <strong>integrand</strong>; $dx$ marks the variable and corresponds to $\Delta x\to 0$.</p><p><strong>Closed-form sigma formulas</strong> (let you evaluate the limit):</p><p>$$\sum_{i=1}^{n}i=\frac{n(n+1)}{2} \qquad \sum_{i=1}^{n}i^2=\frac{n(n+1)(2n+1)}{6}$$</p></div>
+<details class="mistake-panel">
+<summary class="mistake-toggle">&blacktriangleright; Common Mistake</summary>
+<div class="mistake-body">
+<p>Students sometimes read $\int_a^b f(x)\,dx$ as "$f$ times $dx$" and try to cancel. The $dx$ is part of the limit notation, not a factor you can simplify away.</p>
+<p>Also: swapping the limits negates the integral. $\int_3^1 x^2\,dx = -\int_1^3 x^2\,dx$ &mdash; this comes from the Riemann sum reversing direction, not from a sign error.</p>
+</div>
+</details>
+</div>
+<div class="col"><div class="section-head">FTC Part 2 &amp; Its Proof</div>
+<div class="accent-box"><p><strong>Theorem (FTC Part 2 / Newton&ndash;Leibniz):</strong><br>If $F'(x)=f(x)$ on $[a,b]$, then</p><p>$$\int_a^b f(x)\,dx = F(b)-F(a)$$</p><p><strong>Proof.</strong> Let $a=x_0<x_1<\cdots<x_n=b$ with $\Delta x=(b-a)/n$.</p><p><em>Step 1 &mdash; Telescope.</em> Adding and subtracting intermediate values of $F$:</p><p>$F(b)-F(a)=\displaystyle\sum_{i=1}^{n}\bigl[F(x_i)-F(x_{i-1})\bigr]$</p><p><em>Step 2 &mdash; Apply MVT to each piece.</em> $F$ is continuous on $[x_{i-1},x_i]$ and differentiable on $(x_{i-1},x_i)$, so the Mean Value Theorem gives some $c_i\in(x_{i-1},x_i)$ with</p><p>$F(x_i)-F(x_{i-1})=F'(c_i)\,\Delta x=f(c_i)\,\Delta x$</p><p>Substituting into the telescope sum:</p><p>$F(b)-F(a)=\displaystyle\sum_{i=1}^{n}f(c_i)\,\Delta x$</p><p><em>Step 3 &mdash; Take the limit.</em> The right side is a Riemann sum for $f$. As $n\to\infty$:</p><p>$\displaystyle\sum_{i=1}^{n}f(c_i)\,\Delta x \;\longrightarrow\; \int_a^b f(x)\,dx$</p><p>The left side $F(b)-F(a)$ is constant, so</p><p>$\displaystyle F(b)-F(a)=\int_a^b f(x)\,dx \qquad\square$</p></div>
+<details class="mistake-panel">
+<summary class="mistake-toggle">&blacktriangleright; Common Mistake</summary>
+<div class="mistake-body">
+<p>Forgetting to evaluate at <em>both</em> limits: $\int_1^3 2x\,dx \ne F(3)$. FTC requires $F(b)-F(a)$.</p>
+<p>Also: the constant of integration cancels. Using $F(x)=x^2+7$ vs.&nbsp;$G(x)=x^2$ gives the same result for any definite integral, so there is no need to find $C$ when evaluating a definite integral.</p>
+</div>
+</details>
+<p class="body-text">FTC Part 2 is the bridge from §§4.1&ndash;4.2 to the rest of Calculus: instead of summing thousands of rectangles, you find <em>one</em> antiderivative and subtract. The proof shows this is not a coincidence &mdash; it follows directly from the MVT applied to every subinterval.</p>
+</div>
+</div>
+<div class="section-head">Worked Examples</div>
+<div class="examples-grid">
+<div class="ex-block">
+  <div class="ex-label">Example 1 &nbsp;&mdash;&nbsp; Limit definition (the long way)</div>
+  <div class="ex-body">Compute $\displaystyle\int_0^1 x^2\,dx$ using the limit of a right Riemann sum.</div>
+  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">$\Delta x=1/n,\; x_i=i/n$<br>$R_n=\displaystyle\sum_{i=1}^{n}\left(\frac{i}{n}\right)^2\!\cdot\frac{1}{n}=\frac{1}{n^3}\sum_{i=1}^{n}i^2=\frac{1}{n^3}\cdot\frac{n(n+1)(2n+1)}{6}=\frac{(n+1)(2n+1)}{6n^2}\to\dfrac{1}{3}$</div></div>
+</div>
+<div class="ex-block">
+  <div class="ex-label">Example 2 &nbsp;&mdash;&nbsp; FTC Part 2 (the fast way)</div>
+  <div class="ex-body">Compute $\displaystyle\int_0^1 x^2\,dx$ using FTC Part 2.</div>
+  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">$F(x)=\dfrac{x^3}{3}$<br>$F(1)-F(0)=\dfrac{1}{3}-0=\dfrac{1}{3}$ &nbsp;&#10003; (same answer, one line)</div></div>
+</div>
+<div class="ex-block">
+  <div class="ex-label">Example 3 &nbsp;&mdash;&nbsp; FTC Part 2 application</div>
+  <div class="ex-body">Evaluate $\displaystyle\int_1^3(2x+1)\,dx$.</div>
+  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">$F(x)=x^2+x$<br>$F(3)-F(1)=(9+3)-(1+1)=12-2=10$</div></div>
+</div>
+<div class="ex-block">
+  <div class="ex-label">Example 4 &nbsp;&mdash;&nbsp; Velocity &rarr; distance</div>
+  <div class="ex-body">A car&rsquo;s velocity is $v(t)=t^2$ mph for $t\in[0,3]$ hr. Use FTC to find the total distance traveled.</div>
+  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">Antiderivative of $t^2$: $\;F(t)=\dfrac{t^3}{3}$<br>Distance $= F(3)-F(0)=9-0=9$ miles</div></div>
+</div>
+</div>
+<div class="section-head">Practice Problems</div>
+<div class="practice">
+<div class="pr-row">
+  <div class="pr-num">1.</div>
+  <div class="pr-prob">Evaluate $\displaystyle\int_0^2 x\,dx$ using FTC Part 2.</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$F(x)=x^2/2$; $\;F(2)-F(0)=2-0=2$</div></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">2.</div>
+  <div class="pr-prob">Evaluate $\displaystyle\int_1^4 3x^2\,dx$ using FTC Part 2.</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$F(x)=x^3$; $\;F(4)-F(1)=64-1=63$</div></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">3.</div>
+  <div class="pr-prob">Evaluate $\displaystyle\int_0^3(x^2+1)\,dx$.</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$F(x)=x^3/3+x$; $\;F(3)-F(0)=(9+3)-0=12$</div></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">4.</div>
+  <div class="pr-prob">Verify $\displaystyle\int_0^2 x\,dx=2$ using the limit definition.</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$\Delta x=2/n,\; x_i=2i/n$<br>$R_n=\dfrac{4}{n^2}\cdot\dfrac{n(n+1)}{2}=\dfrac{2(n+1)}{n}\to 2$ &nbsp;&#10003;</div></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">5.</div>
+  <div class="pr-prob">A particle has velocity $v(t)=2t-1$ on $[0,4]$. Find its net displacement.</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$F(t)=t^2-t$; $\;F(4)-F(0)=12-0=12$ units</div></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">6.</div>
+  <div class="pr-prob">In one sentence, explain why $F(b)-F(a)=\displaystyle\int_a^b F'(x)\,dx$.</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">The MVT guarantees $F(b)-F(a)=\sum f(c_i)\Delta x$ for every partition, and that Riemann sum converges to $\int_a^b F'\,dx$ as $n\to\infty$.</div></div>
+</div>
+</div>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/contrib/auto-render.min.js"></script>
+<script>
+function toggleAns(btn) {
+  if (!btn.dataset.orig) btn.dataset.orig = btn.textContent;
+  var ans = btn.nextElementSibling;
+  var showing = ans.classList.toggle('visible');
+  btn.textContent = showing ? 'Hide' : btn.dataset.orig;
+}
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left: '$$', right: '$$', display: true},
+      {left: '$',  right: '$',  display: false}
+    ],
+    throwOnError: false
+  });
+</script>
+</body>
+</html>
