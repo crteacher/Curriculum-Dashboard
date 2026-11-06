@@ -232,7 +232,7 @@ sup,sub{line-height:0}
     var answers = S.qs.map(function (q, i) {
       var g = S.given[i], ok = g !== null && g !== '' && MQ.grade(q, g);
       return {
-        skill: q.skill, ok: !!ok,
+        skill: q.skill, title: q.title, ok: !!ok,
         given: g === null ? '' : (q.type === 'mc' ? q.choices[g].replace(/<[^>]+>/g, '') : String(g)),
         correct: q.type === 'mc' ? q.choices[q.correct].replace(/<[^>]+>/g, '') : q.show
       };
