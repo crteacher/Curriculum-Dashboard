@@ -45,7 +45,8 @@
   .check-btn{font-family:sans-serif;font-size:13px;background:#1a1a1a;color:#fff;
     border:none;border-radius:6px;padding:7px 14px;cursor:pointer}
   .check-btn:hover{background:#333}.check-btn:disabled{background:#aaa;cursor:default}
-  .hint{font-family:sans-serif;font-size:12px;color:#888;margin-top:7px}
+  .hint{font-family:sans-serif;font-size:12px;color:#888;margin-top:5px;display:none}
+  .hint-link{font-family:sans-serif;font-size:12px;color:#aaa;cursor:pointer;text-decoration:underline;margin-top:7px;display:inline-block}.hint-link:hover{color:#666}
   .feedback{font-family:sans-serif;font-size:13px;margin-top:10px;padding:8px 12px;
     border-radius:6px;display:none;line-height:1.5}
   .feedback.correct{display:block;background:#eaf5ea;color:#1a5a1a}
@@ -57,9 +58,6 @@
   .revealed-answer{display:none;margin-top:8px;font-family:sans-serif;font-size:13px;
     color:#444;background:#f5f3ef;border-radius:6px;padding:8px 11px;line-height:1.8;overflow-x:auto}
   code{font-family:'Courier New',monospace;background:#f0ede7;padding:1px 5px;border-radius:3px;font-size:12px}
-
-
-.hint{display:none!important}
 </style>
 </head>
 <body>
@@ -217,53 +215,68 @@ function gen4() {
   };
 }
 
-// gen5: SVG — identify left / right / midpoint from a diagram
-function gen5() {
-  const type = choose(['left', 'right', 'midpoint']);
-  const W=320, H=155, lm=42, rm=15, tm=12, bm=30;
+// Shared helper: build an SVG diagram for gen5/gen6
+function _riemannDiagramSVG(f, evalXs, buildCurve, yMax) {
+  const W=320, H=165, lm=42, rm=15, tm=14, bm=30;
   const plotW = W - lm - rm, plotH = H - tm - bm;
-  // f(x) = -(x-2)^2 + 5  on [0,4], range [1,5]
-  const f  = x => -(x - 2) * (x - 2) + 5;
   const sx = x => lm + (x / 4) * plotW;
-  const sy = y => (H - bm) - (y / 6) * plotH;
-
-  // Curve polyline
-  let pts = [];
-  for (let i = 0; i <= 40; i++) { const x = i * 0.1; pts.push(`${sx(x).toFixed(1)},${sy(f(x)).toFixed(1)}`); }
-
-  // Rectangle evaluation points
-  const evalXs = type === 'left'     ? [0, 1, 2, 3]
-               : type === 'right'    ? [1, 2, 3, 4]
-               :                       [0.5, 1.5, 2.5, 3.5];
+  const sy = y => (H - bm) - (y / yMax) * plotH;
+  const ax = H - bm;
   const rw = (plotW / 4).toFixed(1);
+
+  // Rectangles (navy fill + stroke, no banned blue)
   let rects = '';
   for (let i = 0; i < 4; i++) {
     const h  = f(evalXs[i]);
     const rx = sx(i).toFixed(1);
     const ry = sy(h).toFixed(1);
     const rh = ((H - bm) - sy(h)).toFixed(1);
-    rects += `<rect x="${rx}" y="${ry}" width="${rw}" height="${rh}" fill="#cce0f5" stroke="#1e3a5c" stroke-width="1.2" opacity="0.85"/>`;
+    rects += `<rect x="${rx}" y="${ry}" width="${rw}" height="${rh}" fill="#d9e8f5" stroke="#1e3a5c" stroke-width="1.2" opacity="0.85"/>`;
   }
 
-  // Axes
-  const ax = H - bm;
+  // x-axis tick labels (0–4)
   let xlbls = '';
-  for (let i = 0; i <= 4; i++) xlbls += `<text x="${sx(i).toFixed(1)}" y="${ax + 15}" text-anchor="middle" font-size="11" font-family="sans-serif" fill="#444">${i}</text>`;
+  for (let i = 0; i <= 4; i++) xlbls += `<text x="${sx(i).toFixed(1)}" y="${ax+15}" text-anchor="middle" font-size="11" font-family="sans-serif" fill="#444">${i}</text>`;
 
-  const svg = `<svg width="${W}" height="${H}" style="display:block;margin:4px auto">`
+  // y-axis tick labels at y=2 and y=4
+  let ylbls = '';
+  for (const yv of [2, 4]) {
+    const yp = sy(yv).toFixed(1);
+    ylbls += `<line x1="${lm-4}" y1="${yp}" x2="${lm}" y2="${yp}" stroke="#555" stroke-width="1"/>`;
+    ylbls += `<text x="${lm-7}" y="${(parseFloat(yp)+4).toFixed(1)}" text-anchor="end" font-size="11" font-family="sans-serif" fill="#444">${yv}</text>`;
+  }
+
+  return `<svg width="${W}" height="${H}" style="display:block;margin:4px auto">`
     + rects
-    + `<line x1="${lm}" y1="${ax}" x2="${W-rm}" y2="${ax}" stroke="#555" stroke-width="1.5"/>`
+    + `<line x1="${lm}" y1="${ax}" x2="${W-rm+4}" y2="${ax}" stroke="#555" stroke-width="1.5"/>`
     + `<line x1="${lm}" y1="${tm}" x2="${lm}" y2="${ax}" stroke="#555" stroke-width="1.5"/>`
-    + `<polyline points="${pts.join(' ')}" fill="none" stroke="#c0392b" stroke-width="2.2"/>`
+    + ylbls
+    + buildCurve(sx, sy)
     + xlbls
     + `</svg>`;
+}
 
+// gen5: SVG — identify left / right / midpoint from a diagram
+function gen5() {
+  const type = choose(['left', 'right', 'midpoint']);
+  // f(x) = -(x-2)^2 + 5  on [0,4], range [1,5]
+  const f = x => -(x - 2) * (x - 2) + 5;
+  const evalXs = type === 'left'     ? [0, 1, 2, 3]
+               : type === 'right'    ? [1, 2, 3, 4]
+               :                       [0.5, 1.5, 2.5, 3.5];
+  const buildCurve = (sx, sy) => {
+    let pts = [];
+    for (let i = 0; i <= 40; i++) { const x = i * 0.1; pts.push(`${sx(x).toFixed(1)},${sy(f(x)).toFixed(1)}`); }
+    return `<polyline points="${pts.join(' ')}" fill="none" stroke="#b03030" stroke-width="2.2"/>`;
+  };
+  const svgEl = _riemannDiagramSVG(f, evalXs, buildCurve, 6);
+  const question = `<p style="font-family:sans-serif;font-size:14px;font-weight:700;color:#1e3a5c;margin:0 0 6px">Is this a left, right, or midpoint Riemann sum?</p>`;
   const desc = type === 'midpoint' ? 'center' : type + ' edge';
   return {
-    svg,
+    svg: question + svgEl,
     answer: [type],
-    hint: `Look at where the height of each rectangle is measured within its subinterval — the left edge, right edge, or center?`,
-    step: `\\text{Heights sampled at the ${desc} of each subinterval}\\Rightarrow\\text{${type} Riemann sum.}`
+    hint: `Look at where the height of each rectangle is sampled within its subinterval — left edge, right edge, or center?`,
+    step: `\\text{Heights sampled at the ${desc} of each subinterval} \\Rightarrow \\text{${type} Riemann sum.}`
   };
 }
 
@@ -272,46 +285,21 @@ function gen6() {
   const isLeft = rInt(2) === 0;
   const type   = isLeft ? 'left' : 'right';
   const ans    = isLeft ? 'underestimate' : 'overestimate';
-  const W=320, H=155, lm=42, rm=15, tm=12, bm=30;
-  const plotW = W - lm - rm, plotH = H - tm - bm;
   // f(x) = x + 1  on [0,4], increasing, range [1,5]
-  const f  = x => x + 1;
-  const sx = x => lm + (x / 4) * plotW;
-  const sy = y => (H - bm) - (y / 6) * plotH;
-
-  // Line (two points suffice)
-  const linePts = `${sx(0).toFixed(1)},${sy(f(0)).toFixed(1)} ${sx(4).toFixed(1)},${sy(f(4)).toFixed(1)}`;
-
-  // Rectangle heights
+  const f = x => x + 1;
   const evalXs = isLeft ? [0, 1, 2, 3] : [1, 2, 3, 4];
-  const rw = (plotW / 4).toFixed(1);
-  let rects = '';
-  for (let i = 0; i < 4; i++) {
-    const h  = f(evalXs[i]);
-    const rx = sx(i).toFixed(1);
-    const ry = sy(h).toFixed(1);
-    const rh = ((H - bm) - sy(h)).toFixed(1);
-    rects += `<rect x="${rx}" y="${ry}" width="${rw}" height="${rh}" fill="#cce0f5" stroke="#1e3a5c" stroke-width="1.2" opacity="0.85"/>`;
-  }
-
-  const ax = H - bm;
-  let xlbls = '';
-  for (let i = 0; i <= 4; i++) xlbls += `<text x="${sx(i).toFixed(1)}" y="${ax + 15}" text-anchor="middle" font-size="11" font-family="sans-serif" fill="#444">${i}</text>`;
-
-  const svg = `<svg width="${W}" height="${H}" style="display:block;margin:4px auto">`
-    + rects
-    + `<line x1="${lm}" y1="${ax}" x2="${W-rm}" y2="${ax}" stroke="#555" stroke-width="1.5"/>`
-    + `<line x1="${lm}" y1="${tm}" x2="${lm}" y2="${ax}" stroke="#555" stroke-width="1.5"/>`
-    + `<polyline points="${linePts}" fill="none" stroke="#c0392b" stroke-width="2.2"/>`
-    + xlbls
-    + `</svg>`;
-
+  const buildCurve = (sx, sy) => {
+    const pts = `${sx(0).toFixed(1)},${sy(f(0)).toFixed(1)} ${sx(4).toFixed(1)},${sy(f(4)).toFixed(1)}`;
+    return `<polyline points="${pts}" fill="none" stroke="#b03030" stroke-width="2.2"/>`;
+  };
+  const svgEl = _riemannDiagramSVG(f, evalXs, buildCurve, 6);
+  const question = `<p style="font-family:sans-serif;font-size:14px;font-weight:700;color:#1e3a5c;margin:0 0 6px">The function above is <em>increasing</em> on [0,4]. Does this ${type} Riemann sum overestimate or underestimate the true area?</p>`;
   const relation = isLeft ? 'fall below' : 'extend above';
   return {
-    svg,
+    svg: question + svgEl,
     answer: [ans],
     hint: `f is increasing. Do ${type} rectangle tops sit above the curve or below it on each subinterval?`,
-    step: `\\text{f increasing + ${type} sum}\\Rightarrow\\text{rectangles ${relation} the curve}\\Rightarrow\\text{${ans}.}`
+    step: `\\text{Increasing } f \\text{ + ${type} sum} \\Rightarrow \\text{rectangles ${relation} the curve} \\Rightarrow \\text{${ans}.}`
   };
 }
 
@@ -341,7 +329,7 @@ function gen8() {
     latex: `\\text{f is ${dir} on }[a,b].\\text{ Is the ${type} Riemann sum an over- or underestimate?}`,
     answer: [ans],
     hint: `Sketch a quick ${dir} curve. For a ${type} sum, are the rectangle tops above or below the curve?`,
-    step: `\\text{${dir[0].toUpperCase() + dir.slice(1)} f + ${type} sum}\\Rightarrow\\text{${ans}.}`
+    step: `\\text{${dir[0].toUpperCase() + dir.slice(1)} f + ${type} sum \\u2192 ${ans}.}`
   };
 }
 
@@ -357,15 +345,13 @@ function norm(s) {
 function ok(user, acc) { return acc.some(a => norm(user) === norm(a)); }
 
 function init() {
-  ACTIVE    = shuffle(GENERATORS.map(gen => gen()));
+  ACTIVE    = shuffle(GENERATORS).slice(0, Math.min(8, GENERATORS.length)).map(gen => gen());
   correct   = 0;
   flags     = Array(GENERATORS.length).fill(false);
   attempted = Array(GENERATORS.length).fill(false);
   peeked    = Array(GENERATORS.length).fill(false);
 }
 
-function _lth(s){let h='',r=s;while(r.length){const m=r.match(/^\\text\{([^}]*)\}/);if(m){h+=m[1];r=r.slice(m[0].length);}else{const n=r.indexOf('\\text{');if(n<0){h+=(r.trim()?'$'+r+'$':'');r='';}else{if(n>0)h+='$'+r.slice(0,n)+'$';r=r.slice(n);}}}return h;}
-function _re(p,i){const e=document.getElementById('expr-'+i),KO={delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false};if(p.svg){e.innerHTML=p.svg;}else if(p.html){e.innerHTML=p.html;renderMathInElement(e,KO);}else if(p.latex&&/\\text\{/.test(p.latex)){e.innerHTML=_lth(p.latex);renderMathInElement(e,KO);}else{katex.render(p.latex,e,{throwOnError:false,displayMode:true});}}
 function buildCards() {
   const wrap = document.getElementById('problems');
   wrap.innerHTML = '';
@@ -380,7 +366,7 @@ function buildCards() {
           <input class="ans-input" id="ai-${i}" placeholder="answer" />
           <button class="check-btn" id="chk-${i}" onclick="check(${i})">Check</button>
         </div>
-        <div class="hint">${p.hint}</div>
+        <span class="hint-link" onclick="this.style.display='none';this.nextElementSibling.style.display='block'">Show hint</span><div class="hint">${p.hint}</div>
         <div class="feedback" id="fb-${i}"></div>
         <span class="reveal-link" id="rl-${i}" onclick="reveal(${i})">Show solution</span>
         <div class="revealed-answer" id="ra-${i}"></div>
@@ -388,7 +374,12 @@ function buildCards() {
     wrap.appendChild(div);
     document.getElementById('ai-' + i)
       .addEventListener('keydown', e => { if (e.key === 'Enter') check(i); });
-    _re(p, i);
+    if (p.svg) {
+      document.getElementById('expr-' + i).innerHTML = p.svg;
+    } else {
+      katex.render(p.latex, document.getElementById('expr-' + i),
+        { throwOnError: false, displayMode: true });
+    }
   });
 }
 
