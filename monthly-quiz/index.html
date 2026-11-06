@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Monthly Skills Check</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f3f6f9; --card:#ffffff; --ink:#16212b; --mute:#566573; --line:#d5dde5;
+  --accent:#1f5f8b; --accent-ink:#ffffff; --accent-soft:#e3eef7;
+  --good:#1b7a47; --good-soft:#e1f3e8; --bad:#b03226; --bad-soft:#fbe8e5; --warn-soft:#fff3d6; --warn:#7a5600;
+  --shadow:0 1px 2px rgba(22,33,43,.06),0 4px 14px rgba(22,33,43,.05);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0f1720; --card:#17222d; --ink:#e8eef3; --mute:#9fb0be; --line:#2b3a47;
+    --accent:#6fb1e0; --accent-ink:#0b1620; --accent-soft:#1b2f40;
+    --good:#5fd08b; --good-soft:#15301f; --bad:#ff8f80; --bad-soft:#38201d; --warn-soft:#33290f; --warn:#f0c65a;
+    --shadow:none;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0f1720; --card:#17222d; --ink:#e8eef3; --mute:#9fb0be; --line:#2b3a47;
+  --accent:#6fb1e0; --accent-ink:#0b1620; --accent-soft:#1b2f40;
+  --good:#5fd08b; --good-soft:#15301f; --bad:#ff8f80; --bad-soft:#38201d; --warn-soft:#33290f; --warn:#f0c65a;
+  --shadow:none;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.5 "Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:720px;margin:0 auto;padding:28px 16px 64px}
+.eyebrow{font-size:.78rem;letter-spacing:.09em;text-transform:uppercase;color:var(--mute);font-weight:600;margin:0 0 6px}
+h1{font:700 2rem/1.15 Fraunces,Georgia,serif;margin:0 0 4px;text-wrap:balance}
+.sub{color:var(--mute);margin:0 0 22px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:20px;box-shadow:var(--shadow)}
+.card + .card{margin-top:14px}
+label{display:block;font-weight:600;margin:0 0 4px;font-size:.95rem}
+.field{margin-bottom:14px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:520px){.row2{grid-template-columns:1fr}}
+input[type=text],select{width:100%;font:inherit;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:8px;padding:10px 12px}
+input[type=text]:focus,select:focus,button:focus-visible{outline:3px solid var(--accent);outline-offset:1px;border-color:var(--accent)}
+button{font:inherit;font-weight:700;border:0;border-radius:8px;padding:12px 20px;background:var(--accent);color:var(--accent-ink);cursor:pointer}
+button:disabled{opacity:.5;cursor:default}
+button.ghost{background:transparent;color:var(--accent);border:1.5px solid var(--accent)}
+.note{background:var(--accent-soft);border-radius:8px;padding:12px 14px;font-size:.95rem;margin:4px 0 16px}
+.warn{background:var(--warn-soft);color:var(--ink);border-left:4px solid var(--warn)}
+.err{background:var(--bad-soft);border-left:4px solid var(--bad);border-radius:8px;padding:12px 14px;margin:0 0 14px;font-size:.95rem}
+.bar{position:sticky;top:0;z-index:5;background:var(--bg);padding:10px 0;margin:-10px 0 10px;display:flex;justify-content:space-between;align-items:baseline;gap:12px;border-bottom:1px solid var(--line);font-size:.92rem;color:var(--mute)}
+.bar b{color:var(--ink)}
+.q{margin-top:14px}
+.qnum{font:700 .8rem/1 "Source Sans 3",sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-bottom:8px}
+.qtext{font-size:1.15rem;margin-bottom:12px}
+.eq{margin:10px 0 0;font-size:1.3rem}
+.choices{display:grid;gap:8px}
+.choice{display:flex;gap:10px;align-items:flex-start;border:1.5px solid var(--line);border-radius:8px;padding:10px 12px;cursor:pointer;background:var(--bg)}
+.choice input{margin-top:.35em;accent-color:var(--accent)}
+.choice:has(input:checked){border-color:var(--accent);background:var(--accent-soft)}
+.hint{color:var(--mute);font-size:.85rem;margin-top:6px}
+.num{max-width:220px}
+.submitrow{margin-top:20px;display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.score{font:700 3rem/1 Fraunces,Georgia,serif;margin:0}
+.res{display:grid;grid-template-columns:auto 1fr;gap:6px 12px;margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}
+.res .mark{font-weight:700;width:1.6em;height:1.6em;display:grid;place-items:center;border-radius:50%}
+.res .ok{background:var(--good-soft);color:var(--good)}
+.res .no{background:var(--bad-soft);color:var(--bad)}
+.res small{color:var(--mute)}
+.res .skill{font-size:.85rem;color:var(--mute)}
+/* math bits */
+i{font-style:italic}
+sup,sub{line-height:0}
+.frac{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;margin:0 .2em;line-height:1.25}
+.frac>span:first-child{border-bottom:1.5px solid currentColor;padding:0 .25em}
+.frac>span:last-child{padding:0 .25em}
+.intw{display:inline-flex;align-items:center;gap:1px;vertical-align:middle}
+.isign{font-size:2em;line-height:1;font-weight:300}
+.lims{display:inline-flex;flex-direction:column;justify-content:space-between;font-size:.7em;line-height:1;height:2.6em}
+.lims sup,.lims sub{position:static;vertical-align:baseline}
+.sumw{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;line-height:1.05;margin-right:.3em}
+.sumw .big{font-size:1.7em}
+.sumw small{font-size:.7em}
+.lim,.nw{white-space:nowrap}
+@media (prefers-reduced-motion:no-preference){button{transition:filter .15s}button:hover:not(:disabled){filter:brightness(1.08)}}
+</style>
+</head>
+<body>
+<main id="app"></main>
+<script src="skills.js"></script>
+<script src="config.js"></script>
+<script>
+(function () {
+  var CFG = window.MQ_CONFIG, MQ = window.MQ, app = document.getElementById('app');
+  var qs = new URLSearchParams(location.search);
+  var preview = qs.get('preview') === '1';
+  var monthKey = qs.get('month') || CFG.current;
+  var MONTH = CFG.months[monthKey];
+  app.addEventListener('input', function (e) { onInput(e); });
+  var S = { course: qs.get('course') || '', first: '', last: '', seed: 0, qs: [], given: [], armed: false };
+
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function html(h) { app.innerHTML = h; window.scrollTo(0, 0); }
+  function header(sub) {
+    return '<p class="eyebrow">Cardinal Ritter College Prep · Mathematics</p><h1>Monthly Skills Check</h1><p class="sub">' + sub + '</p>';
+  }
+  function courseList() { return MONTH ? Object.keys(MONTH.skills).filter(function (c) { return CFG.courses[c]; }) : []; }
+
+  /* ---------- server ---------- */
+  function api(body) {
+    var ctl = new AbortController(), t = setTimeout(function () { ctl.abort(); }, 20000);
+    return fetch(CFG.scriptUrl, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(body), signal: ctl.signal })
+      .then(function (r) { clearTimeout(t); if (!r.ok) throw new Error('http ' + r.status); return r.json(); })
+      .catch(function (e) { clearTimeout(t); throw e; });
+  }
+
+  /* ---------- start screen ---------- */
+  function showStart(msg) {
+    if (!MONTH) { html(header('') + '<div class="err">There is no quiz set up for ' + esc(monthKey) + '. Check the link with your teacher.</div>'); return; }
+    var cs = courseList();
+    var opts = '<option value="">Choose your class…</option>' + cs.map(function (c) {
+      return '<option value="' + c + '"' + (S.course === c ? ' selected' : '') + '>' + esc(CFG.courses[c]) + '</option>';
+    }).join('');
+    var setup = (!CFG.scriptUrl && !preview)
+      ? '<div class="err">Results tracking is not connected yet, so the quiz cannot start. Teachers: add <b>?preview=1</b> to the link to try it.</div>' : '';
+    html(header(esc(MONTH.label) + ' · 5 questions') +
+      '<div class="card">' + setup + (msg ? '<div class="err">' + msg + '</div>' : '') +
+      (preview ? '<div class="note warn"><b>Teacher preview.</b> Nothing is saved to the Sheet and you can retry as often as you like.</div>' : '') +
+      '<div class="field"><label for="course">Class</label><select id="course">' + opts + '</select></div>' +
+      '<div class="row2"><div class="field"><label for="first">First name</label><input type="text" id="first" autocomplete="given-name" value="' + esc(S.first) + '"></div>' +
+      '<div class="field"><label for="last">Last name</label><input type="text" id="last" autocomplete="family-name" value="' + esc(S.last) + '"></div></div>' +
+      '<div class="note"><b>One attempt only.</b> Type your name the way it appears on your class roster. Once you click Start your questions are locked in — if you reload the page you will get the same five questions back.</div>' +
+      '<button id="go">Start</button></div>');
+    document.getElementById('go').onclick = onStart;
+  }
+
+  function onStart() {
+    var course = document.getElementById('course').value,
+        first = document.getElementById('first').value.trim(),
+        last = document.getElementById('last').value.trim();
+    S.course = course; S.first = first; S.last = last;
+    if (!course || first.length < 2 || last.length < 2) { showStart('Pick your class and type your first and last name.'); return; }
+    var go = document.getElementById('go'); go.disabled = true; go.textContent = 'Checking…';
+    if (preview) { S.seed = (crypto.getRandomValues(new Uint32Array(1))[0] || 1); beginQuiz(); return; }
+    api({ action: 'start', month: monthKey, course: course, first: first, last: last }).then(function (res) {
+      if (!res.ok) throw new Error(res.error || 'server');
+      if (res.status === 'done') { showDone(res); return; }
+      S.seed = res.seed; beginQuiz();
+    }).catch(function () {
+      showStart('Could not reach the quiz server. Check your internet connection and click Start again. Nothing was lost.');
+    });
+  }
+
+  function showDone(res) {
+    html(header(esc(MONTH.label)) + '<div class="card"><h2 style="margin-top:0">You have already completed this quiz.</h2>' +
+      '<p>' + esc(S.first) + ' ' + esc(S.last) + ' · ' + esc(CFG.courses[S.course]) + ' · score ' + res.score + ' / ' + res.total +
+      '.</p><p class="hint">Only one attempt is allowed. If your name was typed wrong the first time, see your teacher.</p></div>');
+  }
+
+  /* ---------- build + render questions ---------- */
+  function beginQuiz() {
+    var ids = MONTH.skills[S.course];
+    S.qs = ids.map(function (id, i) {
+      var sk = MQ.skills[id];
+      var q = sk.gen(MQ.rng((S.seed + 7919 * (i + 1)) >>> 0));
+      q.skill = id; q.title = sk.title; return q;
+    });
+    S.given = S.qs.map(function () { return null; });
+    S.armed = false;
+    window.onbeforeunload = function (e) { e.preventDefault(); e.returnValue = ''; };
+    renderQuiz();
+  }
+
+  function qCard(q, i) {
+    var body;
+    if (q.type === 'mc') {
+      body = '<div class="choices">' + q.choices.map(function (c, k) {
+        return '<label class="choice"><input type="radio" name="q' + i + '" value="' + k + '"><span>' + c + '</span></label>';
+      }).join('') + '</div>';
+    } else {
+      body = '<input type="text" class="num" id="q' + i + '" inputmode="decimal" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Answer to question ' + (i + 1) + '"><div class="hint">' + q.hint + '</div>';
+    }
+    return '<div class="card q" data-i="' + i + '"><div class="qnum">Question ' + (i + 1) + ' of ' + S.qs.length + '</div><div class="qtext">' + q.html + '</div>' + body + '</div>';
+  }
+
+  function renderQuiz(err) {
+    html('<div class="bar"><span><b>' + esc(S.first) + ' ' + esc(S.last) + '</b> · ' + esc(CFG.courses[S.course]) + '</span><span id="prog"></span></div>' +
+      (err ? '<div class="err">' + err + '</div>' : '') +
+      S.qs.map(qCard).join('') +
+      '<div class="submitrow"><button id="sub">Submit quiz</button><span class="hint" id="subhint">You cannot change your answers after submitting.</span></div>');
+    S.qs.forEach(function (q, i) { restore(q, i); });
+    document.getElementById('sub').onclick = onSubmit;
+    updateProg();
+  }
+  function restore(q, i) {
+    if (S.given[i] == null) return;
+    if (q.type === 'mc') { var r = app.querySelector('input[name="q' + i + '"][value="' + S.given[i] + '"]'); if (r) r.checked = true; }
+    else document.getElementById('q' + i).value = S.given[i];
+  }
+  function onInput(e) {
+    var t = e.target;
+    if (t.type === 'radio') { S.given[+t.name.slice(1)] = +t.value; }
+    else if (t.id && /^q\d+$/.test(t.id)) { S.given[+t.id.slice(1)] = t.value; }
+    S.armed = false;
+    var b = document.getElementById('sub'); if (b) b.textContent = 'Submit quiz';
+    updateProg();
+  }
+  function answered() { return S.given.filter(function (g, i) { return g !== null && g !== '' && !(S.qs[i].type === 'num' && !String(g).trim()); }).length; }
+  function updateProg() { var p = document.getElementById('prog'); if (p) p.innerHTML = '<b>' + answered() + '</b> of ' + S.qs.length + ' answered'; }
+
+  /* ---------- submit ---------- */
+  function onSubmit() {
+    var left = S.qs.length - answered(), b = document.getElementById('sub'), h = document.getElementById('subhint');
+    if (!S.armed) {
+      S.armed = true;
+      b.textContent = 'Click again to submit';
+      h.textContent = left ? left + ' question' + (left > 1 ? 's are' : ' is') + ' still blank. After you submit, answers are final.' : 'After you submit, answers are final.';
+      return;
+    }
+    b.disabled = true; b.textContent = 'Saving…';
+    var answers = S.qs.map(function (q, i) {
+      var g = S.given[i], ok = g !== null && g !== '' && MQ.grade(q, g);
+      return {
+        skill: q.skill, ok: !!ok,
+        given: g === null ? '' : (q.type === 'mc' ? q.choices[g].replace(/<[^>]+>/g, '') : String(g)),
+        correct: q.type === 'mc' ? q.choices[q.correct].replace(/<[^>]+>/g, '') : q.show
+      };
+    });
+    var score = answers.filter(function (a) { return a.ok; }).length;
+    function finish() { window.onbeforeunload = null; showResults(answers, score); }
+    if (preview) { finish(); return; }
+    api({ action: 'submit', month: monthKey, course: S.course, first: S.first, last: S.last, seed: S.seed, answers: answers }).then(function (res) {
+      if (!res.ok) throw new Error(res.error || 'server');
+      finish();
+    }).catch(function () {
+      S.armed = false; b.disabled = false; b.textContent = 'Try saving again';
+      h.innerHTML = '<b style="color:var(--bad)">Your answers did not save.</b> Do not close this page — check your internet and click again.';
+    });
+  }
+
+  /* ---------- results ---------- */
+  function showResults(answers, score) {
+    var rows = answers.map(function (a, i) {
+      var q = S.qs[i];
+      return '<span class="mark ' + (a.ok ? 'ok' : 'no') + '" aria-label="' + (a.ok ? 'correct' : 'incorrect') + '">' + (a.ok ? '✓' : '✕') + '</span>' +
+        '<div><div>Question ' + (i + 1) + '<span class="skill"> · ' + esc(q.title) + '</span></div>' +
+        (a.ok ? '' : '<small>Your answer: ' + (a.given ? esc(a.given) : '<i>blank</i>') + (CFG.showAnswers ? ' · Correct: ' + esc(a.correct) : '') + '</small>') + '</div>';
+    }).join('');
+    html(header(esc(MONTH.label) + ' · submitted') +
+      (preview ? '<div class="note warn"><b>Teacher preview</b> — not recorded.</div>' : '') +
+      '<div class="card"><p class="score">' + score + ' / ' + answers.length + '</p><p class="sub" style="margin:6px 0 0">' +
+      esc(S.first) + ' ' + esc(S.last) + ' · ' + esc(CFG.courses[S.course]) +
+      (preview ? '' : ' · Your result has been saved.') + '</p><div class="res">' + rows + '</div></div>' +
+      (preview ? '<div class="submitrow"><button class="ghost" id="again">Try again (preview)</button></div>' : ''));
+    var ag = document.getElementById('again'); if (ag) ag.onclick = function () { showStart(); };
+  }
+
+  window.__MQ = { S: S, beginQuiz: beginQuiz };   // hook for automated tests
+  showStart();
+})();
+</script>
+</body>
+</html>
