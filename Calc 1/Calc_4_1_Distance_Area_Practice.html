@@ -45,7 +45,8 @@
   .check-btn{font-family:sans-serif;font-size:13px;background:#1a1a1a;color:#fff;
     border:none;border-radius:6px;padding:7px 14px;cursor:pointer}
   .check-btn:hover{background:#333}.check-btn:disabled{background:#aaa;cursor:default}
-  .hint{font-family:sans-serif;font-size:12px;color:#888;margin-top:7px}
+  .hint{font-family:sans-serif;font-size:12px;color:#888;margin-top:5px;display:none}
+  .hint-link{font-family:sans-serif;font-size:12px;color:#aaa;cursor:pointer;text-decoration:underline;margin-top:7px;display:inline-block}.hint-link:hover{color:#666}
   .feedback{font-family:sans-serif;font-size:13px;margin-top:10px;padding:8px 12px;
     border-radius:6px;display:none;line-height:1.5}
   .feedback.correct{display:block;background:#eaf5ea;color:#1a5a1a}
@@ -57,9 +58,6 @@
   .revealed-answer{display:none;margin-top:8px;font-family:sans-serif;font-size:13px;
     color:#444;background:#f5f3ef;border-radius:6px;padding:8px 11px;line-height:1.8;overflow-x:auto}
   code{font-family:'Courier New',monospace;background:#f0ede7;padding:1px 5px;border-radius:3px;font-size:12px}
-
-
-.hint{display:none!important}
 </style>
 </head>
 <body>
@@ -71,17 +69,18 @@
     <div class="section-title">Core Ideas</div>
 
     <div class="concept">
-      <span class="concept-label">Area = Accumulated Change</span>
-      $\displaystyle\int_a^b f(x)\,dx$ = area under $f$ from $a$ to $b$.
-      If $f$ is a rate of change (e.g.\ speed), the integral gives total change (distance).
-      For simple shapes use geometry; otherwise approximate with Riemann sums.
+      <span class="concept-label">Area = Distance Traveled</span>
+      Speed &times; time = distance = area of a rectangle on a speed-time graph.
+      When speed varies, slice the interval into pieces, form a thin rectangle on each piece,
+      and add up the areas. More rectangles &rarr; better estimate.
     </div>
     <div class="concept">
-      <span class="concept-label">Riemann Sums from a Table</span>
-      <strong>Left sum:</strong> use $f$ at the <em>left</em> endpoint of each subinterval.
-      &nbsp; <strong>Right sum:</strong> use $f$ at the <em>right</em> endpoint.
-      Width of each rectangle = gap between consecutive $x$-values (can vary).
-      Total $\approx \sum f(x_i)\cdot\Delta x_i$
+      <span class="concept-label">Left, Right, and Midpoint Estimates</span>
+      <strong>Left sum:</strong> use $f$ at the <em>left</em> edge of each interval.
+      &nbsp;<strong>Right sum:</strong> use $f$ at the <em>right</em> edge.
+      &nbsp;<strong>Midpoint sum:</strong> use $f$ at the <em>center</em> of each interval.
+      Width = gap between consecutive $x$-values (intervals need not be equal).
+      Estimate = sum of (height &times; width) for each rectangle.
     </div>
 
   </div>
@@ -89,7 +88,7 @@
   <div class="section">
     <div class="section-title">Practice Problems</div>
     <p style="font-family:sans-serif;font-size:13px;color:#666;margin-bottom:1rem;">
-      All answers are integers. Table problems: multiply f-value × width for each subinterval and sum. Equal-width problems: compute Δx = (b−a)/n first. Velocity problem: enter total miles.
+      All answers are integers. Table problems: multiply (height) × (width) for each interval and add. Unequal-interval problems: compute each width separately as the difference of consecutive t-values. Formula problems: compute Δx = (b−a)/n first, then list the sample points.
       Press <strong>Check</strong> or hit Enter.
     </p>
     <div class="score-bar">
@@ -250,20 +249,54 @@ function gen7() {
   };
 }
 
-// gen8: Velocity word problem → distance = v*t (area of rectangle)
+// gen8: Midpoint sum from a table (5 evenly-spaced points, 2 subintervals of width 2)
 function gen8() {
-  const v = choose([30, 40, 50, 60]);   // speed in mph
-  const t = rInt(3) + 2;               // time in {2,3,4} hours
-  const ans = v * t;
+  // Build 5-point table at t=0,1,2,3,4 with random integer speeds
+  const vs = Array.from({length:5}, () => 10*(rInt(6)+2)); // 20–70 in steps of 10
+  // Two subintervals [0,2] and [2,4], width=2 each. Midpoints at t=1 and t=3.
+  const ans = vs[1]*2 + vs[3]*2;
+  const tbl = `\\begin{array}{c|ccccc} t & 0 & 1 & 2 & 3 & 4 \\\\ v & ${vs[0]} & ${vs[1]} & ${vs[2]} & ${vs[3]} & ${vs[4]} \\end{array}`;
   return {
-    latex:  `\\text{A car travels at ${v} mph for ${t} hours. What is }\\int_0^{${t}} ${v}\\,dt\\text{?}`,
+    latex:  `${tbl}\\quad\\text{Midpoint sum on }[0,4]\\text{ with }n=2`,
     answer: [String(ans)],
-    hint:   `The integral of a constant over an interval equals the constant times the interval length. What shape is this area?`,
-    step:   `\\text{Area of rectangle: }${v}\\times${t}=${ans}\\text{ miles}`
+    hint:   `Two subintervals: [0,2] and [2,4], each width 2. The midpoint of [0,2] is t=1; the midpoint of [2,4] is t=3. Use those table values as heights.`,
+    step:   `v(1)\\cdot 2 + v(3)\\cdot 2 = ${vs[1]}(2)+${vs[3]}(2)=${ans}`
   };
 }
 
-const GENERATORS = [gen1, gen2, gen3, gen4, gen5, gen6, gen7, gen8];
+// gen9: Estimate total distance from an unequal-interval velocity table (left sum) —
+//       stated as a real-world distance problem, no integral symbol
+function gen9() {
+  const cases = [
+    {ts:[0,1,3,6],  vs:[50,70,40,60], method:'left'},
+    {ts:[0,2,5,9],  vs:[30,60,50,20], method:'left'},
+    {ts:[0,1,4,7],  vs:[40,50,30,70], method:'right'},
+    {ts:[0,3,5,8],  vs:[60,40,80,30], method:'right'},
+    {ts:[0,2,3,7],  vs:[20,50,70,40], method:'left'},
+    {ts:[0,1,5,8],  vs:[80,60,30,50], method:'right'},
+  ];
+  const {ts, vs, method} = choose(cases);
+  const ws = [ts[1]-ts[0], ts[2]-ts[1], ts[3]-ts[2]];
+  let ans, parts, sideTxt;
+  if (method === 'left') {
+    ans = vs[0]*ws[0] + vs[1]*ws[1] + vs[2]*ws[2];
+    parts = ws.map((w,i) => `${vs[i]}(${w})`);
+    sideTxt = 'left';
+  } else {
+    ans = vs[1]*ws[0] + vs[2]*ws[1] + vs[3]*ws[2];
+    parts = ws.map((w,i) => `${vs[i+1]}(${w})`);
+    sideTxt = 'right';
+  }
+  const tbl = `\\begin{array}{c|cccc} t\\text{ (hr)} & ${ts[0]} & ${ts[1]} & ${ts[2]} & ${ts[3]} \\\\ v\\text{ (mph)} & ${vs[0]} & ${vs[1]} & ${vs[2]} & ${vs[3]} \\end{array}`;
+  return {
+    latex:  `\\text{Estimate total distance (miles) using a ${sideTxt} sum:}\\\\[4pt]${tbl}`,
+    answer: [String(ans)],
+    hint:   `Identify the width of each time interval first (they are unequal). Then multiply each ${sideTxt}-endpoint speed by its interval width and add.`,
+    step:   `${parts.join('+')}=${ans}\\text{ miles}`
+  };
+}
+
+const GENERATORS = [gen1, gen2, gen3, gen4, gen5, gen6, gen7, gen8, gen9];
 
 
 // ── State ─────────────────────────────────────────────────────────────────────
@@ -275,15 +308,13 @@ function norm(s) {
 function ok(user, acc) { return acc.some(a => norm(user) === norm(a)); }
 
 function init() {
-  ACTIVE    = shuffle(GENERATORS.map(gen => gen()));
+  ACTIVE    = shuffle(GENERATORS).slice(0, Math.min(8, GENERATORS.length)).map(gen => gen());
   correct   = 0;
   flags     = Array(GENERATORS.length).fill(false);
   attempted = Array(GENERATORS.length).fill(false);
   peeked    = Array(GENERATORS.length).fill(false);
 }
 
-function _lth(s){let h='',r=s;while(r.length){const m=r.match(/^\\text\{([^}]*)\}/);if(m){h+=m[1];r=r.slice(m[0].length);}else{const n=r.indexOf('\\text{');if(n<0){h+=(r.trim()?'$'+r+'$':'');r='';}else{if(n>0)h+='$'+r.slice(0,n)+'$';r=r.slice(n);}}}return h;}
-function _re(p,i){const e=document.getElementById('expr-'+i),KO={delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false};if(p.svg){e.innerHTML=p.svg;}else if(p.html){e.innerHTML=p.html;renderMathInElement(e,KO);}else if(p.latex&&/\\text\{/.test(p.latex)){e.innerHTML=_lth(p.latex);renderMathInElement(e,KO);}else{katex.render(p.latex,e,{throwOnError:false,displayMode:true});}}
 function buildCards() {
   const wrap = document.getElementById('problems');
   wrap.innerHTML = '';
@@ -298,7 +329,7 @@ function buildCards() {
           <input class="ans-input" id="ai-${i}" placeholder="answer" />
           <button class="check-btn" id="chk-${i}" onclick="check(${i})">Check</button>
         </div>
-        <div class="hint">${p.hint}</div>
+        <span class="hint-link" onclick="this.style.display='none';this.nextElementSibling.style.display='block'">Show hint</span><div class="hint">${p.hint}</div>
         <div class="feedback" id="fb-${i}"></div>
         <span class="reveal-link" id="rl-${i}" onclick="reveal(${i})">Show solution</span>
         <div class="revealed-answer" id="ra-${i}"></div>
@@ -306,7 +337,12 @@ function buildCards() {
     wrap.appendChild(div);
     document.getElementById('ai-' + i)
       .addEventListener('keydown', e => { if (e.key === 'Enter') check(i); });
-    _re(p, i);
+    if (p.svg) {
+      document.getElementById('expr-' + i).innerHTML = p.svg;
+    } else {
+      katex.render(p.latex, document.getElementById('expr-' + i),
+        { throwOnError: false, displayMode: true });
+    }
   });
 }
 

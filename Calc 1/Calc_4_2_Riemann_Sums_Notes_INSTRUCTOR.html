@@ -18,12 +18,24 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 .opening-q{background:#eef3f9;border-left:4px solid #1e3a5c;
   border-radius:0 8px 8px 0;padding:1rem 1.2rem;font-size:15px;
   margin-bottom:1.5rem;font-style:italic;line-height:1.75}
+.hook-question{margin:0}
+.hook-graph{text-align:center;margin:.7rem 0 .3rem;font-style:normal}
+.hook-graph svg{max-width:100%;height:auto}
+.hook-reveal{margin-top:.5rem;font-style:normal}
+.hook-reveal-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;
+  color:#1e3a5c;text-transform:uppercase;letter-spacing:.07em;list-style:none;user-select:none;display:block}
+.hook-reveal-toggle::-webkit-details-marker{display:none}
+.hook-reveal-body{margin-top:.5rem;font-size:14px;line-height:1.75;padding-top:.5rem;
+  border-top:1px solid #c8d8ec}
 
 /* ── Section heading ── */
 .section-head{font-family:sans-serif;font-size:11px;font-weight:700;
   text-transform:uppercase;letter-spacing:.08em;color:#1e3a5c;
   margin-top:1.4rem;margin-bottom:.6rem;
   border-bottom:1px solid #c8d8ec;padding-bottom:4px}
+
+/* ── Protect math from text-transform on headings/labels ── */
+.katex,.katex *{text-transform:none;letter-spacing:normal}
 
 /* ── Accent box ── */
 .accent-box{background:#d9e8f5;border-left:4px solid #1e3a5c;
@@ -64,6 +76,31 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   border-radius:5px;padding:4px 9px;line-height:1.75}
 .pr-ans.student{border-bottom:1.5px solid #bbb;min-height:2.2rem}
 
+/* ── Student interactive ── */
+.st-work{width:100%;min-height:3rem;border:1px solid #ccc;border-radius:5px;
+  padding:.35rem .5rem;font-family:Georgia,serif;font-size:13px;resize:vertical;
+  background:#fafafa;display:block;margin-bottom:.3rem}
+.st-work-sm{width:100%;min-height:1.5rem;border:1px solid #ccc;border-radius:4px;
+  padding:.2rem .4rem;font-family:Georgia,serif;font-size:12px;resize:vertical;
+  background:#fafafa;display:block;margin-bottom:.2rem}
+.st-btn{font-family:sans-serif;font-size:10px;font-weight:700;color:#1e3a5c;
+  background:none;border:1.5px solid #1e3a5c;border-radius:4px;
+  padding:2px 9px;cursor:pointer;margin-bottom:.2rem;display:inline-block}
+.st-btn-sm{font-family:sans-serif;font-size:9px;font-weight:700;color:#1e3a5c;
+  background:none;border:1px solid #1e3a5c;border-radius:3px;
+  padding:1px 6px;cursor:pointer;margin-bottom:.15rem;display:inline-block}
+.st-btn:hover,.st-btn-sm:hover{background:#eef3f9}
+.st-ans-hidden{display:none;background:#fef9e7;border-left:3px solid #7a5c1e;
+  border-radius:0 5px 5px 0;padding:.4rem .7rem;font-size:13px;
+  color:#5a3e00;line-height:1.85}
+.st-ans-hidden.visible{display:block}
+
+/* ── SVG figures ── */
+.svg-figure{text-align:center;margin:.4rem 0 .6rem}
+.svg-figure svg{max-width:100%;height:auto}
+.svg-caption{font-family:sans-serif;font-size:11px;color:#555;
+  margin-top:.2rem;font-style:italic}
+
 /* ── KaTeX overflow ── */
 .katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}
 
@@ -93,11 +130,23 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   .pr-ans.instructor{font-size:9.5pt;padding:2px 7px;line-height:1.55;
     background:#fef9e7 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
   .pr-ans.student{min-height:1.6rem}
+  .st-work{background:none;border:none;border-bottom:1.5px solid #bbb;
+    border-radius:0;min-height:2.6rem;resize:none}
+  .st-work-sm{background:none;border:none;border-bottom:1.5px solid #bbb;
+    border-radius:0;min-height:1.3rem;resize:none}
+  .st-btn,.st-btn-sm{display:none}
+  .st-ans-hidden{display:none !important}
   .opening-q{
     background:#eef3f9 !important;
     -webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .hook-graph{margin:.4rem 0 .2rem}
+  details.hook-reveal:not([open]){display:none}
+  .svg-figure{margin:.25rem 0 .4rem}
+  .svg-figure svg{max-width:100%;height:auto}
+  .svg-caption{font-size:9pt}
 }
 @page{margin:.55in .65in;size:letter}
+
 .proof-panel{margin:.4rem 0 1.1rem;border-left:3px solid #7a9a6a;border-radius:0 6px 6px 0;background:#f5f7f3}
 .proof-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#5a7a4a;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
 .proof-toggle::-webkit-details-marker{display:none}
@@ -120,40 +169,13 @@ details[open]>.mistake-toggle{color:#1e3a5c}
   .mistake-panel{break-inside:avoid}
   details.mistake-panel:not([open]){display:none}
 }
-.katex,.katex *{text-transform:none;letter-spacing:normal}
 </style>
 </head>
 <body>
 <div class="container">
 <h1 class="page-title">Riemann Sums</h1>
 <p class="page-sub">Calculus I &nbsp;&middot;&nbsp; &sect;4.2 &nbsp;&middot;&nbsp; Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026 &nbsp;&middot;&nbsp; <strong>INSTRUCTOR</strong></p>
-<div class="opening-q">We approximated integrals with a few rectangles. Now we formalize: partition the interval into $n$ equal pieces, add $n$ rectangles, and let $n\to\infty$. Which sum gives an overestimate? An underestimate?</div>
-
-<div class="section-head">The Geometry: What a Riemann Sum Looks Like</div>
-<p class="body-text">Partition $[0,2]$ into $n=4$ equal pieces ($\Delta x=0.5$). On each piece, build a rectangle whose height equals $f$ at one sample point. Sum the areas to approximate $\displaystyle\int_0^2 x^2\,dx=\tfrac{8}{3}\approx 2.67$.</p>
-<div style="display:flex;gap:1.5rem;align-items:flex-start;flex-wrap:wrap;margin:.5rem 0 1rem">
-<div style="flex:1;min-width:260px">
-<svg viewBox="0 0 310 220" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:290px;display:block;margin:0 auto" font-family="sans-serif"><rect x="55" y="195" width="50" height="0" fill="#1e3a5c" fill-opacity="0.18" stroke="#1e3a5c" stroke-width="1.2"/><rect x="105" y="184" width="50" height="11" fill="#1e3a5c" fill-opacity="0.18" stroke="#1e3a5c" stroke-width="1.2"/><rect x="155" y="151" width="50" height="44" fill="#1e3a5c" fill-opacity="0.18" stroke="#1e3a5c" stroke-width="1.2"/><rect x="205" y="96" width="50" height="99" fill="#1e3a5c" fill-opacity="0.18" stroke="#1e3a5c" stroke-width="1.2"/><line x1="38" y1="195" x2="275" y2="195" stroke="#444" stroke-width="1.5"/><line x1="55" y1="205" x2="55" y2="8" stroke="#444" stroke-width="1.5"/><polygon points="272,191 272,199 279,195" fill="#444"/><polygon points="51,11 59,11 55,5" fill="#444"/><line x1="105" y1="192" x2="105" y2="198" stroke="#444" stroke-width="1"/><text x="105" y="209" text-anchor="middle" fill="#555" font-size="10">0.5</text><line x1="155" y1="192" x2="155" y2="198" stroke="#444" stroke-width="1"/><text x="155" y="209" text-anchor="middle" fill="#555" font-size="10">1.0</text><line x1="205" y1="192" x2="205" y2="198" stroke="#444" stroke-width="1"/><text x="205" y="209" text-anchor="middle" fill="#555" font-size="10">1.5</text><line x1="255" y1="192" x2="255" y2="198" stroke="#444" stroke-width="1"/><text x="255" y="209" text-anchor="middle" fill="#555" font-size="10">2.0</text><line x1="52" y1="151" x2="58" y2="151" stroke="#444" stroke-width="1"/><text x="49" y="155" text-anchor="end" fill="#555" font-size="10">1</text><line x1="52" y1="107" x2="58" y2="107" stroke="#444" stroke-width="1"/><text x="49" y="111" text-anchor="end" fill="#555" font-size="10">2</text><line x1="52" y1="63" x2="58" y2="63" stroke="#444" stroke-width="1"/><text x="49" y="67" text-anchor="end" fill="#555" font-size="10">3</text><line x1="52" y1="19" x2="58" y2="19" stroke="#444" stroke-width="1"/><text x="49" y="23" text-anchor="end" fill="#555" font-size="10">4</text><text x="278" y="199" fill="#444" font-size="12" font-style="italic">x</text><text x="59" y="8" fill="#444" font-size="12" font-style="italic">y</text><polyline points="55,195 65,195 75,193 85,191 95,188 105,184 115,179 125,173 135,167 145,159 155,151 165,142 175,132 185,121 195,109 205,96 215,82 225,68 235,52 245,36 255,19 265,1" fill="none" stroke="#1e3a5c" stroke-width="2.5" stroke-linejoin="round"/><text x="240" y="45" fill="#1e3a5c" font-size="10" font-style="italic">y=x²</text><line x1="155" y1="200" x2="155" y2="217" stroke="#888" stroke-width="0.9"/><line x1="205" y1="200" x2="205" y2="217" stroke="#888" stroke-width="0.9"/><line x1="155" y1="217" x2="205" y2="217" stroke="#888" stroke-width="0.9"/><text x="180" y="227" text-anchor="middle" fill="#555" font-size="9">Δx</text></svg>
-<p style="text-align:center;font-size:.88rem;margin:.4rem 0"><strong>Left sum</strong> $L_4=0.5(0+0.25+1+2.25)=\mathbf{1.75}$<br><em>Rectangles stay below the curve — underestimate</em></p>
-</div>
-<div style="flex:1;min-width:260px">
-<svg viewBox="0 0 310 220" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:290px;display:block;margin:0 auto" font-family="sans-serif"><rect x="55" y="184" width="50" height="11" fill="#1e3a5c" fill-opacity="0.18" stroke="#1e3a5c" stroke-width="1.2"/><rect x="105" y="151" width="50" height="44" fill="#1e3a5c" fill-opacity="0.18" stroke="#1e3a5c" stroke-width="1.2"/><rect x="155" y="96" width="50" height="99" fill="#1e3a5c" fill-opacity="0.18" stroke="#1e3a5c" stroke-width="1.2"/><rect x="205" y="19" width="50" height="176" fill="#1e3a5c" fill-opacity="0.18" stroke="#1e3a5c" stroke-width="1.2"/><line x1="38" y1="195" x2="275" y2="195" stroke="#444" stroke-width="1.5"/><line x1="55" y1="205" x2="55" y2="8" stroke="#444" stroke-width="1.5"/><polygon points="272,191 272,199 279,195" fill="#444"/><polygon points="51,11 59,11 55,5" fill="#444"/><line x1="105" y1="192" x2="105" y2="198" stroke="#444" stroke-width="1"/><text x="105" y="209" text-anchor="middle" fill="#555" font-size="10">0.5</text><line x1="155" y1="192" x2="155" y2="198" stroke="#444" stroke-width="1"/><text x="155" y="209" text-anchor="middle" fill="#555" font-size="10">1.0</text><line x1="205" y1="192" x2="205" y2="198" stroke="#444" stroke-width="1"/><text x="205" y="209" text-anchor="middle" fill="#555" font-size="10">1.5</text><line x1="255" y1="192" x2="255" y2="198" stroke="#444" stroke-width="1"/><text x="255" y="209" text-anchor="middle" fill="#555" font-size="10">2.0</text><line x1="52" y1="151" x2="58" y2="151" stroke="#444" stroke-width="1"/><text x="49" y="155" text-anchor="end" fill="#555" font-size="10">1</text><line x1="52" y1="107" x2="58" y2="107" stroke="#444" stroke-width="1"/><text x="49" y="111" text-anchor="end" fill="#555" font-size="10">2</text><line x1="52" y1="63" x2="58" y2="63" stroke="#444" stroke-width="1"/><text x="49" y="67" text-anchor="end" fill="#555" font-size="10">3</text><line x1="52" y1="19" x2="58" y2="19" stroke="#444" stroke-width="1"/><text x="49" y="23" text-anchor="end" fill="#555" font-size="10">4</text><text x="278" y="199" fill="#444" font-size="12" font-style="italic">x</text><text x="59" y="8" fill="#444" font-size="12" font-style="italic">y</text><polyline points="55,195 65,195 75,193 85,191 95,188 105,184 115,179 125,173 135,167 145,159 155,151 165,142 175,132 185,121 195,109 205,96 215,82 225,68 235,52 245,36 255,19 265,1" fill="none" stroke="#1e3a5c" stroke-width="2.5" stroke-linejoin="round"/><text x="240" y="45" fill="#1e3a5c" font-size="10" font-style="italic">y=x²</text></svg>
-<p style="text-align:center;font-size:.88rem;margin:.4rem 0"><strong>Right sum</strong> $R_4=0.5(0.25+1+2.25+4)=\mathbf{3.75}$<br><em>Rectangles extend above the curve — overestimate</em></p>
-</div>
-</div>
-<div class="accent-box" style="margin-bottom:1rem">
-<p><strong>Step-by-step for $L_4$:</strong> &emsp; $f(x)=x^2$, &ensp; $[a,b]=[0,2]$, &ensp; $n=4$, &ensp; $\Delta x=\tfrac{b-a}{n}=\tfrac{2}{4}=0.5$</p>
-<table style="border-collapse:collapse;font-size:.9rem;margin:.4rem 0 .5rem;width:100%;max-width:480px">
-<thead><tr><th style="border:1px solid #c8b88a;padding:4px 10px;background:#f5efdf;text-align:center">$i$</th><th style="border:1px solid #c8b88a;padding:4px 10px;background:#f5efdf;text-align:center">left endpoint $x_i$</th><th style="border:1px solid #c8b88a;padding:4px 10px;background:#f5efdf;text-align:center">height $f(x_i)=x_i^2$</th><th style="border:1px solid #c8b88a;padding:4px 10px;background:#f5efdf;text-align:center">area $f(x_i)\cdot\Delta x$</th></tr></thead>
-<tbody>
-<tr><td style="border:1px solid #c8b88a;padding:3px 10px;text-align:center">0</td><td style="border:1px solid #c8b88a;padding:3px 10px;text-align:center">0</td><td style="border:1px solid #c8b88a;padding:3px 10px;text-align:center">0</td><td style="border:1px solid #c8b88a;padding:3px 10px;text-align:center">0</td></tr>
-<tr><td style="border:1px solid #c8b88a;padding:3px 10px;text-align:center">1</td><td style="border:1px solid #c8b88a;padding:3px 10px;text-align:center">0.5</td><td style="border:1px solid #c8b88a;padding:3px 10px;text-align:center">0.25</td><td style="border:1px solid #c8b88a;padding:3px 10px;text-align:center">0.125</td></tr>
-<tr><td style="border:1px solid #c8b88a;padding:3px 10px;text-align:center">2</td><td style="border:1px solid #c8b88a;padding:3px 10px;text-align:center">1.0</td><td style="border:1px solid #c8b88a;padding:3px 10px;text-align:center">1.00</td><td style="border:1px solid #c8b88a;padding:3px 10px;text-align:center">0.500</td></tr>
-<tr><td style="border:1px solid #c8b88a;padding:3px 10px;text-align:center">3</td><td style="border:1px solid #c8b88a;padding:3px 10px;text-align:center">1.5</td><td style="border:1px solid #c8b88a;padding:3px 10px;text-align:center">2.25</td><td style="border:1px solid #c8b88a;padding:3px 10px;text-align:center">1.125</td></tr>
-<tr style="font-weight:600"><td colspan="3" style="border:1px solid #c8b88a;padding:4px 10px;text-align:right;background:#f5efdf">Total</td><td style="border:1px solid #c8b88a;padding:4px 10px;text-align:center;background:#f5efdf">1.750</td></tr>
-</tbody></table>
-<p style="margin:.25rem 0 0">True value: $\displaystyle\int_0^2 x^2\,dx=\tfrac{8}{3}\approx 2.667$. So $L_4=1.75 &lt; 2.667 &lt; 3.75=R_4$ — the sums bracket the exact answer.</p>
-</div>
+<div class="opening-q">Using 4 rectangles, your left and right estimates for a trip differed by 15 miles. What if you used 40 rectangles? 400? As you increase the number of rectangles, the estimates converge &mdash; but to what, exactly? And which sum gives an overestimate versus an underestimate?</div>
 <div class="two-col">
 <div class="col"><div class="section-head">Riemann Sum Setup</div>
 <div class="accent-box"><p>Partition $[a,b]$ into $n$ equal subintervals of width:</p><p>$$\Delta x=\frac{b-a}{n}$$</p><p><strong>Left sum $L_n$:</strong> use left endpoint of each subinterval<br>$$L_n=\sum_{i=0}^{n-1}f(x_i)\,\Delta x$$</p><p><strong>Right sum $R_n$:</strong> use right endpoint<br>$$R_n=\sum_{i=1}^{n}f(x_i)\,\Delta x$$</p><p><strong>Midpoint sum:</strong> use center of each subinterval</p></div>
@@ -238,6 +260,12 @@ details[open]>.mistake-toggle{color:#1e3a5c}
 <script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/contrib/auto-render.min.js"></script>
 <script>
+function toggleAns(btn) {
+  if (!btn.dataset.orig) btn.dataset.orig = btn.textContent;
+  var ans = btn.nextElementSibling;
+  var showing = ans.classList.toggle('visible');
+  btn.textContent = showing ? 'Hide' : btn.dataset.orig;
+}
   renderMathInElement(document.body, {
     delimiters: [
       {left: '$$', right: '$$', display: true},
@@ -246,7 +274,5 @@ details[open]>.mistake-toggle{color:#1e3a5c}
     throwOnError: false
   });
 </script>
-<!-- proof-layer:done -->
-<!-- mistake-layer:done -->
 </body>
 </html>

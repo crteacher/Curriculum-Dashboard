@@ -18,12 +18,24 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 .opening-q{background:#eef3f9;border-left:4px solid #1e3a5c;
   border-radius:0 8px 8px 0;padding:1rem 1.2rem;font-size:15px;
   margin-bottom:1.5rem;font-style:italic;line-height:1.75}
+.hook-question{margin:0}
+.hook-graph{text-align:center;margin:.7rem 0 .3rem;font-style:normal}
+.hook-graph svg{max-width:100%;height:auto}
+.hook-reveal{margin-top:.5rem;font-style:normal}
+.hook-reveal-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;
+  color:#1e3a5c;text-transform:uppercase;letter-spacing:.07em;list-style:none;user-select:none;display:block}
+.hook-reveal-toggle::-webkit-details-marker{display:none}
+.hook-reveal-body{margin-top:.5rem;font-size:14px;line-height:1.75;padding-top:.5rem;
+  border-top:1px solid #c8d8ec}
 
 /* ── Section heading ── */
 .section-head{font-family:sans-serif;font-size:11px;font-weight:700;
   text-transform:uppercase;letter-spacing:.08em;color:#1e3a5c;
   margin-top:1.4rem;margin-bottom:.6rem;
   border-bottom:1px solid #c8d8ec;padding-bottom:4px}
+
+/* ── Protect math from text-transform on headings/labels ── */
+.katex,.katex *{text-transform:none;letter-spacing:normal}
 
 /* ── Accent box ── */
 .accent-box{background:#d9e8f5;border-left:4px solid #1e3a5c;
@@ -64,6 +76,25 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   border-radius:5px;padding:4px 9px;line-height:1.75}
 .pr-ans.student{border-bottom:1.5px solid #bbb;min-height:2.2rem}
 
+/* ── Student interactive ── */
+.st-work{width:100%;min-height:3rem;border:1px solid #ccc;border-radius:5px;
+  padding:.35rem .5rem;font-family:Georgia,serif;font-size:13px;resize:vertical;
+  background:#fafafa;display:block;margin-bottom:.3rem}
+.st-work-sm{width:100%;min-height:1.5rem;border:1px solid #ccc;border-radius:4px;
+  padding:.2rem .4rem;font-family:Georgia,serif;font-size:12px;resize:vertical;
+  background:#fafafa;display:block;margin-bottom:.2rem}
+.st-btn{font-family:sans-serif;font-size:10px;font-weight:700;color:#1e3a5c;
+  background:none;border:1.5px solid #1e3a5c;border-radius:4px;
+  padding:2px 9px;cursor:pointer;margin-bottom:.2rem;display:inline-block}
+.st-btn-sm{font-family:sans-serif;font-size:9px;font-weight:700;color:#1e3a5c;
+  background:none;border:1px solid #1e3a5c;border-radius:3px;
+  padding:1px 6px;cursor:pointer;margin-bottom:.15rem;display:inline-block}
+.st-btn:hover,.st-btn-sm:hover{background:#eef3f9}
+.st-ans-hidden{display:none;background:#fef9e7;border-left:3px solid #7a5c1e;
+  border-radius:0 5px 5px 0;padding:.4rem .7rem;font-size:13px;
+  color:#5a3e00;line-height:1.85}
+.st-ans-hidden.visible{display:block}
+
 /* ── SVG figures ── */
 .svg-figure{text-align:center;margin:.4rem 0 .6rem}
 .svg-figure svg{max-width:100%;height:auto}
@@ -99,14 +130,23 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   .pr-ans.instructor{font-size:9.5pt;padding:2px 7px;line-height:1.55;
     background:#fef9e7 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
   .pr-ans.student{min-height:1.6rem}
+  .st-work{background:none;border:none;border-bottom:1.5px solid #bbb;
+    border-radius:0;min-height:2.6rem;resize:none}
+  .st-work-sm{background:none;border:none;border-bottom:1.5px solid #bbb;
+    border-radius:0;min-height:1.3rem;resize:none}
+  .st-btn,.st-btn-sm{display:none}
+  .st-ans-hidden{display:none !important}
   .opening-q{
     background:#eef3f9 !important;
     -webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .hook-graph{margin:.4rem 0 .2rem}
+  details.hook-reveal:not([open]){display:none}
   .svg-figure{margin:.25rem 0 .4rem}
   .svg-figure svg{max-width:100%;height:auto}
   .svg-caption{font-size:9pt}
 }
 @page{margin:.55in .65in;size:letter}
+
 .proof-panel{margin:.4rem 0 1.1rem;border-left:3px solid #7a9a6a;border-radius:0 6px 6px 0;background:#f5f7f3}
 .proof-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#5a7a4a;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
 .proof-toggle::-webkit-details-marker{display:none}
@@ -115,99 +155,103 @@ details[open]>.proof-toggle{color:#1e3a5c}
 .proof-body p{margin-bottom:.45rem}
 .proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
 @media print{.proof-panel{break-inside:avoid}}
-.katex,.katex *{text-transform:none;letter-spacing:normal}
+.mistake-panel{margin:.4rem 0 1.1rem;border-left:3px solid #b8860b;border-radius:0 6px 6px 0;background:#fdf8e8}
+.mistake-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#9a6a00;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.mistake-toggle::-webkit-details-marker{display:none}
+details[open]>.mistake-toggle{color:#1e3a5c}
+.mistake-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #e8d8a8}
+.mistake-body p{margin-bottom:.45rem}
+.panel-row{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.1rem}
+.panel-row>.proof-panel,.panel-row>.mistake-panel{margin:0;min-width:0}
+.panel-row:has(.proof-panel):has(.mistake-panel){grid-template-columns:1fr}
+@media print{
+  .panel-row{break-inside:avoid}
+  .mistake-panel{break-inside:avoid}
+  details.mistake-panel:not([open]){display:none}
+}
 </style>
 </head>
 <body>
 <div class="container">
 <h1 class="page-title">Distance Traveled &amp; Area Under a Curve</h1>
-<p class="page-sub">Calculus I &nbsp;&middot;&nbsp; &sect;4.1 &nbsp;&middot;&nbsp; Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026 &nbsp;&middot;&nbsp; <strong>INSTRUCTOR</strong></p>
-<div class="opening-q">If you know your speed at every moment, how do you find total distance traveled? And geometrically, what does $\displaystyle\int_a^b f(x)\,dx$ actually represent? We start with the big picture: area as accumulated change.</div>
+<p class="page-sub">Calculus I &nbsp;&middot;&nbsp; &sect;4.1 &nbsp;&middot;&nbsp; Instructor: Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026</p>
+<div class="opening-q">A car's GPS logs its speed at several points during a trip &mdash; but the time intervals between readings aren&rsquo;t equal. You have a table of speeds and times. How would you estimate the total distance traveled? Could you get a better estimate, and what would that require?</div>
 <div class="two-col">
-<div class="col"><div class="section-head">Area = Accumulated Change</div>
-<div class="accent-box"><p>$$\int_a^b f(x)\,dx = \text{area under } f \text{ from } a \text{ to } b$$</p><p>If $f(x)$ is a <em>rate of change</em> (e.g., speed), the integral gives total change (distance).</p><p>For simple shapes, use <strong>geometry</strong>:<br>rectangle: $\text{base}\times\text{height}$<br>triangle: $\frac{1}{2}\cdot\text{base}\times\text{height}$<br>semicircle: $\frac{1}{2}\pi r^2$</p></div>
+<div class="col"><div class="section-head">Area = Distance Traveled</div>
+<div class="accent-box"><p>When speed is <strong>constant</strong>: &nbsp;distance&nbsp;=&nbsp;speed&nbsp;&times;&nbsp;time.<br>On a speed-time graph that&rsquo;s the <em>area of a rectangle</em>: base&nbsp;=&nbsp;time, height&nbsp;=&nbsp;speed.</p><p>When speed <strong>varies</strong>: slice the time axis into small pieces. On each piece, speed barely changes &mdash; approximate it as constant and form a thin rectangle.</p><p>The total estimated distance = sum of all rectangle areas.<br>More (thinner) rectangles &rarr; better estimate.</p></div>
 <details class="proof-panel">
-<summary class="proof-toggle">▸ Geometric Argument</summary>
+<summary class="proof-toggle">&blacktriangleright; Why area equals distance</summary>
 <div class="proof-body">
-  <p>Here's why area under a rate curve equals total change — let's think about it with velocity.</p>
-  <p>Imagine your speed $v(t)$ is <em>constant</em> at some value $v_0$ on an interval $[a,b]$. Distance = speed × time = $v_0\cdot(b-a)$. Geometrically, that's the <em>area of a rectangle</em> with height $v_0$ and width $(b-a)$.</p>
-  <p>Now suppose speed varies. Break $[a,b]$ into tiny slices of width $dt$. On each slice, speed barely changes, so distance $\approx v(t)\cdot dt$ — a thin rectangle of height $v(t)$ and width $dt$.</p>
-  <p>Adding all those rectangles: total distance $\approx \sum v(t)\,dt$. As the slices get infinitely thin, the sum becomes the integral $\int_a^b v(t)\,dt$, which equals the exact area under the curve.</p>
-  <p>The same logic applies to any rate of change: the integral $\int_a^b f(x)\,dx$ measures total accumulated change, which is the area trapped between the curve and the $x$-axis.</p>
-  <p class="proof-qed">∎</p>
+<p>Suppose you drive at a steady 60 mph for 2 hours. Distance = 60 &times; 2 = 120 miles. On a speed-time graph, that&rsquo;s a rectangle of height 60 and width 2 &mdash; area 120.</p>
+<p>Now suppose your speed changes every hour: 40 mph the first hour, 70 mph the second. Total distance = 40(1) + 70(1) = 110 miles. That&rsquo;s the sum of two rectangle areas.</p>
+<p>The same logic extends to any number of pieces. The thinner the slices, the closer the sum of rectangle areas gets to the <em>exact</em> area under the speed-time curve &mdash; and therefore to the exact distance.</p>
+<p class="proof-qed">&there4; area under speed-time curve = total distance traveled.</p>
 </div>
 </details>
-<div class="svg-figure"><svg viewBox="0 0 240 140" xmlns="http://www.w3.org/2000/svg" style="width:210px;height:auto"><rect x="20" y="98" width="60" height="30" fill="#d9e8f5" stroke="#1e3a5c" stroke-width="1.5"/><rect x="80" y="88" width="60" height="40" fill="#d9e8f5" stroke="#1e3a5c" stroke-width="1.5"/><rect x="140" y="58" width="60" height="70" fill="#d9e8f5" stroke="#1e3a5c" stroke-width="1.5"/><polyline points="20,98 50,96 80,88 110,76 140,58 170,36 200,8" stroke="#1a1a1a" stroke-width="2" fill="none"/><line x1="10" y1="128" x2="220" y2="128" stroke="#888" stroke-width="1.2"/><polygon points="220,125 226,128 220,131" fill="#888"/><line x1="20" y1="133" x2="20" y2="8" stroke="#888" stroke-width="1.2"/><polygon points="17,8 20,2 23,8" fill="#888"/><text x="223" y="132" font-size="10" fill="#555" font-family="sans-serif">x</text><text x="24" y="8" font-size="10" fill="#555" font-family="sans-serif">y</text><line x1="20" y1="125" x2="20" y2="131" stroke="#888" stroke-width="1"/><text x="17" y="139" font-size="9.5" fill="#555" font-family="sans-serif">0</text><line x1="80" y1="125" x2="80" y2="131" stroke="#888" stroke-width="1"/><text x="77" y="139" font-size="9.5" fill="#555" font-family="sans-serif">1</text><line x1="140" y1="125" x2="140" y2="131" stroke="#888" stroke-width="1"/><text x="137" y="139" font-size="9.5" fill="#555" font-family="sans-serif">2</text><line x1="200" y1="125" x2="200" y2="131" stroke="#888" stroke-width="1"/><text x="197" y="139" font-size="9.5" fill="#555" font-family="sans-serif">3</text><text x="165" y="22" font-size="9.5" fill="#555" font-family="sans-serif" font-style="italic">y = x&#178;/3+1</text></svg><div class="svg-caption">Left Riemann sum with 3 rectangles — underestimates area under an increasing curve</div></div>
+<div class="svg-figure"><svg viewBox="0 0 260 158" xmlns="http://www.w3.org/2000/svg" style="width:220px;height:auto"><rect x="25" y="77" width="52" height="53" fill="#d9e8f5" stroke="#1e3a5c" stroke-width="1.2"/><rect x="77" y="50" width="52" height="80" fill="#d9e8f5" stroke="#1e3a5c" stroke-width="1.2"/><rect x="129" y="63" width="52" height="67" fill="#d9e8f5" stroke="#1e3a5c" stroke-width="1.2"/><rect x="181" y="37" width="52" height="93" fill="#d9e8f5" stroke="#1e3a5c" stroke-width="1.2"/><polyline points="25,77 77,50 129,63 181,37 233,23" stroke="#1e3a5c" stroke-width="2" fill="none" stroke-linejoin="round"/><line x1="15" y1="130" x2="243" y2="130" stroke="#888" stroke-width="1.2"/><polygon points="243,127 249,130 243,133" fill="#888"/><line x1="25" y1="140" x2="25" y2="8" stroke="#888" stroke-width="1.2"/><polygon points="22,8 25,2 28,8" fill="#888"/><text x="251" y="134" font-size="10" fill="#555" font-family="sans-serif">t</text><text x="29" y="8" font-size="10" fill="#555" font-family="sans-serif">v</text><line x1="25" y1="127" x2="25" y2="133" stroke="#888" stroke-width="1"/><text x="21" y="143" font-size="9" fill="#555" font-family="sans-serif">0</text><line x1="77" y1="127" x2="77" y2="133" stroke="#888" stroke-width="1"/><text x="74" y="143" font-size="9" fill="#555" font-family="sans-serif">1</text><line x1="129" y1="127" x2="129" y2="133" stroke="#888" stroke-width="1"/><text x="126" y="143" font-size="9" fill="#555" font-family="sans-serif">2</text><line x1="181" y1="127" x2="181" y2="133" stroke="#888" stroke-width="1"/><text x="178" y="143" font-size="9" fill="#555" font-family="sans-serif">3</text><line x1="233" y1="127" x2="233" y2="133" stroke="#888" stroke-width="1"/><text x="230" y="143" font-size="9" fill="#555" font-family="sans-serif">4</text><text x="118" y="155" font-size="9" fill="#777" font-family="sans-serif" font-style="italic">time (hrs)</text></svg><div class="svg-caption">Left-rectangle estimate under a speed-time curve (4 rectangles)</div></div>
 </div>
-<div class="col"><div class="section-head">Riemann Sums from a Table</div>
-<div class="accent-box"><p>Approximate $\displaystyle\int_a^b f(x)\,dx$ by rectangles:</p><p><strong>Left sum:</strong> use $f$ at the left endpoint of each subinterval<br><strong>Right sum:</strong> use $f$ at the right endpoint</p><p>$$\text{Total}\approx\sum f(x_i)\cdot\Delta x_i$$</p><p>The width $\Delta x_i$ is the gap between consecutive $x$-values (may vary if the table is unequal).</p></div>
-<details class="proof-panel">
-<summary class="proof-toggle">▸ Geometric Argument</summary>
-<div class="proof-body">
-  <p>The key idea is simple: replace a curved region with rectangles whose area we can compute exactly.</p>
-  <p>Divide $[a,b]$ into subintervals. On each subinterval $[x_i, x_{i+1}]$, choose a sample point and draw a rectangle with height $f(x_i)$ and width $\Delta x_i = x_{i+1}-x_i$.</p>
-  <p>Each rectangle's area is $f(x_i)\cdot\Delta x_i$ (base times height). Summing all rectangles: $$\text{Total area}\approx\sum f(x_i)\cdot\Delta x_i$$</p>
-  <p>As the widths $\Delta x_i$ shrink toward zero, the jagged rectangle outline hugs the curve more and more tightly. In the limit, the sum equals the exact area — which is the definition of $\int_a^b f(x)\,dx$.</p>
-  <p class="proof-qed">∎</p>
+<div class="col"><div class="section-head">Left, Right, and Midpoint Estimates</div>
+<div class="accent-box"><p>Given a table of values, there are three natural choices for the height of each rectangle:</p><p><strong>Left sum &mdash;</strong> use the value at the <em>left</em> edge of each interval.<br><strong>Right sum &mdash;</strong> use the value at the <em>right</em> edge.<br><strong>Midpoint sum &mdash;</strong> use the value at the <em>center</em> of each interval.</p><p>Width of each rectangle = difference between consecutive $x$- (or $t$-) values. Intervals <strong>do not need to be equal</strong>.</p><p>Estimate = $\sum (\text{height}) \times (\text{width})$ for each piece.</p></div>
+<details class="mistake-panel">
+<summary class="mistake-toggle">&blacktriangleright; Common Mistake</summary>
+<div class="mistake-body">
+<p>With unequal intervals, students often assume all widths are the same. They&rsquo;re not &mdash; each width is the gap between <em>that</em> pair of consecutive $x$-values. Always subtract: width$_i$ = $x_{i+1} - x_i$.</p>
+<p>Example: for $x = [0,\,3,\,5,\,8]$ the widths are $3,\,2,\,3$ &mdash; not $3,\,3,\,3$.</p>
 </div>
 </details>
-<p class="body-text">When the function is positive, both left and right sums give positive area. When the function dips below zero, rectangles contribute <em>negative</em> area.</p>
+<p class="body-text">The midpoint sum often gives the most accurate estimate because it balances the overcount on one side of the true curve against the undercount on the other. All three converge to the same value as the number of rectangles grows.</p>
 </div>
 </div>
+<div class="spacer"></div>
 <div class="section-head">Worked Examples</div>
 <div class="examples-grid">
 <div class="ex-block">
-  <div class="ex-label">Example 1 &nbsp;&mdash;&nbsp; Left sum from a table</div>
-  <div class="ex-body">Velocity data: $t=0,1,2,3$, $v=2,5,4,6$ mph. Estimate distance using a left Riemann sum.</div>
-  <div class="ex-answer instructor">Left sum $= v(0)\cdot1+v(1)\cdot1+v(2)\cdot1$<br>$=2+5+4=11$ miles</div>
+  <div class="ex-label">Example 1 &nbsp;&mdash;&nbsp; Left sum from a table (equal intervals)</div>
+  <div class="ex-body"><p>A car&rsquo;s speed (mph) is recorded every hour:</p><table style='border-collapse:collapse;font-size:14px;margin:.4rem 0'><tr><td style='border:1px solid #ccc;padding:4px 10px'><em>t</em> (hr)</td><td style='border:1px solid #ccc;padding:4px 10px'>0</td><td style='border:1px solid #ccc;padding:4px 10px'>1</td><td style='border:1px solid #ccc;padding:4px 10px'>2</td><td style='border:1px solid #ccc;padding:4px 10px'>3</td></tr><tr><td style='border:1px solid #ccc;padding:4px 10px'><em>v</em> (mph)</td><td style='border:1px solid #ccc;padding:4px 10px'>20</td><td style='border:1px solid #ccc;padding:4px 10px'>30</td><td style='border:1px solid #ccc;padding:4px 10px'>25</td><td style='border:1px solid #ccc;padding:4px 10px'>35</td></tr></table><p>Estimate total distance using a <strong>left sum</strong>.</p></div>
+  <div class="ex-answer instructor"><p>Three intervals, each width = 1 hr. Use left-endpoint speed:</p><p>$L = 20(1) + 30(1) + 25(1) = 75$ miles</p></div>
 </div>
 <div class="ex-block">
-  <div class="ex-label">Example 2 &nbsp;&mdash;&nbsp; Right sum from a table</div>
-  <div class="ex-body">Same data. Estimate distance using a right Riemann sum.</div>
-  <div class="ex-answer instructor">Right sum $= v(1)\cdot1+v(2)\cdot1+v(3)\cdot1$<br>$=5+4+6=15$ miles</div>
+  <div class="ex-label">Example 2 &nbsp;&mdash;&nbsp; Right sum from the same table</div>
+  <div class="ex-body"><p>Use the same speed data. Estimate using a <strong>right sum</strong>.</p><table style='border-collapse:collapse;font-size:14px;margin:.4rem 0'><tr><td style='border:1px solid #ccc;padding:4px 10px'><em>t</em> (hr)</td><td style='border:1px solid #ccc;padding:4px 10px'>0</td><td style='border:1px solid #ccc;padding:4px 10px'>1</td><td style='border:1px solid #ccc;padding:4px 10px'>2</td><td style='border:1px solid #ccc;padding:4px 10px'>3</td></tr><tr><td style='border:1px solid #ccc;padding:4px 10px'><em>v</em> (mph)</td><td style='border:1px solid #ccc;padding:4px 10px'>20</td><td style='border:1px solid #ccc;padding:4px 10px'>30</td><td style='border:1px solid #ccc;padding:4px 10px'>25</td><td style='border:1px solid #ccc;padding:4px 10px'>35</td></tr></table></div>
+  <div class="ex-answer instructor"><p>Use right-endpoint speed for each interval:</p><p>$R = 30(1) + 25(1) + 35(1) = 90$ miles</p></div>
 </div>
 <div class="ex-block">
-  <div class="ex-label">Example 3 &nbsp;&mdash;&nbsp; Geometric area</div>
-  <div class="ex-body">Find $\displaystyle\int_0^3 2\,dx$ using geometry.</div>
-  <div class="ex-answer instructor">Rectangle: base $=3$, height $=2$<br>Area $= 3\times 2=6$</div>
+  <div class="ex-label">Example 3 &nbsp;&mdash;&nbsp; Midpoint sum from a table</div>
+  <div class="ex-body"><p>Use the table below. Estimate distance on $[0, 4]$ with <strong>2 subintervals</strong> of equal width, using a <strong>midpoint sum</strong>.</p><table style='border-collapse:collapse;font-size:14px;margin:.4rem 0'><tr><td style='border:1px solid #ccc;padding:4px 10px'><em>t</em> (hr)</td><td style='border:1px solid #ccc;padding:4px 10px'>0</td><td style='border:1px solid #ccc;padding:4px 10px'>1</td><td style='border:1px solid #ccc;padding:4px 10px'>2</td><td style='border:1px solid #ccc;padding:4px 10px'>3</td><td style='border:1px solid #ccc;padding:4px 10px'>4</td></tr><tr><td style='border:1px solid #ccc;padding:4px 10px'><em>v</em> (mph)</td><td style='border:1px solid #ccc;padding:4px 10px'>30</td><td style='border:1px solid #ccc;padding:4px 10px'>40</td><td style='border:1px solid #ccc;padding:4px 10px'>50</td><td style='border:1px solid #ccc;padding:4px 10px'>35</td><td style='border:1px solid #ccc;padding:4px 10px'>25</td></tr></table></div>
+  <div class="ex-answer instructor"><p>Two subintervals: $[0,2]$ and $[2,4]$, each width = 2.<br>Midpoint of $[0,2]$ is $t=1$; midpoint of $[2,4]$ is $t=3$.</p><p>$M = v(1)(2) + v(3)(2) = 40(2) + 35(2) = 80 + 70 = 150$ miles</p></div>
 </div>
 <div class="ex-block">
-  <div class="ex-label">Example 4 &nbsp;&mdash;&nbsp; Triangle area</div>
-  <div class="ex-body">Find $\displaystyle\int_0^4 x\,dx$ using geometry.</div>
-  <div class="ex-answer instructor">Triangle: base $=4$, height $=4$<br>Area $=\dfrac{1}{2}\cdot 4\cdot 4=8$</div>
+  <div class="ex-label">Example 4 &nbsp;&mdash;&nbsp; Left sum with unequal intervals</div>
+  <div class="ex-body"><p>Speed is logged at uneven time intervals:</p><table style='border-collapse:collapse;font-size:14px;margin:.4rem 0'><tr><td style='border:1px solid #ccc;padding:4px 10px'><em>t</em> (hr)</td><td style='border:1px solid #ccc;padding:4px 10px'>0</td><td style='border:1px solid #ccc;padding:4px 10px'>2</td><td style='border:1px solid #ccc;padding:4px 10px'>5</td><td style='border:1px solid #ccc;padding:4px 10px'>8</td></tr><tr><td style='border:1px solid #ccc;padding:4px 10px'><em>v</em> (mph)</td><td style='border:1px solid #ccc;padding:4px 10px'>40</td><td style='border:1px solid #ccc;padding:4px 10px'>60</td><td style='border:1px solid #ccc;padding:4px 10px'>30</td><td style='border:1px solid #ccc;padding:4px 10px'>50</td></tr></table><p>Estimate total distance using a <strong>left sum</strong>.</p></div>
+  <div class="ex-answer instructor"><p>Widths are <em>unequal</em>: $2 - 0 = 2$, $\;5 - 2 = 3$, $\;8 - 5 = 3$.</p><p>Use speed at left endpoint of each interval:</p><p>$L = 40(2) + 60(3) + 30(3) = 80 + 180 + 90 = 350$ miles</p></div>
 </div>
 </div>
 <div class="section-head">Practice Problems</div>
 <div class="practice">
 <div class="pr-row">
   <div class="pr-num">1.</div>
-  <div class="pr-prob">Velocity $v$: $t=0,2,4,6$ gives $v=10,8,12,6$ mph. Left sum estimate for total distance.</div>
-  <div class="pr-ans instructor">$10\cdot2+8\cdot2+12\cdot2=60$ miles</div>
+  <div class="pr-prob"><p>Use a <strong>left sum</strong> to estimate distance from the table:</p><table style='border-collapse:collapse;font-size:13px;margin:.3rem 0'><tr><td style='border:1px solid #ccc;padding:3px 8px'><em>t</em></td><td style='border:1px solid #ccc;padding:3px 8px'>0</td><td style='border:1px solid #ccc;padding:3px 8px'>3</td><td style='border:1px solid #ccc;padding:3px 8px'>5</td><td style='border:1px solid #ccc;padding:3px 8px'>9</td></tr><tr><td style='border:1px solid #ccc;padding:3px 8px'><em>v</em></td><td style='border:1px solid #ccc;padding:3px 8px'>50</td><td style='border:1px solid #ccc;padding:3px 8px'>70</td><td style='border:1px solid #ccc;padding:3px 8px'>40</td><td style='border:1px solid #ccc;padding:3px 8px'>60</td></tr></table></div>
+  <div class="pr-ans instructor">Widths: 3, 2, 4. &nbsp; $L = 50(3)+70(2)+40(4) = 150+140+160 = 450$</div>
 </div>
 <div class="pr-row">
   <div class="pr-num">2.</div>
-  <div class="pr-prob">Same data. Right sum estimate.</div>
-  <div class="pr-ans instructor">$8\cdot2+12\cdot2+6\cdot2=52$ miles</div>
+  <div class="pr-prob"><p>Use a <strong>right sum</strong> for the same table above.</p></div>
+  <div class="pr-ans instructor">Widths: 3, 2, 4. &nbsp; $R = 70(3)+40(2)+60(4) = 210+80+240 = 530$</div>
 </div>
 <div class="pr-row">
   <div class="pr-num">3.</div>
-  <div class="pr-prob">Find $\displaystyle\int_0^5 3\,dx$ using geometry.</div>
-  <div class="pr-ans instructor">Rectangle: $5\times3=15$</div>
+  <div class="pr-prob"><p>Use a <strong>midpoint sum</strong> with 2 equal subintervals on $[0,4]$:</p><table style='border-collapse:collapse;font-size:13px;margin:.3rem 0'><tr><td style='border:1px solid #ccc;padding:3px 8px'><em>t</em></td><td style='border:1px solid #ccc;padding:3px 8px'>0</td><td style='border:1px solid #ccc;padding:3px 8px'>1</td><td style='border:1px solid #ccc;padding:3px 8px'>2</td><td style='border:1px solid #ccc;padding:3px 8px'>3</td><td style='border:1px solid #ccc;padding:3px 8px'>4</td></tr><tr><td style='border:1px solid #ccc;padding:3px 8px'><em>v</em></td><td style='border:1px solid #ccc;padding:3px 8px'>20</td><td style='border:1px solid #ccc;padding:3px 8px'>45</td><td style='border:1px solid #ccc;padding:3px 8px'>60</td><td style='border:1px solid #ccc;padding:3px 8px'>50</td><td style='border:1px solid #ccc;padding:3px 8px'>30</td></tr></table></div>
+  <div class="pr-ans instructor">Subintervals $[0,2]$ and $[2,4]$, width 2 each. Midpoints $t=1$ and $t=3$. &nbsp; $M = 45(2)+50(2) = 90+100 = 190$</div>
 </div>
 <div class="pr-row">
   <div class="pr-num">4.</div>
-  <div class="pr-prob">Find $\displaystyle\int_0^6 x\,dx$ using geometry.</div>
-  <div class="pr-ans instructor">Triangle: $\frac{1}{2}\cdot6\cdot6=18$</div>
+  <div class="pr-prob">Find the left sum for $f(x) = 3x$ on $[0, 6]$ with $n = 3$.</div>
+  <div class="pr-ans instructor">$\Delta x = 2$; left points $0,2,4$. &nbsp; $L = f(0)(2)+f(2)(2)+f(4)(2) = 0+12+24 = 36$</div>
 </div>
 <div class="pr-row">
   <div class="pr-num">5.</div>
-  <div class="pr-prob">Find $\displaystyle\int_{-2}^{2} \sqrt{4-x^2}\,dx$ using geometry.</div>
-  <div class="pr-ans instructor">Semicircle with $r=2$: $\frac{1}{2}\pi(4)=2\pi$</div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">6.</div>
-  <div class="pr-prob">Velocity $v$: $t=0,1,3,6$ gives $v=4,4,4,4$ mph (constant). Left sum for total distance.</div>
-  <div class="pr-ans instructor">$4\cdot1+4\cdot2+4\cdot3=24$ miles</div>
+  <div class="pr-prob">If velocity is <em>increasing</em> throughout a trip, does the left sum overestimate or underestimate the actual distance? Explain briefly.</div>
+  <div class="pr-ans instructor">Underestimate &mdash; each rectangle uses the smallest speed in its interval (the left edge), so it falls short of the actual distance on that piece.</div>
 </div>
 </div>
 
@@ -215,6 +259,12 @@ details[open]>.proof-toggle{color:#1e3a5c}
 <script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/contrib/auto-render.min.js"></script>
 <script>
+function toggleAns(btn) {
+  if (!btn.dataset.orig) btn.dataset.orig = btn.textContent;
+  var ans = btn.nextElementSibling;
+  var showing = ans.classList.toggle('visible');
+  btn.textContent = showing ? 'Hide' : btn.dataset.orig;
+}
   renderMathInElement(document.body, {
     delimiters: [
       {left: '$$', right: '$$', display: true},
@@ -223,6 +273,5 @@ details[open]>.proof-toggle{color:#1e3a5c}
     throwOnError: false
   });
 </script>
-<!-- proof-layer:done -->
 </body>
 </html>
