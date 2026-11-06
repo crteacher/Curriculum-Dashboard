@@ -1,0 +1,886 @@
+<title>Integration Basics Practice Test</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=JetBrains+Mono:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #f6f1e4;
+    --paper-line: rgba(58, 74, 94, 0.14);
+    --paper-line-strong: rgba(58, 74, 94, 0.26);
+    --ink: #26313f;
+    --ink-soft: #5b6b7d;
+    --card-bg: #fffdf7;
+    --card-border: #ddd2b6;
+    --accent: #2f7d6b;
+    --accent-strong: #1f5c4e;
+    --accent-soft: rgba(47, 125, 107, 0.12);
+    --accent-ink: #f5fbf9;
+    --good: #3f7a52;
+    --good-soft: rgba(63, 122, 82, 0.14);
+    --bad: #b3413a;
+    --bad-soft: rgba(179, 65, 58, 0.12);
+    --shadow: rgba(38, 49, 63, 0.16);
+    --graph-grid: rgba(58, 74, 94, 0.14);
+    --graph-axis: rgba(38, 49, 63, 0.55);
+    --graph-stroke-a: #2f7d6b;
+    --graph-stroke-b: #c1483f;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #1b2330;
+      --paper-line: rgba(238, 242, 240, 0.07);
+      --paper-line-strong: rgba(238, 242, 240, 0.15);
+      --ink: #edf1ef;
+      --ink-soft: #a3aebb;
+      --card-bg: #232e3d;
+      --card-border: #3a4a61;
+      --accent: #5fd1b3;
+      --accent-strong: #86e0c8;
+      --accent-soft: rgba(95, 209, 179, 0.16);
+      --accent-ink: #0c2620;
+      --good: #7bc794;
+      --good-soft: rgba(123, 199, 148, 0.16);
+      --bad: #ff9a90;
+      --bad-soft: rgba(255, 154, 144, 0.14);
+      --shadow: rgba(0, 0, 0, 0.5);
+      --graph-grid: rgba(238, 242, 240, 0.10);
+      --graph-axis: rgba(238, 242, 240, 0.55);
+      --graph-stroke-a: #5fd1b3;
+      --graph-stroke-b: #ff9179;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #1b2330;
+    --paper-line: rgba(238, 242, 240, 0.07);
+    --paper-line-strong: rgba(238, 242, 240, 0.15);
+    --ink: #edf1ef;
+    --ink-soft: #a3aebb;
+    --card-bg: #232e3d;
+    --card-border: #3a4a61;
+    --accent: #5fd1b3;
+    --accent-strong: #86e0c8;
+    --accent-soft: rgba(95, 209, 179, 0.16);
+    --accent-ink: #0c2620;
+    --good: #7bc794;
+    --good-soft: rgba(123, 199, 148, 0.16);
+    --bad: #ff9a90;
+    --bad-soft: rgba(255, 154, 144, 0.14);
+    --shadow: rgba(0, 0, 0, 0.5);
+    --graph-grid: rgba(238, 242, 240, 0.10);
+    --graph-axis: rgba(238, 242, 240, 0.55);
+    --graph-stroke-a: #5fd1b3;
+    --graph-stroke-b: #ff9179;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background:
+      repeating-linear-gradient(0deg, var(--paper-line) 0, var(--paper-line) 1px, transparent 1px, transparent 32px),
+      repeating-linear-gradient(90deg, var(--paper-line) 0, var(--paper-line) 1px, transparent 1px, transparent 32px),
+      var(--paper);
+    color: var(--ink);
+    font-family: "Source Sans 3", ui-sans-serif, system-ui, sans-serif;
+    display: flex;
+    justify-content: center;
+    padding: clamp(20px, 4vw, 56px) 18px 80px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+  }
+
+  .wrap { width: 100%; max-width: 900px; }
+  header { text-align: center; margin-bottom: 22px; }
+
+  .eyebrow {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--accent); font-weight: 600;
+  }
+
+  h1 {
+    font-family: "Fraunces", Georgia, serif; font-weight: 600;
+    font-size: clamp(1.9rem, 5vw, 2.6rem); margin: 6px 0 8px; text-wrap: balance;
+  }
+
+  header p { color: var(--ink-soft); font-size: 1rem; max-width: 60ch; margin: 0 auto; line-height: 1.55; }
+
+  .toolbar {
+    position: sticky; top: 12px; z-index: 5;
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    margin: 22px 0 26px; padding: 12px 16px; flex-wrap: wrap;
+    background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 14px;
+    box-shadow: 0 10px 26px -16px var(--shadow);
+  }
+  .score-box { display: flex; align-items: baseline; gap: 8px; }
+  .score-num { font-family: "JetBrains Mono", monospace; font-size: 1.3rem; font-weight: 700; color: var(--accent-strong); font-variant-numeric: tabular-nums; }
+  .score-label { font-size: 0.78rem; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.06em; }
+  .score-group { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .score-divider { width: 1px; align-self: stretch; min-height: 24px; background: var(--card-border); }
+  .exam-score-box .score-num { color: var(--ink); }
+  .exam-score-box .score-label { display: flex; align-items: center; gap: 5px; }
+  .exam-score-box .score-label svg { width: 11px; height: 11px; flex-shrink: 0; }
+
+  .exam-badge {
+    display: inline-flex; align-items: center; gap: 5px; font-size: 0.68rem; font-weight: 700;
+    padding: 3px 9px; border-radius: 20px; letter-spacing: 0.02em; white-space: nowrap;
+  }
+  .exam-badge svg { width: 11px; height: 11px; flex-shrink: 0; }
+  .exam-badge.exam-good { background: var(--good-soft); color: var(--good); }
+  .exam-badge.exam-bad { background: var(--bad-soft); color: var(--bad); }
+
+  button { font-family: inherit; cursor: pointer; }
+  button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .icon-btn {
+    display: inline-flex; align-items: center; gap: 7px; background: var(--card-bg);
+    border: 1px solid var(--card-border); color: var(--ink); padding: 9px 14px;
+    border-radius: 9px; font-size: 0.86rem; font-weight: 600;
+    transition: border-color 0.15s ease, transform 0.1s ease;
+  }
+  .icon-btn:hover { border-color: var(--accent); }
+  .icon-btn:active { transform: translateY(1px); }
+  .icon-btn svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+  .group-head {
+    margin: 34px 0 14px; padding-bottom: 8px; border-bottom: 1.5px solid var(--paper-line-strong);
+  }
+  .group-head .gnum {
+    font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 1.3rem; color: var(--ink);
+  }
+  .group-head .gdesc { font-size: 0.92rem; color: var(--ink-soft); margin-top: 2px; }
+
+  .qcard {
+    background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px;
+    box-shadow: 0 14px 32px -22px var(--shadow), 0 2px 8px -2px var(--shadow);
+    padding: clamp(16px, 3vw, 24px); margin-bottom: 18px;
+  }
+
+  .qcard-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
+  .qcard-head .qtitle { display: flex; align-items: center; gap: 10px; }
+  .qlabel { font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 1.1rem; }
+  .qpoints {
+    font-family: "JetBrains Mono", monospace; font-size: 0.68rem; letter-spacing: 0.05em;
+    color: var(--ink-soft); background: var(--paper-line); padding: 2px 8px; border-radius: 20px;
+  }
+
+  .qprompt { font-size: 1rem; line-height: 1.7; margin-bottom: 14px; }
+  .qprompt .math { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 1.02rem; }
+  .qprompt .frac, .qsolution .frac { display: inline-flex; flex-direction: column; vertical-align: middle; text-align: center; margin: 0 3px; line-height: 1.15; }
+  .qprompt .frac .num, .qsolution .frac .num { border-bottom: 1.3px solid currentColor; padding: 0 3px 1px; }
+  .qprompt .frac .den, .qsolution .frac .den { padding: 1px 3px 0; }
+  .qprompt .radical, .qsolution .radical { display: inline-flex; align-items: flex-start; margin: 0 2px; }
+  .qprompt .radical .idx, .qsolution .radical .idx { font-size: 0.62em; margin-right: -0.35em; margin-top: -0.3em; }
+  .qprompt .radical .rsym, .qsolution .radical .rsym { font-size: 1.1em; }
+  .qprompt .radical .rad-inner, .qsolution .radical .rad-inner { border-top: 1.3px solid currentColor; padding: 0 3px; margin-left: 1px; }
+
+  .qgraph-wrap { display: flex; justify-content: center; margin: 10px 0 16px; }
+  .qgraph-wrap canvas { width: 100%; max-width: 380px; height: 230px; display: block; }
+  .qgraph-wrap.small canvas { max-width: 280px; height: 190px; }
+
+  .qinputs { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin-bottom: 14px; }
+  .qinputs .field-label { font-size: 0.86rem; color: var(--ink-soft); font-weight: 600; }
+  .qinputs input[type="text"], .qinputs select {
+    font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 0.95rem;
+    background: var(--paper); border: 1.5px solid var(--card-border); border-radius: 8px;
+    padding: 8px 10px; color: var(--ink); min-width: 92px;
+  }
+  .qinputs select { font-family: "Source Sans 3", sans-serif; min-width: 190px; }
+  .qinputs input:focus, .qinputs select:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .qinputs .subrow {
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    padding: 8px 10px; border: 1.5px dashed var(--card-border); border-radius: 10px;
+  }
+  .qinputs .hidden { display: none !important; }
+  .mc-row { display: flex; flex-wrap: wrap; gap: 8px; }
+  .mc-opt {
+    border: 1.5px solid var(--card-border); border-radius: 9px; padding: 8px 13px;
+    font-size: 0.88rem; background: var(--card-bg); color: var(--ink); font-weight: 600;
+    transition: border-color 0.15s ease, background 0.15s ease;
+  }
+  .mc-opt:hover { border-color: var(--accent); }
+  .mc-opt.selected { border-color: var(--accent); background: var(--accent-soft); color: var(--accent-strong); }
+
+  .qactions { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; }
+  .btn-primary {
+    background: var(--accent); color: var(--accent-ink); border: none; padding: 10px 20px;
+    border-radius: 10px; font-size: 0.92rem; font-weight: 700;
+    box-shadow: 0 8px 16px -8px var(--accent-strong); transition: transform 0.1s ease;
+  }
+  .btn-primary:active { transform: translateY(1px); }
+  .btn-secondary {
+    background: transparent; border: 1.5px solid var(--card-border); color: var(--ink);
+    padding: 9px 18px; border-radius: 10px; font-size: 0.92rem; font-weight: 700;
+    transition: border-color 0.15s ease;
+  }
+  .btn-secondary:hover { border-color: var(--accent); }
+
+  .qfeedback {
+    font-size: 0.9rem; font-weight: 700; padding: 9px 13px; border-radius: 9px; margin-bottom: 10px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .qfeedback.good { background: var(--good-soft); color: var(--good); }
+  .qfeedback.bad { background: var(--bad-soft); color: var(--bad); }
+  .qfeedback svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+  .qsolution {
+    background: var(--accent-soft); border: 1px solid var(--card-border); border-left: 4px solid var(--accent);
+    border-radius: 0 12px 12px 0; padding: 14px 16px; font-size: 0.92rem; line-height: 1.7;
+  }
+  .qsolution .sol-label {
+    font-family: "JetBrains Mono", monospace; font-size: 0.68rem; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--accent-strong); font-weight: 700; display: block; margin-bottom: 6px;
+  }
+  .qsolution .step { margin: 3px 0; }
+  .qsolution .final { margin-top: 8px; font-weight: 700; font-family: "JetBrains Mono", monospace; }
+
+  .hidden { display: none !important; }
+
+  /* integration test additions */
+  .int { display: inline-flex; align-items: center; gap: 1px; vertical-align: middle; }
+  .int .isign { font-size: 2em; line-height: 1; font-weight: 300; }
+  .lims { display: inline-flex; flex-direction: column; justify-content: space-between; font-size: 0.66em; line-height: 1; height: 2.7em; }
+  .lims sup, .lims sub { position: static; vertical-align: baseline; }
+  .qprompt .math sup, .qsolution sup { font-size: 0.72em; line-height: 0; }
+  .nobr { white-space: nowrap; }
+  .qinputs input.ans-wide { width: min(100%, 440px); }
+  .qinputs .fmt-hint { flex-basis: 100%; font-size: 0.8rem; color: var(--ink-soft); }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Calc 1 &middot; Integration</div>
+    <h1>Integration Basics Practice Test</h1>
+    <p>Every part regenerates its own random version — work it out on paper, type your answer, and check yourself. Click "New version" on any part as many times as you want to drill it again with different numbers. Your <strong>Exam Score</strong> locks in the first time you check each part (or peek its solution) — everything after that is just practice. Use "Reset exam" any time for a brand-new attempt.</p>
+  </header>
+
+  <div class="toolbar">
+    <div class="score-group">
+      <div class="score-box">
+        <span class="score-num" id="scoreNum">0 / 0</span>
+        <span class="score-label">points checked correct</span>
+      </div>
+      <div class="score-divider"></div>
+      <div class="score-box exam-score-box">
+        <span class="score-num" id="examScoreNum">0 / 0</span>
+        <span class="score-label">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+          exam score
+        </span>
+      </div>
+    </div>
+    <button class="icon-btn" id="newTestBtn" type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3h5v5"/><path d="M4 20 21 3"/><path d="M21 16v5h-5"/><path d="M15 15l6 6"/><path d="M4 4l5 5"/></svg>
+      Reset exam
+    </button>
+  </div>
+
+  <div id="groups"></div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  // ============================================================
+  // Utilities
+  // ============================================================
+  function randInt(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+  function randNonZeroInt(min, max) { var v; do { v = randInt(min, max); } while (v === 0); return v; }
+  function randIntExcluding(exclude, min, max) {
+    var v, tries = 0;
+    do { v = randInt(min, max); tries++; } while (exclude.indexOf(v) !== -1 && tries < 200);
+    return v;
+  }
+  function randChoice(arr) { return arr[randInt(0, arr.length - 1)]; }
+  function randBool() { return Math.random() < 0.5; }
+  function shuffle(arr) {
+    var a = arr.slice();
+    for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; }
+    return a;
+  }
+  function fmtNum(n) { return n.toLocaleString("en-US"); }
+  function gcdInt(a, b) { a = Math.abs(a); b = Math.abs(b); while (b) { var t = b; b = a % b; a = t; } return a || 1; }
+  function fracLabel(p, q) {
+    var g = gcdInt(p, q);
+    p = p / g; q = q / g;
+    if (q < 0) { p = -p; q = -q; }
+    return { p: p, q: q };
+  }
+  function fracStr(p, q) {
+    var fr = fracLabel(p, q);
+    return fr.q === 1 ? String(fr.p) : (fr.p + "/" + fr.q);
+  }
+
+  function frac(numHtml, denHtml) {
+    return "<span class=\"frac\"><span class=\"num\">" + numHtml + "</span><span class=\"den\">" + denHtml + "</span></span>";
+  }
+  function radical(innerHtml, index) {
+    var idx = index ? "<span class=\"idx\">" + index + "</span>" : "";
+    return "<span class=\"radical\">" + idx + "<span class=\"rsym\">&radic;</span><span class=\"rad-inner\">" + innerHtml + "</span></span>";
+  }
+  function signedTerm(coef, label) {
+    if (coef === 0) return "";
+    var abs = Math.abs(coef);
+    var coefStr = (abs === 1 && label) ? "" : String(abs);
+    return (coef < 0 ? "&minus;" : "+") + " " + coefStr + label;
+  }
+  function leadTerm(coef, label) {
+    if (coef === 0) return "0";
+    var abs = Math.abs(coef);
+    var coefStr = (abs === 1 && label) ? "" : String(abs);
+    return (coef < 0 ? "&minus;" : "") + coefStr + label;
+  }
+
+  // ---- answer parsing / checking ----
+  function parseAnswer(raw) {
+    if (raw === null || raw === undefined) return { type: "invalid" };
+    var str = String(raw).trim().toLowerCase().replace(/[\u2212\u2013]/g, "-");
+    if (str === "") return { type: "invalid" };
+    if (["dne", "does not exist", "no limit", "undefined", "not defined"].indexOf(str) !== -1) return { type: "dne" };
+    if (["inf", "infinity", "+inf", "+infinity", "∞", "+∞"].indexOf(str) !== -1) return { type: "inf", sign: 1 };
+    if (["-inf", "-infinity", "-∞"].indexOf(str) !== -1) return { type: "inf", sign: -1 };
+    var fracMatch = str.match(/^(-?\d+(\.\d+)?)\s*\/\s*(-?\d+(\.\d+)?)$/);
+    if (fracMatch) {
+      var p = parseFloat(fracMatch[1]), q = parseFloat(fracMatch[3]);
+      if (q !== 0) return { type: "number", value: p / q };
+    }
+    var cleaned = str.replace(/,/g, "");
+    if (/^-?\d*\.?\d+$/.test(cleaned)) return { type: "number", value: parseFloat(cleaned) };
+    return { type: "invalid" };
+  }
+  function answersMatch(user, correct, tol) {
+    tol = tol === undefined ? 0.01 : tol;
+    if (user.type === "invalid") return false;
+    if (correct.type === "dne") return user.type === "dne";
+    if (correct.type === "inf") return user.type === "inf" && user.sign === correct.sign;
+    if (correct.type === "number") return user.type === "number" && Math.abs(user.value - correct.value) < tol;
+    return false;
+  }
+  function parseNumberList(raw) {
+    if (raw === null || raw === undefined) return [];
+    return String(raw).split(",").map(function (s) { return parseFloat(s.trim()); }).filter(function (v) { return !isNaN(v); });
+  }
+  function numberSetsMatch(a, b, tol) {
+    tol = tol === undefined ? 0.15 : tol;
+    if (a.length !== b.length) return false;
+    var bUsed = b.slice();
+    for (var i = 0; i < a.length; i++) {
+      var idx = -1;
+      for (var j = 0; j < bUsed.length; j++) { if (bUsed[j] !== null && Math.abs(bUsed[j] - a[i]) < tol) { idx = j; break; } }
+      if (idx === -1) return false;
+      bUsed[idx] = null;
+    }
+    return true;
+  }
+
+  // ============================================================
+  // Integration Basics: helpers
+  // ============================================================
+  function rnd(n, dp) { var m = Math.pow(10, dp === undefined ? 4 : dp); return Math.round(n * m) / m; }
+  function numStr(v) { return String(rnd(v, 4)).replace("-", "−".length ? "&minus;" : "-"); }
+  function red(n, d) { var g = gcdInt(n, d); n /= g; d /= g; if (d < 0) { n = -n; d = -d; } return [n, d]; }
+
+  // "4/15" style number as html: sign handled by caller; |n|/d
+  function mag(n, d, hasBody) {
+    var a = Math.abs(n);
+    if (d === 1) return (a === 1 && hasBody) ? "" : String(a);
+    return frac(String(a), String(d));
+  }
+  // one term of a sum: coefficient n/d times bodyHtml, with correct sign placement
+  function term(n, d, body, first) {
+    var neg = n < 0;
+    var lead = first ? (neg ? "&minus;" : "") : (" " + (neg ? "&minus;" : "+") + " ");
+    return lead + mag(n, d, !!body) + body;
+  }
+  // plain-text version (what a student would type), used for the typed-answer check
+  function termTxt(n, d, body, first) {
+    var neg = n < 0, a = Math.abs(n);
+    var coef = d === 1 ? (a === 1 && body ? "" : String(a)) : "(" + a + "/" + d + ")";
+    return (first ? (neg ? "-" : "") : (neg ? " - " : " + ")) + coef + body;
+  }
+  function integ(lo, hi, bodyHtml) {
+    var lims = (lo !== null) ? "<span class=\"lims\"><sup>" + hi + "</sup><sub>" + lo + "</sub></span>" : "";
+    return "<span class=\"int\"><span class=\"isign\">&int;</span>" + lims + "</span>&thinsp;" + bodyHtml + "<i>dx</i>";
+  }
+  function powSup(p, q) { return q === 1 ? String(p) : p + "/" + q; }
+
+  // ---- typed-expression parser (antiderivatives): + - * / ^, ( ), x, C, e, pi, sin cos tan ln exp sqrt abs, |x|, implicit multiplication ----
+  function normExpr(raw) {
+    var s = String(raw === null || raw === undefined ? "" : raw);
+    var i = s.lastIndexOf("=");
+    if (i !== -1) s = s.slice(i + 1);
+    s = s.replace(/[−‒–—]/g, "-").replace(/[×·∙]/g, "*").replace(/÷/g, "/")
+         .replace(/π/g, "pi").replace(/²/g, "^2").replace(/³/g, "^3").replace(/\*\*/g, "^")
+         .replace(/\|([^|]*)\|/g, "abs($1)").replace(/\s+/g, " ").trim().toLowerCase();
+    return s.replace(/\s*d\s*x\s*$/, "");
+  }
+  var EXPR_FNS = { sqrt: Math.sqrt, abs: Math.abs, sin: Math.sin, cos: Math.cos, tan: Math.tan, ln: Math.log, exp: Math.exp };
+  var EXPR_NAMES = ["sqrt", "abs", "sin", "cos", "tan", "ln", "exp", "pi", "e", "x", "c"].sort(function (a, b) { return b.length - a.length; });
+  function compileExpr(raw) {
+    var s = normExpr(raw);
+    if (s === "") return { err: "Type your answer in the box first." };
+    var toks = [], i = 0, m;
+    while (i < s.length) {
+      var ch = s.charAt(i);
+      if (ch === " ") { i++; continue; }
+      if (/[0-9.]/.test(ch)) {
+        m = /^(?:\d+\.?\d*|\.\d+)/.exec(s.slice(i));
+        if (!m) return { err: "I could not read a number in your answer." };
+        toks.push({ t: "num", v: parseFloat(m[0]) }); i += m[0].length; continue;
+      }
+      if (/[a-z]/.test(ch)) {
+        var hit = null;
+        for (var k = 0; k < EXPR_NAMES.length; k++) { if (s.substr(i, EXPR_NAMES[k].length) === EXPR_NAMES[k]) { hit = EXPR_NAMES[k]; break; } }
+        if (!hit) return { err: "I did not understand \"" + ch + "\". Use x, C, e, sin(x), cos(x), ln|x|, and ^ for powers." };
+        toks.push({ t: EXPR_FNS[hit] ? "fn" : "name", v: hit }); i += hit.length; continue;
+      }
+      if ("+-*/^()".indexOf(ch) !== -1) { toks.push({ t: "op", v: ch }); i++; continue; }
+      return { err: "I did not understand the symbol \"" + ch + "\"." };
+    }
+    var p = 0, bad = null;
+    function isOp(v) { var t = toks[p]; return t && t.t === "op" && t.v === v; }
+    function fail(msg) { if (!bad) bad = msg; return function () { return NaN; }; }
+    function startsFactor() { var t = toks[p]; return !!t && (t.t === "num" || t.t === "name" || t.t === "fn" || (t.t === "op" && t.v === "(")); }
+    function expr() {
+      var left = term_();
+      while (isOp("+") || isOp("-")) {
+        var op = toks[p++].v, right = term_();
+        left = (function (a, b, o) { return o === "+" ? function (e) { return a(e) + b(e); } : function (e) { return a(e) - b(e); }; })(left, right, op);
+      }
+      return left;
+    }
+    function term_() {
+      var left = unary();
+      for (;;) {
+        if (isOp("*") || isOp("/")) {
+          var op = toks[p++].v, right = unary();
+          left = (function (a, b, o) { return o === "*" ? function (e) { return a(e) * b(e); } : function (e) { return a(e) / b(e); }; })(left, right, op);
+        } else if (startsFactor()) {
+          var r2 = unary();
+          left = (function (a, b) { return function (e) { return a(e) * b(e); }; })(left, r2);
+        } else break;
+      }
+      return left;
+    }
+    function unary() {
+      if (isOp("-")) { p++; var u = unary(); return function (e) { return -u(e); }; }
+      if (isOp("+")) { p++; return unary(); }
+      return power();
+    }
+    function power() {
+      var base = atom();
+      if (isOp("^")) {
+        p++;
+        var ex;
+        if (isOp("-")) { p++; var q = power(); ex = function (e) { return -q(e); }; } else ex = power();
+        return function (e) { return Math.pow(base(e), ex(e)); };
+      }
+      return base;
+    }
+    function atom() {
+      var t = toks[p];
+      if (!t) return fail("Your answer seems to end too soon. Is something missing at the end?");
+      if (t.t === "num") { p++; var v = t.v; return function () { return v; }; }
+      if (t.t === "name") {
+        p++; var nm = t.v;
+        if (nm === "pi") return function () { return Math.PI; };
+        if (nm === "e") return function () { return Math.E; };
+        return function (env) { return env[nm]; };
+      }
+      if (t.t === "fn") {
+        p++;
+        var inner;
+        if (isOp("(")) { p++; inner = expr(); if (isOp(")")) p++; else return fail("A parenthesis is not closed."); }
+        else inner = power();
+        var f = EXPR_FNS[t.v];
+        return function (env) { return f(inner(env)); };
+      }
+      if (t.t === "op" && t.v === "(") {
+        p++; var ex2 = expr();
+        if (isOp(")")) { p++; return ex2; }
+        return fail("A parenthesis is not closed.");
+      }
+      return fail("I did not expect \"" + t.v + "\" there.");
+    }
+    var fn = expr();
+    if (!bad && p < toks.length) bad = "I could not read the end of your answer (near \"" + toks[p].v + "\").";
+    if (bad) return { err: bad };
+    return { fn: fn };
+  }
+
+  // Grade a typed antiderivative: matches Fc(x) up to a constant; full credit needs "+ C", otherwise one point off.
+  function gradeAnti(raw, Fc, points) {
+    var c = compileExpr(raw);
+    if (c.err) return { pts: 0, msg: c.err };
+    var xs = [0.6, 1.1, 1.9, 2.7, 3.8], diffs = [], i, scale = 1;
+    for (i = 0; i < xs.length; i++) {
+      var v = c.fn({ x: xs[i], c: 0 }), ref = Fc(xs[i]), d = v - ref;
+      if (!isFinite(d)) return { pts: 0, msg: "I could not evaluate that for positive x. Check that it is written with x, ^, and parentheses." };
+      diffs.push(d); scale = Math.max(scale, Math.abs(ref), Math.abs(v));
+    }
+    for (i = 1; i < diffs.length; i++) if (Math.abs(diffs[i] - diffs[0]) > 1e-6 * scale) return { pts: 0 };
+    var withC = Math.abs(c.fn({ x: 1.3, c: 1 }) - c.fn({ x: 1.3, c: 0 }));
+    if (withC < 1e-9) return { pts: points - 1, msg: "Your antiderivative is right, but an indefinite integral needs + C. (" + (points - 1) + "/" + points + ")" };
+    return { pts: points };
+  }
+
+  // ============================================================
+  // Question part definitions (Integration Basics)
+  // ============================================================
+  var PARTS = [];
+  var FMT_HINT = "<span class=\"fmt-hint\">Type powers with ^ and fractions in parentheses, e.g. (2/5)x^(5/2) &minus; x^3 + C. Don&rsquo;t forget + C.</span>";
+
+  // ---------- 1: power rule with fractional exponent ----------
+  PARTS.push({
+    id: "1", group: "1", label: "", points: 4,
+    gen: function () {
+      var q = randChoice([[1, 2], [1, 3], [1, 4], [2, 3], [3, 2], [3, 4]]), pp = q[0], qq = q[1];
+      var r, ss, g;
+      do { r = randInt(1, 4); ss = randInt(2, 5); g = gcdInt(r, ss); } while (g !== 1 || r === ss);
+      var sgn1 = randBool() ? 1 : -1, k = randInt(2, 6) * (randBool() ? 1 : -1), n = randInt(2, 5);
+      var a1 = red(sgn1 * r * qq, ss * (pp + qq));           // coefficient on x^((p+q)/q)
+      var a2 = red(k, n + 1);                                  // coefficient on x^(n+1)
+      var e1 = (pp + qq) / qq;
+      var s = { pp: pp, qq: qq, r: r, ss: ss, sgn1: sgn1, k: k, n: n, a1: a1, a2: a2 };
+      s.f = function (x) { return sgn1 * r / ss * Math.pow(x, pp / qq) + k * Math.pow(x, n); };
+      s.F = function (x) { return a1[0] / a1[1] * Math.pow(x, e1) + a2[0] / a2[1] * Math.pow(x, n + 1); };
+      s.typed = termTxt(a1[0], a1[1], "x^(" + (pp + qq) + "/" + qq + ")", true) + termTxt(a2[0], a2[1], "x^" + (n + 1), false) + " + C";
+      return s;
+    },
+    prompt: function (s) {
+      var body = term(s.sgn1 * s.r, s.ss, "x<sup>" + powSup(s.pp, s.qq) + "</sup>", true) + term(s.k, 1, "x<sup>" + s.n + "</sup>", false);
+      return "<span class=\"math\">" + integ(null, null, "(" + body + ")") + "</span>";
+    },
+    inputsHtml: function () {
+      return "<span class=\"field-label\">Antiderivative =</span><input type=\"text\" class=\"ans-main ans-wide\" placeholder=\"e.g. (2/5)x^(5/2) - x^3 + C\" autocomplete=\"off\" spellcheck=\"false\">" + FMT_HINT;
+    },
+    readAnswer: function (card) { return { raw: card.querySelector(".ans-main").value }; },
+    isCorrect: function (ua, s) { return gradeAnti(ua.raw, s.F, 4).pts >= 4; },
+    grade: function (ua, s) { return gradeAnti(ua.raw, s.F, 4); },
+    solutionHtml: function (s) {
+      var e1 = powSup(s.pp + s.qq, s.qq);
+      return "<span class=\"sol-label\">Solution</span>" +
+        "<div class=\"step\">Power rule: &int;x<sup>m</sup>dx = x<sup>m+1</sup>/(m+1) + C. Constants come out front, and we integrate term by term.</div>" +
+        "<div class=\"step\">First term: m = " + powSup(s.pp, s.qq) + ", so m + 1 = " + e1 + ". Dividing by " + e1 + " is the same as multiplying by " + frac(String(s.qq), String(s.pp + s.qq)) + ": " +
+          (s.sgn1 < 0 ? "&minus;" : "") + mag(s.r, s.ss, false) + " &middot; " + frac(String(s.qq), String(s.pp + s.qq)) + " &middot; x<sup>" + e1 + "</sup> = " + (s.a1[0] < 0 ? "&minus;" : "") + mag(s.a1[0], s.a1[1], false) + "x<sup>" + e1 + "</sup>.</div>" +
+        "<div class=\"step\">Second term: " + term(s.k, 1, "x<sup>" + s.n + "</sup>", true) + " &rarr; " + (s.a2[0] < 0 ? "&minus;" : "") + mag(s.a2[0], s.a2[1], true) + "x<sup>" + (s.n + 1) + "</sup>.</div>" +
+        "<div class=\"final\">Answer: " + term(s.a1[0], s.a1[1], "x<sup>" + e1 + "</sup>", true) + term(s.a2[0], s.a2[1], "x<sup>" + (s.n + 1) + "</sup>", false) + " + C</div>";
+    }
+  });
+
+  // ---------- 2: 1/x, sin, cos, e^x ----------
+  PARTS.push({
+    id: "2", group: "2", label: "", points: 4,
+    gen: function () {
+      var sg = function () { return randBool() ? 1 : -1; };
+      var a = randInt(2, 6) * sg(), b = randInt(1, 5) * sg(), c = randInt(1, 4) * sg(), d = randInt(2, 6) * sg();
+      var s = { a: a, b: b, c: c, d: d };
+      s.f = function (x) { return a / x + b * Math.sin(x) + c * Math.cos(x) + d * Math.exp(x); };
+      s.F = function (x) { return a * Math.log(x) - b * Math.cos(x) + c * Math.sin(x) + d * Math.exp(x); };
+      s.typed = termTxt(a, 1, "ln|x|", true) + termTxt(-b, 1, "cos(x)", false) + termTxt(c, 1, "sin(x)", false) + termTxt(d, 1, "e^x", false) + " + C";
+      return s;
+    },
+    prompt: function (s) {
+      var body = (s.a < 0 ? "&minus;" : "") + frac(String(Math.abs(s.a)), "x") +
+        term(s.b, 1, "sin(x)", false) + term(s.c, 1, "cos(x)", false) + term(s.d, 1, "e<sup>x</sup>", false);
+      return "<span class=\"math\">" + integ(null, null, "(" + body + ")") + "</span>";
+    },
+    inputsHtml: function () {
+      return "<span class=\"field-label\">Antiderivative =</span><input type=\"text\" class=\"ans-main ans-wide\" placeholder=\"e.g. 3ln|x| + 2cos(x) + C\" autocomplete=\"off\" spellcheck=\"false\">" +
+        "<span class=\"fmt-hint\">Use ln|x| for the natural log, e^x for e<sup>x</sup>, and sin(x), cos(x). Don&rsquo;t forget + C.</span>";
+    },
+    readAnswer: function (card) { return { raw: card.querySelector(".ans-main").value }; },
+    isCorrect: function (ua, s) { return gradeAnti(ua.raw, s.F, 4).pts >= 4; },
+    grade: function (ua, s) { return gradeAnti(ua.raw, s.F, 4); },
+    solutionHtml: function (s) {
+      return "<span class=\"sol-label\">Solution</span>" +
+        "<div class=\"step\">Use the basic rules: &int;1/x dx = ln|x|, &int;sin(x)dx = &minus;cos(x), &int;cos(x)dx = sin(x), &int;e<sup>x</sup>dx = e<sup>x</sup>.</div>" +
+        "<div class=\"step\">" + term(s.a, 1, "&int;(1/x)dx", true) + " &rarr; " + term(s.a, 1, "ln|x|", true) + "</div>" +
+        "<div class=\"step\">" + term(s.b, 1, "&int;sin(x)dx", true) + " &rarr; " + term(-s.b, 1, "cos(x)", true) + "</div>" +
+        "<div class=\"step\">" + term(s.c, 1, "&int;cos(x)dx", true) + " &rarr; " + term(s.c, 1, "sin(x)", true) + "</div>" +
+        "<div class=\"step\">" + term(s.d, 1, "&int;e<sup>x</sup>dx", true) + " &rarr; " + term(s.d, 1, "e<sup>x</sup>", true) + "</div>" +
+        "<div class=\"final\">Answer: " + term(s.a, 1, "ln|x|", true) + term(-s.b, 1, "cos(x)", false) + term(s.c, 1, "sin(x)", false) + term(s.d, 1, "e<sup>x</sup>", false) + " + C</div>";
+    }
+  });
+
+  // ---------- 3: properties of definite integrals ----------
+  PARTS.push({
+    id: "3", group: "3", label: "", points: 4,
+    gen: function () {
+      var lo = randInt(0, 4), hi = lo + randInt(1, 3);
+      var A = randNonZeroInt(-6, 8), B = randNonZeroInt(-6, 8), p = randInt(2, 9), q = randInt(2, 9);
+      return { lo: lo, hi: hi, A: A, B: B, p: p, q: q, answer: { type: "number", value: -(p * A - q * B) } };
+    },
+    prompt: function (s) {
+      return "<span class=\"math\">If " + integ(s.lo, s.hi, "f(x)") + " = " + numStr(s.A) + " and " + integ(s.lo, s.hi, "g(x)") + " = " + numStr(s.B) + ", what is " +
+        integ(s.hi, s.lo, "(" + s.p + "f(x) &minus; " + s.q + "g(x))") + " ?</span>";
+    },
+    inputsHtml: function () {
+      return "<span class=\"field-label\">Value =</span><input type=\"text\" class=\"ans-main\" placeholder=\"e.g. 12\">";
+    },
+    readAnswer: function (card) { return { main: parseAnswer(card.querySelector(".ans-main").value) }; },
+    isCorrect: function (ua, s) { return answersMatch(ua.main, s.answer); },
+    solutionHtml: function (s) {
+      var inner = s.p * s.A - s.q * s.B;
+      return "<span class=\"sol-label\">Solution</span>" +
+        "<div class=\"step\">Swapping the limits flips the sign: " + integ(s.hi, s.lo, "(&hellip;)") + " = &minus;" + integ(s.lo, s.hi, "(&hellip;)") + ".</div>" +
+        "<div class=\"step\">Constants and sums split apart: " + integ(s.lo, s.hi, "(" + s.p + "f &minus; " + s.q + "g)") + " = " + s.p + "(" + numStr(s.A) + ") &minus; " + s.q + "(" + numStr(s.B) + ") = " + numStr(inner) + ".</div>" +
+        "<div class=\"final\">Answer: &minus;(" + numStr(inner) + ") = " + numStr(-inner) + "</div>";
+    }
+  });
+
+  // ---------- 4: additivity of intervals ----------
+  PARTS.push({
+    id: "4", group: "4", label: "", points: 4,
+    gen: function () {
+      var p, q, r;
+      do { p = randInt(1, 9); q = randInt(1, 9); r = randInt(1, 9); } while (p === q || q === r || p === r);
+      return { p: p, q: q, r: r };
+    },
+    prompt: function (s) {
+      return "<span class=\"math\">" + integ(s.p, s.q, "f(x)") + " + " + integ(s.q, s.r, "f(x)") + "</span>" +
+        "<div style=\"margin-top:8px\">Write this sum as a single integral.</div>";
+    },
+    inputsHtml: function () {
+      return "<span class=\"field-label\">Single integral: lower limit</span><input type=\"text\" class=\"ans-lo\" placeholder=\"a\" style=\"width:70px\">" +
+        "<span class=\"field-label\">upper limit</span><input type=\"text\" class=\"ans-hi\" placeholder=\"b\" style=\"width:70px\">" +
+        "<span class=\"field-label\">of f(x)dx</span>";
+    },
+    readAnswer: function (card) { return { lo: parseAnswer(card.querySelector(".ans-lo").value), hi: parseAnswer(card.querySelector(".ans-hi").value) }; },
+    isCorrect: function (ua, s) { return answersMatch(ua.lo, { type: "number", value: s.p }, 1e-9) && answersMatch(ua.hi, { type: "number", value: s.r }, 1e-9); },
+    solutionHtml: function (s) {
+      return "<span class=\"sol-label\">Solution</span>" +
+        "<div class=\"step\">Integrals over back-to-back intervals combine: the first one ends at " + s.q + " where the second begins, so the " + s.q + " drops out.</div>" +
+        "<div class=\"step\">" + integ(s.p, s.q, "f(x)") + " + " + integ(s.q, s.r, "f(x)") + " = " + integ(s.p, s.r, "f(x)") + "</div>" +
+        "<div class=\"final\">Answer: lower limit " + s.p + ", upper limit " + s.r + "</div>";
+    }
+  });
+
+  // ---------- 5: Riemann sum ----------
+  PARTS.push({
+    id: "5", group: "5", label: "", points: 4,
+    gen: function () {
+      var ab = randChoice([[0, 3, 6], [0, 2, 4], [1, 4, 6], [0, 4, 4], [2, 5, 6], [1, 3, 4], [0, 3, 3]]);
+      var tmpl = randChoice(["lin", "lin", "const"]), k = randInt(1, 4), left = randBool();
+      var a = ab[0], b = ab[1], n = ab[2], dx = (b - a) / n;
+      var f = tmpl === "lin" ? function (x) { return x * x + k * x; } : function (x) { return x * x + k; };
+      var xs = [], fs = [], sum = 0, i;
+      for (i = 0; i < n; i++) { var x = a + (left ? i : i + 1) * dx; xs.push(rnd(x, 6)); fs.push(rnd(f(x), 6)); sum += f(x); }
+      var s = { a: a, b: b, n: n, dx: dx, tmpl: tmpl, k: k, left: left, xs: xs, fs: fs, sum: sum, answer: { type: "number", value: rnd(sum * dx, 6) } };
+      s.f = f;
+      return s;
+    },
+    prompt: function (s) {
+      var fx = s.tmpl === "lin" ? "x&sup2; + " + (s.k === 1 ? "" : s.k) + "x" : "x&sup2; + " + s.k;
+      return "Estimate the area under the curve <span class=\"math\">f(x) = " + fx + "</span> from x = " + s.a + " to x = " + s.b +
+        " using a <strong>" + (s.left ? "Left" : "Right") + " Riemann sum</strong> with " + s.n + " equal intervals.";
+    },
+    inputsHtml: function () {
+      return "<span class=\"field-label\">Estimate =</span><input type=\"text\" class=\"ans-main\" placeholder=\"e.g. 10.5\"><span class=\"fmt-hint\">Give an exact decimal or fraction (at least 2 decimal places).</span>";
+    },
+    readAnswer: function (card) { return { main: parseAnswer(card.querySelector(".ans-main").value) }; },
+    isCorrect: function (ua, s) { return answersMatch(ua.main, s.answer, 0.01); },
+    solutionHtml: function (s) {
+      var rows = s.xs.map(function (x, i) { return "f(" + numStr(x) + ") = " + numStr(s.fs[i]); }).join(", ");
+      return "<span class=\"sol-label\">Solution</span>" +
+        "<div class=\"step\">&Delta;x = (" + s.b + " &minus; " + s.a + ") / " + s.n + " = " + numStr(s.dx) + "</div>" +
+        "<div class=\"step\">" + (s.left ? "Left" : "Right") + " endpoints use x = " + s.xs.map(numStr).join(", ") + ".</div>" +
+        "<div class=\"step\">" + rows + "</div>" +
+        "<div class=\"step\">Sum of heights = " + numStr(s.sum) + "</div>" +
+        "<div class=\"final\">Answer: " + numStr(s.dx) + " &times; " + numStr(s.sum) + " = " + numStr(s.dx * s.sum) + "</div>";
+    }
+  });
+
+  // ---------- 6: evaluate a definite integral ----------
+  PARTS.push({
+    id: "6", group: "6", label: "", points: 4,
+    gen: function () {
+      var a = randChoice([1, 1, 2]), b = a + randInt(2, 4), c = randInt(2, 6), k = randChoice([1, 2, 3, 4, -1, -2, -3]), swap = randBool();
+      var f1 = red(c * (b - a), a * b), f2 = red(k * (b * b - a * a), 2);
+      var num = f1[0] * f2[1] + f2[0] * f1[1], den = f1[1] * f2[1], t = red(num, den);
+      var s = { a: a, b: b, c: c, k: k, swap: swap, f1: f1, f2: f2, t: t, answer: { type: "number", value: t[0] / t[1] } };
+      s.f = function (x) { return c / (x * x) + k * x; };
+      return s;
+    },
+    prompt: function (s) {
+      var tc = "<span class=\"nobr\">" + frac(String(s.c), "x<sup>2</sup>") + "</span>", tk = term(s.k, 1, "x", s.swap);
+      var body = s.swap ? tk + " + " + tc : tc + term(s.k, 1, "x", false);
+      return "<span class=\"math\">Evaluate " + integ(s.a, s.b, "(" + body + ")") + "</span>";
+    },
+    inputsHtml: function () {
+      return "<span class=\"field-label\">Value =</span><input type=\"text\" class=\"ans-main\" placeholder=\"e.g. 17/3 or 5.67\"><span class=\"fmt-hint\">An exact fraction, or a decimal rounded to at least 2 places.</span>";
+    },
+    readAnswer: function (card) { return { main: parseAnswer(card.querySelector(".ans-main").value) }; },
+    isCorrect: function (ua, s) { return answersMatch(ua.main, s.answer, 0.01); },
+    solutionHtml: function (s) {
+      var ans = fracStr(s.t[0], s.t[1]);
+      return "<span class=\"sol-label\">Solution</span>" +
+        "<div class=\"step\">Rewrite " + s.c + "/x&sup2; as " + s.c + "x<sup>&minus;2</sup>, then use the power rule: an antiderivative of the integrand is F(x) = &minus;" + s.c + "/x " + (s.k < 0 ? "&minus; " : "+ ") + frac(String(Math.abs(s.k)), "2") + "x&sup2;.</div>" +
+        "<div class=\"step\">F(" + s.b + ") &minus; F(" + s.a + ") = [&minus;" + fracStr(s.c, s.b) + " " + (s.k < 0 ? "&minus;" : "+") + " " + fracStr(Math.abs(s.k) * s.b * s.b, 2) + "] &minus; [&minus;" + fracStr(s.c, s.a) + " " + (s.k < 0 ? "&minus;" : "+") + " " + fracStr(Math.abs(s.k) * s.a * s.a, 2) + "]</div>" +
+        "<div class=\"step\">= " + fracStr(s.f1[0], s.f1[1]) + " " + (s.f2[0] < 0 ? "&minus;" : "+") + " " + fracStr(Math.abs(s.f2[0]), s.f2[1]) + "</div>" +
+        "<div class=\"final\">Answer: " + ans + (s.t[1] === 1 ? "" : " &asymp; " + numStr(s.t[0] / s.t[1])) + "</div>";
+    }
+  });
+
+  // ============================================================
+  // Group metadata
+  // ============================================================
+  var GROUP_META = {
+    "1": { num: "1.", desc: "Find the indefinite integral." },
+    "2": { num: "2.", desc: "Find the indefinite integral." },
+    "3": { num: "3.", desc: "Use the properties of definite integrals." },
+    "4": { num: "4.", desc: "Combine integrals over adjacent intervals." },
+    "5": { num: "5.", desc: "Approximate an area with a Riemann sum." },
+    "6": { num: "6.", desc: "Evaluate the definite integral." }
+  };
+  window.__PT = { PARTS: PARTS, compileExpr: compileExpr, gradeAnti: gradeAnti };
+
+  // ============================================================
+  // Engine: mount cards
+  // ============================================================
+  var scoreMap = {};
+  var TOTAL_POINTS = PARTS.reduce(function (sum, p) { return sum + p.points; }, 0);
+  var scoreNumEl = document.getElementById("scoreNum");
+
+  function updateScore() {
+    var earned = 0;
+    Object.keys(scoreMap).forEach(function (k) { earned += scoreMap[k]; });
+    scoreNumEl.textContent = earned + " / " + TOTAL_POINTS;
+  }
+
+  var examScoreMap = {};
+  var examScoreNumEl = document.getElementById("examScoreNum");
+
+  function updateExamScore() {
+    var earned = 0;
+    Object.keys(examScoreMap).forEach(function (k) { earned += examScoreMap[k]; });
+    examScoreNumEl.textContent = earned + " / " + TOTAL_POINTS;
+  }
+
+  window.__PT_STATE = {};
+
+  function mountCard(part, container) {
+    var card = document.createElement("div");
+    card.className = "qcard";
+    card.setAttribute("data-id", part.id);
+
+    var headHtml = "<div class=\"qcard-head\"><div class=\"qtitle\">" +
+      (part.label ? "<span class=\"qlabel\">" + part.label + "</span>" : "") +
+      "<span class=\"qpoints\">" + part.points + " pt" + (part.points === 1 ? "" : "s") + "</span>" +
+      "<span class=\"exam-badge hidden\"></span></div>" +
+      "<button class=\"icon-btn new-version-btn\" type=\"button\">" +
+      "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M16 3h5v5\"/><path d=\"M4 20 21 3\"/><path d=\"M21 16v5h-5\"/><path d=\"M15 15l6 6\"/><path d=\"M4 4l5 5\"/></svg>" +
+      "New version</button></div>";
+
+    card.innerHTML = headHtml +
+      "<div class=\"qprompt\"></div>" +
+      (part.hasGraph ? "<div class=\"qgraph-wrap" + (part.graphSmall ? " small" : "") + "\"><canvas></canvas></div>" : "") +
+      "<div class=\"qinputs\"></div>" +
+      "<div class=\"qactions\"><button class=\"btn-primary check-btn\" type=\"button\">Check Answer</button><button class=\"btn-secondary solution-btn\" type=\"button\">Show Solution</button></div>" +
+      "<div class=\"qfeedback hidden\"></div>" +
+      "<div class=\"qsolution hidden\"></div>";
+
+    container.appendChild(card);
+
+    var promptEl = card.querySelector(".qprompt");
+    var inputsEl = card.querySelector(".qinputs");
+    var feedbackEl = card.querySelector(".qfeedback");
+    var solutionEl = card.querySelector(".qsolution");
+    var examBadgeEl = card.querySelector(".exam-badge");
+    var canvasEl = part.hasGraph ? card.querySelector("canvas") : null;
+
+    var state;
+    var examAttempted = false;
+
+    function lockExam(pts, note) {
+      if (examAttempted) return;
+      examAttempted = true;
+      examScoreMap[part.id] = pts;
+      examBadgeEl.className = "exam-badge " + (pts >= part.points ? "exam-good" : "exam-bad");
+      examBadgeEl.innerHTML = "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"4\" y=\"10\" width=\"16\" height=\"10\" rx=\"2\"/><path d=\"M8 10V7a4 4 0 0 1 8 0v3\"/></svg> Exam: " + pts + "/" + part.points + (note ? " (" + note + ")" : "");
+      updateExamScore();
+    }
+
+    function render() {
+      state = part.gen();
+      window.__PT_STATE[part.id] = state;
+      promptEl.innerHTML = part.prompt(state);
+      inputsEl.innerHTML = part.inputsHtml(state, part.id);
+      feedbackEl.classList.add("hidden");
+      feedbackEl.innerHTML = "";
+      solutionEl.classList.add("hidden");
+      solutionEl.innerHTML = "";
+      scoreMap[part.id] = 0;
+      updateScore();
+      if (part.afterRender) part.afterRender(card);
+      if (part.hasGraph) part.drawGraph(canvasEl, state);
+    }
+
+    card.querySelector(".new-version-btn").addEventListener("click", render);
+    card.querySelector(".check-btn").addEventListener("click", function () {
+      var ua = part.readAnswer(card);
+      var res = part.grade ? part.grade(ua, state) : null;
+      var pts = res ? res.pts : (part.isCorrect(ua, state) ? part.points : 0);
+      var correct = pts >= part.points;
+      feedbackEl.classList.remove("hidden");
+      if (correct) {
+        feedbackEl.className = "qfeedback good";
+        feedbackEl.innerHTML = "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M20 6 9 17l-5-5\"/></svg> Correct!";
+        scoreMap[part.id] = part.points;
+      } else {
+        feedbackEl.className = "qfeedback bad";
+        feedbackEl.innerHTML = "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\"><circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M15 9l-6 6M9 9l6 6\"/></svg> " + (res && res.msg ? res.msg : "Not quite — check the solution below.");
+        scoreMap[part.id] = pts;
+      }
+      updateScore();
+      lockExam(pts);
+    });
+    card.querySelector(".solution-btn").addEventListener("click", function () {
+      solutionEl.innerHTML = part.solutionHtml(state);
+      solutionEl.classList.remove("hidden");
+      lockExam(0, "viewed solution");
+    });
+
+    if (part.hasGraph) {
+      window.addEventListener("resize", function () { if (state) part.drawGraph(canvasEl, state); });
+    }
+
+    render();
+  }
+
+  function buildAll() {
+    var groupsEl = document.getElementById("groups");
+    groupsEl.innerHTML = "";
+    scoreMap = {};
+    examScoreMap = {};
+    var seenGroups = {};
+    var currentContainer = null;
+    PARTS.forEach(function (part) {
+      if (!seenGroups[part.group]) {
+        seenGroups[part.group] = true;
+        var meta = GROUP_META[part.group];
+        var gh = document.createElement("div");
+        gh.className = "group-head";
+        gh.innerHTML = "<div class=\"gnum\">" + meta.num + "</div><div class=\"gdesc\">" + meta.desc + "</div>";
+        groupsEl.appendChild(gh);
+        currentContainer = document.createElement("div");
+        groupsEl.appendChild(currentContainer);
+      }
+      mountCard(part, currentContainer);
+    });
+    updateScore();
+    updateExamScore();
+  }
+
+  document.getElementById("newTestBtn").addEventListener("click", buildAll);
+
+  buildAll();
+})();
+</script>
