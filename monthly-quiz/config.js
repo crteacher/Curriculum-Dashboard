@@ -12,25 +12,15 @@ window.MQ_CONFIG = {
   /* Teachers shown in the Teacher picker (recorded in the Sheet). */
   teachers: ['Halverson', 'Ofori', 'Stock', 'Adams', 'Bedard'],
 
-  /* Course names shown in the course picker. */
-  courses: {
-    alg: 'College Algebra',
-    precalc: 'Precalculus',
-    calc1: 'Calculus 1',
-    calc2: 'Calculus 2'
-  },
+  /* Class sections shown in the Class picker (recorded in the Sheet). */
+  sections: ['A1', 'A2', 'A3', 'A4', 'B5', 'B6', 'B7', 'B8'],
 
-  /* Each month: 5 skill IDs per course (skills live in skills.js).
+  /* Each month: one list of 5 skill IDs, the same for every class (skills live in skills.js).
      SAMPLE skills for now — swap in the assistant principal's real list when it arrives. */
   months: {
     '2026-11': {
       label: 'November 2026',
-      skills: {
-        alg:    ['alg.linear', 'alg.slope', 'alg.vertex', 'alg.linear', 'alg.slope'],
-        precalc:['pc.endbehavior', 'pc.bounce', 'pc.logeval', 'pc.endbehavior', 'pc.bounce'],
-        calc1:  ['c1.power', 'c1.limit', 'c1.chain', 'c1.power', 'c1.chain'],
-        calc2:  ['c2.integral', 'c2.geoseries', 'c2.integral', 'c2.geoseries', 'c2.integral']
-      }
+      skills: ['alg.linear', 'pc.logeval', 'c1.power', 'c1.chain', 'c2.integral']
     }
   }
 };

@@ -97,14 +97,13 @@ sup,sub{line-height:0}
   var monthKey = qs.get('month') || CFG.current;
   var MONTH = CFG.months[monthKey];
   app.addEventListener('input', function (e) { onInput(e); });
-  var S = { teacher: qs.get('teacher') || '', course: qs.get('course') || '', first: '', last: '', seed: 0, qs: [], given: [], armed: false };
+  var S = { teacher: qs.get('teacher') || '', section: qs.get('section') || '', first: '', last: '', seed: 0, qs: [], given: [], armed: false };
 
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
   function html(h) { app.innerHTML = h; window.scrollTo(0, 0); }
   function header(sub) {
     return '<p class="eyebrow">Cardinal Ritter College Prep · Mathematics</p><h1>Monthly Skills Check</h1><p class="sub">' + sub + '</p>';
   }
-  function courseList() { return MONTH ? Object.keys(MONTH.skills).filter(function (c) { return CFG.courses[c]; }) : []; }
 
   /* ---------- server ---------- */
   function api(body) {
@@ -117,9 +116,8 @@ sup,sub{line-height:0}
   /* ---------- start screen ---------- */
   function showStart(msg) {
     if (!MONTH) { html(header('') + '<div class="err">There is no quiz set up for ' + esc(monthKey) + '. Check the link with your teacher.</div>'); return; }
-    var cs = courseList();
-    var opts = '<option value="">Choose your class…</option>' + cs.map(function (c) {
-      return '<option value="' + c + '"' + (S.course === c ? ' selected' : '') + '>' + esc(CFG.courses[c]) + '</option>';
+    var opts = '<option value="">Choose your class\u2026</option>' + (CFG.sections || []).map(function (c) {
+      return '<option value="' + esc(c) + '"' + (S.section === c ? ' selected' : '') + '>' + esc(c) + '</option>';
     }).join('');
     var topts = '<option value="">Choose your teacher\u2026</option>' + (CFG.teachers || []).map(function (t) {
       return '<option value="' + esc(t) + '"' + (S.teacher === t ? ' selected' : '') + '>' + esc(t) + '</option>';
@@ -130,7 +128,7 @@ sup,sub{line-height:0}
       '<div class="card">' + setup + (msg ? '<div class="err">' + msg + '</div>' : '') +
       (preview ? '<div class="note warn"><b>Teacher preview.</b> Nothing is saved to the Sheet and you can retry as often as you like.</div>' : '') +
       '<div class="row2"><div class="field"><label for="teacher">Teacher</label><select id="teacher">' + topts + '</select></div>' +
-      '<div class="field"><label for="course">Class</label><select id="course">' + opts + '</select></div></div>' +
+      '<div class="field"><label for="section">Class</label><select id="section">' + opts + '</select></div></div>' +
       '<div class="row2"><div class="field"><label for="first">First name</label><input type="text" id="first" autocomplete="given-name" value="' + esc(S.first) + '"></div>' +
       '<div class="field"><label for="last">Last name</label><input type="text" id="last" autocomplete="family-name" value="' + esc(S.last) + '"></div></div>' +
       '<div class="note"><b>One attempt only.</b> Type your name the way it appears on your class roster. Once you click Start your questions are locked in — if you reload the page you will get the same five questions back.</div>' +
@@ -140,14 +138,14 @@ sup,sub{line-height:0}
 
   function onStart() {
     var teacher = document.getElementById('teacher').value,
-        course = document.getElementById('course').value,
+        section = document.getElementById('section').value,
         first = document.getElementById('first').value.trim(),
         last = document.getElementById('last').value.trim();
-    S.teacher = teacher; S.course = course; S.first = first; S.last = last;
-    if (!teacher || !course || first.length < 2 || last.length < 2) { showStart('Pick your teacher and your class, and type your first and last name.'); return; }
+    S.teacher = teacher; S.section = section; S.first = first; S.last = last;
+    if (!teacher || !section || first.length < 2 || last.length < 2) { showStart('Pick your teacher and your class, and type your first and last name.'); return; }
     var go = document.getElementById('go'); go.disabled = true; go.textContent = 'Checking…';
     if (preview) { S.seed = (crypto.getRandomValues(new Uint32Array(1))[0] || 1); beginQuiz(); return; }
-    api({ action: 'start', month: monthKey, course: course, teacher: teacher, first: first, last: last }).then(function (res) {
+    api({ action: 'start', month: monthKey, section: section, teacher: teacher, first: first, last: last }).then(function (res) {
       if (!res.ok) throw new Error(res.error || 'server');
       if (res.status === 'done') { showDone(res); return; }
       S.seed = res.seed; beginQuiz();
@@ -158,13 +156,13 @@ sup,sub{line-height:0}
 
   function showDone(res) {
     html(header(esc(MONTH.label)) + '<div class="card"><h2 style="margin-top:0">You have already completed this quiz.</h2>' +
-      '<p>' + esc(S.first) + ' ' + esc(S.last) + ' · ' + esc(CFG.courses[S.course]) + ' · score ' + res.score + ' / ' + res.total +
+      '<p>' + esc(S.first) + ' ' + esc(S.last) + ' · ' + esc(S.section) + ' · score ' + res.score + ' / ' + res.total +
       '.</p><p class="hint">Only one attempt is allowed. If your name was typed wrong the first time, see your teacher.</p></div>');
   }
 
   /* ---------- build + render questions ---------- */
   function beginQuiz() {
-    var ids = MONTH.skills[S.course];
+    var ids = MONTH.skills;
     S.qs = ids.map(function (id, i) {
       var sk = MQ.skills[id];
       var q = sk.gen(MQ.rng((S.seed + 7919 * (i + 1)) >>> 0));
@@ -189,7 +187,7 @@ sup,sub{line-height:0}
   }
 
   function renderQuiz(err) {
-    html('<div class="bar"><span><b>' + esc(S.first) + ' ' + esc(S.last) + '</b> · ' + esc(CFG.courses[S.course]) + '</span><span id="prog"></span></div>' +
+    html('<div class="bar"><span><b>' + esc(S.first) + ' ' + esc(S.last) + '</b> · ' + esc(S.section) + '</span><span id="prog"></span></div>' +
       (err ? '<div class="err">' + err + '</div>' : '') +
       S.qs.map(qCard).join('') +
       '<div class="submitrow"><button id="sub">Submit quiz</button><span class="hint" id="subhint">You cannot change your answers after submitting.</span></div>');
@@ -234,7 +232,7 @@ sup,sub{line-height:0}
     var score = answers.filter(function (a) { return a.ok; }).length;
     function finish() { window.onbeforeunload = null; showResults(answers, score); }
     if (preview) { finish(); return; }
-    api({ action: 'submit', month: monthKey, course: S.course, teacher: S.teacher, first: S.first, last: S.last, seed: S.seed, answers: answers }).then(function (res) {
+    api({ action: 'submit', month: monthKey, section: S.section, teacher: S.teacher, first: S.first, last: S.last, seed: S.seed, answers: answers }).then(function (res) {
       if (!res.ok) throw new Error(res.error || 'server');
       finish();
     }).catch(function () {
@@ -254,7 +252,7 @@ sup,sub{line-height:0}
     html(header(esc(MONTH.label) + ' · submitted') +
       (preview ? '<div class="note warn"><b>Teacher preview</b> — not recorded.</div>' : '') +
       '<div class="card"><p class="score">' + score + ' / ' + answers.length + '</p><p class="sub" style="margin:6px 0 0">' +
-      esc(S.first) + ' ' + esc(S.last) + ' · ' + esc(CFG.courses[S.course]) +
+      esc(S.first) + ' ' + esc(S.last) + ' · ' + esc(S.section) +
       (preview ? '' : ' · Your result has been saved.') + '</p><div class="res">' + rows + '</div></div>' +
       (preview ? '<div class="submitrow"><button class="ghost" id="again">Try again (preview)</button></div>' : ''));
     var ag = document.getElementById('again'); if (ag) ag.onclick = function () { showStart(); };
