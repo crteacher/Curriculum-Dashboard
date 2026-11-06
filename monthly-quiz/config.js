@@ -1,7 +1,7 @@
 /* Monthly Skills Check — settings. This is the only file that changes month to month. */
 window.MQ_CONFIG = {
   /* Paste the Google Apps Script web-app URL here (see setup steps). Leave '' until then. */
-  scriptUrl: '',
+  scriptUrl: 'https://script.google.com/a/macros/cardinalritterprep.org/s/AKfycbzZ8o5CtgXgPmmlTBgmRQ7q_oTFCruZ0tlM7eaYBPaOP3SmLP-v5o0iPoIg0LMODDRcGA/exec',
 
   /* Which month's quiz students get by default. */
   current: '2026-11',
