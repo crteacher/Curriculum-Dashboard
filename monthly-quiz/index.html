@@ -90,6 +90,26 @@ sup,sub{line-height:0}
 .sumw .big{font-size:1.7em}
 .sumw small{font-size:.7em}
 .lim,.nw{white-space:nowrap}
+/* figures for the MLS common-assessment questions */
+.sv{display:block;width:100%;max-width:360px;margin:10px 0 2px}
+.sv text,.gp .sv-t{fill:var(--ink);font:13px "Source Sans 3",system-ui,sans-serif}
+.gp .sv-t{font-weight:700}
+.sv-s{fill:none;stroke:var(--ink);stroke-width:2;stroke-linejoin:round}
+.sv-f{fill:var(--accent-soft);stroke:var(--accent);stroke-width:2.2;stroke-linejoin:round}
+.sv-f2{fill:var(--bad-soft);stroke:var(--bad);stroke-width:2.2;stroke-linejoin:round;fill-opacity:.7}
+.sv-d{fill:none;stroke:var(--mute);stroke-width:1.4;stroke-dasharray:5 4}
+.sv-cut{fill:none;stroke:var(--bad);stroke-width:2.4;stroke-dasharray:6 4}
+.sv-pt{fill:var(--accent);stroke:var(--accent);stroke-width:2.5}
+.sv-open{fill:var(--card);stroke:var(--accent);stroke-width:2.5}
+.sv-ray{stroke:var(--accent);stroke-width:3.4}
+.sv-arrow{fill:var(--accent)}
+.dtw{overflow-x:auto;margin:10px 0 6px}
+.dt{border-collapse:collapse;font-size:1rem}
+.dt th,.dt td{border:1px solid var(--line);padding:6px 12px;text-align:center;white-space:nowrap}
+.dt th{background:var(--accent-soft);font-weight:600}
+.steps{margin:10px 0 12px;padding:10px 14px;border:1px solid var(--line);border-radius:8px;background:var(--bg);font-size:1.05rem}
+.steps div+div{margin-top:4px}
+.sn{display:inline-block;min-width:4.2em;color:var(--mute);font-size:.82rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em}
 @media (prefers-reduced-motion:no-preference){button{transition:filter .15s}button:hover:not(:disabled){filter:brightness(1.08)}}
 </style>
 </head>
@@ -97,6 +117,7 @@ sup,sub{line-height:0}
 <main id="app"></main>
 <script src="skills.js"></script>
 <script src="config.js"></script>
+<script src="months.js"></script>
 <script>
 (function () {
   var CFG = window.MQ_CONFIG, MQ = window.MQ, app = document.getElementById('app');
