@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Definite Integral &amp; FTC Part 1 &mdash; Notes</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75;font-size:15px}
+.container{max-width:900px;margin:0 auto;padding:2rem 1.5rem 4rem}
+
+/* ── Header ── */
+.page-title{font-size:28px;font-weight:700;margin-bottom:4px}
+.page-sub{font-family:sans-serif;font-size:13px;color:#666;margin-bottom:1.6rem}
+
+/* ── Opening question ── */
+.opening-q{background:#eef3f9;border-left:4px solid #1e3a5c;
+  border-radius:0 8px 8px 0;padding:1rem 1.2rem;font-size:15px;
+  margin-bottom:1.5rem;font-style:italic;line-height:1.75}
+.hook-question{margin:0}
+.hook-graph{text-align:center;margin:.7rem 0 .3rem;font-style:normal}
+.hook-graph svg{max-width:100%;height:auto}
+.hook-reveal{margin-top:.5rem;font-style:normal}
+.hook-reveal-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;
+  color:#1e3a5c;text-transform:uppercase;letter-spacing:.07em;list-style:none;user-select:none;display:block}
+.hook-reveal-toggle::-webkit-details-marker{display:none}
+.hook-reveal-body{margin-top:.5rem;font-size:14px;line-height:1.75;padding-top:.5rem;
+  border-top:1px solid #c8d8ec}
+
+/* ── Section heading ── */
+.section-head{font-family:sans-serif;font-size:11px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.08em;color:#1e3a5c;
+  margin-top:1.4rem;margin-bottom:.6rem;
+  border-bottom:1px solid #c8d8ec;padding-bottom:4px}
+
+/* ── Protect math from text-transform on headings/labels ── */
+.katex,.katex *{text-transform:none;letter-spacing:normal}
+
+/* ── Accent box ── */
+.accent-box{background:#d9e8f5;border-left:4px solid #1e3a5c;
+  border-radius:0 8px 8px 0;padding:.9rem 1.1rem;font-size:14px;
+  margin-bottom:.85rem;line-height:1.95}
+.accent-box ul{margin-left:1.3rem;margin-top:.3rem}
+.accent-box li{margin-bottom:.15rem}
+.accent-box p{margin-bottom:.4rem}
+
+/* ── Body text ── */
+.body-text{font-size:14px;line-height:1.75;margin-bottom:.85rem}
+
+/* ── Spacer ── */
+.spacer{height:1rem}
+
+/* ── Two-column layout ── */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:.5rem}
+.col{min-width:0}
+
+/* ── Worked examples 2-col grid ── */
+.examples-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem}
+.ex-block{border:1.5px solid #ddd;border-radius:9px;padding:1rem 1.1rem;background:#fff}
+.ex-label{font-family:sans-serif;font-size:11px;font-weight:700;color:#1e3a5c;
+  text-transform:uppercase;letter-spacing:.05em;margin-bottom:.45rem}
+.ex-body{font-size:14px;line-height:1.75;margin-bottom:.5rem}
+.ex-answer.instructor{background:#fef9e7;border-left:3px solid #7a5c1e;
+  border-radius:0 6px 6px 0;padding:.6rem .9rem;font-size:13.5px;
+  color:#5a3e00;line-height:1.85}
+.ex-answer.student{height:4.5rem;border-bottom:1.5px solid #bbb;margin-top:.4rem}
+
+/* ── Practice section ── */
+.practice{margin-bottom:1.5rem}
+.pr-row{display:grid;grid-template-columns:1.6rem 1fr 210px;gap:.75rem;
+  align-items:start;padding:.6rem 0;border-bottom:1px solid #ece8e0}
+.pr-num{font-family:sans-serif;font-weight:700;font-size:14px;color:#1e3a5c;padding-top:2px}
+.pr-prob{font-size:14px;line-height:1.75}
+.pr-ans.instructor{font-size:13px;color:#5a3e00;background:#fef9e7;
+  border-radius:5px;padding:4px 9px;line-height:1.75}
+.pr-ans.student{border-bottom:1.5px solid #bbb;min-height:2.2rem}
+
+/* ── Student interactive ── */
+.st-work{width:100%;min-height:3rem;border:1px solid #ccc;border-radius:5px;
+  padding:.35rem .5rem;font-family:Georgia,serif;font-size:13px;resize:vertical;
+  background:#fafafa;display:block;margin-bottom:.3rem}
+.st-work-sm{width:100%;min-height:1.5rem;border:1px solid #ccc;border-radius:4px;
+  padding:.2rem .4rem;font-family:Georgia,serif;font-size:12px;resize:vertical;
+  background:#fafafa;display:block;margin-bottom:.2rem}
+.st-btn{font-family:sans-serif;font-size:10px;font-weight:700;color:#1e3a5c;
+  background:none;border:1.5px solid #1e3a5c;border-radius:4px;
+  padding:2px 9px;cursor:pointer;margin-bottom:.2rem;display:inline-block}
+.st-btn-sm{font-family:sans-serif;font-size:9px;font-weight:700;color:#1e3a5c;
+  background:none;border:1px solid #1e3a5c;border-radius:3px;
+  padding:1px 6px;cursor:pointer;margin-bottom:.15rem;display:inline-block}
+.st-btn:hover,.st-btn-sm:hover{background:#eef3f9}
+.st-ans-hidden{display:none;background:#fef9e7;border-left:3px solid #7a5c1e;
+  border-radius:0 5px 5px 0;padding:.4rem .7rem;font-size:13px;
+  color:#5a3e00;line-height:1.85}
+.st-ans-hidden.visible{display:block}
+
+/* ── SVG figures ── */
+.svg-figure{text-align:center;margin:.4rem 0 .6rem}
+.svg-figure svg{max-width:100%;height:auto}
+.svg-caption{font-family:sans-serif;font-size:11px;color:#555;
+  margin-top:.2rem;font-style:italic}
+
+/* ── KaTeX overflow ── */
+.katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}
+
+/* ── Print styles ── */
+@media print{
+  body{background:white;font-size:10pt;line-height:1.5}
+  .container{padding:0;max-width:none}
+  .page-sub{margin-bottom:.8rem}
+  .opening-q{padding:.5rem .8rem;margin-bottom:.8rem;font-size:10pt;line-height:1.5;break-inside:avoid}
+  .section-head{margin-top:.7rem;margin-bottom:.35rem}
+  .spacer{height:.3rem}
+  .accent-box{padding:.5rem .75rem;margin-bottom:.5rem;font-size:10pt;line-height:1.55;
+    background:#e8f0f8 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .accent-box p{margin-bottom:.2rem}
+  .body-text{font-size:10pt;line-height:1.5;margin-bottom:.5rem}
+  .two-col{gap:1rem;margin-bottom:.3rem;break-inside:avoid}
+  .examples-grid{gap:.6rem;margin-bottom:.8rem;break-inside:avoid}
+  .ex-block{padding:.55rem .75rem;border:1px solid #ccc;break-inside:avoid}
+  .ex-label{margin-bottom:.25rem}
+  .ex-body{font-size:10pt;line-height:1.5;margin-bottom:.3rem}
+  .ex-answer.instructor{padding:.35rem .7rem;font-size:9.5pt;line-height:1.55;
+    background:#fef9e7 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .ex-answer.student{height:2.8rem}
+  .practice{margin-bottom:.8rem}
+  .pr-row{padding:.3rem 0;break-inside:avoid}
+  .pr-prob{font-size:10pt;line-height:1.5}
+  .pr-ans.instructor{font-size:9.5pt;padding:2px 7px;line-height:1.55;
+    background:#fef9e7 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .pr-ans.student{min-height:1.6rem}
+  .st-work{background:none;border:none;border-bottom:1.5px solid #bbb;
+    border-radius:0;min-height:2.6rem;resize:none}
+  .st-work-sm{background:none;border:none;border-bottom:1.5px solid #bbb;
+    border-radius:0;min-height:1.3rem;resize:none}
+  .st-btn,.st-btn-sm{display:none}
+  .st-ans-hidden{display:none !important}
+  .opening-q{
+    background:#eef3f9 !important;
+    -webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .hook-graph{margin:.4rem 0 .2rem}
+  details.hook-reveal:not([open]){display:none}
+  .svg-figure{margin:.25rem 0 .4rem}
+  .svg-figure svg{max-width:100%;height:auto}
+  .svg-caption{font-size:9pt}
+}
+@page{margin:.55in .65in;size:letter}
+
+.proof-panel{margin:.4rem 0 1.1rem;border-left:3px solid #7a9a6a;border-radius:0 6px 6px 0;background:#f5f7f3}
+.proof-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#5a7a4a;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.proof-toggle::-webkit-details-marker{display:none}
+details[open]>.proof-toggle{color:#1e3a5c}
+.proof-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #c8d8b8}
+.proof-body p{margin-bottom:.45rem}
+.proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
+@media print{.proof-panel{break-inside:avoid}}
+.mistake-panel{margin:.4rem 0 1.1rem;border-left:3px solid #b8860b;border-radius:0 6px 6px 0;background:#fdf8e8}
+.mistake-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#9a6a00;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.mistake-toggle::-webkit-details-marker{display:none}
+details[open]>.mistake-toggle{color:#1e3a5c}
+.mistake-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #e8d8a8}
+.mistake-body p{margin-bottom:.45rem}
+.panel-row{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.1rem}
+.panel-row>.proof-panel,.panel-row>.mistake-panel{margin:0;min-width:0}
+.panel-row:has(.proof-panel):has(.mistake-panel){grid-template-columns:1fr}
+@media print{
+  .panel-row{break-inside:avoid}
+  .mistake-panel{break-inside:avoid}
+  details.mistake-panel:not([open]){display:none}
+}
+</style>
+</head>
+<body>
+<div class="container">
+<h1 class="page-title">The Definite Integral &amp; FTC Part 1</h1>
+<p class="page-sub">Calculus I &nbsp;&middot;&nbsp; &sect;4.3 &nbsp;&middot;&nbsp; Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026 &nbsp;&middot;&nbsp; <strong>INSTRUCTOR</strong></p>
+<div class="opening-q">In &sect;4.2 you computed a Riemann sum $R_n$ and took $n\to\infty$ to get an exact area. That limiting process defines the integral. But here&rsquo;s a strange observation: $\dfrac{d}{dx}\!\left[\int_0^x t^2\,dt\right] = x^2$. Differentiating an integral gives back the original function. Is that always true?</div>
+<div class="two-col">
+<div class="col"><div class="section-head">The Definite Integral &amp; FTC Part 1</div>
+<div class="accent-box"><p>The <strong>definite integral</strong> of $f$ on $[a,b]$:</p><p>$$\int_a^b f(x)\,dx = \lim_{n\to\infty}\sum_{i=1}^{n}f(x_i)\,\Delta x$$</p><p>where $\Delta x=(b-a)/n$ and $x_i=a+i\,\Delta x$. The symbol $\int$ is an elongated S for &ldquo;sum&rdquo;; $a,b$ are the <strong>limits of integration</strong>; $dx$ corresponds to $\Delta x\to 0$.</p><p><strong>Closed-form sigma formulas</strong> (for evaluating the limit):<br>$\displaystyle\sum_{i=1}^{n}i=\frac{n(n+1)}{2}\qquad\displaystyle\sum_{i=1}^{n}i^2=\frac{n(n+1)(2n+1)}{6}$</p><hr style="border:none;border-top:1px solid #c8d8e8;margin:.6rem 0"><p><strong>FTC Part 1.</strong> If $f$ is continuous on $[a,b]$ and $G(x)=\displaystyle\int_a^x\!f(t)\,dt$, then</p><p>$$G'(x)=f(x)$$</p><p><em>Proof sketch.</em> $G(x+h)-G(x)=\displaystyle\int_x^{x+h}\!f(t)\,dt\approx f(x)\cdot h$ for small $h$ (the integrand barely changes over the tiny interval $[x,x+h]$). Divide by $h$ and let $h\to 0$: &nbsp;$G'(x)=f(x)$.&ensp;$\square$</p><p><strong>Chain-rule variant:</strong> If the upper limit is $g(x)$:<br>$\dfrac{d}{dx}\!\left[\int_a^{g(x)}\!f(t)\,dt\right]=f(g(x))\cdot g'(x)$</p></div>
+<details class="mistake-panel">
+<summary class="mistake-toggle">&blacktriangleright; Common Mistake</summary>
+<div class="mistake-body">
+<p>When applying FTC Part 1 with a non-trivial upper limit, students often forget the chain rule. $\dfrac{d}{dx}\!\left[\int_0^{x^2}\cos t\,dt\right]=\cos(x^2)\cdot 2x$, not $\cos(x^2)$. The $f(g(x))$ part is the FTC; the $\cdot g'(x)$ part is the chain rule &mdash; both are required.</p>
+</div>
+</details>
+</div>
+<div class="col"><div class="section-head">Properties of Definite Integrals</div>
+<div class="accent-box"><p>These follow directly from the limit definition.</p><p><strong>Same limits:</strong> $\displaystyle\int_a^a f(x)\,dx=0$</p><p><strong>Reverse limits:</strong> $\displaystyle\int_a^b f(x)\,dx=-\int_b^a f(x)\,dx$</p><p><strong>Constant multiple:</strong> $\displaystyle\int_a^b cf(x)\,dx=c\int_a^b f(x)\,dx$</p><p><strong>Sum/difference:</strong> $\displaystyle\int_a^b[f(x)\pm g(x)]\,dx=\int_a^b f(x)\,dx\pm\int_a^b g(x)\,dx$</p><p><strong>Additivity:</strong> $\displaystyle\int_a^b f(x)\,dx=\int_a^c f(x)\,dx+\int_c^b f(x)\,dx$</p><p><strong>Comparison:</strong> If $f(x)\ge 0$ on $[a,b]$, then $\displaystyle\int_a^b f(x)\,dx\ge 0$.</p></div>
+<details class="mistake-panel">
+<summary class="mistake-toggle">&blacktriangleright; Common Mistake</summary>
+<div class="mistake-body">
+<p>The additivity rule splits on an interior point $c$ &mdash; but $c$ does not have to be between $a$ and $b$. $\displaystyle\int_1^5 f\,dx = \int_1^8 f\,dx + \int_8^5 f\,dx$ is valid even though $8>5$. Students who assume $a<c<b$ miss cases where the split point lies outside the interval.</p>
+</div>
+</details>
+<p class="body-text">FTC Part 1 connects these properties to differentiation: the accumulation function $G(x)=\int_a^x f(t)\,dt$ is an antiderivative of $f$ &mdash; that&rsquo;s why the integral and the derivative undo each other. §4.4 uses this to prove the evaluation formula $\int_a^b f\,dx=F(b)-F(a)$.</p>
+</div>
+</div>
+<div class="section-head">Worked Examples</div>
+<div class="examples-grid">
+<div class="ex-block">
+  <div class="ex-label">Example 1 &nbsp;&mdash;&nbsp; FTC Part 1 — basic</div>
+  <div class="ex-body">Find $\dfrac{d}{dx}\!\left[\displaystyle\int_0^x (t^3+2t)\,dt\right]$.</div>
+  <div class="ex-answer instructor">FTC Part 1: differentiate by plugging $x$ in for $t$.<br>$= x^3+2x$</div>
+</div>
+<div class="ex-block">
+  <div class="ex-label">Example 2 &nbsp;&mdash;&nbsp; FTC Part 1 — chain rule</div>
+  <div class="ex-body">Find $\dfrac{d}{dx}\!\left[\displaystyle\int_1^{x^2}\sin t\,dt\right]$.</div>
+  <div class="ex-answer instructor">Upper limit is $g(x)=x^2$, so apply the chain-rule variant:<br>$f(g(x))\cdot g'(x)=\sin(x^2)\cdot 2x$</div>
+</div>
+<div class="ex-block">
+  <div class="ex-label">Example 3 &nbsp;&mdash;&nbsp; Using properties</div>
+  <div class="ex-body">Given $\displaystyle\int_1^5 f(x)\,dx=8$ and $\displaystyle\int_1^3 f(x)\,dx=3$, find $\displaystyle\int_3^5 f(x)\,dx$.</div>
+  <div class="ex-answer instructor">Additivity: $\displaystyle\int_1^5 f\,dx=\int_1^3 f\,dx+\int_3^5 f\,dx$<br>$8=3+\displaystyle\int_3^5 f\,dx\;\Rightarrow\;\int_3^5 f\,dx=5$</div>
+</div>
+<div class="ex-block">
+  <div class="ex-label">Example 4 &nbsp;&mdash;&nbsp; Reversed limits</div>
+  <div class="ex-body">If $\displaystyle\int_2^7 f(x)\,dx=10$, find $\displaystyle\int_7^2 f(x)\,dx$.</div>
+  <div class="ex-answer instructor">Reversed limits negate the integral:<br>$\displaystyle\int_7^2 f(x)\,dx = -10$</div>
+</div>
+</div>
+<div class="section-head">Practice Problems</div>
+<div class="practice">
+<div class="pr-row">
+  <div class="pr-num">1.</div>
+  <div class="pr-prob">Find $\dfrac{d}{dx}\!\left[\displaystyle\int_0^x e^t\,dt\right]$.</div>
+  <div class="pr-ans instructor">$e^x$ &nbsp;(FTC Part 1 — plug $x$ in for $t$)</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">2.</div>
+  <div class="pr-prob">Find $\dfrac{d}{dx}\!\left[\displaystyle\int_0^{x^3}\cos t\,dt\right]$.</div>
+  <div class="pr-ans instructor">$\cos(x^3)\cdot 3x^2$ &nbsp;(chain-rule variant)</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">3.</div>
+  <div class="pr-prob">Given $\displaystyle\int_0^4 f\,dx=12$ and $\displaystyle\int_0^4 g\,dx=5$, find $\displaystyle\int_0^4 [2f(x)-g(x)]\,dx$.</div>
+  <div class="pr-ans instructor">$2(12)-5=19$ &nbsp;(linearity)</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">4.</div>
+  <div class="pr-prob">Given $\displaystyle\int_2^9 f\,dx=15$ and $\displaystyle\int_6^9 f\,dx=4$, find $\displaystyle\int_2^6 f\,dx$.</div>
+  <div class="pr-ans instructor">Additivity: $15=\displaystyle\int_2^6 f\,dx+4$, so the answer is $11$.</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">5.</div>
+  <div class="pr-prob">True or false: $\displaystyle\int_a^b f(x)\,dx = -\displaystyle\int_b^a f(x)\,dx$.</div>
+  <div class="pr-ans instructor">True &mdash; reversing the limits of integration negates the integral.</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">6.</div>
+  <div class="pr-prob">Let $G(x)=\displaystyle\int_3^x (t^2+1)\,dt$. Find $G'(x)$ and $G(3)$.</div>
+  <div class="pr-ans instructor">$G'(x)=x^2+1$ (FTC Part 1);&ensp; $G(3)=0$ (same upper and lower limit)</div>
+</div>
+</div>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/contrib/auto-render.min.js"></script>
+<script>
+function toggleAns(btn) {
+  if (!btn.dataset.orig) btn.dataset.orig = btn.textContent;
+  var ans = btn.nextElementSibling;
+  var showing = ans.classList.toggle('visible');
+  btn.textContent = showing ? 'Hide' : btn.dataset.orig;
+}
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left: '$$', right: '$$', display: true},
+      {left: '$',  right: '$',  display: false}
+    ],
+    throwOnError: false
+  });
+</script>
+</body>
+</html>

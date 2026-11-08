@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Basic Integration Rules &mdash; Notes</title>
+<title>FTC Part 2 &mdash; Notes</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.css">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -18,12 +18,24 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 .opening-q{background:#eef3f9;border-left:4px solid #1e3a5c;
   border-radius:0 8px 8px 0;padding:1rem 1.2rem;font-size:15px;
   margin-bottom:1.5rem;font-style:italic;line-height:1.75}
+.hook-question{margin:0}
+.hook-graph{text-align:center;margin:.7rem 0 .3rem;font-style:normal}
+.hook-graph svg{max-width:100%;height:auto}
+.hook-reveal{margin-top:.5rem;font-style:normal}
+.hook-reveal-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;
+  color:#1e3a5c;text-transform:uppercase;letter-spacing:.07em;list-style:none;user-select:none;display:block}
+.hook-reveal-toggle::-webkit-details-marker{display:none}
+.hook-reveal-body{margin-top:.5rem;font-size:14px;line-height:1.75;padding-top:.5rem;
+  border-top:1px solid #c8d8ec}
 
 /* ── Section heading ── */
 .section-head{font-family:sans-serif;font-size:11px;font-weight:700;
   text-transform:uppercase;letter-spacing:.08em;color:#1e3a5c;
   margin-top:1.4rem;margin-bottom:.6rem;
   border-bottom:1px solid #c8d8ec;padding-bottom:4px}
+
+/* ── Protect math from text-transform on headings/labels ── */
+.katex,.katex *{text-transform:none;letter-spacing:normal}
 
 /* ── Accent box ── */
 .accent-box{background:#d9e8f5;border-left:4px solid #1e3a5c;
@@ -127,11 +139,14 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   .opening-q{
     background:#eef3f9 !important;
     -webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .hook-graph{margin:.4rem 0 .2rem}
+  details.hook-reveal:not([open]){display:none}
   .svg-figure{margin:.25rem 0 .4rem}
   .svg-figure svg{max-width:100%;height:auto}
   .svg-caption{font-size:9pt}
 }
 @page{margin:.55in .65in;size:letter}
+
 .proof-panel{margin:.4rem 0 1.1rem;border-left:3px solid #7a9a6a;border-radius:0 6px 6px 0;background:#f5f7f3}
 .proof-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#5a7a4a;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
 .proof-toggle::-webkit-details-marker{display:none}
@@ -154,106 +169,89 @@ details[open]>.mistake-toggle{color:#1e3a5c}
   .mistake-panel{break-inside:avoid}
   details.mistake-panel:not([open]){display:none}
 }
-.katex,.katex *{text-transform:none;letter-spacing:normal}
 </style>
 </head>
 <body>
 <div class="container">
-<h1 class="page-title">Basic Integration Rules</h1>
+<h1 class="page-title">FTC Part 2</h1>
 <p class="page-sub">Calculus I &nbsp;&middot;&nbsp; &sect;4.4 &nbsp;&middot;&nbsp; Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026 &nbsp;&middot;&nbsp; <strong>INSTRUCTOR</strong></p>
-<div class="opening-q">Riemann sums let us approximate $\int_a^b f(x)\,dx$, but computing thousands of rectangles by hand is impractical. Can we reverse the differentiation rules to evaluate integrals exactly? Every derivative rule has a mirror — what does the Power Rule look like going backwards?</div>
+<div class="opening-q">FTC Part 1 says $\dfrac{d}{dx}\!\left[\int_a^x f(t)\,dt\right]=f(x)$: differentiating an integral recovers $f$. What about the reverse? If you already know an antiderivative $F$ of $f$, can you evaluate $\int_a^b f(x)\,dx$ without summing a single rectangle?</div>
 <div class="two-col">
-<div class="col"><div class="section-head">Integration Rules</div>
-<div class="accent-box"><p><strong>Power Rule</strong> $(n\neq -1)$:</p><p>$$\int x^n\,dx=\frac{x^{n+1}}{n+1}+C$$</p><p><strong>Constant Rule:</strong> $\displaystyle\int k\,dx=kx+C$</p><p><strong>Constant Multiple:</strong> $\displaystyle\int c\,f(x)\,dx=c\int f(x)\,dx$</p><p><strong>Sum / Difference:</strong></p><p>$\displaystyle\int[f(x)\pm g(x)]\,dx=\int f\,dx\pm\int g\,dx$</p></div>
-<div class="panel-row">
-<details class="proof-panel">
-<summary class="proof-toggle">▸ Show Proof</summary>
-<div class="proof-body">
-  <p>The key idea: we want a function whose derivative is $x^n$. We run the Power Rule for derivatives <em>backwards</em>.</p>
-  <p>From differentiation, we know: $\dfrac{d}{dx}\!\left[x^{n+1}\right] = (n+1)x^n$.</p>
-  <p>That's almost what we want, but we have an extra factor of $(n+1)$. To cancel it, divide both sides by $(n+1)$ (which is fine as long as $n \neq -1$, since we can't divide by zero):</p>
-  <p>$$\frac{d}{dx}\!\left[\frac{x^{n+1}}{n+1}\right] = x^n$$</p>
-  <p>So $\dfrac{x^{n+1}}{n+1}$ is <em>an</em> antiderivative of $x^n$. But it's not the only one — any constant $C$ has derivative zero, so adding $C$ gives another antiderivative. In fact, every antiderivative of $x^n$ has this form. Therefore:</p>
-  <p>$$\int x^n\,dx = \frac{x^{n+1}}{n+1} + C$$</p>
-  <p>You can always verify an integration result by differentiating the right side — you should get the integrand back.</p>
-  <p class="proof-qed">∎</p>
-</div>
-</details>
+<div class="col"><div class="section-head">FTC Part 2 &amp; Its Proof</div>
+<div class="accent-box"><p><strong>Theorem (FTC Part 2 / Newton&ndash;Leibniz):</strong><br>Let $f$ be Riemann integrable on $[a,b]$ and let $F$ be an antiderivative of $f$ continuous on $[a,b]$. Then</p><p>$$\int_a^b f(x)\,dx = F(b)-F(a)$$</p><p><strong>Proof.</strong> Recall the <strong>MVT</strong>: if $F$ is continuous on $[a,b]$ and differentiable on $(a,b)$, there exists $c\in(a,b)$ with $F'(c)(b-a)=F(b)-F(a)$.</p><p>Partition $[a,b]$ with any points $a=x_0<x_1<\cdots<x_n=b$.</p><p><strong>(1)</strong> Insert additive inverses to telescope:</p><p style="font-size:.93em">$F(b)\!-\!F(a)$$=[F(x_n)\!-\!F(x_{n-1})]+\cdots+[F(x_1)\!-\!F(x_0)]$$=\displaystyle\sum_{i=1}^{n}[F(x_i)-F(x_{i-1})]$</p><p><strong>(2)</strong> $F$ is continuous on $[x_{i-1},x_i]$ and differentiable on $(x_{i-1},x_i)$, so the MVT gives $c_i\in(x_{i-1},x_i)$ with</p><p>$F(x_i)-F(x_{i-1})=F'(c_i)\,\Delta x_i=f(c_i)\,\Delta x_i$</p><p>Substituting into (1):</p><p>$F(b)-F(a)=\displaystyle\sum_{i=1}^{n}f(c_i)\,\Delta x_i$</p><p><strong>Take the limit</strong> as $\|\Delta x_i\|\to 0$ (largest partition width $\to 0$, $n\to\infty$):</p><p>$\displaystyle\lim_{\|\Delta x_i\|\to 0}F(b)-F(a)=\lim_{\|\Delta x_i\|\to 0}\sum_{i=1}^{n}f(c_i)\,\Delta x_i$</p><p>$F(b)-F(a)$ is constant (independent of the partition), so the left side is unchanged. The right side is the definition of the Riemann integral. Therefore:</p><p>$\displaystyle F(b)-F(a)=\int_a^b f(x)\,dx\qquad\square$</p></div>
 <details class="mistake-panel">
-<summary class="mistake-toggle">▸ Common Mistake</summary>
+<summary class="mistake-toggle">&blacktriangleright; Common Mistake</summary>
 <div class="mistake-body">
-  <p>Students often write $\displaystyle\int x^n\,dx = \frac{x^n}{n}+C$ instead of $\displaystyle\frac{x^{n+1}}{n+1}+C$ — dividing by the <em>original</em> exponent $n$ rather than the <em>new</em> one after raising the power. For example, $\int x^3\,dx$ becomes $\frac{x^4}{4}+C$, not $\frac{x^3}{3}+C$. The slip comes from over-focusing on the exponent that was already there and forgetting the exponent changes first — only then does the new exponent become the divisor.</p>
-  <p>Also common: dropping the $+C$. Since $\int x^n\,dx$ asks for an entire <em>family</em> of antiderivatives, not just the one you'd get by reversing the derivative in your head, omitting $C$ loses that generality — and it typically costs a point on a test even when every other step is right.</p>
+<p>Evaluating at only the upper limit: $\int_1^3 2x\,dx\ne F(3)$. FTC Part 2 always requires $F(b)-F(a)$ &mdash; both endpoints.</p>
+<p>Constants of integration cancel: $F(x)=x^2+7$ and $G(x)=x^2$ give $F(3)-F(1)=G(3)-G(1)=8$, so there is no need to find $C$ when evaluating a definite integral.</p>
 </div>
 </details>
 </div>
-<p class="body-text">$+C$ is the <strong>constant of integration</strong> — every antiderivative family has infinitely many members differing by a constant. For definite integrals, $C$ cancels and can be dropped.</p>
-</div>
-<div class="col"><div class="section-head">Common Antiderivatives</div>
-<div class="accent-box"><ul>  <li>$\displaystyle\int e^x\,dx = e^x+C$</li>  <li>$\displaystyle\int \frac{1}{x}\,dx = \ln|x|+C$</li>  <li>$\displaystyle\int \sin x\,dx = -\cos x+C$</li>  <li>$\displaystyle\int \cos x\,dx = \sin x+C$</li></ul><p style='margin-top:.5rem'><strong>Area below the $x$-axis is negative.</strong><br>For a definite integral, any region where $f(x)&lt;0$ subtracts from the total. Signed area $\neq$ total area.</p></div>
+<div class="col"><div class="section-head">Net Change &amp; Signed Area</div>
+<div class="accent-box"><p><strong>Net Change Theorem.</strong> If $F'(x)$ is the rate of change of a quantity $F$, then</p><p>$$\int_a^b F'(x)\,dx = F(b)-F(a)$$</p><p>The integral of a <em>rate</em> gives the <em>net change</em> in the quantity.</p><p><strong>Examples:</strong></p><ul style="margin:.4rem 0 .4rem 1.2rem;padding:0"><li>$v(t)=$ velocity $\Rightarrow$ $\displaystyle\int_a^b v(t)\,dt=$ net displacement</li><li>$P'(t)=$ population growth rate $\Rightarrow$ $\displaystyle\int_a^b P'\,dt=$ net population change</li><li>$C'(x)=$ marginal cost $\Rightarrow$ $\displaystyle\int_a^b C'\,dx=$ change in cost</li></ul><p><strong>Signed area.</strong> FTC Part 2 gives <em>signed</em> area: regions below the $x$-axis contribute negatively. Net displacement $\ne$ total distance when $v$ changes sign.</p></div>
 <details class="mistake-panel">
-<summary class="mistake-toggle">▸ Common Mistake</summary>
+<summary class="mistake-toggle">&blacktriangleright; Common Mistake</summary>
 <div class="mistake-body">
-  <p>Students treat $\int_a^b f(x)\,dx$ as if it always returns a positive quantity — "the area under the curve" — and get thrown off (or "fix" their answer) when the result comes out negative. If $f(x)<0$ somewhere on $[a,b]$, the definite integral is <em>signed</em> area: regions below the $x$-axis subtract from the total instead of adding to it.</p>
-  <p>For instance, $\int_{-2}^{0}x^3\,dx = \left[\frac{x^4}{4}\right]_{-2}^0 = 0-4=-4$, and $-4$ is the correct final answer — not $4$. To get the <em>total</em> (unsigned) area between the curve and the axis, you'd need to split the interval at the roots of $f$ and integrate $|f|$ piece by piece; the plain definite integral won't do that for you automatically.</p>
+<p>Confusing net displacement and total distance. If $v(t)$ is negative on part of $[a,b]$, $\int_a^b v\,dt$ gives net displacement (can be zero or negative), while total distance requires $\int_a^b |v(t)|\,dt$ &mdash; break the interval at the zeros of $v$ and add magnitudes.</p>
 </div>
 </details>
+<p class="body-text">FTC Part 2 is the bridge from §§4.1&ndash;4.3 to the rest of Calculus: instead of summing thousands of rectangles, you find <em>one</em> antiderivative and subtract. §4.5 builds the antiderivative toolkit.</p>
 </div>
 </div>
 <div class="section-head">Worked Examples</div>
 <div class="examples-grid">
 <div class="ex-block">
-  <div class="ex-label">Example 1 &nbsp;&mdash;&nbsp; Power Rule (indefinite)</div>
-  <div class="ex-body">Find $\displaystyle\int (3x^2+4x)\,dx$.</div>
-  <div class="ex-answer instructor">$\dfrac{3x^3}{3}+\dfrac{4x^2}{2}+C = x^3+2x^2+C$</div>
+  <div class="ex-label">Example 1 &nbsp;&mdash;&nbsp; FTC Part 2 — basic</div>
+  <div class="ex-body">Evaluate $\displaystyle\int_0^1 x^2\,dx$.</div>
+  <div class="ex-answer instructor">Antiderivative: $F(x)=\dfrac{x^3}{3}$<br>$F(1)-F(0)=\dfrac{1}{3}-0=\dfrac{1}{3}$</div>
 </div>
 <div class="ex-block">
-  <div class="ex-label">Example 2 &nbsp;&mdash;&nbsp; Polynomial antiderivative</div>
-  <div class="ex-body">Find $\displaystyle\int (5x^4-6x+2)\,dx$.</div>
-  <div class="ex-answer instructor">$x^5-3x^2+2x+C$</div>
+  <div class="ex-label">Example 2 &nbsp;&mdash;&nbsp; FTC Part 2 — polynomial</div>
+  <div class="ex-body">Evaluate $\displaystyle\int_1^3(2x+1)\,dx$.</div>
+  <div class="ex-answer instructor">Antiderivative: $F(x)=x^2+x$<br>$F(3)-F(1)=(9+3)-(1+1)=12-2=10$</div>
 </div>
 <div class="ex-block">
-  <div class="ex-label">Example 3 &nbsp;&mdash;&nbsp; Definite integral</div>
-  <div class="ex-body">Evaluate $\displaystyle\int_0^3 x^2\,dx$.</div>
-  <div class="ex-answer instructor">$\left[\dfrac{x^3}{3}\right]_0^3=\dfrac{27}{3}-0=9$</div>
+  <div class="ex-label">Example 3 &nbsp;&mdash;&nbsp; Net displacement</div>
+  <div class="ex-body">A particle&rsquo;s velocity is $v(t)=t^2-4$ on $[0,3]$. Find the net displacement.</div>
+  <div class="ex-answer instructor">Antiderivative: $F(t)=\dfrac{t^3}{3}-4t$<br>$F(3)-F(0)=(9-12)-0=-3$ units</div>
 </div>
 <div class="ex-block">
-  <div class="ex-label">Example 4 &nbsp;&mdash;&nbsp; Mixed antiderivatives</div>
-  <div class="ex-body">Find $\displaystyle\int (4e^x+3\cos x)\,dx$.</div>
-  <div class="ex-answer instructor">$4e^x+3\sin x+C$</div>
+  <div class="ex-label">Example 4 &nbsp;&mdash;&nbsp; Verify with the limit</div>
+  <div class="ex-body">Confirm $\displaystyle\int_0^1 x^2\,dx=\dfrac{1}{3}$ using $\lim_{n\to\infty}R_n$.</div>
+  <div class="ex-answer instructor">$\Delta x=1/n,\; x_i=i/n$<br>$R_n=\dfrac{1}{n^3}\displaystyle\sum_{i=1}^{n}i^2=\dfrac{1}{n^3}\cdot\dfrac{n(n+1)(2n+1)}{6}=\dfrac{(n+1)(2n+1)}{6n^2}\to\dfrac{1}{3}$ &ensp;&#10003;</div>
 </div>
 </div>
 <div class="section-head">Practice Problems</div>
 <div class="practice">
 <div class="pr-row">
   <div class="pr-num">1.</div>
-  <div class="pr-prob">Find $\displaystyle\int x^5\,dx$.</div>
-  <div class="pr-ans instructor">$\dfrac{x^6}{6}+C$</div>
+  <div class="pr-prob">Evaluate $\displaystyle\int_0^2 x\,dx$ using FTC Part 2.</div>
+  <div class="pr-ans instructor">$F(x)=x^2/2$; $\;F(2)-F(0)=2$</div>
 </div>
 <div class="pr-row">
   <div class="pr-num">2.</div>
-  <div class="pr-prob">Find $\displaystyle\int (6x^2+4x-3)\,dx$.</div>
-  <div class="pr-ans instructor">$2x^3+2x^2-3x+C$</div>
+  <div class="pr-prob">Evaluate $\displaystyle\int_1^4 3x^2\,dx$.</div>
+  <div class="pr-ans instructor">$F(x)=x^3$; $\;F(4)-F(1)=64-1=63$</div>
 </div>
 <div class="pr-row">
   <div class="pr-num">3.</div>
-  <div class="pr-prob">Evaluate $\displaystyle\int_0^2 4x^3\,dx$.</div>
-  <div class="pr-ans instructor">$\left[x^4\right]_0^2=16$</div>
+  <div class="pr-prob">Evaluate $\displaystyle\int_0^3(x^2+1)\,dx$.</div>
+  <div class="pr-ans instructor">$F(x)=x^3/3+x$; $\;F(3)-F(0)=12$</div>
 </div>
 <div class="pr-row">
   <div class="pr-num">4.</div>
-  <div class="pr-prob">Find $\displaystyle\int (2e^x-\sin x)\,dx$.</div>
-  <div class="pr-ans instructor">$2e^x+\cos x+C$</div>
+  <div class="pr-prob">A particle has velocity $v(t)=2t-1$ on $[0,4]$. Net displacement?</div>
+  <div class="pr-ans instructor">$F(t)=t^2-t$; $\;F(4)-F(0)=12$ units</div>
 </div>
 <div class="pr-row">
   <div class="pr-num">5.</div>
-  <div class="pr-prob">Evaluate $\displaystyle\int_1^4 \sqrt{x}\,dx$.</div>
-  <div class="pr-ans instructor">$\left[\dfrac{2x^{3/2}}{3}\right]_1^4=\dfrac{16}{3}-\dfrac{2}{3}=\dfrac{14}{3}$</div>
+  <div class="pr-prob">In one sentence: why does $F(b)-F(a)=\displaystyle\int_a^b F'(x)\,dx$?</div>
+  <div class="pr-ans instructor">MVT gives $F(b)-F(a)=\sum f(c_i)\Delta x$ for any partition, and that Riemann sum converges to $\int_a^b F'\,dx$ as $n\to\infty$.</div>
 </div>
 <div class="pr-row">
   <div class="pr-num">6.</div>
-  <div class="pr-prob">Is $\displaystyle\int_{-2}^{0} x^3\,dx$ positive or negative? Why?</div>
-  <div class="pr-ans instructor">Negative — $x^3&lt;0$ on $(-2,0)$, so the signed area is below the $x$-axis.</div>
+  <div class="pr-prob">Evaluate $\displaystyle\int_2^2 \sin(x^3)\,dx$.</div>
+  <div class="pr-ans instructor">$0$ &mdash; same upper and lower limit (integral property from §4.3).</div>
 </div>
 </div>
 
@@ -275,7 +273,5 @@ function toggleAns(btn) {
     throwOnError: false
   });
 </script>
-<!-- proof-layer:done -->
-<!-- mistake-layer:done -->
 </body>
 </html>

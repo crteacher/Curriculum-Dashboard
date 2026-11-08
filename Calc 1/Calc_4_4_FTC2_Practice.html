@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Fundamental Theorem of Calculus &mdash; Practice</title>
+<title>The Definite Integral &amp; FTC Part 2 &mdash; Practice</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.css">
 <style>
   *{box-sizing:border-box;margin:0;padding:0}
@@ -45,7 +45,8 @@
   .check-btn{font-family:sans-serif;font-size:13px;background:#1a1a1a;color:#fff;
     border:none;border-radius:6px;padding:7px 14px;cursor:pointer}
   .check-btn:hover{background:#333}.check-btn:disabled{background:#aaa;cursor:default}
-  .hint{font-family:sans-serif;font-size:12px;color:#888;margin-top:7px}
+  .hint{font-family:sans-serif;font-size:12px;color:#888;margin-top:5px;display:none}
+  .hint-link{font-family:sans-serif;font-size:12px;color:#aaa;cursor:pointer;text-decoration:underline;margin-top:7px;display:inline-block}.hint-link:hover{color:#666}
   .feedback{font-family:sans-serif;font-size:13px;margin-top:10px;padding:8px 12px;
     border-radius:6px;display:none;line-height:1.5}
   .feedback.correct{display:block;background:#eaf5ea;color:#1a5a1a}
@@ -57,29 +58,29 @@
   .revealed-answer{display:none;margin-top:8px;font-family:sans-serif;font-size:13px;
     color:#444;background:#f5f3ef;border-radius:6px;padding:8px 11px;line-height:1.8;overflow-x:auto}
   code{font-family:'Courier New',monospace;background:#f0ede7;padding:1px 5px;border-radius:3px;font-size:12px}
-
-
-.hint{display:none!important}
 </style>
 </head>
 <body>
 <div class="container">
-  <h1>Fundamental Theorem of Calculus</h1>
+  <h1>The Definite Integral &amp; FTC Part 2</h1>
   <p class="subtitle">Calculus I &nbsp;&middot;&nbsp; &sect;4.4 &nbsp;&middot;&nbsp; Instructor: Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026</p>
 
   <div class="section">
     <div class="section-title">Core Ideas</div>
 
     <div class="concept">
-      <span class="concept-label">FTC Part 2 — Evaluation Theorem</span>
-      If $F$ is any antiderivative of $f$ on $[a,b]$, then
-      $$\int_a^b f(x)\,dx = F(b) - F(a)$$
-      Find the antiderivative, evaluate at both endpoints, subtract bottom from top.
+      <span class="concept-label">The Definite Integral</span>
+      $$\int_a^b f(x)\,dx = \lim_{n\to\infty}\sum_{i=1}^{n}f(x_i)\,\Delta x, \quad \Delta x=\frac{b-a}{n}$$
+      Closed-form formulas for the limit:
+      $\displaystyle\sum_{i=1}^{n}i=\frac{n(n+1)}{2}$
+      &nbsp;&nbsp;
+      $\displaystyle\sum_{i=1}^{n}i^2=\frac{n(n+1)(2n+1)}{6}$
     </div>
     <div class="concept">
-      <span class="concept-label">FTC Part 1 — Derivative of an Integral</span>
-      $$\frac{d}{dx}\int_a^x f(t)\,dt = f(x)$$
-      With chain rule: $\dfrac{d}{dx}\displaystyle\int_a^{g(x)} f(t)\,dt = f(g(x))\cdot g'(x)$
+      <span class="concept-label">FTC Part 2</span>
+      If $F'(x)=f(x)$ on $[a,b]$, then $\displaystyle\int_a^b f(x)\,dx = F(b)-F(a)$.
+      &nbsp; <strong>Proof sketch:</strong> MVT gives $F(x_i)-F(x_{i-1})=f(c_i)\Delta x$ on each
+      subinterval; telescope and take $n\to\infty$.
     </div>
 
   </div>
@@ -87,7 +88,7 @@
   <div class="section">
     <div class="section-title">Practice Problems</div>
     <p style="font-family:sans-serif;font-size:13px;color:#666;margin-bottom:1rem;">
-      All answers are integers. Definite integrals: enter the numeric value. FTC Part 1 problems: enter the value of F’(c).
+      FTC and Riemann sum limits: enter the integer value. For fraction answers such as 1/3, enter <code>1/3</code> or <code>0.333</code>.
       Press <strong>Check</strong> or hit Enter.
     </p>
     <div class="score-bar">
@@ -133,126 +134,146 @@ function addT(n, v) {
 
 // ── Problem generators (section-specific, injected below) ─────────────────────
 
-// gen1: ∫[a,b] k dx = k(b-a) — constant function → integer
+// gen1: FTC for f(x) = cx on [0, b]  → c·b²/2  (integer)
 function gen1() {
-  const k   = rInt(4) + 2;        // k in {2,3,4,5}
-  const a   = rInt(3) + 1;        // a in {1,2,3}
-  const len = rInt(3) + 2;        // b-a in {2,3,4}
-  const b   = a + len;
-  const ans = k * len;
+  const cases = [
+    {c:2, b:4, ans:16},
+    {c:1, b:6, ans:18},
+    {c:3, b:2, ans:6},
+    {c:4, b:3, ans:18},
+    {c:2, b:5, ans:25},
+    {c:3, b:4, ans:24},
+    {c:6, b:2, ans:12},
+    {c:1, b:4, ans:8},
+  ];
+  const {c, b, ans} = choose(cases);
+  const cStr = c === 1 ? '' : String(c);
   return {
-    latex:  `\\int_{${a}}^{${b}} ${k}\\,dx`,
+    latex: `\\int_0^{${b}} ${cStr}x\\,dx`,
     answer: [String(ans)],
-    hint:   `FTC Part 2: find F, then compute F(b)−F(a). Which basic antiderivative rule applies to a constant?`,
-    step:   `\\left[${k}x\\right]_{${a}}^{${b}}=${k}(${b})-${k}(${a})=${ans}`
+    hint: `Find an antiderivative F(x) of ${cStr}x, then compute F(${b}) − F(0).`,
+    step: `F(x)=${c===1?'':c}\\frac{x^2}{2},\\quad F(${b})-F(0)=${c}\\cdot\\frac{${b*b}}{2}=${ans}`
   };
 }
 
-// gen2: ∫[0,b] x dx = b²/2 — b even → integer
+// gen2: FTC for f(x) = 3x² on [0, b]  → b³
 function gen2() {
-  const b   = 2 * (rInt(4) + 1);  // b in {2,4,6,8}
-  const ans = b * b / 2;
+  const b   = rInt(3) + 2;   // b in {2,3,4}
+  const ans = b * b * b;
   return {
-    latex:  `\\int_0^{${b}} x\\,dx`,
+    latex: `\\int_0^{${b}} 3x^2\\,dx`,
     answer: [String(ans)],
-    hint:   `Power rule for integrals: raise the exponent by 1, divide by the new exponent. What does that give you for x?`,
-    step:   `\\left[\\frac{x^2}{2}\\right]_0^{${b}}=\\frac{${b*b}}{2}=${ans}`
+    hint: `The antiderivative of 3x² is x³. Apply FTC: F(${b}) − F(0).`,
+    step: `F(x)=x^3,\\quad F(${b})-F(0)=${ans}`
   };
 }
 
-// gen3: ∫[a,b] x dx = (b²-a²)/2 — same parity → integer
+// gen3: FTC for f(x) = x² on [a, b]  → b³/3 − a³/3  (use a,b so result is integer)
 function gen3() {
-  const par = rInt(2);
-  const a   = 2 * rInt(2) + (par === 0 ? 1 : 2);   // odd {1,3} or even {2,4}
-  const b   = a + 2 * (rInt(2) + 1);               // b = a+2 or a+4
-  const ans = (b * b - a * a) / 2;
+  const cases = [
+    {a:0, b:3, ans:9},
+    {a:1, b:4, ans:21},
+    {a:0, b:6, ans:72},
+    {a:3, b:6, ans:63},
+    {a:0, b:3, ans:9},
+    {a:1, b:7, ans:114},
+    {a:2, b:5, ans:39},
+  ];
+  const {a, b, ans} = choose(cases);
+  const aStr = a === 0 ? '0' : String(a);
   return {
-    latex:  `\\int_{${a}}^{${b}} x\\,dx`,
+    latex: `\\int_{${aStr}}^{${b}} x^2\\,dx`,
     answer: [String(ans)],
-    hint:   `Same power rule as the previous type. The lower limit here is ${a}, not 0 — does your F(b)−F(a) account for that?`,
-    step:   `\\left[\\frac{x^2}{2}\\right]_{${a}}^{${b}}=\\frac{${b*b}}{2}-\\frac{${a*a}}{2}=\\frac{${b*b-a*a}}{2}=${ans}`
+    hint: `Antiderivative of x² is x³/3. Compute F(${b}) − F(${aStr}).`,
+    step: `F(x)=\\frac{x^3}{3},\\quad F(${b})-F(${aStr})=\\frac{${b*b*b}}{3}-\\frac{${a*a*a}}{3}=${ans}`
   };
 }
 
-// gen4: ∫[0,b] x² dx = b³/3 — b in {3,6} → integer
+// gen4: FTC for f(x) = ax + b on [0, N]  → aN²/2 + bN  (integer)
 function gen4() {
-  const b   = choose([3, 6]);
-  const ans = b * b * b / 3;
+  const a = rInt(3) + 1;           // a in {1,2,3}
+  const b = rInt(4) + 1;           // b in {1,2,3,4}
+  const N = rInt(3) + 2;           // N in {2,3,4}
+  const ans = a * N * N / 2 + b * N;
+  if (!Number.isInteger(ans)) return gen4();   // retry if not integer
+  const aStr = a === 1 ? '' : String(a);
   return {
-    latex:  `\\int_0^{${b}} x^2\\,dx`,
+    latex: `\\int_0^{${N}} (${aStr}x+${b})\\,dx`,
     answer: [String(ans)],
-    hint:   `Power rule applies to x². What is the new exponent after integrating, and what do you divide by?`,
-    step:   `\\left[\\frac{x^3}{3}\\right]_0^{${b}}=\\frac{${b*b*b}}{3}=${ans}`
+    hint: `Antiderivative of ${aStr}x+${b} is ${a===1?'':''+a}x²/2+${b}x. Evaluate at x=${N} and subtract value at x=0.`,
+    step: `F(x)=${a===1?'':a}\\frac{x^2}{2}+${b}x,\\quad F(${N})-F(0)=${a}\\cdot\\frac{${N*N}}{2}+${b}\\cdot${N}=${ans}`
   };
 }
 
-// gen5: ∫[0,b] (x+k) dx = b²/2 + k·b → integer when b even
+// gen5: Limit of right Riemann sum for f(x) = cx on [0, b]  → cb²/2
+// Shows the Σi formula in action
 function gen5() {
-  const b   = 2 * (rInt(3) + 1);  // b in {2,4,6}
-  const k   = rInt(4) + 1;        // k in {1,2,3,4}
-  const ans = b * b / 2 + k * b;
+  const cases = [
+    {c:1, b:4, ans:8},
+    {c:2, b:3, ans:9},
+    {c:1, b:6, ans:18},
+    {c:2, b:4, ans:16},
+    {c:3, b:2, ans:6},
+    {c:1, b:2, ans:2},
+  ];
+  const {c, b, ans} = choose(cases);
+  const cStr = c === 1 ? '' : String(c);
+  const numer = c * b * b;
   return {
-    latex:  `\\int_0^{${b}} (x+${k})\\,dx`,
+    latex: `\\lim_{n\\to\\infty}\\sum_{i=1}^{n}${cStr}\\frac{${b}i}{n}\\cdot\\frac{${b}}{n}`,
     answer: [String(ans)],
-    hint:   `Integrate term by term. Which rule handles x? Which rule handles the constant ${k}?`,
-    step:   `\\left[\\frac{x^2}{2}+${k}x\\right]_0^{${b}}=\\frac{${b*b}}{2}+${k*b}=${ans}`
+    hint: `Factor out the constants, then apply the closed-form formula \\(\\sum_{i=1}^n i = \\frac{n(n+1)}{2}\\), and take the limit as n→∞.`,
+    step: `\\frac{${c*b*b}}{n^2}\\cdot\\frac{n(n+1)}{2}=\\frac{${numer}(n+1)}{2n}\\to\\frac{${numer}}{2}=${ans}`
   };
 }
 
-// gen6: FTC Part 1 — F(x)=∫[0,x] f(t) dt, find F'(c)
+// gen6: Net displacement from v(t) = ct on [0, T]  → cT²/2
 function gen6() {
   const cases = [
-    {fTex:'t^2',   c:3, ans:9,  stepTex:`F'(x)=x^2,\\quad F'(3)=9`},
-    {fTex:'t^2',   c:4, ans:16, stepTex:`F'(x)=x^2,\\quad F'(4)=16`},
-    {fTex:'2t',    c:5, ans:10, stepTex:`F'(x)=2x,\\quad F'(5)=10`},
-    {fTex:'2t',    c:6, ans:12, stepTex:`F'(x)=2x,\\quad F'(6)=12`},
-    {fTex:'t^2+1', c:3, ans:10, stepTex:`F'(x)=x^2+1,\\quad F'(3)=10`},
-    {fTex:'t^2+1', c:4, ans:17, stepTex:`F'(x)=x^2+1,\\quad F'(4)=17`},
+    {c:2, T:4, ans:16},
+    {c:4, T:3, ans:18},
+    {c:1, T:6, ans:18},
+    {c:3, T:4, ans:24},
+    {c:2, T:5, ans:25},
+    {c:6, T:2, ans:12},
   ];
-  const {fTex, c, ans, stepTex} = choose(cases);
+  const {c, T, ans} = choose(cases);
+  const cStr = c === 1 ? '' : String(c);
   return {
-    latex:  `\\text{If }F(x)=\\int_0^x ${fTex}\\,dt,\\text{ find }F'(${c}).`,
+    latex: `\\text{Velocity }v(t)=${cStr}t\\text{ on }[0,${T}].\\text{ Net displacement?}`,
     answer: [String(ans)],
-    hint:   `FTC Part 1 applies here. What does differentiating this integral give you — and at what value do you evaluate it?`,
-    step:   stepTex
+    hint: `Displacement = \\(\\int_0^{${T}} v(t)\\,dt\\). Find an antiderivative of ${cStr}t and apply FTC.`,
+    step: `\\int_0^{${T}}${cStr}t\\,dt=\\left[${c===1?'':c}\\frac{t^2}{2}\\right]_0^{${T}}=${c}\\cdot\\frac{${T*T}}{2}=${ans}\\text{ units}`
   };
 }
 
-// gen7: FTC Part 1 with chain rule — F(x)=∫[0,g(x)] f(t) dt, find F'(c)
+// gen7: Limit of right Riemann sum for f(x)=x² on [0,b] → b³/3  (uses Σi² formula)
 function gen7() {
-  const cases = [
-    {gTex:'x^2', fTex:'t', c:2, ans:16, stepTex:`F'(x)=x^2\\cdot 2x=2x^3,\\quad F'(2)=16`},
-    {gTex:'x^2', fTex:'t', c:1, ans:2,  stepTex:`F'(x)=x^2\\cdot 2x=2x^3,\\quad F'(1)=2`},
-    {gTex:'2x',  fTex:'t', c:3, ans:12, stepTex:`F'(x)=(2x)\\cdot 2=4x,\\quad F'(3)=12`},
-    {gTex:'2x',  fTex:'t', c:4, ans:16, stepTex:`F'(x)=(2x)\\cdot 2=4x,\\quad F'(4)=16`},
-    {gTex:'x^2', fTex:'3', c:2, ans:12, stepTex:`F'(x)=3\\cdot 2x=6x,\\quad F'(2)=12`},
-    {gTex:'x^2', fTex:'3', c:3, ans:18, stepTex:`F'(x)=3\\cdot 2x=6x,\\quad F'(3)=18`},
-  ];
-  const {gTex, fTex, c, ans, stepTex} = choose(cases);
+  const b = choose([1, 2, 3]);
+  const ans_num = b * b * b;
+  // show as fraction when b=1 (ans = 1/3)
+  const ansStr = b === 1 ? '1/3' : String(ans_num / 3);
+  const ansVal = b === 1 ? '0.333' : String(ans_num / 3);
   return {
-    latex:  `\\text{If }F(x)=\\int_0^{${gTex}} ${fTex}\\,dt,\\text{ find }F'(${c}).`,
-    answer: [String(ans)],
-    hint:   `The upper limit is g(x), not plain x — so the chain rule form applies. What is g(x) here?`,
-    step:   stepTex
+    latex: `\\lim_{n\\to\\infty}\\sum_{i=1}^{n}\\left(\\frac{${b}i}{n}\\right)^2\\!\\cdot\\frac{${b}}{n}`,
+    answer: b === 1 ? ['1/3', '0.333', '.333'] : [ansStr],
+    hint: `Factor out the constants, apply \\(\\sum i^2 = \\frac{n(n+1)(2n+1)}{6}\\), simplify, then take n→∞.`,
+    step: `\\frac{${b**3}}{n^3}\\cdot\\frac{n(n+1)(2n+1)}{6}=\\frac{${b**3}(n+1)(2n+1)}{6n^2}\\to\\frac{${b**3}}{6}\\cdot 2=\\frac{${b**3}}{3}${b>1?'='+ansStr:''}`
   };
 }
 
-// gen8: ∫[a,b] (2x+k) dx = [x²+kx] from a to b → integer
+// gen8: Additive property: given ∫₀ᵃ f = A and ∫₀ᵇ f = B, find ∫ₐᵇ f = B − A
 function gen8() {
-  const cases = [
-    {a:1, b:3, k:2, ans:12},
-    {a:1, b:3, k:4, ans:16},
-    {a:2, b:4, k:1, ans:14},
-    {a:2, b:4, k:3, ans:18},
-    {a:1, b:4, k:2, ans:21},
-    {a:0, b:3, k:2, ans:15},
-  ];
-  const {a, b, k, ans} = choose(cases);
+  const a   = rInt(3) + 1;             // a in {1,2,3}
+  const b   = a + rInt(3) + 2;         // b > a
+  const A   = rInt(8) + 2;             // ∫₀ᵃ f
+  const B   = A + rInt(10) + 3;        // ∫₀ᵇ f > A
+  const ans = B - A;
   return {
-    latex:  `\\int_{${a}}^{${b}} (2x+${k})\\,dx`,
+    latex: `\\int_0^{${a}} f(x)\\,dx=${A},\\quad\\int_0^{${b}} f(x)\\,dx=${B}.\\quad\\text{Find }\\int_{${a}}^{${b}} f(x)\\,dx.`,
     answer: [String(ans)],
-    hint:   `Integrate term by term — two terms. Then apply F(b)−F(a) at the given limits.`,
-    step:   `\\left[x^2+${k}x\\right]_{${a}}^{${b}}=(${b*b}+${k*b})-(${a*a}+${k*a})=${ans}`
+    hint: `The definite integral is additive: \\(\\int_0^b f\\,dx = \\int_0^a f\\,dx + \\int_a^b f\\,dx\\). Solve for the piece you want.`,
+    step: `\\int_0^{${b}} f\\,dx - \\int_0^{${a}} f\\,dx = ${B}-${A}=${ans}`
   };
 }
 
@@ -268,15 +289,13 @@ function norm(s) {
 function ok(user, acc) { return acc.some(a => norm(user) === norm(a)); }
 
 function init() {
-  ACTIVE    = shuffle(GENERATORS.map(gen => gen()));
+  ACTIVE    = shuffle(GENERATORS).slice(0, Math.min(8, GENERATORS.length)).map(gen => gen());
   correct   = 0;
   flags     = Array(GENERATORS.length).fill(false);
   attempted = Array(GENERATORS.length).fill(false);
   peeked    = Array(GENERATORS.length).fill(false);
 }
 
-function _lth(s){let h='',r=s;while(r.length){const m=r.match(/^\\text\{([^}]*)\}/);if(m){h+=m[1];r=r.slice(m[0].length);}else{const n=r.indexOf('\\text{');if(n<0){h+=(r.trim()?'$'+r+'$':'');r='';}else{if(n>0)h+='$'+r.slice(0,n)+'$';r=r.slice(n);}}}return h;}
-function _re(p,i){const e=document.getElementById('expr-'+i),KO={delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false};if(p.svg){e.innerHTML=p.svg;}else if(p.html){e.innerHTML=p.html;renderMathInElement(e,KO);}else if(p.latex&&/\\text\{/.test(p.latex)){e.innerHTML=_lth(p.latex);renderMathInElement(e,KO);}else{katex.render(p.latex,e,{throwOnError:false,displayMode:true});}}
 function buildCards() {
   const wrap = document.getElementById('problems');
   wrap.innerHTML = '';
@@ -291,7 +310,7 @@ function buildCards() {
           <input class="ans-input" id="ai-${i}" placeholder="answer" />
           <button class="check-btn" id="chk-${i}" onclick="check(${i})">Check</button>
         </div>
-        <div class="hint">${p.hint}</div>
+        <span class="hint-link" onclick="this.style.display='none';this.nextElementSibling.style.display='block'">Show hint</span><div class="hint">${p.hint}</div>
         <div class="feedback" id="fb-${i}"></div>
         <span class="reveal-link" id="rl-${i}" onclick="reveal(${i})">Show solution</span>
         <div class="revealed-answer" id="ra-${i}"></div>
@@ -299,7 +318,12 @@ function buildCards() {
     wrap.appendChild(div);
     document.getElementById('ai-' + i)
       .addEventListener('keydown', e => { if (e.key === 'Enter') check(i); });
-    _re(p, i);
+    if (p.svg) {
+      document.getElementById('expr-' + i).innerHTML = p.svg;
+    } else {
+      katex.render(p.latex, document.getElementById('expr-' + i),
+        { throwOnError: false, displayMode: true });
+    }
   });
 }
 

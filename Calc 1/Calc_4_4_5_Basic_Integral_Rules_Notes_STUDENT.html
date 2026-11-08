@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Fundamental Theorem of Calculus &mdash; Notes</title>
+<title>Basic Integration Rules &mdash; Notes</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -148,100 +148,101 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
 </head>
 <body>
 <div class="container">
-<h1 class="page-title">Fundamental Theorem of Calculus</h1>
-<p class="page-sub">Calculus I &nbsp;&middot;&nbsp; &sect;4.4 &nbsp;&middot;&nbsp; Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026 &nbsp;&middot;&nbsp; <strong>STUDENT</strong></p>
-<div class="opening-q">We've been computing areas with rectangles. The Fundamental Theorem gives us an exact method: antidifferentiate, then plug in endpoints. Why does the connection between antiderivatives and areas work?</div>
+<h1 class="page-title">Basic Integration Rules</h1>
+<p class="page-sub">Calculus I &nbsp;&middot;&nbsp; &sect;4.4.5 &nbsp;&middot;&nbsp; Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026 &nbsp;&middot;&nbsp; <strong>STUDENT</strong></p>
+<div class="opening-q">Riemann sums let us approximate $\int_a^b f(x)\,dx$, but computing thousands of rectangles by hand is impractical. Can we reverse the differentiation rules to evaluate integrals exactly? Every derivative rule has a mirror — what does the Power Rule look like going backwards?</div>
 <div class="two-col">
-<div class="col"><div class="section-head">FTC Part 2 — Evaluation Theorem</div>
-<div class="accent-box"><p>If $F$ is any antiderivative of $f$ on $[a,b]$:</p>$$\int_a^b f(x)\,dx = F(b)-F(a)$$<p><strong>Notation:</strong> $\Big[F(x)\Big]_a^b = F(b)-F(a)$</p><p><strong>Procedure:</strong></p><ol style='margin-left:1.2rem;margin-top:.3rem'>  <li>Find an antiderivative $F$ (ignore $+C$)</li>  <li>Evaluate $F(b)$</li>  <li>Evaluate $F(a)$</li>  <li>Subtract: $F(b)-F(a)$</li></ol></div>
+<div class="col"><div class="section-head">Integration Rules</div>
+<div class="accent-box"><p><strong>Power Rule</strong> $(n\neq -1)$:</p><p>$$\int x^n\,dx=\frac{x^{n+1}}{n+1}+C$$</p><p><strong>Constant Rule:</strong> $\displaystyle\int k\,dx=kx+C$</p><p><strong>Constant Multiple:</strong> $\displaystyle\int c\,f(x)\,dx=c\int f(x)\,dx$</p><p><strong>Sum / Difference:</strong></p><p>$\displaystyle\int[f(x)\pm g(x)]\,dx=\int f\,dx\pm\int g\,dx$</p></div>
+<div class="panel-row">
 <details class="proof-panel">
 <summary class="proof-toggle">▸ Show Proof</summary>
 <div class="proof-body">
-  <p>Here's the key idea: define the accumulation function $A(x) = \displaystyle\int_a^x f(t)\,dt$, which measures the signed area from $a$ up to $x$.</p>
-  <p>By FTC Part 1 (proved below), $A'(x) = f(x)$. So $A$ is an antiderivative of $f$.</p>
-  <p>Now let $F$ be <em>any</em> antiderivative of $f$. Since two antiderivatives of the same function can only differ by a constant, we have $F(x) = A(x) + C$ for some constant $C$.</p>
-  <p>Compute $F(b) - F(a)$:</p>
-  <p>$$F(b)-F(a) = \bigl[A(b)+C\bigr] - \bigl[A(a)+C\bigr] = A(b) - A(a)$$</p>
-  <p>Notice: $A(b) = \displaystyle\int_a^b f(t)\,dt$ (the total area from $a$ to $b$), and $A(a) = \displaystyle\int_a^a f(t)\,dt = 0$ (no width, no area). So:</p>
-  <p>$$F(b)-F(a) = \int_a^b f(t)\,dt$$</p>
-  <p>The constant $C$ cancels — that's why it doesn't matter which antiderivative you pick.</p>
+  <p>The key idea: we want a function whose derivative is $x^n$. We run the Power Rule for derivatives <em>backwards</em>.</p>
+  <p>From differentiation, we know: $\dfrac{d}{dx}\!\left[x^{n+1}\right] = (n+1)x^n$.</p>
+  <p>That's almost what we want, but we have an extra factor of $(n+1)$. To cancel it, divide both sides by $(n+1)$ (which is fine as long as $n \neq -1$, since we can't divide by zero):</p>
+  <p>$$\frac{d}{dx}\!\left[\frac{x^{n+1}}{n+1}\right] = x^n$$</p>
+  <p>So $\dfrac{x^{n+1}}{n+1}$ is <em>an</em> antiderivative of $x^n$. But it's not the only one — any constant $C$ has derivative zero, so adding $C$ gives another antiderivative. In fact, every antiderivative of $x^n$ has this form. Therefore:</p>
+  <p>$$\int x^n\,dx = \frac{x^{n+1}}{n+1} + C$$</p>
+  <p>You can always verify an integration result by differentiating the right side — you should get the integrand back.</p>
   <p class="proof-qed">∎</p>
 </div>
 </details>
-</div>
-<div class="col"><div class="section-head">FTC Part 1 — Derivative of an Integral</div>
-<div class="accent-box"><p>$$\frac{d}{dx}\int_a^x f(t)\,dt=f(x)$$</p><p>The derivative of the accumulation function is the integrand, evaluated at the upper limit.</p><p><strong>With chain rule:</strong><br>$\dfrac{d}{dx}\displaystyle\int_a^{g(x)}f(t)\,dt=f(g(x))\cdot g'(x)$</p></div>
-<details class="proof-panel">
-<summary class="proof-toggle">▸ Show Proof</summary>
-<div class="proof-body">
-  <p>Let $A(x) = \displaystyle\int_a^x f(t)\,dt$. We want to find $A'(x)$ using the limit definition of the derivative:</p>
-  <p>$$A'(x) = \lim_{h\to 0}\frac{A(x+h)-A(x)}{h}$$</p>
-  <p>The numerator is the area from $a$ to $x+h$, minus the area from $a$ to $x$. That difference is just the thin strip of area from $x$ to $x+h$:</p>
-  <p>$$A(x+h)-A(x) = \int_x^{x+h} f(t)\,dt$$</p>
-  <p>For small $h$, this strip is nearly a rectangle with height $f(x)$ and width $h$, so its area is approximately $f(x)\cdot h$. (We're assuming $f$ is continuous here, which holds for every function in this course.)</p>
-  <p>Dividing by $h$ and taking the limit:</p>
-  <p>$$A'(x) = \lim_{h\to 0}\frac{f(x)\cdot h}{h} = f(x)$$</p>
-  <p>The derivative of the area-accumulation function is exactly the function you're integrating, evaluated at the moving upper limit.</p>
-  <p class="proof-qed">∎</p>
+<details class="mistake-panel">
+<summary class="mistake-toggle">▸ Common Mistake</summary>
+<div class="mistake-body">
+  <p>Students often write $\displaystyle\int x^n\,dx = \frac{x^n}{n}+C$ instead of $\displaystyle\frac{x^{n+1}}{n+1}+C$ — dividing by the <em>original</em> exponent $n$ rather than the <em>new</em> one after raising the power. For example, $\int x^3\,dx$ becomes $\frac{x^4}{4}+C$, not $\frac{x^3}{3}+C$. The slip comes from over-focusing on the exponent that was already there and forgetting the exponent changes first — only then does the new exponent become the divisor.</p>
+  <p>Also common: dropping the $+C$. Since $\int x^n\,dx$ asks for an entire <em>family</em> of antiderivatives, not just the one you'd get by reversing the derivative in your head, omitting $C$ loses that generality — and it typically costs a point on a test even when every other step is right.</p>
 </div>
 </details>
-<p class="body-text"><strong>Key antiderivative formulas:</strong><br>$\int x^n\,dx=\dfrac{x^{n+1}}{n+1}+C$ &ensp; $(n\neq-1)$<br>$\int e^x\,dx=e^x+C$ &ensp; $\int\cos x\,dx=\sin x+C$<br>$\int\sin x\,dx=-\cos x+C$ &ensp; $\int\dfrac{1}{x}\,dx=\ln|x|+C$</p>
+</div>
+<p class="body-text">$+C$ is the <strong>constant of integration</strong> — every antiderivative family has infinitely many members differing by a constant. For definite integrals, $C$ cancels and can be dropped.</p>
+</div>
+<div class="col"><div class="section-head">Common Antiderivatives</div>
+<div class="accent-box"><ul>  <li>$\displaystyle\int e^x\,dx = e^x+C$</li>  <li>$\displaystyle\int \frac{1}{x}\,dx = \ln|x|+C$</li>  <li>$\displaystyle\int \sin x\,dx = -\cos x+C$</li>  <li>$\displaystyle\int \cos x\,dx = \sin x+C$</li></ul><p style='margin-top:.5rem'><strong>Area below the $x$-axis is negative.</strong><br>For a definite integral, any region where $f(x)&lt;0$ subtracts from the total. Signed area $\neq$ total area.</p></div>
+<details class="mistake-panel">
+<summary class="mistake-toggle">▸ Common Mistake</summary>
+<div class="mistake-body">
+  <p>Students treat $\int_a^b f(x)\,dx$ as if it always returns a positive quantity — "the area under the curve" — and get thrown off (or "fix" their answer) when the result comes out negative. If $f(x)<0$ somewhere on $[a,b]$, the definite integral is <em>signed</em> area: regions below the $x$-axis subtract from the total instead of adding to it.</p>
+  <p>For instance, $\int_{-2}^{0}x^3\,dx = \left[\frac{x^4}{4}\right]_{-2}^0 = 0-4=-4$, and $-4$ is the correct final answer — not $4$. To get the <em>total</em> (unsigned) area between the curve and the axis, you'd need to split the interval at the roots of $f$ and integrate $|f|$ piece by piece; the plain definite integral won't do that for you automatically.</p>
+</div>
+</details>
 </div>
 </div>
 <div class="section-head">Worked Examples</div>
 <div class="examples-grid">
 <div class="ex-block">
-  <div class="ex-label">Example 1 &nbsp;&mdash;&nbsp; Polynomial integral</div>
-  <div class="ex-body">Evaluate $\displaystyle\int_1^3 x^2\,dx$.</div>
-  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">$\left[\dfrac{x^3}{3}\right]_1^3=\dfrac{27}{3}-\dfrac{1}{3}=9-\dfrac{1}{3}=\dfrac{26}{3}$</div></div>
+  <div class="ex-label">Example 1 &nbsp;&mdash;&nbsp; Power Rule (indefinite)</div>
+  <div class="ex-body">Find $\displaystyle\int (3x^2+4x)\,dx$.</div>
+  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">$\dfrac{3x^3}{3}+\dfrac{4x^2}{2}+C = x^3+2x^2+C$</div></div>
 </div>
 <div class="ex-block">
-  <div class="ex-label">Example 2 &nbsp;&mdash;&nbsp; Mixed integral</div>
-  <div class="ex-body">Evaluate $\displaystyle\int_0^1 (3x^2+2x)\,dx$.</div>
-  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">$\left[x^3+x^2\right]_0^1=(1+1)-(0)=2$</div></div>
+  <div class="ex-label">Example 2 &nbsp;&mdash;&nbsp; Polynomial antiderivative</div>
+  <div class="ex-body">Find $\displaystyle\int (5x^4-6x+2)\,dx$.</div>
+  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">$x^5-3x^2+2x+C$</div></div>
 </div>
 <div class="ex-block">
-  <div class="ex-label">Example 3 &nbsp;&mdash;&nbsp; Trig integral</div>
-  <div class="ex-body">Evaluate $\displaystyle\int_0^{\pi} \sin x\,dx$.</div>
-  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">$\left[-\cos x\right]_0^{\pi}=-\cos\pi-(-\cos 0)=1+1=2$</div></div>
+  <div class="ex-label">Example 3 &nbsp;&mdash;&nbsp; Definite integral</div>
+  <div class="ex-body">Evaluate $\displaystyle\int_0^3 x^2\,dx$.</div>
+  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">$\left[\dfrac{x^3}{3}\right]_0^3=\dfrac{27}{3}-0=9$</div></div>
 </div>
 <div class="ex-block">
-  <div class="ex-label">Example 4 &nbsp;&mdash;&nbsp; FTC Part 1</div>
-  <div class="ex-body">Let $F(x)=\displaystyle\int_0^x t^2\,dt$. Find $F'(x)$ and $F'(3)$.</div>
-  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">By FTC Part 1: $F'(x)=x^2$<br>$F'(3)=9$</div></div>
+  <div class="ex-label">Example 4 &nbsp;&mdash;&nbsp; Mixed antiderivatives</div>
+  <div class="ex-body">Find $\displaystyle\int (4e^x+3\cos x)\,dx$.</div>
+  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">$4e^x+3\sin x+C$</div></div>
 </div>
 </div>
 <div class="section-head">Practice Problems</div>
 <div class="practice">
 <div class="pr-row">
   <div class="pr-num">1.</div>
-  <div class="pr-prob">Evaluate $\displaystyle\int_0^2 x^3\,dx$.</div>
-  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$\left[x^4/4\right]_0^2=16/4=4$</div></div>
+  <div class="pr-prob">Find $\displaystyle\int x^5\,dx$.</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$\dfrac{x^6}{6}+C$</div></div>
 </div>
 <div class="pr-row">
   <div class="pr-num">2.</div>
-  <div class="pr-prob">Evaluate $\displaystyle\int_1^4 \sqrt{x}\,dx$.</div>
-  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$\left[\frac{2}{3}x^{3/2}\right]_1^4=\frac{2}{3}(8-1)=\frac{14}{3}$</div></div>
+  <div class="pr-prob">Find $\displaystyle\int (6x^2+4x-3)\,dx$.</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$2x^3+2x^2-3x+C$</div></div>
 </div>
 <div class="pr-row">
   <div class="pr-num">3.</div>
-  <div class="pr-prob">Evaluate $\displaystyle\int_0^1 e^x\,dx$.</div>
-  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$\left[e^x\right]_0^1=e-1$</div></div>
+  <div class="pr-prob">Evaluate $\displaystyle\int_0^2 4x^3\,dx$.</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$\left[x^4\right]_0^2=16$</div></div>
 </div>
 <div class="pr-row">
   <div class="pr-num">4.</div>
-  <div class="pr-prob">Evaluate $\displaystyle\int_{\pi/6}^{\pi/2}\cos x\,dx$.</div>
-  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$\left[\sin x\right]_{\pi/6}^{\pi/2}=1-\frac{1}{2}=\frac{1}{2}$</div></div>
+  <div class="pr-prob">Find $\displaystyle\int (2e^x-\sin x)\,dx$.</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$2e^x+\cos x+C$</div></div>
 </div>
 <div class="pr-row">
   <div class="pr-num">5.</div>
-  <div class="pr-prob">Let $G(x)=\displaystyle\int_1^x \sqrt{t}\,dt$. Find $G'(x)$.</div>
-  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$G'(x)=\sqrt{x}$</div></div>
+  <div class="pr-prob">Evaluate $\displaystyle\int_1^4 \sqrt{x}\,dx$.</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$\left[\dfrac{2x^{3/2}}{3}\right]_1^4=\dfrac{16}{3}-\dfrac{2}{3}=\dfrac{14}{3}$</div></div>
 </div>
 <div class="pr-row">
   <div class="pr-num">6.</div>
-  <div class="pr-prob">Let $H(x)=\displaystyle\int_0^{x^2}\cos t\,dt$. Find $H'(x)$.</div>
-  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$H'(x)=\cos(x^2)\cdot 2x=2x\cos(x^2)$</div></div>
+  <div class="pr-prob">Is $\displaystyle\int_{-2}^{0} x^3\,dx$ positive or negative? Why?</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">Negative — $x^3&lt;0$ on $(-2,0)$, so the signed area is below the $x$-axis.</div></div>
 </div>
 </div>
 

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Definite Integral &amp; FTC Part 2 &mdash; Notes</title>
+<title>The Definite Integral &amp; FTC Part 1 &mdash; Notes</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.css">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -173,86 +173,84 @@ details[open]>.mistake-toggle{color:#1e3a5c}
 </head>
 <body>
 <div class="container">
-<h1 class="page-title">The Definite Integral &amp; FTC Part 2</h1>
+<h1 class="page-title">The Definite Integral &amp; FTC Part 1</h1>
 <p class="page-sub">Calculus I &nbsp;&middot;&nbsp; &sect;4.3 &nbsp;&middot;&nbsp; Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026 &nbsp;&middot;&nbsp; <strong>STUDENT</strong></p>
-<div class="opening-q">In &sect;4.2 you computed $R_n$ for $f(x)=x^2$ on $[0,1]$ and found $R_n = \dfrac{n(n+1)(2n+1)}{6n^3}$. As $n\to\infty$ this approaches $\tfrac{1}{3}$. But there&rsquo;s a one-line shortcut: the antiderivative $F(x)=\tfrac{x^3}{3}$ gives $F(1)-F(0)=\tfrac{1}{3}$ instantly. Why should an <em>antiderivative</em> tell you the exact area?</div>
+<div class="opening-q">In &sect;4.2 you computed a Riemann sum $R_n$ and took $n\to\infty$ to get an exact area. That limiting process defines the integral. But here&rsquo;s a strange observation: $\dfrac{d}{dx}\!\left[\int_0^x t^2\,dt\right] = x^2$. Differentiating an integral gives back the original function. Is that always true?</div>
 <div class="two-col">
-<div class="col"><div class="section-head">The Definite Integral</div>
-<div class="accent-box"><p>The <strong>definite integral</strong> of $f$ on $[a,b]$ is the limit of any Riemann sum as the number of rectangles grows without bound:</p><p>$$\int_a^b f(x)\,dx = \lim_{n\to\infty}\sum_{i=1}^{n}f(x_i)\,\Delta x$$</p><p>where $\Delta x=\dfrac{b-a}{n}$ and $x_i=a+i\,\Delta x$.</p><p>The symbol $\int$ is an elongated S for &ldquo;sum.&rdquo; $a,b$ are the <strong>limits of integration</strong>; $f(x)$ is the <strong>integrand</strong>; $dx$ marks the variable and corresponds to $\Delta x\to 0$.</p><p><strong>Closed-form sigma formulas</strong> (let you evaluate the limit):</p><p>$$\sum_{i=1}^{n}i=\frac{n(n+1)}{2} \qquad \sum_{i=1}^{n}i^2=\frac{n(n+1)(2n+1)}{6}$$</p></div>
+<div class="col"><div class="section-head">The Definite Integral &amp; FTC Part 1</div>
+<div class="accent-box"><p>The <strong>definite integral</strong> of $f$ on $[a,b]$:</p><p>$$\int_a^b f(x)\,dx = \lim_{n\to\infty}\sum_{i=1}^{n}f(x_i)\,\Delta x$$</p><p>where $\Delta x=(b-a)/n$ and $x_i=a+i\,\Delta x$. The symbol $\int$ is an elongated S for &ldquo;sum&rdquo;; $a,b$ are the <strong>limits of integration</strong>; $dx$ corresponds to $\Delta x\to 0$.</p><p><strong>Closed-form sigma formulas</strong> (for evaluating the limit):<br>$\displaystyle\sum_{i=1}^{n}i=\frac{n(n+1)}{2}\qquad\displaystyle\sum_{i=1}^{n}i^2=\frac{n(n+1)(2n+1)}{6}$</p><hr style="border:none;border-top:1px solid #c8d8e8;margin:.6rem 0"><p><strong>FTC Part 1.</strong> If $f$ is continuous on $[a,b]$ and $G(x)=\displaystyle\int_a^x\!f(t)\,dt$, then</p><p>$$G'(x)=f(x)$$</p><p><em>Proof sketch.</em> $G(x+h)-G(x)=\displaystyle\int_x^{x+h}\!f(t)\,dt\approx f(x)\cdot h$ for small $h$ (the integrand barely changes over the tiny interval $[x,x+h]$). Divide by $h$ and let $h\to 0$: &nbsp;$G'(x)=f(x)$.&ensp;$\square$</p><p><strong>Chain-rule variant:</strong> If the upper limit is $g(x)$:<br>$\dfrac{d}{dx}\!\left[\int_a^{g(x)}\!f(t)\,dt\right]=f(g(x))\cdot g'(x)$</p></div>
 <details class="mistake-panel">
 <summary class="mistake-toggle">&blacktriangleright; Common Mistake</summary>
 <div class="mistake-body">
-<p>Students sometimes read $\int_a^b f(x)\,dx$ as "$f$ times $dx$" and try to cancel. The $dx$ is part of the limit notation, not a factor you can simplify away.</p>
-<p>Also: swapping the limits negates the integral. $\int_3^1 x^2\,dx = -\int_1^3 x^2\,dx$ &mdash; this comes from the Riemann sum reversing direction, not from a sign error.</p>
+<p>When applying FTC Part 1 with a non-trivial upper limit, students often forget the chain rule. $\dfrac{d}{dx}\!\left[\int_0^{x^2}\cos t\,dt\right]=\cos(x^2)\cdot 2x$, not $\cos(x^2)$. The $f(g(x))$ part is the FTC; the $\cdot g'(x)$ part is the chain rule &mdash; both are required.</p>
 </div>
 </details>
 </div>
-<div class="col"><div class="section-head">FTC Part 2 &amp; Its Proof</div>
-<div class="accent-box"><p><strong>Theorem (FTC Part 2 / Newton&ndash;Leibniz):</strong><br>If $F'(x)=f(x)$ on $[a,b]$, then</p><p>$$\int_a^b f(x)\,dx = F(b)-F(a)$$</p><p><strong>Proof.</strong> Let $a=x_0<x_1<\cdots<x_n=b$ with $\Delta x=(b-a)/n$.</p><p><em>Step 1 &mdash; Telescope.</em> Adding and subtracting intermediate values of $F$:</p><p>$F(b)-F(a)=\displaystyle\sum_{i=1}^{n}\bigl[F(x_i)-F(x_{i-1})\bigr]$</p><p><em>Step 2 &mdash; Apply MVT to each piece.</em> $F$ is continuous on $[x_{i-1},x_i]$ and differentiable on $(x_{i-1},x_i)$, so the Mean Value Theorem gives some $c_i\in(x_{i-1},x_i)$ with</p><p>$F(x_i)-F(x_{i-1})=F'(c_i)\,\Delta x=f(c_i)\,\Delta x$</p><p>Substituting into the telescope sum:</p><p>$F(b)-F(a)=\displaystyle\sum_{i=1}^{n}f(c_i)\,\Delta x$</p><p><em>Step 3 &mdash; Take the limit.</em> The right side is a Riemann sum for $f$. As $n\to\infty$:</p><p>$\displaystyle\sum_{i=1}^{n}f(c_i)\,\Delta x \;\longrightarrow\; \int_a^b f(x)\,dx$</p><p>The left side $F(b)-F(a)$ is constant, so</p><p>$\displaystyle F(b)-F(a)=\int_a^b f(x)\,dx \qquad\square$</p></div>
+<div class="col"><div class="section-head">Properties of Definite Integrals</div>
+<div class="accent-box"><p>These follow directly from the limit definition.</p><p><strong>Same limits:</strong> $\displaystyle\int_a^a f(x)\,dx=0$</p><p><strong>Reverse limits:</strong> $\displaystyle\int_a^b f(x)\,dx=-\int_b^a f(x)\,dx$</p><p><strong>Constant multiple:</strong> $\displaystyle\int_a^b cf(x)\,dx=c\int_a^b f(x)\,dx$</p><p><strong>Sum/difference:</strong> $\displaystyle\int_a^b[f(x)\pm g(x)]\,dx=\int_a^b f(x)\,dx\pm\int_a^b g(x)\,dx$</p><p><strong>Additivity:</strong> $\displaystyle\int_a^b f(x)\,dx=\int_a^c f(x)\,dx+\int_c^b f(x)\,dx$</p><p><strong>Comparison:</strong> If $f(x)\ge 0$ on $[a,b]$, then $\displaystyle\int_a^b f(x)\,dx\ge 0$.</p></div>
 <details class="mistake-panel">
 <summary class="mistake-toggle">&blacktriangleright; Common Mistake</summary>
 <div class="mistake-body">
-<p>Forgetting to evaluate at <em>both</em> limits: $\int_1^3 2x\,dx \ne F(3)$. FTC requires $F(b)-F(a)$.</p>
-<p>Also: the constant of integration cancels. Using $F(x)=x^2+7$ vs.&nbsp;$G(x)=x^2$ gives the same result for any definite integral, so there is no need to find $C$ when evaluating a definite integral.</p>
+<p>The additivity rule splits on an interior point $c$ &mdash; but $c$ does not have to be between $a$ and $b$. $\displaystyle\int_1^5 f\,dx = \int_1^8 f\,dx + \int_8^5 f\,dx$ is valid even though $8>5$. Students who assume $a<c<b$ miss cases where the split point lies outside the interval.</p>
 </div>
 </details>
-<p class="body-text">FTC Part 2 is the bridge from §§4.1&ndash;4.2 to the rest of Calculus: instead of summing thousands of rectangles, you find <em>one</em> antiderivative and subtract. The proof shows this is not a coincidence &mdash; it follows directly from the MVT applied to every subinterval.</p>
+<p class="body-text">FTC Part 1 connects these properties to differentiation: the accumulation function $G(x)=\int_a^x f(t)\,dt$ is an antiderivative of $f$ &mdash; that&rsquo;s why the integral and the derivative undo each other. §4.4 uses this to prove the evaluation formula $\int_a^b f\,dx=F(b)-F(a)$.</p>
 </div>
 </div>
 <div class="section-head">Worked Examples</div>
 <div class="examples-grid">
 <div class="ex-block">
-  <div class="ex-label">Example 1 &nbsp;&mdash;&nbsp; Limit definition (the long way)</div>
-  <div class="ex-body">Compute $\displaystyle\int_0^1 x^2\,dx$ using the limit of a right Riemann sum.</div>
-  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">$\Delta x=1/n,\; x_i=i/n$<br>$R_n=\displaystyle\sum_{i=1}^{n}\left(\frac{i}{n}\right)^2\!\cdot\frac{1}{n}=\frac{1}{n^3}\sum_{i=1}^{n}i^2=\frac{1}{n^3}\cdot\frac{n(n+1)(2n+1)}{6}=\frac{(n+1)(2n+1)}{6n^2}\to\dfrac{1}{3}$</div></div>
+  <div class="ex-label">Example 1 &nbsp;&mdash;&nbsp; FTC Part 1 — basic</div>
+  <div class="ex-body">Find $\dfrac{d}{dx}\!\left[\displaystyle\int_0^x (t^3+2t)\,dt\right]$.</div>
+  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">FTC Part 1: differentiate by plugging $x$ in for $t$.<br>$= x^3+2x$</div></div>
 </div>
 <div class="ex-block">
-  <div class="ex-label">Example 2 &nbsp;&mdash;&nbsp; FTC Part 2 (the fast way)</div>
-  <div class="ex-body">Compute $\displaystyle\int_0^1 x^2\,dx$ using FTC Part 2.</div>
-  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">$F(x)=\dfrac{x^3}{3}$<br>$F(1)-F(0)=\dfrac{1}{3}-0=\dfrac{1}{3}$ &nbsp;&#10003; (same answer, one line)</div></div>
+  <div class="ex-label">Example 2 &nbsp;&mdash;&nbsp; FTC Part 1 — chain rule</div>
+  <div class="ex-body">Find $\dfrac{d}{dx}\!\left[\displaystyle\int_1^{x^2}\sin t\,dt\right]$.</div>
+  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">Upper limit is $g(x)=x^2$, so apply the chain-rule variant:<br>$f(g(x))\cdot g'(x)=\sin(x^2)\cdot 2x$</div></div>
 </div>
 <div class="ex-block">
-  <div class="ex-label">Example 3 &nbsp;&mdash;&nbsp; FTC Part 2 application</div>
-  <div class="ex-body">Evaluate $\displaystyle\int_1^3(2x+1)\,dx$.</div>
-  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">$F(x)=x^2+x$<br>$F(3)-F(1)=(9+3)-(1+1)=12-2=10$</div></div>
+  <div class="ex-label">Example 3 &nbsp;&mdash;&nbsp; Using properties</div>
+  <div class="ex-body">Given $\displaystyle\int_1^5 f(x)\,dx=8$ and $\displaystyle\int_1^3 f(x)\,dx=3$, find $\displaystyle\int_3^5 f(x)\,dx$.</div>
+  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">Additivity: $\displaystyle\int_1^5 f\,dx=\int_1^3 f\,dx+\int_3^5 f\,dx$<br>$8=3+\displaystyle\int_3^5 f\,dx\;\Rightarrow\;\int_3^5 f\,dx=5$</div></div>
 </div>
 <div class="ex-block">
-  <div class="ex-label">Example 4 &nbsp;&mdash;&nbsp; Velocity &rarr; distance</div>
-  <div class="ex-body">A car&rsquo;s velocity is $v(t)=t^2$ mph for $t\in[0,3]$ hr. Use FTC to find the total distance traveled.</div>
-  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">Antiderivative of $t^2$: $\;F(t)=\dfrac{t^3}{3}$<br>Distance $= F(3)-F(0)=9-0=9$ miles</div></div>
+  <div class="ex-label">Example 4 &nbsp;&mdash;&nbsp; Reversed limits</div>
+  <div class="ex-body">If $\displaystyle\int_2^7 f(x)\,dx=10$, find $\displaystyle\int_7^2 f(x)\,dx$.</div>
+  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">Reversed limits negate the integral:<br>$\displaystyle\int_7^2 f(x)\,dx = -10$</div></div>
 </div>
 </div>
 <div class="section-head">Practice Problems</div>
 <div class="practice">
 <div class="pr-row">
   <div class="pr-num">1.</div>
-  <div class="pr-prob">Evaluate $\displaystyle\int_0^2 x\,dx$ using FTC Part 2.</div>
-  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$F(x)=x^2/2$; $\;F(2)-F(0)=2-0=2$</div></div>
+  <div class="pr-prob">Find $\dfrac{d}{dx}\!\left[\displaystyle\int_0^x e^t\,dt\right]$.</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$e^x$ &nbsp;(FTC Part 1 — plug $x$ in for $t$)</div></div>
 </div>
 <div class="pr-row">
   <div class="pr-num">2.</div>
-  <div class="pr-prob">Evaluate $\displaystyle\int_1^4 3x^2\,dx$ using FTC Part 2.</div>
-  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$F(x)=x^3$; $\;F(4)-F(1)=64-1=63$</div></div>
+  <div class="pr-prob">Find $\dfrac{d}{dx}\!\left[\displaystyle\int_0^{x^3}\cos t\,dt\right]$.</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$\cos(x^3)\cdot 3x^2$ &nbsp;(chain-rule variant)</div></div>
 </div>
 <div class="pr-row">
   <div class="pr-num">3.</div>
-  <div class="pr-prob">Evaluate $\displaystyle\int_0^3(x^2+1)\,dx$.</div>
-  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$F(x)=x^3/3+x$; $\;F(3)-F(0)=(9+3)-0=12$</div></div>
+  <div class="pr-prob">Given $\displaystyle\int_0^4 f\,dx=12$ and $\displaystyle\int_0^4 g\,dx=5$, find $\displaystyle\int_0^4 [2f(x)-g(x)]\,dx$.</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$2(12)-5=19$ &nbsp;(linearity)</div></div>
 </div>
 <div class="pr-row">
   <div class="pr-num">4.</div>
-  <div class="pr-prob">Verify $\displaystyle\int_0^2 x\,dx=2$ using the limit definition.</div>
-  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$\Delta x=2/n,\; x_i=2i/n$<br>$R_n=\dfrac{4}{n^2}\cdot\dfrac{n(n+1)}{2}=\dfrac{2(n+1)}{n}\to 2$ &nbsp;&#10003;</div></div>
+  <div class="pr-prob">Given $\displaystyle\int_2^9 f\,dx=15$ and $\displaystyle\int_6^9 f\,dx=4$, find $\displaystyle\int_2^6 f\,dx$.</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">Additivity: $15=\displaystyle\int_2^6 f\,dx+4$, so the answer is $11$.</div></div>
 </div>
 <div class="pr-row">
   <div class="pr-num">5.</div>
-  <div class="pr-prob">A particle has velocity $v(t)=2t-1$ on $[0,4]$. Find its net displacement.</div>
-  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$F(t)=t^2-t$; $\;F(4)-F(0)=12-0=12$ units</div></div>
+  <div class="pr-prob">True or false: $\displaystyle\int_a^b f(x)\,dx = -\displaystyle\int_b^a f(x)\,dx$.</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">True &mdash; reversing the limits of integration negates the integral.</div></div>
 </div>
 <div class="pr-row">
   <div class="pr-num">6.</div>
-  <div class="pr-prob">In one sentence, explain why $F(b)-F(a)=\displaystyle\int_a^b F'(x)\,dx$.</div>
-  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">The MVT guarantees $F(b)-F(a)=\sum f(c_i)\Delta x$ for every partition, and that Riemann sum converges to $\int_a^b F'\,dx$ as $n\to\infty$.</div></div>
+  <div class="pr-prob">Let $G(x)=\displaystyle\int_3^x (t^2+1)\,dt$. Find $G'(x)$ and $G(3)$.</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$G'(x)=x^2+1$ (FTC Part 1);&ensp; $G(3)=0$ (same upper and lower limit)</div></div>
 </div>
 </div>
 

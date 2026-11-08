@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Definite Integral &amp; FTC Part 2 &mdash; Notes</title>
+<title>FTC Part 2 &mdash; Notes</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.css">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -173,53 +173,52 @@ details[open]>.mistake-toggle{color:#1e3a5c}
 </head>
 <body>
 <div class="container">
-<h1 class="page-title">The Definite Integral &amp; FTC Part 2</h1>
-<p class="page-sub">Calculus I &nbsp;&middot;&nbsp; &sect;4.3 &nbsp;&middot;&nbsp; Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026 &nbsp;&middot;&nbsp; <strong>INSTRUCTOR</strong></p>
-<div class="opening-q">In &sect;4.2 you computed $R_n$ for $f(x)=x^2$ on $[0,1]$ and found $R_n = \dfrac{n(n+1)(2n+1)}{6n^3}$. As $n\to\infty$ this approaches $\tfrac{1}{3}$. But there&rsquo;s a one-line shortcut: the antiderivative $F(x)=\tfrac{x^3}{3}$ gives $F(1)-F(0)=\tfrac{1}{3}$ instantly. Why should an <em>antiderivative</em> tell you the exact area?</div>
+<h1 class="page-title">FTC Part 2</h1>
+<p class="page-sub">Calculus I &nbsp;&middot;&nbsp; &sect;4.4 &nbsp;&middot;&nbsp; Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026 &nbsp;&middot;&nbsp; <strong>STUDENT</strong></p>
+<div class="opening-q">FTC Part 1 says $\dfrac{d}{dx}\!\left[\int_a^x f(t)\,dt\right]=f(x)$: differentiating an integral recovers $f$. What about the reverse? If you already know an antiderivative $F$ of $f$, can you evaluate $\int_a^b f(x)\,dx$ without summing a single rectangle?</div>
 <div class="two-col">
-<div class="col"><div class="section-head">The Definite Integral</div>
-<div class="accent-box"><p>The <strong>definite integral</strong> of $f$ on $[a,b]$ is the limit of any Riemann sum as the number of rectangles grows without bound:</p><p>$$\int_a^b f(x)\,dx = \lim_{n\to\infty}\sum_{i=1}^{n}f(x_i)\,\Delta x$$</p><p>where $\Delta x=\dfrac{b-a}{n}$ and $x_i=a+i\,\Delta x$.</p><p>The symbol $\int$ is an elongated S for &ldquo;sum.&rdquo; $a,b$ are the <strong>limits of integration</strong>; $f(x)$ is the <strong>integrand</strong>; $dx$ marks the variable and corresponds to $\Delta x\to 0$.</p><p><strong>Closed-form sigma formulas</strong> (let you evaluate the limit):</p><p>$$\sum_{i=1}^{n}i=\frac{n(n+1)}{2} \qquad \sum_{i=1}^{n}i^2=\frac{n(n+1)(2n+1)}{6}$$</p></div>
-<details class="mistake-panel">
-<summary class="mistake-toggle">&blacktriangleright; Common Mistake</summary>
-<div class="mistake-body">
-<p>Students sometimes read $\int_a^b f(x)\,dx$ as "$f$ times $dx$" and try to cancel. The $dx$ is part of the limit notation, not a factor you can simplify away.</p>
-<p>Also: swapping the limits negates the integral. $\int_3^1 x^2\,dx = -\int_1^3 x^2\,dx$ &mdash; this comes from the Riemann sum reversing direction, not from a sign error.</p>
-</div>
-</details>
-</div>
 <div class="col"><div class="section-head">FTC Part 2 &amp; Its Proof</div>
-<div class="accent-box"><p><strong>Theorem (FTC Part 2 / Newton&ndash;Leibniz):</strong><br>If $F'(x)=f(x)$ on $[a,b]$, then</p><p>$$\int_a^b f(x)\,dx = F(b)-F(a)$$</p><p><strong>Proof.</strong> Let $a=x_0<x_1<\cdots<x_n=b$ with $\Delta x=(b-a)/n$.</p><p><em>Step 1 &mdash; Telescope.</em> Adding and subtracting intermediate values of $F$:</p><p>$F(b)-F(a)=\displaystyle\sum_{i=1}^{n}\bigl[F(x_i)-F(x_{i-1})\bigr]$</p><p><em>Step 2 &mdash; Apply MVT to each piece.</em> $F$ is continuous on $[x_{i-1},x_i]$ and differentiable on $(x_{i-1},x_i)$, so the Mean Value Theorem gives some $c_i\in(x_{i-1},x_i)$ with</p><p>$F(x_i)-F(x_{i-1})=F'(c_i)\,\Delta x=f(c_i)\,\Delta x$</p><p>Substituting into the telescope sum:</p><p>$F(b)-F(a)=\displaystyle\sum_{i=1}^{n}f(c_i)\,\Delta x$</p><p><em>Step 3 &mdash; Take the limit.</em> The right side is a Riemann sum for $f$. As $n\to\infty$:</p><p>$\displaystyle\sum_{i=1}^{n}f(c_i)\,\Delta x \;\longrightarrow\; \int_a^b f(x)\,dx$</p><p>The left side $F(b)-F(a)$ is constant, so</p><p>$\displaystyle F(b)-F(a)=\int_a^b f(x)\,dx \qquad\square$</p></div>
+<div class="accent-box"><p><strong>Theorem (FTC Part 2 / Newton&ndash;Leibniz):</strong><br>Let $f$ be Riemann integrable on $[a,b]$ and let $F$ be an antiderivative of $f$ continuous on $[a,b]$. Then</p><p>$$\int_a^b f(x)\,dx = F(b)-F(a)$$</p><p><strong>Proof.</strong> Recall the <strong>MVT</strong>: if $F$ is continuous on $[a,b]$ and differentiable on $(a,b)$, there exists $c\in(a,b)$ with $F'(c)(b-a)=F(b)-F(a)$.</p><p>Partition $[a,b]$ with any points $a=x_0<x_1<\cdots<x_n=b$.</p><p><strong>(1)</strong> Insert additive inverses to telescope:</p><p style="font-size:.93em">$F(b)\!-\!F(a)$$=[F(x_n)\!-\!F(x_{n-1})]+\cdots+[F(x_1)\!-\!F(x_0)]$$=\displaystyle\sum_{i=1}^{n}[F(x_i)-F(x_{i-1})]$</p><p><strong>(2)</strong> $F$ is continuous on $[x_{i-1},x_i]$ and differentiable on $(x_{i-1},x_i)$, so the MVT gives $c_i\in(x_{i-1},x_i)$ with</p><p>$F(x_i)-F(x_{i-1})=F'(c_i)\,\Delta x_i=f(c_i)\,\Delta x_i$</p><p>Substituting into (1):</p><p>$F(b)-F(a)=\displaystyle\sum_{i=1}^{n}f(c_i)\,\Delta x_i$</p><p><strong>Take the limit</strong> as $\|\Delta x_i\|\to 0$ (largest partition width $\to 0$, $n\to\infty$):</p><p>$\displaystyle\lim_{\|\Delta x_i\|\to 0}F(b)-F(a)=\lim_{\|\Delta x_i\|\to 0}\sum_{i=1}^{n}f(c_i)\,\Delta x_i$</p><p>$F(b)-F(a)$ is constant (independent of the partition), so the left side is unchanged. The right side is the definition of the Riemann integral. Therefore:</p><p>$\displaystyle F(b)-F(a)=\int_a^b f(x)\,dx\qquad\square$</p></div>
 <details class="mistake-panel">
 <summary class="mistake-toggle">&blacktriangleright; Common Mistake</summary>
 <div class="mistake-body">
-<p>Forgetting to evaluate at <em>both</em> limits: $\int_1^3 2x\,dx \ne F(3)$. FTC requires $F(b)-F(a)$.</p>
-<p>Also: the constant of integration cancels. Using $F(x)=x^2+7$ vs.&nbsp;$G(x)=x^2$ gives the same result for any definite integral, so there is no need to find $C$ when evaluating a definite integral.</p>
+<p>Evaluating at only the upper limit: $\int_1^3 2x\,dx\ne F(3)$. FTC Part 2 always requires $F(b)-F(a)$ &mdash; both endpoints.</p>
+<p>Constants of integration cancel: $F(x)=x^2+7$ and $G(x)=x^2$ give $F(3)-F(1)=G(3)-G(1)=8$, so there is no need to find $C$ when evaluating a definite integral.</p>
 </div>
 </details>
-<p class="body-text">FTC Part 2 is the bridge from §§4.1&ndash;4.2 to the rest of Calculus: instead of summing thousands of rectangles, you find <em>one</em> antiderivative and subtract. The proof shows this is not a coincidence &mdash; it follows directly from the MVT applied to every subinterval.</p>
+</div>
+<div class="col"><div class="section-head">Net Change &amp; Signed Area</div>
+<div class="accent-box"><p><strong>Net Change Theorem.</strong> If $F'(x)$ is the rate of change of a quantity $F$, then</p><p>$$\int_a^b F'(x)\,dx = F(b)-F(a)$$</p><p>The integral of a <em>rate</em> gives the <em>net change</em> in the quantity.</p><p><strong>Examples:</strong></p><ul style="margin:.4rem 0 .4rem 1.2rem;padding:0"><li>$v(t)=$ velocity $\Rightarrow$ $\displaystyle\int_a^b v(t)\,dt=$ net displacement</li><li>$P'(t)=$ population growth rate $\Rightarrow$ $\displaystyle\int_a^b P'\,dt=$ net population change</li><li>$C'(x)=$ marginal cost $\Rightarrow$ $\displaystyle\int_a^b C'\,dx=$ change in cost</li></ul><p><strong>Signed area.</strong> FTC Part 2 gives <em>signed</em> area: regions below the $x$-axis contribute negatively. Net displacement $\ne$ total distance when $v$ changes sign.</p></div>
+<details class="mistake-panel">
+<summary class="mistake-toggle">&blacktriangleright; Common Mistake</summary>
+<div class="mistake-body">
+<p>Confusing net displacement and total distance. If $v(t)$ is negative on part of $[a,b]$, $\int_a^b v\,dt$ gives net displacement (can be zero or negative), while total distance requires $\int_a^b |v(t)|\,dt$ &mdash; break the interval at the zeros of $v$ and add magnitudes.</p>
+</div>
+</details>
+<p class="body-text">FTC Part 2 is the bridge from §§4.1&ndash;4.3 to the rest of Calculus: instead of summing thousands of rectangles, you find <em>one</em> antiderivative and subtract. §4.5 builds the antiderivative toolkit.</p>
 </div>
 </div>
 <div class="section-head">Worked Examples</div>
 <div class="examples-grid">
 <div class="ex-block">
-  <div class="ex-label">Example 1 &nbsp;&mdash;&nbsp; Limit definition (the long way)</div>
-  <div class="ex-body">Compute $\displaystyle\int_0^1 x^2\,dx$ using the limit of a right Riemann sum.</div>
-  <div class="ex-answer instructor">$\Delta x=1/n,\; x_i=i/n$<br>$R_n=\displaystyle\sum_{i=1}^{n}\left(\frac{i}{n}\right)^2\!\cdot\frac{1}{n}=\frac{1}{n^3}\sum_{i=1}^{n}i^2=\frac{1}{n^3}\cdot\frac{n(n+1)(2n+1)}{6}=\frac{(n+1)(2n+1)}{6n^2}\to\dfrac{1}{3}$</div>
+  <div class="ex-label">Example 1 &nbsp;&mdash;&nbsp; FTC Part 2 — basic</div>
+  <div class="ex-body">Evaluate $\displaystyle\int_0^1 x^2\,dx$.</div>
+  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">Antiderivative: $F(x)=\dfrac{x^3}{3}$<br>$F(1)-F(0)=\dfrac{1}{3}-0=\dfrac{1}{3}$</div></div>
 </div>
 <div class="ex-block">
-  <div class="ex-label">Example 2 &nbsp;&mdash;&nbsp; FTC Part 2 (the fast way)</div>
-  <div class="ex-body">Compute $\displaystyle\int_0^1 x^2\,dx$ using FTC Part 2.</div>
-  <div class="ex-answer instructor">$F(x)=\dfrac{x^3}{3}$<br>$F(1)-F(0)=\dfrac{1}{3}-0=\dfrac{1}{3}$ &nbsp;&#10003; (same answer, one line)</div>
-</div>
-<div class="ex-block">
-  <div class="ex-label">Example 3 &nbsp;&mdash;&nbsp; FTC Part 2 application</div>
+  <div class="ex-label">Example 2 &nbsp;&mdash;&nbsp; FTC Part 2 — polynomial</div>
   <div class="ex-body">Evaluate $\displaystyle\int_1^3(2x+1)\,dx$.</div>
-  <div class="ex-answer instructor">$F(x)=x^2+x$<br>$F(3)-F(1)=(9+3)-(1+1)=12-2=10$</div>
+  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">Antiderivative: $F(x)=x^2+x$<br>$F(3)-F(1)=(9+3)-(1+1)=12-2=10$</div></div>
 </div>
 <div class="ex-block">
-  <div class="ex-label">Example 4 &nbsp;&mdash;&nbsp; Velocity &rarr; distance</div>
-  <div class="ex-body">A car&rsquo;s velocity is $v(t)=t^2$ mph for $t\in[0,3]$ hr. Use FTC to find the total distance traveled.</div>
-  <div class="ex-answer instructor">Antiderivative of $t^2$: $\;F(t)=\dfrac{t^3}{3}$<br>Distance $= F(3)-F(0)=9-0=9$ miles</div>
+  <div class="ex-label">Example 3 &nbsp;&mdash;&nbsp; Net displacement</div>
+  <div class="ex-body">A particle&rsquo;s velocity is $v(t)=t^2-4$ on $[0,3]$. Find the net displacement.</div>
+  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">Antiderivative: $F(t)=\dfrac{t^3}{3}-4t$<br>$F(3)-F(0)=(9-12)-0=-3$ units</div></div>
+</div>
+<div class="ex-block">
+  <div class="ex-label">Example 4 &nbsp;&mdash;&nbsp; Verify with the limit</div>
+  <div class="ex-body">Confirm $\displaystyle\int_0^1 x^2\,dx=\dfrac{1}{3}$ using $\lim_{n\to\infty}R_n$.</div>
+  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">$\Delta x=1/n,\; x_i=i/n$<br>$R_n=\dfrac{1}{n^3}\displaystyle\sum_{i=1}^{n}i^2=\dfrac{1}{n^3}\cdot\dfrac{n(n+1)(2n+1)}{6}=\dfrac{(n+1)(2n+1)}{6n^2}\to\dfrac{1}{3}$ &ensp;&#10003;</div></div>
 </div>
 </div>
 <div class="section-head">Practice Problems</div>
@@ -227,32 +226,32 @@ details[open]>.mistake-toggle{color:#1e3a5c}
 <div class="pr-row">
   <div class="pr-num">1.</div>
   <div class="pr-prob">Evaluate $\displaystyle\int_0^2 x\,dx$ using FTC Part 2.</div>
-  <div class="pr-ans instructor">$F(x)=x^2/2$; $\;F(2)-F(0)=2-0=2$</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$F(x)=x^2/2$; $\;F(2)-F(0)=2$</div></div>
 </div>
 <div class="pr-row">
   <div class="pr-num">2.</div>
-  <div class="pr-prob">Evaluate $\displaystyle\int_1^4 3x^2\,dx$ using FTC Part 2.</div>
-  <div class="pr-ans instructor">$F(x)=x^3$; $\;F(4)-F(1)=64-1=63$</div>
+  <div class="pr-prob">Evaluate $\displaystyle\int_1^4 3x^2\,dx$.</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$F(x)=x^3$; $\;F(4)-F(1)=64-1=63$</div></div>
 </div>
 <div class="pr-row">
   <div class="pr-num">3.</div>
   <div class="pr-prob">Evaluate $\displaystyle\int_0^3(x^2+1)\,dx$.</div>
-  <div class="pr-ans instructor">$F(x)=x^3/3+x$; $\;F(3)-F(0)=(9+3)-0=12$</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$F(x)=x^3/3+x$; $\;F(3)-F(0)=12$</div></div>
 </div>
 <div class="pr-row">
   <div class="pr-num">4.</div>
-  <div class="pr-prob">Verify $\displaystyle\int_0^2 x\,dx=2$ using the limit definition.</div>
-  <div class="pr-ans instructor">$\Delta x=2/n,\; x_i=2i/n$<br>$R_n=\dfrac{4}{n^2}\cdot\dfrac{n(n+1)}{2}=\dfrac{2(n+1)}{n}\to 2$ &nbsp;&#10003;</div>
+  <div class="pr-prob">A particle has velocity $v(t)=2t-1$ on $[0,4]$. Net displacement?</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$F(t)=t^2-t$; $\;F(4)-F(0)=12$ units</div></div>
 </div>
 <div class="pr-row">
   <div class="pr-num">5.</div>
-  <div class="pr-prob">A particle has velocity $v(t)=2t-1$ on $[0,4]$. Find its net displacement.</div>
-  <div class="pr-ans instructor">$F(t)=t^2-t$; $\;F(4)-F(0)=12-0=12$ units</div>
+  <div class="pr-prob">In one sentence: why does $F(b)-F(a)=\displaystyle\int_a^b F'(x)\,dx$?</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">MVT gives $F(b)-F(a)=\sum f(c_i)\Delta x$ for any partition, and that Riemann sum converges to $\int_a^b F'\,dx$ as $n\to\infty$.</div></div>
 </div>
 <div class="pr-row">
   <div class="pr-num">6.</div>
-  <div class="pr-prob">In one sentence, explain why $F(b)-F(a)=\displaystyle\int_a^b F'(x)\,dx$.</div>
-  <div class="pr-ans instructor">The MVT guarantees $F(b)-F(a)=\sum f(c_i)\Delta x$ for every partition, and that Riemann sum converges to $\int_a^b F'\,dx$ as $n\to\infty$.</div>
+  <div class="pr-prob">Evaluate $\displaystyle\int_2^2 \sin(x^3)\,dx$.</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$0$ &mdash; same upper and lower limit (integral property from §4.3).</div></div>
 </div>
 </div>
 
