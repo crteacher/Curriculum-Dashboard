@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Graphing Quadratics &mdash; Practice</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
 <style>
   *{box-sizing:border-box;margin:0;padding:0}
   body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.7}
@@ -33,7 +33,8 @@
   .card.correct{border-color:#3a7a3a}.card.wrong{border-color:#b03030}.card.peeked{border-color:#b8860b}
   .card-body{padding:14px 16px}
   .card-meta{font-family:sans-serif;font-size:12px;color:#888;margin-bottom:4px}
-  .card-expr{font-size:17px;margin-bottom:12px;line-height:2.2;overflow-x:auto}
+  .card-expr{font-size:17px;margin-bottom:12px;line-height:1.5;overflow-wrap:break-word;white-space:normal;overflow-x:auto}
+  .card-expr svg{max-width:100%;height:auto}
   .katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}
   .input-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
   .ans-input{font-family:'Courier New',monospace;font-size:14px;border:1px solid #ccc;
@@ -45,7 +46,8 @@
   .check-btn{font-family:sans-serif;font-size:13px;background:#1a1a1a;color:#fff;
     border:none;border-radius:6px;padding:7px 14px;cursor:pointer}
   .check-btn:hover{background:#333}.check-btn:disabled{background:#aaa;cursor:default}
-  .hint{font-family:sans-serif;font-size:12px;color:#888;margin-top:7px}
+  .hint{font-family:sans-serif;font-size:12px;color:#888;margin-top:5px;display:none}
+  .hint-link{font-family:sans-serif;font-size:12px;color:#aaa;cursor:pointer;text-decoration:underline;margin-top:7px;display:inline-block}.hint-link:hover{color:#666}
   .feedback{font-family:sans-serif;font-size:13px;margin-top:10px;padding:8px 12px;
     border-radius:6px;display:none;line-height:1.5}
   .feedback.correct{display:block;background:#eaf5ea;color:#1a5a1a}
@@ -56,10 +58,9 @@
   .reveal-link:hover{color:#555}
   .revealed-answer{display:none;margin-top:8px;font-family:sans-serif;font-size:13px;
     color:#444;background:#f5f3ef;border-radius:6px;padding:8px 11px;line-height:1.8;overflow-x:auto}
+  .interval-hint{font-family:sans-serif;font-size:11px;color:#1e3a5c;margin-top:4px;
+    padding:2px 7px;background:#eef3f9;border-radius:4px;display:inline-block}
   code{font-family:'Courier New',monospace;background:#f0ede7;padding:1px 5px;border-radius:3px;font-size:12px}
-
-
-.hint{display:none!important}
 </style>
 </head>
 <body>
@@ -164,7 +165,7 @@ function makeParabola(a, h, k, question) {
     const yi = a*(xi-h)*(xi-h) + k;
     pts.push(`${(cx+xi*sc).toFixed(1)},${(cy-yi*sc).toFixed(1)}`);
   }
-  g += `<polyline points="${pts.join(' ')}" fill="none" stroke="#1e3a5c" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>`;
+  g += `<polyline points="${pts.join(' ')}" fill="none" stroke="#185fa5" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>`;
   // vertex dot
   const vx = cx + h*sc, vy = cy - k*sc;
   g += `<circle cx="${vx}" cy="${vy}" r="4" fill="#c0392b" stroke="#fff" stroke-width="1.5"/>`;
@@ -219,9 +220,9 @@ function gen4() {
   const bStr  = b < 0 ? `- ${Math.abs(b)}` : `+ ${b}`;
   return {
     latex:  `f(x)=x^2${bStr}x+${c}.\\quad\\text{Find the axis of symmetry.}`,
-    answer: [String(axis)],
-    hint:   'What is the relationship between the axis of symmetry and the vertex?',
-    step:   `x=-\\frac{${b}}{2(1)}=${axis}`
+    answer: [`x=${axis}`, `x = ${axis}`],
+    hint:   'The axis of symmetry is a vertical line. Express your answer as an equation of the form x = ___.',
+    step:   `x=-\\frac{${b}}{2(1)}=${axis},\\text{ so axis: }x=${axis}`
   };
 }
 
@@ -296,20 +297,24 @@ const GENERATORS = [gen1, gen2, gen3, gen4, gen5, gen6, gen7, gen8];
 let ACTIVE, correct, flags, attempted, peeked;
 
 function norm(s) {
-  return s.trim().toLowerCase().replace(/\s+/g, '').replace(/[−–]/g, '-');
+  return s.trim().toLowerCase()
+    .replace(/\s+/g, '')
+    .replace(/[−–]/g, '-')
+    .replace(/∞/g, 'inf')
+    .replace(/∪/g, 'u')
+    .replace(/infinity/g, 'inf')
+    .replace(/union/g, 'u');
 }
 function ok(user, acc) { return acc.some(a => norm(user) === norm(a)); }
 
 function init() {
-  ACTIVE    = shuffle(GENERATORS.map(gen => gen()));
+  ACTIVE    = shuffle(GENERATORS).slice(0, Math.min(8, GENERATORS.length)).map(gen => gen());
   correct   = 0;
   flags     = Array(GENERATORS.length).fill(false);
   attempted = Array(GENERATORS.length).fill(false);
   peeked    = Array(GENERATORS.length).fill(false);
 }
 
-function _lth(s){let h='',r=s;while(r.length){const m=r.match(/^\\text\{([^}]*)\}/);if(m){h+=m[1];r=r.slice(m[0].length);}else{const n=r.indexOf('\\text{');if(n<0){h+=(r.trim()?'$'+r+'$':'');r='';}else{if(n>0)h+='$'+r.slice(0,n)+'$';r=r.slice(n);}}}return h;}
-function _re(p,i){const e=document.getElementById('expr-'+i),KO={delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false};if(p.svg){e.innerHTML=p.svg;}else if(p.html){e.innerHTML=p.html;renderMathInElement(e,KO);}else if(p.latex&&/\\text\{/.test(p.latex)){e.innerHTML=_lth(p.latex);renderMathInElement(e,KO);}else{katex.render(p.latex,e,{throwOnError:false,displayMode:true});}}
 function buildCards() {
   const wrap = document.getElementById('problems');
   wrap.innerHTML = '';
@@ -321,10 +326,11 @@ function buildCards() {
         <div class="card-meta">Problem ${i + 1}</div>
         <div class="card-expr" id="expr-${i}"></div>
         <div class="input-row">
-          <input class="ans-input" id="ai-${i}" placeholder="answer" />
+          <input class="ans-input" id="ai-${i}" placeholder="${p.interval ? '[a,b)' : 'answer'}" />
           <button class="check-btn" id="chk-${i}" onclick="check(${i})">Check</button>
         </div>
-        <div class="hint">${p.hint}</div>
+        <span class="hint-link" onclick="this.style.display='none';this.nextElementSibling.style.display='block'">Show hint</span><div class="hint">${p.hint}</div>
+        ${p.interval ? '<div class="interval-hint">Use <code>inf</code> and <code>u</code> for union &mdash; e.g. <code>[2,inf)</code> or <code>(-inf,0)u(0,inf)</code></div>' : ''}
         <div class="feedback" id="fb-${i}"></div>
         <span class="reveal-link" id="rl-${i}" onclick="reveal(${i})">Show solution</span>
         <div class="revealed-answer" id="ra-${i}"></div>
@@ -332,7 +338,14 @@ function buildCards() {
     wrap.appendChild(div);
     document.getElementById('ai-' + i)
       .addEventListener('keydown', e => { if (e.key === 'Enter') check(i); });
-    _re(p, i);
+    if (p.svg) {
+      document.getElementById('expr-' + i).innerHTML = p.svg;
+    } else if (p.text) {
+      document.getElementById('expr-' + i).innerHTML = p.text;
+    } else {
+      katex.render(p.latex, document.getElementById('expr-' + i),
+        { throwOnError: false, displayMode: true });
+    }
   });
 }
 
@@ -384,8 +397,8 @@ function updateScore() {
 function resetAll() { init(); buildCards(); updateScore(); }
 </script>
 
-<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/contrib/auto-render.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
 <script>
   renderMathInElement(document.body, {
     delimiters: [
