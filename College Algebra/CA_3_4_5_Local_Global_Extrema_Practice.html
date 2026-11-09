@@ -228,7 +228,19 @@ function gen7(){
   return {svg:qWrap(makeSVG(inner),'On [0,&nbsp;7], at what x-value does the <strong>global maximum</strong> occur?<br><em style="font-size:11px;color:#666">Enter as: x = 3</em>'),answer:['x = '+xpk3,'x='+xpk3,'x= '+xpk3],hint:'Compare the peak height to both endpoint heights. Which point is highest overall?',step:'Peak at $x='+xpk3+'$ (height '+ypk3+') exceeds both endpoints ('+yL+' and '+yR+'). Global max at $x='+xpk3+'$.'};
 }
 
-const GENERATORS = [gen1, gen2, gen3, gen4, gen5, gen6, gen7];
+// gen8: Is the local max ALSO the global max? (answer: no — endpoint is higher)
+function gen8(){
+  var yEnd=choose([4,5,5]),ypk=yEnd-choose([1,2]),yv=choose([1,2]),xpk2=choose([2,3]);
+  var p='M '+xp(0)+','+yp(yEnd)+' C '+xp(xpk2*0.5)+','+yp(yEnd-0.3)+' '+xp(xpk2*0.8)+','+yp(ypk)+' '+xp(xpk2)+','+yp(ypk)+' C '+xp(xpk2+0.5)+','+yp(ypk)+' '+xp(4)+','+yp(yv)+' '+xp(4.5)+','+yp(yv)+' C '+xp(5)+','+yp(yv)+' '+xp(6.5)+','+yp(yv+0.5)+' '+xp(7)+','+yp(yv+0.5);
+  var inner='<path d="'+p+'" fill="none" stroke="#1e3a5c" stroke-width="2.5" stroke-linejoin="round"/>'+
+    '<circle cx="'+Math.round(xp(0))+'" cy="'+Math.round(yp(yEnd))+'" r="5" fill="#b03000"/>'+
+    '<circle cx="'+Math.round(xp(xpk2))+'" cy="'+Math.round(yp(ypk))+'" r="4" fill="#1e3a5c"/>'+
+    '<text x="'+(Math.round(xp(xpk2))+8)+'" y="'+(Math.round(yp(ypk))-6)+'" font-family="sans-serif" font-size="9" fill="#1e3a5c">local max</text>'+
+    '<text x="'+(Math.round(xp(0))+8)+'" y="'+(Math.round(yp(yEnd))-6)+'" font-family="sans-serif" font-size="9" fill="#b03000">endpoint</text>';
+  return {svg:qWrap(makeSVG(inner),'On [0,&nbsp;7], is the navy <strong>local max</strong> also the <strong>global maximum</strong>?<br><em style="font-size:11px;color:#666">Enter: yes &nbsp;or&nbsp; no</em>'),answer:['no'],hint:'Is there any point on [0, 7] higher than the local max? Check the endpoints.',step:'The red endpoint at $x=0$ (height '+yEnd+') is higher than the local max (height '+ypk+'). So the local max is <strong>not</strong> the global maximum — the answer is no.'};
+}
+
+const GENERATORS = [gen1, gen2, gen3, gen4, gen5, gen6, gen7, gen8];
 
 
 // ── State ─────────────────────────────────────────────────────────────────────
