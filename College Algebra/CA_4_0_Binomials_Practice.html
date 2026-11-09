@@ -92,7 +92,7 @@
   <div class="section">
     <div class="section-title">Practice Problems</div>
     <p style="font-family:sans-serif;font-size:13px;color:#666;margin-bottom:1rem;">
-      All answers are integers — enter the coefficient or constant term asked for (e.g. <code>12</code> or <code>-6</code>).
+      Expand the product and type the full polynomial, e.g. <code>x^2 + 5x + 6</code>. Terms can be in any order.
       Press <strong>Check</strong> or hit Enter.
     </p>
     <div class="score-bar">
@@ -138,95 +138,107 @@ function addT(n, v) {
 
 // ── Problem generators (section-specific, injected below) ─────────────────────
 
-// gen1: (x+a)(x+b), both positive — find constant term a*b
+// Helper: canonical compact polynomial string a2*x^2 + a1*x + a0
+function polyStr(a2, a1, a0) {
+  let s = a2===1?'x^2':a2+'x^2';
+  if(a1>1)s+='+'+a1+'x'; else if(a1===1)s+='+x';
+  else if(a1===-1)s+='-x'; else if(a1<-1)s+='-'+(-a1)+'x';
+  if(a0>0)s+='+'+a0; else if(a0<0)s+='-'+(-a0);
+  return s;
+}
+
+// gen1: (x+a)(x+b), both positive → x²+(a+b)x+ab
 function gen1() {
-  const a = rInt(6) + 1, b = rInt(6) + 1;
+  const a=rInt(6)+1, b=rInt(6)+1;
+  const mid=a+b, con=a*b;
   return {
-    latex:  `(x+${a})(x+${b}).\\quad\\text{Find the constant term.}`,
-    answer: [String(a * b)],
-    hint:   'Which letter of FOIL produces the constant term?',
-    step:   `\\text{Last terms: }${a}\\cdot${b}=${a*b}`
+    html:   `$(x+${a})(x+${b})$ &mdash; expand completely.`,
+    answer: [polyStr(1,mid,con)],
+    hint:   'Apply FOIL: add the Outer and Inner products to get the x-term.',
+    step:   `x^2+${b}x+${a}x+${con}=`+polyStr(1,mid,con)
   };
 }
 
-// gen2: (x+a)(x+b), both positive — find x-coefficient a+b
+// gen2: (x+a)(x-b), mixed signs → x²+(a-b)x-ab
 function gen2() {
-  const a = rInt(5) + 1, b = rInt(5) + 1;
+  const a=rInt(5)+2, b=rInt(5)+2;
+  const mid=a-b, con=-(a*b);
   return {
-    latex:  `(x+${a})(x+${b}).\\quad\\text{Find the coefficient of }x.`,
-    answer: [String(a + b)],
-    hint:   'Which two letters of FOIL produce terms that still contain x?',
-    step:   `\\text{Outer + Inner: }${a}x+${b}x=${a+b}x`
+    html:   `$(x+${a})(x-${b})$ &mdash; expand completely.`,
+    answer: [polyStr(1,mid,con)],
+    hint:   'The Last product is negative. What sign does the combined x-term end up with?',
+    step:   `x^2-${b}x+${a}x-${a*b}=`+polyStr(1,mid,con)
   };
 }
 
-// gen3: (x+a)(x-b), mixed signs — find constant term (-a*b)
+// gen3: (x-a)(x-b), both negative → x²-(a+b)x+ab
 function gen3() {
-  const a = rInt(5) + 2, b = rInt(5) + 2;
-  const c = -a * b;
+  const a=rInt(5)+2, b=rInt(5)+2;
+  const mid=-(a+b), con=a*b;
   return {
-    latex:  `(x+${a})(x-${b}).\\quad\\text{Find the constant term.}`,
-    answer: [String(c)],
-    hint:   'What is the sign when a positive number multiplies a negative number?',
-    step:   `\\text{Last terms: }${a}\\cdot(-${b})=${c}`
+    html:   `$(x-${a})(x-${b})$ &mdash; expand completely.`,
+    answer: [polyStr(1,mid,con)],
+    hint:   'What sign does each FOIL product carry when both factors subtract?',
+    step:   `x^2-${b}x-${a}x+${con}=`+polyStr(1,mid,con)
   };
 }
 
-// gen4: (x-a)(x+a) difference of squares — find constant term (-a²)
+// gen4: (x-a)(x+a) difference of squares → x²-a²
 function gen4() {
-  const a = rInt(6) + 2;
+  const a=rInt(6)+2;
   return {
-    latex:  `(x-${a})(x+${a}).\\quad\\text{Find the constant term.}`,
-    answer: [String(-(a * a))],
-    hint:   'Do these two binomials fit the difference-of-squares pattern?',
-    step:   `x^2-${a}^2=x^2-${a*a};\\quad\\text{constant: }-${a*a}`
+    html:   `$(x-${a})(x+${a})$ &mdash; expand completely.`,
+    answer: [polyStr(1,0,-(a*a))],
+    hint:   'What do the Outer and Inner products of this pair always equal? Name the pattern.',
+    step:   `x^2+${a}x-${a}x-${a*a}=`+polyStr(1,0,-(a*a))
   };
 }
 
-// gen5: (x+a)² perfect square — find the middle coefficient 2a
+// gen5: (x+a)² perfect square → x²+2ax+a²
 function gen5() {
-  const a = rInt(6) + 2;
+  const a=rInt(6)+2;
   return {
-    latex:  `(x+${a})^2.\\quad\\text{Find the coefficient of }x.`,
-    answer: [String(2 * a)],
-    hint:   'Does this fit the perfect-square trinomial pattern?',
-    step:   `(x+${a})^2=x^2+${2*a}x+${a*a};\\quad\\text{coefficient: }${2*a}`
+    html:   `$(x+${a})^2$ &mdash; expand completely.`,
+    answer: [polyStr(1,2*a,a*a)],
+    hint:   'Write it as the binomial times itself, then FOIL. What pattern does this expansion match?',
+    step:   `x^2+${a}x+${a}x+${a*a}=`+polyStr(1,2*a,a*a)
   };
 }
 
-// gen6: (x-a)² perfect square — find the constant term a²
+// gen6: (x-a)² perfect square → x²-2ax+a²
 function gen6() {
-  const a = rInt(6) + 2;
+  const a=rInt(6)+2;
   return {
-    latex:  `(x-${a})^2.\\quad\\text{Find the constant term.}`,
-    answer: [String(a * a)],
-    hint:   'Does squaring a binomial fit a named pattern?',
-    step:   `(x-${a})^2=x^2-${2*a}x+${a*a};\\quad\\text{constant: }${a*a}`
+    html:   `$(x-${a})^2$ &mdash; expand completely.`,
+    answer: [polyStr(1,-2*a,a*a)],
+    hint:   'Write it as the binomial times itself, then FOIL. What is the sign of the middle term?',
+    step:   `x^2-${a}x-${a}x+${a*a}=`+polyStr(1,-2*a,a*a)
   };
 }
 
-// gen7: (ax+b)(cx+d), leading coeffs > 1 — find the x² coefficient
+// gen7: (ax+b)(cx+d), leading coeffs > 1 → acx²+(ad+bc)x+bd
 function gen7() {
-  const a = rInt(3) + 2, c = rInt(3) + 2;
-  const b = rInt(4) + 1, d = rInt(4) + 1;
+  const a=rInt(3)+2, c=rInt(3)+2;
+  const b=rInt(4)+1, d=rInt(4)+1;
+  const a2=a*c, a1=a*d+b*c, a0=b*d;
   return {
-    latex:  `(${a}x+${b})(${c}x+${d}).\\quad\\text{Find the coefficient of }x^2.`,
-    answer: [String(a * c)],
-    hint:   'Which FOIL product contains x\xb2?',
-    step:   `\\text{First: }${a}x\\cdot${c}x=${a*c}x^2`
+    html:   `$(${a}x+${b})(${c}x+${d})$ &mdash; expand completely.`,
+    answer: [polyStr(a2,a1,a0)],
+    hint:   'FOIL gives four products — which two contain x and can be combined?',
+    step:   `${a2}x^2+${a*d}x+${b*c}x+${a0}=`+polyStr(a2,a1,a0)
   };
 }
 
-// gen8: (ax+b)(cx-d) — find the constant term (-b*d)
+// gen8: (ax+b)(cx-d) → acx²+(bc-ad)x-bd
 function gen8() {
-  const b = rInt(5) + 1, d = rInt(5) + 1;
-  const a = rInt(3) + 1, c = rInt(3) + 1;
-  const constant = -b * d;
+  const a=rInt(3)+1, c=rInt(3)+1;
+  const b=rInt(4)+1, d=rInt(4)+1;
+  const a2=a*c, a1=b*c-a*d, a0=-(b*d);
   return {
-    latex:  `(${a}x+${b})(${c}x-${d}).\\quad\\text{Find the constant term.}`,
-    answer: [String(constant)],
-    hint:   'Which letter of FOIL produces the constant term?',
-    step:   `\\text{Last: }${b}\\cdot(-${d})=${constant}`
+    html:   `$(${a}x+${b})(${c}x-${d})$ &mdash; expand completely.`,
+    answer: [polyStr(a2,a1,a0)],
+    hint:   'The Last product is negative. After FOIL, what is the net coefficient of x?',
+    step:   `${a2===1?'':a2}x^2-${a*d}x+${b*c}x-${b*d}=`+polyStr(a2,a1,a0)
   };
 }
 
@@ -236,10 +248,39 @@ const GENERATORS = [gen1, gen2, gen3, gen4, gen5, gen6, gen7, gen8];
 // ── State ─────────────────────────────────────────────────────────────────────
 let ACTIVE, correct, flags, attempted, peeked;
 
+// Parse a polynomial string into {a2,a1,a0} — allows terms in any order
+function parsePoly(s) {
+  s = s.replace(/\s+/g,'').replace(/[−–]/g,'-').replace(/x²/g,'x^2');
+  if(!s) return null;
+  const parts = s.match(/([+-]?[^+-]+)/g) || [];
+  let a2=0, a1=0, a0=0, found=false;
+  for(const t of parts) {
+    if(!t) continue;
+    if(t.includes('x^2')) {
+      const c=t.replace('x^2','');
+      a2 = !c||c==='+'?1 : c==='-'?-1 : Number(c);
+      if(!isNaN(a2)) found=true;
+    } else if(t.includes('x')) {
+      const c=t.replace('x','');
+      a1 = !c||c==='+'?1 : c==='-'?-1 : Number(c);
+      if(!isNaN(a1)) found=true;
+    } else {
+      const v=Number(t);
+      if(!isNaN(v)) { a0=v; found=true; }
+    }
+  }
+  return found ? {a2,a1,a0} : null;
+}
 function norm(s) {
   return s.trim().toLowerCase().replace(/\s+/g, '').replace(/[−–]/g, '-');
 }
-function ok(user, acc) { return acc.some(a => norm(user) === norm(a)); }
+function ok(user, acc) {
+  const u=norm(user);
+  if(acc.some(a => norm(a) === u)) return true;
+  const up=parsePoly(user);
+  if(!up) return false;
+  return acc.some(a => { const ap=parsePoly(a); return ap && up.a2===ap.a2 && up.a1===ap.a1 && up.a0===ap.a0; });
+}
 
 function init() {
   ACTIVE    = shuffle(GENERATORS.map(gen => gen()));
