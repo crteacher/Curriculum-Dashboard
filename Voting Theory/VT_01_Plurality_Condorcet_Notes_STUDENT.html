@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Voting Schedules, Plurality &amp; Condorcet &mdash; Notes</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75;font-size:15px}
+.container{max-width:900px;margin:0 auto;padding:2rem 1.5rem 4rem}
+
+/* ── Header ── */
+.page-title{font-size:28px;font-weight:700;margin-bottom:4px}
+.page-sub{font-family:sans-serif;font-size:13px;color:#666;margin-bottom:1.6rem}
+
+/* ── Opening question ── */
+.opening-q{background:#eef3f9;border-left:4px solid #1e3a5c;
+  border-radius:0 8px 8px 0;padding:1rem 1.2rem;font-size:15px;
+  margin-bottom:1.5rem;font-style:italic;line-height:1.75}
+.hook-question{margin:0}
+.hook-graph{text-align:center;margin:.7rem 0 .3rem;font-style:normal}
+.hook-graph svg{max-width:100%;height:auto}
+.hook-reveal{margin-top:.5rem;font-style:normal}
+.hook-reveal-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;
+  color:#1e3a5c;text-transform:uppercase;letter-spacing:.07em;list-style:none;user-select:none;display:block}
+.hook-reveal-toggle::-webkit-details-marker{display:none}
+.hook-reveal-body{margin-top:.5rem;font-size:14px;line-height:1.75;padding-top:.5rem;
+  border-top:1px solid #c8d8ec}
+
+/* ── Section heading ── */
+.section-head{font-family:sans-serif;font-size:11px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.08em;color:#1e3a5c;
+  margin-top:1.4rem;margin-bottom:.6rem;
+  border-bottom:1px solid #c8d8ec;padding-bottom:4px}
+
+/* ── Protect math from text-transform on headings/labels ── */
+.katex,.katex *{text-transform:none;letter-spacing:normal}
+
+/* ── Accent box ── */
+.accent-box{background:#d9e8f5;border-left:4px solid #1e3a5c;
+  border-radius:0 8px 8px 0;padding:.9rem 1.1rem;font-size:14px;
+  margin-bottom:.85rem;line-height:1.95}
+.accent-box ul{margin-left:1.3rem;margin-top:.3rem}
+.accent-box li{margin-bottom:.15rem}
+.accent-box p{margin-bottom:.4rem}
+
+/* ── Body text ── */
+.body-text{font-size:14px;line-height:1.75;margin-bottom:.85rem}
+
+/* ── Spacer ── */
+.spacer{height:1rem}
+
+/* ── Two-column layout ── */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:.5rem}
+.col{min-width:0}
+
+/* ── Worked examples 2-col grid ── */
+.examples-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem}
+.ex-block{border:1.5px solid #ddd;border-radius:9px;padding:1rem 1.1rem;background:#fff}
+.ex-label{font-family:sans-serif;font-size:11px;font-weight:700;color:#1e3a5c;
+  text-transform:uppercase;letter-spacing:.05em;margin-bottom:.45rem}
+.ex-body{font-size:14px;line-height:1.75;margin-bottom:.5rem}
+.ex-answer.instructor{background:#fef9e7;border-left:3px solid #7a5c1e;
+  border-radius:0 6px 6px 0;padding:.6rem .9rem;font-size:13.5px;
+  color:#5a3e00;line-height:1.85}
+.ex-answer.student{height:4.5rem;border-bottom:1.5px solid #bbb;margin-top:.4rem}
+
+/* ── Practice section ── */
+.practice{margin-bottom:1.5rem}
+.pr-row{display:grid;grid-template-columns:1.6rem 1fr 210px;gap:.75rem;
+  align-items:start;padding:.6rem 0;border-bottom:1px solid #ece8e0}
+.pr-num{font-family:sans-serif;font-weight:700;font-size:14px;color:#1e3a5c;padding-top:2px}
+.pr-prob{font-size:14px;line-height:1.75}
+.pr-ans.instructor{font-size:13px;color:#5a3e00;background:#fef9e7;
+  border-radius:5px;padding:4px 9px;line-height:1.75}
+.pr-ans.student{border-bottom:1.5px solid #bbb;min-height:2.2rem}
+
+/* ── Student interactive ── */
+.st-work{width:100%;min-height:3rem;border:1px solid #ccc;border-radius:5px;
+  padding:.35rem .5rem;font-family:Georgia,serif;font-size:13px;resize:vertical;
+  background:#fafafa;display:block;margin-bottom:.3rem}
+.st-work-sm{width:100%;min-height:1.5rem;border:1px solid #ccc;border-radius:4px;
+  padding:.2rem .4rem;font-family:Georgia,serif;font-size:12px;resize:vertical;
+  background:#fafafa;display:block;margin-bottom:.2rem}
+.st-btn{font-family:sans-serif;font-size:10px;font-weight:700;color:#1e3a5c;
+  background:none;border:1.5px solid #1e3a5c;border-radius:4px;
+  padding:2px 9px;cursor:pointer;margin-bottom:.2rem;display:inline-block}
+.st-btn-sm{font-family:sans-serif;font-size:9px;font-weight:700;color:#1e3a5c;
+  background:none;border:1px solid #1e3a5c;border-radius:3px;
+  padding:1px 6px;cursor:pointer;margin-bottom:.15rem;display:inline-block}
+.st-btn:hover,.st-btn-sm:hover{background:#eef3f9}
+.st-ans-hidden{display:none;background:#fef9e7;border-left:3px solid #7a5c1e;
+  border-radius:0 5px 5px 0;padding:.4rem .7rem;font-size:13px;
+  color:#5a3e00;line-height:1.85}
+.st-ans-hidden.visible{display:block}
+
+/* ── SVG figures ── */
+.svg-figure{text-align:center;margin:.4rem 0 .6rem}
+.svg-figure svg{max-width:100%;height:auto}
+.svg-caption{font-family:sans-serif;font-size:11px;color:#555;
+  margin-top:.2rem;font-style:italic}
+
+/* ── KaTeX overflow ── */
+.katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}
+
+/* ── Print styles ── */
+@media print{
+  body{background:white;font-size:10pt;line-height:1.5}
+  .container{padding:0;max-width:none}
+  .page-sub{margin-bottom:.8rem}
+  .opening-q{padding:.5rem .8rem;margin-bottom:.8rem;font-size:10pt;line-height:1.5;break-inside:avoid}
+  .section-head{margin-top:.7rem;margin-bottom:.35rem}
+  .spacer{height:.3rem}
+  .accent-box{padding:.5rem .75rem;margin-bottom:.5rem;font-size:10pt;line-height:1.55;
+    background:#e8f0f8 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .accent-box p{margin-bottom:.2rem}
+  .body-text{font-size:10pt;line-height:1.5;margin-bottom:.5rem}
+  .two-col{gap:1rem;margin-bottom:.3rem;break-inside:avoid}
+  .examples-grid{gap:.6rem;margin-bottom:.8rem;break-inside:avoid}
+  .ex-block{padding:.55rem .75rem;border:1px solid #ccc;break-inside:avoid}
+  .ex-label{margin-bottom:.25rem}
+  .ex-body{font-size:10pt;line-height:1.5;margin-bottom:.3rem}
+  .ex-answer.instructor{padding:.35rem .7rem;font-size:9.5pt;line-height:1.55;
+    background:#fef9e7 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .ex-answer.student{height:2.8rem}
+  .practice{margin-bottom:.8rem}
+  .pr-row{padding:.3rem 0;break-inside:avoid}
+  .pr-prob{font-size:10pt;line-height:1.5}
+  .pr-ans.instructor{font-size:9.5pt;padding:2px 7px;line-height:1.55;
+    background:#fef9e7 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .pr-ans.student{min-height:1.6rem}
+  .st-work{background:none;border:none;border-bottom:1.5px solid #bbb;
+    border-radius:0;min-height:2.6rem;resize:none}
+  .st-work-sm{background:none;border:none;border-bottom:1.5px solid #bbb;
+    border-radius:0;min-height:1.3rem;resize:none}
+  .st-btn,.st-btn-sm{display:none}
+  .st-ans-hidden{display:none !important}
+  .opening-q{
+    background:#eef3f9 !important;
+    -webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .hook-graph{margin:.4rem 0 .2rem}
+  details.hook-reveal:not([open]){display:none}
+  .svg-figure{margin:.25rem 0 .4rem}
+  .svg-figure svg{max-width:100%;height:auto}
+  .svg-caption{font-size:9pt}
+}
+@page{margin:.55in .65in;size:letter}
+
+.proof-panel{margin:.4rem 0 1.1rem;border-left:3px solid #7a9a6a;border-radius:0 6px 6px 0;background:#f5f7f3}
+.proof-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#5a7a4a;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.proof-toggle::-webkit-details-marker{display:none}
+details[open]>.proof-toggle{color:#1e3a5c}
+.proof-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #c8d8b8}
+.proof-body p{margin-bottom:.45rem}
+.proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
+@media print{.proof-panel{break-inside:avoid}}
+.mistake-panel{margin:.4rem 0 1.1rem;border-left:3px solid #b8860b;border-radius:0 6px 6px 0;background:#fdf8e8}
+.mistake-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#9a6a00;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.mistake-toggle::-webkit-details-marker{display:none}
+details[open]>.mistake-toggle{color:#1e3a5c}
+.mistake-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #e8d8a8}
+.mistake-body p{margin-bottom:.45rem}
+.panel-row{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.1rem}
+.panel-row>.proof-panel,.panel-row>.mistake-panel{margin:0;min-width:0}
+.panel-row:has(.proof-panel):has(.mistake-panel){grid-template-columns:1fr}
+@media print{
+  .panel-row{break-inside:avoid}
+  .mistake-panel{break-inside:avoid}
+  details.mistake-panel:not([open]){display:none}
+}
+</style>
+</head>
+<body>
+<div class="container">
+<h1 class="page-title">Voting Schedules, Plurality &amp; Condorcet</h1>
+<p class="page-sub">Voting Theory &nbsp;&middot;&nbsp; Part 1 &nbsp;&middot;&nbsp; Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026 &nbsp;&middot;&nbsp; <strong>STUDENT</strong></p>
+<style>
+table.vt{border-collapse:collapse;margin:.45rem 0 .65rem;font-family:sans-serif;font-size:13px}
+table.vt th,table.vt td{border:1px solid #b9c7da;padding:3px 11px;text-align:center}
+table.vt th{background:#e4edf7;color:#1e3a5c;font-weight:700}
+table.vt td.rl{background:#f3f6fa;font-weight:700;color:#1e3a5c;text-align:left}
+.vt-lbl{font-family:sans-serif;font-size:12px;color:#555;margin-top:.3rem}
+.vt-crit{border-collapse:collapse;font-family:sans-serif;font-size:13px;margin:.5rem 0}
+.vt-crit th,.vt-crit td{border:1px solid #b9c7da;padding:4px 10px;text-align:center}
+.vt-crit th{background:#e4edf7;color:#1e3a5c}
+.vt-crit td.bad{background:#fdecea;color:#7a1a1a;font-weight:700}
+.vt-crit td.ok{color:#2e5339}
+.teacher{background:#fef9e7;border-left:4px solid #7a5c1e;border-radius:0 8px 8px 0;
+  padding:.7rem 1rem;font-family:sans-serif;font-size:13px;margin:.6rem 0;color:#5a3e00}
+@media print{.teacher{break-inside:avoid}}
+</style>
+<div class="opening-q">Rank cheese, sausage, and pepperoni for a class pizza order. If the topping with the most first-place votes wins, is that always the topping the class would actually choose?</div>
+<div class="two-col">
+<div class="col"><div class="section-head">Preference Ballots &amp; Plurality</div>
+<div class="accent-box"><p><strong>Preference ballot:</strong> a ballot on which the voter <em>ranks</em> the choices in order of preference. A <strong>preference schedule</strong> groups identical ballots and lists how many voters cast each.</p><p><strong>Plurality Method:</strong> the choice with the most <em>first-preference</em> votes wins. Ties are possible and must be settled by some sort of run-off.</p><p><strong>Most is not the same as majority.</strong> A majority is <em>more than half</em> of all votes.</p></div>
+</div>
+<div class="col"><div class="section-head">The Condorcet Criterion</div>
+<div class="accent-box"><p><strong>Fairness criteria</strong> are statements that seem like they <em>should</em> be true in a fair election.</p><p><strong>Condorcet Criterion:</strong> if one choice is preferred in every one-to-one comparison with the other choices, that choice (the <strong>Condorcet winner</strong>) should win the election.</p><p><em>Does a Condorcet winner always exist?</em> Not always &mdash; see Example 2.</p></div>
+</div>
+</div>
+<div class="section-head">Worked Examples</div>
+<div class="examples-grid">
+<div class="ex-block">
+  <div class="ex-label">Example 1 &nbsp;&mdash;&nbsp; Plurality vs. Condorcet</div>
+  <div class="ex-body"><table class="vt"><tr><th>Votes</th><th>4</th><th>5</th><th>8</th><th>7</th></tr><tr><td class="rl">1st choice</td><td>P</td><td>P</td><td>C</td><td>S</td></tr><tr><td class="rl">2nd choice</td><td>S</td><td>C</td><td>S</td><td>C</td></tr><tr><td class="rl">3rd choice</td><td>C</td><td>S</td><td>P</td><td>P</td></tr></table>Find the plurality winner and the Condorcet winner. Is the result fair?</div>
+  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">First-place votes: C: 8, P: 9, S: 7 &rarr; plurality winner <strong>P</strong> (only 9 of 24, not a majority).<br>C vs P: 15&ndash;9 (C wins)<br>C vs S: 13&ndash;11 (C wins)<br>P vs S: 9&ndash;15 (S wins)<br>Condorcet winner: <strong>C</strong> beats everyone head to head, yet plurality picked someone else.</div></div>
+</div>
+<div class="ex-block">
+  <div class="ex-label">Example 2 &nbsp;&mdash;&nbsp; No Condorcet winner</div>
+  <div class="ex-body"><table class="vt"><tr><th>Votes</th><th>1</th><th>1</th><th>1</th></tr><tr><td class="rl">1st choice</td><td>A</td><td>B</td><td>C</td></tr><tr><td class="rl">2nd choice</td><td>B</td><td>C</td><td>A</td></tr><tr><td class="rl">3rd choice</td><td>C</td><td>A</td><td>B</td></tr></table>Find the plurality winner and the Condorcet winner.</div>
+  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">First-place votes: A: 1, B: 1, C: 1 &rarr; three-way tie.<br>A vs B: 2&ndash;1 (A wins)<br>A vs C: 1&ndash;2 (C wins)<br>B vs C: 2&ndash;1 (B wins)<br>Every choice loses to someone: a cycle, so <strong>no Condorcet winner exists</strong>.</div></div>
+</div>
+<div class="ex-block">
+  <div class="ex-label">Example 3 &nbsp;&mdash;&nbsp; Plurality vs. Condorcet</div>
+  <div class="ex-body"><table class="vt"><tr><th>Votes</th><th>8</th><th>7</th><th>6</th><th>4</th></tr><tr><td class="rl">1st choice</td><td>A</td><td>B</td><td>C</td><td>B</td></tr><tr><td class="rl">2nd choice</td><td>C</td><td>C</td><td>A</td><td>A</td></tr><tr><td class="rl">3rd choice</td><td>B</td><td>A</td><td>B</td><td>C</td></tr></table>Find the plurality winner and the Condorcet winner.</div>
+  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">First-place votes: A: 8, B: 11, C: 6 &rarr; plurality winner <strong>B</strong>.<br>A vs B: 14&ndash;11 (A wins)<br>A vs C: 12&ndash;13 (C wins)<br>B vs C: 11&ndash;14 (C wins)<br>Condorcet winner: <strong>C</strong>.</div></div>
+</div>
+<div class="ex-block">
+  <div class="ex-label">Example 4 &nbsp;&mdash;&nbsp; Majority threshold</div>
+  <div class="ex-body"><table class="vt"><tr><th>Votes</th><th>5</th><th>4</th><th>3</th></tr><tr><td class="rl">1st choice</td><td>A</td><td>B</td><td>C</td></tr><tr><td class="rl">2nd choice</td><td>B</td><td>C</td><td>B</td></tr><tr><td class="rl">3rd choice</td><td>C</td><td>A</td><td>A</td></tr></table>How many votes are needed for a majority? Does anyone have one?</div>
+  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">12 voters, so a majority needs more than 6, i.e. <strong>7</strong> votes.<br>First-place votes: A: 5, B: 4, C: 3 &rarr; nobody has a majority, though A wins by plurality.</div></div>
+</div>
+</div>
+<div class="section-head">Practice Problems</div>
+<div class="practice">
+<div class="pr-row">
+  <div class="pr-num">1.</div>
+  <div class="pr-prob"><table class="vt"><tr><th>Votes</th><th>6</th><th>7</th><th>6</th><th>4</th></tr><tr><td class="rl">1st choice</td><td>A</td><td>B</td><td>C</td><td>A</td></tr><tr><td class="rl">2nd choice</td><td>B</td><td>C</td><td>B</td><td>C</td></tr><tr><td class="rl">3rd choice</td><td>C</td><td>A</td><td>A</td><td>B</td></tr></table>Plurality winner? Condorcet winner (or none)?</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">Plurality: <strong>A</strong> (A: 10, B: 7, C: 6).<br>Condorcet: <strong>B</strong>.</div></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">2.</div>
+  <div class="pr-prob"><table class="vt"><tr><th>Votes</th><th>5</th><th>5</th><th>5</th><th>1</th></tr><tr><td class="rl">1st choice</td><td>A</td><td>B</td><td>C</td><td>A</td></tr><tr><td class="rl">2nd choice</td><td>B</td><td>C</td><td>A</td><td>B</td></tr><tr><td class="rl">3rd choice</td><td>C</td><td>A</td><td>B</td><td>C</td></tr></table>Plurality winner? Condorcet winner (or none)?</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">Plurality: <strong>A</strong> (A: 6, B: 5, C: 5).<br>Condorcet: <strong>none</strong>.</div></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">3.</div>
+  <div class="pr-prob"><table class="vt"><tr><th>Votes</th><th>9</th><th>7</th><th>5</th></tr><tr><td class="rl">1st choice</td><td>A</td><td>B</td><td>C</td></tr><tr><td class="rl">2nd choice</td><td>B</td><td>C</td><td>B</td></tr><tr><td class="rl">3rd choice</td><td>C</td><td>A</td><td>A</td></tr></table>Plurality winner? Condorcet winner (or none)?</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">Plurality: <strong>A</strong> (A: 9, B: 7, C: 5).<br>Condorcet: <strong>B</strong>.</div></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">4.</div>
+  <div class="pr-prob"><table class="vt"><tr><th>Votes</th><th>10</th><th>6</th><th>5</th><th>4</th></tr><tr><td class="rl">1st choice</td><td>A</td><td>B</td><td>C</td><td>B</td></tr><tr><td class="rl">2nd choice</td><td>B</td><td>C</td><td>B</td><td>A</td></tr><tr><td class="rl">3rd choice</td><td>C</td><td>A</td><td>A</td><td>C</td></tr></table>Plurality winner? Condorcet winner (or none)?</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">Plurality: <strong>A and B</strong> (A: 10, B: 10, C: 5).<br>Condorcet: <strong>B</strong>.</div></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">5.</div>
+  <div class="pr-prob"><table class="vt"><tr><th>Votes</th><th>8</th><th>7</th><th>6</th><th>5</th></tr><tr><td class="rl">1st choice</td><td>A</td><td>B</td><td>C</td><td>D</td></tr><tr><td class="rl">2nd choice</td><td>B</td><td>C</td><td>D</td><td>C</td></tr><tr><td class="rl">3rd choice</td><td>C</td><td>D</td><td>B</td><td>B</td></tr><tr><td class="rl">4th choice</td><td>D</td><td>A</td><td>A</td><td>A</td></tr></table>Plurality winner? Condorcet winner (or none)?</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">Plurality: <strong>A</strong> (A: 8, B: 7, C: 6, D: 5).<br>Condorcet: <strong>B</strong>.</div></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">6.</div>
+  <div class="pr-prob"><table class="vt"><tr><th>Votes</th><th>12</th><th>9</th><th>8</th><th>4</th></tr><tr><td class="rl">1st choice</td><td>A</td><td>B</td><td>C</td><td>C</td></tr><tr><td class="rl">2nd choice</td><td>B</td><td>C</td><td>B</td><td>A</td></tr><tr><td class="rl">3rd choice</td><td>C</td><td>A</td><td>A</td><td>B</td></tr></table>Plurality winner? Condorcet winner (or none)?</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">Plurality: <strong>A and C</strong> (A: 12, B: 9, C: 12).<br>Condorcet: <strong>B</strong>.</div></div>
+</div>
+</div>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/contrib/auto-render.min.js"></script>
+<script>
+function toggleAns(btn) {
+  if (!btn.dataset.orig) btn.dataset.orig = btn.textContent;
+  var ans = btn.nextElementSibling;
+  var showing = ans.classList.toggle('visible');
+  btn.textContent = showing ? 'Hide' : btn.dataset.orig;
+}
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left: '$$', right: '$$', display: true},
+      {left: '$',  right: '$',  display: false}
+    ],
+    throwOnError: false
+  });
+  /* flip ▸ ↔ ▾ on all <details> toggles */
+  document.querySelectorAll('details').forEach(function(d){
+    d.addEventListener('toggle',function(){
+      var s=d.querySelector('summary');
+      if(!s) return;
+      s.textContent=d.open?s.textContent.replace('▸','▾'):s.textContent.replace('▾','▸');
+    });
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Instant Runoff &amp; Monotonicity &mdash; Notes</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75;font-size:15px}
+.container{max-width:900px;margin:0 auto;padding:2rem 1.5rem 4rem}
+
+/* ── Header ── */
+.page-title{font-size:28px;font-weight:700;margin-bottom:4px}
+.page-sub{font-family:sans-serif;font-size:13px;color:#666;margin-bottom:1.6rem}
+
+/* ── Opening question ── */
+.opening-q{background:#eef3f9;border-left:4px solid #1e3a5c;
+  border-radius:0 8px 8px 0;padding:1rem 1.2rem;font-size:15px;
+  margin-bottom:1.5rem;font-style:italic;line-height:1.75}
+.hook-question{margin:0}
+.hook-graph{text-align:center;margin:.7rem 0 .3rem;font-style:normal}
+.hook-graph svg{max-width:100%;height:auto}
+.hook-reveal{margin-top:.5rem;font-style:normal}
+.hook-reveal-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;
+  color:#1e3a5c;text-transform:uppercase;letter-spacing:.07em;list-style:none;user-select:none;display:block}
+.hook-reveal-toggle::-webkit-details-marker{display:none}
+.hook-reveal-body{margin-top:.5rem;font-size:14px;line-height:1.75;padding-top:.5rem;
+  border-top:1px solid #c8d8ec}
+
+/* ── Section heading ── */
+.section-head{font-family:sans-serif;font-size:11px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.08em;color:#1e3a5c;
+  margin-top:1.4rem;margin-bottom:.6rem;
+  border-bottom:1px solid #c8d8ec;padding-bottom:4px}
+
+/* ── Protect math from text-transform on headings/labels ── */
+.katex,.katex *{text-transform:none;letter-spacing:normal}
+
+/* ── Accent box ── */
+.accent-box{background:#d9e8f5;border-left:4px solid #1e3a5c;
+  border-radius:0 8px 8px 0;padding:.9rem 1.1rem;font-size:14px;
+  margin-bottom:.85rem;line-height:1.95}
+.accent-box ul{margin-left:1.3rem;margin-top:.3rem}
+.accent-box li{margin-bottom:.15rem}
+.accent-box p{margin-bottom:.4rem}
+
+/* ── Body text ── */
+.body-text{font-size:14px;line-height:1.75;margin-bottom:.85rem}
+
+/* ── Spacer ── */
+.spacer{height:1rem}
+
+/* ── Two-column layout ── */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:.5rem}
+.col{min-width:0}
+
+/* ── Worked examples 2-col grid ── */
+.examples-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem}
+.ex-block{border:1.5px solid #ddd;border-radius:9px;padding:1rem 1.1rem;background:#fff}
+.ex-label{font-family:sans-serif;font-size:11px;font-weight:700;color:#1e3a5c;
+  text-transform:uppercase;letter-spacing:.05em;margin-bottom:.45rem}
+.ex-body{font-size:14px;line-height:1.75;margin-bottom:.5rem}
+.ex-answer.instructor{background:#fef9e7;border-left:3px solid #7a5c1e;
+  border-radius:0 6px 6px 0;padding:.6rem .9rem;font-size:13.5px;
+  color:#5a3e00;line-height:1.85}
+.ex-answer.student{height:4.5rem;border-bottom:1.5px solid #bbb;margin-top:.4rem}
+
+/* ── Practice section ── */
+.practice{margin-bottom:1.5rem}
+.pr-row{display:grid;grid-template-columns:1.6rem 1fr 210px;gap:.75rem;
+  align-items:start;padding:.6rem 0;border-bottom:1px solid #ece8e0}
+.pr-num{font-family:sans-serif;font-weight:700;font-size:14px;color:#1e3a5c;padding-top:2px}
+.pr-prob{font-size:14px;line-height:1.75}
+.pr-ans.instructor{font-size:13px;color:#5a3e00;background:#fef9e7;
+  border-radius:5px;padding:4px 9px;line-height:1.75}
+.pr-ans.student{border-bottom:1.5px solid #bbb;min-height:2.2rem}
+
+/* ── Student interactive ── */
+.st-work{width:100%;min-height:3rem;border:1px solid #ccc;border-radius:5px;
+  padding:.35rem .5rem;font-family:Georgia,serif;font-size:13px;resize:vertical;
+  background:#fafafa;display:block;margin-bottom:.3rem}
+.st-work-sm{width:100%;min-height:1.5rem;border:1px solid #ccc;border-radius:4px;
+  padding:.2rem .4rem;font-family:Georgia,serif;font-size:12px;resize:vertical;
+  background:#fafafa;display:block;margin-bottom:.2rem}
+.st-btn{font-family:sans-serif;font-size:10px;font-weight:700;color:#1e3a5c;
+  background:none;border:1.5px solid #1e3a5c;border-radius:4px;
+  padding:2px 9px;cursor:pointer;margin-bottom:.2rem;display:inline-block}
+.st-btn-sm{font-family:sans-serif;font-size:9px;font-weight:700;color:#1e3a5c;
+  background:none;border:1px solid #1e3a5c;border-radius:3px;
+  padding:1px 6px;cursor:pointer;margin-bottom:.15rem;display:inline-block}
+.st-btn:hover,.st-btn-sm:hover{background:#eef3f9}
+.st-ans-hidden{display:none;background:#fef9e7;border-left:3px solid #7a5c1e;
+  border-radius:0 5px 5px 0;padding:.4rem .7rem;font-size:13px;
+  color:#5a3e00;line-height:1.85}
+.st-ans-hidden.visible{display:block}
+
+/* ── SVG figures ── */
+.svg-figure{text-align:center;margin:.4rem 0 .6rem}
+.svg-figure svg{max-width:100%;height:auto}
+.svg-caption{font-family:sans-serif;font-size:11px;color:#555;
+  margin-top:.2rem;font-style:italic}
+
+/* ── KaTeX overflow ── */
+.katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}
+
+/* ── Print styles ── */
+@media print{
+  body{background:white;font-size:10pt;line-height:1.5}
+  .container{padding:0;max-width:none}
+  .page-sub{margin-bottom:.8rem}
+  .opening-q{padding:.5rem .8rem;margin-bottom:.8rem;font-size:10pt;line-height:1.5;break-inside:avoid}
+  .section-head{margin-top:.7rem;margin-bottom:.35rem}
+  .spacer{height:.3rem}
+  .accent-box{padding:.5rem .75rem;margin-bottom:.5rem;font-size:10pt;line-height:1.55;
+    background:#e8f0f8 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .accent-box p{margin-bottom:.2rem}
+  .body-text{font-size:10pt;line-height:1.5;margin-bottom:.5rem}
+  .two-col{gap:1rem;margin-bottom:.3rem;break-inside:avoid}
+  .examples-grid{gap:.6rem;margin-bottom:.8rem;break-inside:avoid}
+  .ex-block{padding:.55rem .75rem;border:1px solid #ccc;break-inside:avoid}
+  .ex-label{margin-bottom:.25rem}
+  .ex-body{font-size:10pt;line-height:1.5;margin-bottom:.3rem}
+  .ex-answer.instructor{padding:.35rem .7rem;font-size:9.5pt;line-height:1.55;
+    background:#fef9e7 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .ex-answer.student{height:2.8rem}
+  .practice{margin-bottom:.8rem}
+  .pr-row{padding:.3rem 0;break-inside:avoid}
+  .pr-prob{font-size:10pt;line-height:1.5}
+  .pr-ans.instructor{font-size:9.5pt;padding:2px 7px;line-height:1.55;
+    background:#fef9e7 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .pr-ans.student{min-height:1.6rem}
+  .st-work{background:none;border:none;border-bottom:1.5px solid #bbb;
+    border-radius:0;min-height:2.6rem;resize:none}
+  .st-work-sm{background:none;border:none;border-bottom:1.5px solid #bbb;
+    border-radius:0;min-height:1.3rem;resize:none}
+  .st-btn,.st-btn-sm{display:none}
+  .st-ans-hidden{display:none !important}
+  .opening-q{
+    background:#eef3f9 !important;
+    -webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .hook-graph{margin:.4rem 0 .2rem}
+  details.hook-reveal:not([open]){display:none}
+  .svg-figure{margin:.25rem 0 .4rem}
+  .svg-figure svg{max-width:100%;height:auto}
+  .svg-caption{font-size:9pt}
+}
+@page{margin:.55in .65in;size:letter}
+
+.proof-panel{margin:.4rem 0 1.1rem;border-left:3px solid #7a9a6a;border-radius:0 6px 6px 0;background:#f5f7f3}
+.proof-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#5a7a4a;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.proof-toggle::-webkit-details-marker{display:none}
+details[open]>.proof-toggle{color:#1e3a5c}
+.proof-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #c8d8b8}
+.proof-body p{margin-bottom:.45rem}
+.proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
+@media print{.proof-panel{break-inside:avoid}}
+.mistake-panel{margin:.4rem 0 1.1rem;border-left:3px solid #b8860b;border-radius:0 6px 6px 0;background:#fdf8e8}
+.mistake-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#9a6a00;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.mistake-toggle::-webkit-details-marker{display:none}
+details[open]>.mistake-toggle{color:#1e3a5c}
+.mistake-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #e8d8a8}
+.mistake-body p{margin-bottom:.45rem}
+.panel-row{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.1rem}
+.panel-row>.proof-panel,.panel-row>.mistake-panel{margin:0;min-width:0}
+.panel-row:has(.proof-panel):has(.mistake-panel){grid-template-columns:1fr}
+@media print{
+  .panel-row{break-inside:avoid}
+  .mistake-panel{break-inside:avoid}
+  details.mistake-panel:not([open]){display:none}
+}
+</style>
+</head>
+<body>
+<div class="container">
+<h1 class="page-title">Instant Runoff &amp; Monotonicity</h1>
+<p class="page-sub">Voting Theory &nbsp;&middot;&nbsp; Part 2 &nbsp;&middot;&nbsp; Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026 &nbsp;&middot;&nbsp; <strong>STUDENT</strong></p>
+<style>
+table.vt{border-collapse:collapse;margin:.45rem 0 .65rem;font-family:sans-serif;font-size:13px}
+table.vt th,table.vt td{border:1px solid #b9c7da;padding:3px 11px;text-align:center}
+table.vt th{background:#e4edf7;color:#1e3a5c;font-weight:700}
+table.vt td.rl{background:#f3f6fa;font-weight:700;color:#1e3a5c;text-align:left}
+.vt-lbl{font-family:sans-serif;font-size:12px;color:#555;margin-top:.3rem}
+.vt-crit{border-collapse:collapse;font-family:sans-serif;font-size:13px;margin:.5rem 0}
+.vt-crit th,.vt-crit td{border:1px solid #b9c7da;padding:4px 10px;text-align:center}
+.vt-crit th{background:#e4edf7;color:#1e3a5c}
+.vt-crit td.bad{background:#fdecea;color:#7a1a1a;font-weight:700}
+.vt-crit td.ok{color:#2e5339}
+.teacher{background:#fef9e7;border-left:4px solid #7a5c1e;border-radius:0 8px 8px 0;
+  padding:.7rem 1rem;font-family:sans-serif;font-size:13px;margin:.6rem 0;color:#5a3e00}
+@media print{.teacher{break-inside:avoid}}
+</style>
+<div class="opening-q">In a plurality election people may vote insincerely if they think their favorite can&rsquo;t win. How could we run an election so that nobody has a reason to?</div>
+<div class="two-col">
+<div class="col"><div class="section-head">Instant Runoff Voting</div>
+<div class="accent-box"><p><strong>Instant Runoff Voting (IRV):</strong> the choice with the <em>fewest</em> first-place votes is eliminated and those ballots move to each voter&rsquo;s next remaining choice. Repeat until a choice has a majority (over 50%).</p><p>Because your vote moves to your next choice, backing a long-shot first is no longer &ldquo;wasted.&rdquo;</p></div>
+</div>
+<div class="col"><div class="section-head">Monotonicity</div>
+<div class="accent-box"><p><strong>Monotonicity Criterion:</strong> if voters change their ballots to <em>increase</em> the preference for a candidate, it should not harm that candidate&rsquo;s chances of winning.</p><p>Does IRV always respect this? Example 3 says no.</p></div>
+</div>
+</div>
+<div class="section-head">Worked Examples</div>
+<div class="examples-grid">
+<div class="ex-block">
+  <div class="ex-label">Example 1 &nbsp;&mdash;&nbsp; IRV</div>
+  <div class="ex-body"><table class="vt"><tr><th>Votes</th><th>342</th><th>298</th><th>214</th></tr><tr><td class="rl">1st choice</td><td>E</td><td>D</td><td>K</td></tr><tr><td class="rl">2nd choice</td><td>D</td><td>K</td><td>D</td></tr><tr><td class="rl">3rd choice</td><td>K</td><td>E</td><td>E</td></tr></table>Run IRV. Does the result agree with the Condorcet winner?</div>
+  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">Round 1: D: 298, E: 342, K: 214 &rarr; eliminate K<br>Round 2: D: 512, E: 342 &rarr; D wins (majority of 854)<br>Condorcet winner: D. Here IRV agrees &mdash; will it always?</div></div>
+</div>
+<div class="ex-block">
+  <div class="ex-label">Example 2 &nbsp;&mdash;&nbsp; IRV, three candidates</div>
+  <div class="ex-body"><table class="vt"><tr><th>Votes</th><th>37</th><th>22</th><th>12</th><th>29</th></tr><tr><td class="rl">1st choice</td><td>A</td><td>B</td><td>B</td><td>C</td></tr><tr><td class="rl">2nd choice</td><td>B</td><td>C</td><td>A</td><td>A</td></tr><tr><td class="rl">3rd choice</td><td>C</td><td>A</td><td>C</td><td>B</td></tr></table>Run IRV.</div>
+  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">Round 1: A: 37, B: 34, C: 29 &rarr; eliminate C<br>Round 2: A: 66, B: 34 &rarr; A wins (majority of 100)</div></div>
+</div>
+<div class="ex-block">
+  <div class="ex-label">Example 3 &nbsp;&mdash;&nbsp; Monotonicity violation</div>
+  <div class="ex-body">Next year some Adams supporters move him up on their ballots (the 12 ballots B&gt;A&gt;C become 2 with B&gt;A&gt;C and 10 more join the A&gt;B&gt;C group).<table class="vt"><tr><th>Votes</th><th>47</th><th>22</th><th>2</th><th>29</th></tr><tr><td class="rl">1st choice</td><td>A</td><td>B</td><td>B</td><td>C</td></tr><tr><td class="rl">2nd choice</td><td>B</td><td>C</td><td>A</td><td>A</td></tr><tr><td class="rl">3rd choice</td><td>C</td><td>A</td><td>C</td><td>B</td></tr></table>Run IRV. Is this fair?</div>
+  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">Round 1: A: 47, B: 24, C: 29 &rarr; eliminate B<br>Round 2: A: 49, C: 51 &rarr; C wins (majority of 100)<br>Adams gained support and <strong>lost</strong>: IRV violated monotonicity.</div></div>
+</div>
+<div class="ex-block">
+  <div class="ex-label">Example 4 &nbsp;&mdash;&nbsp; IRV vs. Condorcet</div>
+  <div class="ex-body"><table class="vt"><tr><th>Votes</th><th>342</th><th>214</th><th>298</th></tr><tr><td class="rl">1st choice</td><td>P</td><td>T</td><td>B</td></tr><tr><td class="rl">2nd choice</td><td>T</td><td>B</td><td>T</td></tr><tr><td class="rl">3rd choice</td><td>B</td><td>P</td><td>P</td></tr></table>Run IRV. Compare to the Condorcet winner.</div>
+  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">Round 1: B: 298, P: 342, T: 214 &rarr; eliminate T<br>Round 2: B: 512, P: 342 &rarr; B wins (majority of 854)<br>Condorcet winner: <strong>T</strong> was eliminated first. IRV can violate the Condorcet criterion.</div></div>
+</div>
+</div>
+<div class="section-head">Practice Problems</div>
+<div class="practice">
+<div class="pr-row">
+  <div class="pr-num">1.</div>
+  <div class="pr-prob"><table class="vt"><tr><th>Votes</th><th>8</th><th>7</th><th>6</th></tr><tr><td class="rl">1st choice</td><td>A</td><td>B</td><td>C</td></tr><tr><td class="rl">2nd choice</td><td>B</td><td>C</td><td>B</td></tr><tr><td class="rl">3rd choice</td><td>C</td><td>A</td><td>A</td></tr></table>Who wins using Instant Runoff Voting?</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">Round 1: A: 8, B: 7, C: 6 &rarr; eliminate C<br>Round 2: A: 8, B: 13 &rarr; B wins (majority of 21)</div></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">2.</div>
+  <div class="pr-prob"><table class="vt"><tr><th>Votes</th><th>10</th><th>8</th><th>7</th></tr><tr><td class="rl">1st choice</td><td>A</td><td>B</td><td>C</td></tr><tr><td class="rl">2nd choice</td><td>B</td><td>C</td><td>A</td></tr><tr><td class="rl">3rd choice</td><td>C</td><td>A</td><td>B</td></tr></table>Who wins using Instant Runoff Voting?</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">Round 1: A: 10, B: 8, C: 7 &rarr; eliminate C<br>Round 2: A: 17, B: 8 &rarr; A wins (majority of 25)</div></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">3.</div>
+  <div class="pr-prob"><table class="vt"><tr><th>Votes</th><th>7</th><th>6</th><th>5</th><th>4</th></tr><tr><td class="rl">1st choice</td><td>A</td><td>B</td><td>C</td><td>B</td></tr><tr><td class="rl">2nd choice</td><td>B</td><td>C</td><td>A</td><td>A</td></tr><tr><td class="rl">3rd choice</td><td>C</td><td>A</td><td>B</td><td>C</td></tr></table>Who wins using Instant Runoff Voting?</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">Round 1: A: 7, B: 10, C: 5 &rarr; eliminate C<br>Round 2: A: 12, B: 10 &rarr; A wins (majority of 22)</div></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">4.</div>
+  <div class="pr-prob"><table class="vt"><tr><th>Votes</th><th>9</th><th>8</th><th>7</th><th>6</th></tr><tr><td class="rl">1st choice</td><td>A</td><td>B</td><td>C</td><td>D</td></tr><tr><td class="rl">2nd choice</td><td>B</td><td>C</td><td>D</td><td>A</td></tr><tr><td class="rl">3rd choice</td><td>C</td><td>D</td><td>A</td><td>B</td></tr><tr><td class="rl">4th choice</td><td>D</td><td>A</td><td>B</td><td>C</td></tr></table>Who wins using Instant Runoff Voting?</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">Round 1: A: 9, B: 8, C: 7, D: 6 &rarr; eliminate D<br>Round 2: A: 15, B: 8, C: 7 &rarr; eliminate C<br>Round 3: A: 22, B: 8 &rarr; A wins (majority of 30)</div></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">5.</div>
+  <div class="pr-prob"><table class="vt"><tr><th>Votes</th><th>12</th><th>11</th><th>9</th><th>3</th></tr><tr><td class="rl">1st choice</td><td>A</td><td>B</td><td>C</td><td>C</td></tr><tr><td class="rl">2nd choice</td><td>B</td><td>C</td><td>A</td><td>B</td></tr><tr><td class="rl">3rd choice</td><td>C</td><td>A</td><td>B</td><td>A</td></tr></table>Who wins using Instant Runoff Voting?</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">Round 1: A: 12, B: 11, C: 12 &rarr; eliminate B<br>Round 2: A: 12, C: 23 &rarr; C wins (majority of 35)</div></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">6.</div>
+  <div class="pr-prob"><table class="vt"><tr><th>Votes</th><th>5</th><th>4</th><th>4</th><th>3</th></tr><tr><td class="rl">1st choice</td><td>A</td><td>B</td><td>C</td><td>C</td></tr><tr><td class="rl">2nd choice</td><td>B</td><td>A</td><td>B</td><td>A</td></tr><tr><td class="rl">3rd choice</td><td>C</td><td>C</td><td>A</td><td>B</td></tr></table>Who wins using Instant Runoff Voting?</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">Round 1: A: 5, B: 4, C: 7 &rarr; eliminate B<br>Round 2: A: 9, C: 7 &rarr; A wins (majority of 16)</div></div>
+</div>
+</div>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/contrib/auto-render.min.js"></script>
+<script>
+function toggleAns(btn) {
+  if (!btn.dataset.orig) btn.dataset.orig = btn.textContent;
+  var ans = btn.nextElementSibling;
+  var showing = ans.classList.toggle('visible');
+  btn.textContent = showing ? 'Hide' : btn.dataset.orig;
+}
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left: '$$', right: '$$', display: true},
+      {left: '$',  right: '$',  display: false}
+    ],
+    throwOnError: false
+  });
+  /* flip ▸ ↔ ▾ on all <details> toggles */
+  document.querySelectorAll('details').forEach(function(d){
+    d.addEventListener('toggle',function(){
+      var s=d.querySelector('summary');
+      if(!s) return;
+      s.textContent=d.open?s.textContent.replace('▸','▾'):s.textContent.replace('▾','▸');
+    });
+  });
+</script>
+</body>
+</html>

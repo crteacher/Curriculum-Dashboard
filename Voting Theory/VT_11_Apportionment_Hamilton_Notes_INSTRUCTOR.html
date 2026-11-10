@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Apportionment &amp; Hamilton&rsquo;s Method &mdash; Notes</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75;font-size:15px}
+.container{max-width:900px;margin:0 auto;padding:2rem 1.5rem 4rem}
+
+/* ── Header ── */
+.page-title{font-size:28px;font-weight:700;margin-bottom:4px}
+.page-sub{font-family:sans-serif;font-size:13px;color:#666;margin-bottom:1.6rem}
+
+/* ── Opening question ── */
+.opening-q{background:#eef3f9;border-left:4px solid #1e3a5c;
+  border-radius:0 8px 8px 0;padding:1rem 1.2rem;font-size:15px;
+  margin-bottom:1.5rem;font-style:italic;line-height:1.75}
+.hook-question{margin:0}
+.hook-graph{text-align:center;margin:.7rem 0 .3rem;font-style:normal}
+.hook-graph svg{max-width:100%;height:auto}
+.hook-reveal{margin-top:.5rem;font-style:normal}
+.hook-reveal-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;
+  color:#1e3a5c;text-transform:uppercase;letter-spacing:.07em;list-style:none;user-select:none;display:block}
+.hook-reveal-toggle::-webkit-details-marker{display:none}
+.hook-reveal-body{margin-top:.5rem;font-size:14px;line-height:1.75;padding-top:.5rem;
+  border-top:1px solid #c8d8ec}
+
+/* ── Section heading ── */
+.section-head{font-family:sans-serif;font-size:11px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.08em;color:#1e3a5c;
+  margin-top:1.4rem;margin-bottom:.6rem;
+  border-bottom:1px solid #c8d8ec;padding-bottom:4px}
+
+/* ── Protect math from text-transform on headings/labels ── */
+.katex,.katex *{text-transform:none;letter-spacing:normal}
+
+/* ── Accent box ── */
+.accent-box{background:#d9e8f5;border-left:4px solid #1e3a5c;
+  border-radius:0 8px 8px 0;padding:.9rem 1.1rem;font-size:14px;
+  margin-bottom:.85rem;line-height:1.95}
+.accent-box ul{margin-left:1.3rem;margin-top:.3rem}
+.accent-box li{margin-bottom:.15rem}
+.accent-box p{margin-bottom:.4rem}
+
+/* ── Body text ── */
+.body-text{font-size:14px;line-height:1.75;margin-bottom:.85rem}
+
+/* ── Spacer ── */
+.spacer{height:1rem}
+
+/* ── Two-column layout ── */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:.5rem}
+.col{min-width:0}
+
+/* ── Worked examples 2-col grid ── */
+.examples-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem}
+.ex-block{border:1.5px solid #ddd;border-radius:9px;padding:1rem 1.1rem;background:#fff}
+.ex-label{font-family:sans-serif;font-size:11px;font-weight:700;color:#1e3a5c;
+  text-transform:uppercase;letter-spacing:.05em;margin-bottom:.45rem}
+.ex-body{font-size:14px;line-height:1.75;margin-bottom:.5rem}
+.ex-answer.instructor{background:#fef9e7;border-left:3px solid #7a5c1e;
+  border-radius:0 6px 6px 0;padding:.6rem .9rem;font-size:13.5px;
+  color:#5a3e00;line-height:1.85}
+.ex-answer.student{height:4.5rem;border-bottom:1.5px solid #bbb;margin-top:.4rem}
+
+/* ── Practice section ── */
+.practice{margin-bottom:1.5rem}
+.pr-row{display:grid;grid-template-columns:1.6rem 1fr 210px;gap:.75rem;
+  align-items:start;padding:.6rem 0;border-bottom:1px solid #ece8e0}
+.pr-num{font-family:sans-serif;font-weight:700;font-size:14px;color:#1e3a5c;padding-top:2px}
+.pr-prob{font-size:14px;line-height:1.75}
+.pr-ans.instructor{font-size:13px;color:#5a3e00;background:#fef9e7;
+  border-radius:5px;padding:4px 9px;line-height:1.75}
+.pr-ans.student{border-bottom:1.5px solid #bbb;min-height:2.2rem}
+
+/* ── Student interactive ── */
+.st-work{width:100%;min-height:3rem;border:1px solid #ccc;border-radius:5px;
+  padding:.35rem .5rem;font-family:Georgia,serif;font-size:13px;resize:vertical;
+  background:#fafafa;display:block;margin-bottom:.3rem}
+.st-work-sm{width:100%;min-height:1.5rem;border:1px solid #ccc;border-radius:4px;
+  padding:.2rem .4rem;font-family:Georgia,serif;font-size:12px;resize:vertical;
+  background:#fafafa;display:block;margin-bottom:.2rem}
+.st-btn{font-family:sans-serif;font-size:10px;font-weight:700;color:#1e3a5c;
+  background:none;border:1.5px solid #1e3a5c;border-radius:4px;
+  padding:2px 9px;cursor:pointer;margin-bottom:.2rem;display:inline-block}
+.st-btn-sm{font-family:sans-serif;font-size:9px;font-weight:700;color:#1e3a5c;
+  background:none;border:1px solid #1e3a5c;border-radius:3px;
+  padding:1px 6px;cursor:pointer;margin-bottom:.15rem;display:inline-block}
+.st-btn:hover,.st-btn-sm:hover{background:#eef3f9}
+.st-ans-hidden{display:none;background:#fef9e7;border-left:3px solid #7a5c1e;
+  border-radius:0 5px 5px 0;padding:.4rem .7rem;font-size:13px;
+  color:#5a3e00;line-height:1.85}
+.st-ans-hidden.visible{display:block}
+
+/* ── SVG figures ── */
+.svg-figure{text-align:center;margin:.4rem 0 .6rem}
+.svg-figure svg{max-width:100%;height:auto}
+.svg-caption{font-family:sans-serif;font-size:11px;color:#555;
+  margin-top:.2rem;font-style:italic}
+
+/* ── KaTeX overflow ── */
+.katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}
+
+/* ── Print styles ── */
+@media print{
+  body{background:white;font-size:10pt;line-height:1.5}
+  .container{padding:0;max-width:none}
+  .page-sub{margin-bottom:.8rem}
+  .opening-q{padding:.5rem .8rem;margin-bottom:.8rem;font-size:10pt;line-height:1.5;break-inside:avoid}
+  .section-head{margin-top:.7rem;margin-bottom:.35rem}
+  .spacer{height:.3rem}
+  .accent-box{padding:.5rem .75rem;margin-bottom:.5rem;font-size:10pt;line-height:1.55;
+    background:#e8f0f8 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .accent-box p{margin-bottom:.2rem}
+  .body-text{font-size:10pt;line-height:1.5;margin-bottom:.5rem}
+  .two-col{gap:1rem;margin-bottom:.3rem;break-inside:avoid}
+  .examples-grid{gap:.6rem;margin-bottom:.8rem;break-inside:avoid}
+  .ex-block{padding:.55rem .75rem;border:1px solid #ccc;break-inside:avoid}
+  .ex-label{margin-bottom:.25rem}
+  .ex-body{font-size:10pt;line-height:1.5;margin-bottom:.3rem}
+  .ex-answer.instructor{padding:.35rem .7rem;font-size:9.5pt;line-height:1.55;
+    background:#fef9e7 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .ex-answer.student{height:2.8rem}
+  .practice{margin-bottom:.8rem}
+  .pr-row{padding:.3rem 0;break-inside:avoid}
+  .pr-prob{font-size:10pt;line-height:1.5}
+  .pr-ans.instructor{font-size:9.5pt;padding:2px 7px;line-height:1.55;
+    background:#fef9e7 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .pr-ans.student{min-height:1.6rem}
+  .st-work{background:none;border:none;border-bottom:1.5px solid #bbb;
+    border-radius:0;min-height:2.6rem;resize:none}
+  .st-work-sm{background:none;border:none;border-bottom:1.5px solid #bbb;
+    border-radius:0;min-height:1.3rem;resize:none}
+  .st-btn,.st-btn-sm{display:none}
+  .st-ans-hidden{display:none !important}
+  .opening-q{
+    background:#eef3f9 !important;
+    -webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .hook-graph{margin:.4rem 0 .2rem}
+  details.hook-reveal:not([open]){display:none}
+  .svg-figure{margin:.25rem 0 .4rem}
+  .svg-figure svg{max-width:100%;height:auto}
+  .svg-caption{font-size:9pt}
+}
+@page{margin:.55in .65in;size:letter}
+
+.proof-panel{margin:.4rem 0 1.1rem;border-left:3px solid #7a9a6a;border-radius:0 6px 6px 0;background:#f5f7f3}
+.proof-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#5a7a4a;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.proof-toggle::-webkit-details-marker{display:none}
+details[open]>.proof-toggle{color:#1e3a5c}
+.proof-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #c8d8b8}
+.proof-body p{margin-bottom:.45rem}
+.proof-qed{text-align:right;font-weight:700;font-size:15px;color:#5a7a4a;margin-top:.5rem}
+@media print{.proof-panel{break-inside:avoid}}
+.mistake-panel{margin:.4rem 0 1.1rem;border-left:3px solid #b8860b;border-radius:0 6px 6px 0;background:#fdf8e8}
+.mistake-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#9a6a00;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.mistake-toggle::-webkit-details-marker{display:none}
+details[open]>.mistake-toggle{color:#1e3a5c}
+.mistake-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #e8d8a8}
+.mistake-body p{margin-bottom:.45rem}
+.panel-row{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.1rem}
+.panel-row>.proof-panel,.panel-row>.mistake-panel{margin:0;min-width:0}
+.panel-row:has(.proof-panel):has(.mistake-panel){grid-template-columns:1fr}
+@media print{
+  .panel-row{break-inside:avoid}
+  .mistake-panel{break-inside:avoid}
+  details.mistake-panel:not([open]){display:none}
+}
+</style>
+</head>
+<body>
+<div class="container">
+<h1 class="page-title">Apportionment &amp; Hamilton&rsquo;s Method</h1>
+<p class="page-sub">Voting Theory &nbsp;&middot;&nbsp; Part 7 &nbsp;&middot;&nbsp; Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026 &nbsp;&middot;&nbsp; <strong>INSTRUCTOR</strong></p>
+<style>
+table.vt{border-collapse:collapse;margin:.45rem 0 .65rem;font-family:sans-serif;font-size:13px}
+table.vt th,table.vt td{border:1px solid #b9c7da;padding:3px 11px;text-align:center}
+table.vt th{background:#e4edf7;color:#1e3a5c;font-weight:700}
+table.vt td.rl{background:#f3f6fa;font-weight:700;color:#1e3a5c;text-align:left}
+.vt-lbl{font-family:sans-serif;font-size:12px;color:#555;margin-top:.3rem}
+.vt-crit{border-collapse:collapse;font-family:sans-serif;font-size:13px;margin:.5rem 0}
+.vt-crit th,.vt-crit td{border:1px solid #b9c7da;padding:4px 10px;text-align:center}
+.vt-crit th{background:#e4edf7;color:#1e3a5c}
+.vt-crit td.bad{background:#fdecea;color:#7a1a1a;font-weight:700}
+.vt-crit td.ok{color:#2e5339}
+.teacher{background:#fef9e7;border-left:4px solid #7a5c1e;border-radius:0 8px 8px 0;
+  padding:.7rem 1rem;font-family:sans-serif;font-size:13px;margin:.6rem 0;color:#5a3e00}
+@media print{.teacher{break-inside:avoid}}
+</style>
+<div class="opening-q">Pizzas, seats in Congress, ambulances for hospitals: you have to split a fixed number of <em>whole</em> things among groups of different sizes. How do you do it fairly?</div>
+<div class="two-col">
+<div class="col"><div class="section-head">Apportionment</div>
+<div class="accent-box"><p><strong>Apportionment</strong> means dividing something up (pizzas, ambulances, seats for states) using these rules:</p><ul><li>The things being divided exist only in <strong>whole numbers</strong>.</li><li>We use <strong>all</strong> of them, and no more.</li><li>Each group gets <strong>at least one</strong>.</li><li>Each group&rsquo;s share is <strong>approximately proportional</strong> to its population.</li></ul></div>
+</div>
+<div class="col"><div class="section-head">Hamilton&rsquo;s Method</div>
+<div class="accent-box"><p>1. <strong>Standard divisor</strong> = total population &divide; seats.</p><p>2. <strong>Quota</strong> for each group = its population &divide; standard divisor.</p><p>3. Give each group its quota <em>rounded down</em> (lower quota).</p><p>4. Hand out the leftover seats, one each, to the groups with the <strong>largest fractional parts</strong>.</p></div>
+</div>
+</div>
+<div class="section-head">Worked Examples</div>
+<div class="examples-grid">
+<div class="ex-block">
+  <div class="ex-label">Example 1 &nbsp;&mdash;&nbsp; Seats for cities</div>
+  <div class="ex-body">5 seats among City A (10 people), City B (7), City C (3).</div>
+  <div class="ex-answer instructor">Standard divisor = 20 &divide; 5 = 4. Quota = pop &divide; divisor.<br><table class="vt"><tr><th>Group</th><th>Pop.</th><th>Quota</th><th>Lower</th><th>Fraction</th><th>Final</th></tr><tr><td class="rl">City A</td><td>10</td><td>2.500</td><td>2</td><td>0.500</td><td><strong>2</strong></td></tr><tr><td class="rl">City B</td><td>7</td><td>1.750</td><td>1</td><td>0.750</td><td><strong>2</strong></td></tr><tr><td class="rl">City C</td><td>3</td><td>0.750</td><td>0</td><td>0.750</td><td><strong>1</strong></td></tr></table>Lower quotas use 3 of 5 seats; 2 left over go to the largest fractions.</div>
+</div>
+<div class="ex-block">
+  <div class="ex-label">Example 2 &nbsp;&mdash;&nbsp; Pizza order (tie!)</div>
+  <div class="ex-body">5 pizzas for 20 people: 11 want pepperoni, 7 cheese, 2 sausage.</div>
+  <div class="ex-answer instructor">Standard divisor = 20 &divide; 5 = 4. Quota = pop &divide; divisor.<br><table class="vt"><tr><th>Group</th><th>Pop.</th><th>Quota</th><th>Lower</th><th>Fraction</th><th>Final</th></tr><tr><td class="rl">Pepperoni</td><td>11</td><td>2.750</td><td>2</td><td>0.750</td><td><strong>3</strong></td></tr><tr><td class="rl">Cheese</td><td>7</td><td>1.750</td><td>1</td><td>0.750</td><td><strong>2</strong></td></tr><tr><td class="rl">Sausage</td><td>2</td><td>0.500</td><td>0</td><td>0.500</td><td><strong>0</strong></td></tr></table>Lower quotas use 3 of 5 seats; 2 left over go to the largest fractions.<br>Pepperoni and cheese tie at .75, and only 2 seats remain: both receive one. Sausage gets none, which breaks the &ldquo;at least one&rdquo; rule, a known drawback of Hamilton for small groups.</div>
+</div>
+<div class="ex-block">
+  <div class="ex-label">Example 3 &nbsp;&mdash;&nbsp; States and electors</div>
+  <div class="ex-body">12 electors among State X (120), Y (80), Z (50) thousand people.</div>
+  <div class="ex-answer instructor">Standard divisor = 250 &divide; 12 = 20.8333. Quota = pop &divide; divisor.<br><table class="vt"><tr><th>Group</th><th>Pop.</th><th>Quota</th><th>Lower</th><th>Fraction</th><th>Final</th></tr><tr><td class="rl">State X</td><td>120</td><td>5.760</td><td>5</td><td>0.760</td><td><strong>6</strong></td></tr><tr><td class="rl">State Y</td><td>80</td><td>3.840</td><td>3</td><td>0.840</td><td><strong>4</strong></td></tr><tr><td class="rl">State Z</td><td>50</td><td>2.400</td><td>2</td><td>0.400</td><td><strong>2</strong></td></tr></table>Lower quotas use 10 of 12 seats; 2 left over go to the largest fractions.</div>
+</div>
+<div class="ex-block">
+  <div class="ex-label">Example 4 &nbsp;&mdash;&nbsp; The Alabama paradox</div>
+  <div class="ex-body">Populations A: 5, B: 5, C: 3 (thousand). Apportion 6 seats, then 7 seats.</div>
+  <div class="ex-answer instructor">6 seats: A 2, B 2, C 2.<br>7 seats: A 3, B 3, C 1.<br>Adding a seat made C <strong>lose</strong> a seat: the <strong>Alabama paradox</strong>.</div>
+</div>
+</div>
+<div class="section-head">Practice Problems</div>
+<div class="practice">
+<div class="pr-row">
+  <div class="pr-num">1.</div>
+  <div class="pr-prob">Use Hamilton&rsquo;s Method to apportion <strong>11</strong> seats among: A: 14, B: 9, C: 5, D: 4.</div>
+  <div class="pr-ans instructor">Standard divisor = 32 &divide; 11 = 2.90909. Quota = pop &divide; divisor.<br><table class="vt"><tr><th>Group</th><th>Pop.</th><th>Quota</th><th>Lower</th><th>Fraction</th><th>Final</th></tr><tr><td class="rl">A</td><td>14</td><td>4.812</td><td>4</td><td>0.812</td><td><strong>5</strong></td></tr><tr><td class="rl">B</td><td>9</td><td>3.094</td><td>3</td><td>0.094</td><td><strong>3</strong></td></tr><tr><td class="rl">C</td><td>5</td><td>1.719</td><td>1</td><td>0.719</td><td><strong>2</strong></td></tr><tr><td class="rl">D</td><td>4</td><td>1.375</td><td>1</td><td>0.375</td><td><strong>1</strong></td></tr></table>Lower quotas use 9 of 11 seats; 2 left over go to the largest fractions.</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">2.</div>
+  <div class="pr-prob">Use Hamilton&rsquo;s Method to apportion <strong>11</strong> seats among: North: 41, South: 29, East: 18.</div>
+  <div class="pr-ans instructor">Standard divisor = 88 &divide; 11 = 8. Quota = pop &divide; divisor.<br><table class="vt"><tr><th>Group</th><th>Pop.</th><th>Quota</th><th>Lower</th><th>Fraction</th><th>Final</th></tr><tr><td class="rl">North</td><td>41</td><td>5.125</td><td>5</td><td>0.125</td><td><strong>5</strong></td></tr><tr><td class="rl">South</td><td>29</td><td>3.625</td><td>3</td><td>0.625</td><td><strong>4</strong></td></tr><tr><td class="rl">East</td><td>18</td><td>2.250</td><td>2</td><td>0.250</td><td><strong>2</strong></td></tr></table>Lower quotas use 10 of 11 seats; 1 left over go to the largest fractions.</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">3.</div>
+  <div class="pr-prob">Use Hamilton&rsquo;s Method to apportion <strong>9</strong> seats among: X: 66, Y: 52, Z: 22.</div>
+  <div class="pr-ans instructor">Standard divisor = 140 &divide; 9 = 15.5556. Quota = pop &divide; divisor.<br><table class="vt"><tr><th>Group</th><th>Pop.</th><th>Quota</th><th>Lower</th><th>Fraction</th><th>Final</th></tr><tr><td class="rl">X</td><td>66</td><td>4.243</td><td>4</td><td>0.243</td><td><strong>4</strong></td></tr><tr><td class="rl">Y</td><td>52</td><td>3.343</td><td>3</td><td>0.343</td><td><strong>3</strong></td></tr><tr><td class="rl">Z</td><td>22</td><td>1.414</td><td>1</td><td>0.414</td><td><strong>2</strong></td></tr></table>Lower quotas use 8 of 9 seats; 1 left over go to the largest fractions.</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">4.</div>
+  <div class="pr-prob">Use Hamilton&rsquo;s Method to apportion <strong>13</strong> seats among: A: 31, B: 25, C: 13, D: 11.</div>
+  <div class="pr-ans instructor">Standard divisor = 80 &divide; 13 = 6.15385. Quota = pop &divide; divisor.<br><table class="vt"><tr><th>Group</th><th>Pop.</th><th>Quota</th><th>Lower</th><th>Fraction</th><th>Final</th></tr><tr><td class="rl">A</td><td>31</td><td>5.037</td><td>5</td><td>0.037</td><td><strong>5</strong></td></tr><tr><td class="rl">B</td><td>25</td><td>4.062</td><td>4</td><td>0.062</td><td><strong>4</strong></td></tr><tr><td class="rl">C</td><td>13</td><td>2.112</td><td>2</td><td>0.113</td><td><strong>2</strong></td></tr><tr><td class="rl">D</td><td>11</td><td>1.788</td><td>1</td><td>0.787</td><td><strong>2</strong></td></tr></table>Lower quotas use 12 of 13 seats; 1 left over go to the largest fractions.</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">5.</div>
+  <div class="pr-prob">Use Hamilton&rsquo;s Method to apportion <strong>8</strong> seats among: P: 95, Q: 41, R: 24.</div>
+  <div class="pr-ans instructor">Standard divisor = 160 &divide; 8 = 20. Quota = pop &divide; divisor.<br><table class="vt"><tr><th>Group</th><th>Pop.</th><th>Quota</th><th>Lower</th><th>Fraction</th><th>Final</th></tr><tr><td class="rl">P</td><td>95</td><td>4.750</td><td>4</td><td>0.750</td><td><strong>5</strong></td></tr><tr><td class="rl">Q</td><td>41</td><td>2.050</td><td>2</td><td>0.050</td><td><strong>2</strong></td></tr><tr><td class="rl">R</td><td>24</td><td>1.200</td><td>1</td><td>0.200</td><td><strong>1</strong></td></tr></table>Lower quotas use 7 of 8 seats; 1 left over go to the largest fractions.</div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">6.</div>
+  <div class="pr-prob">Use Hamilton&rsquo;s Method to apportion <strong>10</strong> seats among: A: 270, B: 160, C: 90.</div>
+  <div class="pr-ans instructor">Standard divisor = 520 &divide; 10 = 52. Quota = pop &divide; divisor.<br><table class="vt"><tr><th>Group</th><th>Pop.</th><th>Quota</th><th>Lower</th><th>Fraction</th><th>Final</th></tr><tr><td class="rl">A</td><td>270</td><td>5.192</td><td>5</td><td>0.192</td><td><strong>5</strong></td></tr><tr><td class="rl">B</td><td>160</td><td>3.077</td><td>3</td><td>0.077</td><td><strong>3</strong></td></tr><tr><td class="rl">C</td><td>90</td><td>1.731</td><td>1</td><td>0.731</td><td><strong>2</strong></td></tr></table>Lower quotas use 9 of 10 seats; 1 left over go to the largest fractions.</div>
+</div>
+</div>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/contrib/auto-render.min.js"></script>
+<script>
+function toggleAns(btn) {
+  if (!btn.dataset.orig) btn.dataset.orig = btn.textContent;
+  var ans = btn.nextElementSibling;
+  var showing = ans.classList.toggle('visible');
+  btn.textContent = showing ? 'Hide' : btn.dataset.orig;
+}
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left: '$$', right: '$$', display: true},
+      {left: '$',  right: '$',  display: false}
+    ],
+    throwOnError: false
+  });
+  /* flip ▸ ↔ ▾ on all <details> toggles */
+  document.querySelectorAll('details').forEach(function(d){
+    d.addEventListener('toggle',function(){
+      var s=d.querySelector('summary');
+      if(!s) return;
+      s.textContent=d.open?s.textContent.replace('▸','▾'):s.textContent.replace('▾','▸');
+    });
+  });
+</script>
+</body>
+</html>

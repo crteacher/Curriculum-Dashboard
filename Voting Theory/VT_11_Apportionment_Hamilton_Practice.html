@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Apportionment &amp; Hamilton&rsquo;s Method &mdash; Practice</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.css">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.7}
+  .container{max-width:820px;margin:0 auto;padding:2rem 1.5rem 4rem}
+  h1{font-size:26px;font-weight:700;margin-bottom:4px}
+  .subtitle{font-size:14px;color:#666;margin-bottom:2rem;font-family:sans-serif}
+  .section{margin-bottom:2.5rem}
+  .section-title{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;
+    color:#777;font-family:sans-serif;margin-bottom:1rem;border-bottom:1px solid #ddd;padding-bottom:6px}
+  .concept{background:#d9e8f5;border-left:4px solid #1e3a5c;border-radius:0 8px 8px 0;
+    padding:.85rem 1.1rem;font-size:15px;margin-bottom:1rem}
+  .concept-label{font-family:sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;
+    letter-spacing:.07em;color:#1e3a5c;display:block;margin-bottom:.35rem}
+  .score-bar{display:flex;align-items:center;gap:12px;margin-bottom:1.25rem;
+    font-family:sans-serif;font-size:14px;flex-wrap:wrap}
+  .score-display{font-weight:700;font-size:18px;min-width:60px}
+  .score-label{color:#777;font-size:13px}
+  .score-note{font-size:12px;color:#999;font-style:italic}
+  .progress{flex:1;min-width:80px;height:6px;background:#e5e1d8;border-radius:3px;overflow:hidden}
+  .progress-fill{height:100%;background:#1e3a5c;border-radius:3px;transition:width .4s}
+  .reset-btn{font-size:12px;background:none;border:1px solid #bbb;border-radius:5px;
+    padding:4px 10px;cursor:pointer;color:#666;font-family:sans-serif;white-space:nowrap}
+  .reset-btn:hover{background:#eee}
+  .problems{display:grid;grid-template-columns:repeat(auto-fill,minmax(370px,1fr));gap:14px}
+  .card{background:#fff;border:1.5px solid #ddd;border-radius:10px;overflow:hidden;transition:border-color .25s}
+  .card.correct{border-color:#3a7a3a}.card.wrong{border-color:#b03030}.card.peeked{border-color:#7a5c1e}
+  .card-body{padding:14px 16px}
+  .card-meta{font-family:sans-serif;font-size:12px;color:#888;margin-bottom:4px}
+  .card-expr{font-size:15px;margin-bottom:12px;line-height:1.6;overflow-x:auto}
+  .card-expr p.q{margin:.2rem 0 .5rem}
+  table.vt{border-collapse:collapse;margin:.3rem 0 .5rem;font-family:sans-serif;font-size:13px}
+  table.vt th,table.vt td{border:1px solid #b9c7da;padding:3px 10px;text-align:center}
+  table.vt th{background:#e4edf7;color:#1e3a5c;font-weight:700}
+  table.vt td.rl{background:#f3f6fa;font-weight:700;color:#1e3a5c;text-align:left}
+  .fields{display:flex;flex-direction:column;gap:7px;margin-bottom:6px}
+  .frow{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-family:sans-serif;font-size:13px}
+  .frow label{min-width:150px;color:#444}
+  .ans-input{font-family:'Courier New',monospace;font-size:14px;border:1px solid #ccc;
+    border-radius:6px;padding:6px 9px;flex:1;min-width:90px;max-width:200px;background:#fafaf8;
+    color:#1a1a1a;outline:none}
+  .ans-input:focus{border-color:#1e3a5c;background:#fff}
+  .ans-input.ok{border-color:#3a7a3a;background:#f0faf0}
+  .ans-input.bad{border-color:#b03030;background:#fdf0f0}
+  .check-btn{font-family:sans-serif;font-size:13px;background:#1a1a1a;color:#fff;
+    border:none;border-radius:6px;padding:7px 14px;cursor:pointer;margin-top:4px}
+  .check-btn:hover{background:#333}.check-btn:disabled{background:#aaa;cursor:default}
+  .hint{font-family:sans-serif;font-size:12px;color:#888;margin-top:5px;display:none}
+  .hint-link{font-family:sans-serif;font-size:12px;color:#aaa;cursor:pointer;text-decoration:underline;margin-top:7px;display:inline-block}
+  .hint-link:hover{color:#666}
+  .feedback{font-family:sans-serif;font-size:13px;margin-top:10px;padding:8px 12px;
+    border-radius:6px;display:none;line-height:1.5}
+  .feedback.correct{display:block;background:#eaf5ea;color:#1a5a1a}
+  .feedback.wrong{display:block;background:#faeaea;color:#7a1a1a}
+  .feedback.peeked{display:block;background:#fdf8e8;color:#7a5a00}
+  .reveal-link{font-family:sans-serif;font-size:12px;color:#999;cursor:pointer;
+    text-decoration:underline;margin-top:8px;margin-left:10px;display:inline-block}
+  .reveal-link:hover{color:#555}
+  .revealed-answer{display:none;margin-top:8px;font-family:sans-serif;font-size:13px;
+    color:#444;background:#f5f3ef;border-radius:6px;padding:8px 11px;line-height:1.8;overflow-x:auto}
+  .fmt{font-family:sans-serif;font-size:12px;color:#777;margin-bottom:1rem}
+  code{font-family:'Courier New',monospace;background:#f0ede7;padding:1px 5px;border-radius:3px;font-size:12px}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Apportionment &amp; Hamilton&rsquo;s Method</h1>
+  <p class="subtitle">Voting Theory &nbsp;&middot;&nbsp; Part 7 &nbsp;&middot;&nbsp; Instructor: Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026</p>
+
+  <div class="section">
+    <div class="section-title">Core Ideas</div>
+    <div class="concept"><span class="concept-label">Hamilton&rsquo;s Method</span>1) Standard divisor = total population &divide; seats. 2) Quota = population &divide; divisor. 3) Give each group its quota rounded <em>down</em>. 4) Give leftover seats to the largest fractional parts.</div>
+    <div class="concept"><span class="concept-label">Alabama paradox</span>Adding a seat can make a state <em>lose</em> a seat under Hamilton&rsquo;s method.</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Practice Problems</div>
+    <p class="fmt">Enter whole numbers (seats) or <code>yes</code>/<code>no</code>. Press <strong>Check</strong> or hit Enter.</p>
+    <div class="score-bar">
+      <span class="score-label">Score:</span>
+      <span class="score-display" id="score">0 / 8</span>
+      <span class="score-note">first attempt only</span>
+      <div class="progress"><div class="progress-fill" id="prog" style="width:0%"></div></div>
+      <button class="reset-btn" onclick="resetAll()">New set &nbsp;&#8635;</button>
+    </div>
+    <div class="problems" id="problems"></div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/contrib/auto-render.min.js"></script>
+<script>
+
+// ── RNG ───────────────────────────────────────────────────────────────────────
+function _rf(){const b=new Uint32Array(1);crypto.getRandomValues(b);return b[0]/4294967296;}
+function rInt(n){return Math.floor(_rf()*n);}
+function rRange(lo,hi){return lo+rInt(hi-lo+1);}
+function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=rInt(i+1);[a[i],a[j]]=[a[j],a[i]];}return a;}
+function choose(a){return a[rInt(a.length)];}
+function until(fn,tries){tries=tries||4000;for(let i=0;i<tries;i++){const r=fn();if(r)return r;}throw new Error('no instance');}
+
+// ── Profiles: [{n:count, r:'ABC'}] ───────────────────────────────────────────
+const LET='ABCD';
+function perm(k){return shuffle(LET.slice(0,k).split('')).join('');}
+function randProfile(k,g,lo,hi){const seen=new Set(),p=[];while(p.length<g){const r=perm(k);if(seen.has(r))continue;seen.add(r);p.push({n:rRange(lo||3,hi||14),r});}return p;}
+function cands(p){return p[0].r.split('').sort();}
+function total(p){return p.reduce((s,g)=>s+g.n,0);}
+function dropC(p,c){return p.map(g=>({n:g.n,r:g.r.replace(c,'')}));}
+function tbl(p){
+  const o=['1st','2nd','3rd','4th'];
+  let h='<table class="vt"><tr><th>Votes</th>'+p.map(g=>'<th>'+g.n+'</th>').join('')+'</tr>';
+  for(let i=0;i<p[0].r.length;i++) h+='<tr><td class="rl">'+o[i]+' choice</td>'+p.map(g=>'<td>'+g.r[i]+'</td>').join('')+'</tr>';
+  return h+'</table>';
+}
+function tstr(t){return Object.keys(t).sort().map(c=>c+': '+t[c]).join(', ');}
+function nm(w){return w.length?w.join(' and '):'none';}
+
+// ── Methods ──────────────────────────────────────────────────────────────────
+function plur(p){const t={};cands(p).forEach(c=>t[c]=0);p.forEach(g=>t[g.r[0]]+=g.n);const m=Math.max(...Object.values(t));return{t,w:Object.keys(t).filter(c=>t[c]===m).sort()};}
+function majority(p){const{t}=plur(p);for(const c in t) if(2*t[c]>total(p)) return c;return null;}
+function h2h(p,a,b){let x=0,y=0;p.forEach(g=>{if(g.r.indexOf(a)<g.r.indexOf(b))x+=g.n;else y+=g.n;});return[x,y];}
+function condorcet(p){const cs=cands(p);for(const c of cs){if(cs.every(o=>o===c||h2h(p,c,o)[0]>h2h(p,c,o)[1]))return c;}return null;}
+function h2hLines(p){const cs=cands(p),o=[];for(let i=0;i<cs.length;i++)for(let j=i+1;j<cs.length;j++){const[x,y]=h2h(p,cs[i],cs[j]);o.push(cs[i]+' vs '+cs[j]+': '+x+'&ndash;'+y+(x>y?' ('+cs[i]+')':y>x?' ('+cs[j]+')':' (tie)'));}return o.join('<br>');}
+function copeland(p){const cs=cands(p),pts={};cs.forEach(c=>pts[c]=0);for(let i=0;i<cs.length;i++)for(let j=i+1;j<cs.length;j++){const a=cs[i],b=cs[j],[x,y]=h2h(p,a,b);if(x>y)pts[a]++;else if(y>x)pts[b]++;else{pts[a]+=.5;pts[b]+=.5;}}const m=Math.max(...Object.values(pts));return{pts,w:cs.filter(c=>pts[c]===m)};}
+function borda(p){const cs=cands(p),k=cs.length,pts={};cs.forEach(c=>pts[c]=0);p.forEach(g=>{for(let i=0;i<k;i++)pts[g.r[i]]+=g.n*(k-i);});const m=Math.max(...Object.values(pts));return{pts,w:cs.filter(c=>pts[c]===m)};}
+function irv(p){
+  let rem=new Set(cands(p));const rounds=[],tot=total(p);
+  while(true){
+    const t={};rem.forEach(c=>t[c]=0);
+    p.forEach(g=>{for(const c of g.r){if(rem.has(c)){t[c]+=g.n;break;}}});
+    const v=Object.values(t),top=Math.max(...v);
+    if(2*top>tot||rem.size===1){rounds.push({t,e:[]});return{rounds,w:Object.keys(t).filter(c=>t[c]===top).sort()};}
+    const low=Math.min(...v),e=Object.keys(t).filter(c=>t[c]===low).sort();
+    if(e.length===rem.size){rounds.push({t,e:[]});return{rounds,w:[...rem].sort()};}
+    rounds.push({t,e});e.forEach(c=>rem.delete(c));
+  }
+}
+function irvTie(p){const r=irv(p);return r.rounds.some(x=>x.e.length>1)||r.w.length>1;}
+function irvSteps(p){const r=irv(p);return r.rounds.map((x,i)=>'Round '+(i+1)+': '+tstr(x.t)+(x.e.length?' &rarr; eliminate '+nm(x.e):' &rarr; '+nm(r.w)+' wins')).join('<br>');}
+function approval(p,k){k=k||2;const t={};cands(p).forEach(c=>t[c]=0);p.forEach(g=>g.r.slice(0,k).split('').forEach(c=>t[c]+=g.n));const m=Math.max(...Object.values(t));return{t,w:Object.keys(t).filter(c=>t[c]===m).sort()};}
+function stl(p){
+  const t=approval(p,2).t,o=Object.keys(t).sort((a,b)=>t[b]-t[a]||(a<b?-1:1));
+  if(o.length>2&&t[o[1]]===t[o[2]])return null;
+  if(o.length>1&&t[o[0]]===t[o[1]]&&o.length>2&&t[o[0]]===t[o[2]])return null;
+  const a=o[0],b=o[1],[x,y]=h2h(p,a,b);
+  if(x===y)return null;
+  return{t,pair:[a,b],v:[x,y],win:x>y?a:b,lose:x>y?b:a};
+}
+const METHODS={
+  plurality:p=>plur(p).w, irv:p=>irv(p).w, borda:p=>borda(p).w, copeland:p=>copeland(p).w
+};
+const MNAME={plurality:'Plurality',irv:'Instant Runoff',borda:'Borda Count',copeland:'Copeland'};
+function violMaj(p,w){const m=majority(p);return m!==null&&!(w.length===1&&w[0]===m);}
+function violCond(p,w){const c=condorcet(p);return c!==null&&!(w.length===1&&w[0]===c);}
+function violIIA(p,m){const w=METHODS[m](p);if(w.length!==1)return false;for(const c of cands(p)){if(c===w[0])continue;const w2=METHODS[m](dropC(p,c));if(!(w2.length===1&&w2[0]===w[0]))return true;}return false;}
+function pts(x){return Number.isInteger(x)?String(x):(Math.floor(x)?Math.floor(x):'')+'&frac12;';}
+
+// ── Hamilton (integer arithmetic) ────────────────────────────────────────────
+function hamilton(pops,seats){
+  const names=Object.keys(pops),tot=names.reduce((s,k)=>s+pops[k],0);
+  const low={},rem={};
+  names.forEach(k=>{low[k]=Math.floor(pops[k]*seats/tot);rem[k]=(pops[k]*seats)%tot;});
+  let left=seats-names.reduce((s,k)=>s+low[k],0);
+  const ord=names.slice().sort((a,b)=>rem[b]-rem[a]||(a<b?-1:1));
+  const fin={...low};ord.slice(0,left).forEach(k=>fin[k]++);
+  const tie=left>0&&left<ord.length&&rem[ord[left-1]]===rem[ord[left]];
+  return{tot,div:tot/seats,low,rem,left,fin,tie,order:ord};
+}
+function hamTable(pops,seats){
+  const h=hamilton(pops,seats);
+  let t='<table class="vt"><tr><th>Group</th><th>Pop.</th><th>Quota</th><th>Lower</th><th>Final</th></tr>';
+  Object.keys(pops).forEach(k=>{t+='<tr><td class="rl">'+k+'</td><td>'+pops[k]+'</td><td>'+(pops[k]*seats/h.tot).toFixed(3)+'</td><td>'+h.low[k]+'</td><td><b>'+h.fin[k]+'</b></td></tr>';});
+  return'Standard divisor = '+h.tot+' &divide; '+seats+' = '+(+h.div.toFixed(4))+'<br>'+t+'</table>'+h.left+' leftover seat(s) go to the largest fractional parts.';
+}
+
+// ── Answer parsing ───────────────────────────────────────────────────────────
+function candSet(v){
+  const u=v.toUpperCase().trim();
+  const letters=(u.match(/\b[A-D]\b/g)||[]).filter((x,i,a)=>a.indexOf(x)===i).sort();
+  if(!letters.length&&/^(NONE|NO|NOBODY|N\/A|NA|NO ONE|NOONE)$/.test(u))return[];
+  return letters;
+}
+function parseNum(v){
+  v=v.trim().replace(/½/g,'.5').replace(/−/g,'-');
+  let m=v.match(/^(\d+)\s+(\d+)\/(\d+)$/);if(m)return+m[1]+ +m[2]/+m[3];
+  m=v.match(/^(-?\d+)\/(\d+)$/);if(m)return+m[1]/+m[2];
+  m=v.match(/^(\d+)\.5$/);if(m)return+m[1]+.5;
+  return/^-?\d+(\.\d+)?$/.test(v)?parseFloat(v):null;
+}
+function fieldOK(f,v){
+  if(f.type==='grp')return v.trim().toLowerCase()===f.ans.toLowerCase();
+  if(f.type==='cand')return JSON.stringify(candSet(v))===JSON.stringify(f.ans.slice().sort());
+  if(f.type==='yn'){const c=v.trim().toLowerCase()[0];return(c==='y'?'yes':c==='n'?'no':'')===f.ans;}
+  const x=parseNum(v);return x!==null&&Math.abs(x-f.ans)<1e-6;
+}
+// problem builders
+function C(label,ans){return{label,type:'cand',ans:Array.isArray(ans)?ans:(ans===null?[]:[ans])};}
+function N(label,ans){return{label,type:'num',ans};}
+function Y(label,ans){return{label,type:'yn',ans:ans?'yes':'no'};}
+function C_group(label,name){return{label:label,type:'grp',ans:name};}
+function ansText(f){return f.type==='cand'?nm(f.ans):f.type==='yn'||f.type==='grp'?f.ans:f.ans;}
+
+
+// ── Generators for this page ─────────────────────────────────────────────────
+
+const NAMES=['North','South','East','West'];
+function hp(k,seatLo,seatHi,divInt){
+  return until(()=>{
+    const seats=rRange(seatLo,seatHi);let pops={};
+    for(let i=0;i<k;i++)pops[NAMES[i]]=rRange(8,70);
+    if(divInt){let tot=Object.values(pops).reduce((a,b)=>a+b,0);const r=tot%seats;pops[NAMES[k-1]]+=(seats-r)%seats;}
+    const h=hamilton(pops,seats);
+    if(h.tie||Math.min(...Object.values(h.fin))<1)return null;
+    return{pops,seats,h};
+  });
+}
+function popStr(pops){return Object.keys(pops).map(k=>k+': '+pops[k]).join(', ');}
+function alab(){
+  return until(()=>{
+    const pops={A:rRange(3,12),B:rRange(3,12),C:rRange(3,12)};
+    const s=rRange(5,12),h1=hamilton(pops,s),h2=hamilton(pops,s+1);
+    if(h1.tie||h2.tie||Math.min(...Object.values(h1.fin))<1)return null;
+    return{pops,s,h1,h2,paradox:Object.keys(pops).some(k=>h2.fin[k]<h1.fin[k])};
+  },20000);
+}
+const GENERATORS=[
+ ()=>{const s=hp(3,5,12,false);return{html:'<p class="q">Use Hamilton’s Method to apportion <b>'+s.seats+'</b> seats among: '+popStr(s.pops)+'.</p>',
+    fields:Object.keys(s.pops).map(k=>N(k+' seats',s.h.fin[k])),
+    hint:'Find the standard divisor, then each quota. Round down first and see how many seats remain.',step:hamTable(s.pops,s.seats)};},
+ ()=>{const s=hp(4,8,16,false);return{html:'<p class="q">Use Hamilton’s Method to apportion <b>'+s.seats+'</b> seats among: '+popStr(s.pops)+'.</p>',
+    fields:Object.keys(s.pops).map(k=>N(k+' seats',s.h.fin[k])),
+    hint:'Four groups: compute all four quotas before deciding who gets the leftover seats.',step:hamTable(s.pops,s.seats)};},
+ ()=>{const s=hp(3,6,12,true);return{html:'<p class="q">Total population and seats are given. Find the standard divisor, then apportion with Hamilton’s Method: '+popStr(s.pops)+' with <b>'+s.seats+'</b> seats.</p>',
+    fields:[N('Standard divisor',s.h.div)].concat(Object.keys(s.pops).map(k=>N(k+' seats',s.h.fin[k]))),
+    hint:'Standard divisor = total population divided by the number of seats.',step:hamTable(s.pops,s.seats)};},
+ ()=>{const s=hp(3,6,12,false);return{html:'<p class="q">After rounding every quota down, how many seats are left over, and which group receives the first leftover seat?</p><p class="q">Populations: '+popStr(s.pops)+'; seats: <b>'+s.seats+'</b>.</p>',
+    fields:[N('Leftover seats',s.h.left),C_group('First leftover seat goes to',s.h.order[0])],
+    hint:'Leftover seats go to the largest fractional parts of the quotas.',step:hamTable(s.pops,s.seats)};},
+ ()=>{const s=alab();return{html:'<p class="q">Populations: A: '+s.pops.A+', B: '+s.pops.B+', C: '+s.pops.C+'. Apportion '+s.s+' seats, then '+(s.s+1)+' seats with Hamilton’s Method. Does any group <b>lose</b> a seat when the seat count goes up?</p>',
+    fields:[N('A at '+s.s+' seats',s.h1.fin.A),N('A at '+(s.s+1)+' seats',s.h2.fin.A),Y('Any group loses a seat? (yes/no)',s.paradox)],
+    hint:'Do the apportionment twice, once for each house size, then compare each group’s seats.',step:'<b>'+s.s+' seats:</b><br>'+hamTable(s.pops,s.s)+'<br><b>'+(s.s+1)+' seats:</b><br>'+hamTable(s.pops,s.s+1)};}
+];
+
+
+const N_PROBLEMS=8;
+let ACTIVE,correct,flags,attempted,peeked;
+
+function init(){
+  const order=[];
+  while(order.length<N_PROBLEMS)order.push(...shuffle(GENERATORS.map((_,i)=>i)));
+  ACTIVE=order.slice(0,N_PROBLEMS).map(i=>GENERATORS[i]());
+  correct=0;flags=Array(N_PROBLEMS).fill(false);attempted=Array(N_PROBLEMS).fill(false);peeked=Array(N_PROBLEMS).fill(false);
+}
+
+function buildCards(){
+  const wrap=document.getElementById('problems');wrap.innerHTML='';
+  ACTIVE.forEach((p,i)=>{
+    const div=document.createElement('div');div.className='card';div.id='card-'+i;
+    const inputs=p.fields.map((f,j)=>'<div class="frow"><label>'+f.label+'</label><input class="ans-input" id="ai-'+i+'-'+j+'" placeholder="'+(f.type==='yn'?'yes / no':f.type==='num'?'number':'e.g. A')+'" autocomplete="off"></div>').join('');
+    div.innerHTML=
+      '<div class="card-body"><div class="card-meta">Problem '+(i+1)+'</div>'
+      +'<div class="card-expr">'+p.html+'</div>'
+      +'<div class="fields">'+inputs+'</div>'
+      +'<button class="check-btn" id="chk-'+i+'" onclick="check('+i+')">Check</button>'
+      +'<div><span class="hint-link" onclick="this.style.display=\'none\';this.nextElementSibling.style.display=\'block\'">Show hint</span><div class="hint">'+p.hint+'</div></div>'
+      +'<div class="feedback" id="fb-'+i+'"></div>'
+      +'<span class="reveal-link" id="rl-'+i+'" onclick="reveal('+i+')">Show solution</span>'
+      +'<div class="revealed-answer" id="ra-'+i+'"></div></div>';
+    wrap.appendChild(div);
+    p.fields.forEach((f,j)=>document.getElementById('ai-'+i+'-'+j).addEventListener('keydown',e=>{if(e.key==='Enter')check(i);}));
+  });
+}
+
+function check(i){
+  const p=ACTIVE[i],fb=document.getElementById('fb-'+i),card=document.getElementById('card-'+i);
+  let all=true;
+  p.fields.forEach((f,j)=>{
+    const inp=document.getElementById('ai-'+i+'-'+j),ok=fieldOK(f,inp.value);
+    inp.className='ans-input '+(ok?'ok':'bad');if(!ok)all=false;
+  });
+  if(all){
+    fb.className='feedback correct';fb.textContent='✓ Correct!';card.className='card correct';
+    if(!attempted[i]&&!peeked[i]&&!flags[i]){flags[i]=true;correct++;updateScore();}
+    attempted[i]=true;document.getElementById('chk-'+i).disabled=true;
+    p.fields.forEach((f,j)=>document.getElementById('ai-'+i+'-'+j).readOnly=true);
+  }else{
+    attempted[i]=true;fb.className='feedback wrong';
+    fb.textContent='✗ Not quite — the red boxes need another look, or show the solution.';
+    card.className=peeked[i]?'card peeked':'card wrong';
+  }
+}
+
+function reveal(i){
+  const p=ACTIVE[i],box=document.getElementById('ra-'+i),lnk=document.getElementById('rl-'+i);
+  if(box.style.display==='block'){box.style.display='none';lnk.textContent='Show solution';return;}
+  if(!flags[i]){
+    peeked[i]=true;document.getElementById('card-'+i).className='card peeked';
+    if(!attempted[i]){const fb=document.getElementById('fb-'+i);fb.className='feedback peeked';fb.textContent='⚠ Solution revealed — no point awarded.';}
+  }
+  box.innerHTML='<b>Answer'+(p.fields.length>1?'s':'')+':</b> '+p.fields.map(f=>f.label+' <b>'+ansText(f)+'</b>').join(' &middot; ')+'<br><br>'+p.step;
+  box.style.display='block';lnk.textContent='Hide solution';
+}
+
+function updateScore(){
+  document.getElementById('score').textContent=correct+' / '+N_PROBLEMS;
+  document.getElementById('prog').style.width=Math.round(correct/N_PROBLEMS*100)+'%';
+}
+function resetAll(){init();buildCards();updateScore();}
+init();buildCards();updateScore();
+</script>
+</body>
+</html>
