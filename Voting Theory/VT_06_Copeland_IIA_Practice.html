@@ -39,6 +39,10 @@
   table.vt th,table.vt td{border:1px solid #b9c7da;padding:3px 10px;text-align:center}
   table.vt th{background:#e4edf7;color:#1e3a5c;font-weight:700}
   table.vt td.rl{background:#f3f6fa;font-weight:700;color:#1e3a5c;text-align:left}
+  table.vt th.chg,table.vt td.chg{background:#fdf3d6;color:#5a3e00;border-color:#d9bf7a}
+  .pair{display:flex;gap:22px;flex-wrap:wrap;margin:.2rem 0 .6rem}
+  .pair .vt-lbl{font-family:sans-serif;font-size:12px;font-weight:700;color:#1e3a5c;letter-spacing:.04em;text-transform:uppercase}
+  .chg-note{font-family:sans-serif;font-size:13px;background:#fef9e7;border-left:3px solid #7a5c1e;border-radius:0 6px 6px 0;padding:6px 10px;margin:.2rem 0 .5rem;color:#5a3e00}
   .fields{display:flex;flex-direction:column;gap:7px;margin-bottom:6px}
   .frow{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-family:sans-serif;font-size:13px}
   .frow label{min-width:150px;color:#444}
@@ -103,7 +107,7 @@ function rInt(n){return Math.floor(_rf()*n);}
 function rRange(lo,hi){return lo+rInt(hi-lo+1);}
 function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=rInt(i+1);[a[i],a[j]]=[a[j],a[i]];}return a;}
 function choose(a){return a[rInt(a.length)];}
-function until(fn,tries){tries=tries||4000;for(let i=0;i<tries;i++){const r=fn();if(r)return r;}throw new Error('no instance');}
+function until(fn,tries){tries=tries||60000;for(let i=0;i<tries;i++){const r=fn();if(r)return r;}throw new Error('no instance');}
 
 // ── Profiles: [{n:count, r:'ABC'}] ───────────────────────────────────────────
 const LET='ABCD';
@@ -118,6 +122,13 @@ function tbl(p){
   for(let i=0;i<p[0].r.length;i++) h+='<tr><td class="rl">'+o[i]+' choice</td>'+p.map(g=>'<td>'+g.r[i]+'</td>').join('')+'</tr>';
   return h+'</table>';
 }
+function tblHL(p,hl){   // like tbl(), but columns whose index is in hl get class "chg"
+  const o=['1st','2nd','3rd','4th'],cl=i=>hl.includes(i)?' class="chg"':'';
+  let h='<table class="vt"><tr><th>Votes</th>'+p.map((g,i)=>'<th'+cl(i)+'>'+g.n+'</th>').join('')+'</tr>';
+  for(let r=0;r<p[0].r.length;r++) h+='<tr><td class="rl">'+o[r]+' choice</td>'+p.map((g,i)=>'<td'+cl(i)+'>'+g.r[r]+'</td>').join('')+'</tr>';
+  return h+'</table>';
+}
+function arrow(r){return r.split('').join(' &gt; ');}
 function tstr(t){return Object.keys(t).sort().map(c=>c+': '+t[c]).join(', ');}
 function nm(w){return w.length?w.join(' and '):'none';}
 
@@ -241,9 +252,13 @@ const N_PROBLEMS=8;
 let ACTIVE,correct,flags,attempted,peeked;
 
 function init(){
+  // Optional per-page hooks: beforeSet() re-rolls shared state; FIXED_TAIL = generators that always fill the last cards.
+  const tail=(typeof FIXED_TAIL!=='undefined')?FIXED_TAIL:[];
+  const nRand=N_PROBLEMS-tail.length;
+  if(typeof beforeSet==='function')beforeSet();
   const order=[];
-  while(order.length<N_PROBLEMS)order.push(...shuffle(GENERATORS.map((_,i)=>i)));
-  ACTIVE=order.slice(0,N_PROBLEMS).map(i=>GENERATORS[i]());
+  while(order.length<nRand)order.push(...shuffle(GENERATORS.map((_,i)=>i)));
+  ACTIVE=order.slice(0,nRand).map(i=>GENERATORS[i]()).concat(tail.map(g=>g()));
   correct=0;flags=Array(N_PROBLEMS).fill(false);attempted=Array(N_PROBLEMS).fill(false);peeked=Array(N_PROBLEMS).fill(false);
 }
 
@@ -251,6 +266,7 @@ function buildCards(){
   const wrap=document.getElementById('problems');wrap.innerHTML='';
   ACTIVE.forEach((p,i)=>{
     const div=document.createElement('div');div.className='card';div.id='card-'+i;
+    if(p.wide)div.style.gridColumn='1 / -1';
     const inputs=p.fields.map((f,j)=>'<div class="frow"><label>'+f.label+'</label><input class="ans-input" id="ai-'+i+'-'+j+'" placeholder="'+(f.type==='yn'?'yes / no':f.type==='num'?'number':'e.g. A')+'" autocomplete="off"></div>').join('');
     div.innerHTML=
       '<div class="card-body"><div class="card-meta">Problem '+(i+1)+'</div>'

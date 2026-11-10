@@ -39,6 +39,10 @@
   table.vt th,table.vt td{border:1px solid #b9c7da;padding:3px 10px;text-align:center}
   table.vt th{background:#e4edf7;color:#1e3a5c;font-weight:700}
   table.vt td.rl{background:#f3f6fa;font-weight:700;color:#1e3a5c;text-align:left}
+  table.vt th.chg,table.vt td.chg{background:#fdf3d6;color:#5a3e00;border-color:#d9bf7a}
+  .pair{display:flex;gap:22px;flex-wrap:wrap;margin:.2rem 0 .6rem}
+  .pair .vt-lbl{font-family:sans-serif;font-size:12px;font-weight:700;color:#1e3a5c;letter-spacing:.04em;text-transform:uppercase}
+  .chg-note{font-family:sans-serif;font-size:13px;background:#fef9e7;border-left:3px solid #7a5c1e;border-radius:0 6px 6px 0;padding:6px 10px;margin:.2rem 0 .5rem;color:#5a3e00}
   .fields{display:flex;flex-direction:column;gap:7px;margin-bottom:6px}
   .frow{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-family:sans-serif;font-size:13px}
   .frow label{min-width:150px;color:#444}
@@ -103,7 +107,7 @@ function rInt(n){return Math.floor(_rf()*n);}
 function rRange(lo,hi){return lo+rInt(hi-lo+1);}
 function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=rInt(i+1);[a[i],a[j]]=[a[j],a[i]];}return a;}
 function choose(a){return a[rInt(a.length)];}
-function until(fn,tries){tries=tries||4000;for(let i=0;i<tries;i++){const r=fn();if(r)return r;}throw new Error('no instance');}
+function until(fn,tries){tries=tries||60000;for(let i=0;i<tries;i++){const r=fn();if(r)return r;}throw new Error('no instance');}
 
 // ── Profiles: [{n:count, r:'ABC'}] ───────────────────────────────────────────
 const LET='ABCD';
@@ -118,6 +122,13 @@ function tbl(p){
   for(let i=0;i<p[0].r.length;i++) h+='<tr><td class="rl">'+o[i]+' choice</td>'+p.map(g=>'<td>'+g.r[i]+'</td>').join('')+'</tr>';
   return h+'</table>';
 }
+function tblHL(p,hl){   // like tbl(), but columns whose index is in hl get class "chg"
+  const o=['1st','2nd','3rd','4th'],cl=i=>hl.includes(i)?' class="chg"':'';
+  let h='<table class="vt"><tr><th>Votes</th>'+p.map((g,i)=>'<th'+cl(i)+'>'+g.n+'</th>').join('')+'</tr>';
+  for(let r=0;r<p[0].r.length;r++) h+='<tr><td class="rl">'+o[r]+' choice</td>'+p.map((g,i)=>'<td'+cl(i)+'>'+g.r[r]+'</td>').join('')+'</tr>';
+  return h+'</table>';
+}
+function arrow(r){return r.split('').join(' &gt; ');}
 function tstr(t){return Object.keys(t).sort().map(c=>c+': '+t[c]).join(', ');}
 function nm(w){return w.length?w.join(' and '):'none';}
 
@@ -217,10 +228,10 @@ const GENERATORS=[
     hint:'Check for a majority first. If nobody has one, eliminate the last-place candidate.',step:irvSteps(p)};},
  ()=>{const p=ip(4,4),r=irv(p);return{html:'<p class="q">Who wins using Instant Runoff Voting?</p>'+tbl(p),fields:[C('IRV winner',r.w)],
     hint:'With four candidates you may need several rounds. Recount after every elimination.',step:irvSteps(p)};},
- ()=>{const p=ip(3,4),r=irv(p),e=r.rounds[0].e;return{html:'<p class="q">Which candidate is eliminated first, and who wins?</p>'+tbl(p),
+ ()=>{const p=until(()=>{const q=ip(choose([3,4]),4);return irv(q).rounds[0].e.length===1?q:null;}),r=irv(p),e=r.rounds[0].e;return{html:'<p class="q">Which candidate is eliminated first, and who wins?</p>'+tbl(p),
     fields:[C('Eliminated first',e),C('IRV winner',r.w)],
     hint:'The first elimination uses only first-place counts.',step:irvSteps(p)};},
- ()=>{const p=ip(3,4),r=irv(p),last=r.rounds[r.rounds.length-1],wv=last.t[r.w[0]];return{html:'<p class="q">How many votes does the winner have in the <b>final</b> round, and how many total voters are there?</p>'+tbl(p),
+ ()=>{const p=until(()=>{const q=ip(3,4);return irv(q).rounds.length>=2?q:null;}),r=irv(p),last=r.rounds[r.rounds.length-1],wv=last.t[r.w[0]];return{html:'<p class="q">How many votes does the winner have in the <b>final</b> round, and how many total voters are there?</p>'+tbl(p),
     fields:[N('Winner’s final-round votes',wv),N('Total voters',total(p))],
     hint:'Add every column to get the total. In the final round, count all ballots whose top remaining choice is the winner.',step:irvSteps(p)};},
  ()=>{const p=until(()=>{const q=ip(3,4);return plur(q).w.length===1&&irv(q).w[0]!==plur(q).w[0]?q:null;});const r=irv(p),pw=plur(p);
@@ -230,14 +241,46 @@ const GENERATORS=[
     step:'Plurality: '+tstr(pw.t)+' &rarr; '+nm(pw.w)+'.<br>'+irvSteps(p)};}
 ];
 
+// ── Fixed Q7 and Q8: monotonicity pairs. Ballot columns are fixed; counts are random but
+//    only accepted if the engine confirms IRV really violates monotonicity. ──
+const MONO=[
+ {cols:['ABC','BCA','BAC','CAB'],from:2,to:0,w:'A',lo:[20,10,6,18],hi:[45,30,20,34]},
+ {cols:['DACB','CADB','ACDB','CBDA','ACBD'],from:1,to:2,w:'A',lo:[6,6,6,6,6],hi:[30,30,30,30,30]}
+];
+function monoCard(T){
+  const s=until(()=>{
+    const n=T.cols.map((_,i)=>rRange(T.lo[i],T.hi[i]));
+    const x=rRange(3,n[T.from]-1);if(x<3||x>=n[T.from])return null;
+    const n2=n.slice();n2[T.from]-=x;n2[T.to]+=x;
+    const e1=T.cols.map((r,i)=>({n:n[i],r})),e2=T.cols.map((r,i)=>({n:n2[i],r}));
+    if(irvTie(e1)||irvTie(e2))return null;
+    const w1=irv(e1).w,w2=irv(e2).w;
+    return(w1.length===1&&w1[0]===T.w&&!(w2.length===1&&w2[0]===T.w))?{e1,e2,w1,w2,x}:null;
+  });
+  const W=T.w,hl=[T.from,T.to];
+  return{wide:true,
+    html:'<p class="q">Two elections are held with the <b>same</b> voters. Between them, some voters change their ballots in a way that <b>helps '+W+'</b>. The changed columns are shaded.</p>'
+      +'<div class="chg-note"><b>'+s.x+'</b> voters who ranked <b>'+arrow(T.cols[T.from])+'</b> now rank <b>'+arrow(T.cols[T.to])+'</b> (they moved '+W+' up). Nobody else changes.</div>'
+      +'<div class="pair"><div><div class="vt-lbl">Election 1 (before)</div>'+tblHL(s.e1,hl)+'</div><div><div class="vt-lbl">Election 2 (after)</div>'+tblHL(s.e2,hl)+'</div></div>'
+      +'<p class="q">Use Instant Runoff Voting on each election.</p>',
+    fields:[C('Election 1 winner',s.w1),C('Election 2 winner',s.w2),Y('Monotonicity violated? (yes/no)',true)],
+    hint:'Run IRV separately on each table. Then ask: did the candidate the switchers lifted end up better off or worse off?',
+    step:'<b>Election 1:</b><br>'+irvSteps(s.e1)+'<br><br><b>Election 2:</b><br>'+irvSteps(s.e2)+'<br><br>'+W+' gained support ('+s.x+' voters moved '+W+' up) but went from winning to losing: IRV <b>violates monotonicity</b>.'};
+}
+const FIXED_TAIL=[()=>monoCard(MONO[0]),()=>monoCard(MONO[1])];
+
 
 const N_PROBLEMS=8;
 let ACTIVE,correct,flags,attempted,peeked;
 
 function init(){
+  // Optional per-page hooks: beforeSet() re-rolls shared state; FIXED_TAIL = generators that always fill the last cards.
+  const tail=(typeof FIXED_TAIL!=='undefined')?FIXED_TAIL:[];
+  const nRand=N_PROBLEMS-tail.length;
+  if(typeof beforeSet==='function')beforeSet();
   const order=[];
-  while(order.length<N_PROBLEMS)order.push(...shuffle(GENERATORS.map((_,i)=>i)));
-  ACTIVE=order.slice(0,N_PROBLEMS).map(i=>GENERATORS[i]());
+  while(order.length<nRand)order.push(...shuffle(GENERATORS.map((_,i)=>i)));
+  ACTIVE=order.slice(0,nRand).map(i=>GENERATORS[i]()).concat(tail.map(g=>g()));
   correct=0;flags=Array(N_PROBLEMS).fill(false);attempted=Array(N_PROBLEMS).fill(false);peeked=Array(N_PROBLEMS).fill(false);
 }
 
@@ -245,6 +288,7 @@ function buildCards(){
   const wrap=document.getElementById('problems');wrap.innerHTML='';
   ACTIVE.forEach((p,i)=>{
     const div=document.createElement('div');div.className='card';div.id='card-'+i;
+    if(p.wide)div.style.gridColumn='1 / -1';
     const inputs=p.fields.map((f,j)=>'<div class="frow"><label>'+f.label+'</label><input class="ans-input" id="ai-'+i+'-'+j+'" placeholder="'+(f.type==='yn'?'yes / no':f.type==='num'?'number':'e.g. A')+'" autocomplete="off"></div>').join('');
     div.innerHTML=
       '<div class="card-body"><div class="card-meta">Problem '+(i+1)+'</div>'
