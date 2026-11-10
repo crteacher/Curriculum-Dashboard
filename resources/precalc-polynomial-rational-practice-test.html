@@ -1,0 +1,1801 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Polynomial & Rational Practice Test</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=JetBrains+Mono:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #f6f1e4;
+    --paper-line: rgba(58, 74, 94, 0.14);
+    --paper-line-strong: rgba(58, 74, 94, 0.26);
+    --ink: #26313f;
+    --ink-soft: #5b6b7d;
+    --card-bg: #fffdf7;
+    --card-border: #ddd2b6;
+    --accent: #c1483f;
+    --accent-strong: #8f342d;
+    --accent-soft: rgba(193, 72, 63, 0.12);
+    --accent-ink: #fff6f4;
+    --good: #3f7a52;
+    --good-soft: rgba(63, 122, 82, 0.14);
+    --bad: #b3413a;
+    --bad-soft: rgba(179, 65, 58, 0.12);
+    --shadow: rgba(38, 49, 63, 0.16);
+    --graph-grid: rgba(58, 74, 94, 0.14);
+    --graph-axis: rgba(38, 49, 63, 0.55);
+    --graph-stroke-a: #c1483f;
+    --graph-stroke-b: #2f7d6b;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #1b2330;
+      --paper-line: rgba(238, 242, 240, 0.07);
+      --paper-line-strong: rgba(238, 242, 240, 0.15);
+      --ink: #edf1ef;
+      --ink-soft: #a3aebb;
+      --card-bg: #232e3d;
+      --card-border: #3a4a61;
+      --accent: #ff9179;
+      --accent-strong: #ffb3a0;
+      --accent-soft: rgba(255, 145, 121, 0.16);
+      --accent-ink: #2e0f09;
+      --good: #7bc794;
+      --good-soft: rgba(123, 199, 148, 0.16);
+      --bad: #ff9a90;
+      --bad-soft: rgba(255, 154, 144, 0.14);
+      --shadow: rgba(0, 0, 0, 0.5);
+      --graph-grid: rgba(238, 242, 240, 0.10);
+      --graph-axis: rgba(238, 242, 240, 0.55);
+      --graph-stroke-a: #ff9179;
+      --graph-stroke-b: #5fd1b3;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #1b2330;
+    --paper-line: rgba(238, 242, 240, 0.07);
+    --paper-line-strong: rgba(238, 242, 240, 0.15);
+    --ink: #edf1ef;
+    --ink-soft: #a3aebb;
+    --card-bg: #232e3d;
+    --card-border: #3a4a61;
+    --accent: #ff9179;
+    --accent-strong: #ffb3a0;
+    --accent-soft: rgba(255, 145, 121, 0.16);
+    --accent-ink: #2e0f09;
+    --good: #7bc794;
+    --good-soft: rgba(123, 199, 148, 0.16);
+    --bad: #ff9a90;
+    --bad-soft: rgba(255, 154, 144, 0.14);
+    --shadow: rgba(0, 0, 0, 0.5);
+    --graph-grid: rgba(238, 242, 240, 0.10);
+    --graph-axis: rgba(238, 242, 240, 0.55);
+    --graph-stroke-a: #ff9179;
+    --graph-stroke-b: #5fd1b3;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background:
+      repeating-linear-gradient(0deg, var(--paper-line) 0, var(--paper-line) 1px, transparent 1px, transparent 32px),
+      repeating-linear-gradient(90deg, var(--paper-line) 0, var(--paper-line) 1px, transparent 1px, transparent 32px),
+      var(--paper);
+    color: var(--ink);
+    font-family: "Source Sans 3", ui-sans-serif, system-ui, sans-serif;
+    display: flex;
+    justify-content: center;
+    padding: clamp(20px, 4vw, 56px) 18px 80px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+  }
+
+  .wrap { width: 100%; max-width: 900px; }
+  header { text-align: center; margin-bottom: 22px; }
+
+  .eyebrow {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--accent); font-weight: 600;
+  }
+
+  h1 {
+    font-family: "Fraunces", Georgia, serif; font-weight: 600;
+    font-size: clamp(1.9rem, 5vw, 2.6rem); margin: 6px 0 8px; text-wrap: balance;
+  }
+
+  header p { color: var(--ink-soft); font-size: 1rem; max-width: 60ch; margin: 0 auto; line-height: 1.55; }
+
+  .toolbar {
+    position: sticky; top: 12px; z-index: 5;
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    margin: 22px 0 26px; padding: 12px 16px; flex-wrap: wrap;
+    background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 14px;
+    box-shadow: 0 10px 26px -16px var(--shadow);
+  }
+  .score-box { display: flex; align-items: baseline; gap: 8px; }
+  .score-num { font-family: "JetBrains Mono", monospace; font-size: 1.3rem; font-weight: 700; color: var(--accent-strong); font-variant-numeric: tabular-nums; }
+  .score-label { font-size: 0.78rem; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.06em; }
+  .score-group { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .score-divider { width: 1px; align-self: stretch; min-height: 24px; background: var(--card-border); }
+  .exam-score-box .score-num { color: var(--ink); }
+  .exam-score-box .score-label { display: flex; align-items: center; gap: 5px; }
+  .exam-score-box .score-label svg { width: 11px; height: 11px; flex-shrink: 0; }
+
+  .exam-badge {
+    display: inline-flex; align-items: center; gap: 5px; font-size: 0.68rem; font-weight: 700;
+    padding: 3px 9px; border-radius: 20px; letter-spacing: 0.02em; white-space: nowrap;
+  }
+  .exam-badge svg { width: 11px; height: 11px; flex-shrink: 0; }
+  .exam-badge.exam-good { background: var(--good-soft); color: var(--good); }
+  .exam-badge.exam-bad { background: var(--bad-soft); color: var(--bad); }
+
+  button { font-family: inherit; cursor: pointer; }
+  button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .icon-btn {
+    display: inline-flex; align-items: center; gap: 7px; background: var(--card-bg);
+    border: 1px solid var(--card-border); color: var(--ink); padding: 9px 14px;
+    border-radius: 9px; font-size: 0.86rem; font-weight: 600;
+    transition: border-color 0.15s ease, transform 0.1s ease;
+  }
+  .icon-btn:hover { border-color: var(--accent); }
+  .icon-btn:active { transform: translateY(1px); }
+  .icon-btn svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+  .group-head {
+    margin: 34px 0 14px; padding-bottom: 8px; border-bottom: 1.5px solid var(--paper-line-strong);
+  }
+  .group-head .gnum {
+    font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 1.3rem; color: var(--ink);
+  }
+  .group-head .gdesc { font-size: 0.92rem; color: var(--ink-soft); margin-top: 2px; }
+
+  .qcard {
+    background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px;
+    box-shadow: 0 14px 32px -22px var(--shadow), 0 2px 8px -2px var(--shadow);
+    padding: clamp(16px, 3vw, 24px); margin-bottom: 18px;
+  }
+
+  .qcard-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
+  .qcard-head .qtitle { display: flex; align-items: center; gap: 10px; }
+  .qlabel { font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 1.1rem; }
+  .qpoints {
+    font-family: "JetBrains Mono", monospace; font-size: 0.68rem; letter-spacing: 0.05em;
+    color: var(--ink-soft); background: var(--paper-line); padding: 2px 8px; border-radius: 20px;
+  }
+
+  .qprompt { font-size: 1rem; line-height: 1.7; margin-bottom: 14px; }
+  .qprompt .math { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 1.02rem; }
+  .qprompt .frac, .qsolution .frac { display: inline-flex; flex-direction: column; vertical-align: middle; text-align: center; margin: 0 3px; line-height: 1.15; }
+  .qprompt .frac .num, .qsolution .frac .num { border-bottom: 1.3px solid currentColor; padding: 0 3px 1px; }
+  .qprompt .frac .den, .qsolution .frac .den { padding: 1px 3px 0; }
+  .qprompt .radical, .qsolution .radical { display: inline-flex; align-items: flex-start; margin: 0 2px; }
+  .qprompt .radical .idx, .qsolution .radical .idx { font-size: 0.62em; margin-right: -0.35em; margin-top: -0.3em; }
+  .qprompt .radical .rsym, .qsolution .radical .rsym { font-size: 1.1em; }
+  .qprompt .radical .rad-inner, .qsolution .radical .rad-inner { border-top: 1.3px solid currentColor; padding: 0 3px; margin-left: 1px; }
+
+  .qgraph-wrap { display: flex; justify-content: center; margin: 10px 0 16px; }
+  .qgraph-wrap canvas { width: 100%; max-width: 380px; height: 380px; display: block; }
+  .qgraph-wrap.small canvas { max-width: 280px; height: 190px; }
+
+  .qgraph-tools { display: flex; align-items: center; justify-content: center; gap: 12px; margin: -6px 0 16px; flex-wrap: wrap; }
+  .qgraph-caption { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 0.78rem; color: var(--ink-soft); }
+
+  .qtable-wrap { overflow-x: auto; margin: 10px 0 16px; display: flex; justify-content: center; }
+  .qtable { border-collapse: collapse; font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 0.92rem; }
+  .qtable th, .qtable td {
+    border: 1.3px solid var(--card-border); padding: 7px 16px; text-align: center;
+  }
+  .qtable th { background: var(--paper-line); color: var(--ink); font-weight: 700; }
+  .qtable td { background: var(--card-bg); }
+
+  .qinputs { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin-bottom: 14px; }
+  .qinputs:empty { margin-bottom: 0; }
+  .qinputs .field-label { font-size: 0.86rem; color: var(--ink-soft); font-weight: 600; }
+  .qinputs input[type="text"], .qinputs select {
+    font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 0.95rem;
+    background: var(--paper); border: 1.5px solid var(--card-border); border-radius: 8px;
+    padding: 8px 10px; color: var(--ink); min-width: 92px;
+  }
+  .qinputs select { font-family: "Source Sans 3", sans-serif; min-width: 190px; }
+  .qinputs input:focus, .qinputs select:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .qinputs .subrow {
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    padding: 8px 10px; border: 1.5px dashed var(--card-border); border-radius: 10px;
+  }
+  .qinputs .hidden { display: none !important; }
+  .mc-row { display: flex; flex-wrap: wrap; gap: 8px; }
+  .mc-opt {
+    border: 1.5px solid var(--card-border); border-radius: 9px; padding: 8px 13px;
+    font-size: 0.88rem; background: var(--card-bg); color: var(--ink); font-weight: 600;
+    transition: border-color 0.15s ease, background 0.15s ease;
+  }
+  .mc-opt:hover { border-color: var(--accent); }
+  .mc-opt.selected { border-color: var(--accent); background: var(--accent-soft); color: var(--accent-strong); }
+
+  .qactions { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; }
+  .btn-primary {
+    background: var(--accent); color: var(--accent-ink); border: none; padding: 10px 20px;
+    border-radius: 10px; font-size: 0.92rem; font-weight: 700;
+    box-shadow: 0 8px 16px -8px var(--accent-strong); transition: transform 0.1s ease;
+  }
+  .btn-primary:active { transform: translateY(1px); }
+  .btn-secondary {
+    background: transparent; border: 1.5px solid var(--card-border); color: var(--ink);
+    padding: 9px 18px; border-radius: 10px; font-size: 0.92rem; font-weight: 700;
+    transition: border-color 0.15s ease;
+  }
+  .btn-secondary:hover { border-color: var(--accent); }
+
+  .qfeedback {
+    font-size: 0.9rem; font-weight: 700; padding: 9px 13px; border-radius: 9px; margin-bottom: 10px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .qfeedback.good { background: var(--good-soft); color: var(--good); }
+  .qfeedback.bad { background: var(--bad-soft); color: var(--bad); }
+  .qfeedback svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+  .qsolution {
+    background: var(--accent-soft); border: 1px solid var(--card-border); border-left: 4px solid var(--accent);
+    border-radius: 0 12px 12px 0; padding: 14px 16px; font-size: 0.92rem; line-height: 1.7;
+  }
+  .qsolution .sol-label {
+    font-family: "JetBrains Mono", monospace; font-size: 0.68rem; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--accent-strong); font-weight: 700; display: block; margin-bottom: 6px;
+  }
+  .qsolution .step { margin: 3px 0; }
+  .qsolution .final { margin-top: 8px; font-weight: 700; font-family: "JetBrains Mono", monospace; }
+
+
+  /* ---- additions for the quadratics test ---- */
+  body { flex-direction: column; align-items: center; }
+  .site-nav { align-self: stretch; margin: calc(-1 * clamp(20px, 4vw, 56px)) -18px clamp(14px, 3vw, 28px); }
+  .qprompt .math sup, .qsolution sup, .mc-opt sup { font-size: 0.72em; line-height: 0; }
+  .field-note { font-size: 0.86rem; color: var(--ink-soft); margin-top: 8px; line-height: 1.55; }
+  .field-note .math { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 0.84rem; color: var(--ink); }
+  .qinputs { flex-direction: column; align-items: stretch; gap: 10px; }
+  .qinputs > .subrow { border: none; padding: 0; }
+  .qinputs .field-label { font-size: 0.86rem; color: var(--ink-soft); font-weight: 600; }
+  .qinputs input[type="text"].wide { flex: 1 1 230px; min-width: 0; }
+  .qinputs input[type="text"] { max-width: 100%; }
+  .qinputs .subrow.col { flex-direction: column; align-items: flex-start; }
+  .qinputs .mc-row { flex-direction: row; }
+  .qinputs .subrow.col .mc-row { flex-direction: column; align-items: stretch; width: 100%; }
+  .qinputs .subrow.col .mc-opt { text-align: left; font-weight: 500; line-height: 1.4; }
+  .qsolution .wb {
+    font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 0.88rem; line-height: 1.55;
+    background: var(--card-bg); border: 1.5px dashed var(--card-border); border-radius: 10px;
+    padding: 10px 14px; margin: 6px 0 10px; overflow-x: auto;
+  }
+  .qsolution .wb .ln { padding: 3px 0; white-space: normal; }
+  .qsolution .wb .ln.cont { padding-left: 2.2em; }
+  .qsolution .wb .frac { margin: 0 4px; }
+  .qsolution .note-inline { font-family: "Source Sans 3", sans-serif; font-size: 0.8rem; color: var(--ink-soft); font-style: italic; margin-left: 1.2em; }
+  .qsolution .step { margin: 7px 0; }
+  .qsolution .final { font-family: "JetBrains Mono", monospace; line-height: 1.5; }
+  .sketch-wrap { display: flex; justify-content: center; margin: 6px 0 4px; }
+  svg.sketch { width: 100%; max-width: 340px; height: auto; background: var(--card-bg); border: 1.5px dashed var(--card-border); border-radius: 10px; }
+  svg.sketch .sk-axis { stroke: var(--graph-axis); stroke-width: 1.2; }
+  svg.sketch .sk-dash { stroke: var(--graph-grid); stroke-width: 1.2; stroke-dasharray: 4 4; }
+  svg.sketch .sk-curve { fill: none; stroke: var(--accent); stroke-width: 2.4; stroke-linejoin: round; }
+  svg.sketch .sk-dot { fill: var(--accent-strong); }
+  svg.sketch .sk-txt { fill: var(--ink); font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 10.5px; }
+  .qpoints, .new-version-btn { white-space: nowrap; }
+  .qfeedback { align-items: flex-start; }
+  .qfeedback svg { margin-top: 2px; }
+  @media (max-width: 560px) {
+    .qinputs .subrow { flex-direction: column; align-items: stretch; }
+    .qinputs .subrow > input[type="text"], .qinputs input[type="text"].wide { width: 100%; flex: none; }
+    .qinputs > .subrow > .field-label { margin-bottom: -4px; }
+  }
+
+  .hidden { display: none !important; }
+
+
+  /* ---- additions for the graph-based exams ---- */
+  .qgraph-wrap.wide canvas { max-width: 560px; height: 250px; }
+  .gsvg { width: 100%; height: auto; display: block; }
+  .gsvg .gl { stroke: var(--graph-grid); stroke-width: 1; }
+  .gsvg .ax { stroke: var(--graph-axis); stroke-width: 1.3; }
+  .gsvg .as { stroke: var(--graph-stroke-b); stroke-width: 1.2; stroke-dasharray: 4 3; }
+  .gsvg .cv { fill: none; stroke: var(--graph-stroke-a); stroke-width: 2.3; stroke-linejoin: round; }
+  .gsvg .cv2 { fill: none; stroke: var(--graph-stroke-b); stroke-width: 2.3; stroke-linejoin: round; }
+  .gsvg .tk { fill: var(--ink-soft); font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 8.5px; }
+  .gsvg .lb { fill: var(--ink); font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 9px; }
+  .gsvg .dot { fill: var(--graph-stroke-a); stroke: var(--card-bg); stroke-width: 1; }
+  .gsvg .dot-open { fill: var(--card-bg); stroke: var(--graph-stroke-a); stroke-width: 1.8; }
+  .mc-row.gopts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; max-width: 560px; }
+  .gopt { position: relative; padding: 6px 6px 4px; text-align: center; background: var(--card-bg); }
+  .gopt .gopt-l { position: absolute; top: 6px; left: 8px; font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 0.8rem; font-weight: 700; color: var(--ink-soft); }
+  .gopt.selected .gopt-l { color: var(--accent-strong); }
+  .sol-fig { display: flex; justify-content: center; margin: 8px 0; }
+  .sol-fig .gsvg { max-width: 330px; background: var(--card-bg); border: 1.5px dashed var(--card-border); border-radius: 10px; }
+  .qinputs input.ans-deg { min-width: 70px; width: 90px; }
+  .qinputs .mini { font-size: 0.86rem; color: var(--ink-soft); }
+  .qinputs select { min-width: 150px; }
+  @media (max-width: 460px) { .mc-row.gopts { gap: 8px; } }
+</style>
+
+<style>
+  .site-nav { background: #8b3a8b; padding: .55rem 1.25rem; font-family: Georgia, serif;
+              font-size: .82rem; display: flex; gap: 1.2rem; }
+  .site-nav a { color: rgba(255,255,255,.9); text-decoration: none; }
+  .site-nav a:hover { color: #fff; }
+</style>
+</head>
+<body>
+<nav class="site-nav">
+  <a href="../index.html">← Dashboard</a>
+  <a href="../classrooms.html">↩ Spiral Do Now</a>
+</nav>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">PreCalc &middot; Polynomial &amp; Rational Functions</div>
+    <h1>Polynomial & Rational Practice Test</h1>
+    <p>Every part regenerates its own random version — work it out on paper, then enter your answers and check yourself. Click "New version" on any part as many times as you want to drill it again with different numbers. Q1 asks whether a function is even a polynomial before you find its degree and end behavior — read carefully, some are traps. In Q2 you pick a sketch for one function and build the sketch of another by clicking its zeros on the grid. In Q3 you read a graph and type a polynomial that could produce it (any vertical stretch is fine). Q4 asks for zeros, asymptotes, and holes of a rational function; type <strong>none</strong> when nothing applies. Q5 is extra credit and can push your exam score above the total. Your <strong>Exam Score</strong> locks in the first time you check each part (or peek its solution) — everything after that is just practice. Use "Reset exam" any time for a brand-new attempt.</p>
+  </header>
+
+  <div class="toolbar">
+    <div class="score-group">
+      <div class="score-box">
+        <span class="score-num" id="scoreNum">0 / 0</span>
+        <span class="score-label">points checked correct</span>
+      </div>
+      <div class="score-divider"></div>
+      <div class="score-box exam-score-box">
+        <span class="score-num" id="examScoreNum">0 / 0</span>
+        <span class="score-label">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+          exam score
+        </span>
+      </div>
+    </div>
+    <button class="icon-btn" id="newTestBtn" type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3h5v5"/><path d="M4 20 21 3"/><path d="M21 16v5h-5"/><path d="M15 15l6 6"/><path d="M4 4l5 5"/></svg>
+      Reset exam
+    </button>
+  </div>
+
+  <div id="groups"></div>
+</div>
+
+
+<script>
+(function () {
+  "use strict";
+  function gcd(a, b) { a = Math.abs(a); b = Math.abs(b); while (b) { var t = a % b; a = b; b = t; } return a; }
+  function F(n, d) {
+    if (d === undefined) d = 1;
+    if (d < 0) { n = -n; d = -d; }
+    var g = gcd(n, d) || 1;
+    return { n: n / g, d: d / g };
+  }
+  function fadd(a, b) { return F(a.n * b.d + b.n * a.d, a.d * b.d); }
+  function fmul(a, b) { return F(a.n * b.n, a.d * b.d); }
+  function fneg(a) { return { n: -a.n, d: a.d }; }
+  function finv(a) { if (a.n === 0) throw new Error("division by zero"); return F(a.d, a.n); }
+  function feq(a, b) { return a.n === b.n && a.d === b.d; }
+  function fnum(a) { return a.n / a.d; }
+  function fisInt(a) { return a.d === 1; }
+  function fstr(a) { return a.d === 1 ? String(a.n) : a.n + "/" + a.d; }
+  function fpowInt(a, k) {
+    var r = F(1), i;
+    if (k >= 0) { for (i = 0; i < k; i++) r = fmul(r, a); return r; }
+    return finv(fpowInt(a, -k));
+  }
+  function pConst(c) { var p = {}; if (c.n !== 0) p["0"] = { e: F(0), c: c }; return p; }
+  function pX() { var p = {}; p["1"] = { e: F(1), c: F(1) }; return p; }
+  function pAddTerm(p, e, c) {
+    var k = fstr(e);
+    var cur = p[k] ? p[k].c : F(0);
+    var nc = fadd(cur, c);
+    if (nc.n === 0) delete p[k]; else p[k] = { e: e, c: nc };
+  }
+  function pAdd(a, b) { var r = {}; Object.keys(a).forEach(function (k) { pAddTerm(r, a[k].e, a[k].c); }); Object.keys(b).forEach(function (k) { pAddTerm(r, b[k].e, b[k].c); }); return r; }
+  function pNeg(a) { var r = {}; Object.keys(a).forEach(function (k) { r[k] = { e: a[k].e, c: fneg(a[k].c) }; }); return r; }
+  function pMul(a, b) {
+    var r = {};
+    Object.keys(a).forEach(function (i) { Object.keys(b).forEach(function (j) { pAddTerm(r, fadd(a[i].e, b[j].e), fmul(a[i].c, b[j].c)); }); });
+    return r;
+  }
+  function pTerms(p) { return Object.keys(p).map(function (k) { return p[k]; }).sort(function (x, y) { return fnum(y.e) - fnum(x.e); }); }
+  function pEqual(a, b) {
+    var ka = Object.keys(a), kb = Object.keys(b);
+    if (ka.length !== kb.length) return false;
+    return ka.every(function (k) { return b[k] && feq(a[k].c, b[k].c); });
+  }
+  function normalizeInput(s) {
+    s = String(s === null || s === undefined ? "" : s);
+    s = s.replace(/[−–—]/g, "-").replace(/[×·⋅]/g, "*")
+      .replace(/²/g, "^2").replace(/³/g, "^3").replace(/⁴/g, "^4").replace(/⁵/g, "^5")
+      .replace(/′|’/g, "'").replace(/\s+/g, "").replace(/X/g, "x").replace(/\*\*/g, "^");
+    // strip a leading "f'(x)=" / "y=" label (take everything after the last "=")
+    if (s.indexOf("=") !== -1) {
+      var eqi = s.lastIndexOf("="), rhs = s.slice(eqi + 1);
+      s = ((rhs === "0" || rhs === "") && eqi > 0) ? s.slice(0, eqi) : rhs;
+    }
+    return s;
+  }
+  function tokenize(s) {
+    var toks = [], i = 0, m;
+    while (i < s.length) {
+      var ch = s[i];
+      if (/[0-9.]/.test(ch)) {
+        m = /^[0-9]*\.?[0-9]+|^[0-9]+\.?/.exec(s.slice(i));
+        if (!m) throw new Error("I can't read the number near \"" + s.slice(i, i + 3) + "\".");
+        toks.push({ t: "num", v: m[0] }); i += m[0].length;
+      } else if (ch === "x") { toks.push({ t: "x" }); i++; }
+      else if ("+-*/^()".indexOf(ch) !== -1) { toks.push({ t: ch }); i++; }
+      else throw new Error("I can't read the symbol \"" + ch + "\". Use only numbers, x, + - / ^ and parentheses.");
+    }
+    return toks;
+  }
+  function decToFrac(str) {
+    var parts = str.split(".");
+    if (parts.length === 1 || parts[1] === "") return F(parseInt(parts[0], 10));
+    var d = Math.pow(10, parts[1].length);
+    return F(parseInt(parts[0] || "0", 10) * d + parseInt(parts[1], 10), d);
+  }
+  function parseExpr(str) {
+    var toks = tokenize(normalizeInput(str)), pos = 0;
+    if (!toks.length) throw new Error("Type an answer first.");
+    function peek() { return toks[pos]; }
+    function next() { return toks[pos++]; }
+    function expect(t) { var k = next(); if (!k || k.t !== t) throw new Error("Check your parentheses: I expected \"" + t + "\"."); return k; }
+    function pExpr() {
+      var left = pTerm();
+      while (peek() && (peek().t === "+" || peek().t === "-")) {
+        var op = next().t, right = pTerm();
+        left = { t: "add", a: left, b: op === "-" ? { t: "neg", a: right } : right };
+      }
+      return left;
+    }
+    function startsFactor() { var k = peek(); return k && (k.t === "num" || k.t === "x" || k.t === "("); }
+    function pTerm() {
+      var left = pUnary();
+      for (;;) {
+        var k = peek();
+        if (k && k.t === "*") { next(); left = { t: "mul", a: left, b: pUnary() }; }
+        else if (k && k.t === "/") { next(); left = { t: "div", a: left, b: pPowerOnly() }; }
+        else if (startsFactor()) { left = { t: "mul", a: left, b: pPowerOnly() }; }
+        else break;
+      }
+      return left;
+    }
+    function pUnary() {
+      var k = peek();
+      if (k && k.t === "-") { next(); return { t: "neg", a: pUnary() }; }
+      if (k && k.t === "+") { next(); return pUnary(); }
+      return pPowerOnly();
+    }
+    function pPowerOnly() {
+      var base = pAtom();
+      if (peek() && peek().t === "^") {
+        next();
+        var e;
+        if (peek() && peek().t === "(") { next(); var inner = pExpr(); expect(")"); e = constOf(inner); }
+        else {
+          var neg = false;
+          if (peek() && peek().t === "-") { next(); neg = true; }
+          var nt = next();
+          if (!nt || nt.t !== "num") throw new Error("Put exponents in parentheses, like x^(1/2) or x^(-1/2).");
+          e = decToFrac(nt.v); if (neg) e = fneg(e);
+        }
+        return { t: "pow", a: base, e: e };
+      }
+      return base;
+    }
+    function pAtom() {
+      var k = next();
+      if (!k) throw new Error("That expression ends too soon.");
+      if (k.t === "num") return { t: "num", v: decToFrac(k.v) };
+      if (k.t === "x") return { t: "x" };
+      if (k.t === "(") { var inner = pExpr(); expect(")"); return { t: "grp", a: inner }; }
+      throw new Error("I can't read that: unexpected \"" + k.t + "\".");
+    }
+    var tree = pExpr();
+    if (pos < toks.length) throw new Error("I can't read that: check for a stray \"" + toks[pos].t + "\".");
+    return tree;
+  }
+  function constOf(node) {
+    var p = expandNode(node);
+    var ks = Object.keys(p);
+    if (ks.length === 0) return F(0);
+    if (ks.length === 1 && ks[0] === "0") return p["0"].c;
+    throw new Error("An exponent must be a plain number.");
+  }
+  function expandNode(n) {
+    switch (n.t) {
+      case "num": return pConst(n.v);
+      case "x": return pX();
+      case "grp": return expandNode(n.a);
+      case "neg": return pNeg(expandNode(n.a));
+      case "add": return pAdd(expandNode(n.a), expandNode(n.b));
+      case "mul": return pMul(expandNode(n.a), expandNode(n.b));
+      case "div": {
+        var d = expandNode(n.b), ks = Object.keys(d);
+        if (ks.length !== 1) throw new Error("Only divide by a number or a power of x here.");
+        var inv = {}; inv[fstr(fneg(d[ks[0]].e))] = { e: fneg(d[ks[0]].e), c: finv(d[ks[0]].c) };
+        return pMul(expandNode(n.a), inv);
+      }
+      case "pow": {
+        var base = expandNode(n.a), q = n.e, bk = Object.keys(base), r, i;
+        if (fisInt(q) && q.n >= 0) { r = pConst(F(1)); for (i = 0; i < q.n; i++) r = pMul(r, base); return r; }
+        if (bk.length === 1) {
+          var t = base[bk[0]], out = {};
+          var c;
+          if (fisInt(q)) c = fpowInt(t.c, q.n);
+          else if (feq(t.c, F(1))) c = F(1);
+          else throw new Error("Fractional powers of numbers aren't supported here.");
+          var e2 = fmul(t.e, q);
+          out[fstr(e2)] = { e: e2, c: c };
+          return out;
+        }
+        throw new Error("Negative or fractional powers of a sum aren't supported here.");
+      }
+    }
+    throw new Error("Unsupported expression.");
+  }
+  function expandStr(s) { return expandNode(parseExpr(s)); }
+
+  // ============================================================
+  // Utilities (shared with the rest of the practice-test family)
+  // ============================================================
+  function randInt(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+  function randNonZeroInt(min, max) { var v; do { v = randInt(min, max); } while (v === 0); return v; }
+  function randChoice(arr) { return arr[randInt(0, arr.length - 1)]; }
+  function randBool() { return Math.random() < 0.5; }
+  function isSq(n) { if (n < 0 || n !== Math.floor(n)) return false; var r = Math.round(Math.sqrt(n)); return r * r === n; }
+  function frac(numHtml, denHtml) {
+    return "<span class=\"frac\"><span class=\"num\">" + numHtml + "</span><span class=\"den\">" + denHtml + "</span></span>";
+  }
+  function sqrtH(inner) {
+    return "<span class=\"radical\"><span class=\"rsym\">&radic;</span><span class=\"rad-inner\">" + inner + "</span></span>";
+  }
+  function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
+  function M(s) { return String(s).replace(/-/g, "&minus;"); }
+
+  // ---- result helpers ----
+  function bad(msg) { return { ok: false, msg: msg || "" }; }
+  function good(msg) { return { ok: true, msg: msg || "" }; }
+
+  // ---- exact-value display helpers (F = exact fraction object) ----
+  function fh(f) {
+    var an = Math.abs(f.n), s = f.d === 1 ? String(an) : frac(String(an), String(f.d));
+    return (f.n < 0 ? "&minus;" : "") + s;
+  }
+  function ft(f) { return f.d === 1 ? M(f.n) : M(f.n) + "/" + f.d; }
+  function fpl(f) { return (f.d === 1 ? String(f.n) : f.n + "/" + f.d).replace("-", "\u2212"); }
+  function fp(f) { return f.n < 0 ? "(" + fh(f) + ")" : fh(f); }
+  function pnum(x) { return x < 0 ? "(" + M(x) + ")" : String(x); }
+  function d2(v) { if (Math.abs(v) < 0.005) return "0.00"; return M(v.toFixed(2)); }
+  function dtrim(v) { return M(String(Math.round(v * 100) / 100)); }
+  function toF(x) {
+    if (x && typeof x === "object") return x;
+    if (x === Math.floor(x)) return F(x);
+    return F(Math.round(x * 1000), 1000);
+  }
+  function fsq(f) { return fmul(f, f); }
+  function fdiv(a, b) { return fmul(a, finv(b)); }
+  function fsub(a, b) { return fadd(a, fneg(b)); }
+
+  // ---- polynomial display: coefficients may be numbers or F objects ----
+  function polyH(co, v) {
+    v = v || "x";
+    var terms = [[co[0], v + "<sup>2</sup>"], [co[1], v], [co[2], ""]], out = "", first = true;
+    terms.forEach(function (t) {
+      var x = t[0], isF = x && typeof x === "object";
+      var zero = isF ? x.n === 0 : x === 0;
+      if (zero) return;
+      var neg = isF ? x.n < 0 : x < 0, abs;
+      if (isF) { abs = F(Math.abs(x.n), x.d); abs = abs.d === 1 ? String(abs.n) : "(" + abs.n + "/" + abs.d + ")"; }
+      else abs = String(Math.abs(x));
+      var body = (abs === "1" && t[1] !== "") ? t[1] : abs + t[1];
+      if (first) out += (neg ? "&minus;" : "") + body;
+      else out += (neg ? " &minus; " : " + ") + body;
+      first = false;
+    });
+    return out || "0";
+  }
+  function signedAdd(x) { // number or F -> " + 3" / " &minus; 3"
+    var f = toF(x);
+    if (f.n === 0) return "";
+    return f.n < 0 ? " &minus; " + fh(fneg(f)) : " + " + fh(f);
+  }
+  function lead(a) { return a === 1 ? "" : (a === -1 ? "&minus;" : M(a)); }
+  function termX(f) { // F -> " + 3x" / " - x" / " + 3/2 x"
+    var neg = f.n < 0, af = neg ? fneg(f) : f;
+    return (neg ? " &minus; " : " + ") + (af.n === 1 && af.d === 1 ? "" : fh(af)) + "x";
+  }
+  // a(x - h)^2 + k  with integers
+  function vfH(a, h, k) {
+    var inner = h === 0 ? "x" : "(x " + (h > 0 ? "&minus; " + h : "+ " + (-h)) + ")";
+    var s = lead(a) + inner + "<sup>2</sup>";
+    if (k > 0) s += " + " + k; else if (k < 0) s += " &minus; " + (-k);
+    return s;
+  }
+
+  // ---- whiteboard blocks ----
+  function wb(lines) {
+    return "<div class=\"wb\">" + lines.map(function (l) {
+      return "<div class=\"ln" + ((l.indexOf("= ") === 0 || l.indexOf("&asymp; ") === 0) ? " cont" : "") + "\">" + l + "</div>";
+    }).join("") + "</div>";
+  }
+  function step(h) { return "<div class=\"step\">" + h + "</div>"; }
+  function solLabel() { return "<span class=\"sol-label\">Solution</span>"; }
+  function finalH(h) { return "<div class=\"final\">Answer: " + h + "</div>"; }
+
+  // ============================================================
+  // Typed-answer parsing (floating point; accepts fractions, decimals, sqrt)
+  // ============================================================
+  function normNum(s) {
+    s = String(s === null || s === undefined ? "" : s);
+    return s.replace(/[−–—]/g, "-").replace(/[×·⋅]/g, "*").replace(/÷/g, "/")
+      .replace(/²/g, "^2").replace(/√/g, "sqrt").replace(/\s+/g, "").toLowerCase();
+  }
+  function floatEval(str) {
+    var s = normNum(str), toks = [], i = 0, m;
+    while (i < s.length) {
+      var ch = s.charAt(i);
+      if (/[0-9.]/.test(ch)) {
+        m = /^[0-9]*\.?[0-9]+|^[0-9]+\.?/.exec(s.slice(i));
+        if (!m) throw new Error("I can't read the number near \"" + s.slice(i, i + 3) + "\".");
+        toks.push({ t: "num", v: parseFloat(m[0]) }); i += m[0].length;
+      } else if (s.substr(i, 4) === "sqrt") { toks.push({ t: "sqrt" }); i += 4; }
+      else if ("+-*/^()".indexOf(ch) !== -1) { toks.push({ t: ch }); i++; }
+      else if (ch === "i" && (i === 0 || /[0-9)]/.test(s.charAt(i - 1)))) throw new Error("COMPLEX");
+      else throw new Error("I can't read the symbol \"" + ch + "\". Use numbers, fractions like 3/2, decimals, or sqrt.");
+    }
+    var pos = 0;
+    function peek() { return toks[pos]; }
+    function next() { return toks[pos++]; }
+    function expr() {
+      var left = term();
+      while (peek() && (peek().t === "+" || peek().t === "-")) { var op = next().t, r = term(); left = op === "+" ? left + r : left - r; }
+      return left;
+    }
+    function startsAtom() { var k = peek(); return k && (k.t === "num" || k.t === "(" || k.t === "sqrt"); }
+    function term() {
+      var left = unary();
+      for (;;) {
+        var k = peek();
+        if (k && k.t === "*") { next(); left = left * unary(); }
+        else if (k && k.t === "/") { next(); left = left / unary(); }
+        else if (startsAtom()) { left = left * power(); }
+        else break;
+      }
+      return left;
+    }
+    function unary() {
+      var k = peek();
+      if (k && k.t === "-") { next(); return -unary(); }
+      if (k && k.t === "+") { next(); return unary(); }
+      return power();
+    }
+    function power() {
+      var base = atom();
+      if (peek() && peek().t === "^") { next(); var e = unary(); return Math.pow(base, e); }
+      return base;
+    }
+    function atom() {
+      var k = next();
+      if (!k) throw new Error("That expression ends too soon.");
+      if (k.t === "num") return k.v;
+      if (k.t === "(") { var v = expr(); var c = next(); if (!c || c.t !== ")") throw new Error("Check your parentheses."); return v; }
+      if (k.t === "sqrt") {
+        var inner = atom();
+        if (inner < 0) throw new Error("NEGSQRT");
+        return Math.sqrt(inner);
+      }
+      throw new Error("I can't read that: unexpected \"" + k.t + "\".");
+    }
+    if (!toks.length) throw new Error("Type an answer first.");
+    var out = expr();
+    if (pos < toks.length) throw new Error("I can't read that: check for a stray \"" + toks[pos].t + "\".");
+    if (!isFinite(out)) throw new Error("That isn't a number I can use.");
+    return out;
+  }
+  function readErr(e, raw) {
+    if (e.message === "COMPLEX") return "An answer with i is not a real number. Real zeros and real intersections must be real x-values.";
+    if (e.message === "NEGSQRT") return "The square root of a negative number isn't a real number.";
+    return e.message;
+  }
+  var NONE_RE = /^(none|dne|n\/a|na|∅|no (real )?(zeros?|solutions?|roots?|intersections?|intersection points?|minimum|maximum|min|max|extremum|extreme)|(it )?does ?n[o']?t exist|doesn.t exist|does not exist|there (is|are) no (real )?(zeros?|solutions?|roots?|intersections?|minimum|maximum|min|max)|not exist|nonexistent|they do not intersect|they don.t intersect|never intersect|no intersect)$/;
+  function isNoneWord(raw) {
+    var low = String(raw === null || raw === undefined ? "" : raw).toLowerCase().replace(/[’‘]/g, "'").trim().replace(/\.$/, "").replace(/\s+/g, " ");
+    return NONE_RE.test(low);
+  }
+  function parseVal(raw) {
+    var s = String(raw === null || raw === undefined ? "" : raw).trim();
+    if (s === "") return { empty: true };
+    if (isNoneWord(s)) return { none: true };
+    s = s.replace(/^[a-z]\s*(\([a-z]\))?\s*=\s*/i, "").replace(/^(x|t|y)\s*=/i, "");
+    try { return { v: floatEval(s) }; } catch (e) { return { error: readErr(e, s) }; }
+  }
+  function splitTop(s) { // split on commas at paren depth 0
+    var out = [], depth = 0, cur = "", i;
+    for (i = 0; i < s.length; i++) {
+      var ch = s.charAt(i);
+      if (ch === "(") depth++;
+      if (ch === ")") depth--;
+      if ((ch === "," || ch === ";") && depth <= 0) { out.push(cur); cur = ""; } else cur += ch;
+    }
+    out.push(cur);
+    return out;
+  }
+  function expandPM(tok) {
+    var i = tok.indexOf("±");
+    if (i === -1) return [tok];
+    var a = tok.slice(0, i), b = tok.slice(i + 1), res = [];
+    expandPM(b).forEach(function (rest) { res.push(a + "+" + rest); res.push(a + "-" + rest); });
+    return res;
+  }
+  // -> {empty} | {error} | {list:[numbers], pointLike:bool}
+  function parseList(raw) {
+    var s = String(raw === null || raw === undefined ? "" : raw).replace(/[−–]/g, "-").trim();
+    if (s === "") return { empty: true };
+    if (isNoneWord(s)) return { list: [] };
+    s = s.replace(/\+\/-|\+-/g, "±").replace(/[{}\[\]]/g, "");
+    s = s.replace(/\b(x|t)\s*=/gi, "").replace(/\band\b|\bor\b/gi, ",");
+    var pointLike = false, t = s.trim();
+    if (t.charAt(0) === "(" && t.charAt(t.length - 1) === ")" && splitTop(t.slice(1, -1)).length > 1) {
+      var inner = t.slice(1, -1), okInner = true, d = 0, k;
+      for (k = 0; k < inner.length; k++) { if (inner.charAt(k) === "(") d++; if (inner.charAt(k) === ")") d--; if (d < 0) okInner = false; }
+      if (okInner) { pointLike = true; s = inner; }
+    }
+    if (s.indexOf(",") === -1 && s.indexOf(";") === -1 && /^\s*[-+]?[0-9./]+(\s+[-+]?[0-9./]+)+\s*$/.test(s)) s = s.trim().replace(/\s+/g, ",");
+    var toks = splitTop(s).map(function (x) { return x.trim(); }).filter(function (x) { return x !== ""; });
+    var out = [], i, j;
+    for (i = 0; i < toks.length; i++) {
+      var forms = expandPM(toks[i].replace(/\s+/g, " ").replace(/\s*([\/^])\s*/g, "$1"));
+      for (j = 0; j < forms.length; j++) {
+        try { out.push(floatEval(forms[j])); }
+        catch (e) {
+          if (e.message === "COMPLEX" || e.message === "NEGSQRT") return { error: readErr(e) };
+          return { error: "I couldn't read \"" + toks[i] + "\" as a number. Use whole numbers, fractions like 3/2, or decimals." };
+        }
+      }
+    }
+    return { list: out, pointLike: pointLike };
+  }
+  function close(a, b, tol) { return Math.abs(a - b) <= (tol === undefined ? 1e-9 : tol); }
+  // tolerance for an exact answer given as a fraction: exact when it is a short decimal, else allow a rounded decimal
+  function tolOf(f) { return (100 % f.d === 0) ? 1e-9 : 0.0101; }
+
+  function fmtN(v) {
+    if (Math.abs(v - Math.round(v)) < 1e-9) return String(Math.round(v)).replace("-", "−");
+    for (var d = 2; d <= 16; d++) { var n = v * d; if (Math.abs(n - Math.round(n)) < 1e-9) return (Math.round(n) < 0 ? "−" : "") + Math.abs(Math.round(n)) + "/" + d; }
+    return (Math.round(v * 100) / 100).toFixed(2).replace("-", "−");
+  }
+
+  // compare a typed list against the wanted values (want[i] with tolerance tols[i])
+  function gradeNumList(input, want, tols, o) {
+    o = o || {};
+    var r = parseList(input);
+    if (r.empty) return bad("Type your answer first.");
+    if (r.error) return bad(r.error);
+    var mine = r.list, i;
+    if (!want.length) {
+      if (!mine.length) return good();
+      return bad(o.noneMsg || "Check the discriminant, b² − 4ac. When it is negative there are no real zeros.");
+    }
+    if (!mine.length) return bad(o.someMsg || "This one does have real zeros.");
+    if (r.pointLike && o.pointMsg) return bad(o.pointMsg);
+    var missing = want.filter(function (w, wi) { return !mine.some(function (m) { return close(m, w, tols[wi]); }); });
+    var extra = mine.filter(function (m) { return !want.some(function (w, wi) { return close(m, w, tols[wi]); }); });
+    if (!missing.length && !extra.length) return good();
+    if (extra.length) return bad(o.extraMsg ? o.extraMsg(extra[0]) : "x = " + fmtN(extra[0]) + " doesn't make it zero. Substitute it back in to see.");
+    if (missing.some(function (w) { return Math.abs(w) < 1e-12; })) return bad("You're missing a zero. Don't forget the factor of x itself gives x = 0.");
+    return bad(o.missMsg ? o.missMsg(missing.length) : "You're missing " + (missing.length > 1 ? missing.length + " zeros" : "a zero") + ". There is another real zero.");
+  }
+  function gradeVertex(input, h, k) {
+    var r = parseList(input);
+    if (r.empty) return bad("Type the vertex as a point (x, y).");
+    if (r.error) return bad(r.error);
+    if (r.list.length !== 2) return bad("The vertex is a point. Give both coordinates, like (2, −3).");
+    var x = r.list[0], y = r.list[1], hv = fnum(h), kv = fnum(k);
+    var okx = close(x, hv, tolOf(h)), oky = close(y, kv, tolOf(k));
+    if (okx && oky) return good();
+    if (!(h.n === k.n && h.d === k.d) && close(x, kv, tolOf(k)) && close(y, hv, tolOf(h))) return bad("Your coordinates look swapped. A point is written (x, y).");
+    if (okx) return bad("The x-value of the vertex is right. Now substitute it back into f to get the y-value.");
+    if (oky) return bad("The y-value matches, but the x-value of the vertex is off. Use x = −b/(2a).");
+    return bad("That isn't the vertex. Use x = −b/(2a), then substitute that x into f(x) to get the y-value.");
+  }
+
+  // ---- reading the card (works with the real DOM and with the node harness stub) ----
+  function val(card, cls) { var el = card.querySelector(cls); return el ? el.value : ""; }
+  function mcSel(card, name) {
+    var el = card.querySelector(".mc-row[data-name=\"" + name + "\"] .mc-opt.selected");
+    return el ? el.getAttribute("data-val") : null;
+  }
+  function mcRowHtml(name, opts) {
+    return "<div class=\"mc-row\" data-name=\"" + name + "\">" + opts.map(function (o) {
+      return "<button type=\"button\" class=\"mc-opt\" data-val=\"" + o[0] + "\">" + o[1] + "</button>";
+    }).join("") + "</div>";
+  }
+  function mcAfterRender(card) {
+    card.querySelectorAll(".mc-row").forEach(function (row) {
+      var opts = row.querySelectorAll(".mc-opt");
+      opts.forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          opts.forEach(function (b) { b.classList.remove("selected"); });
+          btn.classList.add("selected");
+        });
+      });
+    });
+  }
+  function inputHtml(cls, ph, extra) {
+    return "<input type=\"text\" class=\"" + cls + (extra ? " " + extra : "") + "\" placeholder=\"" + ph + "\" autocomplete=\"off\" autocapitalize=\"off\" spellcheck=\"false\">";
+  }
+
+  // ============================================================
+  // Extra helpers shared by the two new exams
+  // ============================================================
+  function sqrtSimp(n) { var s = 1, r = n, f; for (f = 2; f * f <= r; f++) { while (r % (f * f) === 0) { r /= f * f; s *= f; } } return { s: s, r: r }; }
+  function pickN(n, lo, hi, minGap) {
+    minGap = minGap || 1;
+    var out = [], tries = 0;
+    while (out.length < n && tries < 500) {
+      tries++;
+      var v = randInt(lo, hi);
+      if (out.every(function (o) { return Math.abs(o - v) >= minGap; })) out.push(v);
+    }
+    return out.sort(function (a, b) { return a - b; });
+  }
+  function shuffle(a) { a = a.slice(); for (var i = a.length - 1; i > 0; i--) { var j = randInt(0, i), t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+  function stdPolyH(a, b, c) { return polyH([a, b, c]); }
+  function readPoly(raw) {
+    if (String(raw || "").trim() === "") return { err: "Type your answer first." };
+    try { return { p: expandStr(raw) }; } catch (e) { return { err: e.message }; }
+  }
+  function sup(t) { return "<sup>" + t + "</sup>"; }
+  function binom(r, lab) { // (x - r)  or  (x + lab)
+    if (lab) return "(x " + lab + ")";
+    return r === 0 ? "x" : "(x " + (r > 0 ? "&minus; " + r : "+ " + (-r)) + ")";
+  }
+  // zs = [{r, m, lab?}]; k = lead (number or F)
+  function leadH(k) {
+    var f = toF(k);
+    if (f.n === 1 && f.d === 1) return "";
+    if (f.n === -1 && f.d === 1) return "&minus;";
+    if (f.d === 1) return M(f.n);
+    return (f.n < 0 ? "&minus;" : "") + frac(String(Math.abs(f.n)), String(f.d));
+  }
+  function facH(zs, k) {
+    var s = leadH(k === undefined ? 1 : k);
+    zs.forEach(function (z) { s += binom(z.r, z.lab) + (z.m > 1 ? sup(z.m) : ""); });
+    return s;
+  }
+  function zsDeg(zs) { return zs.reduce(function (a, z) { return a + z.m; }, 0); }
+  function endsOf(deg, sign) {
+    var right = sign > 0 ? "up" : "down", left = deg % 2 === 0 ? right : (right === "up" ? "down" : "up");
+    return { left: left, right: right };
+  }
+  var ARW = { up: "&uarr;", down: "&darr;" };
+  function endWord(e) { return e === "up" ? "rises (&uarr;, f(x) &rarr; +&infin;)" : "falls (&darr;, f(x) &rarr; &minus;&infin;)"; }
+  function endSel(cls, label) {
+    return "<select class=\"" + cls + "\" aria-label=\"" + label + "\"><option value=\"\">choose&hellip;</option><option value=\"up\">&uarr; up (+&infin;)</option><option value=\"down\">&darr; down (&minus;&infin;)</option></select>";
+  }
+  function sel(card, cls) { var el = card.querySelector(cls); return el ? el.value : ""; }
+
+  // ---- exact radical for a zero of ax^2+bx+c with D > 0 not a perfect square ----
+  function exactZeroH(a, b, D) {
+    var q = sqrtSimp(D), g = gcd(gcd(b, q.s), 2 * a), B = -b / g, S = q.s / g, A = 2 * a / g;
+    if (A < 0) { A = -A; B = -B; }
+    var rad = (S === 1 ? "" : S) + sqrtH(q.r);
+    var num = (B === 0 ? "" : M(B) + " ") + "&plusmn; " + rad;
+    return A === 1 ? num : frac(num, A);
+  }
+
+  // ---- dense polynomial arrays (exact fractions) ----
+  function toDense(p) { // -> array of F by degree, or null if not a polynomial with whole-number exponents
+    var ks = Object.keys(p), out = [], i, e;
+    for (i = 0; i < ks.length; i++) { e = p[ks[i]].e; if (!fisInt(e) || e.n < 0) return null; }
+    var deg = 0; ks.forEach(function (k) { deg = Math.max(deg, p[k].e.n); });
+    for (i = 0; i <= deg; i++) out.push(F(0));
+    ks.forEach(function (k) { out[p[k].e.n] = p[k].c; });
+    return out;
+  }
+  function dTrim(a) { a = a.slice(); while (a.length > 1 && a[a.length - 1].n === 0) a.pop(); return a; }
+  function dDivRoot(a, r) { // divide by (x - r) exactly; returns {q, rem}
+    var n = a.length - 1, q = [], carry = F(0), i;
+    for (i = n; i >= 0; i--) { carry = fadd(a[i], fmul(carry, F(r))); if (i > 0) q[i - 1] = carry; else return { q: q, rem: carry }; }
+  }
+  function dEval(a, r) { var v = F(0), i; for (i = a.length - 1; i >= 0; i--) v = fadd(fmul(v, F(r)), a[i]); return v; }
+  // integer roots (with multiplicity) of a dense polynomial; returns {roots:{r:m}, rest:dense}
+  function intRootsOf(a) {
+    a = dTrim(a);
+    var roots = {}, r, guard = 0;
+    for (r = -15; r <= 15; r++) {
+      while (a.length > 1 && dEval(a, r).n === 0 && guard++ < 80) {
+        a = dDivRoot(a, r).q; roots[r] = (roots[r] || 0) + 1;
+      }
+    }
+    return { roots: roots, rest: a };
+  }
+  function dPropTo(a, b) { // is a = lambda * b (lambda != 0)?  returns lambda F or null
+    a = dTrim(a); b = dTrim(b);
+    if (a.length !== b.length) return null;
+    var lam = null, i;
+    for (i = 0; i < a.length; i++) {
+      if (b[i].n === 0) { if (a[i].n !== 0) return null; continue; }
+      var l = fdiv(a[i], b[i]);
+      if (lam === null) lam = l; else if (!feq(lam, l)) return null;
+    }
+    return lam && lam.n !== 0 ? lam : null;
+  }
+
+  // ============================================================
+  // Canvas grid + curves (adapted from the linear-equations tests)
+  // ============================================================
+  function setupCanvas(canvas) {
+    var cssW = canvas.clientWidth || 300, cssH = canvas.clientHeight || 300;
+    var dpr = window.devicePixelRatio || 1;
+    canvas.width = cssW * dpr; canvas.height = cssH * dpr;
+    var ctx = canvas.getContext("2d");
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, cssW, cssH);
+    return { ctx: ctx, w: cssW, h: cssH };
+  }
+  function makeMapper(cssW, cssH, xMin, xMax, yMin, yMax, pad) {
+    pad = pad || 24;
+    var w = cssW - pad * 1.4, h = cssH - pad * 1.6, sx = w / (xMax - xMin), sy = h / (yMax - yMin);
+    var ox = pad, oy = cssH - pad * 0.9;
+    return function (x, y) { return [ox + (x - xMin) * sx, oy - (y - yMin) * sy]; };
+  }
+  function makeInvMapper(cssW, cssH, xMin, xMax, yMin, yMax, pad) {
+    pad = pad || 24;
+    var w = cssW - pad * 1.4, h = cssH - pad * 1.6, sx = w / (xMax - xMin), sy = h / (yMax - yMin);
+    var ox = pad, oy = cssH - pad * 0.9;
+    return function (px, py) { return [(px - ox) / sx + xMin, yMin + (oy - py) / sy]; };
+  }
+  function cssVar(n) { return getComputedStyle(document.documentElement).getPropertyValue(n).trim(); }
+  // o: {xStep, yStep, noYLabels, hGrid (step) }
+  function drawGrid(canvas, xMin, xMax, yMin, yMax, o) {
+    o = o || {};
+    var setup = setupCanvas(canvas), ctx = setup.ctx, cssW = setup.w, cssH = setup.h;
+    var toPx = makeMapper(cssW, cssH, xMin, xMax, yMin, yMax);
+    ctx.lineWidth = 1; ctx.strokeStyle = cssVar("--graph-grid"); ctx.beginPath();
+    var gx, gy, p0, p1;
+    for (gx = Math.ceil(xMin); gx <= Math.floor(xMax); gx++) { p0 = toPx(gx, yMin); p1 = toPx(gx, yMax); ctx.moveTo(p0[0], p0[1]); ctx.lineTo(p1[0], p1[1]); }
+    var hs = o.hGrid || 1;
+    for (gy = Math.ceil(yMin / hs) * hs; gy <= yMax + 1e-9; gy += hs) { p0 = toPx(xMin, gy); p1 = toPx(xMax, gy); ctx.moveTo(p0[0], p0[1]); ctx.lineTo(p1[0], p1[1]); }
+    ctx.stroke();
+    ctx.lineWidth = 1.6; ctx.strokeStyle = cssVar("--graph-axis"); ctx.beginPath();
+    if (xMin <= 0 && xMax >= 0) { p0 = toPx(0, yMin); p1 = toPx(0, yMax); ctx.moveTo(p0[0], p0[1]); ctx.lineTo(p1[0], p1[1]); }
+    if (yMin <= 0 && yMax >= 0) { p0 = toPx(xMin, 0); p1 = toPx(xMax, 0); ctx.moveTo(p0[0], p0[1]); ctx.lineTo(p1[0], p1[1]); }
+    ctx.stroke();
+    ctx.fillStyle = cssVar("--ink-soft"); ctx.font = "10px 'JetBrains Mono', ui-monospace, monospace";
+    ctx.textAlign = "center"; ctx.textBaseline = "top";
+    var xs = o.xStep || 1, ys = o.yStep || 1, lx, ly, lp;
+    for (lx = Math.ceil(xMin / xs) * xs; lx <= Math.floor(xMax); lx += xs) { lp = toPx(lx, yMin); ctx.fillText(String(lx).replace("-", "−"), Math.min(Math.max(lp[0], 12), cssW - 12), cssH - 13); }
+    if (!o.noYLabels) {
+      ctx.textAlign = "left"; ctx.textBaseline = "middle";
+      for (ly = Math.ceil(yMin / ys) * ys; ly <= Math.floor(yMax); ly += ys) { lp = toPx(xMin, ly); ctx.fillText(String(ly).replace("-", "−"), 4, Math.min(Math.max(lp[1], 10), cssH - 16)); }
+    }
+    return { ctx: ctx, toPx: toPx, w: cssW, h: cssH, win: [xMin, xMax, yMin, yMax] };
+  }
+  function clipWin(g) {
+    var a = g.toPx(g.win[0], g.win[3]), b = g.toPx(g.win[1], g.win[2]);
+    g.ctx.save(); g.ctx.beginPath(); g.ctx.rect(a[0], a[1], b[0] - a[0], b[1] - a[1]); g.ctx.clip();
+  }
+  function plotFn(g, fn, color, width, breaks) {
+    var ctx = g.ctx, x0 = g.win[0], x1 = g.win[1], N = 700, pen = false, i, px = null;
+    clipWin(g);
+    ctx.strokeStyle = color; ctx.lineWidth = width || 2.4; ctx.lineJoin = "round"; ctx.lineCap = "round"; ctx.beginPath();
+    for (i = 0; i <= N; i++) {
+      var x = x0 + (x1 - x0) * i / N, y = fn(x);
+      if (!isFinite(y) || Math.abs(y) > 1e5) { pen = false; px = null; continue; }
+      if (pen && breaks && breaks.some(function (b) { return (px - b) * (x - b) < 0; })) pen = false;
+      var p = g.toPx(x, y);
+      if (!pen) { ctx.moveTo(p[0], p[1]); pen = true; } else ctx.lineTo(p[0], p[1]);
+      px = x;
+    }
+    ctx.stroke(); ctx.restore();
+  }
+  function plotDot(g, x, y, color, r, open) {
+    var p = g.toPx(x, y), ctx = g.ctx;
+    ctx.beginPath(); ctx.arc(p[0], p[1], r || 5, 0, Math.PI * 2);
+    if (open) { ctx.fillStyle = cssVar("--card-bg"); ctx.fill(); ctx.lineWidth = 2; ctx.strokeStyle = color; ctx.stroke(); }
+    else { ctx.fillStyle = color; ctx.fill(); }
+  }
+  function plotVLine(g, x, color) {
+    var a = g.toPx(x, g.win[2]), b = g.toPx(x, g.win[3]), ctx = g.ctx;
+    ctx.save(); ctx.setLineDash([6, 5]); ctx.strokeStyle = color; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.stroke(); ctx.restore();
+  }
+  function plotHLine(g, y, color) {
+    var a = g.toPx(g.win[0], y), b = g.toPx(g.win[1], y), ctx = g.ctx;
+    ctx.save(); ctx.setLineDash([6, 5]); ctx.strokeStyle = color; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.stroke(); ctx.restore();
+  }
+  // translate a click event to graph coordinates (not rounded)
+  function clickToGraph(canvas, evt, win) {
+    var rect = canvas.getBoundingClientRect(), cssW = canvas.clientWidth, cssH = canvas.clientHeight;
+    var scaleX = rect.width ? (cssW / rect.width) : 1, scaleY = rect.height ? (cssH / rect.height) : 1;
+    var inv = makeInvMapper(cssW, cssH, win[0], win[1], win[2], win[3]);
+    return inv((evt.clientX - rect.left) * scaleX, (evt.clientY - rect.top) * scaleY);
+  }
+
+  // ============================================================
+  // Inline SVG plots (thumbnails + solution figures)
+  // o: {W,H,x0,x1,y0,y1, xt:[tick values], yt:[tick values], curves:[{fn,breaks}], vl:[x], hl:[y], dots:[{x,y,open,lab}], noY}
+  // ============================================================
+  var svgUid = 0;
+  function svgPlot(o) {
+    var W = o.W || 250, H = o.H || 170, L = o.noY ? 8 : 24, R = 8, T = 8, B = 20, id = "gp" + (++svgUid);
+    var pw = W - L - R, ph = H - T - B;
+    function X(x) { return (L + (x - o.x0) / (o.x1 - o.x0) * pw).toFixed(1); }
+    function Y(y) { return (T + (o.y1 - y) / (o.y1 - o.y0) * ph).toFixed(1); }
+    var s = "<svg class=\"gsvg\" viewBox=\"0 0 " + W + " " + H + "\" role=\"img\" aria-label=\"" + (o.aria || "graph") + "\"><defs><clipPath id=\"" + id + "\"><rect x=\"" + L + "\" y=\"" + T + "\" width=\"" + pw + "\" height=\"" + ph + "\"/></clipPath></defs>";
+    var i, v;
+    (o.xt || []).forEach(function (t) { s += "<line class=\"gl\" x1=\"" + X(t) + "\" y1=\"" + T + "\" x2=\"" + X(t) + "\" y2=\"" + (T + ph) + "\"/>"; });
+    (o.yt || []).forEach(function (t) { s += "<line class=\"gl\" x1=\"" + L + "\" y1=\"" + Y(t) + "\" x2=\"" + (L + pw) + "\" y2=\"" + Y(t) + "\"/>"; });
+    if (o.y0 <= 0 && o.y1 >= 0) s += "<line class=\"ax\" x1=\"" + L + "\" y1=\"" + Y(0) + "\" x2=\"" + (L + pw) + "\" y2=\"" + Y(0) + "\"/>";
+    if (o.x0 <= 0 && o.x1 >= 0) s += "<line class=\"ax\" x1=\"" + X(0) + "\" y1=\"" + T + "\" x2=\"" + X(0) + "\" y2=\"" + (T + ph) + "\"/>";
+    (o.xt || []).forEach(function (t) { s += "<text class=\"tk\" x=\"" + X(t) + "\" y=\"" + (H - 6) + "\" text-anchor=\"middle\">" + String(t).replace("-", "−") + "</text>"; });
+    if (!o.noY) (o.yt || []).forEach(function (t) { if (t !== 0) s += "<text class=\"tk\" x=\"" + (L - 3) + "\" y=\"" + (+Y(t) + 3) + "\" text-anchor=\"end\">" + String(t).replace("-", "−") + "</text>"; });
+    (o.vl || []).forEach(function (x) { s += "<line class=\"as\" x1=\"" + X(x) + "\" y1=\"" + T + "\" x2=\"" + X(x) + "\" y2=\"" + (T + ph) + "\"/>"; });
+    (o.hl || []).forEach(function (y) { s += "<line class=\"as\" x1=\"" + L + "\" y1=\"" + Y(y) + "\" x2=\"" + (L + pw) + "\" y2=\"" + Y(y) + "\"/>"; });
+    (o.curves || []).forEach(function (c) {
+      var d = "", pen = false, px = null, N = 500;
+      for (i = 0; i <= N; i++) {
+        var x = o.x0 + (o.x1 - o.x0) * i / N; v = c.fn(x);
+        if (!isFinite(v) || Math.abs(v) > 1e4) { pen = false; px = null; continue; }
+        if (pen && c.breaks && c.breaks.some(function (b) { return (px - b) * (x - b) < 0; })) pen = false;
+        d += (pen ? "L" : "M") + X(x) + "," + Y(Math.max(-1e3, Math.min(1e3, v))) + " "; pen = true; px = x;
+      }
+      s += "<g clip-path=\"url(#" + id + ")\"><path class=\"" + (c.cls || "cv") + "\" d=\"" + d + "\"/></g>";
+    });
+    (o.dots || []).forEach(function (d) {
+      s += "<circle class=\"" + (d.open ? "dot-open" : "dot") + "\" cx=\"" + X(d.x) + "\" cy=\"" + Y(d.y) + "\" r=\"" + (d.r || 3.6) + "\"/>";
+      if (d.lab) s += "<text class=\"lb\" x=\"" + (+X(d.x) + 6) + "\" y=\"" + (+Y(d.y) - 5) + "\">" + d.lab + "</text>";
+    });
+    return s + "</svg>";
+  }
+  function rng(a, b, st) { var out = []; for (var v = a; v <= b + 1e-9; v += (st || 1)) out.push(Math.round(v * 1000) / 1000); return out; }
+
+  // ---- polynomial "sketch" shape (qualitative, compressed so every bump is visible) ----
+  function sketchShape(zs, s) {
+    var rs = zs.map(function (z) { return z.r; }), rmin = Math.min.apply(null, rs), rmax = Math.max.apply(null, rs);
+    function g(x) { var v = s; zs.forEach(function (z) { v *= Math.pow(x - z.r, z.m); }); return v; }
+    var ref = 0, x;
+    for (x = rmin - 0.5; x <= rmax + 0.5; x += 0.02) ref = Math.max(ref, Math.abs(g(x)));
+    if (ref === 0) ref = 1;
+    var C = 20, den = Math.asinh(C);
+    return function (xx) { return Math.asinh(C * g(xx) / ref) / den; };
+  }
+  function sketchSvg2(zs, s, o) {
+    o = o || {};
+    var fn = sketchShape(zs, s);
+    return svgPlot({
+      W: o.W || 250, H: o.H || 170, x0: -6, x1: 6, y0: -1.35, y1: 1.35, xt: rng(-6, 6), noY: true, aria: "sketch of a polynomial graph",
+      curves: [{ fn: fn }],
+      dots: zs.map(function (z) { return { x: z.r, y: 0, open: z.m % 2 === 0 }; })
+    });
+  }
+  function graphOptHtml(name, svgs) {
+    return "<div class=\"mc-row gopts\" data-name=\"" + name + "\">" + svgs.map(function (sv, i) {
+      return "<button type=\"button\" class=\"mc-opt gopt\" data-val=\"" + i + "\" aria-label=\"Graph " + "ABCD".charAt(i) + "\"><span class=\"gopt-l\">" + "ABCD".charAt(i) + "</span>" + sv + "</button>";
+    }).join("") + "</div>";
+  }
+
+  // ---- rational functions: factor lists N=[{r,m}], D=[{r,m}] with constants n,d (numbers) ----
+  function ratInfo(N, D, n, d) {
+    var rs = {}, i;
+    N.forEach(function (z) { rs[z.r] = rs[z.r] || [0, 0]; rs[z.r][0] += z.m; });
+    D.forEach(function (z) { rs[z.r] = rs[z.r] || [0, 0]; rs[z.r][1] += z.m; });
+    var info = { zeros: [], vas: [], holes: [], ha: null, haKind: "" };
+    function val(x) {
+      var v = n / d;
+      N.forEach(function (z) { v *= Math.pow(x - z.r, z.m); });
+      D.forEach(function (z) { v /= Math.pow(x - z.r, z.m); });
+      return v;
+    }
+    info.f = val;
+    Object.keys(rs).map(Number).sort(function (a, b) { return a - b; }).forEach(function (r) {
+      var mn = rs[r][0], md = rs[r][1];
+      if (md === 0 && mn > 0) info.zeros.push(r);
+      else if (mn === 0 && md > 0) info.vas.push(r);
+      else if (mn > 0 && md > 0) {
+        if (mn >= md) {
+          // hole: value of the reduced function at r
+          var v = F(n, d), k;
+          Object.keys(rs).map(Number).forEach(function (r2) {
+            var net = rs[r2][0] - rs[r2][1];
+            if (r2 === r) net = mn - md;
+            if (net !== 0) v = fmul(v, fpowInt(F(r - r2), net));
+          });
+          if (mn - md > 0) v = F(0);
+          info.holes.push({ x: r, y: v });
+        } else info.vas.push(r);
+      }
+    });
+    var dn = zsDeg(N), dd = zsDeg(D);
+    if (dn < dd) { info.ha = F(0); info.haKind = "zero"; }
+    else if (dn === dd) { info.ha = F(n, d); info.haKind = "ratio"; }
+    else info.haKind = "none";
+    info.degN = dn; info.degD = dd;
+    return info;
+  }
+  function ratSvg(N, D, n, d, o) {
+    o = o || {};
+    var I = ratInfo(N, D, n, d), holeXs = I.holes.map(function (h) { return h.x; });
+    var curves = [{ fn: function (x) { return holeXs.some(function (h) { return Math.abs(x - h) < 1e-9; }) ? NaN : I.f(x); }, breaks: I.vas }];
+    return svgPlot({
+      W: o.W || 250, H: o.H || 170, x0: -8, x1: 8, y0: -6, y1: 6, xt: rng(-8, 8, 2), yt: rng(-6, 6, 2), aria: "graph of a rational function",
+      curves: curves, vl: I.vas, hl: I.ha ? [fnum(I.ha)] : [],
+      dots: I.holes.map(function (h) { return { x: h.x, y: fnum(h.y), open: true, r: 4 }; })
+    });
+  }
+  function ratSig(N, D, n, d) {
+    var I = ratInfo(N, D, n, d);
+    return JSON.stringify([I.zeros, I.vas, I.holes.map(function (h) { return [h.x, fstr(h.y)]; }), I.ha ? fstr(I.ha) : "x"]);
+  }
+  function ratFracH(N, D, n, d) {
+    function side(zs, c) { var s = (c === 1 ? "" : (c === -1 ? "&minus;" : String(c))); zs.forEach(function (z) { s += binom(z.r) + (z.m > 1 ? sup(z.m) : ""); }); return s; }
+    return frac(side(N, n), side(D, d));
+  }
+
+  // ============================================================
+  // PreCalc - Polynomial & Rational exam parts
+  // ============================================================
+  var PARTS = [];
+  function row(label, inner) { return "<div class=\"subrow\"><span class=\"field-label\">" + label + "</span>" + inner + "</div>"; }
+  function plain(h) { var d = document.createElement("div"); d.innerHTML = h; return d.textContent; }
+  function rootsMapOf(zs) { var m = {}; zs.forEach(function (z) { m[z.r] = z.m; }); return m; }
+  function listWords(arr) { return arr.map(function (v) { return String(v).replace("-", "−"); }).join(", "); }
+
+  // ---------- Q1: polynomial? degree, end behavior ----------
+  var NONPOLY = [
+    { h: "sin(x)", why: "x is inside a sine function. A polynomial only uses whole-number powers of x." },
+    { h: "cos(x)", why: "x is inside a cosine function. A polynomial only uses whole-number powers of x." },
+    { h: "x + 3sin(x)", why: "sin(x) is not a whole-number power of x, so the sum is not a polynomial." },
+    { h: "2" + sup("x"), why: "x is in the exponent. In a polynomial, x is the base and the exponent is a whole number." },
+    { h: "3" + sup("x") + " &minus; x" + sup("2"), why: "3" + sup("x") + " has x in the exponent, so this is not a polynomial." },
+    { h: "e" + sup("x"), why: "x is in the exponent, so this is an exponential function, not a polynomial." },
+    { h: "&radic;x + 4", why: "&radic;x is x" + sup("1/2") + ". The exponent is not a whole number." },
+    { h: "x" + sup("3/2") + " &minus; 4x", why: "The exponent 3/2 is not a whole number." },
+    { h: "x" + sup("&minus;2") + " + 5x", why: "A negative exponent (x" + sup("&minus;2") + " = 1/x" + sup("2") + ") isn't allowed in a polynomial." },
+    { h: "7 + " + frac("1", "x"), why: "1/x = x" + sup("&minus;1") + ", a negative exponent." },
+    { h: "ln(x)", why: "ln(x) is a logarithm, not a sum of whole-number powers of x." },
+    { h: "|x| &minus; 3", why: "The absolute value is piecewise (it equals x on one side and &minus;x on the other), so it is not a polynomial." },
+    { h: frac("x" + sup("2") + " + 1", "x &minus; 3"), why: "It is a quotient with x in the denominator (a rational function), not a polynomial." },
+    { h: "x" + sup("2") + "sin(x)", why: "sin(x) is not a whole-number power of x, so the product is not a polynomial." }
+  ];
+  var IRR = [{ t: "&pi;", v: 3.14 }, { t: "&radic;2", v: 1.41 }, { t: "e", v: 2.72 }];
+  function coefPick() {
+    return randChoice([F(1), F(1), F(-1), F(-1), F(2), F(-2), F(3), F(-3), F(5), F(-5), F(7), F(-4), F(1, 2), F(-1, 2), F(1, 3), F(-1, 3), F(2, 3), F(-3, 4), F(3, 4), F(10), F(-10)]);
+  }
+  function xPow(e) { return e === 0 ? "" : (e === 1 ? "x" : "x" + sup(e)); }
+  function genExpanded(nTerms, withIrr, scramble) {
+    var d = randInt(3, 9), exps = [d], pool = [], e;
+    for (e = 1; e < d; e++) pool.push(e);
+    pool = shuffle(pool);
+    while (exps.length < nTerms - (withIrr ? 1 : 0) && pool.length) exps.push(pool.pop());
+    exps.sort(function (a, b) { return b - a; });
+    var terms = exps.map(function (ex) { return { c: coefPick(), e: ex }; });
+    if (withIrr) { var ir = randChoice(IRR); terms.push({ irr: ir.t, neg: Math.random() < 0.6, e: 0 }); }
+    var lead = terms[0].c, order = terms.slice();
+    if (scramble) { do { order = shuffle(terms); } while (order[0] === terms[0]); }
+    var html = "";
+    order.forEach(function (t, i) {
+      var neg, body;
+      if (t.irr) { neg = t.neg; body = t.irr; }
+      else {
+        neg = t.c.n < 0; var ac = F(Math.abs(t.c.n), t.c.d);
+        body = (ac.n === 1 && ac.d === 1 && t.e > 0) ? "" : fh(ac);
+        body += xPow(t.e);
+      }
+      html += (i === 0 ? (neg ? "&minus;" : "") : (neg ? " &minus; " : " + ")) + body;
+    });
+    var leadCoefH = fh(lead);
+    return { isPoly: true, how: "expanded", html: html, deg: d, sign: lead.n > 0 ? 1 : -1, leadTerm: (Math.abs(lead.n) === 1 && lead.d === 1 ? (lead.n < 0 ? "&minus;" : "") : leadCoefH) + xPow(d), exps: exps };
+  }
+  function genFactoredQ1(leadMode, withIrr) {
+    for (;;) {
+      var n = randInt(2, 4), rs = pickN(n, -6, 6), ms = rs.map(function () { return randChoice([1, 1, 2, 2, 3, 4, 5, 7]); });
+      var deg = ms.reduce(function (a, b) { return a + b; }, 0);
+      if (deg > 17 || deg < 4) continue;
+      var zs = rs.map(function (r, i) { return { r: r, m: ms[i] }; });
+      if (withIrr) { var ir = randChoice(IRR.slice(0, 2)), pi = randInt(0, zs.length - 1); zs[pi] = { r: 0, m: zs[pi].m, lab: (Math.random() < 0.5 ? "+ " : "&minus; ") + ir.t }; }
+      var k = leadMode === "pos" ? 1 : (leadMode === "neg" ? -1 : randChoice([1, -1, 2, -2, 3]));
+      if (leadMode === "neg" && Math.random() < 0.15) k = -2;
+      zs.sort(function (a, b) { return (a.lab ? 1 : 0) - (b.lab ? 1 : 0); });
+      return { isPoly: true, how: "factored", html: facH(zs, k), deg: deg, sign: k > 0 ? 1 : -1, k: k, ms: zs.map(function (z) { return z.m; }), leadTerm: (k === 1 ? "" : (k === -1 ? "&minus;" : M(k))) + xPow(deg) };
+    }
+  }
+  function genNonPoly() { var o = randChoice(NONPOLY); return { isPoly: false, html: o.h, why: o.why }; }
+  function q1Gen(kind) {
+    var nonP = { a: 0.1, b: 0, c: 0.85, d: 0, e: 0.12 }[kind];
+    if (Math.random() < nonP) return genNonPoly();
+    if (kind === "a") return genExpanded(2, false, Math.random() < 0.2);
+    if (kind === "b") return genFactoredQ1(Math.random() < 0.7 ? "pos" : "rand", false);
+    if (kind === "c") return genExpanded(3, false, false);
+    if (kind === "d") return genFactoredQ1(Math.random() < 0.8 ? "neg" : "rand", Math.random() < 0.7);
+    return genExpanded(3, true, Math.random() < 0.2);
+  }
+  function q1Solution(s) {
+    var out = solLabel();
+    if (!s.isPoly) return out + step("<strong>Not a polynomial.</strong> " + s.why) + step("A polynomial is a sum of terms like <span class=\"math\">a x<sup>n</sup></span> where n is a whole number (0, 1, 2, ...) and a is a real number. (Constants such as &pi; or &radic;2 are fine as coefficients.)") + finalH("not a polynomial (no degree or end behavior)");
+    out += step("This <strong>is a polynomial</strong>: every power of x is a whole number.");
+    if (s.how === "factored") {
+      out += step("The degree is the sum of the exponents, because multiplying the factors multiplies out to x raised to that total: <span class=\"math\">" + s.ms.join(" + ") + " = " + s.deg + "</span>.");
+      out += step("The leading term is the product of the leading terms of the factors: <span class=\"math\">" + s.leadTerm + "</span>. The sign in front (" + (s.sign > 0 ? "positive" : "negative") + ") is the sign of the leading coefficient.");
+    } else {
+      out += step("The degree is the highest power of x" + (s.exps && s.exps.length ? " (here " + s.deg + ")" : "") + ", and the leading term is that highest-power term: <span class=\"math\">" + s.leadTerm + "</span>. Its coefficient is " + (s.sign > 0 ? "positive" : "negative") + ".");
+    }
+    var e = endsOf(s.deg, s.sign);
+    out += step("End behavior: degree " + s.deg + " is <strong>" + (s.deg % 2 === 0 ? "even" : "odd") + "</strong>, so the ends point " + (s.deg % 2 === 0 ? "the <strong>same</strong> direction" : "in <strong>opposite</strong> directions") + ". The leading coefficient is " + (s.sign > 0 ? "positive, so the right end rises" : "negative, so the right end falls") + ".");
+    return out + finalH("degree " + s.deg + ";  left end " + ARW[e.left] + " (" + (e.left === "up" ? "+&infin;" : "&minus;&infin;") + "),  right end " + ARW[e.right] + " (" + (e.right === "up" ? "+&infin;" : "&minus;&infin;") + ")");
+  }
+  function q1Grade(ua, s) {
+    if (!ua.poly) return { pts: 0, msg: "Choose Yes or No for \"Is it a polynomial?\"" };
+    if (!s.isPoly) return ua.poly === "no" ? { pts: 4, msg: "" } : { pts: 0, msg: "This one is not a polynomial. " + plain(s.why) };
+    if (ua.poly === "no") return { pts: 0, msg: "This one is a polynomial: every exponent is a whole number." };
+    var pts = 1, issues = [], e = endsOf(s.deg, s.sign), dg = parseInt(String(ua.deg).trim(), 10);
+    if (!/^\s*\d+\s*$/.test(String(ua.deg))) issues.push("Type the degree as a whole number.");
+    else if (dg === s.deg) pts++;
+    else issues.push(s.how === "factored" ? "The degree is the sum of all the exponents on the factors." : "The degree is the highest power of x.");
+    if (!ua.left || !ua.right) issues.push("Choose both end behaviors.");
+    else {
+      if (ua.left === e.left) pts++; else issues.push("Recheck the left end.");
+      if (ua.right === e.right) pts++; else issues.push("Recheck the right end: its direction comes from the sign of the leading coefficient.");
+    }
+    return { pts: pts, msg: pts >= 4 ? "" : issues.join(" ") };
+  }
+  [["1a", "a"], ["1b", "b"], ["1c", "c"], ["1d", "d"], ["1e", "e"]].forEach(function (d) {
+    PARTS.push({
+      id: d[0], group: "1", label: "(" + d[0].charAt(1) + ")", points: 4,
+      gen: function () { return q1Gen(d[1]); },
+      prompt: function (s) { return "Is <span class=\"math\">f(x) = " + s.html + "</span> a polynomial? If yes, give the degree and the end behavior." + "<div class=\"field-note\">If it is not a polynomial, choose No and leave the rest blank.</div>"; },
+      inputsHtml: function () {
+        return row("Is it a polynomial?", mcRowHtml("poly", [["yes", "Yes"], ["no", "No"]])) +
+          row("Degree:", inputHtml("ans-deg", "e.g. 5")) +
+          row("End behavior:", "<span class=\"mini\">as x &rarr; &minus;&infin;, f(x) goes</span>" + endSel("ans-left", "left end") + "<span class=\"mini\">&nbsp; as x &rarr; +&infin;, f(x) goes</span>" + endSel("ans-right", "right end"));
+      },
+      afterRender: mcAfterRender,
+      readAnswer: function (card) { return { poly: mcSel(card, "poly"), deg: val(card, ".ans-deg"), left: sel(card, ".ans-left"), right: sel(card, ".ans-right") }; },
+      grade: q1Grade,
+      isCorrect: function (ua, s) { return { ok: q1Grade(ua, s).pts >= 4 }; },
+      solutionHtml: q1Solution
+    });
+  });
+
+  // ---------- Q2: sketches ----------
+  function genSk(mode) {
+    for (;;) {
+      var n = randInt(2, 3) + (Math.random() < 0.12 ? 1 : 0), rs = pickN(n, -4, 4);
+      var zs = rs.map(function (r) { return { r: r, m: mode === "even" ? 2 : randChoice([1, 2]) }; });
+      var has1 = zs.some(function (z) { return z.m === 1; }), has2 = zs.some(function (z) { return z.m === 2; });
+      if (mode === "mix" && !(has1 && has2)) continue;
+      if (mode === "any" && n === 2 && !has1 && Math.random() < 0.6) continue;
+      return { zs: zs, s: Math.random() < 0.5 ? 1 : -1 };
+    }
+  }
+  function sigOf(zs, s) { return zs.map(function (z) { return z.r + ":" + z.m; }).join(",") + "|" + s; }
+  function cloneZ(zs) { return zs.map(function (z) { return { r: z.r, m: z.m }; }); }
+  function makeOptions(zs, s) {
+    var truth = sigOf(zs, s), cands = [], seen = {}; seen[truth] = 1;
+    function add(z2, s2) { var g = sigOf(z2, s2); if (!seen[g]) { seen[g] = 1; cands.push({ zs: z2, s: s2 }); } }
+    add(cloneZ(zs), -s);
+    zs.forEach(function (z, i) { var c = cloneZ(zs); c[i].m = z.m === 1 ? 2 : 1; add(c, s); });
+    zs.forEach(function (z, i) { var c = cloneZ(zs); c[i].m = z.m === 1 ? 2 : 1; add(c, -s); });
+    zs.forEach(function (z, i) { [-1, 1].forEach(function (dx) { var c = cloneZ(zs), nr = z.r + dx; if (Math.abs(nr) <= 5 && !zs.some(function (o) { return o.r === nr; })) { c[i].r = nr; add(c.sort(function (a, b) { return a.r - b.r; }), s); } }); });
+    var picks = [], first = cands.slice(0, 1);
+    // prefer: sign flip, two multiplicity changes
+    var pool = shuffle(cands.slice(1)); picks = first.concat(pool).slice(0, 3);
+    var all = shuffle(picks.map(function (c) { return { zs: c.zs, s: c.s, ok: false }; }).concat([{ zs: cloneZ(zs), s: s, ok: true }]));
+    return all;
+  }
+  function pickHint(chosen, zs, s) {
+    var tr = rootsMapOf(zs), ch = rootsMapOf(chosen.zs), k;
+    var sameSet = Object.keys(tr).length === Object.keys(ch).length && Object.keys(tr).every(function (r) { return ch[r] !== undefined; });
+    if (!sameSet) return "Check where the zeros are: each factor (x − r) gives a zero at x = r.";
+    for (k in tr) if (tr[k] !== ch[k]) return "Look at x = " + String(k).replace("-", "−") + ". The exponent there is " + tr[k] + ", so the graph should " + (tr[k] % 2 === 0 ? "touch the axis and turn around (even)" : "cross the axis (odd)") + ".";
+    return "The zeros and multiplicities match, but the end behavior is flipped. Use the degree and the sign of the leading coefficient.";
+  }
+  function skExplain(zs, s) {
+    var out = step("<strong>Zeros and multiplicities</strong> (the exponent on each factor):");
+    out += wb(zs.map(function (z) { return "x = " + M(z.r) + ":  multiplicity " + z.m + " &rarr; " + (z.m % 2 === 0 ? "touches the x-axis and turns around" : "crosses the x-axis") + (z.m > 2 ? " (flattens as it crosses)" : ""); }));
+    var deg = zsDeg(zs), e = endsOf(deg, s);
+    out += step("<strong>End behavior:</strong> the degree is " + zs.map(function (z) { return z.m; }).join(" + ") + " = " + deg + " (" + (deg % 2 ? "odd" : "even") + ") and the leading coefficient is " + (s > 0 ? "positive" : "negative") + ", so the left end " + ARW[e.left] + " and the right end " + ARW[e.right] + ".");
+    return out;
+  }
+  var SK_FORMULA = function (s) { return "<span class=\"math\">f(x) = " + facH(s.zs, s.s) + "</span>"; };
+  PARTS.push({
+    id: "2a", group: "2", label: "(a)", points: 4,
+    gen: function () { var g = genSk("mix"); g.opts = makeOptions(g.zs, g.s); return g; },
+    prompt: function (s) { return "Which graph is a sketch of " + SK_FORMULA(s) + "? It must show the correct zeros, the multiplicity at each zero, and the end behavior."; },
+    inputsHtml: function (s) { return graphOptHtml("g", s.opts.map(function (o) { return sketchSvg2(o.zs, o.s); })); },
+    afterRender: mcAfterRender,
+    readAnswer: function (card) { return { g: mcSel(card, "g") }; },
+    grade: function (ua, s) {
+      if (ua.g === null || ua.g === undefined) return { pts: 0, msg: "Pick one of the graphs." };
+      var o = s.opts[+ua.g];
+      return o.ok ? { pts: 4, msg: "" } : { pts: 0, msg: pickHint(o, s.zs, s.s) };
+    },
+    isCorrect: function (ua, s) { return { ok: ua.g !== null && s.opts[+ua.g].ok }; },
+    solutionHtml: function (s) {
+      var i = 0; s.opts.forEach(function (o, k) { if (o.ok) i = k; });
+      return solLabel() + skExplain(s.zs, s.s) + step("The matching sketch is <strong>graph " + "ABCD".charAt(i) + "</strong>:") + "<div class=\"sol-fig\">" + sketchSvg2(s.zs, s.s) + "</div>" + finalH("graph " + "ABCD".charAt(i));
+    }
+  });
+
+  // 2b: build the sketch by clicking the zeros
+  var SKW = [-6, 6, -1.35, 1.35];
+  function skMarksList(marks) { return Object.keys(marks).map(Number).sort(function (a, b) { return a - b; }).map(function (r) { return { r: r, m: marks[r] }; }); }
+  function skSign(zsM, leftEnd) { var deg = zsDeg(zsM), p = deg % 2 === 0 ? 1 : -1; return leftEnd === "up" ? p : -p; }
+  function skCaption(card) {
+    var canvas = card.querySelector("canvas"), cap = card.querySelector(".qgraph-caption"), marks = canvas._marks || {};
+    var list = skMarksList(marks);
+    if (!cap) return;
+    if (!list.length) { cap.textContent = "Click an x-value on the grid to mark a zero."; return; }
+    var txt = list.map(function (z) { return "x = " + String(z.r).replace("-", "−") + (z.m === 1 ? " crosses" : " touches"); }).join(";  ");
+    var right = sel(card, ".ans-right"), left = sel(card, ".ans-left");
+    if (left && right) {
+      var zsM = list.map(function (z) { return { r: z.r, m: z.m }; }), sg = skSign(zsM, left), derived = sg > 0 ? "up" : "down";
+      if (derived !== right) txt += "   — these ends don't fit the zeros you marked: check how the crossings change the direction.";
+    }
+    cap.textContent = txt;
+  }
+  function drawSk(canvas, s) {
+    var g = drawGrid(canvas, SKW[0], SKW[1], SKW[2], SKW[3], { noYLabels: true, hGrid: 100 });
+    var ca = cssVar("--graph-stroke-a"), cb = cssVar("--graph-stroke-b"), card = canvas._card;
+    if (canvas._showSolution) {
+      plotFn(g, sketchShape(s.zs, s.s), cb, 2.8);
+      s.zs.forEach(function (z) { plotDot(g, z.r, 0, cb, 6, z.m % 2 === 0); });
+    }
+    var list = skMarksList(canvas._marks || {}), left = card ? sel(card, ".ans-left") : "";
+    if (list.length && left) {
+      var zsM = list.map(function (z) { return { r: z.r, m: z.m }; });
+      plotFn(g, sketchShape(zsM, skSign(zsM, left)), ca, 2.4);
+    }
+    list.forEach(function (z) { plotDot(g, z.r, 0, ca, 5.5, z.m === 2); });
+  }
+  function wireSk(card, id) {
+    var canvas = card.querySelector("canvas");
+    canvas._marks = {}; canvas._showSolution = false; canvas._card = card; skCaption(card);
+    if (!canvas._wired) {
+      canvas._wired = true; canvas.style.cursor = "pointer";
+      canvas.addEventListener("click", function (evt) {
+        var s = window.__PT_STATE[id]; if (!s) return;
+        var gp = clickToGraph(canvas, evt, SKW), gx = Math.max(-6, Math.min(6, Math.round(gp[0])));
+        var cur = canvas._marks[gx];
+        if (!cur) canvas._marks[gx] = 1; else if (cur === 1) canvas._marks[gx] = 2; else delete canvas._marks[gx];
+        drawSk(canvas, s); skCaption(card);
+      });
+    }
+    ["ans-left", "ans-right"].forEach(function (c) {
+      var el = card.querySelector("." + c);
+      if (el && !el._wired) { el._wired = true; el.addEventListener("change", function () { var s = window.__PT_STATE[id]; if (s) drawSk(canvas, s); skCaption(card); }); }
+    });
+    var clr = card.querySelector(".clear-points-btn");
+    if (clr && !clr._wired) { clr._wired = true; clr.addEventListener("click", function () { canvas._marks = {}; var s = window.__PT_STATE[id]; if (s) drawSk(canvas, s); skCaption(card); }); }
+    var sb = card.querySelector(".solution-btn");
+    if (sb && !sb._wired) { sb._wired = true; sb.addEventListener("click", function () { canvas._showSolution = true; var s = window.__PT_STATE[id]; if (s) drawSk(canvas, s); }); }
+  }
+  PARTS.push({
+    id: "2b", group: "2", label: "(b)", points: 4, hasGraph: true, interactive: true, graphClass: "wide",
+    gen: function () { return genSk(Math.random() < 0.45 ? "even" : "any"); },
+    prompt: function (s) { return "Build a sketch of " + SK_FORMULA(s) + ". Click the grid at each <strong>zero</strong>: one click marks a zero where the graph <em>crosses</em> (solid dot), a second click on the same spot changes it to a zero where the graph <em>touches</em> and turns around (open dot), and a third click removes it. Then choose the <strong>end behavior</strong> and your sketch is drawn for you."; },
+    inputsHtml: function () { return row("End behavior:", "<span class=\"mini\">left end</span>" + endSel("ans-left", "left end") + "<span class=\"mini\">&nbsp; right end</span>" + endSel("ans-right", "right end")); },
+    afterRender: function (card) { wireSk(card, "2b"); },
+    readAnswer: function (card) { return { marks: JSON.parse(JSON.stringify(card.querySelector("canvas")._marks || {})), left: sel(card, ".ans-left"), right: sel(card, ".ans-right") }; },
+    drawGraph: drawSk,
+    grade: function (ua, s) {
+      var tr = rootsMapOf(s.zs), mk = ua.marks || {}, trK = Object.keys(tr).sort(), mkK = Object.keys(mk).sort(), pts = 0, issues = [];
+      var setOK = JSON.stringify(trK) === JSON.stringify(mkK);
+      if (setOK) {
+        pts++;
+        var multOK = trK.every(function (k) { return tr[k] === mk[k]; });
+        if (multOK) pts++; else { var bk = trK.filter(function (k) { return tr[k] !== mk[k]; })[0]; issues.push("At x = " + bk.replace("-", "−") + " the exponent is " + tr[bk] + ", so the graph should " + (tr[bk] % 2 === 0 ? "touch and turn around" : "cross") + "."); }
+      } else {
+        var miss = trK.filter(function (k) { return mkK.indexOf(k) === -1; }), extra = mkK.filter(function (k) { return trK.indexOf(k) === -1; });
+        if (!mkK.length) issues.push("Mark the zeros on the grid first.");
+        else issues.push((miss.length ? "You are missing a zero. " : "") + (extra.length ? "x = " + extra[0].replace("-", "−") + " is not a zero of f. " : "") + "Each factor (x − r) gives a zero at x = r.");
+      }
+      var e = endsOf(zsDeg(s.zs), s.s);
+      if (!ua.left || !ua.right) issues.push("Choose both end behaviors.");
+      else {
+        if (ua.left === e.left) pts++; else issues.push("Recheck the left end.");
+        if (ua.right === e.right) pts++; else issues.push("Recheck the right end.");
+      }
+      return { pts: pts, msg: pts >= 4 ? "" : issues.join(" ") };
+    },
+    isCorrect: function () { return { ok: false }; },
+    solutionHtml: function (s) { return solLabel() + skExplain(s.zs, s.s) + "<div class=\"sol-fig\">" + sketchSvg2(s.zs, s.s) + "</div>" + finalH("shown in teal above your sketch"); }
+  });
+
+  // ---------- Q3: write a polynomial from a graph ----------
+  var K_CANDS = [F(1), F(2), F(3), F(1, 2), F(1, 3), F(1, 4), F(1, 5), F(1, 6), F(1, 8), F(1, 10), F(1, 12), F(1, 15), F(1, 20), F(1, 30), F(1, 50), F(1, 80), F(1, 100)];
+  function gOf(zs, x) { var v = 1; zs.forEach(function (z) { v *= Math.pow(x - z.r, z.m); }); return v; }
+  function gen3(kind) {
+    for (;;) {
+      var zs;
+      if (kind === "a") {
+        var n = randInt(2, 3), rs = pickN(n, -5, 5, 2);
+        if (rs.length < n) continue;
+        zs = rs.map(function (r) { return { r: r, m: randChoice([1, 2]) }; });
+        if (zsDeg(zs) < 3 || !zs.some(function (z) { return z.m === 2; })) continue;
+      } else {
+        var t = randChoice(["par", "par", "tan", "cub"]), a = randInt(-3, 3);
+        if (t === "par") { var r1 = randInt(-3, 2); zs = [{ r: r1, m: 1 }, { r: r1 + randInt(1, 4), m: 1 }]; }
+        else if (t === "tan") zs = [{ r: randInt(-3, 3), m: 2 }];
+        else { var q = pickN(2, -4, 4, 2); if (q.length < 2) continue; zs = [{ r: q[0], m: 2 }, { r: q[1], m: 1 }]; }
+      }
+      var s = Math.random() < 0.5 ? 1 : -1, rs2 = zs.map(function (z) { return z.r; }), lo = Math.min.apply(null, rs2), hi = Math.max.apply(null, rs2);
+      var M0 = 0, x;
+      var a0 = hi > lo ? lo : lo - 1.5, a1 = hi > lo ? hi : lo + 1.5;
+      for (x = a0; x <= a1; x += 0.02) M0 = Math.max(M0, Math.abs(gOf(zs, x)));
+      var best = K_CANDS[0], bd = 1e9;
+      K_CANDS.forEach(function (c) { var dd = Math.abs(Math.log(c.n / c.d * M0 / 3.8)); if (dd < bd) { bd = dd; best = c; } });
+      var k = fmul(best, F(s));
+      var win = { x0: Math.min(lo - 2, -3), x1: Math.max(hi + 2, 3), y0: -8, y1: 8 };
+      var peak = M0 * best.n / best.d;
+      if (peak > 6 || peak < 2.2) continue;
+      var yw = peak > 4.5 ? 10 : 8; win.y0 = -yw; win.y1 = yw;
+      return { zs: zs, s: s, k: k, roots: rootsMapOf(zs), win: win, kind: kind };
+    }
+  }
+  function f3(s, x) { return fnum(s.k) * gOf(s.zs, x); }
+  function draw3(canvas, st) {
+    var w = st.win, span = w.x1 - w.x0, g = drawGrid(canvas, w.x0, w.x1, w.y0, w.y1, { xStep: span > 16 ? 2 : 1, yStep: (w.y1 - w.y0) > 16 ? 2 : 1 });
+    plotFn(g, function (x) { return f3(st, x); }, cssVar("--graph-stroke-a"), 2.6);
+  }
+  function setEq(a, b) { var ka = Object.keys(a).sort(), kb = Object.keys(b).sort(); return JSON.stringify(ka) === JSON.stringify(kb); }
+  function grade3(ua, s) {
+    var r = readPoly(ua.main); if (r.err) return { pts: 0, msg: r.err };
+    var dense = toDense(r.p); if (!dense) return { pts: 0, msg: "Use only whole-number exponents; your answer should be a polynomial." };
+    dense = dTrim(dense);
+    if (dense.length < 2) return { pts: 0, msg: "Your answer should be a polynomial of degree at least 1." };
+    var IR = intRootsOf(dense), lead = dense[dense.length - 1], setOK = IR.rest.length === 1 && setEq(IR.roots, s.roots), pts = 0, issues = [];
+    if (setOK) {
+      pts++;
+      var bad2 = Object.keys(s.roots).filter(function (k) { return IR.roots[k] !== s.roots[k]; });
+      if (!bad2.length) pts += 2; else { var k0 = bad2[0]; issues.push("Look at x = " + k0.replace("-", "−") + ": the graph " + (s.roots[k0] % 2 === 0 ? "touches the axis and turns around, so that factor needs an even exponent." : "crosses the axis, so that factor needs an odd exponent (1 is simplest).")); }
+      if ((lead.n > 0) === (fnum(s.k) > 0)) pts++; else issues.push("Check the end behavior: the graph's right end " + (fnum(s.k) > 0 ? "rises, so your leading coefficient should be positive." : "falls, so your leading coefficient should be negative."));
+    } else {
+      var miss = Object.keys(s.roots).filter(function (k) { return IR.roots[k] === undefined; }), extra = Object.keys(IR.roots).filter(function (k) { return s.roots[k] === undefined; });
+      if (miss.length) issues.push("Your polynomial has no zero at x = " + miss[0].replace("-", "−") + ", but the graph crosses or touches the x-axis there.");
+      else if (extra.length) issues.push("Your polynomial has a zero at x = " + extra[0].replace("-", "−") + ", but the graph doesn't touch the x-axis there.");
+      else issues.push("Your polynomial has extra zeros that the graph doesn't show.");
+    }
+    return { pts: pts, msg: pts >= 4 ? "" : issues.join(" ") };
+  }
+  [["3a", "a"], ["3b", "b"]].forEach(function (d) {
+    PARTS.push({
+      id: d[0], group: "3", label: "(" + d[0].charAt(1) + ")", points: 4, hasGraph: true,
+      gen: function () { return gen3(d[1]); },
+      prompt: function () { return "Write a polynomial that could have the graph below. Consider the zeros, what is happening at each zero, and the end behavior." + "<div class=\"field-note\">Type it in factored form, like <span class=\"math\">-2(x+1)(x-3)^2</span>. Any vertical stretch is fine: your zeros, multiplicities, and the <em>sign</em> of your leading coefficient must match the graph.</div>"; },
+      inputsHtml: function () { return row("f(x) =", inputHtml("ans-main wide", "e.g. -(x+1)(x-3)^2")); },
+      readAnswer: function (card) { return { main: val(card, ".ans-main") }; },
+      drawGraph: draw3,
+      grade: grade3,
+      isCorrect: function (ua, s) { return { ok: grade3(ua, s).pts >= 4 }; },
+      solutionHtml: function (s) {
+        var out = solLabel() + step("Read the zeros off the x-axis and decide what the graph does at each one:");
+        out += wb(s.zs.map(function (z) { return "x = " + M(z.r) + ":  " + (z.m === 1 ? "crosses the axis &rarr; factor " + binom(z.r) + " to an odd power (1)" : "touches and turns around &rarr; factor " + binom(z.r) + sup(2) + " to an even power (2)"); }));
+        var deg = zsDeg(s.zs), e = endsOf(deg, fnum(s.k) > 0 ? 1 : -1);
+        out += step("End behavior: the graph's left end " + ARW[e.left] + " and right end " + ARW[e.right] + ". With degree " + deg + " (" + (deg % 2 ? "odd" : "even") + "), that means the leading coefficient is <strong>" + (fnum(s.k) > 0 ? "positive" : "negative") + "</strong>.");
+        out += step("Put it together. The vertical stretch only changes how tall the bumps are, so any nonzero value with the right sign works. The graph shown uses <span class=\"math\">f(x) = " + leadH(s.k) + facH(s.zs, 1) + "</span>.");
+        return out + finalH("f(x) = " + leadH(s.k) + facH(s.zs, 1) + "  (or any nonzero multiple with the same sign)");
+      }
+    });
+  });
+
+  // ---------- Q4: zeros / asymptotes / removable discontinuities ----------
+  function genRat() {
+    for (;;) {
+      var rs = shuffle(pickN(6, -6, 6)); if (rs.length < 6) continue;
+      var type = randChoice(["h21", "h21", "h11", "h22", "h12", "h11"]), mc = { h21: [2, 1], h11: [1, 1], h22: [2, 2], h12: [1, 2] }[type];
+      var b = rs[0], nz = randChoice([1, 1, 2]), nd = randChoice([1, 2, 2]);
+      var N = [{ r: rs[1], m: 1 }], D = [{ r: rs[2], m: 1 }];
+      if (nz === 2) N.push({ r: rs[3], m: 1 });
+      if (nd === 2) D.push({ r: rs[4], m: 1 });
+      N.push({ r: b, m: mc[0] }); D.push({ r: b, m: mc[1] });
+      N.sort(function (x, y) { return x.r - y.r; }); D.sort(function (x, y) { return x.r - y.r; });
+      if (zsDeg(N) > zsDeg(D)) continue;
+      var n = randChoice([1, 1, 1, 2, -1, 3]), d = randChoice([1, 1, 1, 1, 2]);
+      return { N: N, D: D, n: n, d: d, type: type, info: ratInfo(N, D, n, d) };
+    }
+  }
+  function haFmt(ha) { return "y = " + fh(ha); }
+  function gradeHole(raw, info) {
+    var r = parseList(raw);
+    if (r.empty) return bad("Type your answer (or none).");
+    if (r.error) return bad(r.error);
+    if (!info.holes.length) return r.list.length ? bad("There is no removable discontinuity: no factor cancels completely. A factor that stays in the denominator after canceling gives a vertical asymptote instead.") : good();
+    var h = info.holes[0];
+    if (!r.list.length) return bad("There is a removable discontinuity (a hole): look for a factor that appears in both the numerator and the denominator.");
+    if (r.pointLike) {
+      if (r.list.length === 2 && close(r.list[0], h.x) && close(r.list[1], fnum(h.y), tolOf(h.y))) return good();
+      if (r.list.length === 2 && close(r.list[0], h.x)) return bad("The x-value of the hole is right. For its y-value, plug x = " + h.x + " into the function after canceling the common factor.");
+      return bad("That isn't the location of the hole.");
+    }
+    return (r.list.length === 1 && close(r.list[0], h.x)) ? good() : bad("That isn't where the hole is. The hole is at the x-value where the canceled factor equals zero.");
+  }
+  function gradeRatFields(ua, info) {
+    var m = { zeros: "", vas: "", ha: "", hole: "" }, ok = {};
+    var all = { noneMsg: "", someMsg: "", pointMsg: "Give just x-values.", extraMsg: function (v) { return "x = " + fmtN(v) + " doesn't belong in this list."; } };
+    function setTol(a) { return a.map(function () { return 1e-9; }); }
+    var gz = gradeNumList(ua.zeros, info.zeros.map(Number), setTol(info.zeros), { noneMsg: "A zero is an x-value that makes the numerator 0 (and isn't also a root of the denominator).", someMsg: "This function does have zeros: set the numerator's factors to 0, and ignore any factor that also cancels.", pointMsg: all.pointMsg, extraMsg: function (v) { return "x = " + fmtN(v) + " is not a zero of f (it may be a hole or a vertical asymptote instead)."; } });
+    ok.zeros = gz.ok; m.zeros = gz.msg;
+    var gv = gradeNumList(ua.vas, info.vas.map(Number), setTol(info.vas), { noneMsg: "A vertical asymptote comes from a factor in the denominator that does NOT cancel.", someMsg: "There is a vertical asymptote: look at the denominator's factors that don't cancel.", pointMsg: all.pointMsg, extraMsg: function (v) { return "x = " + fmtN(v) + " is not a vertical asymptote. Check whether that factor cancels."; } });
+    ok.vas = gv.ok; m.vas = gv.msg;
+    var hv = parseVal(ua.ha);
+    if (hv.empty) { ok.ha = false; m.ha = "Type the horizontal asymptote, like y = 2 (or none)."; }
+    else if (hv.error) { ok.ha = false; m.ha = hv.error; }
+    else if (hv.none) { ok.ha = info.ha === null || info.haKind === "none"; m.ha = "Compare the degrees of the numerator and denominator. Equal degrees give y = (leading coefficient ratio); a bigger denominator degree gives y = 0."; }
+    else { ok.ha = info.ha && close(hv.v, fnum(info.ha), tolOf(info.ha)); m.ha = info.haKind === "zero" ? "The denominator has the higher degree, so the horizontal asymptote is y = 0." : "The degrees are equal, so the horizontal asymptote is y = (leading coefficient of the numerator) / (leading coefficient of the denominator)."; }
+    var gh = gradeHole(ua.hole, info); ok.hole = gh.ok; m.hole = gh.msg;
+    return { ok: ok, msg: m };
+  }
+  function ratSolution(N, D, n, d, info) {
+    var rs = {}, out = "";
+    N.forEach(function (z) { rs[z.r] = rs[z.r] || [0, 0]; rs[z.r][0] += z.m; });
+    D.forEach(function (z) { rs[z.r] = rs[z.r] || [0, 0]; rs[z.r][1] += z.m; });
+    var common = Object.keys(rs).map(Number).filter(function (r) { return rs[r][0] > 0 && rs[r][1] > 0; });
+    out += step("The numerator and denominator are already factored. Look for factors that appear in <strong>both</strong>:");
+    if (!common.length) out += wb(["no common factors"]);
+    common.forEach(function (r) {
+      var mn = rs[r][0], md = rs[r][1], c = binom(r);
+      out += wb([c + (mn > 1 ? sup(mn) : "") + " on top and " + c + (md > 1 ? sup(md) : "") + " on the bottom"]);
+      if (mn >= md) out += step("Canceling uses up the whole " + c + " in the denominator, so <strong>x = " + M(r) + " is a removable discontinuity (a hole)</strong>. The function is undefined there, but the graph has a hole instead of an asymptote." + (mn > md ? " After canceling, a factor of " + c + " is still on top, so the hole sits at height y = 0, so the point is (" + M(r) + ", 0)." : " Plug x = " + M(r) + " into the canceled function to get its height: the hole is the point (" + M(r) + ", " + fpl(info.holes[0].y) + ")."));
+      else out += step("Canceling removes " + mn + " copy" + (mn > 1 ? "ies" : "") + " of " + c + ", but " + (md - mn) + " is still in the denominator. So x = " + M(r) + " stays a <strong>vertical asymptote</strong>, and there is <strong>no hole</strong>.");
+    });
+    out += step("<strong>Zeros:</strong> numerator factors that did not cancel: " + (info.zeros.length ? "x = " + info.zeros.map(function (z) { return M(z); }).join(", ") : "none") + (info.holes.length && info.holes[0].y.n === 0 ? " (x = " + M(info.holes[0].x) + " is NOT a zero: f is undefined there, so it's a hole)" : "") + ".");
+    out += step("<strong>Vertical asymptotes:</strong> denominator factors that did not cancel: " + (info.vas.length ? "x = " + info.vas.map(function (z) { return M(z); }).join(", ") : "none") + ".");
+    out += step("<strong>Horizontal asymptote:</strong> the numerator has degree " + info.degN + " and the denominator has degree " + info.degD + (info.degN === info.degD ? ", which are equal, so y = (leading coefficient of top) / (leading coefficient of bottom) = " + fh(info.ha) : ", so the denominator wins and y = 0") + ".");
+    return out;
+  }
+  var RAT_NOTE = "<div class=\"field-note\">Separate several answers with commas. Type <strong>none</strong> where nothing applies. For the horizontal asymptote type something like <span class=\"math\">y = 2</span>. For the hole you may give the x-value or the point, like <span class=\"math\">(-2, 0)</span>.</div>";
+  var RAT_FIELDS = function () {
+    return row("zero(s):", inputHtml("ans-zeros wide", "e.g. 1, -3")) + row("vertical asymptote(s):", inputHtml("ans-vas wide", "e.g. 3, -1")) + row("horizontal asymptote:", inputHtml("ans-ha wide", "e.g. y = 1")) + row("removable discontinuity (hole):", inputHtml("ans-hole wide", "e.g. -2  or  (-2, 0)"));
+  };
+  function ratRead(card) { return { zeros: val(card, ".ans-zeros"), vas: val(card, ".ans-vas"), ha: val(card, ".ans-ha"), hole: val(card, ".ans-hole") }; }
+  function ratFeedback(g) {
+    var pts = 0, msgs = [], names = { zeros: "Zeros", vas: "Vertical asymptotes", ha: "Horizontal asymptote", hole: "Removable discontinuity" };
+    Object.keys(names).forEach(function (k) { if (g.ok[k]) pts++; else if (g.msg[k]) msgs.push(names[k] + ": " + g.msg[k]); });
+    return { pts: pts, msg: msgs.join(" ") };
+  }
+  PARTS.push({
+    id: "4", group: "4", label: "", points: 4,
+    gen: genRat,
+    prompt: function (s) { return "Find all zeros, asymptotes, and removable discontinuities of <span class=\"math\">f(x) = </span>" + ratFracH(s.N, s.D, s.n, s.d) + RAT_NOTE; },
+    inputsHtml: RAT_FIELDS,
+    readAnswer: ratRead,
+    grade: function (ua, s) { return ratFeedback(gradeRatFields(ua, s.info)); },
+    isCorrect: function (ua, s) { return { ok: ratFeedback(gradeRatFields(ua, s.info)).pts >= 4 }; },
+    solutionHtml: function (s) {
+      var I = s.info;
+      return solLabel() + ratSolution(s.N, s.D, s.n, s.d, I) + finalH("zeros: " + (I.zeros.length ? I.zeros.map(M).join(", ") : "none") + ";  VA: " + (I.vas.length ? I.vas.map(function (v) { return "x = " + M(v); }).join(", ") : "none") + ";  HA: " + haFmt(I.ha) + ";  hole: " + (I.holes.length ? "(" + M(I.holes[0].x) + ", " + fpl(I.holes[0].y) + ")" : "none"));
+    }
+  });
+
+  // ---------- Q5 (EC): sketch a rational function ----------
+  function gen5ec() {
+    for (;;) {
+      var rs = shuffle(pickN(3, -5, 5)); if (rs.length < 3) continue;
+      var p = rs[0], h = rs[1], q = rs[2];
+      var N = [{ r: p, m: 1 }, { r: h, m: 1 }], D = [{ r: h, m: 1 }, { r: q, m: 1 }];
+      var info = ratInfo(N, D, 1, 1);
+      if (!info.holes.length || Math.abs(fnum(info.holes[0].y)) > 5 || Math.abs(fnum(info.holes[0].y)) < 0.01) continue;
+      var f0 = function (x) { return (x - p) / (x - q); };
+      if (Math.abs(f0(0)) > 5 && q !== 0) continue;
+      // options: correct + 3 distinct wrong pictures
+      var wrongSpecs = shuffle([
+        { N: [{ r: p, m: 1 }], D: [{ r: h, m: 1 }, { r: q, m: 1 }], n: 1, d: 1 },
+        { N: [{ r: q, m: 1 }, { r: h, m: 1 }], D: [{ r: h, m: 1 }, { r: p, m: 1 }], n: 1, d: 1 },
+        { N: [{ r: p, m: 1 }, { r: h, m: 1 }], D: [{ r: h, m: 1 }, { r: q, m: 1 }], n: -1, d: 1 },
+        { N: [{ r: p, m: 1 }, { r: h, m: 1 }], D: [{ r: h, m: 1 }, { r: q, m: 1 }], n: 2, d: 1 },
+        { N: [{ r: p, m: 1 }, { r: q, m: 1 }], D: [{ r: h, m: 1 }, { r: q, m: 1 }], n: 1, d: 1 }
+      ]);
+      var seen = {}; seen[ratSig(N, D, 1, 1)] = 1;
+      var opts = [{ N: N, D: D, n: 1, d: 1, ok: true }];
+      wrongSpecs.forEach(function (w) {
+        var g = ratSig(w.N, w.D, w.n, w.d), wi = ratInfo(w.N, w.D, w.n, w.d);
+        if (seen[g] || opts.length >= 4) return;
+        if (wi.holes.some(function (hh) { return Math.abs(fnum(hh.y)) > 6; })) return;
+        seen[g] = 1; opts.push({ N: w.N, D: w.D, n: w.n, d: w.d, ok: false });
+      });
+      if (opts.length < 4) continue;
+      return { p: p, h: h, q: q, N: N, D: D, info: info, opts: shuffle(opts) };
+    }
+  }
+  PARTS.push({
+    id: "5", group: "5", label: "EC", points: 4, bonus: true,
+    gen: gen5ec,
+    prompt: function (s) {
+      var s0 = s.p + s.h, p0 = s.p * s.h, s1 = s.h + s.q, p1 = s.h * s.q;
+      return "Extra credit: Sketch the graph of <span class=\"math\">f(x) = </span>" + frac(stdPolyH(1, -s0, p0), stdPolyH(1, -s1, p1)) + ". First list its key features, then choose the matching graph." + RAT_NOTE;
+    },
+    inputsHtml: function (s) { return RAT_FIELDS() + "<div class=\"field-label\">Which graph matches?</div>" + graphOptHtml("g", s.opts.map(function (o) { return ratSvg(o.N, o.D, o.n, o.d); })); },
+    afterRender: mcAfterRender,
+    readAnswer: function (card) { var r = ratRead(card); r.g = mcSel(card, "g"); return r; },
+    grade: function (ua, s) {
+      var g = gradeRatFields(ua, s.info), f = ratFeedback(g), pts = f.pts * 0.5, msg = f.msg;
+      if (ua.g === null || ua.g === undefined) msg += " Pick one of the graphs.";
+      else if (s.opts[+ua.g].ok) pts += 2;
+      else msg += " The graph you picked doesn't match: check the hole (open circle), the vertical asymptote, and the horizontal asymptote.";
+      return { pts: pts, msg: msg.trim() };
+    },
+    isCorrect: function () { return { ok: false }; },
+    solutionHtml: function (s) {
+      var I = s.info, out = solLabel();
+      out += step("Factor the top and bottom first:");
+      out += wb(["f(x) = " + ratFracH(s.N, s.D, 1, 1)]);
+      out += ratSolution(s.N, s.D, 1, 1, I);
+      var i = 0; s.opts.forEach(function (o, k) { if (o.ok) i = k; });
+      out += step("Sketch: draw the dashed asymptotes, an open circle at the hole, the zero on the x-axis, then connect the pieces. The matching graph is <strong>" + "ABCD".charAt(i) + "</strong>:") + "<div class=\"sol-fig\">" + ratSvg(s.N, s.D, 1, 1) + "</div>";
+      return out + finalH("graph " + "ABCD".charAt(i) + ": zero at x = " + M(s.p) + ", vertical asymptote x = " + M(s.q) + ", horizontal asymptote y = 1, hole at (" + M(s.h) + ", " + fpl(I.holes[0].y) + ")");
+    }
+  });
+
+  var GROUP_META = {
+    "1": { num: "1.", desc: "Determine whether each function is a polynomial. If it is, give the degree and the end behavior (which way each end of the graph points)." },
+    "2": { num: "2.", desc: "Sketch the following. Your sketch needs to show the zeros, the multiplicities, and the end behavior." },
+    "3": { num: "3.", desc: "Write a polynomial that could have the following graph. Consider the zeros, what is happening at the zeros, and the end behavior." },
+    "4": { num: "4.", desc: "Find all zeros, asymptotes, and removable discontinuities." },
+    "5": { num: "5.", desc: "Extra credit: sketch a graph of the rational function." }
+  };
+  window.__PT = { PARTS: PARTS, F: F, ratInfo: ratInfo, ratSig: ratSig, makeOptions: makeOptions, sigOf: sigOf, endsOf: endsOf, gradeRatFields: gradeRatFields, gradeHole: gradeHole, grade3: grade3, gOf: gOf, expandStr: expandStr, toDense: toDense, intRootsOf: intRootsOf };
+
+  var scoreMap = {};
+  var TOTAL_POINTS = PARTS.reduce(function (sum, p) { return sum + (p.bonus ? 0 : p.points); }, 0);
+  var scoreNumEl = document.getElementById("scoreNum");
+
+  function updateScore() {
+    var earned = 0;
+    Object.keys(scoreMap).forEach(function (k) { earned += scoreMap[k]; });
+    scoreNumEl.textContent = earned + " / " + TOTAL_POINTS;
+  }
+
+  var examScoreMap = {};
+  var examScoreNumEl = document.getElementById("examScoreNum");
+
+  function updateExamScore() {
+    var earned = 0;
+    Object.keys(examScoreMap).forEach(function (k) { earned += examScoreMap[k]; });
+    examScoreNumEl.textContent = earned + " / " + TOTAL_POINTS;
+  }
+
+  window.__PT_STATE = {};
+
+  function mountCard(part, container) {
+    var card = document.createElement("div");
+    card.className = "qcard";
+    card.setAttribute("data-id", part.id);
+
+    var headHtml = "<div class=\"qcard-head\"><div class=\"qtitle\">" +
+      (part.label ? "<span class=\"qlabel\">" + part.label + "</span>" : "") +
+      "<span class=\"qpoints\">" + part.points + " pt" + (part.points === 1 ? "" : "s") + (part.bonus ? " &middot; extra credit" : "") + "</span>" +
+      "<span class=\"exam-badge hidden\"></span></div>" +
+      "<button class=\"icon-btn new-version-btn\" type=\"button\">" +
+      "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M16 3h5v5\"/><path d=\"M4 20 21 3\"/><path d=\"M21 16v5h-5\"/><path d=\"M15 15l6 6\"/><path d=\"M4 4l5 5\"/></svg>" +
+      "New version</button></div>";
+
+    card.innerHTML = headHtml +
+      "<div class=\"qprompt\"></div>" +
+      (part.hasGraph ? "<div class=\"qgraph-wrap" + (part.graphSmall ? " small" : "") + (part.graphClass ? " " + part.graphClass : "") + "\"><canvas></canvas></div>" : "") +
+      (part.interactive ? "<div class=\"qgraph-tools\"><span class=\"qgraph-caption\"></span><button class=\"btn-secondary clear-points-btn\" type=\"button\">Clear points</button></div>" : "") +
+      "<div class=\"qinputs\"></div>" +
+      "<div class=\"qactions\"><button class=\"btn-primary check-btn\" type=\"button\">Check Answer</button><button class=\"btn-secondary solution-btn\" type=\"button\">Show Solution</button></div>" +
+      "<div class=\"qfeedback hidden\"></div>" +
+      "<div class=\"qsolution hidden\"></div>";
+
+    container.appendChild(card);
+
+    var promptEl = card.querySelector(".qprompt");
+    var inputsEl = card.querySelector(".qinputs");
+    var feedbackEl = card.querySelector(".qfeedback");
+    var solutionEl = card.querySelector(".qsolution");
+    var examBadgeEl = card.querySelector(".exam-badge");
+    var canvasEl = part.hasGraph ? card.querySelector("canvas") : null;
+
+    var state;
+    var examAttempted = false;
+
+    function lockExam(pts, note) {
+      if (examAttempted) return;
+      examAttempted = true;
+      examScoreMap[part.id] = pts;
+      examBadgeEl.className = "exam-badge " + (pts >= part.points ? "exam-good" : "exam-bad");
+      examBadgeEl.innerHTML = "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"4\" y=\"10\" width=\"16\" height=\"10\" rx=\"2\"/><path d=\"M8 10V7a4 4 0 0 1 8 0v3\"/></svg> Exam: " + pts + "/" + part.points + (note ? " (" + note + ")" : "");
+      updateExamScore();
+    }
+
+    function render() {
+      state = part.gen();
+      window.__PT_STATE[part.id] = state;
+      promptEl.innerHTML = part.prompt(state);
+      inputsEl.innerHTML = part.inputsHtml(state, part.id);
+      feedbackEl.classList.add("hidden");
+      feedbackEl.innerHTML = "";
+      solutionEl.classList.add("hidden");
+      solutionEl.innerHTML = "";
+      scoreMap[part.id] = 0;
+      updateScore();
+      if (part.afterRender) part.afterRender(card);
+      if (part.hasGraph) part.drawGraph(canvasEl, state);
+    }
+
+    card.querySelector(".new-version-btn").addEventListener("click", render);
+    card.querySelector(".check-btn").addEventListener("click", function () {
+      var ua = part.readAnswer(card);
+      var res, pts, msg = "";
+      if (part.grade) { res = part.grade(ua, state); pts = res.pts; msg = res.msg || ""; }
+      else {
+        res = part.isCorrect(ua, state);
+        // parts may return a plain boolean, or { ok, msg } with a helpful per-field message
+        pts = ((res && typeof res === "object") ? !!res.ok : !!res) ? part.points : 0;
+        msg = (res && typeof res === "object" && res.msg) ? res.msg : "";
+      }
+      var correct = pts >= part.points;
+      feedbackEl.classList.remove("hidden");
+      if (correct) {
+        feedbackEl.className = "qfeedback good";
+        feedbackEl.innerHTML = "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M20 6 9 17l-5-5\"/></svg> <span>Correct!" + (msg ? " " + esc(msg) : "") + "</span>";
+        scoreMap[part.id] = part.points;
+      } else {
+        feedbackEl.className = "qfeedback bad";
+        feedbackEl.innerHTML = "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\"><circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M15 9l-6 6M9 9l6 6\"/></svg> <span>" + (pts > 0 ? "Partly right (" + pts + " of " + part.points + " points). " : "Not quite. ") + (msg ? esc(msg.charAt(0).toUpperCase() + msg.slice(1)) + " (The solution below shows the full work.)" : "Check the solution below.") + "</span>";
+        scoreMap[part.id] = pts;
+      }
+      updateScore();
+      lockExam(pts);
+    });
+    card.querySelector(".solution-btn").addEventListener("click", function () {
+      solutionEl.innerHTML = part.solutionHtml(state, card);
+      solutionEl.classList.remove("hidden");
+      lockExam(0, "viewed solution");
+    });
+
+    if (part.hasGraph) {
+      window.addEventListener("resize", function () { if (state) part.drawGraph(canvasEl, state); });
+    }
+
+    render();
+  }
+
+  function buildAll() {
+    var groupsEl = document.getElementById("groups");
+    groupsEl.innerHTML = "";
+    scoreMap = {};
+    examScoreMap = {};
+    var seenGroups = {};
+    var currentContainer = null;
+    PARTS.forEach(function (part) {
+      if (!seenGroups[part.group]) {
+        seenGroups[part.group] = true;
+        var meta = GROUP_META[part.group];
+        var gh = document.createElement("div");
+        gh.className = "group-head";
+        gh.innerHTML = "<div class=\"gnum\">" + meta.num + "</div><div class=\"gdesc\">" + meta.desc + "</div>";
+        groupsEl.appendChild(gh);
+        currentContainer = document.createElement("div");
+        groupsEl.appendChild(currentContainer);
+      }
+      mountCard(part, currentContainer);
+    });
+    updateScore();
+    updateExamScore();
+  }
+
+  document.getElementById("newTestBtn").addEventListener("click", buildAll);
+
+
+  buildAll();
+})();
+</script>
+</body>
+</html>
