@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Integral Notation &amp; Geometric Area &mdash; Notes</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75;font-size:15px}
+.container{max-width:900px;margin:0 auto;padding:2rem 1.5rem 4rem}
+
+/* ── Header ── */
+.page-title{font-size:28px;font-weight:700;margin-bottom:4px}
+.page-sub{font-family:sans-serif;font-size:13px;color:#666;margin-bottom:1.6rem}
+
+/* ── Opening question ── */
+.opening-q{background:#eef3f9;border-left:4px solid #1e3a5c;
+  border-radius:0 8px 8px 0;padding:1rem 1.2rem;font-size:15px;
+  margin-bottom:1.5rem;font-style:italic;line-height:1.75}
+
+/* ── Section heading ── */
+.section-head{font-family:sans-serif;font-size:11px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.08em;color:#1e3a5c;
+  margin-top:1.4rem;margin-bottom:.6rem;
+  border-bottom:1px solid #c8d8ec;padding-bottom:4px}
+
+/* ── Accent box ── */
+.accent-box{background:#d9e8f5;border-left:4px solid #1e3a5c;
+  border-radius:0 8px 8px 0;padding:.9rem 1.1rem;font-size:14px;
+  margin-bottom:.85rem;line-height:1.95}
+.accent-box ul{margin-left:1.3rem;margin-top:.3rem}
+.accent-box li{margin-bottom:.15rem}
+.accent-box p{margin-bottom:.4rem}
+
+/* ── Body text ── */
+.body-text{font-size:14px;line-height:1.75;margin-bottom:.85rem}
+
+/* ── Two-column layout ── */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:.5rem}
+.col{min-width:0}
+
+/* ── Worked examples 2-col grid ── */
+.examples-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem}
+.ex-block{border:1.5px solid #ddd;border-radius:9px;padding:1rem 1.1rem;background:#fff}
+.ex-label{font-family:sans-serif;font-size:11px;font-weight:700;color:#1e3a5c;
+  text-transform:uppercase;letter-spacing:.05em;margin-bottom:.45rem}
+.ex-body{font-size:14px;line-height:1.75;margin-bottom:.5rem}
+
+/* ── Practice section ── */
+.practice{margin-bottom:1.5rem}
+.pr-row{display:grid;grid-template-columns:1.6rem 1fr 210px;gap:.75rem;
+  align-items:start;padding:.6rem 0;border-bottom:1px solid #ece8e0}
+.pr-num{font-family:sans-serif;font-weight:700;font-size:14px;color:#1e3a5c;padding-top:2px}
+.pr-prob{font-size:14px;line-height:1.75}
+
+/* ── Student interactive ── */
+.st-work{width:100%;min-height:3rem;border:1px solid #ccc;border-radius:5px;
+  padding:.35rem .5rem;font-family:Georgia,serif;font-size:13px;resize:vertical;
+  background:#fafafa;display:block;margin-bottom:.3rem}
+.st-work-sm{width:100%;min-height:1.5rem;border:1px solid #ccc;border-radius:4px;
+  padding:.2rem .4rem;font-family:Georgia,serif;font-size:12px;resize:vertical;
+  background:#fafafa;display:block;margin-bottom:.2rem}
+.st-btn{font-family:sans-serif;font-size:10px;font-weight:700;color:#1e3a5c;
+  background:none;border:1.5px solid #1e3a5c;border-radius:4px;
+  padding:2px 9px;cursor:pointer;margin-bottom:.2rem;display:inline-block}
+.st-btn-sm{font-family:sans-serif;font-size:9px;font-weight:700;color:#1e3a5c;
+  background:none;border:1px solid #1e3a5c;border-radius:3px;
+  padding:1px 6px;cursor:pointer;margin-bottom:.15rem;display:inline-block}
+.st-btn:hover,.st-btn-sm:hover{background:#eef3f9}
+.st-ans-hidden{display:none;background:#fef9e7;border-left:3px solid #7a5c1e;
+  border-radius:0 5px 5px 0;padding:.4rem .7rem;font-size:13px;
+  color:#5a3e00;line-height:1.85}
+.st-ans-hidden.visible{display:block}
+
+/* ── SVG figures ── */
+.svg-figure{text-align:center;margin:.4rem 0 .5rem}
+.svg-figure svg{max-width:100%;height:auto}
+.svg-caption{font-family:sans-serif;font-size:11px;color:#555;
+  margin-top:.2rem;font-style:italic}
+
+/* ── KaTeX overflow ── */
+.katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}
+
+/* ── Mistake panel ── */
+.mistake-panel{margin:.4rem 0 1.1rem;border-left:3px solid #b8860b;border-radius:0 6px 6px 0;background:#fdf8e8}
+.mistake-toggle{cursor:pointer;font-family:sans-serif;font-size:11px;font-weight:700;color:#9a6a00;text-transform:uppercase;letter-spacing:.07em;padding:.5rem 1rem;list-style:none;user-select:none;display:block}
+.mistake-toggle::-webkit-details-marker{display:none}
+details[open]>.mistake-toggle{color:#1e3a5c}
+.mistake-body{padding:.5rem 1.1rem .8rem 1.1rem;font-size:13.5px;line-height:1.85;color:#1a1a1a;border-top:1px solid #e8d8a8}
+.mistake-body p{margin-bottom:.45rem}
+
+.katex,.katex *{text-transform:none;letter-spacing:normal}
+
+/* ── Print styles ── */
+@media print{
+  body{background:white;font-size:10pt;line-height:1.5}
+  .container{padding:0;max-width:none}
+  .page-sub{margin-bottom:.8rem}
+  .opening-q{padding:.5rem .8rem;margin-bottom:.8rem;font-size:10pt;line-height:1.5;break-inside:avoid;
+    background:#eef3f9 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .section-head{margin-top:.7rem;margin-bottom:.35rem}
+  .accent-box{padding:.5rem .75rem;margin-bottom:.5rem;font-size:10pt;line-height:1.55;
+    background:#e8f0f8 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .accent-box p{margin-bottom:.2rem}
+  .body-text{font-size:10pt;line-height:1.5;margin-bottom:.5rem}
+  .two-col{gap:1rem;margin-bottom:.3rem;break-inside:avoid}
+  .examples-grid{gap:.6rem;margin-bottom:.8rem;break-inside:avoid}
+  .ex-block{padding:.55rem .75rem;border:1px solid #ccc;break-inside:avoid}
+  .ex-label{margin-bottom:.25rem}
+  .ex-body{font-size:10pt;line-height:1.5;margin-bottom:.3rem}
+  .practice{margin-bottom:.8rem}
+  .pr-row{padding:.3rem 0;break-inside:avoid}
+  .pr-prob{font-size:10pt;line-height:1.5}
+  .st-work{background:none;border:none;border-bottom:1.5px solid #bbb;
+    border-radius:0;min-height:2.6rem;resize:none}
+  .st-work-sm{background:none;border:none;border-bottom:1.5px solid #bbb;
+    border-radius:0;min-height:1.3rem;resize:none}
+  .st-btn,.st-btn-sm{display:none}
+  .st-ans-hidden{display:none !important}
+  .mistake-panel{break-inside:avoid}
+  details.mistake-panel:not([open]){display:none}
+  .svg-figure{margin:.2rem 0 .35rem;break-inside:avoid}
+}
+@page{margin:.55in .65in;size:letter}
+</style>
+</head>
+<body>
+<div class="container">
+<h1 class="page-title">Integral Notation &amp; Geometric Area</h1>
+<p class="page-sub">Calculus I &nbsp;&middot;&nbsp; &sect;4.1.5 &nbsp;&middot;&nbsp; Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026 &nbsp;&middot;&nbsp; <strong>STUDENT</strong></p>
+<div class="opening-q">You&rsquo;ve used areas of rectangles to estimate distances traveled. But what if the region under a curve IS a simple geometric shape? Before we build the full machinery of Riemann sums, let&rsquo;s ask: which integrals can we read off from a picture right now, using only the geometry we learned before calculus?</div>
+
+<div class="two-col">
+<div class="col">
+<div class="section-head">Reading the Notation</div>
+<div class="accent-box">
+<p style="font-size:16px;text-align:center;margin-bottom:.6rem">$\displaystyle\int_{\,a}^{\,b} f(x)\,dx$</p>
+<ul>
+  <li><strong>$\int$</strong> &mdash; integral sign (elongated $S$, for &ldquo;sum&rdquo;)</li>
+  <li><strong>$a$</strong> &mdash; lower limit of integration</li>
+  <li><strong>$b$</strong> &mdash; upper limit of integration</li>
+  <li><strong>$f(x)$</strong> &mdash; integrand (the function being integrated)</li>
+  <li><strong>$dx$</strong> &mdash; variable of integration; think of it as the &ldquo;width&rdquo; direction</li>
+</ul>
+<p style="margin-top:.5rem">The result is a <strong>number</strong>: the signed area between the graph of $f$ and the $x$-axis, from $x=a$ to $x=b$.</p>
+</div>
+<p class="body-text"><strong>Units:</strong> $\int_a^b f(x)\,dx$ has units equal to (units of $f$) &times; (units of $x$). If $f$ is in m/s and $x$ is in seconds, the integral is in meters.</p>
+</div>
+
+<div class="col">
+<div class="section-head">Geometric Rules</div>
+<div class="accent-box">
+<p>These follow from what <em>area</em> means &mdash; no antiderivatives needed.</p>
+<p><strong>Constant Multiple:</strong></p>
+<p>$\displaystyle\int_a^b c\,f(x)\,dx = c\int_a^b f(x)\,dx$</p>
+<p><strong>Sum / Difference:</strong></p>
+<p>$\displaystyle\int_a^b [f\pm g]\,dx=\int_a^b f\,dx\pm\int_a^b g\,dx$</p>
+<p><strong>Zero-width interval:</strong> $\displaystyle\int_a^a f(x)\,dx=0$</p>
+<p><strong>Flip limits:</strong> $\displaystyle\int_b^a f(x)\,dx=-\int_a^b f(x)\,dx$</p>
+<p><strong>Interval split:</strong></p>
+<p>$\displaystyle\int_a^b f\,dx+\int_b^c f\,dx=\int_a^c f\,dx$</p>
+</div>
+</div>
+</div>
+
+<div class="section-head">Signed Area</div>
+<p class="body-text"><strong>Area above the $x$-axis counts positive; area below counts negative.</strong> The definite integral adds up signed contributions across $[a,b]$ &mdash; so a region where $f(x) &lt; 0$ <em>subtracts</em> from the total. This is not a flaw; signed area is exactly what makes the Net Change Theorem and FTC work cleanly. Flipping the limits of integration ($a \leftrightarrow b$) also negates the result, because you&rsquo;re now sweeping right-to-left instead of left-to-right.</p>
+<details class="mistake-panel" style="margin-bottom:1.1rem">
+<summary class="mistake-toggle">&#9658; Common Mistake</summary>
+<div class="mistake-body">
+  <p>Students assume a definite integral is always positive because &ldquo;area can&rsquo;t be negative.&rdquo; But $\int_a^b f(x)\,dx$ is <em>signed</em> area: a region below the $x$-axis contributes a negative quantity. For example, $\int_0^3(-2)\,dx=-6$ &mdash; the rectangle is entirely below the axis, so the answer is $-6$, not $6$.</p>
+  <p>If you need the <em>total unsigned area</em>, you must split at the zeros of $f$ and integrate $|f|$ on each piece separately. The plain definite integral will not do that for you automatically.</p>
+</div>
+</details>
+
+<div class="section-head">Worked Examples</div>
+<div class="examples-grid">
+<div class="ex-block">
+  <div class="ex-label">Example 1 &nbsp;&mdash;&nbsp; Rectangle</div>
+  <div class="ex-body">Evaluate $\displaystyle\int_0^4 3\,dx$ geometrically.</div>
+  <div class="svg-figure">
+    <svg viewBox="0 0 210 110" xmlns="http://www.w3.org/2000/svg" width="200" height="110">
+      <rect x="35" y="20" width="140" height="65" fill="#d9e8f5" stroke="#1e3a5c" stroke-width="1.5"/>
+      <line x1="20" y1="85" x2="190" y2="85" stroke="#444" stroke-width="1.3"/>
+      <polygon points="186,82 193,85 186,88" fill="#444"/>
+      <line x1="35" y1="10" x2="35" y2="95" stroke="#444" stroke-width="1.3"/>
+      <polygon points="32,14 35,7 38,14" fill="#444"/>
+      <line x1="175" y1="82" x2="175" y2="88" stroke="#444" stroke-width="1"/>
+      <line x1="32" y1="20" x2="38" y2="20" stroke="#444" stroke-width="1"/>
+      <text x="33" y="99" text-anchor="middle" font-size="11" font-family="Georgia,serif">0</text>
+      <text x="175" y="99" text-anchor="middle" font-size="11" font-family="Georgia,serif">4</text>
+      <text x="20" y="24" text-anchor="end" font-size="11" font-family="Georgia,serif">3</text>
+      <text x="183" y="17" font-size="11" font-family="Georgia,serif" fill="#1e3a5c">y&#x202f;=&#x202f;3</text>
+      <text x="105" y="58" text-anchor="middle" font-size="12" font-family="Georgia,serif" fill="#1e3a5c">4 &#x00D7; 3 = 12</text>
+    </svg>
+    <div class="svg-caption">Rectangle: width 4, height 3</div>
+  </div>
+  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work&hellip;"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">$\displaystyle\int_0^4 3\,dx = 4\times 3 = 12$</div></div>
+</div>
+
+<div class="ex-block">
+  <div class="ex-label">Example 2 &nbsp;&mdash;&nbsp; Triangle</div>
+  <div class="ex-body">Evaluate $\displaystyle\int_0^4 x\,dx$ geometrically.</div>
+  <div class="svg-figure">
+    <svg viewBox="0 0 210 110" xmlns="http://www.w3.org/2000/svg" width="200" height="110">
+      <polygon points="35,85 175,85 175,20" fill="#d9e8f5" stroke="#1e3a5c" stroke-width="1.5"/>
+      <line x1="20" y1="85" x2="190" y2="85" stroke="#444" stroke-width="1.3"/>
+      <polygon points="186,82 193,85 186,88" fill="#444"/>
+      <line x1="35" y1="10" x2="35" y2="95" stroke="#444" stroke-width="1.3"/>
+      <polygon points="32,14 35,7 38,14" fill="#444"/>
+      <line x1="175" y1="82" x2="175" y2="88" stroke="#444" stroke-width="1"/>
+      <line x1="32" y1="20" x2="38" y2="20" stroke="#444" stroke-width="1"/>
+      <text x="33" y="99" text-anchor="middle" font-size="11" font-family="Georgia,serif">0</text>
+      <text x="175" y="99" text-anchor="middle" font-size="11" font-family="Georgia,serif">4</text>
+      <text x="20" y="24" text-anchor="end" font-size="11" font-family="Georgia,serif">4</text>
+      <text x="90" y="47" font-size="11" font-family="Georgia,serif" fill="#1e3a5c" transform="rotate(-25,90,47)">y&#x202f;=&#x202f;x</text>
+      <text x="145" y="78" text-anchor="middle" font-size="11" font-family="Georgia,serif" fill="#1e3a5c">&#189;&#x202f;&#xB7;&#x202f;4&#x202f;&#xB7;&#x202f;4&#x202f;=&#x202f;8</text>
+    </svg>
+    <div class="svg-caption">Right triangle: base 4, height 4</div>
+  </div>
+  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work&hellip;"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">$\dfrac{1}{2}\cdot 4\cdot 4 = 8$</div></div>
+</div>
+
+<div class="ex-block">
+  <div class="ex-label">Example 3 &nbsp;&mdash;&nbsp; Below the axis</div>
+  <div class="ex-body">Evaluate $\displaystyle\int_0^3 (-2)\,dx$ geometrically.</div>
+  <div class="svg-figure">
+    <svg viewBox="0 0 190 115" xmlns="http://www.w3.org/2000/svg" width="190" height="115">
+      <rect x="35" y="28" width="105" height="65" fill="#fde8e8" stroke="#8a1e1e" stroke-width="1.5"/>
+      <line x1="20" y1="28" x2="170" y2="28" stroke="#444" stroke-width="1.3"/>
+      <polygon points="166,25 173,28 166,31" fill="#444"/>
+      <line x1="35" y1="10" x2="35" y2="105" stroke="#444" stroke-width="1.3"/>
+      <polygon points="32,14 35,7 38,14" fill="#444"/>
+      <line x1="140" y1="25" x2="140" y2="31" stroke="#444" stroke-width="1"/>
+      <line x1="32" y1="93" x2="38" y2="93" stroke="#333" stroke-width="1"/>
+      <line x1="35" y1="93" x2="140" y2="93" stroke="#8a1e1e" stroke-width="1.5" stroke-dasharray="4,3"/>
+      <text x="33" y="20" text-anchor="middle" font-size="11" font-family="Georgia,serif">0</text>
+      <text x="140" y="20" text-anchor="middle" font-size="11" font-family="Georgia,serif">3</text>
+      <text x="22" y="97" text-anchor="end" font-size="11" font-family="Georgia,serif">&minus;2</text>
+      <text x="162" y="97" font-size="11" font-family="Georgia,serif" fill="#8a1e1e">y&#x202f;=&#x202f;&minus;2</text>
+      <text x="87" y="66" text-anchor="middle" font-size="12" font-family="Georgia,serif" fill="#8a1e1e">&minus;6</text>
+    </svg>
+    <div class="svg-caption">Rectangle below axis: area is negative</div>
+  </div>
+  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work&hellip;"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">$3\times(-2) = -6$. The region is below the $x$-axis, so the integral is $-6$.</div></div>
+</div>
+
+<div class="ex-block">
+  <div class="ex-label">Example 4 &nbsp;&mdash;&nbsp; Interval split</div>
+  <div class="ex-body">If $\displaystyle\int_0^3 f(x)\,dx = 5$ and $\displaystyle\int_3^7 f(x)\,dx = 9$, find $\displaystyle\int_0^7 f(x)\,dx$.</div>
+  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work&hellip;"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">By the interval split rule:<br>$\displaystyle\int_0^7 f\,dx = \int_0^3 f\,dx + \int_3^7 f\,dx = 5+9 = 14$</div></div>
+</div>
+</div>
+
+<div class="section-head">Practice Problems</div>
+<div class="practice">
+<div class="pr-row">
+  <div class="pr-num">1.</div>
+  <div class="pr-prob">Evaluate $\displaystyle\int_1^5 4\,dx$ geometrically.</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer&hellip;"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">Rectangle: width $=4$, height $=4$. &nbsp; $4\times 4=16$</div></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">2.</div>
+  <div class="pr-prob">Evaluate $\displaystyle\int_0^6 x\,dx$ geometrically.</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer&hellip;"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">Right triangle: base $=6$, height $=6$. &nbsp; $\frac{1}{2}(6)(6)=18$</div></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">3.</div>
+  <div class="pr-prob">Evaluate $\displaystyle\int_0^4(-3)\,dx$ geometrically. Is the result positive or negative?</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer&hellip;"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$4\times(-3)=-12$. Negative &mdash; the function is below the $x$-axis.</div></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">4.</div>
+  <div class="pr-prob">If $\displaystyle\int_0^5 f\,dx=8$ and $\displaystyle\int_5^8 f\,dx=-3$, find $\displaystyle\int_0^8 f\,dx$.</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer&hellip;"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$8+(-3)=5$</div></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">5.</div>
+  <div class="pr-prob">If $\displaystyle\int_2^9 f\,dx=11$, find $\displaystyle\int_9^2 f\,dx$.</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer&hellip;"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$-11$. Flipping limits negates the integral.</div></div>
+</div>
+<div class="pr-row">
+  <div class="pr-num">6.</div>
+  <div class="pr-prob">Use the constant multiple rule and geometry to evaluate $\displaystyle\int_0^3 2x\,dx$.</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer&hellip;"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$2\displaystyle\int_0^3 x\,dx = 2\cdot\tfrac{1}{2}(3)(3)=9$</div></div>
+</div>
+</div>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/contrib/auto-render.min.js"></script>
+<script>
+function toggleAns(btn) {
+  if (!btn.dataset.orig) btn.dataset.orig = btn.textContent;
+  var ans = btn.nextElementSibling;
+  var showing = ans.classList.toggle('visible');
+  btn.textContent = showing ? 'Hide' : btn.dataset.orig;
+}
+renderMathInElement(document.body,{
+  delimiters:[
+    {left:'$$',right:'$$',display:true},
+    {left:'$',right:'$',display:false}
+  ],
+  throwOnError:false
+});
+</script>
+</body>
+</html>
