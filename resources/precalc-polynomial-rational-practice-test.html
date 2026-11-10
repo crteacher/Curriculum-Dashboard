@@ -1284,18 +1284,36 @@
   }
   function sigOf(zs, s) { return zs.map(function (z) { return z.r + ":" + z.m; }).join(",") + "|" + s; }
   function cloneZ(zs) { return zs.map(function (z) { return { r: z.r, m: z.m }; }); }
+  function shapeSamples(zs, s) {
+    var f = sketchShape(zs, s), out = [], x;
+    for (x = -6; x <= 6.001; x += 0.25) out.push(Math.max(-1.35, Math.min(1.35, f(x))));
+    return out;
+  }
+  function shapeDist(a, b) { var t = 0, i; for (i = 0; i < a.length; i++) t += (a[i] - b[i]) * (a[i] - b[i]); return Math.sqrt(t / a.length); }
   function makeOptions(zs, s) {
     var truth = sigOf(zs, s), cands = [], seen = {}; seen[truth] = 1;
-    function add(z2, s2) { var g = sigOf(z2, s2); if (!seen[g]) { seen[g] = 1; cands.push({ zs: z2, s: s2 }); } }
+    function add(z2, s2) { z2 = z2.slice().sort(function (a, b) { return a.r - b.r; }); var g = sigOf(z2, s2); if (!seen[g]) { seen[g] = 1; cands.push({ zs: z2, s: s2 }); } }
     add(cloneZ(zs), -s);
-    zs.forEach(function (z, i) { var c = cloneZ(zs); c[i].m = z.m === 1 ? 2 : 1; add(c, s); });
-    zs.forEach(function (z, i) { var c = cloneZ(zs); c[i].m = z.m === 1 ? 2 : 1; add(c, -s); });
-    zs.forEach(function (z, i) { [-1, 1].forEach(function (dx) { var c = cloneZ(zs), nr = z.r + dx; if (Math.abs(nr) <= 5 && !zs.some(function (o) { return o.r === nr; })) { c[i].r = nr; add(c.sort(function (a, b) { return a.r - b.r; }), s); } }); });
-    var picks = [], first = cands.slice(0, 1);
-    // prefer: sign flip, two multiplicity changes
-    var pool = shuffle(cands.slice(1)); picks = first.concat(pool).slice(0, 3);
-    var all = shuffle(picks.map(function (c) { return { zs: c.zs, s: c.s, ok: false }; }).concat([{ zs: cloneZ(zs), s: s, ok: true }]));
-    return all;
+    zs.forEach(function (z, i) {
+      [s, -s].forEach(function (s2) { var c = cloneZ(zs); c[i].m = z.m === 1 ? 2 : 1; add(c, s2); });
+      [-2, -1, 1, 2].forEach(function (dx) {
+        var nr = z.r + dx; if (Math.abs(nr) > 5 || zs.some(function (o) { return o.r === nr; })) return;
+        [s, -s].forEach(function (s2) { var c = cloneZ(zs); c[i].r = nr; add(c, s2); });
+      });
+    });
+    if (zs.length > 1) zs.forEach(function (z, i) { zs.forEach(function (w, k) { if (k > i) { var c = cloneZ(zs); c[i].m = z.m === 1 ? 2 : 1; c[k].m = w.m === 1 ? 2 : 1; add(c, s); add(c, -s); } }); });
+    var base = shapeSamples(zs, s), thr = [0.3, 0.2, 0.12, 0.05, 0], picks = [], t, pool, k;
+    for (t = 0; t < thr.length && picks.length < 3; t++) {
+      pool = shuffle(cands);
+      for (k = 0; k < pool.length && picks.length < 3; k++) {
+        var c = pool[k]; if (picks.indexOf(c) !== -1) continue;
+        var sm = shapeSamples(c.zs, c.s);
+        if (shapeDist(sm, base) < thr[t]) continue;
+        if (picks.some(function (p) { return shapeDist(shapeSamples(p.zs, p.s), sm) < thr[t]; })) continue;
+        picks.push(c);
+      }
+    }
+    return shuffle(picks.map(function (c) { return { zs: c.zs, s: c.s, ok: false }; }).concat([{ zs: cloneZ(zs), s: s, ok: true }]));
   }
   function pickHint(chosen, zs, s) {
     var tr = rootsMapOf(zs), ch = rootsMapOf(chosen.zs), k;
@@ -1648,7 +1666,7 @@
     "4": { num: "4.", desc: "Find all zeros, asymptotes, and removable discontinuities." },
     "5": { num: "5.", desc: "Extra credit: sketch a graph of the rational function." }
   };
-  window.__PT = { PARTS: PARTS, F: F, ratInfo: ratInfo, ratSig: ratSig, makeOptions: makeOptions, sigOf: sigOf, endsOf: endsOf, gradeRatFields: gradeRatFields, gradeHole: gradeHole, grade3: grade3, gOf: gOf, expandStr: expandStr, toDense: toDense, intRootsOf: intRootsOf };
+  window.__PT = { PARTS: PARTS, shapeSamples: shapeSamples, shapeDist: shapeDist, F: F, ratInfo: ratInfo, ratSig: ratSig, makeOptions: makeOptions, sigOf: sigOf, endsOf: endsOf, gradeRatFields: gradeRatFields, gradeHole: gradeHole, grade3: grade3, gOf: gOf, expandStr: expandStr, toDense: toDense, intRootsOf: intRootsOf };
 
   var scoreMap = {};
   var TOTAL_POINTS = PARTS.reduce(function (sum, p) { return sum + (p.bonus ? 0 : p.points); }, 0);
