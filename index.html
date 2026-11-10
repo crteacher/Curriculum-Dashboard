@@ -66,22 +66,33 @@ header{background:#6b1a26;color:#fff;padding:.9rem 2rem;
 .cv-sections-inner{max-width:720px}
 
 /* Right: tools sidebar */
-.cv-sidebar{width:210px;flex-shrink:0;padding:1rem .9rem;
+.cv-sidebar{width:240px;flex-shrink:0;padding:0;
   background:#f7f5f2;border-left:1px solid #e0e0e0;overflow-y:auto;
-  display:flex;flex-direction:column;gap:.55rem}
-.sb-label{font-family:sans-serif;font-size:.65rem;font-weight:700;
-  letter-spacing:.1em;text-transform:uppercase;color:#888}
+  display:flex;flex-direction:column}
+.sb-tabs{display:flex;flex-shrink:0;border-bottom:1px solid #e0e0e0;background:#ece9e3}
+.sb-tab{flex:1;padding:.5rem .15rem;font-size:9.5px;font-family:sans-serif;font-weight:700;
+  letter-spacing:.03em;text-align:center;cursor:pointer;border:none;background:transparent;
+  color:#888;border-bottom:2.5px solid transparent;line-height:1.45}
+.sb-tab.active{color:#1e3a5c;border-bottom-color:#1e3a5c;background:#f7f5f2}
+.sb-tab:hover:not(.active){background:#e4e0d8}
+.sb-panel{display:none;flex-direction:column;gap:.5rem;padding:.85rem .9rem;overflow-y:auto}
+.sb-panel.active{display:flex}
+.sb-course-panel{display:flex;flex-direction:column;gap:.5rem}
+.sb-section-label{font-family:sans-serif;font-size:.58rem;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;color:#999;margin-top:.5rem}
+.sb-section-label:first-child{margin-top:0}
+.sb-note{font-family:sans-serif;font-size:11px;color:#aaa;text-align:center;padding:.5rem 0}
 .sb-btn{display:block;padding:.7rem 1rem;border-radius:8px;
-  text-decoration:none;font-family:sans-serif;font-size:13px;font-weight:700;
+  text-decoration:none;font-family:sans-serif;font-size:12.5px;font-weight:700;
   border:1.5px solid;transition:background .15s,color .15s;text-align:center}
 .sb-btn.crimson{color:#6b1a26;border-color:#6b1a26}
 .sb-btn.crimson:hover{background:#6b1a26;color:#fff}
 .sb-btn.gold{color:#7a5c1e;border-color:#7a5c1e}
 .sb-btn.gold:hover{background:#7a5c1e;color:#fff}
-.sb-divider{border:none;border-top:1px solid #e0e0e0;margin:.1rem 0}
-.sb-link{font-family:sans-serif;font-size:12px;color:#6b1a26;text-decoration:none;
-  padding:.35rem .5rem;display:block;border-radius:5px;transition:background .12s}
-.sb-link:hover{background:#f0ede7}
+.sb-btn.navy{color:#1e3a5c;border-color:#1e3a5c}
+.sb-btn.navy:hover{background:#1e3a5c;color:#fff}
+.sb-btn.muted{color:#555;border-color:#ccc;font-weight:400;font-size:12px}
+.sb-btn.muted:hover{background:#ece9e3;color:#111;border-color:#aaa}
 
 /* ── Section rows (shared) ────────────────────────────────── */
 .row{display:grid;grid-template-columns:11px 1fr auto;align-items:center;
@@ -100,8 +111,8 @@ header{background:#6b1a26;color:#fff;padding:.9rem 2rem;
   .course-grid{grid-template-columns:1fr}
   #course-view{height:auto}
   .cv-body{flex-direction:column}
-  .cv-sidebar{width:100%;border-left:none;border-top:1px solid #e0e0e0;
-    flex-direction:row;flex-wrap:wrap;gap:.5rem;padding:.75rem 1rem}
+  .cv-sidebar{width:100%;border-left:none;border-top:1px solid #e0e0e0;max-height:260px}
+  .sb-panel{padding:.6rem .75rem}
   .cv-sections{overflow-y:visible}
   .row{grid-template-columns:10px 1fr;gap:.35rem}
   .pills{grid-column:2;justify-content:flex-start}
@@ -207,14 +218,89 @@ header{background:#6b1a26;color:#fff;padding:.9rem 2rem;
       <div class="cv-sections-inner" id="cvRows"></div>
     </div>
     <div class="cv-sidebar">
-      <div class="sb-label">Quick Access</div>
-      <a class="sb-btn crimson" id="doNowLink" href="./classrooms.html" target="_blank">Do Now</a>
-      <a class="sb-btn crimson" href="./exit-ticket.html" target="_blank">Exit Ticket</a>
-      <a class="sb-btn gold" id="sectionReviewLink" href="./review.html" target="_blank">Section Review</a>
-      <hr class="sb-divider">
-      <a class="sb-link" href="./lesson-plan.html" target="_blank">This Week&#8217;s Plan</a>
-      <a class="sb-link" href="./puzzle.html" target="_blank">Puzzle of the Week</a>
-      <a class="sb-link" href="./mathmap.html" target="_blank">Math Map</a>
+      <!-- Tab bar -->
+      <div class="sb-tabs">
+        <button class="sb-tab active" onclick="switchSbTab('donow',this)">Do Now<br>/ Exit</button>
+        <button class="sb-tab" onclick="switchSbTab('exams',this)">Practice<br>Exams</button>
+        <button class="sb-tab" onclick="switchSbTab('supp',this)">Supple-<br>mentary</button>
+      </div>
+
+      <!-- Tab 1: Do Now / Exit -->
+      <div class="sb-panel active" id="sbTab-donow">
+        <a class="sb-btn crimson" id="doNowLink" href="./classrooms.html" target="_blank">Do Now</a>
+        <a class="sb-btn crimson" href="./exit-ticket.html" target="_blank">Exit Ticket</a>
+      </div>
+
+      <!-- Tab 2: Practice Exams -->
+      <div class="sb-panel" id="sbTab-exams">
+        <div class="sb-course-panel" data-course="calc1">
+          <a class="sb-btn navy" href="./resources/limits-practice-test.html" target="_blank">Limits</a>
+          <a class="sb-btn navy" href="./resources/calc1-derivative-basics-practice-test.html" target="_blank">Derivative Basics</a>
+          <a class="sb-btn navy" href="./resources/calc1-derivative-rules-practice-test.html" target="_blank">Derivative Rules</a>
+          <a class="sb-btn navy" href="./resources/calc1-applications-of-derivative-practice-test.html" target="_blank">Applications of Deriv.</a>
+          <a class="sb-btn navy" href="./resources/calc1-implicit-related-rates-practice-test.html" target="_blank">Implicit &amp; Related Rates</a>
+          <a class="sb-btn navy" href="./resources/calc1-integration-basics-practice-test.html" target="_blank">Integration Basics</a>
+        </div>
+        <div class="sb-course-panel" data-course="calc2" style="display:none">
+          <p class="sb-note">No practice exams yet for Calc II.</p>
+        </div>
+        <div class="sb-course-panel" data-course="precalc" style="display:none">
+          <a class="sb-btn navy" href="./resources/precalc-function-basics-practice-test.html" target="_blank">Function Basics</a>
+          <a class="sb-btn navy" href="./resources/precalc-linear-equations-practice-test.html" target="_blank">Linear Equations</a>
+          <a class="sb-btn navy" href="./resources/precalc-quadratics-practice-test.html" target="_blank">Quadratics</a>
+        </div>
+        <div class="sb-course-panel" data-course="ca" style="display:none">
+          <a class="sb-btn navy" href="./resources/college-algebra-functions-practice-test.html" target="_blank">Functions</a>
+          <a class="sb-btn navy" href="./resources/college-algebra-inequalities-practice-test.html" target="_blank">Inequalities</a>
+          <a class="sb-btn navy" href="./resources/college-algebra-linear-equations-practice-test.html" target="_blank">Linear Equations</a>
+        </div>
+      </div>
+
+      <!-- Tab 3: Supplementary -->
+      <div class="sb-panel" id="sbTab-supp">
+        <div class="sb-course-panel" data-course="calc1">
+          <div class="sb-section-label">Walkthroughs</div>
+          <a class="sb-btn gold" href="./resources/calc1-factoring-walkthrough.html" target="_blank">Factoring</a>
+          <a class="sb-btn gold" href="./resources/calc1-implicit-related-rates-walkthrough.html" target="_blank">Implicit / Related Rates</a>
+          <a class="sb-btn gold" href="./resources/calc1-optimization-walkthrough.html" target="_blank">Optimization</a>
+          <a class="sb-btn gold" href="./resources/calc1-summation-notation-walkthrough.html" target="_blank">Summation Notation</a>
+          <div class="sb-section-label">Reference</div>
+          <a class="sb-btn muted" href="./resources/derivative-rules.html" target="_blank">Derivative Rules</a>
+          <a class="sb-btn muted" href="./resources/basic-antiderivatives.html" target="_blank">Basic Antiderivatives</a>
+          <a class="sb-btn muted" href="./resources/exponent-radical-rules.html" target="_blank">Exponent &amp; Radical Rules</a>
+          <a class="sb-btn muted" href="./resources/unit-circle.html" target="_blank">Unit Circle</a>
+          <a class="sb-btn muted" href="./resources/trig-identities.html" target="_blank">Trig Identities</a>
+          <a class="sb-btn muted" href="./resources/function-library.html" target="_blank">Function Library</a>
+          <a class="sb-btn muted" href="./resources/factoring-patterns.html" target="_blank">Factoring Patterns</a>
+        </div>
+        <div class="sb-course-panel" data-course="calc2" style="display:none">
+          <div class="sb-section-label">Reference</div>
+          <a class="sb-btn muted" href="./resources/series-tests.html" target="_blank">Series Tests</a>
+          <a class="sb-btn muted" href="./resources/basic-antiderivatives.html" target="_blank">Basic Antiderivatives</a>
+          <a class="sb-btn muted" href="./resources/trig-identities.html" target="_blank">Trig Identities</a>
+          <a class="sb-btn muted" href="./resources/unit-circle.html" target="_blank">Unit Circle</a>
+        </div>
+        <div class="sb-course-panel" data-course="precalc" style="display:none">
+          <div class="sb-section-label">Walkthroughs</div>
+          <a class="sb-btn gold" href="./resources/precalc-polynomial-functions-walkthrough.html" target="_blank">Polynomial Functions</a>
+          <div class="sb-section-label">Reference</div>
+          <a class="sb-btn muted" href="./resources/unit-circle.html" target="_blank">Unit Circle</a>
+          <a class="sb-btn muted" href="./resources/trig-identities.html" target="_blank">Trig Identities</a>
+          <a class="sb-btn muted" href="./resources/law-of-sines-cosines.html" target="_blank">Law of Sines &amp; Cosines</a>
+          <a class="sb-btn muted" href="./resources/function-library.html" target="_blank">Function Library</a>
+          <a class="sb-btn muted" href="./resources/exponent-radical-rules.html" target="_blank">Exponent &amp; Radical Rules</a>
+          <a class="sb-btn muted" href="./resources/factoring-patterns.html" target="_blank">Factoring Patterns</a>
+        </div>
+        <div class="sb-course-panel" data-course="ca" style="display:none">
+          <div class="sb-section-label">Walkthroughs</div>
+          <a class="sb-btn gold" href="./resources/college-algebra-inc-dec-pos-neg-walkthrough.html" target="_blank">Inc/Dec &amp; Pos/Neg</a>
+          <a class="sb-btn gold" href="./resources/college-algebra-inequalities-walkthrough.html" target="_blank">Inequalities</a>
+          <div class="sb-section-label">Reference</div>
+          <a class="sb-btn muted" href="./resources/function-library.html" target="_blank">Function Library</a>
+          <a class="sb-btn muted" href="./resources/exponent-radical-rules.html" target="_blank">Exponent &amp; Radical Rules</a>
+          <a class="sb-btn muted" href="./resources/factoring-patterns.html" target="_blank">Factoring Patterns</a>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -382,6 +468,19 @@ header{background:#6b1a26;color:#fff;padding:.9rem 2rem;
 </div>
 
 <script>
+function switchSbTab(name, btn) {
+  document.querySelectorAll('.sb-tab').forEach(function(t){t.classList.remove('active');});
+  document.querySelectorAll('.sb-panel').forEach(function(p){p.classList.remove('active');});
+  if (btn) btn.classList.add('active');
+  document.getElementById('sbTab-' + name).classList.add('active');
+}
+
+function updateSbCourse(id) {
+  document.querySelectorAll('.sb-course-panel').forEach(function(p){
+    p.style.display = p.dataset.course === id ? '' : 'none';
+  });
+}
+
 function openCourse(id) {
   var pool   = document.getElementById('pool-' + id);
   var cv     = document.getElementById('course-view');
@@ -396,9 +495,10 @@ function openCourse(id) {
   // Update Do Now link to show only this course's pane
   document.getElementById('doNowLink').href = './classrooms.html?course=' + id;
 
-  // Update Section Review link — review.html uses 'pc'/'c2' keys, map from dashboard ids
-  var reviewKey = {precalc:'pc', calc2:'c2'}[id] || id;
-  document.getElementById('sectionReviewLink').href = './review.html?course=' + reviewKey;
+  // Update sidebar course panels and reset to Do Now tab
+  updateSbCourse(id);
+  document.querySelectorAll('.sb-tab').forEach(function(t,i){t.classList.toggle('active',i===0);});
+  document.querySelectorAll('.sb-panel').forEach(function(p,i){p.classList.toggle('active',i===0);});
 
   land.style.display = 'none';
   cv.classList.add('visible');
