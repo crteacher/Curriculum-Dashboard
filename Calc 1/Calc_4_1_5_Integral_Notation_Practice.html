@@ -8,16 +8,16 @@
 <style>
   *{box-sizing:border-box;margin:0;padding:0}
   body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.7}
-  .container{max-width:820px;margin:0 auto;padding:2rem 1.5rem 4rem}
+  .container{max-width:860px;margin:0 auto;padding:2rem 1.5rem 4rem}
   h1{font-size:26px;font-weight:700;margin-bottom:4px}
   .subtitle{font-size:14px;color:#666;margin-bottom:2rem;font-family:sans-serif}
   .section{margin-bottom:2.5rem}
   .section-title{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;
     color:#777;font-family:sans-serif;margin-bottom:1rem;border-bottom:1px solid #ddd;padding-bottom:6px}
   .concept{background:#d9e8f5;border-left:4px solid #1e3a5c;border-radius:0 8px 8px 0;
-    padding:.85rem 1.1rem;font-size:14.5px;margin-bottom:.85rem;line-height:1.9}
+    padding:.85rem 1.1rem;font-size:14px;margin-bottom:.85rem;line-height:2.1}
   .concept-label{font-family:sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;
-    letter-spacing:.07em;color:#1e3a5c;display:block;margin-bottom:.35rem}
+    letter-spacing:.07em;color:#1e3a5c;display:block;margin-bottom:.4rem}
   .score-bar{display:flex;align-items:center;gap:12px;margin-bottom:1.25rem;
     font-family:sans-serif;font-size:14px;flex-wrap:wrap}
   .score-display{font-weight:700;font-size:18px;min-width:60px}
@@ -33,12 +33,12 @@
   .card.correct{border-color:#3a7a3a}.card.wrong{border-color:#b03030}.card.peeked{border-color:#b8860b}
   .card-body{padding:14px 16px}
   .card-meta{font-family:sans-serif;font-size:12px;color:#888;margin-bottom:4px}
-  .card-expr{font-size:15px;margin-bottom:12px;line-height:1.9}
+  .card-expr{font-size:15px;margin-bottom:12px;line-height:2}
   .card-expr svg{display:block;margin:.5rem auto 0;max-width:100%}
   .katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}
   .input-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
   .ans-input{font-family:'Courier New',monospace;font-size:14px;border:1px solid #ccc;
-    border-radius:6px;padding:7px 10px;flex:1;min-width:120px;background:#fafaf8;
+    border-radius:6px;padding:7px 10px;flex:1;min-width:140px;background:#fafaf8;
     color:#1a1a1a;outline:none}
   .ans-input:focus{border-color:#1e3a5c;background:#fff}
   .ans-input.ok{border-color:#3a7a3a;background:#f0faf0}
@@ -65,39 +65,38 @@
   <h1>Integral Notation &amp; Geometric Area</h1>
   <p class="subtitle">Calculus I &nbsp;&middot;&nbsp; &sect;4.1.5 &nbsp;&middot;&nbsp; Instructor: Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026</p>
 
-  <div class="section">
+  <div class="section" id="concept-section">
     <div class="section-title">Core Ideas</div>
     <div class="concept">
-      <span class="concept-label">Geometric Rules (no antiderivatives needed)</span>
+      <span class="concept-label">Geometric Rules</span>
       $\displaystyle\int_a^b c\,f\,dx = c\int_a^b f\,dx$ &emsp;
       $\displaystyle\int_a^b(f\pm g)\,dx = \int_a^b f\,dx \pm \int_a^b g\,dx$ &emsp;
       $\displaystyle\int_a^b f\,dx + \int_b^c f\,dx = \int_a^c f\,dx$
     </div>
     <div class="concept">
-      <span class="concept-label">Signed Area &amp; Flipped Limits</span>
+      <span class="concept-label">Signed Area &amp; Symmetry</span>
       Area <em>below</em> the $x$-axis is <strong>negative</strong>.
-      Flipping the limits negates the integral: $\displaystyle\int_b^a f\,dx = -\int_a^b f\,dx$.
-      If a region is symmetric about the $y$-axis <em>and</em> the function is odd ($f(-x)=-f(x)$),
-      the positive and negative pieces cancel: $\displaystyle\int_{-a}^{a} f\,dx = 0$.
+      &ensp;If $f$ is <strong>odd</strong> ($f(-x)=-f(x)$): $\displaystyle\int_{-a}^{a}f\,dx=0$ &mdash; pieces cancel.
+      &ensp;If $f$ is <strong>even</strong> ($f(-x)=f(x)$): $\displaystyle\int_{-a}^{a}f\,dx=2\int_0^a f\,dx$ &mdash; halves add.
     </div>
     <div class="concept">
       <span class="concept-label">Shapes to Know</span>
-      Rectangle: $\displaystyle\int_a^b c\,dx = c(b-a)$ &emsp;
-      Right triangle: $\displaystyle\int_0^b x\,dx = \tfrac{1}{2}b^2$ &emsp;
-      Trapezoid: average height &times; base width.
+      Rectangle: $A=\text{width}\times\text{height}$ &emsp;
+      Right triangle: $A=\tfrac{1}{2}\,b\,h$ &emsp;
+      Quarter-circle of radius $r$: $A=\dfrac{\pi r^2}{4}$
     </div>
   </div>
 
   <div class="section">
     <div class="section-title">Practice Problems</div>
     <p style="font-family:sans-serif;font-size:13px;color:#666;margin-bottom:1rem;">
-      Read the graph and enter a number (integers like <code>12</code> or decimals like <code>4.5</code>).
-      Negative answers require a minus sign: <code>-6</code>.
+      Read the graph. Enter an integer (<code>12</code>), decimal (<code>4.5</code>), or for circle problems
+      an exact form (<code>4pi</code>). Negative answers need a minus sign: <code>-6</code>.
       Press <strong>Check</strong> or hit Enter.
     </p>
     <div class="score-bar">
       <span class="score-label">Score:</span>
-      <span class="score-display" id="score">0 / 8</span>
+      <span class="score-display" id="score">0</span>
       <span class="score-note">first attempt only</span>
       <div class="progress"><div class="progress-fill" id="prog" style="width:0%"></div></div>
       <button class="reset-btn" onclick="resetAll()">New set &nbsp;&#8635;</button>
@@ -107,363 +106,265 @@
 </div>
 
 <script>
-// ── RNG ──────────────────────────────────────────────────────────────────────
+// ── RNG ───────────────────────────────────────────────────────────────────────
 function _rf(){const b=new Uint32Array(1);crypto.getRandomValues(b);return b[0]/4294967296;}
 function rInt(n){return Math.floor(_rf()*n);}
 function choose(arr){return arr[rInt(arr.length)];}
 function shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=rInt(i+1);[a[i],a[j]]=[a[j],a[i]];}return a;}
 
-// ── SVG helpers ───────────────────────────────────────────────────────────────
-// Axes above: x-axis at oy=100, y-axis at ox=48, viewBox 240×130
-function axesAbove(ox,oy,W,H){
-  return `<line x1="${ox-10}" y1="${oy}" x2="${W-12}" y2="${oy}" stroke="#444" stroke-width="1.3"/>
-    <polygon points="${W-15},${oy-3} ${W-8},${oy} ${W-15},${oy+3}" fill="#444"/>
-    <line x1="${ox}" y1="${H-8}" x2="${ox}" y2="8" stroke="#444" stroke-width="1.3"/>
-    <polygon points="${ox-3},12 ${ox},5 ${ox+3},12" fill="#444"/>`;
-}
-// Tick at x on x-axis
-function xTick(x,oy,label){
-  return `<line x1="${x}" y1="${oy-4}" x2="${x}" y2="${oy+4}" stroke="#444" stroke-width="1"/>
-    <text x="${x}" y="${oy+16}" text-anchor="middle" font-size="12" font-family="Georgia,serif">${label}</text>`;}
-// Tick at y on y-axis
-function yTick(ox,y,label){
-  return `<line x1="${ox-4}" y1="${y}" x2="${ox+4}" y2="${y}" stroke="#444" stroke-width="1"/>
-    <text x="${ox-7}" y="${y+4}" text-anchor="end" font-size="12" font-family="Georgia,serif">${label}</text>`;}
-// Origin label
-function originLabel(ox,oy,above){
-  return `<text x="${ox-2}" y="${above?oy+16:oy-8}" text-anchor="middle" font-size="12" font-family="Georgia,serif">0</text>`;}
+// ── SVG primitives ────────────────────────────────────────────────────────────
+// Standard canvas: W=260 H=140
+const W=260,H=140;
 
-// Rectangle ABOVE axis: ∫_0^w c dx = cw
-function rectAboveSVG(w, c) {
-  const W=240, H=130, ox=48, oy=100;
-  const sx=Math.min(160/(w+0.6),38);
-  const sy=Math.min(72/(c+0.6),18);
+function arrowH(x1,y,x2){
+  return `<line x1="${x1}" y1="${y}" x2="${x2-7}" y2="${y}" stroke="#444" stroke-width="1.3"/>
+<polygon points="${x2-7},${y-3} ${x2},${y} ${x2-7},${y+3}" fill="#444"/>`;}
+function arrowV(x,y1,y2){
+  return `<line x1="${x}" y1="${y1}" x2="${x}" y2="${y2+7}" stroke="#444" stroke-width="1.3"/>
+<polygon points="${x-3},${y2+7} ${x},${y2} ${x+3},${y2+7}" fill="#444"/>`;}
+function xTick(x,oy,lbl){
+  return `<line x1="${x}" y1="${oy-4}" x2="${x}" y2="${oy+4}" stroke="#555" stroke-width="1"/>
+<text x="${x}" y="${oy+17}" text-anchor="middle" font-size="12" font-family="sans-serif">${lbl}</text>`;}
+function yTick(ox,y,lbl){
+  return `<line x1="${ox-4}" y1="${y}" x2="${ox+4}" y2="${y}" stroke="#555" stroke-width="1"/>
+<text x="${ox-8}" y="${y+4}" text-anchor="end" font-size="12" font-family="sans-serif">${lbl}</text>`;}
+// Axes with origin label — above-axis variant (ox,oy near bottom-left)
+function axes(ox,oy){
+  return arrowH(ox-14,oy,W-6)+arrowV(ox,H-6,6)+
+    `<text x="${ox-2}" y="${oy+17}" text-anchor="middle" font-size="12" font-family="sans-serif">0</text>`;}
+// Symmetric axes centred at cx
+function axesSym(cx,oy){
+  return arrowH(6,oy,W-6)+arrowV(cx,H-6,6)+
+    `<text x="${cx+4}" y="${oy+17}" text-anchor="middle" font-size="12" font-family="sans-serif">0</text>`;}
+
+// ── SVG shapes ────────────────────────────────────────────────────────────────
+
+// Filled rectangle above axis [0..w], height c (y=c label inside)
+function svgRectAbove(w,c){
+  const ox=54,oy=108;
+  const sx=Math.min(170/(w+0.7),34), sy=Math.min(78/(c+0.7),13);
   const x2=ox+w*sx, yc=oy-c*sy;
   return `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
-    <rect x="${ox}" y="${yc.toFixed(1)}" width="${(x2-ox).toFixed(1)}" height="${(oy-yc).toFixed(1)}" fill="#d9e8f5" stroke="#1e3a5c" stroke-width="1.5"/>
-    ${axesAbove(ox,oy,W,H)}
-    ${originLabel(ox,oy,true)}
-    ${xTick(x2.toFixed(1),oy,w)}
-    ${yTick(ox,yc.toFixed(1),c)}
-    <text x="${((ox+x2)/2).toFixed(1)}" y="${((yc+oy)/2+5).toFixed(1)}" text-anchor="middle" font-size="12" font-family="Georgia,serif" fill="#1e3a5c">y = ${c}</text>
-  </svg>`;}
+  <rect x="${ox}" y="${yc.toFixed(1)}" width="${(x2-ox).toFixed(1)}" height="${(oy-yc).toFixed(1)}" fill="#d9e8f5" stroke="#1e3a5c" stroke-width="1.5"/>
+  ${axes(ox,oy)}${xTick(x2.toFixed(1),oy,w)}${yTick(ox,yc.toFixed(1),c)}
+  <text x="${((ox+x2)/2).toFixed(1)}" y="${((yc+oy)/2+5).toFixed(1)}" text-anchor="middle" font-size="12" font-family="sans-serif" fill="#1e3a5c">y&#x202f;=&#x202f;${c}</text>
+</svg>`;}
 
-// Right triangle ABOVE axis: ∫_0^b x dx = b²/2
-function triSVG(b) {
-  const W=240, H=130, ox=48, oy=100;
-  const sx=Math.min(160/(b+0.6),30);
-  const sy=sx; // 1:1 scale since height=base for y=x
+// Right triangle under y=x on [0..b]
+function svgTriangle(b){
+  const ox=54,oy=108;
+  const sx=Math.min(170/(b+0.7),34), sy=Math.min(82/(b+0.7),13);
   const x2=ox+b*sx, yb=oy-b*sy;
+  const ang=Math.round(Math.atan2(b*sy,b*sx)*180/Math.PI);
+  const lx=((ox*2+x2)/3+6).toFixed(1), ly=((oy*2+yb)/3+2).toFixed(1);
   return `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
-    <polygon points="${ox},${oy} ${x2.toFixed(1)},${oy} ${x2.toFixed(1)},${yb.toFixed(1)}" fill="#d9e8f5" stroke="#1e3a5c" stroke-width="1.5"/>
-    ${axesAbove(ox,oy,W,H)}
-    ${originLabel(ox,oy,true)}
-    ${xTick(x2.toFixed(1),oy,b)}
-    ${yTick(ox,yb.toFixed(1),b)}
-    <text x="${(ox+(x2+ox)/2)/2+10}" y="${(oy+yb)/2+5}" font-size="11" font-family="Georgia,serif" fill="#1e3a5c" transform="rotate(-45,${((ox+(x2+ox)/2)/2+10).toFixed(0)},${((oy+yb)/2+5).toFixed(0)})">y&#x202f;=&#x202f;x</text>
-  </svg>`;}
+  <polygon points="${ox},${oy} ${x2.toFixed(1)},${oy} ${x2.toFixed(1)},${yb.toFixed(1)}" fill="#d9e8f5" stroke="#1e3a5c" stroke-width="1.5"/>
+  ${axes(ox,oy)}${xTick(x2.toFixed(1),oy,b)}${yTick(ox,yb.toFixed(1),b)}
+  <text x="${lx}" y="${ly}" font-size="11" font-family="sans-serif" fill="#1e3a5c" transform="rotate(-${ang},${lx},${ly})">y&#x202f;=&#x202f;x</text>
+</svg>`;}
 
-// Rectangle BELOW axis: ∫_0^w (-c) dx = -cw
-function rectBelowSVG(w, c) {
-  const W=240, H=135, ox=48, oy=35; // x-axis near top
-  const sx=Math.min(160/(w+0.6),38);
-  const sy=Math.min(72/(c+0.6),18);
+// Rectangle BELOW axis [0..w], depth c (negative area, red)
+function svgRectBelow(w,c){
+  const ox=54,oy=28;
+  const sx=Math.min(170/(w+0.7),34), sy=Math.min(82/(c+0.7),13);
   const x2=ox+w*sx, yc=oy+c*sy;
   return `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
-    <rect x="${ox}" y="${oy}" width="${(x2-ox).toFixed(1)}" height="${(yc-oy).toFixed(1)}" fill="#fde8e8" stroke="#8a1e1e" stroke-width="1.5"/>
-    <line x1="${ox}" y1="${yc.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${yc.toFixed(1)}" stroke="#8a1e1e" stroke-width="1.5" stroke-dasharray="4,3"/>
-    <line x1="${ox-10}" y1="${oy}" x2="${W-12}" y2="${oy}" stroke="#444" stroke-width="1.3"/>
-    <polygon points="${W-15},${oy-3} ${W-8},${oy} ${W-15},${oy+3}" fill="#444"/>
-    <line x1="${ox}" y1="8" x2="${ox}" y2="${H-8}" stroke="#444" stroke-width="1.3"/>
-    <polygon points="${ox-3},12 ${ox},5 ${ox+3},12" fill="#444"/>
-    <text x="${ox-2}" y="${oy-7}" text-anchor="middle" font-size="12" font-family="Georgia,serif">0</text>
-    ${xTick(x2.toFixed(1),oy,w)}
-    <line x1="${ox-4}" y1="${yc.toFixed(1)}" x2="${ox+4}" y2="${yc.toFixed(1)}" stroke="#444" stroke-width="1"/>
-    <text x="${ox-7}" y="${(yc+4).toFixed(1)}" text-anchor="end" font-size="12" font-family="Georgia,serif">&minus;${c}</text>
-    <text x="${((ox+x2)/2).toFixed(1)}" y="${((oy+yc)/2+5).toFixed(1)}" text-anchor="middle" font-size="11" font-family="Georgia,serif" fill="#8a1e1e">y = &minus;${c}</text>
-  </svg>`;}
+  <rect x="${ox}" y="${oy}" width="${(x2-ox).toFixed(1)}" height="${(yc-oy).toFixed(1)}" fill="#fde8e8" stroke="#8a1e1e" stroke-width="1.5"/>
+  <line x1="${ox}" y1="${yc.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${yc.toFixed(1)}" stroke="#8a1e1e" stroke-width="1.3" stroke-dasharray="4,3"/>
+  ${arrowH(ox-14,oy,W-6)}${arrowV(ox,H-6,6)}
+  <text x="${ox-2}" y="${oy-7}" text-anchor="middle" font-size="12" font-family="sans-serif">0</text>
+  ${xTick(x2.toFixed(1),oy,w)}
+  <line x1="${ox-4}" y1="${yc.toFixed(1)}" x2="${ox+4}" y2="${yc.toFixed(1)}" stroke="#555" stroke-width="1"/>
+  <text x="${ox-8}" y="${(yc+4).toFixed(1)}" text-anchor="end" font-size="12" font-family="sans-serif">&minus;${c}</text>
+  <text x="${((ox+x2)/2).toFixed(1)}" y="${((oy+yc)/2+5).toFixed(1)}" text-anchor="middle" font-size="11" font-family="sans-serif" fill="#8a1e1e">y&#x202f;=&#x202f;&minus;${c}</text>
+</svg>`;}
 
-// Odd step function over [-a, a]: f=h on [0,a], f=-h on [-a,0] → integral = 0
-function oddStepSVG(a, h) {
-  const W=240, H=135, cx=120, oy=68; // cx=center x-axis
-  const sx=Math.min(72/(a+0.4),26);
-  const sy=Math.min(45/(h+0.4),13);
-  const xL=cx-a*sx, xR=cx+a*sx;
-  const yh=oy-h*sy, yd=oy+h*sy;
+// Odd step function: f=+h on [0,a], f=-h on [-a,0] — areas labeled
+function svgOddStep(a,h){
+  const cx=130,oy=70;
+  const sx=Math.min(74/(a+0.5),21), sy=Math.min(44/(h+0.5),12);
+  const xL=cx-a*sx, xR=cx+a*sx, yh=oy-h*sy, yd=oy+h*sy;
   return `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
-    <rect x="${cx}" y="${yh.toFixed(1)}" width="${(xR-cx).toFixed(1)}" height="${(oy-yh).toFixed(1)}" fill="#d9e8f5" stroke="#1e3a5c" stroke-width="1.5"/>
-    <rect x="${xL.toFixed(1)}" y="${oy}" width="${(cx-xL).toFixed(1)}" height="${(yd-oy).toFixed(1)}" fill="#fde8e8" stroke="#8a1e1e" stroke-width="1.5"/>
-    <line x1="10" y1="${oy}" x2="${W-12}" y2="${oy}" stroke="#444" stroke-width="1.3"/>
-    <polygon points="${W-15},${oy-3} ${W-8},${oy} ${W-15},${oy+3}" fill="#444"/>
-    <line x1="${cx}" y1="${H-8}" x2="${cx}" y2="8" stroke="#444" stroke-width="1.3"/>
-    <polygon points="${cx-3},12 ${cx},5 ${cx+3},12" fill="#444"/>
-    <text x="${cx+3}" y="${oy+16}" text-anchor="middle" font-size="12" font-family="Georgia,serif">0</text>
-    ${xTick(xL.toFixed(1),oy,`−${a}`)}
-    ${xTick(xR.toFixed(1),oy,a)}
-    ${yTick(cx,yh.toFixed(1),h)}
-    <text x="${cx-7}" y="${(yd+4).toFixed(1)}" text-anchor="end" font-size="12" font-family="Georgia,serif">&minus;${h}</text>
-    <line x1="${cx-4}" y1="${yd.toFixed(1)}" x2="${cx+4}" y2="${yd.toFixed(1)}" stroke="#444" stroke-width="1"/>
-    <text x="${((cx+xR)/2).toFixed(1)}" y="${((yh+oy)/2+5).toFixed(1)}" text-anchor="middle" font-size="11" font-family="Georgia,serif" fill="#1e3a5c">+${h*a}</text>
-    <text x="${((xL+cx)/2).toFixed(1)}" y="${((oy+yd)/2+5).toFixed(1)}" text-anchor="middle" font-size="11" font-family="Georgia,serif" fill="#8a1e1e">&minus;${h*a}</text>
-  </svg>`;}
+  <rect x="${cx}" y="${yh.toFixed(1)}" width="${(xR-cx).toFixed(1)}" height="${(oy-yh).toFixed(1)}" fill="#d9e8f5" stroke="#1e3a5c" stroke-width="1.5"/>
+  <rect x="${xL.toFixed(1)}" y="${oy}" width="${(cx-xL).toFixed(1)}" height="${(yd-oy).toFixed(1)}" fill="#fde8e8" stroke="#8a1e1e" stroke-width="1.5"/>
+  ${axesSym(cx,oy)}
+  ${xTick(xL.toFixed(1),oy,`&minus;${a}`)}${xTick(xR.toFixed(1),oy,a)}
+  ${yTick(cx,yh.toFixed(1),h)}
+  <line x1="${cx-4}" y1="${yd.toFixed(1)}" x2="${cx+4}" y2="${yd.toFixed(1)}" stroke="#555" stroke-width="1"/>
+  <text x="${cx-8}" y="${(yd+4).toFixed(1)}" text-anchor="end" font-size="12" font-family="sans-serif">&minus;${h}</text>
+  <text x="${((cx+xR)/2).toFixed(1)}" y="${((yh+oy)/2+5).toFixed(1)}" text-anchor="middle" font-size="12" font-family="sans-serif" fill="#1e3a5c">+${h*a}</text>
+  <text x="${((xL+cx)/2).toFixed(1)}" y="${((oy+yd)/2+5).toFixed(1)}" text-anchor="middle" font-size="12" font-family="sans-serif" fill="#8a1e1e">&minus;${h*a}</text>
+</svg>`;}
 
-// Two-region: positive rect [0,w1] height h1, negative rect [w1,w1+w2] depth h2
-function twoRegionSVG(w1, h1, w2, h2) {
-  const W=240, H=140, ox=36, oy=70;
-  const maxW=w1+w2+0.6, maxH=Math.max(h1,h2)+0.6;
-  const sx=Math.min(170/maxW,30), sy=Math.min(50/maxH,15);
-  const xa=ox+w1*sx, xb=xa+w2*sx;
-  const yp=oy-h1*sy, yn=oy+h2*sy;
+// Even step function: f=+h on both [-a,0] and [0,a] — left labeled k, right labeled ?
+function svgEvenStep(a,h,k){
+  const cx=130,oy=108;
+  const sx=Math.min(74/(a+0.5),21), sy=Math.min(70/(h+0.5),13);
+  const xL=cx-a*sx, xR=cx+a*sx, yh=oy-h*sy;
   return `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
-    <rect x="${ox}" y="${yp.toFixed(1)}" width="${(xa-ox).toFixed(1)}" height="${(oy-yp).toFixed(1)}" fill="#d9e8f5" stroke="#1e3a5c" stroke-width="1.5"/>
-    <rect x="${xa.toFixed(1)}" y="${oy}" width="${(xb-xa).toFixed(1)}" height="${(yn-oy).toFixed(1)}" fill="#fde8e8" stroke="#8a1e1e" stroke-width="1.5"/>
-    <line x1="${ox-10}" y1="${oy}" x2="${W-12}" y2="${oy}" stroke="#444" stroke-width="1.3"/>
-    <polygon points="${W-15},${oy-3} ${W-8},${oy} ${W-15},${oy+3}" fill="#444"/>
-    <line x1="${ox}" y1="${H-8}" x2="${ox}" y2="8" stroke="#444" stroke-width="1.3"/>
-    <polygon points="${ox-3},12 ${ox},5 ${ox+3},12" fill="#444"/>
-    <text x="${ox-2}" y="${oy+16}" text-anchor="middle" font-size="12" font-family="Georgia,serif">0</text>
-    ${xTick(xa.toFixed(1),oy,w1)}
-    ${xTick(xb.toFixed(1),oy,w1+w2)}
-    ${yTick(ox,yp.toFixed(1),h1)}
-    <line x1="${ox-4}" y1="${yn.toFixed(1)}" x2="${ox+4}" y2="${yn.toFixed(1)}" stroke="#444" stroke-width="1"/>
-    <text x="${ox-7}" y="${(yn+4).toFixed(1)}" text-anchor="end" font-size="12" font-family="Georgia,serif">&minus;${h2}</text>
-    <text x="${((ox+xa)/2).toFixed(1)}" y="${((yp+oy)/2+5).toFixed(1)}" text-anchor="middle" font-size="11" font-family="Georgia,serif" fill="#1e3a5c">+${w1*h1}</text>
-    <text x="${((xa+xb)/2).toFixed(1)}" y="${((oy+yn)/2+5).toFixed(1)}" text-anchor="middle" font-size="11" font-family="Georgia,serif" fill="#8a1e1e">&minus;${w2*h2}</text>
-  </svg>`;}
+  <rect x="${xL.toFixed(1)}" y="${yh.toFixed(1)}" width="${(cx-xL).toFixed(1)}" height="${(oy-yh).toFixed(1)}" fill="#d9e8f5" stroke="#1e3a5c" stroke-width="1.5"/>
+  <rect x="${cx}" y="${yh.toFixed(1)}" width="${(xR-cx).toFixed(1)}" height="${(oy-yh).toFixed(1)}" fill="#c8ddf5" stroke="#1e3a5c" stroke-width="1.5" stroke-dasharray="6,3"/>
+  ${arrowH(6,oy,W-6)}${arrowV(cx,H-6,6)}
+  <text x="${cx+4}" y="${oy+17}" text-anchor="middle" font-size="12" font-family="sans-serif">0</text>
+  ${xTick(xL.toFixed(1),oy,`&minus;${a}`)}${xTick(xR.toFixed(1),oy,a)}
+  ${yTick(cx,yh.toFixed(1),h)}
+  <text x="${((xL+cx)/2).toFixed(1)}" y="${((yh+oy)/2+5).toFixed(1)}" text-anchor="middle" font-size="13" font-family="sans-serif" fill="#1e3a5c">${k}</text>
+  <text x="${((cx+xR)/2).toFixed(1)}" y="${((yh+oy)/2+5).toFixed(1)}" text-anchor="middle" font-size="13" font-family="sans-serif" fill="#444">?</text>
+</svg>`;}
 
-// Composite: rectangle [0,w] + right triangle [w, w+b] both height h above axis
-function compositeSVG(w, b, h) {
-  const W=240, H=130, ox=40, oy=100;
-  const totW=w+b+0.6;
-  const sx=Math.min(160/totW,25), sy=Math.min(70/(h+0.6),18);
-  const xw=ox+w*sx, xb=xw+b*sx, yh=oy-h*sy;
+// Two-region: positive rect [0,w1] h1, negative rect [w1,w1+w2] h2 — areas labeled
+function svgTwoRegion(w1,h1,w2,h2){
+  const ox=54,oy=76;
+  const sx=Math.min(168/(w1+w2+0.7),27), sy=Math.min(50/(Math.max(h1,h2)+0.5),13);
+  const xa=ox+w1*sx, xb=xa+w2*sx, yp=oy-h1*sy, yn=oy+h2*sy;
   return `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
-    <rect x="${ox}" y="${yh.toFixed(1)}" width="${(xw-ox).toFixed(1)}" height="${(oy-yh).toFixed(1)}" fill="#d9e8f5" stroke="#1e3a5c" stroke-width="1.5"/>
-    <polygon points="${xw.toFixed(1)},${yh.toFixed(1)} ${xb.toFixed(1)},${oy} ${xw.toFixed(1)},${oy}" fill="#c8dff0" stroke="#1e3a5c" stroke-width="1.5"/>
-    ${axesAbove(ox,oy,W,H)}
-    ${originLabel(ox,oy,true)}
-    ${xTick(xw.toFixed(1),oy,w)}
-    ${xTick(xb.toFixed(1),oy,w+b)}
-    ${yTick(ox,yh.toFixed(1),h)}
-  </svg>`;}
+  <rect x="${ox}" y="${yp.toFixed(1)}" width="${(xa-ox).toFixed(1)}" height="${(oy-yp).toFixed(1)}" fill="#d9e8f5" stroke="#1e3a5c" stroke-width="1.5"/>
+  <rect x="${xa.toFixed(1)}" y="${oy}" width="${(xb-xa).toFixed(1)}" height="${(yn-oy).toFixed(1)}" fill="#fde8e8" stroke="#8a1e1e" stroke-width="1.5"/>
+  ${arrowH(ox-14,oy,W-6)}${arrowV(ox,H-6,6)}
+  <text x="${ox-2}" y="${oy+17}" text-anchor="middle" font-size="12" font-family="sans-serif">0</text>
+  ${xTick(xa.toFixed(1),oy,w1)}${xTick(xb.toFixed(1),oy,w1+w2)}
+  ${yTick(ox,yp.toFixed(1),h1)}
+  <line x1="${ox-4}" y1="${yn.toFixed(1)}" x2="${ox+4}" y2="${yn.toFixed(1)}" stroke="#555" stroke-width="1"/>
+  <text x="${ox-8}" y="${(yn+4).toFixed(1)}" text-anchor="end" font-size="12" font-family="sans-serif">&minus;${h2}</text>
+  <text x="${((ox+xa)/2).toFixed(1)}" y="${((yp+oy)/2+5).toFixed(1)}" text-anchor="middle" font-size="12" font-family="sans-serif" fill="#1e3a5c">+${w1*h1}</text>
+  <text x="${((xa+xb)/2).toFixed(1)}" y="${((oy+yn)/2+5).toFixed(1)}" text-anchor="middle" font-size="12" font-family="sans-serif" fill="#8a1e1e">&minus;${w2*h2}</text>
+</svg>`;}
 
-// Interval split: two labeled rectangles side by side
-function intervalSplitSVG(w1, h1, w2, h2, p) {
-  // p = split point (w1 units from 0)
-  const W=240, H=130, ox=40, oy=100;
-  const maxW=w1+w2+0.6, maxH=Math.max(h1,h2)+0.6;
-  const sx=Math.min(160/maxW,30), sy=Math.min(70/maxH,16);
-  const xp=ox+w1*sx, xr=xp+w2*sx;
-  const y1=oy-h1*sy, y2=oy-h2*sy;
+// Composite: rectangle [0,w] + right triangle [w,w+b] both height h — no area labels
+function svgComposite(w,b,h){
+  const ox=54,oy=108;
+  const sx=Math.min(168/(w+b+0.7),22), sy=Math.min(78/(h+0.6),13);
+  const xw=ox+w*sx, xb2=xw+b*sx, yh=oy-h*sy;
   return `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
-    <rect x="${ox}" y="${y1.toFixed(1)}" width="${(xp-ox).toFixed(1)}" height="${(oy-y1).toFixed(1)}" fill="#d9e8f5" stroke="#1e3a5c" stroke-width="1.5"/>
-    <rect x="${xp.toFixed(1)}" y="${y2.toFixed(1)}" width="${(xr-xp).toFixed(1)}" height="${(oy-y2).toFixed(1)}" fill="#c8dff0" stroke="#1e3a5c" stroke-width="1.3" stroke-dasharray="5,3"/>
-    ${axesAbove(ox,oy,W,H)}
-    ${originLabel(ox,oy,true)}
-    ${xTick(xp.toFixed(1),oy,p)}
-    ${xTick(xr.toFixed(1),oy,p+w2)}
-    <text x="${((ox+xp)/2).toFixed(1)}" y="${((y1+oy)/2+4).toFixed(1)}" text-anchor="middle" font-size="12" font-family="Georgia,serif" fill="#1e3a5c">${w1*h1}</text>
-    <text x="${((xp+xr)/2).toFixed(1)}" y="${((y2+oy)/2+4).toFixed(1)}" text-anchor="middle" font-size="12" font-family="Georgia,serif" fill="#1e3a5c">?</text>
-  </svg>`;}
+  <rect x="${ox}" y="${yh.toFixed(1)}" width="${(xw-ox).toFixed(1)}" height="${(oy-yh).toFixed(1)}" fill="#d9e8f5" stroke="#1e3a5c" stroke-width="1.5"/>
+  <polygon points="${xw.toFixed(1)},${yh.toFixed(1)} ${xb2.toFixed(1)},${oy} ${xw.toFixed(1)},${oy}" fill="#c5dff2" stroke="#1e3a5c" stroke-width="1.5"/>
+  ${axes(ox,oy)}${xTick(xw.toFixed(1),oy,w)}${xTick(xb2.toFixed(1),oy,w+b)}${yTick(ox,yh.toFixed(1),h)}
+</svg>`;}
 
-// Simple labeled region for flip-limits problem
-function flipSVG(a, b, k) {
-  const W=240, H=120, ox=35, oy=90;
-  const range=b-a, sx=Math.min(150/range,35), sy=50;
-  const xa=ox, xb=ox+range*sx;
-  const yh=oy-sy;
+// Unlabeled rectangle [a..b] height c — only tick marks, no area or y= label
+function svgUnlabeledRect(a,b,c){
+  const ox=54,oy=108;
+  const sx=Math.min(168/(b+0.7),27), sy=Math.min(78/(c+0.6),13);
+  const xa=ox+a*sx, xb2=ox+b*sx, yc=oy-c*sy;
   return `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
-    <rect x="${xa}" y="${yh}" width="${(xb-xa).toFixed(1)}" height="${sy}" fill="#d9e8f5" stroke="#1e3a5c" stroke-width="1.5" rx="2"/>
-    <line x1="${ox-10}" y1="${oy}" x2="${W-12}" y2="${oy}" stroke="#444" stroke-width="1.3"/>
-    <polygon points="${W-15},${oy-3} ${W-8},${oy} ${W-15},${oy+3}" fill="#444"/>
-    <line x1="${ox}" y1="${oy+8}" x2="${ox}" y2="${yh-8}" stroke="#444" stroke-width="1.3"/>
-    ${xTick(xa,oy,`a=${a}`)}
-    ${xTick(xb.toFixed(1),oy,`b=${b}`)}
-    <text x="${((xa+xb)/2).toFixed(1)}" y="${yh+sy/2+5}" text-anchor="middle" font-size="13" font-family="Georgia,serif" fill="#1e3a5c">Area&#x202f;=&#x202f;${k}</text>
-  </svg>`;}
+  <rect x="${xa.toFixed(1)}" y="${yc.toFixed(1)}" width="${(xb2-xa).toFixed(1)}" height="${(oy-yc).toFixed(1)}" fill="#d9e8f5" stroke="#1e3a5c" stroke-width="1.5"/>
+  ${axes(ox,oy)}${xTick(xa.toFixed(1),oy,a)}${xTick(xb2.toFixed(1),oy,b)}${yTick(ox,yc.toFixed(1),c)}
+</svg>`;}
+
+// Quarter circle of radius r — arc from (ox, oy-r*s) to (ox+r*s, oy)
+function svgQuarterCircle(r){
+  const ox=54,oy=108;
+  const s=Math.min(78/(r+0.5),19);
+  const p=r*s, x2=ox+p, yT=oy-p;
+  return `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
+  <path d="M ${ox},${yT.toFixed(1)} A ${p.toFixed(1)},${p.toFixed(1)} 0 0,1 ${x2.toFixed(1)},${oy} L ${ox},${oy} Z"
+        fill="#d9e8f5" stroke="#1e3a5c" stroke-width="1.5"/>
+  ${axes(ox,oy)}${xTick(x2.toFixed(1),oy,r)}${yTick(ox,yT.toFixed(1),r)}
+</svg>`;}
 
 // ── Generators ────────────────────────────────────────────────────────────────
 
-// gen1: Rectangle above axis  ∫_0^w c dx = cw
-function gen1() {
-  const w=choose([2,3,4,5]), c=choose([2,3,4,5]);
-  const ans=w*c;
-  return {
-    html: `Evaluate $\\displaystyle\\int_0^{${w}} ${c}\\,dx$ using the graph.`
-         +rectAboveSVG(w,c),
-    answer: [String(ans)],
-    hint: 'The function is constant — the region is a rectangle. Area = width \xd7 height.',
-    step: `\\int_0^{${w}} ${c}\\,dx = ${w}\\times${c} = ${ans}`
-  };
-}
+// 1. Labeled rectangle above axis
+function gen1(){
+  const w=choose([2,3,4,5]),c=choose([2,3,4,5]),ans=w*c;
+  return{html:`Evaluate $\\displaystyle\\int_0^{${w}}${c}\\,dx$ using the graph.`+svgRectAbove(w,c),
+    answer:[String(ans)],hint:'Rectangle: width \xd7 height.',step:`${w}\\times${c}=${ans}`};}
 
-// gen2: Right triangle above axis  ∫_0^b x dx = b²/2  (b even → integer answer)
-function gen2() {
-  const b=choose([2,4,6]);
-  const ans=b*b/2;
-  return {
-    html: `Evaluate $\\displaystyle\\int_0^{${b}} x\\,dx$ using the graph.`
-         +triSVG(b),
-    answer: [String(ans)],
-    hint: 'The region under y = x is a right triangle with base and height both equal to the upper limit.',
-    step: `\\frac{1}{2}\\cdot${b}\\cdot${b} = ${ans}`
-  };
-}
+// 2. Right triangle under y = x
+function gen2(){
+  const b=choose([2,4,6]),ans=b*b/2;
+  return{html:`Evaluate $\\displaystyle\\int_0^{${b}}x\\,dx$ using the graph.`+svgTriangle(b),
+    answer:[String(ans)],hint:'Right triangle: half base times height.',
+    step:`\\tfrac{1}{2}\\cdot${b}\\cdot${b}=${ans}`};}
 
-// gen3: Rectangle below axis  ∫_0^w (-c) dx = -cw  (negative answer)
-function gen3() {
-  const w=choose([2,3,4]), c=choose([2,3,4]);
-  const ans=-(w*c);
-  return {
-    html: `Evaluate $\\displaystyle\\int_0^{${w}} (-${c})\\,dx$ using the graph.`
-         +rectBelowSVG(w,c),
-    answer: [String(ans)],
-    hint: 'The function is below the x-axis, so the signed area is negative.',
-    step: `${w}\\times(-${c}) = ${ans}`
-  };
-}
+// 3. Rectangle below axis — negative signed area
+function gen3(){
+  const w=choose([2,3,4]),c=choose([2,3,4]),ans=-(w*c);
+  return{html:`Evaluate $\\displaystyle\\int_0^{${w}}(-${c})\\,dx$ using the graph.`+svgRectBelow(w,c),
+    answer:[String(ans)],hint:'Below the axis: signed area is negative.',
+    step:`${w}\\times(-${c})=${ans}`};}
 
-// gen4: Odd step function over [-a, a] → cancellation → 0
-function gen4() {
-  const a=choose([1,2,3]), h=choose([2,3,4]);
-  return {
-    html: `Evaluate $\\displaystyle\\int_{-${a}}^{${a}} f(x)\\,dx$ using the graph.`
-         +oddStepSVG(a,h),
-    answer: ['0'],
-    hint: 'The positive area above the axis and the negative area below are equal in magnitude — they cancel.',
-    step: `+${h*a} + (-${h*a}) = 0`
-  };
-}
+// 4. Odd symmetry — step function over [-a, a], answer 0
+function gen4(){
+  const a=choose([1,2,3]),h=choose([2,3,4]);
+  return{html:`Evaluate $\\displaystyle\\int_{-${a}}^{${a}}f(x)\\,dx$ using the graph.`+svgOddStep(a,h),
+    answer:['0'],hint:'Odd function: positive and negative pieces cancel.',
+    step:`(+${h*a})+(-${h*a})=0`};}
 
-// gen5: Two-region net signed area (positive rect then negative rect, net ≠ 0)
-function gen5() {
-  // Pick so that w1*h1 ≠ w2*h2
+// 5. Even symmetry — given half, find total = 2×half
+function gen5(){
+  const a=choose([1,2,3]),h=choose([2,3,4]),k=a*h,ans=2*k;
+  return{html:`The function is <strong>even</strong> ($f(-x)=f(x)$) and $\\displaystyle\\int_0^{${a}}f(x)\\,dx=${k}$. Find $\\displaystyle\\int_{-${a}}^{${a}}f(x)\\,dx$.`+svgEvenStep(a,h,k),
+    answer:[String(ans)],hint:'Even function: both halves have equal positive area.',
+    step:`2\\times${k}=${ans}`};}
+
+// 6. Net signed area — labeled blue and red regions
+function gen6(){
   let w1,h1,w2,h2;
-  do {
-    w1=choose([2,3,4]); h1=choose([2,3,4]);
-    w2=choose([1,2,3]); h2=choose([2,3,4]);
-  } while(w1*h1===w2*h2);
+  do{w1=choose([2,3,4]);h1=choose([2,3,4]);w2=choose([1,2,3]);h2=choose([2,3,4]);}
+  while(w1*h1===w2*h2);
   const ans=w1*h1-w2*h2;
-  return {
-    html: `Evaluate $\\displaystyle\\int_0^{${w1+w2}} f(x)\\,dx$ using the graph.`
-         +twoRegionSVG(w1,h1,w2,h2),
-    answer: [String(ans)],
-    hint: 'Add the signed areas: the blue region is positive, the red region is negative.',
-    step: `(+${w1*h1}) + (-${w2*h2}) = ${ans}`
-  };
-}
+  return{html:`Evaluate $\\displaystyle\\int_0^{${w1+w2}}f(x)\\,dx$ using the graph.`+svgTwoRegion(w1,h1,w2,h2),
+    answer:[String(ans)],hint:'Blue positive, red negative — add the signed areas.',
+    step:`(+${w1*h1})+(-${w2*h2})=${ans}`};}
 
-// gen6: Composite shape — rectangle + right triangle above axis
-function gen6() {
-  const w=choose([2,3]), b=choose([2,4]), h=choose([2,3,4]);
-  const triArea=b*h/2; // b even → integer
-  const ans=w*h+triArea;
-  return {
-    html: `Evaluate $\\displaystyle\\int_0^{${w+b}} f(x)\\,dx$ using the graph.`
-         +`<br><small style="font-family:sans-serif;font-size:11px;color:#777">The dashed outline is a rectangle on [0,${w}] and a triangle on [${w},${w+b}], both height ${h}.</small>`
-         +compositeSVG(w,b,h),
-    answer: [String(ans)],
-    hint: `Split into a rectangle [0,${w}] and a triangle [${w},${w+b}]. Add the two areas.`,
-    step: `${w}\\cdot${h} + \\tfrac{1}{2}\\cdot${b}\\cdot${h} = ${w*h} + ${triArea} = ${ans}`
-  };
-}
+// 7. Composite — rectangle + triangle, no area labels, read h from y-axis tick
+function gen7(){
+  const w=choose([2,3]),b=choose([2,4]),h=choose([2,3,4]);
+  const tA=b*h/2,ans=w*h+tA;
+  return{html:`Find $\\displaystyle\\int_0^{${w+b}}f(x)\\,dx$. The region is a rectangle on $[0,${w}]$ and a triangle on $[${w},${w+b}]$, sharing the same height.`+svgComposite(w,b,h),
+    answer:[String(ans)],hint:'Find each sub-area from the tick marks, then add.',
+    step:`${w}\\cdot${h}+\\tfrac{1}{2}\\cdot${b}\\cdot${h}=${w*h}+${tA}=${ans}`};}
 
-// gen7: Flip limits — given ∫_a^b f dx = k, find ∫_b^a f dx = -k
-function gen7() {
-  const pairs=[[1,4],[0,3],[2,6],[1,5],[0,4],[2,5],[1,6]];
-  const [a,b]=choose(pairs);
-  const k=choose([4,5,6,7,8,9,10,12]);
-  return {
-    html: `The shaded region has $\\displaystyle\\int_{${a}}^{${b}} f(x)\\,dx = ${k}$. Find $\\displaystyle\\int_{${b}}^{${a}} f(x)\\,dx$.`
-         +flipSVG(a,b,k),
-    answer: [String(-k)],
-    hint: 'Flipping the limits of integration negates the integral.',
-    step: `\\int_{${b}}^{${a}} f\\,dx = -\\int_{${a}}^{${b}} f\\,dx = -${k}`
-  };
-}
+// 8. Unlabeled rectangle — read all dimensions from axis tick marks
+function gen8(){
+  const a=choose([1,2,3]),dw=choose([2,3,4]),c=choose([2,3,4,5]);
+  const b=a+dw,ans=dw*c;
+  return{html:`Find $\\displaystyle\\int_{${a}}^{${b}}f(x)\\,dx$ from the graph.`+svgUnlabeledRect(a,b,c),
+    answer:[String(ans)],hint:'Read the width and height from the axis tick marks.',
+    step:`${c}\\times(${b}-${a})=${c}\\times${dw}=${ans}`};}
 
-// gen8: Interval split — two labeled rectangles, find total or missing piece
-function gen8() {
-  // Three variants: (A) find total, (B) find right piece, (C) find left piece
-  const v=rInt(3);
-  if(v===0){
-    // (A) Given both pieces, find total
-    const p=choose([2,3,4]);
-    const h1=choose([2,3,4,5]), h2=choose([2,3,4,5]);
-    const w1=choose([2,3]), w2=choose([2,3]);
-    const k1=w1*h1, k2=w2*h2, tot=k1+k2;
-    return {
-      html: `The graph shows two regions. Find $\\displaystyle\\int_0^{${w1+w2}} f(x)\\,dx$.`
-           +intervalSplitSVG(w1,h1,w2,h2,p),
-      answer: [String(tot)],
-      hint: `Use the interval split rule: \\u222b from 0 to ${p} plus \\u222b from ${p} to ${p+w2} equals \\u222b from 0 to ${p+w2}.`,
-      step: `${k1} + ${k2} = ${tot}`
-    };
-  } else if(v===1){
-    // (B) Given total and left piece, find right piece
-    const w1=choose([2,3]), w2=choose([2,3]);
-    const h1=choose([2,3,4]), h2=choose([2,3,4]);
-    const k1=w1*h1, k2=w2*h2, tot=k1+k2;
-    const p=w1;
-    return {
-      html: `$\\displaystyle\\int_0^{${w1+w2}} f(x)\\,dx = ${tot}$ and $\\displaystyle\\int_0^{${w1}} f(x)\\,dx = ${k1}$. Find $\\displaystyle\\int_{${w1}}^{${w1+w2}} f(x)\\,dx$.`
-           +intervalSplitSVG(w1,h1,w2,h2,p),
-      answer: [String(k2)],
-      hint: 'The whole interval splits into two pieces. Subtract the known piece from the total.',
-      step: `${tot} - ${k1} = ${k2}`
-    };
-  } else {
-    // (C) Given total and right piece, find left piece
-    const w1=choose([2,3]), w2=choose([2,3]);
-    const h1=choose([2,3,4]), h2=choose([2,3,4]);
-    const k1=w1*h1, k2=w2*h2, tot=k1+k2;
-    const p=w1;
-    return {
-      html: `$\\displaystyle\\int_0^{${w1+w2}} f(x)\\,dx = ${tot}$ and $\\displaystyle\\int_{${w1}}^{${w1+w2}} f(x)\\,dx = ${k2}$. Find $\\displaystyle\\int_0^{${w1}} f(x)\\,dx$.`
-           +intervalSplitSVG(w1,h1,w2,h2,p),
-      answer: [String(k1)],
-      hint: 'The whole interval splits into two pieces. Subtract the known piece from the total.',
-      step: `${tot} - ${k2} = ${k1}`
-    };
-  }
-}
+// 9. Quarter circle — use A = πr²/4
+function gen9(){
+  const r=choose([2,4,6]),coeff=r*r/4;
+  const dec2=(Math.PI*coeff).toFixed(2),dec1=(Math.PI*coeff).toFixed(1);
+  const exA=coeff===1?'pi':`${coeff}pi`;
+  const stepPi=coeff===1?'\\pi':`${coeff}\\pi`;
+  return{
+    html:`Find $\\displaystyle\\int_0^{${r}}\\sqrt{${r*r}-x^2}\\,dx$. The region is a quarter-circle of radius $${r}$.`+svgQuarterCircle(r),
+    answer:[exA,`${coeff===1?'':''+coeff}π`.trim()||'π',dec2,dec1,`${coeff}*pi`,`pi*${coeff}`],
+    hint:`Quarter-circle of radius ${r}: use A = πr\xb2/4.`,
+    step:`\\frac{\\pi\\cdot${r}^2}{4}=${stepPi}\\approx${dec2}`};}
 
-const GENERATORS = [gen1, gen2, gen3, gen4, gen5, gen6, gen7, gen8];
+const GENERATORS=[gen1,gen2,gen3,gen4,gen5,gen6,gen7,gen8,gen9];
 
 // ── State ─────────────────────────────────────────────────────────────────────
-let ACTIVE, correct, flags, attempted, peeked;
-
+let ACTIVE,correct,flags,attempted,peeked;
 function norm(s){
-  return s.trim().toLowerCase().replace(/\s+/g,'').replace(/[−–]/g,'-');
-}
+  return s.trim().toLowerCase().replace(/\s+/g,'').replace(/[−–]/g,'-')
+    .replace(/π/g,'pi').replace(/\xd7/g,'*');}
 function ok(user,acc){return acc.some(a=>norm(user)===norm(a));}
-
 function init(){
-  ACTIVE=shuffle(GENERATORS.map(gen=>gen()));
-  correct=0;
+  ACTIVE=shuffle(GENERATORS.map(g=>g()));correct=0;
   flags=Array(GENERATORS.length).fill(false);
   attempted=Array(GENERATORS.length).fill(false);
-  peeked=Array(GENERATORS.length).fill(false);
-}
+  peeked=Array(GENERATORS.length).fill(false);}
 
 // ── Rendering ─────────────────────────────────────────────────────────────────
+const KO={delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false};
 function _lth(s){let h='',r=s;while(r.length){const m=r.match(/^\\text\{([^}]*)\}/);if(m){h+=m[1];r=r.slice(m[0].length);}else{const n=r.indexOf('\\text{');if(n<0){h+=(r.trim()?'$'+r+'$':'');r='';}else{if(n>0)h+='$'+r.slice(0,n)+'$';r=r.slice(n);}}}return h;}
 function _re(p,i){
   const e=document.getElementById('expr-'+i);
-  const KO={delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false};
   if(p.svg){e.innerHTML=p.svg;}
   else if(p.html){e.innerHTML=p.html;renderMathInElement(e,KO);}
   else if(p.latex&&/\\text\{/.test(p.latex)){e.innerHTML=_lth(p.latex);renderMathInElement(e,KO);}
-  else{katex.render(p.latex,e,{throwOnError:false,displayMode:true});}
-}
+  else{katex.render(p.latex,e,{throwOnError:false,displayMode:true});}}
 
 function buildCards(){
-  const wrap=document.getElementById('problems');
-  wrap.innerHTML='';
+  const wrap=document.getElementById('problems');wrap.innerHTML='';
   ACTIVE.forEach((p,i)=>{
-    const div=document.createElement('div');
-    div.className='card'; div.id='card-'+i;
-    div.innerHTML=`<div class="card-body">
+    const d=document.createElement('div');d.className='card';d.id='card-'+i;
+    d.innerHTML=`<div class="card-body">
       <div class="card-meta">Problem ${i+1}</div>
       <div class="card-expr" id="expr-${i}"></div>
       <div class="input-row">
@@ -475,60 +376,48 @@ function buildCards(){
       <span class="reveal-link" id="rl-${i}" onclick="reveal(${i})">Show solution</span>
       <div class="revealed-answer" id="ra-${i}"></div>
     </div>`;
-    wrap.appendChild(div);
+    wrap.appendChild(d);
     document.getElementById('ai-'+i).addEventListener('keydown',e=>{if(e.key==='Enter')check(i);});
-    _re(p,i);
-  });
-}
+    _re(p,i);});}
 
 function check(i){
-  const p=ACTIVE[i], inp=document.getElementById('ai-'+i),
-        fb=document.getElementById('fb-'+i), card=document.getElementById('card-'+i),
-        good=ok(inp.value,p.answer);
+  const p=ACTIVE[i],inp=document.getElementById('ai-'+i),
+    fb=document.getElementById('fb-'+i),card=document.getElementById('card-'+i),
+    good=ok(inp.value,p.answer);
   inp.className='ans-input';
   if(good){
-    inp.className='ans-input ok'; fb.className='feedback correct';
-    fb.textContent='✓ Correct!'; card.className='card correct';
+    inp.className='ans-input ok';fb.className='feedback correct';fb.textContent='✓ Correct!';
+    card.className='card correct';
     if(!flags[i]&&!attempted[i]&&!peeked[i]){flags[i]=true;correct++;updateScore();}
-    attempted[i]=true;
-    document.getElementById('chk-'+i).disabled=true; inp.readOnly=true;
-  } else {
-    attempted[i]=true; inp.className='ans-input bad'; fb.className='feedback wrong';
+    attempted[i]=true;document.getElementById('chk-'+i).disabled=true;inp.readOnly=true;
+  }else{
+    attempted[i]=true;inp.className='ans-input bad';fb.className='feedback wrong';
     fb.textContent='✗ Not quite — try again or show the solution.';
-    card.className=peeked[i]?'card peeked':'card wrong';
-  }
-}
+    card.className=peeked[i]?'card peeked':'card wrong';}}
 
 function reveal(i){
-  const p=ACTIVE[i], box=document.getElementById('ra-'+i), lnk=document.getElementById('rl-'+i);
-  if(box.style.display==='block'){
-    box.style.display='none'; lnk.textContent='Show solution';
-  } else {
+  const p=ACTIVE[i],box=document.getElementById('ra-'+i),lnk=document.getElementById('rl-'+i);
+  if(box.style.display==='block'){box.style.display='none';lnk.textContent='Show solution';}
+  else{
     if(!flags[i]){
-      peeked[i]=true; document.getElementById('card-'+i).className='card peeked';
-      if(!attempted[i]){
-        const fb=document.getElementById('fb-'+i);
-        fb.className='feedback peeked';
-        fb.textContent='⚠ Solution revealed — no point awarded.';
-      }
-    }
+      peeked[i]=true;document.getElementById('card-'+i).className='card peeked';
+      if(!attempted[i]){const fb=document.getElementById('fb-'+i);
+        fb.className='feedback peeked';fb.textContent='⚠ Solution revealed — no point awarded.';}}
     box.innerHTML='<strong>Solution:</strong><br>';
-    const span=document.createElement('span'); box.appendChild(span);
-    katex.render(p.step,span,{throwOnError:false,displayMode:true});
-    box.style.display='block'; lnk.textContent='Hide solution';
-  }
-}
+    const sp=document.createElement('span');box.appendChild(sp);
+    katex.render(p.step,sp,{throwOnError:false,displayMode:true});
+    box.style.display='block';lnk.textContent='Hide solution';}}
 
 function updateScore(){
   const n=ACTIVE.length;
   document.getElementById('score').textContent=correct+' / '+n;
-  document.getElementById('prog').style.width=Math.round(correct/n*100)+'%';
-}
+  document.getElementById('prog').style.width=Math.round(correct/n*100)+'%';}
 
 function resetAll(){init();buildCards();updateScore();}
 
-// ── Boot ──────────────────────────────────────────────────────────────────────
-window.addEventListener('DOMContentLoaded',()=>{init();buildCards();updateScore();});
+window.addEventListener('DOMContentLoaded',()=>{
+  renderMathInElement(document.getElementById('concept-section'),KO);
+  init();buildCards();updateScore();});
 </script>
 <script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/contrib/auto-render.min.js"></script>
