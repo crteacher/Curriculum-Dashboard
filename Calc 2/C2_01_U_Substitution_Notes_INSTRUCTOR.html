@@ -278,5 +278,15 @@ function toggleAns(btn) {
 </script>
 <!-- proof-layer:done -->
 <!-- mistake-layer:done -->
+<script>
+/* flip ▸ ↔ ▾ on all <details> toggles */
+document.querySelectorAll('details').forEach(function(d){
+  d.addEventListener('toggle',function(){
+    var s=d.querySelector('summary');
+    if(!s) return;
+    s.textContent=d.open?s.textContent.replace('▸','▾'):s.textContent.replace('▾','▸');
+  });
+});
+</script>
 </body>
 </html>
