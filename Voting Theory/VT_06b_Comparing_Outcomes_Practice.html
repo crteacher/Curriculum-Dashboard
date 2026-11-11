@@ -249,10 +249,33 @@ const GENERATORS=[
     fields:[C('Copeland winner',a.co.w),N('Winner’s Copeland points',a.co.pts[a.co.w[0]]),C('Condorcet winner (or none)',cw)],
     hint:'List all six pairs. A tie in a match-up gives each candidate half a point.',step:h2hLines(p)+'<br>Copeland points: '+copPts(a.co)+'.'};}
 ];
-// Q7: a random election where all four methods disagree. Q8: a fixed one (22 voters).
+// Q7: a disguised "seed" election where all four methods disagree. Each seed has two SLACK columns (f = [col, lo, hi]):
+// any counts inside those ranges (together) keep the same four winners. Then: x1/2/3, relabel letters, shuffle columns.
+// (None of those steps can change who wins; the engine re-checks every card anyway.)  Q8: a fixed one (22 voters).
+const SEEDS=[
+ {c:['BDAC', 'DACB', 'ADBC', 'CBDA'],n:[6, 5, 7, 8],f:[[0, 6, 7], [1, 3, 5]]},
+ {c:['CDBA', 'ABDC', 'DBAC', 'BADC', 'ABCD'],n:[9, 3, 6, 5, 5],f:[[2, 6, 8], [4, 3, 5]]},
+ {c:['BDCA', 'ABDC', 'DBAC', 'CABD'],n:[4, 5, 7, 8],f:[[1, 5, 7], [0, 3, 4]]},
+ {c:['DBCA', 'ACBD', 'BCDA', 'CDAB'],n:[7, 9, 6, 3],f:[[2, 6, 8], [0, 7, 8]]},
+ {c:['CABD', 'ABDC', 'BACD', 'DCAB'],n:[6, 4, 7, 9],f:[[0, 6, 8], [2, 7, 8]]},
+ {c:['ADCB', 'CBAD', 'DABC', 'BADC'],n:[5, 8, 7, 6],f:[[0, 3, 5], [3, 6, 7]]},
+ {c:['BCAD', 'DACB', 'ABDC', 'CABD'],n:[6, 9, 3, 8],f:[[0, 6, 8], [1, 9, 10]]},
+ {c:['DACB', 'BADC', 'CBAD', 'DABC', 'ADBC'],n:[4, 8, 9, 4, 6],f:[[2, 9, 13], [0, 3, 4]]},
+ {c:['ADCB', 'CADB', 'BADC', 'CABD', 'DBAC'],n:[5, 2, 9, 8, 7],f:[[0, 3, 5], [4, 7, 9]]},
+ {c:['CDBA', 'ABDC', 'BACD', 'DBAC', 'CBAD'],n:[8, 6, 2, 7, 3],f:[[1, 6, 9], [4, 2, 3]]},
+ {c:['CBAD', 'BADC', 'DBAC', 'ADBC', 'CABD'],n:[2, 7, 7, 6, 6],f:[[4, 6, 9], [0, 2, 3]]},
+ {c:['BCAD', 'ADBC', 'ABCD', 'CBDA', 'DBCA'],n:[4, 8, 2, 6, 8],f:[[3, 6, 9], [0, 3, 4]]}
+];
+function seedElection(){
+  const s=choose(SEEDS),n=s.n.slice();
+  s.f.forEach(([i,lo,hi])=>{n[i]=rRange(lo,hi);});
+  const m=choose([1,2,3]),lab=shuffle(['A','B','C','D']);
+  const cols=s.c.map(r=>r.split('').map(ch=>lab['ABCD'.indexOf(ch)]).join(''));
+  return shuffle(cols.map((_,i)=>i)).map(i=>({n:n[i]*m,r:cols[i]}));
+}
 const CH=[{n:7,r:'CDBA'},{n:6,r:'BDCA'},{n:5,r:'ADBC'},{n:4,r:'ABCD'}];
 const FIXED_TAIL=[
- ()=>{const p=until(()=>{const q=randProfile(4,choose([4,5]),3,14);return(uniqueAll(q)&&distinct(allFour(q))===4)?q:null;});
+ ()=>{const p=until(()=>{const q=seedElection();return(uniqueAll(q)&&distinct(allFour(q))===4)?q:null;});
    return{html:'<p class="q"><b>Challenge:</b> these ballots were chosen so that <b>no two methods</b> agree. Find the winner under each.</p>'+tbl(p),
     fields:fields4(p),hint:'Work each method separately and compare. If two of your answers match, recheck one of them.',step:steps4(p)};},
  ()=>{const p=CH;
