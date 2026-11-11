@@ -1,0 +1,1293 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Antiderivatives &amp; Definite Integrals Review</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%20100%20100'%3E%3Ctext%20y%3D'.9em'%20font-size%3D'90'%3E%E2%88%AB%3C%2Ftext%3E%3C%2Fsvg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=JetBrains+Mono:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #f6f1e4;
+    --paper-line: rgba(58, 74, 94, 0.14);
+    --paper-line-strong: rgba(58, 74, 94, 0.26);
+    --ink: #26313f;
+    --ink-soft: #5b6b7d;
+    --card-bg: #fffdf7;
+    --card-border: #ddd2b6;
+    --accent: #2f7d6b;
+    --accent-strong: #1f5c4e;
+    --accent-soft: rgba(47, 125, 107, 0.12);
+    --accent-ink: #f5fbf9;
+    --good: #3f7a52;
+    --good-soft: rgba(63, 122, 82, 0.14);
+    --bad: #b3413a;
+    --bad-soft: rgba(179, 65, 58, 0.12);
+    --shadow: rgba(38, 49, 63, 0.16);
+    --graph-grid: rgba(58, 74, 94, 0.14);
+    --graph-axis: rgba(38, 49, 63, 0.55);
+    --graph-stroke-a: #2f7d6b;
+    --graph-stroke-b: #c1483f;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #1b2330;
+      --paper-line: rgba(238, 242, 240, 0.07);
+      --paper-line-strong: rgba(238, 242, 240, 0.15);
+      --ink: #edf1ef;
+      --ink-soft: #a3aebb;
+      --card-bg: #232e3d;
+      --card-border: #3a4a61;
+      --accent: #5fd1b3;
+      --accent-strong: #86e0c8;
+      --accent-soft: rgba(95, 209, 179, 0.16);
+      --accent-ink: #0c2620;
+      --good: #7bc794;
+      --good-soft: rgba(123, 199, 148, 0.16);
+      --bad: #ff9a90;
+      --bad-soft: rgba(255, 154, 144, 0.14);
+      --shadow: rgba(0, 0, 0, 0.5);
+      --graph-grid: rgba(238, 242, 240, 0.10);
+      --graph-axis: rgba(238, 242, 240, 0.55);
+      --graph-stroke-a: #5fd1b3;
+      --graph-stroke-b: #ff9179;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #1b2330;
+    --paper-line: rgba(238, 242, 240, 0.07);
+    --paper-line-strong: rgba(238, 242, 240, 0.15);
+    --ink: #edf1ef;
+    --ink-soft: #a3aebb;
+    --card-bg: #232e3d;
+    --card-border: #3a4a61;
+    --accent: #5fd1b3;
+    --accent-strong: #86e0c8;
+    --accent-soft: rgba(95, 209, 179, 0.16);
+    --accent-ink: #0c2620;
+    --good: #7bc794;
+    --good-soft: rgba(123, 199, 148, 0.16);
+    --bad: #ff9a90;
+    --bad-soft: rgba(255, 154, 144, 0.14);
+    --shadow: rgba(0, 0, 0, 0.5);
+    --graph-grid: rgba(238, 242, 240, 0.10);
+    --graph-axis: rgba(238, 242, 240, 0.55);
+    --graph-stroke-a: #5fd1b3;
+    --graph-stroke-b: #ff9179;
+  }
+
+
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; min-height: 100vh;
+    background:
+      repeating-linear-gradient(0deg, var(--paper-line) 0, var(--paper-line) 1px, transparent 1px, transparent 32px),
+      repeating-linear-gradient(90deg, var(--paper-line) 0, var(--paper-line) 1px, transparent 1px, transparent 32px),
+      var(--paper);
+    color: var(--ink); font-family: "Source Sans 3", ui-sans-serif, system-ui, sans-serif;
+    display: flex; justify-content: center; padding: clamp(16px, 3vw, 44px) 16px 80px; line-height: 1.5;
+  }
+  @media (prefers-reduced-motion: reduce) { * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; } }
+  .wrap { width: 100%; max-width: 900px; }
+  header { text-align: center; margin-bottom: 18px; }
+  .eyebrow { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); font-weight: 600; }
+  h1 { font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: clamp(1.8rem, 5vw, 2.5rem); margin: 6px 0 8px; text-wrap: balance; }
+  header p { color: var(--ink-soft); max-width: 62ch; margin: 0 auto; }
+  h2 { font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 1.55rem; margin: 2px 0 4px; text-wrap: balance; }
+  code, .mono { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: .86em; background: var(--accent-soft); padding: 1px 6px; border-radius: 5px; }
+  .hidden { display: none !important; }
+
+  /* top bar */
+  .topbar { position: sticky; top: 8px; z-index: 6; margin: 0 0 20px; padding: 10px 12px; background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 14px; box-shadow: 0 10px 26px -16px var(--shadow); display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; }
+  .pills { display: flex; flex-wrap: wrap; gap: 6px; flex: 1 1 420px; }
+  .pill { font: 600 .82rem "Source Sans 3", sans-serif; border: 1px solid var(--card-border); background: transparent; color: var(--ink); border-radius: 999px; padding: 5px 11px; cursor: pointer; }
+  .pill:hover { border-color: var(--accent); }
+  .pill.on { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+  .pill.done::after { content: " \2713"; color: var(--good); font-weight: 700; }
+  .pill.on.done::after { color: var(--accent-ink); }
+  .pill.bonus { border-style: dashed; }
+  .stats { display: flex; align-items: center; gap: 14px; font-size: .9rem; color: var(--ink-soft); flex-wrap: wrap; }
+  .stats b { color: var(--ink); font-family: "JetBrains Mono", monospace; font-size: .95rem; }
+  .btn { font: 600 .9rem "Source Sans 3", sans-serif; border-radius: 9px; padding: 7px 14px; cursor: pointer; border: 1px solid var(--card-border); background: var(--card-bg); color: var(--ink); }
+  .btn:hover { border-color: var(--accent); }
+  .btn-primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+  .btn-primary:hover { background: var(--accent-strong); border-color: var(--accent-strong); }
+  .btn-ghost { background: transparent; }
+  .btn:focus-visible, .pill:focus-visible, input:focus-visible, select:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+  .howto, .recall, .card, .res { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 14px; padding: 16px 18px; }
+  .card, .res, .recall { overflow-x: auto; }
+  .howto { margin-bottom: 18px; }
+  .howto h2 { font-size: 1.25rem; }
+  .howto ul { margin: 8px 0 12px 18px; padding: 0; } .howto li { margin: 4px 0; }
+
+  /* stages */
+  .stage-head { margin: 4px 0 12px; }
+  .kicker { font-family: "JetBrains Mono", monospace; font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); font-weight: 600; }
+  .goal { color: var(--ink-soft); }
+  .recall { margin-bottom: 14px; border-left: 4px solid var(--accent); }
+  .recall h3 { margin: 0 0 6px; font: 700 .78rem "JetBrains Mono", monospace; letter-spacing: .1em; text-transform: uppercase; color: var(--accent-strong); }
+  .recall .rows { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 8px 22px; }
+  .recall .row { padding: 4px 0; }
+  .recall p { margin: 4px 0; }
+  .tip { color: var(--ink-soft); font-size: .92rem; }
+  .card { margin-bottom: 14px; }
+  .card-top { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin-bottom: 8px; }
+  .qnum { font: 700 .8rem "JetBrains Mono", monospace; background: var(--accent); color: var(--accent-ink); border-radius: 6px; padding: 2px 8px; }
+  .qtitle { font-weight: 700; }
+  .badge { margin-left: auto; font: 600 .78rem "JetBrains Mono", monospace; color: var(--ink-soft); }
+  .badge.locked { color: var(--accent-strong); }
+  .badge.zero { color: var(--bad); }
+  .prompt { font-size: 1.12rem; margin: 6px 0 10px; line-height: 1.9; }
+  .prompt .mathline { display: block; margin: 8px 0; font-size: 1.22rem; }
+  .fields { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: flex-end; margin: 8px 0 10px; }
+  .fld label { display: block; font-size: .85rem; color: var(--ink-soft); margin-bottom: 3px; }
+  input[type=text], select { font: 500 1.02rem "JetBrains Mono", monospace; padding: 8px 10px; border-radius: 9px; border: 1.5px solid var(--card-border); background: var(--paper); color: var(--ink); min-width: 190px; }
+  input.short { min-width: 120px; width: 130px; }
+  select { font-family: "Source Sans 3", sans-serif; min-width: 150px; }
+  input.ok, select.ok { border-color: var(--good); background: var(--good-soft); }
+  input.no, select.no { border-color: var(--bad); background: var(--bad-soft); }
+  .opts { display: grid; gap: 7px; margin: 6px 0 8px; }
+  .opt { display: flex; gap: 9px; align-items: flex-start; padding: 8px 11px; border: 1.5px solid var(--card-border); border-radius: 10px; cursor: pointer; background: var(--paper); }
+  .opt:hover { border-color: var(--accent); }
+  .opt input { margin-top: 5px; accent-color: var(--accent); }
+  .opt.ok { border-color: var(--good); background: var(--good-soft); }
+  .opt.no { border-color: var(--bad); background: var(--bad-soft); }
+  .btns { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .fb { margin-top: 10px; padding: 9px 12px; border-radius: 10px; font-size: .98rem; display: none; }
+  .fb.show { display: block; }
+  .fb.good { background: var(--good-soft); border: 1px solid var(--good); }
+  .fb.part { background: rgba(214, 160, 40, .14); border: 1px solid #c9962a; }
+  .fb.bad { background: var(--bad-soft); border: 1px solid var(--bad); }
+  .sol { margin-top: 10px; padding: 12px 14px; border-radius: 10px; background: var(--accent-soft); display: none; }
+  .sol.show { display: block; }
+  .sol ol { margin: 4px 0 8px 20px; padding: 0; } .sol li { margin: 5px 0; }
+  .prop { display: inline-block; font: 700 .72rem "JetBrains Mono", monospace; letter-spacing: .06em; text-transform: uppercase; background: var(--accent); color: var(--accent-ink); border-radius: 5px; padding: 2px 8px; margin-bottom: 6px; }
+  .why { margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--paper-line-strong); color: var(--ink); }
+  .why b { color: var(--accent-strong); }
+  .nav-row { display: flex; justify-content: space-between; gap: 10px; margin: 18px 0 6px; flex-wrap: wrap; }
+  .stage-score { color: var(--ink-soft); }
+
+  /* math */
+  .fr { display: inline-flex; flex-direction: column; vertical-align: middle; text-align: center; margin: 0 .18em; line-height: 1.2; font-size: .95em; }
+  .fr > span:first-child { border-bottom: 1.5px solid currentColor; padding: 0 .25em 1px; }
+  .fr > span:last-child { padding: 1px .25em 0; }
+  .int { display: inline-flex; align-items: center; vertical-align: middle; margin-right: .2em; }
+  .int .sym { font: 300 2.4em/1 "Fraunces", Georgia, serif; transform: scaleY(1.05); }
+  .int .lim { display: inline-flex; flex-direction: column; justify-content: space-between; height: 2.45em; font-size: .8em; margin-left: -.3em; margin-right: .2em; line-height: 1; }
+  .rad { white-space: nowrap; } .rad .ov { border-top: 1.5px solid currentColor; padding: 0 .12em; margin-left: .05em; } .rad sup { font-size: .6em; margin-right: -.1em; }
+  .op { margin: 0 .22em; }
+  .mx i { font-family: "Fraunces", Georgia, serif; }
+  .res table { width: 100%; border-collapse: collapse; }
+  .res th, .res td { text-align: left; padding: 7px 8px; border-bottom: 1px solid var(--card-border); }
+  .res td.n, .res th.n { text-align: right; font-family: "JetBrains Mono", monospace; }
+  .bar { height: 8px; border-radius: 6px; background: var(--paper-line-strong); overflow: hidden; min-width: 80px; }
+  .bar > span { display: block; height: 100%; background: var(--accent); }
+  @media (max-width: 560px) { input[type=text], select { min-width: 140px; } .prompt { font-size: 1.04rem; } .topbar { position: static; } }
+  @media print { .topbar, .btns, .nav-row { display: none !important; } body { background: #fff; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Calculus 1 &middot; Chapter 4 Review</div>
+    <h1>Antiderivatives &amp; Definite Integrals</h1>
+    <p>A review activity: nine short stages on basic antiderivatives and the properties of definite integrals, plus a bonus challenge. Plan on about 50 to 55 minutes. Keep scratch paper and a calculator handy.</p>
+  </header>
+  <section class="howto">
+    <h2>How today works</h2>
+    <ul>
+      <li>Work through the stages in order. Each stage starts with a short reminder, then questions with fresh random numbers.</li>
+      <li><b>Your first Check on each question is your exam score.</b> After that you can check again for practice, or press <i>New version</i> for new numbers.</li>
+      <li>Opening <i>Show solution</i> before you have checked scores 0 for that question. Try it first.</li>
+      <li>Type answers like <code>x^3/3 + C</code>, <code>sin(x)</code>, <code>e^x</code>, <code>ln|x|</code>, <code>7/2</code>. Any equivalent form is accepted. Your progress is not saved if the page reloads.</li>
+    </ul>
+  </section>
+  <div id="lesson">
+    <div class="topbar">
+      <div class="pills" id="pills"></div>
+      <div class="stats"><span>Score <b id="stScore">0</b></span><span>Done <b id="stDone">0</b></span><span>Time <b id="stClock">0:00</b></span>
+        <button type="button" class="btn btn-ghost" id="resetBtn">Reset exam</button><button type="button" class="btn btn-ghost" id="themeBtn" aria-label="Switch light or dark">Theme</button></div>
+    </div>
+    <div id="stages"></div>
+  </div>
+</div>
+<script>
+(function () {
+"use strict";
+  // ============================================================
+  // Calculus helpers: typed-expression parser (x, e, pi, sin cos tan ln exp sqrt abs) and equivalence grading
+  // ============================================================
+  function cNorm(raw) {
+    var s = String(raw === null || raw === undefined ? "" : raw);
+    var i = s.lastIndexOf("=");
+    if (i !== -1) s = s.slice(i + 1);
+    s = s.replace(/[−‒–—]/g, "-").replace(/[×·∙]/g, "*").replace(/÷/g, "/")
+         .replace(/π/g, "pi").replace(/²/g, "^2").replace(/³/g, "^3").replace(/\*\*/g, "^")
+         .replace(/\|([^|]*)\|/g, "abs($1)").replace(/\s+/g, " ").trim().toLowerCase();
+    return s.replace(/\s*d\s*x\s*$/, "");
+  }
+  var C_FNS = { sqrt: Math.sqrt, abs: Math.abs, sin: Math.sin, cos: Math.cos, tan: Math.tan, ln: Math.log, exp: Math.exp };
+  var C_NAMES = ["sqrt", "abs", "sin", "cos", "tan", "ln", "exp", "pi", "e", "x", "c"].sort(function (a, b) { return b.length - a.length; });
+  function cCompile(raw) {
+    var s = cNorm(raw);
+    if (s === "") return { err: "Type your answer in the box first." };
+    var toks = [], i = 0, m;
+    while (i < s.length) {
+      var ch = s.charAt(i);
+      if (ch === " ") { i++; continue; }
+      if (/[0-9.]/.test(ch)) {
+        m = /^(?:\d+\.?\d*|\.\d+)/.exec(s.slice(i));
+        if (!m) return { err: "I could not read a number in your answer." };
+        toks.push({ t: "num", v: parseFloat(m[0]) }); i += m[0].length; continue;
+      }
+      if (/[a-z]/.test(ch)) {
+        var hit = null, k;
+        for (k = 0; k < C_NAMES.length; k++) { if (s.substr(i, C_NAMES[k].length) === C_NAMES[k]) { hit = C_NAMES[k]; break; } }
+        if (!hit) return { err: "I did not understand \"" + ch + "\". Use x, e, sin(x), cos(x), ln(x), and ^ for powers." };
+        toks.push({ t: C_FNS[hit] ? "fn" : "name", v: hit }); i += hit.length; continue;
+      }
+      if ("+-*/^()".indexOf(ch) !== -1) { toks.push({ t: "op", v: ch }); i++; continue; }
+      return { err: "I did not understand the symbol \"" + ch + "\"." };
+    }
+    var p = 0, badMsg = null;
+    function isOp(v) { var t = toks[p]; return t && t.t === "op" && t.v === v; }
+    function fail(msg) { if (!badMsg) badMsg = msg; return function () { return NaN; }; }
+    function startsFactor() { var t = toks[p]; return !!t && (t.t === "num" || t.t === "name" || t.t === "fn" || (t.t === "op" && t.v === "(")); }
+    function expr() {
+      var left = term_();
+      while (isOp("+") || isOp("-")) {
+        var op = toks[p++].v, right = term_();
+        left = (function (a, b, o) { return o === "+" ? function (e) { return a(e) + b(e); } : function (e) { return a(e) - b(e); }; })(left, right, op);
+      }
+      return left;
+    }
+    function term_() {
+      var left = unary();
+      for (;;) {
+        if (isOp("*") || isOp("/")) {
+          var op = toks[p++].v, right = unary();
+          left = (function (a, b, o) { return o === "*" ? function (e) { return a(e) * b(e); } : function (e) { return a(e) / b(e); }; })(left, right, op);
+        } else if (startsFactor()) {
+          var r2 = unary();
+          left = (function (a, b) { return function (e) { return a(e) * b(e); }; })(left, r2);
+        } else break;
+      }
+      return left;
+    }
+    function unary() {
+      if (isOp("-")) { p++; var u = unary(); return function (e) { return -u(e); }; }
+      if (isOp("+")) { p++; return unary(); }
+      return power();
+    }
+    function power() {
+      var base = atom();
+      if (isOp("^")) {
+        p++;
+        var ex;
+        if (isOp("-")) { p++; var q = power(); ex = function (e) { return -q(e); }; } else ex = power();
+        return function (e) { return Math.pow(base(e), ex(e)); };
+      }
+      return base;
+    }
+    function atom() {
+      var t = toks[p];
+      if (!t) return fail("Your answer seems to end too soon. Is something missing at the end?");
+      if (t.t === "num") { p++; var v = t.v; return function () { return v; }; }
+      if (t.t === "name") {
+        p++; var nm = t.v;
+        if (nm === "pi") return function () { return Math.PI; };
+        if (nm === "e") return function () { return Math.E; };
+        return function (env) { return env[nm]; };
+      }
+      if (t.t === "fn") {
+        p++;
+        var inner;
+        if (isOp("(")) { p++; inner = expr(); if (isOp(")")) p++; else return fail("A parenthesis is not closed."); }
+        else inner = power();
+        var f = C_FNS[t.v];
+        return function (env) { return f(inner(env)); };
+      }
+      if (t.t === "op" && t.v === "(") {
+        p++; var ex2 = expr();
+        if (isOp(")")) { p++; return ex2; }
+        return fail("A parenthesis is not closed.");
+      }
+      return fail("I did not expect \"" + t.v + "\" there.");
+    }
+    var fn = expr();
+    if (!badMsg && p < toks.length) badMsg = "I could not read the end of your answer (near \"" + toks[p].v + "\").";
+    if (badMsg) return { err: badMsg };
+    return { fn: fn };
+  }
+  // typed expression must equal ref(x) at sample points (optionally up to an additive constant)
+  function cGradeEq(raw, ref, xs, upToConst) {
+    var c = cCompile(raw);
+    if (c.err) return { ok: false, msg: c.err };
+    xs = xs || [0.6, 1.1, 1.9, 2.7, 3.8];
+    var diffs = [], i, scale = 1;
+    for (i = 0; i < xs.length; i++) {
+      var v = c.fn({ x: xs[i], c: 0 }), r = ref(xs[i]), d = v - r;
+      if (!isFinite(d)) return { ok: false, msg: "I could not evaluate that. Check that it is written with x, ^, and parentheses." };
+      diffs.push(d); scale = Math.max(scale, Math.abs(r), Math.abs(v));
+    }
+    if (upToConst) {
+      for (i = 1; i < diffs.length; i++) if (Math.abs(diffs[i] - diffs[0]) > 1e-6 * scale) return { ok: false };
+      var withC = Math.abs(c.fn({ x: 1.3, c: 1 }) - c.fn({ x: 1.3, c: 0 }));
+      return { ok: true, hasC: withC > 1e-9 };
+    }
+    for (i = 0; i < diffs.length; i++) if (Math.abs(diffs[i]) > 1e-6 * scale) return { ok: false };
+    return { ok: true };
+  }
+  function cNum(raw) { // typed decimal / fraction / expression with e and pi -> number
+    var c = cCompile(raw);
+    if (c.err) return { err: c.err };
+    var v = c.fn({ x: 0, c: 0 });
+    if (!isFinite(v)) return { err: "That is not a number I can use." };
+    return { v: v };
+  }
+  function nearRel(a, b, tol) { return Math.abs(a - b) <= (tol || 0.01) * Math.max(1, Math.abs(b)); }
+
+  // ============================================================
+  // small helpers
+  // ============================================================
+  function ri(a, b) { return Math.floor(Math.random() * (b - a + 1)) + a; }
+  function rc(a) { return a[ri(0, a.length - 1)]; }
+  function shuf(a) { a = a.slice(); for (var i = a.length - 1; i > 0; i--) { var j = ri(0, i), t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+  function nz(a, b, not) { var v; do { v = ri(a, b); } while (v === 0 || (not && not.indexOf(v) !== -1)); return v; }
+  function gcd(a, b) { a = Math.abs(a); b = Math.abs(b); while (b) { var t = b; b = a % b; a = t; } return a || 1; }
+  function Rt(n, d) { if (d < 0) { n = -n; d = -d; } var g = gcd(n, d); return { n: n / g, d: d / g }; }
+  function rtVal(r) { return r.n / r.d; }
+  function rtHtml(r) { return r.d === 1 ? nm(r.n) : (r.n < 0 ? "&minus;" : "") + FR(String(Math.abs(r.n)), String(r.d)); }
+  function rtPlain(r) { return r.d === 1 ? String(r.n) : r.n + "/" + r.d; }
+  function sp(v) { return v < 0 ? "(" + v + ")" : String(v); }
+  function rd(v, d) { var k = Math.pow(10, d == null ? 2 : d); return Math.round(v * k) / k; }
+
+  // ============================================================
+  // math -> html
+  // ============================================================
+  var VX = "<i>x</i>";
+  function nm(v) { return v < 0 ? "&minus;" + (-v) : String(v); }
+  function sup(t) { return "<sup>" + t + "</sup>"; }
+  function FR(n, d) { return "<span class=\"fr\"><span>" + n + "</span><span>" + d + "</span></span>"; }
+  function X(e) { return e === 1 ? VX : VX + sup(e); }
+  function RAD(inner, idx) { return "<span class=\"rad\">" + (idx ? sup(idx) : "") + "&radic;<span class=\"ov\">" + inner + "</span></span>"; }
+  function lim(v) { return typeof v === "number" ? nm(v) : v; }
+  function INT(a, b, body) { return "<span class=\"int\"><span class=\"sym\">&int;</span><span class=\"lim\"><span>" + lim(b) + "</span><span>" + lim(a) + "</span></span></span><span class=\"body\">" + body + "</span>"; }
+  function INT0(body) { return "<span class=\"int\"><span class=\"sym\">&int;</span></span><span class=\"body\">" + body + "</span>"; }
+  function I(a, b, body) { return INT(a, b, body) + DX(); }
+  function DX() { return " <i>dx</i>"; }
+  function ML(h) { return "<span class=\"mathline mx\">" + h + "</span>"; }
+  function FN(name) { return "<i>" + name + "</i>(" + VX + ")"; }
+  function joinParts(parts) {   // parts: [{neg, html}] -> html with proper signs
+    var out = "";
+    parts.forEach(function (p, i) {
+      if (i === 0) out += (p.neg ? "&minus;" : "") + p.html;
+      else out += " <span class=\"op\">" + (p.neg ? "&minus;" : "+") + "</span> " + p.html;
+    });
+    return out;
+  }
+  function cf(a) { return a === 1 ? "" : String(a); }
+
+  // ============================================================
+  // integrand / antiderivative terms
+  // ============================================================
+  function T(k, c, n) { return { k: k, c: c, n: n || 0 }; }
+  function tf(t, x) {
+    switch (t.k) {
+      case "pow": return t.c * Math.pow(x, t.n);
+      case "const": return t.c;
+      case "sin": return t.c * Math.sin(x);
+      case "cos": return t.c * Math.cos(x);
+      case "exp": return t.c * Math.exp(x);
+      case "inv": return t.c / x;
+      case "sqrt": return t.c * Math.sqrt(x);
+      case "cbrt": return t.c * Math.cbrt(x);
+      case "isqrt": return t.c / Math.sqrt(x);
+    }
+  }
+  function tF(t, x) {
+    switch (t.k) {
+      case "pow": return t.c / (t.n + 1) * Math.pow(x, t.n + 1);
+      case "const": return t.c * x;
+      case "sin": return -t.c * Math.cos(x);
+      case "cos": return t.c * Math.sin(x);
+      case "exp": return t.c * Math.exp(x);
+      case "inv": return t.c * Math.log(Math.abs(x));
+      case "sqrt": return t.c * 2 / 3 * Math.pow(x, 1.5);
+      case "cbrt": return t.c * 3 / 4 * Math.pow(x, 4 / 3);
+      case "isqrt": return 2 * t.c * Math.sqrt(x);
+    }
+  }
+  function fSum(ts) { return function (x) { var s = 0; ts.forEach(function (t) { s += tf(t, x); }); return s; }; }
+  function FSum(ts) { return function (x) { var s = 0; ts.forEach(function (t) { s += tF(t, x); }); return s; }; }
+  function tPart(t) {   // the integrand term as {neg, html}
+    var a = Math.abs(t.c), cs = cf(a), neg = t.c < 0;
+    switch (t.k) {
+      case "pow": return t.n >= 1 ? { neg: neg, html: cs + X(t.n) } : { neg: neg, html: FR(String(a), X(-t.n)) };
+      case "const": return { neg: neg, html: String(a) };
+      case "sin": return { neg: neg, html: cs + "sin&thinsp;" + VX };
+      case "cos": return { neg: neg, html: cs + "cos&thinsp;" + VX };
+      case "exp": return { neg: neg, html: cs + "e" + sup(VX) };
+      case "inv": return { neg: neg, html: FR(String(a), VX) };
+      case "sqrt": return { neg: neg, html: cs + RAD(VX) };
+      case "cbrt": return { neg: neg, html: cs + RAD(VX, 3) };
+      case "isqrt": return { neg: neg, html: FR(String(a), RAD(VX)) };
+    }
+  }
+  function tFpart(t) {  // antiderivative piece as {neg, html}
+    var a = Math.abs(t.c), r, e, numer;
+    switch (t.k) {
+      case "pow":
+        e = t.n + 1; r = Rt(t.c, e);
+        if (e > 0) { numer = cf(Math.abs(r.n)) + X(e); return { neg: r.n < 0, html: r.d === 1 ? numer : FR(numer, r.d) }; }
+        return { neg: r.n < 0, html: FR(String(Math.abs(r.n)), (r.d === 1 ? "" : r.d) + X(-e)) };
+      case "const": return { neg: t.c < 0, html: cf(a) + VX };
+      case "sin": return { neg: t.c > 0, html: cf(a) + "cos&thinsp;" + VX };
+      case "cos": return { neg: t.c < 0, html: cf(a) + "sin&thinsp;" + VX };
+      case "exp": return { neg: t.c < 0, html: cf(a) + "e" + sup(VX) };
+      case "inv": return { neg: t.c < 0, html: cf(a) + "ln&thinsp;|" + VX + "|" };
+      case "sqrt": r = Rt(2 * t.c, 3); numer = cf(Math.abs(r.n)) + X("3/2"); return { neg: r.n < 0, html: r.d === 1 ? numer : FR(numer, r.d) };
+      case "cbrt": r = Rt(3 * t.c, 4); numer = cf(Math.abs(r.n)) + X("4/3"); return { neg: r.n < 0, html: r.d === 1 ? numer : FR(numer, r.d) };
+      case "isqrt": return { neg: t.c < 0, html: cf(Math.abs(2 * t.c)) + RAD(VX) };
+    }
+  }
+  function tFplain(t) {  // typed form of the antiderivative piece
+    var r;
+    switch (t.k) {
+      case "pow": r = Rt(t.c, t.n + 1); return "(" + rtPlain(r) + ")*x^(" + (t.n + 1) + ")";
+      case "const": return "(" + t.c + ")*x";
+      case "sin": return "(" + (-t.c) + ")*cos(x)";
+      case "cos": return "(" + t.c + ")*sin(x)";
+      case "exp": return "(" + t.c + ")*e^x";
+      case "inv": return "(" + t.c + ")*ln(abs(x))";
+      case "sqrt": r = Rt(2 * t.c, 3); return "(" + rtPlain(r) + ")*x^(3/2)";
+      case "cbrt": r = Rt(3 * t.c, 4); return "(" + rtPlain(r) + ")*x^(4/3)";
+      case "isqrt": return "(" + (2 * t.c) + ")*sqrt(x)";
+    }
+  }
+  function integrandHtml(ts) { return joinParts(ts.map(tPart)); }
+  function antiHtml(ts) { return joinParts(ts.map(tFpart)); }
+  function antiPlain(ts) { return ts.map(tFplain).join(" + ") + " + C"; }
+  function hasKind(ts, k) { return ts.some(function (t) { return t.k === k; }); }
+
+  // ============================================================
+  // grading helpers
+  // ============================================================
+  var XS_POS = [0.6, 1.3, 2.1, 3.2, 4.4];
+  var XS_NEG = [-0.7, -1.4, -2.2, -3.5];
+  function ptsFmt(v) { return (Math.round(v * 10) / 10).toString(); }
+  function gradeAnti(raw, ts, max) {
+    var Fref = FSum(ts), f = fSum(ts);
+    var r = cGradeEq(raw, Fref, XS_POS, true);
+    if (r.msg && !r.ok) return { pts: 0, max: max, msg: r.msg, retry: true };
+    if (!r.ok) {
+      var same = cGradeEq(raw, f, XS_POS, false);
+      if (same.ok) return { pts: 0, max: max, msg: "That is the original function, not its antiderivative. Integrate it." };
+      return { pts: 0, max: max, msg: "Not quite. Differentiate your answer: do you get the integrand back? If not, look at which term is off." };
+    }
+    var pts = max, notes = [];
+    if (hasKind(ts, "inv")) {
+      var Fneg = function (x) { var s = 0; ts.forEach(function (t) { s += t.k === "inv" ? t.c * Math.log(Math.abs(x)) : tF(t, x); }); return s; };
+      var rn = cGradeEq(raw, Fneg, XS_NEG, true);
+      if (!rn.ok) { pts -= max / 4; notes.push("The antiderivative of 1/x is ln|x| with absolute value bars, so it also works for negative x (type <code>ln|x|</code>)."); }
+    }
+    if (!r.hasC) { pts -= max / 4; notes.push("Add the constant: <code>+ C</code>."); }
+    pts = Math.max(pts, 0);
+    return { pts: pts, max: max, msg: notes.join(" ") };
+  }
+  function gradeNum(raw, exp, max, diag) {
+    var c = cNum(raw);
+    if (c.err) return { pts: 0, max: max, msg: c.err, retry: true };
+    var tol = Math.max(0.011, 0.0005 * Math.abs(exp));
+    if (Math.abs(c.v - exp) <= tol) return { pts: max, max: max, msg: "" };
+    var d = diag ? diag(c.v) : null;
+    return { pts: 0, max: max, msg: d || "Not quite. Re-read the property and check the signs." };
+  }
+  function nearV(a, b) { return Math.abs(a - b) <= Math.max(0.011, 0.0005 * Math.abs(b)); }
+  function steps(list) { return "<ol>" + list.map(function (s) { return "<li>" + s + "</li>"; }).join("") + "</ol>"; }
+  function PROP(t) { return "<div class=\"prop\">" + t + "</div>"; }
+  function WHY(t) { return "<div class=\"why\"><b>Why it works.</b> " + t + "</div>"; }
+  function nf(v) { var r = rd(v, 4); return nm(r); }
+
+  // ============================================================
+  // item builders
+  // ============================================================
+  function MI(h) { return "<span class=\"mx\" style=\"white-space:nowrap\">" + h + "</span>"; }
+  var FF = FN("f"), GG = FN("g");
+  function numItem(o) {
+    var pts = o.pts == null ? 2 : o.pts;
+    return {
+      id: o.id, title: o.title, pts: pts, prompt: o.prompt, ans: o.ans,
+      gen: o.allowZero ? o.gen : function () { var s, i; for (i = 0; i < 40; i++) { s = o.gen(); if (Math.abs(o.ans(s)) > 1e-9) return s; } return s; },
+      fields: function () { return [{ k: "v", kind: "num", label: o.label || "Your answer", ph: o.ph || "a number" }]; },
+      grade: function (v, s) { return gradeNum(v.v, o.ans(s), pts, o.diag ? function (x) { return o.diag(x, s); } : null); },
+      solution: o.solution, canon: function (s) { return { v: String(Number(o.ans(s).toPrecision(12))) }; }
+    };
+  }
+  function antiSteps(s) {
+    var ts = s.ts, rows = [], rew = [];
+    ts.forEach(function (t) {
+      if (t.k === "sqrt") rew.push(MI(RAD(VX) + " = " + X("1/2")));
+      if (t.k === "cbrt") rew.push(MI(RAD(VX, 3) + " = " + X("1/3")));
+      if (t.k === "isqrt") rew.push(MI(FR("1", RAD(VX)) + " = " + X("&minus;1/2")));
+      if (t.k === "pow" && t.n < 0) rew.push(MI(FR("1", X(-t.n)) + " = " + X("&minus;" + (-t.n))));
+    });
+    var list = [];
+    if (s.pre) list.push("Simplify first: " + MI(s.pre));
+    if (rew.length) list.push("Rewrite roots and reciprocals as powers: " + rew.join(", ") + ".");
+    ts.forEach(function (t) {
+      var note = "";
+      if (t.k === "pow" || t.k === "sqrt" || t.k === "cbrt" || t.k === "isqrt") note = " (raise the exponent by 1, then divide by the new exponent)";
+      if (t.k === "const") note = " (the antiderivative of a constant k is kx)";
+      if (t.k === "sin") note = " (the antiderivative of sin x is &minus;cos x)";
+      if (t.k === "cos") note = " (the antiderivative of cos x is sin x)";
+      if (t.k === "exp") note = " (e<sup>x</sup> is its own antiderivative)";
+      if (t.k === "inv") note = " (the antiderivative of 1/x is ln|x|)";
+      var tp = tPart(t), fp = tFpart(t);
+      list.push(MI(INT0(joinParts([tp]) + DX()) + " = " + joinParts([fp])) + note);
+    });
+    list.push("Combine and add the constant: " + MI("<i>F</i>(" + VX + ") = " + antiHtml(ts) + " <span class=\"op\">+</span> <i>C</i>"));
+    list.push("Check by differentiating <i>F</i>(" + VX + "): you should get back " + MI(integrandHtml(s.ts)) + ".");
+    return steps(list);
+  }
+  function antiItem(o) {
+    return {
+      id: o.id, title: o.title, pts: 2, gen: o.gen,
+      prompt: function (s) { return "Find the general antiderivative." + ML(INT0(s.html || integrandHtml(s.ts)) + DX()); },
+      fields: function () { return [{ k: "a", kind: "expr", label: "Antiderivative", ph: "type it, e.g. x^3/3 + C" }]; },
+      grade: function (v, s) { return gradeAnti(v.a, s.ts, 2); },
+      solution: function (s) { return antiSteps(s) + WHY(o.why || "Antiderivatives undo derivatives, so differentiating the answer is a built-in check. The constant <i>C</i> is there because every constant has derivative 0, so a whole family of functions shares the same derivative."); },
+      canon: function (s) { return { a: antiPlain(s.ts) }; }
+    };
+  }
+  function sortDesc(ts) { return ts.slice().sort(function (a, b) { return (b.n || 0) - (a.n || 0); }); }
+
+  // ============================================================
+  // STAGE 1: power rule
+  // ============================================================
+  var ST = [];
+  ST.push({
+    id: "s1", short: "1 Powers", title: "Antiderivatives of powers and roots",
+    goal: "Warm up the power rule on polynomials, reciprocals and roots. Type your answer; any equivalent form is accepted.",
+    recall: "<h3>Remember</h3><div class=\"rows\">" +
+      "<div class=\"row\"><b>Power rule</b><p class=\"mx\">" + INT0(X("n") + DX()) + " = " + FR(X("n+1"), "n+1") + " + <i>C</i> &nbsp;(<i>n</i> &ne; &minus;1)</p></div>" +
+      "<div class=\"row\"><b>Constants</b><p class=\"mx\">" + INT0("<i>k</i>" + DX()) + " = <i>kx</i> + <i>C</i></p></div>" +
+      "<div class=\"row\"><b>Rewrite first</b><p class=\"mx\">" + RAD(VX) + " = " + X("1/2") + ", &nbsp; " + FR("1", X(3)) + " = " + X("&minus;3") + "</p></div>" +
+      "<div class=\"row\"><b>Always</b><p>Add <code>+ C</code>, and check by differentiating.</p></div></div>" +
+      "<p class=\"tip\">Typing tips: <code>x^3/3 + C</code>, <code>(2/3)x^(3/2)</code> (put fractional exponents in parentheses), <code>sqrt(x)</code>.</p>",
+    items: [
+      antiItem({ id: "1.1", title: "One term", gen: function () { return { ts: [T("pow", nz(-9, 9), ri(2, 7))] }; } }),
+      antiItem({ id: "1.2", title: "Polynomial", gen: function () {
+        var p = ri(3, 6), q = ri(1, p - 1);
+        return { ts: [T("pow", nz(-9, 9), p), T("pow", nz(-9, 9), q), T("const", nz(-9, 9))] }; } }),
+      antiItem({ id: "1.3", title: "Negative powers", gen: function () {
+        var n = ri(2, 4); return { ts: [T("pow", nz(-6, 6), ri(1, 3)), T("pow", nz(-9, 9), -n)] }; } }),
+      antiItem({ id: "1.4", title: "Roots", gen: function () {
+        var k = rc(["sqrt", "cbrt", "isqrt"]), c = k === "sqrt" ? 3 * nz(-3, 3) : (k === "cbrt" ? 4 * nz(-2, 2) : nz(-6, 6));
+        return { ts: [T(k, c), rc([T("pow", nz(-6, 6), ri(2, 4)), T("const", nz(-8, 8))])] }; } }),
+      antiItem({ id: "1.5", title: "Simplify first", gen: function () {
+        var typ = rc(["A", "B", "C"]), a, b, p, q, r, k;
+        if (typ === "A") {
+          a = nz(-4, 4); b = nz(-9, 9);
+          var inner = joinParts([{ neg: a < 0, html: cf(Math.abs(a)) + VX }, { neg: b < 0, html: String(Math.abs(b)) }]);
+          return { ts: [T("pow", a, 2), T("pow", b, 1)], html: VX + "(" + inner + ")", pre: VX + "(" + inner + ") = " + joinParts([tPart(T("pow", a, 2)), tPart(T("pow", b, 1))]) };
+        }
+        if (typ === "B") {
+          r = ri(1, 2); p = ri(r + 1, r + 3); do { q = ri(r + 1, r + 3); } while (q === p);
+          a = nz(-6, 6); b = nz(-6, 6);
+          var num = joinParts([{ neg: a < 0, html: cf(Math.abs(a)) + X(p) }, { neg: b < 0, html: cf(Math.abs(b)) + X(q) }]);
+          var tsB = [T("pow", a, p - r), T("pow", b, q - r)];
+          return { ts: tsB, html: FR(num, X(r)), pre: FR(num, X(r)) + " = " + joinParts(tsB.map(tPart)) };
+        }
+        r = ri(2, 3); p = ri(r + 1, r + 2); k = nz(-9, 9);
+        var numC = joinParts([{ neg: false, html: X(p) }, { neg: k < 0, html: String(Math.abs(k)) }]);
+        var tsC = [T("pow", 1, p - r), T("pow", k, -r)];
+        return { ts: tsC, html: FR(numC, X(r)), pre: FR(numC, X(r)) + " = " + joinParts(tsC.map(tPart)) };
+      }, why: "You cannot integrate a product or quotient term by term, but you can multiply out or divide out first so the integrand becomes a sum of simple powers. Then the power rule does the rest." })
+    ]
+  });
+
+  // ============================================================
+  // STAGE 2: sin, cos, e^x, 1/x
+  // ============================================================
+  ST.push({
+    id: "s2", short: "2 sin cos e^x ln", title: "Antiderivatives of sin, cos, e^x and 1/x",
+    goal: "Same skill, now with the basic transcendental functions. Watch the signs.",
+    recall: "<h3>Remember</h3><div class=\"rows\">" +
+      "<div class=\"row\"><p class=\"mx\">" + INT0("sin&thinsp;" + VX + DX()) + " = &minus;cos&thinsp;" + VX + " + <i>C</i></p></div>" +
+      "<div class=\"row\"><p class=\"mx\">" + INT0("cos&thinsp;" + VX + DX()) + " = sin&thinsp;" + VX + " + <i>C</i></p></div>" +
+      "<div class=\"row\"><p class=\"mx\">" + INT0("e" + sup(VX) + DX()) + " = e" + sup(VX) + " + <i>C</i></p></div>" +
+      "<div class=\"row\"><p class=\"mx\">" + INT0(FR("1", VX) + DX()) + " = ln|" + VX + "| + <i>C</i></p></div></div>" +
+      "<p class=\"tip\">Typing tips: <code>sin(x)</code>, <code>cos(x)</code>, <code>e^x</code>, <code>ln|x|</code>. The bars matter for 1/x, since it is defined for negative <i>x</i> too.</p>",
+    items: [
+      antiItem({ id: "2.1", title: "Sine and cosine", gen: function () {
+        var a = T("sin", nz(-6, 6)), b = T("cos", nz(-6, 6)); return { ts: Math.random() < .5 ? [a, b] : [b, a] }; } }),
+      antiItem({ id: "2.2", title: "e^x with a power", gen: function () {
+        return { ts: [T("exp", nz(-5, 5)), T("pow", nz(-6, 6), ri(2, 4))] }; } }),
+      antiItem({ id: "2.3", title: "The 1/x case", gen: function () {
+        return { ts: [T("inv", nz(-7, 7)), rc([T("exp", nz(-5, 5)), T("sin", nz(-5, 5)), T("cos", nz(-5, 5))])] }; } }),
+      antiItem({ id: "2.4", title: "Three terms", gen: function () {
+        return { ts: [T("pow", nz(-6, 6), ri(2, 4)), T("inv", nz(-6, 6)), T("const", nz(-8, 8))] }; } }),
+      antiItem({ id: "2.5", title: "Mixed bag", gen: function () {
+        var pool = shuf(["sin", "cos", "exp", "inv", "pow"]).slice(0, 3);
+        var ts = pool.map(function (k) { return k === "pow" ? T("pow", nz(-6, 6), ri(2, 4)) : T(k, nz(-5, 5)); });
+        return { ts: ts }; } })
+    ]
+  });
+
+  // ============================================================
+  // STAGE 3: spot the mistake / verify by differentiating
+  // ============================================================
+  var LABELS = {
+    ok: "No mistake. The answer is correct.",
+    noDivide: "Raised the exponent but did not divide by the new exponent",
+    wrongDiv: "Divided by the old exponent instead of the new one",
+    sign: "Sign error",
+    expPower: "Used the power rule on e<sup>x</sup>",
+    derivative: "Took the derivative instead of the antiderivative",
+    noC: "Forgot the + <i>C</i>",
+    constX: "Forgot the <i>x</i> when integrating a constant"
+  };
+  function genDiag(arch) {
+    var n, k, t, d = { arch: arch };
+    switch (arch) {
+      case "noDivide": n = ri(2, 5); k = nz(-5, 5); d.ts = [T("pow", k, n)];
+        d.claim = joinParts([{ neg: k < 0, html: cf(Math.abs(k)) + X(n + 1) }]) + " + <i>C</i>"; d.key = "noDivide"; break;
+      case "wrongDiv": n = ri(2, 5); k = nz(-5, 5); d.ts = [T("pow", k, n)];
+        d.claim = joinParts([{ neg: k < 0, html: FR(cf(Math.abs(k)) + X(n + 1), n) }]) + " + <i>C</i>"; d.key = "wrongDiv"; break;
+      case "derivative": n = ri(2, 5); k = rc([1, 1, 2, -1, 3]); d.ts = [T("pow", k, n)];
+        d.claim = joinParts([{ neg: k < 0, html: cf(Math.abs(k * n)) + X(n - 1) }]) + " + <i>C</i>"; d.key = "derivative"; break;
+      case "sinSign": k = nz(-5, 5); d.ts = [T("sin", k)]; d.claim = joinParts([{ neg: k < 0, html: cf(Math.abs(k)) + "cos&thinsp;" + VX }]) + " + <i>C</i>"; d.key = "sign"; break;
+      case "cosSign": k = nz(-5, 5); d.ts = [T("cos", k)]; d.claim = joinParts([{ neg: k > 0, html: cf(Math.abs(k)) + "sin&thinsp;" + VX }]) + " + <i>C</i>"; d.key = "sign"; break;
+      case "expPower": k = nz(-5, 5); d.ts = [T("exp", k)];
+        d.claim = joinParts([{ neg: k < 0, html: FR(cf(Math.abs(k)) + "e" + sup(VX + "+1"), VX + " + 1") }]) + " + <i>C</i>"; d.key = "expPower"; break;
+      case "noC": t = rc([T("pow", nz(-5, 5), ri(2, 5)), T("sin", nz(-5, 5)), T("cos", nz(-5, 5)), T("exp", nz(-5, 5)), T("inv", nz(-5, 5))]);
+        d.ts = [t]; d.claim = antiHtml([t]); d.key = "noC"; break;
+      case "constX": k = nz(-9, 9); if (Math.abs(k) === 1) k = 4; d.ts = [T("const", k)];
+        d.claim = joinParts([{ neg: k < 0, html: String(Math.abs(k)) }]) + " + <i>C</i>"; d.key = "constX"; break;
+      default: t = rc([T("pow", nz(-5, 5), ri(2, 5)), T("sin", nz(-5, 5)), T("cos", nz(-5, 5)), T("exp", nz(-5, 5)), T("inv", nz(-5, 5)), T("const", nz(2, 9))]);
+        d.ts = [t]; d.claim = antiHtml([t]) + " + <i>C</i>"; d.key = "ok";
+    }
+    var others = shuf(Object.keys(LABELS).filter(function (x) { return x !== d.key && x !== "ok"; }));
+    var keys = [d.key];
+    if (d.key !== "ok") keys.push("ok");
+    while (keys.length < 4) keys.push(others.shift());
+    // never offer both noDivide and wrongDiv-like ambiguities: they are distinct claims, so fine
+    d.opts = shuf(keys);
+    return d;
+  }
+  function diagItem(id, pool) {
+    return {
+      id: id, title: "Spot the mistake", pts: 1,
+      gen: function () { return genDiag(rc(pool)); },
+      prompt: function (s) { return "A classmate wrote:" + ML(INT0(integrandHtml(s.ts) + DX()) + " = " + s.claim) + "What went wrong, if anything?"; },
+      fields: function (s) { return [{ k: "m", kind: "radio", opts: s.opts.map(function (k) { return [k, LABELS[k]]; }) }]; },
+      grade: function (v, s) {
+        if (!v.m) return { pts: 0, max: 1, msg: "Choose one of the options first.", retry: true };
+        return v.m === s.key ? { pts: 1, max: 1, msg: "" } : { pts: 0, max: 1, msg: "Not that one. Differentiate your classmate's answer and compare it to the integrand." };
+      },
+      solution: function (s) {
+        var good = "The correct antiderivative is " + MI(antiHtml(s.ts) + " + <i>C</i>") + ".";
+        var why = {
+          ok: "Differentiating the classmate's answer gives back the integrand, so it is correct.",
+          noDivide: "The power rule has two moves: add 1 to the exponent <i>and</i> divide by the new exponent. Differentiating the classmate's answer brings down the new exponent, which does not match the integrand.",
+          wrongDiv: "You divide by the <i>new</i> exponent (the one after adding 1). Differentiating the classmate's answer shows the mismatch.",
+          sign: "Differentiate to check: the derivative of sin x is cos x, but the derivative of cos x is &minus;sin x. So the minus sign belongs on the antiderivative of sin x, and cos x integrates to plain sin x.",
+          expPower: "The power rule needs a variable <i>base</i> and a constant exponent. In e<sup>x</sup> the variable is in the exponent, so it does not apply. e<sup>x</sup> is its own antiderivative.",
+          derivative: "That is the derivative (exponent down by one, coefficient times the old exponent). Integrating goes the other direction: exponent up by one, divide by the new exponent.",
+          noC: "The antiderivative is a whole family of functions. Without + <i>C</i> the answer names only one member of that family.",
+          constX: "The integral of a constant <i>k</i> is <i>kx</i>, not <i>k</i>: differentiating <i>kx</i> gives <i>k</i>, while differentiating <i>k</i> gives 0."
+        };
+        return steps([good, "Why that label: " + why[s.key]]) + WHY("Whenever you are unsure of an antiderivative, differentiate it. If you get the integrand back, you are right.");
+      },
+      canon: function (s) { return { m: s.key }; }
+    };
+  }
+  function gen35() {
+    var n = ri(2, 4), k = nz(-3, 3), a = (n + 1) * k, b = nz(-5, 5), mut = rc(["ok", "ok", "sign", "div"]);
+    var rcF = mut === "div" ? Rt(a, n) : Rt(k, 1), q = mut === "sign" ? b : -b;
+    var good = (rtVal(rcF) * (n + 1) === a) && (-q === b);
+    return { n: n, a: a, b: b, rcF: rcF, q: q, good: good, mut: mut };
+  }
+  function claimHtml(s) {
+    var Ppart = s.rcF.d === 1 ? { neg: s.rcF.n < 0, html: cf(Math.abs(s.rcF.n)) + X(s.n + 1) } : { neg: s.rcF.n < 0, html: FR(cf(Math.abs(s.rcF.n)) + X(s.n + 1), s.rcF.d) };
+    return joinParts([Ppart, { neg: s.q < 0, html: cf(Math.abs(s.q)) + "cos&thinsp;" + VX }]);
+  }
+  function dClaim(s) { var cc = Rt(s.rcF.n * (s.n + 1), s.rcF.d); return function (x) { return rtVal(cc) * Math.pow(x, s.n) - s.q * Math.sin(x); }; }
+  ST.push({
+    id: "s3", short: "3 Check it", title: "Is that antiderivative right?",
+    goal: "Diagnose common mistakes and learn the one-step safety net: differentiate the answer.",
+    recall: "<h3>Remember</h3><p><b>Safety net:</b> if <i>F</i>&prime;(" + VX + ") = <i>f</i>(" + VX + "), then <i>F</i> is an antiderivative of <i>f</i>. Differentiating your answer takes about ten seconds and catches almost every error: a missing division, a wrong sign, a missing constant.</p>",
+    items: [
+      diagItem("3.1", ["noDivide", "wrongDiv"]),
+      diagItem("3.2", ["sinSign", "cosSign", "ok"]),
+      diagItem("3.3", ["expPower", "noC", "ok"]),
+      diagItem("3.4", ["derivative", "constX", "noDivide"]),
+      {
+        id: "3.5", title: "Verify by differentiating", pts: 2, gen: gen35,
+        prompt: function (s) {
+          return "Let " + MI("<i>f</i>(" + VX + ") = " + joinParts([{ neg: s.a < 0, html: cf(Math.abs(s.a)) + X(s.n) }, { neg: s.b < 0, html: cf(Math.abs(s.b)) + "sin&thinsp;" + VX }])) +
+            ". A classmate claims " + ML("<i>F</i>(" + VX + ") = " + claimHtml(s)) + "Type <i>F</i>&prime;(" + VX + "), then decide whether <i>F</i> is an antiderivative of <i>f</i>.";
+        },
+        fields: function () { return [{ k: "d", kind: "expr", label: "F′(x) =", ph: "your derivative" }, { k: "yn", kind: "sel", label: "Is F an antiderivative of f?", opts: [["yes", "Yes"], ["no", "No"]] }]; },
+        grade: function (v, s) {
+          var pts = 0, ok = {}, msgs = [];
+          var r = cGradeEq(v.d, dClaim(s), XS_POS, false);
+          if (r.msg && !r.ok) return { pts: 0, max: 2, msg: r.msg, retry: true };
+          if (!v.yn) return { pts: 0, max: 2, msg: "Choose Yes or No for the second part.", retry: true };
+          ok.d = !!r.ok; if (r.ok) pts += 1; else msgs.push("Differentiate each term of <i>F</i> separately (power rule on the first, and the derivative of cos x is &minus;sin x).");
+          ok.yn = (v.yn === "yes") === s.good; if (ok.yn) pts += 1; else msgs.push("Compare your <i>F</i>&prime; with <i>f</i> term by term.");
+          return { pts: pts, max: 2, msg: msgs.join(" "), ok: ok };
+        },
+        solution: function (s) {
+          var cc = Rt(s.rcF.n * (s.n + 1), s.rcF.d), dtxt = joinParts([{ neg: cc.n < 0, html: (cc.d === 1 ? cf(Math.abs(cc.n)) : FR(String(Math.abs(cc.n)), cc.d)) + X(s.n) }, { neg: -s.q < 0, html: cf(Math.abs(s.q)) + "sin&thinsp;" + VX }]);
+          return steps(["Differentiate the first term: the exponent " + (s.n + 1) + " comes down and multiplies the coefficient, giving " + MI(joinParts([{ neg: cc.n < 0, html: (cc.d === 1 ? cf(Math.abs(cc.n)) : FR(String(Math.abs(cc.n)), cc.d)) + X(s.n) }])) + ".",
+            "Differentiate the second term: the derivative of cos x is &minus;sin x, giving " + MI(joinParts([{ neg: -s.q < 0, html: cf(Math.abs(s.q)) + "sin&thinsp;" + VX }])) + ".",
+            "So " + MI("<i>F</i>&prime;(" + VX + ") = " + dtxt) + ". Compare to " + MI("<i>f</i>(" + VX + ")") + ": " + (s.good ? "they match, so the answer is <b>Yes</b>." : "they do not match, so the answer is <b>No</b>.")]) +
+            WHY("An antiderivative must differentiate back to the integrand. Doing this check costs almost nothing and tells you for certain whether your integration is right.");
+        },
+        canon: function (s) { var cc = Rt(s.rcF.n * (s.n + 1), s.rcF.d); return { d: "(" + rtPlain(cc) + ")*x^(" + s.n + ") + (" + (-s.q) + ")*sin(x)", yn: s.good ? "yes" : "no" }; }
+      }
+    ]
+  });
+
+  // ============================================================
+  // STAGE 4: linearity
+  // ============================================================
+  function iv() { var a = ri(-3, 3); return { a: a, b: a + ri(2, 6) }; }
+  function pq() { var p = nz(-9, 12), q = nz(-9, 12); return { p: p, q: q }; }
+  function lin(m, n) { // m f + n g as html parts
+    var parts = [];
+    if (m) parts.push({ neg: m < 0, html: cf(Math.abs(m)) + FF });
+    if (n) parts.push({ neg: n < 0, html: cf(Math.abs(n)) + GG });
+    return joinParts(parts);
+  }
+  function givenLine(s, both) {
+    return "Suppose " + MI(I(s.a, s.b, FF) + " = " + nm(s.p)) + (both ? " and " + MI(I(s.a, s.b, GG) + " = " + nm(s.q)) : "") + ".";
+  }
+  var ST4 = [
+    numItem({ id: "4.1", title: "Constant multiple", gen: function () { var o = iv(), v = pq(); o.p = v.p; o.m = rc([-5, -4, -3, -2, 2, 3, 4, 5]); return o; },
+      prompt: function (s) { return givenLine(s) + " Find" + ML(I(s.a, s.b, nm(s.m) + FF)) ; },
+      ans: function (s) { return s.m * s.p; },
+      diag: function (v, s) { return nearV(v, s.p) ? "You need to multiply by " + nm(s.m) + ". A constant factor comes straight out of the integral." : null; },
+      solution: function (s) { return PROP("Constant multiple") + steps(["Pull the constant out: " + MI(I(s.a, s.b, nm(s.m) + FF) + " = " + nm(s.m) + I(s.a, s.b, FF))+ ".", "Substitute: " + MI(nm(s.m) + "(" + nm(s.p) + ") = " + nm(s.m * s.p))]) + WHY("An integral adds up slices of the function. Scaling every slice by " + nm(s.m) + " scales the total by " + nm(s.m) + ".") ; } }),
+    numItem({ id: "4.2", title: "Sum or difference", gen: function () { var o = iv(), v = pq(); o.p = v.p; o.q = v.q; o.sg = rc([1, -1]); return o; },
+      prompt: function (s) { return givenLine(s, true) + " Find" + ML(I(s.a, s.b, "(" + FF + (s.sg > 0 ? " + " : " &minus; ") + GG + ")")); },
+      ans: function (s) { return s.p + s.sg * s.q; },
+      diag: function (v, s) { return nearV(v, s.p + (-s.sg) * s.q) ? "Check whether the second integral is added or subtracted." : null; },
+      solution: function (s) { return PROP("Sum / difference") + steps(["Split it: " + MI(I(s.a, s.b, "(" + FF + (s.sg > 0 ? " + " : " &minus; ") + GG + ")") + " = " + I(s.a, s.b, FF) + (s.sg > 0 ? " + " : " &minus; ") + I(s.a, s.b, GG)) + ".", "Substitute: " + MI(nm(s.p) + (s.sg > 0 ? " + " : " &minus; ") + sp(s.q).replace("-", "&minus;") + " = " + nm(s.p + s.sg * s.q))]) + WHY("Adding two functions adds their slices at every <i>x</i>, so the totals add too."); } }),
+    numItem({ id: "4.3", title: "Combine both", gen: function () { var o = iv(), v = pq(); o.p = v.p; o.q = v.q; o.m = rc([2, 3, 4, -2, -3]); o.n = rc([2, 3, 5, -2, -4]); return o; },
+      prompt: function (s) { return givenLine(s, true) + " Find" + ML(I(s.a, s.b, "(" + lin(s.m, s.n) + ")")); },
+      ans: function (s) { return s.m * s.p + s.n * s.q; },
+      solution: function (s) { return PROP("Linearity") + steps(["Split and pull out constants: " + MI(nm(s.m) + I(s.a, s.b, FF) + " " + (s.n < 0 ? "&minus;" : "+") + " " + Math.abs(s.n) + I(s.a, s.b, GG)) + ".", "Substitute: " + MI(nm(s.m) + "(" + nm(s.p) + ") " + (s.n < 0 ? "&minus;" : "+") + " " + Math.abs(s.n) + "(" + nm(s.q) + ") = " + nm(s.m * s.p + s.n * s.q))]) + WHY("Sum and constant-multiple together are called linearity: the integral of a combination is the same combination of the integrals."); } }),
+    numItem({ id: "4.4", title: "A constant inside", gen: function () { var o = iv(), v = pq(); o.p = v.p; o.m = rc([2, 3, 4, -2, -3]); o.k = rc([2, 3, 4, 5, -2, -3]); return o; },
+      prompt: function (s) { return givenLine(s) + " Find" + ML(I(s.a, s.b, "(" + nm(s.m) + FF + " " + (s.k < 0 ? "&minus;" : "+") + " " + Math.abs(s.k) + ")")); },
+      ans: function (s) { return s.m * s.p + s.k * (s.b - s.a); },
+      diag: function (v, s) { return nearV(v, s.m * s.p + s.k) ? "The constant is integrated over the whole interval: " + MI(I(s.a, s.b, nm(s.k))) + " = " + nm(s.k) + "(" + (s.b - s.a) + "), not just " + nm(s.k) + "." : null; },
+      solution: function (s) { return PROP("Linearity + constant") + steps(["Split: " + MI(nm(s.m) + I(s.a, s.b, FF) + " " + (s.k < 0 ? "&minus;" : "+") + " " + I(s.a, s.b, String(Math.abs(s.k))).replace(/^/, "")) + ".", "The constant piece: " + MI(I(s.a, s.b, nm(s.k)) + " = " + nm(s.k) + "(" + nm(s.b) + " &minus; " + sp(s.a).replace("-", "&minus;") + ") = " + nm(s.k * (s.b - s.a))) + ".", "Add: " + MI(nm(s.m * s.p) + " " + (s.k < 0 ? "&minus;" : "+") + " " + Math.abs(s.k * (s.b - s.a)) + " = " + nm(s.m * s.p + s.k * (s.b - s.a)))]) + WHY("A constant <i>k</i> over an interval of width " + (s.b - s.a) + " is a rectangle of area <i>k</i> &times; width."); } }),
+    {
+      id: "4.5", title: "Which one is true?", pts: 1,
+      gen: function () {
+        var o = iv(), a = o.a, b = o.b;
+        var T_ = [I(a, b, "(" + FF + " + " + GG + ")") + " = " + I(a, b, FF) + " + " + I(a, b, GG),
+          I(a, b, "5" + FF) + " = 5" + I(a, b, FF),
+          I(a, b, "(" + FF + " &minus; " + GG + ")") + " = " + I(a, b, FF) + " &minus; " + I(a, b, GG)];
+        var F_ = [I(a, b, FF + GG) + " = (" + I(a, b, FF) + ")(" + I(a, b, GG) + ")",
+          I(a, b, FR(FF, GG)) + " = " + FR(I(a, b, FF), I(a, b, GG)),
+          I(a, b, "(" + FF + ")" + sup(2)) + " = (" + I(a, b, FF) + ")" + sup(2),
+          I(a, b, "(" + FF + " + 3)") + " = " + I(a, b, FF) + " + 3"];
+        var right = rc(T_), opts = shuf([right].concat(shuf(F_).slice(0, 3)));
+        return { opts: opts, right: right };
+      },
+      prompt: function () { return "Assume " + MI(FF) + " and " + MI(GG) + " are integrable on the interval. Which statement is <b>always</b> true?"; },
+      fields: function (s) { return [{ k: "m", kind: "radio", opts: s.opts.map(function (h, i) { return [String(i), h]; }), big: true }]; },
+      grade: function (v, s) { if (v.m === "" || v.m == null) return { pts: 0, max: 1, msg: "Choose one first.", retry: true }; return s.opts[+v.m] === s.right ? { pts: 1, max: 1, msg: "" } : { pts: 0, max: 1, msg: "Not that one. Integrals split over sums and pull out constants, but not over products, quotients or powers." }; },
+      solution: function (s) { return steps(["True: " + MI(s.right), "Integration is <b>linear</b>: it splits over sums and differences and pulls out constant multiples. It does <b>not</b> split over products, quotients or powers, and adding a constant inside adds that constant times the width of the interval, not just the constant."]); },
+      canon: function (s) { return { m: String(s.opts.indexOf(s.right)) }; }
+    }
+  ];
+  ST.push({ id: "s4", short: "4 Linearity", title: "Property: constant multiples, sums and differences",
+    goal: "Use given values of definite integrals to compute new ones. No antiderivatives needed here.",
+    recall: "<h3>Properties</h3><div class=\"rows\"><div class=\"row\"><p class=\"mx\">" + I("<i>a</i>", "<i>b</i>", "<i>k</i>&thinsp;" + FF) + " = <i>k</i>" + I("<i>a</i>", "<i>b</i>", FF) + "</p></div>" +
+      "<div class=\"row\"><p class=\"mx\">" + I("<i>a</i>", "<i>b</i>", "(" + FF + " &plusmn; " + GG + ")") + " = " + I("<i>a</i>", "<i>b</i>", FF) + " &plusmn; " + I("<i>a</i>", "<i>b</i>", GG) + "</p></div>" +
+      "<div class=\"row\"><p class=\"mx\">" + I("<i>a</i>", "<i>b</i>", "<i>k</i>") + " = <i>k</i>(<i>b</i> &minus; <i>a</i>)</p></div></div>",
+    items: ST4 });
+
+  // ============================================================
+  // STAGE 5: reversing and equal limits
+  // ============================================================
+  ST.push({ id: "s5", short: "5 Limits", title: "Property: reversing and equal limits",
+    goal: "What happens when you swap the limits, or when both limits are the same number?",
+    recall: "<h3>Properties</h3><div class=\"rows\"><div class=\"row\"><p class=\"mx\">" + I("<i>b</i>", "<i>a</i>", FF) + " = &minus;" + I("<i>a</i>", "<i>b</i>", FF) + "</p></div>" +
+      "<div class=\"row\"><p class=\"mx\">" + I("<i>a</i>", "<i>a</i>", FF) + " = 0</p></div></div>",
+    items: [
+      numItem({ id: "5.1", title: "Swap the limits", gen: function () { var o = iv(); o.p = nz(-9, 12); return o; },
+        prompt: function (s) { return givenLine(s) + " Find" + ML(I(s.b, s.a, FF)); }, ans: function (s) { return -s.p; },
+        diag: function (v, s) { return nearV(v, s.p) ? "The limits are swapped (from " + s.b + " down to " + s.a + "), which reverses the sign." : null; },
+        solution: function (s) { return PROP("Reversing the limits") + steps([MI(I(s.b, s.a, FF) + " = &minus;" + I(s.a, s.b, FF) + " = &minus;(" + nm(s.p) + ") = " + nm(-s.p))]) + WHY("Integrating from " + s.b + " down to " + s.a + " runs the accumulation backwards, so every slice has width <i>&minus;&Delta;x</i> and the whole total flips sign."); } }),
+      numItem({ id: "5.2", title: "Same limits", pts: 1, allowZero: true, gen: function () { return { c: ri(-3, 6), f: rc([["e" + sup("<i>x</i>&sup2;") + " + sin(<i>x</i>" + sup(3) + ")"], [RAD("1 + " + X(4))], [FR("sin&thinsp;" + VX, VX) + " + ln&thinsp;" + VX + "&thinsp;cos&thinsp;" + VX]])[0] }; },
+        prompt: function (s) { return "Find the value (you do not need an antiderivative):" + ML(I(s.c, s.c, s.f)); }, ans: function () { return 0; },
+        diag: function () { return "Look at the limits. When both limits are the same number, there is nothing to accumulate."; },
+        solution: function (s) { return PROP("Equal limits") + steps([MI(I(s.c, s.c, "(…)") + " = 0")]) + WHY("An interval of width zero has area zero, no matter how wild the function is. (This integrand has no elementary antiderivative, so the property is the only way in.)"); } }),
+      numItem({ id: "5.3", title: "Swap and combine", gen: function () { var o = iv(), v = pq(); o.p = v.p; o.q = v.q; o.m = rc([2, 3, 4, -2, -3]); o.n = rc([2, 3, 5, -2, -4]); return o; },
+        prompt: function (s) { return givenLine(s, true) + " Find" + ML(I(s.b, s.a, "(" + lin(s.m, s.n) + ")")); },
+        ans: function (s) { return -(s.m * s.p + s.n * s.q); },
+        diag: function (v, s) { return nearV(v, s.m * s.p + s.n * s.q) ? "The limits run from " + s.b + " down to " + s.a + ". Reverse the sign." : null; },
+        solution: function (s) { return PROP("Reverse + linearity") + steps(["Flip the limits and add a minus: " + MI(I(s.b, s.a, "(" + lin(s.m, s.n) + ")") + " = &minus;" + I(s.a, s.b, "(" + lin(s.m, s.n) + ")")) + ".", "Linearity: " + MI("&minus;[" + nm(s.m) + "(" + nm(s.p) + ") " + (s.n < 0 ? "&minus;" : "+") + " " + Math.abs(s.n) + "(" + nm(s.q) + ")] = &minus;(" + nm(s.m * s.p + s.n * s.q) + ") = " + nm(-(s.m * s.p + s.n * s.q)))]) + WHY("Do each property in turn. Order does not matter, but writing each step keeps the signs straight."); } }),
+      numItem({ id: "5.4", title: "One given backwards", gen: function () { var o = iv(), v = pq(); o.p = v.p; o.q = v.q; o.m = rc([2, 3, -2, -3, 4]); o.n = rc([2, 3, -2, -5]); return o; },
+        prompt: function (s) { return "Suppose " + MI(I(s.b, s.a, FF) + " = " + nm(s.p)) + " and " + MI(I(s.a, s.b, GG) + " = " + nm(s.q)) + ". Find" + ML(I(s.a, s.b, "(" + lin(s.m, s.n) + ")")); },
+        ans: function (s) { return -s.m * s.p + s.n * s.q; },
+        diag: function (v, s) { return nearV(v, s.m * s.p + s.n * s.q) ? "Careful: you were given " + MI(I(s.b, s.a, FF)) + ", with the limits going backwards. First turn it into " + MI(I(s.a, s.b, FF)) + "." : null; },
+        solution: function (s) { return PROP("Reverse + linearity") + steps(["Turn the given integral around: " + MI(I(s.a, s.b, FF) + " = &minus;" + I(s.b, s.a, FF) + " = " + nm(-s.p)) + ".", "Now use linearity: " + MI(nm(s.m) + "(" + nm(-s.p) + ") " + (s.n < 0 ? "&minus;" : "+") + " " + Math.abs(s.n) + "(" + nm(s.q) + ") = " + nm(-s.m * s.p + s.n * s.q))]) + WHY("Before combining integrals, make sure they all run in the same direction (lower limit to upper limit)."); } })
+    ] });
+
+  // ============================================================
+  // STAGE 6: splitting at a point
+  // ============================================================
+  function abc() { var a = ri(-3, 2), b = a + ri(2, 3), c = b + ri(2, 3); return { a: a, b: b, c: c }; }
+  ST.push({ id: "s6", short: "6 Splitting", title: "Property: splitting an interval",
+    goal: "Break one integral into two pieces, or glue pieces back together, even when the limits are not in order.",
+    recall: "<h3>Property</h3><div class=\"rows\"><div class=\"row\"><p class=\"mx\">" + I("<i>a</i>", "<i>c</i>", FF) + " = " + I("<i>a</i>", "<i>b</i>", FF) + " + " + I("<i>b</i>", "<i>c</i>", FF) + "</p></div>" +
+      "<div class=\"row\"><p>This works for <b>any</b> three numbers <i>a</i>, <i>b</i>, <i>c</i>, in any order, as long as the middle point is the same on both sides.</p></div></div>",
+    items: [
+      numItem({ id: "6.1", title: "Glue two pieces", gen: function () { var o = abc(), v = pq(); o.p = v.p; o.q = v.q; return o; },
+        prompt: function (s) { return "Suppose " + MI(I(s.a, s.b, FF) + " = " + nm(s.p)) + " and " + MI(I(s.b, s.c, FF) + " = " + nm(s.q)) + ". Find" + ML(I(s.a, s.c, FF)); },
+        ans: function (s) { return s.p + s.q; },
+        solution: function (s) { return PROP("Additivity") + steps([MI(I(s.a, s.c, FF) + " = " + I(s.a, s.b, FF) + " + " + I(s.b, s.c, FF) + " = " + nm(s.p) + " + " + sp(s.q).replace("-", "&minus;") + " = " + nm(s.p + s.q))]) + WHY("Going from " + s.a + " to " + s.c + " can be done in two legs, stopping at " + s.b + ". The total accumulation is the sum of the two legs."); } }),
+      numItem({ id: "6.2", title: "Find the missing piece", gen: function () { var o = abc(), v = pq(); o.p = v.p; o.q = v.q; return o; },
+        prompt: function (s) { return "Suppose " + MI(I(s.a, s.c, FF) + " = " + nm(s.p)) + " and " + MI(I(s.a, s.b, FF) + " = " + nm(s.q)) + ". Find" + ML(I(s.b, s.c, FF)); },
+        ans: function (s) { return s.p - s.q; },
+        diag: function (v, s) { return nearV(v, s.p + s.q) ? "The whole is " + nm(s.p) + " and one piece is " + nm(s.q) + ". The missing piece is the whole minus the known piece." : null; },
+        solution: function (s) { return PROP("Additivity") + steps(["Write the split: " + MI(I(s.a, s.c, FF) + " = " + I(s.a, s.b, FF) + " + " + I(s.b, s.c, FF)) + ".", "Substitute: " + MI(nm(s.p) + " = " + nm(s.q) + " + " + I(s.b, s.c, FF)) + ".", "Solve: " + MI(I(s.b, s.c, FF) + " = " + nm(s.p) + " &minus; " + sp(s.q).replace("-", "&minus;") + " = " + nm(s.p - s.q))]) + WHY("The whole equals the sum of its pieces, so a missing piece is the whole minus the other pieces."); } }),
+      numItem({ id: "6.3", title: "Mind the direction", gen: function () { var o = abc(), v = pq(); o.p = v.p; o.q = v.q; return o; },
+        prompt: function (s) { return "Suppose " + MI(I(s.a, s.b, FF) + " = " + nm(s.p)) + " and " + MI(I(s.c, s.b, FF) + " = " + nm(s.q)) + ". Find" + ML(I(s.a, s.c, FF)); },
+        ans: function (s) { return s.p - s.q; },
+        diag: function (v, s) { return nearV(v, s.p + s.q) ? "The second integral runs from " + s.c + " <i>down</i> to " + s.b + ", but the leg you need goes from " + s.b + " <i>up</i> to " + s.c + "." : null; },
+        solution: function (s) { return PROP("Additivity + reversing") + steps(["Split at " + s.b + ": " + MI(I(s.a, s.c, FF) + " = " + I(s.a, s.b, FF) + " + " + I(s.b, s.c, FF)) + ".", "The second leg is backwards in the given information: " + MI(I(s.b, s.c, FF) + " = &minus;" + I(s.c, s.b, FF) + " = &minus;(" + nm(s.q) + ") = " + nm(-s.q)) + ".", "Add: " + MI(nm(s.p) + " + " + sp(-s.q).replace("-", "&minus;") + " = " + nm(s.p - s.q))]) + WHY("Additivity needs the legs to connect end to start. When one is written backwards, flip it first."); } }),
+      numItem({ id: "6.4", title: "A chain of pieces", gen: function () {
+          var x0 = ri(-2, 1), x1 = x0 + ri(2, 3), x2 = x1 + ri(2, 3), x3 = x2 + ri(2, 3), v = [nz(-8, 12), nz(-8, 12), nz(-8, 12)];
+          return { x: [x0, x1, x2, x3], v: v, typ: rc(["A", "B", "C"]) }; },
+        prompt: function (s) {
+          var givens = "<div class=\"mathline mx\">" + I(s.x[0], s.x[1], FF) + " = " + nm(s.v[0]) + ", &nbsp; " + I(s.x[1], s.x[2], FF) + " = " + nm(s.v[1]) + ", &nbsp; " + I(s.x[2], s.x[3], FF) + " = " + nm(s.v[2]) + "</div>";
+          var ask = s.typ === "A" ? I(s.x[1], s.x[3], FF) : (s.typ === "B" ? I(s.x[3], s.x[0], FF) : I(s.x[2], s.x[0], FF));
+          return "Given" + givens + "Find" + ML(ask);
+        },
+        ans: function (s) { return s.typ === "A" ? s.v[1] + s.v[2] : (s.typ === "B" ? -(s.v[0] + s.v[1] + s.v[2]) : -(s.v[0] + s.v[1])); },
+        solution: function (s) {
+          var t = s.typ, parts = t === "A" ? [1, 2] : (t === "B" ? [0, 1, 2] : [0, 1]), sum = parts.reduce(function (z, i) { return z + s.v[i]; }, 0);
+          var forward = t === "A" ? I(s.x[1], s.x[3], FF) : (t === "B" ? I(s.x[0], s.x[3], FF) : I(s.x[0], s.x[2], FF));
+          return PROP("Additivity" + (t === "A" ? "" : " + reversing")) + steps(["Add the forward pieces: " + MI(forward + " = " + parts.map(function (i) { return nm(s.v[i]); }).join(" + ").replace(/\+ &minus;/g, "&minus; ") + " = " + nm(sum)) + "."].concat(t === "A" ? [] : ["The question runs backwards, so reverse the sign: " + MI(nm(-sum))])) + WHY("Chain the pieces end to start to cover the whole interval, then fix the direction at the end."); } }),
+      numItem({ id: "6.5", title: "Split, then combine", gen: function () { var o = abc(), v = pq(); o.p = v.p; o.q = v.q; o.r = nz(-9, 9); o.m = rc([2, 3, -2, 4]); return o; },
+        prompt: function (s) { return "Suppose " + MI(I(s.a, s.b, FF) + " = " + nm(s.p)) + ", " + MI(I(s.b, s.c, FF) + " = " + nm(s.q)) + ", and " + MI(I(s.a, s.c, GG) + " = " + nm(s.r)) + ". Find" + ML(I(s.a, s.c, "(" + nm(s.m) + FF + " &minus; " + GG + ")")); },
+        ans: function (s) { return s.m * (s.p + s.q) - s.r; },
+        solution: function (s) { return PROP("Additivity + linearity") + steps(["Get the whole " + MI(FF) + " integral: " + MI(I(s.a, s.c, FF) + " = " + nm(s.p) + " + " + sp(s.q).replace("-", "&minus;") + " = " + nm(s.p + s.q)) + ".", "Linearity: " + MI(I(s.a, s.c, "(" + nm(s.m) + FF + " &minus; " + GG + ")") + " = " + nm(s.m) + "(" + nm(s.p + s.q) + ") &minus; (" + nm(s.r) + ") = " + nm(s.m * (s.p + s.q) - s.r))]) + WHY("Properties stack. First make every integral cover the same interval, then combine."); } }),
+      {
+        id: "6.6", title: "One integral", pts: 1,
+        gen: function () {
+          var o = abc(), a = o.a, b = o.b, c = o.c, vr = ri(0, 3), left, right;
+          if (vr === 0) { left = I(a, c, FF) + " &minus; " + I(a, b, FF); right = [b, c]; }
+          else if (vr === 1) { left = I(a, b, FF) + " + " + I(b, c, FF); right = [a, c]; }
+          else if (vr === 2) { left = I(a, b, FF) + " &minus; " + I(c, b, FF); right = [a, c]; }
+          else { left = I(a, c, FF) + " + " + I(c, b, FF); right = [a, b]; }
+          var all = [[a, b], [b, c], [a, c], [b, a], [c, b], [c, a]], key = right.join(","), wrong = shuf(all.filter(function (p) { return p.join(",") !== key; })).slice(0, 3);
+          var opts = shuf([right].concat(wrong));
+          return { left: left, right: right, opts: opts };
+        },
+        prompt: function (s) { return "Write as a single integral of " + MI(FF) + ":" + ML(s.left); },
+        fields: function (s) { return [{ k: "m", kind: "radio", opts: s.opts.map(function (p, i) { return [String(i), MI(I(p[0], p[1], FF))]; }) }]; },
+        grade: function (v, s) { if (v.m === "" || v.m == null) return { pts: 0, max: 1, msg: "Choose one first.", retry: true }; var p = s.opts[+v.m]; return p.join(",") === s.right.join(",") ? { pts: 1, max: 1, msg: "" } : { pts: 0, max: 1, msg: "Not that one. Trace the path: where does the first integral start, and where does the last one end?" }; },
+        solution: function (s) { return steps(["The answer is " + MI(I(s.right[0], s.right[1], FF)) + ".", "Convert any backwards integral to a forward one (a minus sign), then chain the legs end to start."]) + WHY("Subtracting a piece from the whole leaves the other piece."); },
+        canon: function (s) { return { m: String(s.opts.findIndex(function (p) { return p.join(",") === s.right.join(","); })) }; }
+      }
+    ] });
+
+  // ============================================================
+  // STAGE 7: even / odd symmetry
+  // ============================================================
+  var PAR = {
+    even: [["x" + sup(2) + " + 3", "x2"], ["cos&thinsp;x", "c"], ["x" + sup(4) + " &minus; 5x" + sup(2), "x4"], ["3cos&thinsp;x + x" + sup(2), "c2"]],
+    odd: [["x" + sup(3), "x3"], ["sin&thinsp;x", "s"], ["x" + sup(5) + " &minus; 2x", "x5"], ["x&thinsp;cos&thinsp;x", "xc"], ["2sin&thinsp;x + x" + sup(3), "s3"]],
+    neither: [["x" + sup(2) + " + x", "a"], ["e" + sup("x"), "e"], ["x" + sup(3) + " + 1", "b"], ["sin&thinsp;x + cos&thinsp;x", "sc"], ["x + 2", "l"], ["x" + sup(4) + " + x" + sup(3), "c"]]
+  };
+  ST.push({ id: "s7", short: "7 Even/odd", title: "Property: even and odd functions",
+    goal: "Symmetric intervals [&minus;a, a] let you skip work. Spot whether a function is even or odd.",
+    recall: "<h3>Remember</h3><div class=\"rows\"><div class=\"row\"><b>Even</b> (" + MI("<i>f</i>(&minus;<i>x</i>) = <i>f</i>(<i>x</i>)") + "): symmetric about the <i>y</i>-axis.<p class=\"mx\">" + I("&minus;<i>a</i>", "<i>a</i>", FF) + " = 2" + I(0, "<i>a</i>", FF) + "</p></div>" +
+      "<div class=\"row\"><b>Odd</b> (" + MI("<i>f</i>(&minus;<i>x</i>) = &minus;<i>f</i>(<i>x</i>)") + "): symmetric about the origin.<p class=\"mx\">" + I("&minus;<i>a</i>", "<i>a</i>", FF) + " = 0</p></div></div>",
+    items: [
+      { id: "7.1", title: "Even, odd or neither?", pts: 1.5,
+        gen: function () { var ks = shuf(["even", "odd", "neither"]); return { rows: ks.map(function (k) { return { html: rc(PAR[k])[0], ans: k }; }) }; },
+        prompt: function () { return "Classify each function."; },
+        fields: function (s) { return s.rows.map(function (r, i) { return { k: "p" + i, kind: "sel", label: MI(FN("f") .replace("f", "f") + " = " + r.html), opts: [["even", "Even"], ["odd", "Odd"], ["neither", "Neither"]] }; }); },
+        grade: function (v, s) { var pts = 0, ok = {}; for (var i = 0; i < s.rows.length; i++) { if (!v["p" + i]) return { pts: 0, max: 1.5, msg: "Choose an answer for each function.", retry: true }; ok["p" + i] = v["p" + i] === s.rows[i].ans; if (ok["p" + i]) pts += 0.5; } return { pts: pts, max: 1.5, ok: ok, msg: pts < 1.5 ? "Test it: replace <i>x</i> with &minus;<i>x</i> and compare with the original." : "" }; },
+        solution: function (s) { return steps(s.rows.map(function (r) { return MI("<i>f</i>(" + VX + ") = " + r.html) + " is <b>" + r.ans + "</b>."; })) + steps(["An <b>even</b> function has only even powers (and cos), an <b>odd</b> function only odd powers (and sin). Mix them, or add a constant to an odd function, and you get <b>neither</b>. A product of one odd and one even factor is odd."]) + WHY("Replacing <i>x</i> by &minus;<i>x</i> keeps even powers and cos unchanged but flips the sign of odd powers and sin."); },
+        canon: function (s) { var o = {}; s.rows.forEach(function (r, i) { o["p" + i] = r.ans; }); return o; } },
+      numItem({ id: "7.2", title: "Use the symmetry", allowZero: true, gen: function () { return { a: ri(2, 6), p: nz(-9, 9), typ: rc(["evenFull", "oddFull", "evenHalf", "oddHalf"]) }; },
+        prompt: function (s) {
+          var even = s.typ.indexOf("even") === 0, full = s.typ.indexOf("Full") > 0;
+          return "Suppose " + MI(FN("f")) + " is an <b>" + (even ? "even" : "odd") + "</b> function and " + MI(I(0, s.a, FF) + " = " + nm(s.p)) + ". Find" + ML(full ? I(-s.a, s.a, FF) : I(-s.a, 0, FF));
+        },
+        ans: function (s) { return s.typ === "evenFull" ? 2 * s.p : (s.typ === "oddFull" ? 0 : (s.typ === "evenHalf" ? s.p : -s.p)); },
+        diag: function (v, s) { return s.typ === "oddFull" && nearV(v, 2 * s.p) ? "That is the even-function answer. For an odd function the two halves have opposite signs." : null; },
+        solution: function (s) {
+          var even = s.typ.indexOf("even") === 0, full = s.typ.indexOf("Full") > 0;
+          var line = full ? (even ? MI(I(-s.a, s.a, FF) + " = 2" + I(0, s.a, FF) + " = 2(" + nm(s.p) + ") = " + nm(2 * s.p)) : MI(I(-s.a, s.a, FF) + " = 0")) :
+            (even ? MI(I(-s.a, 0, FF) + " = " + I(0, s.a, FF) + " = " + nm(s.p)) : MI(I(-s.a, 0, FF) + " = &minus;" + I(0, s.a, FF) + " = " + nm(-s.p)));
+          return PROP(even ? "Even symmetry" : "Odd symmetry") + steps([line]) + WHY(even ? "An even function mirrors itself across the <i>y</i>-axis, so the left half has exactly the same signed area as the right half." : "An odd function's left half is the right half flipped upside down, so the signed areas are opposites."); } }),
+      numItem({ id: "7.3", title: "Odd integrand", pts: 1, allowZero: true, gen: function () {
+          var ks = shuf([T("pow", nz(-7, 7), 3), T("pow", nz(-7, 7), 5), T("pow", nz(-7, 7), 1), T("sin", nz(-5, 5))]).slice(0, 3); return { a: ri(2, 6), ts: ks }; },
+        prompt: function (s) { return "Find the value without finding an antiderivative:" + ML(I(-s.a, s.a, "(" + integrandHtml(s.ts) + ")")); }, ans: function () { return 0; },
+        diag: function () { return "Check each term: are they all odd functions? Then the integral over [&minus;a, a] is exactly 0."; },
+        solution: function (s) { return PROP("Odd symmetry") + steps(["Every term (odd powers of <i>x</i> and sin <i>x</i>) is odd, and a sum of odd functions is odd.", "An odd function over [" + nm(-s.a) + ", " + s.a + "] integrates to 0."]) + WHY("Each positive area on the right is cancelled by an equal negative area on the left."); } }),
+      numItem({ id: "7.4", title: "Odd + even", gen: function () {
+          var a = ri(1, 3), k = rc([3, 6, 9, -3, -6]), m = nz(-5, 5), ts = shuf([T("pow", 1, 3), T("pow", k, 2), T("sin", m)]); return { a: a, k: k, ts: ts }; },
+        prompt: function (s) { return "Find" + ML(I(-s.a, s.a, "(" + integrandHtml(s.ts) + ")")); }, ans: function (s) { return 2 * s.k * Math.pow(s.a, 3) / 3; },
+        diag: function (v, s) { return v === 0 ? "The odd terms cancel, but the " + MI(cf(Math.abs(s.k)) + X(2)) + " term is <b>even</b>, so it does not." : null; },
+        solution: function (s) { return PROP("Even/odd + linearity") + steps(["Split into odd terms and the even term: the odd terms (" + MI(X(3)) + " and the sine) integrate to 0 over [" + nm(-s.a) + ", " + s.a + "].", "What is left: " + MI(I(-s.a, s.a, nm(s.k) + X(2)) + " = 2" + I(0, s.a, nm(s.k) + X(2)) + " = 2" + FR(nm(s.k) + "(" + s.a + ")" + sup(3), 3) + " = " + nm(2 * s.k * Math.pow(s.a, 3) / 3))]) + WHY("Cancel the odd pieces, then use the even shortcut on what remains."); } })
+    ] });
+
+  // ============================================================
+  // STAGE 8: comparison and bounds
+  // ============================================================
+  var BF = [
+    { html: X(2), a: 1, b: 3, inc: true, f: function (x) { return x * x; } },
+    { html: RAD(VX), a: 1, b: 4, inc: true, f: Math.sqrt },
+    { html: FR("1", VX), a: 1, b: 4, inc: false, f: function (x) { return 1 / x; } },
+    { html: "2" + VX + " + 1", a: 0, b: 3, inc: true, f: function (x) { return 2 * x + 1; } },
+    { html: X(3), a: 1, b: 2, inc: true, f: function (x) { return x * x * x; } },
+    { html: FR("1", VX), a: 2, b: 4, inc: false, f: function (x) { return 1 / x; } }
+  ];
+  ST.push({ id: "s8", short: "8 Bounds", title: "Property: comparison and bounds",
+    goal: "You can estimate an integral without computing it, and decide its sign from the function.",
+    recall: "<h3>Properties</h3><div class=\"rows\"><div class=\"row\"><p>If <i>m</i> &le; " + MI(FN("f")) + " &le; <i>M</i> on [<i>a</i>, <i>b</i>] then</p><p class=\"mx\"><i>m</i>(<i>b</i> &minus; <i>a</i>) &le; " + I("<i>a</i>", "<i>b</i>", FF) + " &le; <i>M</i>(<i>b</i> &minus; <i>a</i>)</p></div>" +
+      "<div class=\"row\"><p>If " + MI(FF + " &le; " + GG) + " on [<i>a</i>, <i>b</i>] (with <i>a</i> &lt; <i>b</i>), then " + MI(I("<i>a</i>", "<i>b</i>", FF) + " &le; " + I("<i>a</i>", "<i>b</i>", GG)) + ".</p><p>If " + MI(FF + " &gt; 0") + " and <i>a</i> &lt; <i>b</i>, the integral is positive.</p></div></div>",
+    items: [
+      { id: "8.1", title: "Bounds from min and max", pts: 2,
+        gen: function () { var lo = ri(-3, 4), hi = lo + ri(2, 6), a = ri(-2, 3), b = a + ri(2, 5); return { lo: lo, hi: hi, a: a, b: b }; },
+        prompt: function (s) { return "On the interval [" + nm(s.a) + ", " + nm(s.b) + "] the function satisfies " + MI(nm(s.lo) + " &le; " + FF + " &le; " + nm(s.hi)) + ". Fill in the best bounds that the properties guarantee:" + ML("<i>L</i> &le; " + I(s.a, s.b, FF) + " &le; <i>U</i>"); },
+        fields: function () { return [{ k: "L", kind: "num", label: "L =", ph: "lower bound", short: true }, { k: "U", kind: "num", label: "U =", ph: "upper bound", short: true }]; },
+        grade: function (v, s) { var L = cNum(v.L), U = cNum(v.U); if (L.err || U.err) return { pts: 0, max: 2, msg: L.err || U.err, retry: true }; var ok = { L: nearV(L.v, s.lo * (s.b - s.a)), U: nearV(U.v, s.hi * (s.b - s.a)) }; var pts = (ok.L ? 1 : 0) + (ok.U ? 1 : 0); return { pts: pts, max: 2, ok: ok, msg: pts < 2 ? "Multiply the smallest and largest values of f by the <b>width</b> of the interval, " + (s.b - s.a) + "." : "" }; },
+        solution: function (s) { var w = s.b - s.a; return PROP("Comparison / bounds") + steps(["Width: " + MI(nm(s.b) + " &minus; " + sp(s.a).replace("-", "&minus;") + " = " + w) + ".", "Lower bound: " + MI(nm(s.lo) + " &middot; " + w + " = " + nm(s.lo * w)) + ". Upper bound: " + MI(nm(s.hi) + " &middot; " + w + " = " + nm(s.hi * w)) + "."]) + WHY("The graph lies between two horizontal lines, so the area lies between the areas of the two rectangles of width " + w + "."); },
+        canon: function (s) { return { L: String(s.lo * (s.b - s.a)), U: String(s.hi * (s.b - s.a)) }; } },
+      { id: "8.2", title: "Bound a real function", pts: 2,
+        gen: function () { return { f: rc(BF) }; },
+        prompt: function (s) { var f = s.f; return "On [" + f.a + ", " + f.b + "], the function " + MI(FN("f") + " = " + f.html) + " is " + (f.inc ? "increasing" : "decreasing") + ". Use its smallest and largest values on the interval to bound the integral. Type exact values (fractions are fine)." + ML("<i>L</i> &le; " + I(f.a, f.b, f.html) + " &le; <i>U</i>"); },
+        fields: function () { return [{ k: "L", kind: "num", label: "L =", ph: "lower bound", short: true }, { k: "U", kind: "num", label: "U =", ph: "upper bound", short: true }]; },
+        bounds: function (s) { var f = s.f, w = f.b - f.a, lo = (f.inc ? f.f(f.a) : f.f(f.b)) * w, hi = (f.inc ? f.f(f.b) : f.f(f.a)) * w; return { lo: lo, hi: hi }; },
+        grade: function (v, s) { var B = this.bounds(s), L = cNum(v.L), U = cNum(v.U); if (L.err || U.err) return { pts: 0, max: 2, msg: L.err || U.err, retry: true }; var ok = { L: nearV(L.v, B.lo), U: nearV(U.v, B.hi) }; var pts = (ok.L ? 1 : 0) + (ok.U ? 1 : 0); return { pts: pts, max: 2, ok: ok, msg: pts < 2 ? "Find the smallest and largest <i>values</i> of f on the interval (look at the endpoints), then multiply each by the width." : "" }; },
+        solution: function (s) { var f = s.f, B = this.bounds(s), w = f.b - f.a, small = f.inc ? f.a : f.b, big = f.inc ? f.b : f.a; return PROP("Comparison / bounds") + steps(["Since f is " + (f.inc ? "increasing" : "decreasing") + ", its smallest value is at <i>x</i> = " + small + " and its largest is at <i>x</i> = " + big + ": " + MI("<i>m</i> = " + rd(f.f(small), 4) + ", <i>M</i> = " + rd(f.f(big), 4)) + ".", "Width " + w + ". Lower bound " + MI(rd(f.f(small), 4) + " &middot; " + w + " = " + rd(B.lo, 4)) + ". Upper bound " + MI(rd(f.f(big), 4) + " &middot; " + w + " = " + rd(B.hi, 4)) + "."]) + WHY("Sandwich the graph between its lowest and highest heights. The true area must fit between the two rectangles."); },
+        canon: function (s) { var B = this.bounds(s); return { L: String(B.lo), U: String(B.hi) }; } },
+      { id: "8.3", title: "Sign and comparison", pts: 1.5,
+        gen: function () { var a = ri(-3, 2), b = a + ri(2, 5), pos = Math.random() < 0.5; return { a: a, b: b, pos: pos }; },
+        prompt: function (s) { return "Suppose " + MI("<i>f</i>(" + VX + ") " + (s.pos ? "&gt;" : "&lt;") + " 0") + " for every <i>x</i> in [" + nm(s.a) + ", " + nm(s.b) + "], and " + MI("<i>f</i>(" + VX + ") &le; <i>g</i>(" + VX + ")") + " there too. Complete each statement."; },
+        fields: function (s) { return [
+          { k: "p0", kind: "sel", label: MI(I(s.a, s.b, FF)) + " is", opts: [["pos", "Positive"], ["neg", "Negative"], ["zero", "Zero"]] },
+          { k: "p1", kind: "sel", label: MI(I(s.b, s.a, FF)) + " is", opts: [["pos", "Positive"], ["neg", "Negative"], ["zero", "Zero"]] },
+          { k: "p2", kind: "sel", label: MI(I(s.a, s.b, FF)) + " &nbsp;?&nbsp; " + MI(I(s.a, s.b, GG)), opts: [["le", "&le;"], ["ge", "&ge;"], ["eq", "="]] }]; },
+        ans: function (s) { return { p0: s.pos ? "pos" : "neg", p1: s.pos ? "neg" : "pos", p2: "le" }; },
+        grade: function (v, s) { var A = this.ans(s), ok = {}, pts = 0; for (var i = 0; i < 3; i++) { if (!v["p" + i]) return { pts: 0, max: 1.5, msg: "Choose an answer for each part.", retry: true }; ok["p" + i] = v["p" + i] === A["p" + i]; if (ok["p" + i]) pts += 0.5; } return { pts: pts, max: 1.5, ok: ok, msg: pts < 1.5 ? "Think about the sign of the function, then about the <i>direction</i> of integration." : "" }; },
+        solution: function (s) { return PROP("Sign + comparison") + steps(["f is " + (s.pos ? "positive" : "negative") + " on the interval and the limits go forward (" + nm(s.a) + " &lt; " + nm(s.b) + "), so " + MI(I(s.a, s.b, FF)) + " is <b>" + (s.pos ? "positive" : "negative") + "</b>.", "Going backwards (" + nm(s.b) + " to " + nm(s.a) + ") flips the sign, so " + MI(I(s.b, s.a, FF)) + " is <b>" + (s.pos ? "negative" : "positive") + "</b>.", "Since " + MI(FF + " &le; " + GG) + " everywhere on a forward interval, " + MI(I(s.a, s.b, FF) + " &le; " + I(s.a, s.b, GG)) + "."]) + WHY("Accumulating a positive function forward adds area; accumulating backwards subtracts it. Order is preserved when the limits go forward."); },
+        canon: function (s) { return this.ans(s); } }
+    ] });
+
+  // ============================================================
+  // STAGE 9: evaluating definite integrals (FTC)
+  // ============================================================
+  function Radd(a, b) { return Rt(a.n * b.d + b.n * a.d, a.d * b.d); }
+  function rF(ts, x) {   // exact antiderivative value for pow/const terms at integer x
+    var s = Rt(0, 1);
+    ts.forEach(function (t) {
+      if (t.k === "const") s = Radd(s, Rt(t.c * x, 1));
+      else s = Radd(s, Rt(t.c * Math.pow(x, t.n + 1), t.n + 1));
+    });
+    return s;
+  }
+  function Fnum(ts, x) { var s = 0; ts.forEach(function (t) { s += tF(t, x); }); return s; }
+  function ftcSolution(s, exactRational) {
+    var Ft = antiHtml(s.ts), a = s.a, b = s.b, lines = [];
+    lines.push("Antiderivative: " + MI("<i>F</i>(" + VX + ") = " + Ft));
+    if (exactRational) {
+      var fb = rF(s.ts, b), fa = rF(s.ts, a), d = Radd(fb, Rt(-fa.n, fa.d));
+      lines.push("Plug in: " + MI("<i>F</i>(" + lim(b) + ") = " + rtHtml(fb)) + " and " + MI("<i>F</i>(" + lim(a) + ") = " + rtHtml(fa)) + ".");
+      lines.push("Subtract (upper minus lower): " + MI(rtHtml(fb) + " &minus; " + (fa.n < 0 ? "(" + rtHtml(fa) + ")" : rtHtml(fa)) + " = " + rtHtml(d)));
+    } else {
+      lines.push("Plug in the limits: " + MI("<i>F</i>(" + lim(b) + ") &minus; <i>F</i>(" + lim(a) + ") = " + nf(Fnum(s.ts, s.bv == null ? b : s.bv) - Fnum(s.ts, s.av == null ? a : s.av))) + " (decimal; exact forms like <code>e^2-1</code> are fine too).");
+    }
+    return PROP("Fundamental Theorem") + steps(lines) + WHY("The Fundamental Theorem of Calculus says " + MI(INT("<i>a</i>", "<i>b</i>", FN("f")) + DX() + " = <i>F</i>(<i>b</i>) &minus; <i>F</i>(<i>a</i>)") + " for any antiderivative <i>F</i>, so the constant <i>C</i> cancels and is not needed.");
+  }
+  ST.push({ id: "s9", short: "9 Evaluate", title: "Evaluating definite integrals",
+    goal: "Put the antiderivatives to work: find an antiderivative, then evaluate at the limits. Exact answers (like 2 &minus; &pi;/2) or decimals to two places are both accepted.",
+    recall: "<h3>Fundamental Theorem</h3><p class=\"mx\">" + I("<i>a</i>", "<i>b</i>", FF) + " = <i>F</i>(<i>b</i>) &minus; <i>F</i>(<i>a</i>), &nbsp; where <i>F</i>&prime; = <i>f</i>.</p><p class=\"tip\">No <i>+ C</i> needed. Typing tips: <code>pi</code>, <code>e^2 - 1</code>, <code>4ln(3)</code>, <code>7/3</code>.</p>",
+    items: [
+      numItem({ id: "9.1", title: "Polynomial", gen: function () {
+          var a = rc([-1, 0, 1, 2]), b = a + ri(1, 3), ts = [T("pow", nz(-6, 6), ri(2, 4)), rc([T("pow", nz(-6, 6), 1), T("const", nz(-8, 8))])]; return { a: a, b: b, ts: ts }; },
+        prompt: function (s) { return "Evaluate" + ML(I(s.a, s.b, "(" + integrandHtml(s.ts) + ")")); },
+        ans: function (s) { return Fnum(s.ts, s.b) - Fnum(s.ts, s.a); },
+        diag: function (v, s) { return nearV(v, Fnum(s.ts, s.b) + Fnum(s.ts, s.a)) ? "Subtract: upper minus lower, <i>F</i>(b) &minus; <i>F</i>(a)." : null; },
+        solution: function (s) { return ftcSolution(s, true); } }),
+      numItem({ id: "9.2", title: "Sine and cosine", gen: function () {
+          var typ = rc(["A", "B", "C"]), a = nz(-4, 4), b = nz(-4, 4);
+          return { typ: typ, a: a, b: b }; },
+        prompt: function (s) {
+          if (s.typ === "A") return "Evaluate" + ML(I(0, "&pi;", "(" + joinParts([tPart(T("sin", s.a)), tPart(T("cos", s.b))]) + ")"));
+          if (s.typ === "B") return "Evaluate" + ML(I(0, "&pi;/2", "(" + joinParts([tPart(T("sin", s.a)), tPart(T("cos", s.b))]) + ")"));
+          return "Evaluate" + ML(I(0, "&pi;", "(" + joinParts([tPart(T("cos", s.a)), tPart(T("const", s.b))]) + ")")); },
+        ans: function (s) { return s.typ === "A" ? 2 * s.a : (s.typ === "B" ? s.a + s.b : s.b * Math.PI); },
+        ph: "e.g. 5 or 3pi",
+        solution: function (s) {
+          var tA = s.typ === "C" ? [T("cos", s.a), T("const", s.b)] : [T("sin", s.a), T("cos", s.b)], up = s.typ === "B" ? "&pi;/2" : "&pi;";
+          var vals = s.typ === "A" ? "sin &pi; = 0, cos &pi; = &minus;1, cos 0 = 1, sin 0 = 0" : (s.typ === "B" ? "sin(&pi;/2) = 1, cos(&pi;/2) = 0, cos 0 = 1, sin 0 = 0" : "sin &pi; = 0, sin 0 = 0");
+          return PROP("Fundamental Theorem") + steps(["Antiderivative: " + MI("<i>F</i>(" + VX + ") = " + antiHtml(tA)), "Use the exact values " + vals + ".", "Result: " + MI(nm(rd(this.ans(s), 4)) + (s.typ === "C" ? " (this is " + nm(s.b) + "&pi;)" : ""))]) + WHY("Trig integrals over multiples of &pi;/2 give clean exact answers because the unit-circle values are exact."); } }),
+      numItem({ id: "9.3", title: "Exponential", gen: function () { var k = ri(1, 3), ts = [T("exp", nz(-4, 4)), T("pow", nz(-6, 6), 1)]; return { a: 0, b: k, ts: ts }; },
+        prompt: function (s) { return "Evaluate (exact answer or a decimal to two places):" + ML(I(0, s.b, "(" + integrandHtml(s.ts) + ")")); },
+        ans: function (s) { return Fnum(s.ts, s.b) - Fnum(s.ts, 0); }, ph: "e.g. 3e^2 - 3 + 4",
+        solution: function (s) { return ftcSolution(s, false); } }),
+      numItem({ id: "9.4", title: "The 1/x case", gen: function () { var c = nz(-6, 6); return Math.random() < 0.4 ? { c: c, ts: [T("inv", c)], a: 1, b: "e", bv: Math.E } : { c: c, ts: [T("inv", c)], a: 1, b: rc([2, 3, 4, 5]), bv: null }; },
+        prompt: function (s) { return "Evaluate (exact answer or a decimal to two places):" + ML(I(1, s.b, FR(String(Math.abs(s.c)), VX)).replace(/^/, s.c < 0 ? "&minus;" : "")) ; },
+        ans: function (s) { return s.c * Math.log(s.bv == null ? s.b : s.bv); }, ph: "e.g. 4ln(3)",
+        solution: function (s) { return PROP("Fundamental Theorem") + steps(["Antiderivative: " + MI("<i>F</i>(" + VX + ") = " + cf(Math.abs(s.c)).replace(/^/, s.c < 0 ? "&minus;" : "") + "ln|" + VX + "|"), "Evaluate: " + MI(nm(s.c) + "(ln " + s.b + " &minus; ln 1) = " + nm(s.c) + " ln " + s.b + (s.b === "e" ? " = " + nm(s.c) : " &asymp; " + nf(this.ans(s))))]) + WHY("ln 1 = 0, so the lower limit vanishes. For the upper limit <i>e</i>, ln <i>e</i> = 1 gives a clean answer."); } }),
+      numItem({ id: "9.5", title: "Backwards limits", gen: function () {
+          var a = ri(3, 5), b = ri(0, 2), ts = [T("pow", nz(-5, 5), 2), T("const", nz(-6, 6))]; return { a: a, b: b, ts: ts }; },
+        prompt: function (s) { return "Evaluate" + ML(I(s.a, s.b, "(" + integrandHtml(s.ts) + ")")); },
+        ans: function (s) { return Fnum(s.ts, s.b) - Fnum(s.ts, s.a); },
+        diag: function (v, s) { return nearV(v, -(Fnum(s.ts, s.b) - Fnum(s.ts, s.a))) ? "The upper limit is " + s.b + " and the lower limit is " + s.a + " (smaller on top). You do still compute <i>F</i>(upper) &minus; <i>F</i>(lower), which gives a negative answer here." : null; },
+        solution: function (s) { return ftcSolution(s, true); } }),
+      numItem({ id: "9.6", title: "Roots", gen: function () {
+          var typ = rc(["r", "i"]), a, b;
+          if (typ === "r") { a = rc([0, 1, 4]); b = rc([4, 9, 16].filter(function (v) { return v > a; })); return { typ: typ, a: a, b: b, c: rc([3, 6, -3]) }; }
+          a = rc([1, 4]); b = rc([4, 9, 16].filter(function (v) { return v > a; })); return { typ: typ, a: a, b: b, c: nz(-4, 4) }; },
+        prompt: function (s) { var t = s.typ === "r" ? T("sqrt", s.c) : T("isqrt", s.c); return "Evaluate" + ML(I(s.a, s.b, integrandHtml([t]))); },
+        ans: function (s) { var t = s.typ === "r" ? T("sqrt", s.c) : T("isqrt", s.c); return tF(t, s.b) - tF(t, s.a); },
+        solution: function (s) { var t = s.typ === "r" ? T("sqrt", s.c) : T("isqrt", s.c); return PROP("Fundamental Theorem") + steps(["Rewrite as a power and integrate: " + MI("<i>F</i>(" + VX + ") = " + antiHtml([t])), "Evaluate at the perfect-square limits: " + MI("<i>F</i>(" + s.b + ") &minus; <i>F</i>(" + s.a + ") = " + nf(tF(t, s.b)) + " &minus; (" + nf(tF(t, s.a)) + ") = " + nf(this.ans(s)))]) + WHY("Choosing perfect-square limits keeps the radicals clean."); } })
+    ] });
+
+  // ============================================================
+  // STAGE 10: challenge (bonus)
+  // ============================================================
+  ST.push({ id: "s10", short: "Challenge", bonus: true, title: "Challenge: put it all together",
+    goal: "Bonus problems that combine the properties with the Fundamental Theorem. These do not count toward your total.",
+    recall: "<h3>Useful facts</h3><div class=\"rows\"><div class=\"row\"><p class=\"mx\">" + I("<i>a</i>", "<i>b</i>", "<i>F</i>&prime;(" + VX + ")") + " = <i>F</i>(<i>b</i>) &minus; <i>F</i>(<i>a</i>)</p><p class=\"tip\">Net change in <i>F</i> equals the integral of its rate of change.</p></div>" +
+      "<div class=\"row\"><p>An antiderivative with a starting value: find the antiderivative, then use the given point to solve for <i>C</i>.</p></div></div>",
+    items: [
+      numItem({ id: "10.1", title: "Property + FTC", gen: function () { var a = ri(-2, 2), b = a + 2 * ri(1, 2), o = { a: a, b: b, p: nz(-9, 12), m: rc([2, 3, -2, 4]), n: rc([2, 4, -2, 6]) }; return o; },
+          prompt: function (s) { return "Suppose " + MI(I(s.a, s.b, FF) + " = " + nm(s.p)) + ". Find" + ML(I(s.a, s.b, "(" + nm(s.m) + FF + " " + (s.n < 0 ? "&minus;" : "+") + " " + Math.abs(s.n) + VX + ")")); },
+          ans: function (s) { return s.m * s.p + s.n * (s.b * s.b - s.a * s.a) / 2; },
+          solution: function (s) { return PROP("Linearity + FTC") + steps(["Split: " + MI(nm(s.m) + "(" + nm(s.p) + ") " + (s.n < 0 ? "&minus;" : "+") + " " + I(s.a, s.b, Math.abs(s.n) + VX)) + ".", "The second piece needs the Fundamental Theorem: " + MI(I(s.a, s.b, nm(s.n) + VX) + " = " + FR(nm(s.n) + VX + sup(2), 2) + " evaluated from " + nm(s.a) + " to " + nm(s.b) + " = " + nm(s.n * (s.b * s.b - s.a * s.a) / 2)) + ".", "Add: " + nm(this.ans(s))]) + WHY("Use given values for the unknown function and the Fundamental Theorem for the one you can integrate."); } }),
+      numItem({ id: "10.2", title: "Initial value, then net change", gen: function () { var n = ri(1, 3), k = nz(-2, 3), a = rc([0, 1]), b = a + ri(1, 2), o = { n: n, k: k, a: a, b: b, v: nz(-6, 10) }; o.ts = [T("pow", k * (n + 1), n)]; return o; },
+          prompt: function (s) { return "Let <i>F</i> be an antiderivative of " + MI(FN("f") + " = " + integrandHtml(s.ts)) + " with <i>F</i>(" + s.a + ") = " + nm(s.v) + ". Find <i>F</i>(" + s.b + ")."; },
+          ans: function (s) { return s.v + Fnum(s.ts, s.b) - Fnum(s.ts, s.a); },
+          solution: function (s) { return PROP("Net change") + steps(["By the Fundamental Theorem, " + MI("<i>F</i>(" + s.b + ") &minus; <i>F</i>(" + s.a + ") = " + I(s.a, s.b, integrandHtml(s.ts))) + ".", "Evaluate: " + MI(nm(Fnum(s.ts, s.b) - Fnum(s.ts, s.a))) + ".", "So " + MI("<i>F</i>(" + s.b + ") = " + nm(s.v) + " + " + sp(Fnum(s.ts, s.b) - Fnum(s.ts, s.a)).replace("-", "&minus;") + " = " + nm(this.ans(s)))]) + WHY("F(b) = F(a) + net change, and the net change is the definite integral of F&prime;."); } }),
+      {
+        id: "10.3", title: "Find F(x)", pts: 3,
+        gen: function () { var ts = [T("pow", nz(-6, 6), ri(1, 3)), rc([T("cos", nz(-4, 4)), T("sin", nz(-4, 4)), T("exp", nz(-4, 4))])], v = nz(-8, 8); return { ts: ts, v: v, x0: 0 }; },
+        prompt: function (s) { return "Find the antiderivative <i>F</i> of " + MI(FN("f") + " = " + integrandHtml(s.ts)) + " that satisfies <i>F</i>(0) = " + nm(s.v) + "." ; },
+        fields: function () { return [{ k: "a", kind: "expr", label: "F(x) =", ph: "no + C: use the point to pin it down" }]; },
+        Fx: function (s) { var C = s.v - Fnum(s.ts, 0); return function (x) { return Fnum(s.ts, x) + C; }; },
+        grade: function (v, s) { var r = cGradeEq(v.a, this.Fx(s), XS_POS, false); if (r.msg && !r.ok) return { pts: 0, max: 3, msg: r.msg, retry: true }; if (r.ok) return { pts: 3, max: 3, msg: "" }; var r2 = cGradeEq(v.a, FSum(s.ts), XS_POS, true); if (r2.ok) return { pts: 1.5, max: 3, msg: "The shape is right, but the constant is not. Plug in <i>x</i> = 0 and solve for <i>C</i>." }; return { pts: 0, max: 3, msg: "Not quite. Integrate each term, then use <i>F</i>(0) to find <i>C</i>." }; },
+        solution: function (s) { var F0 = Fnum(s.ts, 0), C = s.v - F0; return PROP("Antiderivative + initial value") + steps(["General antiderivative: " + MI("<i>F</i>(" + VX + ") = " + antiHtml(s.ts) + " + <i>C</i>"), "Plug in <i>x</i> = 0: " + MI(nm(rd(F0, 4)) + " + <i>C</i> = " + nm(s.v)) + ", so " + MI("<i>C</i> = " + nm(rd(C, 4))) + ".", "Answer: " + MI("<i>F</i>(" + VX + ") = " + antiHtml(s.ts) + " " + (C < 0 ? "&minus;" : "+") + " " + Math.abs(rd(C, 4)))]) + WHY("An antiderivative is a whole family of curves that differ by a constant. One known point selects the one you want."); },
+        canon: function (s) { return { a: antiPlain(s.ts).replace(/\+ C$/, "+ (" + rd(s.v - Fnum(s.ts, 0), 6) + ")") }; }
+      },
+      {
+        id: "10.4", title: "Net change", pts: 2,
+        gen: function () { var a = ri(0, 3), b = a + ri(2, 4), u = nz(-5, 8), w = nz(-5, 12); return { a: a, b: b, u: u, w: w }; },
+        prompt: function (s) { return "A function " + MI(FN("f")) + " has " + MI("<i>f</i>(" + s.a + ") = " + nm(s.u)) + " and " + MI("<i>f</i>(" + s.b + ") = " + nm(s.w)) + ". Find both integrals of its derivative."; },
+        fields: function (s) { return [{ k: "x", kind: "num", label: MI(I(s.a, s.b, "<i>f</i>&prime;(" + VX + ")")), ph: "a number", short: true }, { k: "y", kind: "num", label: MI(I(s.b, s.a, "<i>f</i>&prime;(" + VX + ")")), ph: "a number", short: true }]; },
+        grade: function (v, s) { var X_ = cNum(v.x), Y_ = cNum(v.y); if (X_.err || Y_.err) return { pts: 0, max: 2, msg: X_.err || Y_.err, retry: true }; var ok = { x: nearV(X_.v, s.w - s.u), y: nearV(Y_.v, s.u - s.w) }; var pts = (ok.x ? 1 : 0) + (ok.y ? 1 : 0); return { pts: pts, max: 2, ok: ok, msg: pts < 2 ? "Use the Fundamental Theorem: the integral of <i>f</i>&prime; is <i>f</i>(upper) &minus; <i>f</i>(lower)." : "" }; },
+        solution: function (s) { return PROP("Fundamental Theorem") + steps([MI(I(s.a, s.b, "<i>f</i>&prime;(" + VX + ")") + " = <i>f</i>(" + s.b + ") &minus; <i>f</i>(" + s.a + ") = " + nm(s.w) + " &minus; " + sp(s.u).replace("-", "&minus;") + " = " + nm(s.w - s.u)), "Reversed limits flip the sign: " + MI(I(s.b, s.a, "<i>f</i>&prime;(" + VX + ")") + " = " + nm(s.u - s.w))]) + WHY("<i>f</i> is an antiderivative of <i>f</i>&prime;, so integrating <i>f</i>&prime; just measures how much <i>f</i> changed."); },
+        canon: function (s) { return { x: String(s.w - s.u), y: String(s.u - s.w) }; }
+      }
+    ] });
+
+  // ============================================================
+  // engine / UI
+  // ============================================================
+  var ALL = [];
+  ST.forEach(function (st, si) { st.index = si; st.items.forEach(function (it) { it.stage = st; ALL.push(it); }); });
+  var BYID = {}; ALL.forEach(function (it) { BYID[it.id] = it; });
+  var CORE_TOTAL = 0; ALL.forEach(function (it) { if (!it.stage.bonus) CORE_TOTAL += it.pts; });
+  var STATE = { cur: 0, t0: Date.now(), items: {}, resetArmed: false };
+  var els = {};
+  function $(id) { return document.getElementById(id); }
+  function el(tag, cls, html) { var e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
+  function newItemState(it) { return { s: it.gen(), locked: false, score: 0, reason: "", version: 1, solOpen: false }; }
+  function resetAll() { ALL.forEach(function (it) { STATE.items[it.id] = newItemState(it); }); STATE.t0 = Date.now(); }
+
+  function fieldsHtml(it, st) {
+    var fs = it.fields(st.s), out = "", rad = "";
+    fs.forEach(function (f, i) {
+      if (f.kind === "radio") {
+        rad += "<div class=\"opts\" data-k=\"" + f.k + "\" role=\"radiogroup\">" + f.opts.map(function (o) {
+          return "<label class=\"opt\"><input type=\"radio\" name=\"r-" + it.id + "-" + st.version + "\" value=\"" + o[0] + "\" data-k=\"" + f.k + "\"><span>" + o[1] + "</span></label>"; }).join("") + "</div>";
+      } else if (f.kind === "sel") {
+        out += "<div class=\"fld\"><label>" + f.label + "</label><select data-k=\"" + f.k + "\"><option value=\"\">Choose&hellip;</option>" + f.opts.map(function (o) { return "<option value=\"" + o[0] + "\">" + o[1] + "</option>"; }).join("") + "</select></div>";
+      } else {
+        out += "<div class=\"fld\"><label>" + f.label + "</label><input type=\"text\" class=\"" + (f.short ? "short" : "") + "\" data-k=\"" + f.k + "\" placeholder=\"" + (f.ph || "") + "\" autocomplete=\"off\" autocapitalize=\"off\" spellcheck=\"false\"></div>";
+      }
+    });
+    return (out ? "<div class=\"fields\">" + out + "</div>" : "") + rad;
+  }
+  function readVals(card) {
+    var v = {};
+    card.querySelectorAll("[data-k]").forEach(function (e) {
+      if (e.tagName === "INPUT" && e.type === "radio") { if (!(e.dataset.k in v)) v[e.dataset.k] = ""; if (e.checked) v[e.dataset.k] = e.value; }
+      else if (e.tagName === "INPUT" || e.tagName === "SELECT") v[e.dataset.k] = e.value;
+    });
+    return v;
+  }
+  function badgeText(it, st) {
+    var b = st.version > 1 ? " &middot; practice version" : "";
+    if (!st.locked) return "<span>not scored yet" + b + "</span>";
+    if (st.reason === "peek") return "<span class=\"zero\">solution first: 0 / " + ptsFmt(it.pts) + b + "</span>";
+    return "<span class=\"locked\">first try: " + ptsFmt(st.score) + " / " + ptsFmt(it.pts) + b + "</span>";
+  }
+  function refreshCard(it) {
+    var st = STATE.items[it.id], card = els.cards[it.id];
+    card.querySelector(".badge").innerHTML = badgeText(it, st);
+    card.querySelector(".nv").disabled = !st.locked;
+    card.querySelector(".nv").title = st.locked ? "Get a fresh set of numbers to practice (your score stays as it was)" : "Check an answer or view the solution first";
+  }
+  function fillCard(it) {
+    var st = STATE.items[it.id], card = els.cards[it.id];
+    card.querySelector(".prompt").innerHTML = it.prompt(st.s);
+    card.querySelector(".inputs").innerHTML = fieldsHtml(it, st);
+    var fb = card.querySelector(".fb"); fb.className = "fb"; fb.innerHTML = "";
+    var sol = card.querySelector(".sol"); sol.className = "sol"; sol.innerHTML = ""; st.solOpen = false;
+    card.querySelector(".sb").textContent = "Show solution";
+    refreshCard(it);
+  }
+  function buildCard(it) {
+    var card = el("div", "card");
+    card.id = "card-" + it.id.replace(".", "-");
+    card.innerHTML = "<div class=\"card-top\"><span class=\"qnum\">" + it.id + "</span><span class=\"qtitle\">" + it.title + " <span class=\"tip\">(" + ptsFmt(it.pts) + " pt" + (it.pts === 1 ? "" : "s") + ")</span></span><span class=\"badge\"></span></div>" +
+      "<div class=\"prompt\"></div><div class=\"inputs\"></div>" +
+      "<div class=\"btns\"><button type=\"button\" class=\"btn btn-primary ck\">Check</button><button type=\"button\" class=\"btn sb\">Show solution</button><button type=\"button\" class=\"btn btn-ghost nv\" disabled>New version</button></div>" +
+      "<div class=\"fb\" role=\"status\" aria-live=\"polite\"></div><div class=\"sol\"></div>";
+    els.cards[it.id] = card;
+    card.querySelector(".ck").addEventListener("click", function () { doCheck(it); });
+    card.querySelector(".sb").addEventListener("click", function () { toggleSol(it); });
+    card.querySelector(".nv").addEventListener("click", function () { newVersion(it); });
+    card.addEventListener("keydown", function (e) { if (e.key === "Enter" && e.target.tagName === "INPUT" && e.target.type === "text") { e.preventDefault(); doCheck(it); } });
+    fillCard(it);
+    return card;
+  }
+  function setFb(card, cls, html) { var fb = card.querySelector(".fb"); fb.className = "fb show " + cls; fb.innerHTML = html; }
+  function doCheck(it) {
+    var st = STATE.items[it.id], card = els.cards[it.id], v = readVals(card), blank = false;
+    card.querySelectorAll("input[type=text]").forEach(function (e) { if (!e.value.trim()) blank = true; });
+    if (blank) { setFb(card, "part", "Type your answer in the box first."); return; }
+    var g = it.grade(v, st.s);
+    if (g.retry) { setFb(card, "part", g.msg); return; }
+    var just = false;
+    if (!st.locked) { st.locked = true; st.score = g.pts; st.reason = "first"; just = true; }
+    var full = g.pts >= g.max - 1e-9, any = g.pts > 0;
+    card.querySelectorAll("[data-k]").forEach(function (e) { e.classList.remove("ok", "no"); });
+    card.querySelectorAll(".opt").forEach(function (e) { e.classList.remove("ok", "no"); });
+    card.querySelectorAll("input[type=text], select").forEach(function (e) {
+      var good = g.ok ? !!g.ok[e.dataset.k] : full;
+      e.classList.add(good ? "ok" : "no");
+    });
+    card.querySelectorAll(".opt input:checked").forEach(function (e) { e.parentNode.classList.add(full ? "ok" : "no"); });
+    var note = just ? "" : (st.reason === "peek" ? " <span class=\"tip\">(Practice check: this question's score stays 0 because the solution was opened first.)</span>" : " <span class=\"tip\">(Practice check: your first-try score is already recorded.)</span>");
+    if (full) setFb(card, "good", "<b>Correct.</b>" + (g.msg ? " " + g.msg : "") + note);
+    else if (any) setFb(card, "part", "<b>Partly right</b> (" + ptsFmt(g.pts) + " / " + ptsFmt(g.max) + "). " + (g.msg || "") + note);
+    else setFb(card, "bad", "<b>Not yet.</b> " + (g.msg || "") + note);
+    refreshCard(it); updateStats();
+  }
+  function toggleSol(it) {
+    var st = STATE.items[it.id], card = els.cards[it.id], sol = card.querySelector(".sol");
+    if (st.solOpen) { st.solOpen = false; sol.className = "sol"; card.querySelector(".sb").textContent = "Show solution"; return; }
+    if (!st.locked) { st.locked = true; st.score = 0; st.reason = "peek"; }
+    sol.innerHTML = it.solution(st.s); sol.className = "sol show"; st.solOpen = true;
+    card.querySelector(".sb").textContent = "Hide solution";
+    refreshCard(it); updateStats();
+  }
+  function newVersion(it) { var st = STATE.items[it.id]; if (!st.locked) return; st.s = it.gen(); st.version++; fillCard(it); }
+
+  function stageStats(st) {
+    var earned = 0, total = 0, done = 0;
+    st.items.forEach(function (it) { var s = STATE.items[it.id]; total += it.pts; if (s.locked) { earned += s.score; done++; } });
+    return { earned: earned, total: total, done: done, n: st.items.length };
+  }
+  function updateStats() {
+    var earned = 0, doneAll = 0, n = 0;
+    ST.forEach(function (st, i) {
+      var s = stageStats(st);
+      if (!st.bonus) { earned += s.earned; }
+      doneAll += s.done; n += s.n;
+      els.pills[i].classList.toggle("done", s.done === s.n);
+      var sc = els.stageScore[i]; if (sc) sc.textContent = ptsFmt(s.earned) + " / " + ptsFmt(s.total) + " pts" + (st.bonus ? " (bonus)" : "") + " · " + s.done + " of " + s.n + " questions done";
+    });
+    $("stScore").textContent = ptsFmt(earned) + " / " + ptsFmt(CORE_TOTAL);
+    $("stDone").textContent = doneAll + " / " + n;
+    renderResults();
+  }
+  function renderResults() {
+    var rows = "", earned = 0;
+    ST.forEach(function (st) {
+      var s = stageStats(st); if (!st.bonus) earned += s.earned;
+      var pct = s.total ? Math.round(100 * s.earned / s.total) : 0;
+      rows += "<tr><td>" + st.title + (st.bonus ? " <span class=\"tip\">(bonus)</span>" : "") + "</td><td class=\"n\">" + ptsFmt(s.earned) + " / " + ptsFmt(s.total) + "</td><td class=\"n\">" + s.done + " / " + s.n + "</td><td><div class=\"bar\"><span style=\"width:" + pct + "%\"></span></div></td></tr>";
+    });
+    var pctAll = CORE_TOTAL ? Math.round(100 * earned / CORE_TOTAL) : 0;
+    $("resBody").innerHTML = "<table><thead><tr><th>Stage</th><th class=\"n\">Score</th><th class=\"n\">Done</th><th></th></tr></thead><tbody>" + rows + "</tbody></table>" +
+      "<p style=\"font-size:1.15rem;margin:14px 0 0\"><b>Exam score: " + ptsFmt(earned) + " / " + ptsFmt(CORE_TOTAL) + " (" + pctAll + "%)</b> &middot; time " + fmtClock(Math.floor((Date.now() - STATE.t0) / 1000)) + "</p>" +
+      "<p class=\"tip\">Scores count your <b>first</b> check on each question. Opening a solution before checking scores 0 for that question. The bonus stage does not count toward the total.</p>";
+  }
+  function fmtClock(s) { var m = Math.floor(s / 60), r = s % 60; return m + ":" + (r < 10 ? "0" : "") + r; }
+
+  function showStage(i) {
+    STATE.cur = i;
+    els.stages.forEach(function (e, k) { e.classList.toggle("hidden", k !== i); });
+    els.pills.forEach(function (p, k) { p.classList.toggle("on", k === i); });
+    window.scrollTo(0, 0);
+  }
+  function build() {
+    els.cards = {}; els.pills = []; els.stages = []; els.stageScore = [];
+    var pills = $("pills"), host = $("stages");
+    pills.innerHTML = ""; host.innerHTML = "";
+    ST.forEach(function (st, i) {
+      var p = el("button", "pill" + (st.bonus ? " bonus" : ""), st.short); p.type = "button"; p.addEventListener("click", function () { showStage(i); });
+      pills.appendChild(p); els.pills.push(p);
+      var sec = el("section", "stage hidden");
+      sec.appendChild(el("div", "stage-head", "<div class=\"kicker\">" + (st.bonus ? "Bonus stage" : "Stage " + (i + 1) + " of " + (ST.length - 1)) + "</div><h2>" + st.title + "</h2><div class=\"goal\">" + st.goal + "</div>"));
+      sec.appendChild(el("div", "recall", st.recall));
+      st.items.forEach(function (it) { sec.appendChild(buildCard(it)); });
+      var ss = el("div", "stage-score"); els.stageScore.push(ss);
+      var nav = el("div", "nav-row"), prev = el("button", "btn btn-ghost", i ? "← Previous stage" : ""), next = el("button", "btn btn-primary", i === ST.length - 1 ? "See my results →" : "Next stage →");
+      prev.type = next.type = "button"; if (!i) prev.style.visibility = "hidden";
+      prev.addEventListener("click", function () { showStage(i - 1); });
+      next.addEventListener("click", function () { showStage(i + 1); });
+      nav.appendChild(prev); nav.appendChild(ss); nav.appendChild(next); sec.appendChild(nav);
+      host.appendChild(sec); els.stages.push(sec);
+    });
+    var rp = el("button", "pill", "Results"); rp.type = "button"; rp.addEventListener("click", function () { showStage(ST.length); });
+    pills.appendChild(rp); els.pills.push(rp);
+    var rs = el("section", "stage hidden");
+    rs.appendChild(el("div", "stage-head", "<div class=\"kicker\">Summary</div><h2>Your results</h2>"));
+    rs.appendChild(el("div", "res", "<div id=\"resBody\"></div>"));
+    var back = el("div", "nav-row"), b1 = el("button", "btn btn-ghost", "← Back to the last stage"); b1.type = "button"; b1.addEventListener("click", function () { showStage(ST.length - 1); }); back.appendChild(b1); rs.appendChild(back);
+    host.appendChild(rs); els.stages.push(rs);
+    updateStats(); showStage(STATE.cur > ST.length ? 0 : STATE.cur);
+  }
+  function init() {
+    resetAll(); build();
+    setInterval(function () { $("stClock").textContent = fmtClock(Math.floor((Date.now() - STATE.t0) / 1000)); }, 1000);
+    var rb = $("resetBtn");
+    rb.addEventListener("click", function () {
+      if (!STATE.resetArmed) { STATE.resetArmed = true; rb.textContent = "Click again to erase scores"; setTimeout(function () { STATE.resetArmed = false; rb.textContent = "Reset exam"; }, 4000); return; }
+      STATE.resetArmed = false; rb.textContent = "Reset exam"; resetAll(); build(); showStage(0);
+    });
+    var th = $("themeBtn"); if (th) th.addEventListener("click", function () { var r = document.documentElement, d = r.getAttribute("data-theme") === "dark" || (!r.getAttribute("data-theme") && window.matchMedia("(prefers-color-scheme: dark)").matches); r.setAttribute("data-theme", d ? "light" : "dark"); });
+  }
+  window.__AI = { ST: ST, ALL: ALL, BYID: BYID, STATE: STATE, gradeAnti: gradeAnti, cGradeEq: cGradeEq, cNum: cNum, antiPlain: antiPlain, fSum: fSum, FSum: FSum, tf: tf, tF: tF, T: T, doCheck: doCheck, toggleSol: toggleSol, newVersion: newVersion, els: els, CORE_TOTAL: CORE_TOTAL, resetAll: resetAll, readVals: readVals };
+  init();
+
+})();
+</script>
+</body>
+</html>
