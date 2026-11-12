@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Solving Quadratics by Factoring &mdash; Practice</title>
+<title>Solving Quadratic Equations &mdash; Practice</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.css">
 <style>
   *{box-sizing:border-box;margin:0;padding:0}
@@ -45,7 +45,9 @@
   .check-btn{font-family:sans-serif;font-size:13px;background:#1a1a1a;color:#fff;
     border:none;border-radius:6px;padding:7px 14px;cursor:pointer}
   .check-btn:hover{background:#333}.check-btn:disabled{background:#aaa;cursor:default}
-  .hint{font-family:sans-serif;font-size:12px;color:#888;margin-top:7px}
+  .hint{font-family:sans-serif;font-size:12px;color:#888;margin-top:5px;display:none}
+  .hint-link{font-family:sans-serif;font-size:12px;color:#aaa;cursor:pointer;text-decoration:underline;margin-top:7px;display:inline-block}
+  .hint-link:hover{color:#666}
   .feedback{font-family:sans-serif;font-size:13px;margin-top:10px;padding:8px 12px;
     border-radius:6px;display:none;line-height:1.5}
   .feedback.correct{display:block;background:#eaf5ea;color:#1a5a1a}
@@ -58,32 +60,31 @@
     color:#444;background:#f5f3ef;border-radius:6px;padding:8px 11px;line-height:1.8;overflow-x:auto}
   code{font-family:'Courier New',monospace;background:#f0ede7;padding:1px 5px;border-radius:3px;font-size:12px}
 
-
-.hint{display:none!important}
 </style>
 </head>
 <body>
 <div class="container">
-  <h1>Solving Quadratics by Factoring</h1>
-  <p class="subtitle">College Algebra &nbsp;&middot;&nbsp; &sect;4.1 &nbsp;&middot;&nbsp; Instructor: Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026</p>
+  <h1>Solving Quadratic Equations</h1>
+  <p class="subtitle">College Algebra &nbsp;&middot;&nbsp; &sect;4.2 &nbsp;&middot;&nbsp; Instructor: Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026</p>
 
   <div class="section">
     <div class="section-title">Core Ideas</div>
 
     <div class="concept">
-      <span class="concept-label">Zero Product Property</span>
-      If $A \cdot B = 0$ then $A=0$ or $B=0$.
-      Steps: standard form → factor → set each factor $= 0$ → solve.
+      <span class="concept-label">1 &middot; Solve directly (square roots)</span>
+      No $x$ term? Isolate the square, then take $\pm\sqrt{\ }$ of both sides: $x^2=k \Rightarrow x=\pm\sqrt{k}$. Works for $(x-h)^2=k$ too.
     </div>
     <div class="concept">
-      <span class="concept-label">Trinomial  x² + bx + c</span>
-      Find $p, q$ with $pq = c$ and $p+q = b$.
-      Then $x^2+bx+c = (x+p)(x+q)$.
+      <span class="concept-label">2 &middot; Already factored (Zero Product Property)</span>
+      If $A \cdot B = 0$ then $A=0$ or $B=0$. Set each factor equal to $0$ and solve each one.
     </div>
     <div class="concept">
-      <span class="concept-label">Special Patterns</span>
-      <strong>Difference of squares:</strong> $x^2 - k^2 = (x+k)(x-k)$, roots $x = \pm k$. &nbsp;
-      <strong>GCF:</strong> $ax^2+bx = x(ax+b)$, roots $x=0$ and $x=-b/a$.
+      <span class="concept-label">3 &middot; Not factored? Factor it</span>
+      With $=0$ on one side, factor: GCF first, then $x^2+bx+c=(x+p)(x+q)$ where $pq=c$ and $p+q=b$, or a difference of squares $x^2-k^2=(x+k)(x-k)$. Then use the Zero Product Property.
+    </div>
+    <div class="concept">
+      <span class="concept-label">4 &middot; Not equal to zero? Rearrange first</span>
+      The Zero Product Property only works when one side is $0$. Move every term to one side, then factor. Example: $(x+1)(x-4)=6$ must be multiplied out and rearranged before factoring.
     </div>
 
   </div>
@@ -137,118 +138,148 @@ function addT(n, v) {
 
 // ── Problem generators (section-specific, injected below) ─────────────────────
 
-// gen1: trinomial, both roots negative → ask for larger (less negative) root
+// ── Helpers shared by the generators ─────────────────────────────────────────
+// Factor for root r:  r=3 → (x-3),  r=-2 → (x+2),  r=0 → x
+function fac(r) { return r === 0 ? 'x' : `(x${r < 0 ? '+' : '-'}${Math.abs(r)})`; }
+// Standard form  x^2 + bx + c
+function quad(b, c) { return `x^2${addT(b, 'x')}${addT(c, '')}`; }
+function sgn() { return rInt(2) ? 1 : -1; }
+// Two different non-zero integer roots in [-n, n] whose sum is not 0
+function twoRoots(n) {
+  let r1, r2;
+  do { r1 = (rInt(n) + 1) * sgn(); r2 = (rInt(n) + 1) * sgn(); } while (r1 === r2 || r1 + r2 === 0);
+  return [r1, r2];
+}
+
+// ── TYPE 1: solve directly (square root) ─────────────────────────────────────
+// gen1: ax^2 = c  →  find the positive solution
 function gen1() {
-  const r1 = -(rInt(4) + 1), r2 = -(rInt(4) + 1);  // both negative
-  const b = -(r1 + r2), c = r1 * r2;
-  const larger = Math.max(r1, r2);
-  const bStr = b < 0 ? `- ${Math.abs(b)}` : `+ ${b}`;
-  const cStr = c < 0 ? `- ${Math.abs(c)}` : `+ ${c}`;
+  const a = rInt(5) + 1, k = rInt(8) + 2;
   return {
-    latex:  `x^2${bStr}x${cStr}=0.\\quad\\text{Find the larger root.}`,
-    answer: [String(larger)],
-    hint:   'What pair of numbers multiplies to the constant term and adds to the x-coefficient?',
-    step:   `(x${r1<0?`+${Math.abs(r1)}`:`-${r1}`})(x${r2<0?`+${Math.abs(r2)}`:`-${r2}`})=0\\Rightarrow x=${r1}\\text{ or }x=${r2}`
-  };
-}
-
-// gen2: trinomial, mixed signs → ask for positive root
-function gen2() {
-  const rPos = rInt(4) + 2;
-  const rNeg = -(rInt(3) + 1);
-  const b = -(rPos + rNeg), c = rPos * rNeg;
-  const bStr = b < 0 ? `- ${Math.abs(b)}` : `+ ${b}`;
-  const cStr = c < 0 ? `- ${Math.abs(c)}` : `+ ${c}`;
-  return {
-    latex:  `x^2${bStr}x${cStr}=0.\\quad\\text{Find the positive root.}`,
-    answer: [String(rPos)],
-    hint:   'What does a negative constant term tell you about the signs of the two roots?',
-    step:   `(x-${rPos})(x+${Math.abs(rNeg)})=0\\Rightarrow x=${rPos}\\text{ or }x=${rNeg}`
-  };
-}
-
-// gen3: difference of squares — find positive root
-function gen3() {
-  const k = rInt(5) + 2;
-  return {
-    latex:  `x^2-${k*k}=0.\\quad\\text{Find the positive root.}`,
+    latex:  `${fc(a)}x^2=${a*k*k}.\\quad\\text{Find the positive solution.}`,
     answer: [String(k)],
-    hint:   'Does the left side fit a special factoring pattern involving two perfect squares?',
+    hint:   'No x term here. What undoes squaring, and how many numbers square to the same value?',
+    step:   (a === 1 ? '' : `${fc(a)}x^2=${a*k*k}\\Rightarrow `) + `x^2=${k*k}\\Rightarrow x=\\pm${k}`
+  };
+}
+
+// gen2: (x-h)^2 = k^2  →  find the larger solution
+function gen2() {
+  const h = (rInt(5) + 1) * sgn(), k = rInt(6) + 2;
+  const inner = `x${h < 0 ? '+' : '-'}${Math.abs(h)}`;
+  return {
+    latex:  `(${inner})^2=${k*k}.\\quad\\text{Find the larger solution.}`,
+    answer: [String(h + k)],
+    hint:   'The squared part is one group. Which two numbers have a square equal to the right side?',
+    step:   `${inner}=\\pm${k}\\Rightarrow x=${h}+${k}=${h+k}\\text{ or }x=${h}-${k}=${h-k}`
+  };
+}
+
+// ── TYPE 2: already factored (Zero Product Property) ─────────────────────────
+// gen3: (x-r1)(x-r2) = 0  →  larger solution
+function gen3() {
+  const [r1, r2] = twoRoots(6);
+  return {
+    latex:  `${fac(r1)}${fac(r2)}=0.\\quad\\text{Find the larger solution.}`,
+    answer: [String(Math.max(r1, r2))],
+    hint:   'A product equals zero. What must be true about at least one of the factors?',
+    step:   `${fac(r1)}=0\\Rightarrow x=${r1};\\quad ${fac(r2)}=0\\Rightarrow x=${r2}`
+  };
+}
+
+// gen4: factors with a leading coefficient:  x(ax+b)=0  or  (ax+b)(x+q)=0
+function gen4() {
+  const a = rInt(3) + 2, m = (rInt(5) + 1) * sgn(), p = a * m;
+  const lin = `${a}x${p < 0 ? '+' : '-'}${Math.abs(p)}`;
+  if (rInt(2) === 0) {
+    return {
+      latex:  `x(${lin})=0.\\quad\\text{Find the non-zero solution.}`,
+      answer: [String(m)],
+      hint:   'One factor is just x. Which value makes the other factor equal zero?',
+      step:   `x=0\\text{ or }${lin}=0\\Rightarrow x=${m}`
+    };
+  }
+  let q; do { q = rInt(5) + 1; } while (m === -q);
+  return {
+    latex:  `(${lin})(x+${q})=0.\\quad\\text{Find the smaller solution.}`,
+    answer: [String(Math.min(m, -q))],
+    hint:   'Each factor gets its own equation. What value of x makes one factor zero?',
+    step:   `${lin}=0\\Rightarrow x=${m};\\quad x+${q}=0\\Rightarrow x=-${q}`
+  };
+}
+
+// ── TYPE 3: not factored, equals zero (must factor) ──────────────────────────
+// gen5: x^2 + bx + c = 0  →  larger or smaller solution
+function gen5() {
+  const [r1, r2] = twoRoots(7), which = rInt(2) ? 'larger' : 'smaller';
+  return {
+    latex:  `${quad(-(r1 + r2), r1 * r2)}=0.\\quad\\text{Find the ${which} solution.}`,
+    answer: [String(which === 'larger' ? Math.max(r1, r2) : Math.min(r1, r2))],
+    hint:   'Which two numbers multiply to the constant term and add to the middle coefficient?',
+    step:   `${fac(r1)}${fac(r2)}=0\\Rightarrow x=${r1}\\text{ or }x=${r2}`
+  };
+}
+
+// gen6: factoring patterns: common factor in every term, x^2+kx, difference of squares
+function gen6() {
+  const t = rInt(3);
+  if (t === 0) {
+    const a = rInt(3) + 2, [r1, r2] = twoRoots(5);
+    return {
+      latex:  `${a}x^2${addT(-a*(r1 + r2), 'x')}${addT(a*r1*r2, '')}=0.\\quad\\text{Find the larger solution.}`,
+      answer: [String(Math.max(r1, r2))],
+      hint:   'Do all three coefficients share a common factor that could be pulled out?',
+      step:   `${a}${fac(r1)}${fac(r2)}=0\\Rightarrow x=${r1}\\text{ or }x=${r2}`
+    };
+  }
+  if (t === 1) {
+    const b = (rInt(8) + 2) * sgn();
+    return {
+      latex:  `x^2${addT(b, 'x')}=0.\\quad\\text{Find the non-zero solution.}`,
+      answer: [String(-b)],
+      hint:   'Both terms share a factor. What does the equation look like once it is pulled out?',
+      step:   `x(x${b < 0 ? '-' : '+'}${Math.abs(b)})=0\\Rightarrow x=0\\text{ or }x=${-b}`
+    };
+  }
+  const k = rInt(8) + 2;
+  return {
+    latex:  `x^2-${k*k}=0.\\quad\\text{Find the positive solution.}`,
+    answer: [String(k)],
+    hint:   'Does the left side match a pattern built from two perfect squares?',
     step:   `(x+${k})(x-${k})=0\\Rightarrow x=${k}\\text{ or }x=-${k}`
   };
 }
 
-// gen4: GCF factoring ax²+bx=0 — find the non-zero root
-function gen4() {
-  const k = rInt(6) + 2;
-  const sign = rInt(2) === 0 ? 1 : -1;
-  const adjK = sign * k;
-  const bStr = adjK < 0 ? `- ${Math.abs(adjK)}` : `+ ${adjK}`;
-  return {
-    latex:  `x^2${bStr}x=0.\\quad\\text{Find the non-zero root.}`,
-    answer: [String(-adjK)],
-    hint:   'What factor do both terms on the left share?',
-    step:   `x(x${bStr})=0\\Rightarrow x=0\\text{ or }x=${-adjK}`
-  };
-}
-
-// gen5: trinomial, both roots positive → ask for smaller root
-function gen5() {
-  const r1 = rInt(4) + 1, r2 = rInt(4) + 1;
-  const b = -(r1 + r2), c = r1 * r2;
-  const smaller = Math.min(r1, r2);
-  const bStr = b < 0 ? `- ${Math.abs(b)}` : `+ ${b}`;
-  const cStr = c < 0 ? `- ${Math.abs(c)}` : `+ ${c}`;
-  return {
-    latex:  `x^2${bStr}x${cStr}=0.\\quad\\text{Find the smaller root.}`,
-    answer: [String(smaller)],
-    hint:   'What pair of numbers multiplies to the constant term and adds to the x-coefficient?',
-    step:   `(x-${r1})(x-${r2})=0\\Rightarrow x=${r1}\\text{ or }x=${r2}`
-  };
-}
-
-// gen6: already factored form (x-a)(x+b)=0 — find the larger root
-function gen6() {
-  const a = rInt(5) + 1;
-  const b = rInt(5) + 1;
-  const larger = Math.max(a, -b);
-  return {
-    latex:  `(x-${a})(x+${b})=0.\\quad\\text{Find the larger root.}`,
-    answer: [String(larger)],
-    hint:   'The equation is already factored. What does the Zero Product Property let you conclude?',
-    step:   `x-${a}=0\\Rightarrow x=${a};\\quad x+${b}=0\\Rightarrow x=-${b}`
-  };
-}
-
-// gen7: move term to standard form first, then factor
+// ── TYPE 4: not equal to zero (rearrange first) ──────────────────────────────
+// gen7: x^2 = sx - p   or   x^2 + ux = v
 function gen7() {
-  const r1 = rInt(4) + 1, r2 = rInt(3) + 2;
-  // x² = (r1+r2)x - r1*r2  →  x² - (r1+r2)x + r1*r2 = 0
-  const sumR = r1 + r2, prodR = r1 * r2;
+  const [r1, r2] = twoRoots(6), s = r1 + r2, p = r1 * r2;
+  const eq = rInt(2) === 0 ? `x^2=${fc(s)}x${addT(-p, '')}` : `x^2${addT(-s, 'x')}=${-p}`;
   return {
-    latex:  `x^2=${sumR}x-${prodR}.\\quad\\text{Find the larger root.}`,
+    latex:  `${eq}.\\quad\\text{Find the larger solution.}`,
     answer: [String(Math.max(r1, r2))],
-    hint:   'What form must a quadratic equation be in before you can factor it?',
-    step:   `x^2-${sumR}x+${prodR}=0\\Rightarrow(x-${r1})(x-${r2})=0\\Rightarrow x=${r1}\\text{ or }x=${r2}`
+    hint:   'The zero product rule needs zero on one side. What must change about this equation?',
+    step:   `x^2${addT(-s, 'x')}${addT(p, '')}=0\\Rightarrow ${fac(r1)}${fac(r2)}=0\\Rightarrow x=${r1}\\text{ or }x=${r2}`
   };
 }
 
-// gen8: trinomial with negative root asked (mixed sign, ask for negative root)
+// gen8: product of two factors equals a non-zero number:  (x+a)(x-b)=m
 function gen8() {
-  const rPos = rInt(4) + 2;
-  const rNeg = -(rInt(3) + 1);
-  const b = -(rPos + rNeg), c = rPos * rNeg;
-  const bStr = b < 0 ? `- ${Math.abs(b)}` : `+ ${b}`;
-  const cStr = c < 0 ? `- ${Math.abs(c)}` : `+ ${c}`;
+  let a, b, r1, r2, m;
+  do {
+    a = rInt(4) + 1; b = rInt(4) + 1; r1 = rInt(15) - 7;
+    r2 = b - a - r1; m = r1*r1 + (a - b)*r1 - a*b;
+  } while (r1 === r2 || m === 0);
   return {
-    latex:  `x^2${bStr}x${cStr}=0.\\quad\\text{Find the negative root.}`,
-    answer: [String(rNeg)],
-    hint:   'What pair of numbers multiplies to the constant term and adds to the x-coefficient?',
-    step:   `(x-${rPos})(x+${Math.abs(rNeg)})=0\\Rightarrow x=${rPos}\\text{ or }x=${rNeg}`
+    latex:  `(x+${a})(x-${b})=${m}.\\quad\\text{Find the larger solution.}`,
+    answer: [String(Math.max(r1, r2))],
+    hint:   'Does the zero product property work when the product equals something other than zero?',
+    step:   `x^2${addT(a - b, 'x')}${addT(-a*b, '')}=${m}\\Rightarrow x^2${addT(a - b, 'x')}${addT(-a*b - m, '')}=0\\Rightarrow ${fac(r1)}${fac(r2)}=0\\Rightarrow x=${r1}\\text{ or }x=${r2}`
   };
 }
 
 const GENERATORS = [gen1, gen2, gen3, gen4, gen5, gen6, gen7, gen8];
+
 
 
 // ── State ─────────────────────────────────────────────────────────────────────
@@ -257,7 +288,7 @@ let ACTIVE, correct, flags, attempted, peeked;
 function norm(s) {
   return s.trim().toLowerCase().replace(/\s+/g, '').replace(/[−–]/g, '-');
 }
-function ok(user, acc) { return acc.some(a => norm(user) === norm(a)); }
+function ok(user, acc) { if (acc.some(a => norm(user) === norm(a))) return true; try { if (typeof MathCheck !== 'undefined') return MathCheck.smart(user, acc).ok; } catch (e) {} return false; }
 
 function init() {
   ACTIVE    = shuffle(GENERATORS.map(gen => gen()));
@@ -283,7 +314,7 @@ function buildCards() {
           <input class="ans-input" id="ai-${i}" placeholder="answer" />
           <button class="check-btn" id="chk-${i}" onclick="check(${i})">Check</button>
         </div>
-        <div class="hint">${p.hint}</div>
+        <span class="hint-link" onclick="this.style.display='none';this.nextElementSibling.style.display='block'">Show hint</span><div class="hint">${p.hint}</div>
         <div class="feedback" id="fb-${i}"></div>
         <span class="reveal-link" id="rl-${i}" onclick="reveal(${i})">Show solution</span>
         <div class="revealed-answer" id="ra-${i}"></div>
@@ -343,6 +374,7 @@ function updateScore() {
 function resetAll() { init(); buildCards(); updateScore(); }
 </script>
 
+<script src="../js/mathcheck.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/contrib/auto-render.min.js"></script>
 <script>
