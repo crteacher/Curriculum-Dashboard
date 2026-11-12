@@ -45,7 +45,10 @@
   .check-btn{font-family:sans-serif;font-size:13px;background:#1a1a1a;color:#fff;
     border:none;border-radius:6px;padding:7px 14px;cursor:pointer}
   .check-btn:hover{background:#333}.check-btn:disabled{background:#aaa;cursor:default}
-  .hint{font-family:sans-serif;font-size:12px;color:#888;margin-top:7px}
+  .hint{font-family:sans-serif;font-size:12px;color:#888;margin-top:5px;display:none}
+  .hint{display:none!important}
+  .plot-card .card-expr{margin-bottom:8px;line-height:1.8}
+  .plot-card .gk-svg{display:block;max-width:100%;height:auto;background:#fff}
   .feedback{font-family:sans-serif;font-size:13px;margin-top:10px;padding:8px 12px;
     border-radius:6px;display:none;line-height:1.5}
   .feedback.correct{display:block;background:#eaf5ea;color:#1a5a1a}
@@ -58,8 +61,6 @@
     color:#444;background:#f5f3ef;border-radius:6px;padding:8px 11px;line-height:1.8;overflow-x:auto}
   code{font-family:'Courier New',monospace;background:#f0ede7;padding:1px 5px;border-radius:3px;font-size:12px}
 
-
-.hint{display:none!important}
 </style>
 </head>
 <body>
@@ -85,8 +86,7 @@
   <div class="section">
     <div class="section-title">Practice Problems</div>
     <p style="font-family:sans-serif;font-size:13px;color:#666;margin-bottom:1rem;">
-      All answers are integers — enter the value only (no units or variables).
-      Press <strong>Check</strong> or hit Enter.
+      Type integer answers (value only). On graph problems, click two points on the line, then press <strong>Check</strong>.
     </p>
     <div class="score-bar">
       <span class="score-label">Score:</span>
@@ -182,21 +182,23 @@ function gen3() {
   };
 }
 
-// gen4: find y-intercept from two points
+// PLOT_WIN: every graph-making problem uses this window; all lines are built to pass
+// through lattice points inside it, so the student can always click two exact points.
+const PLOT_WIN = {x:[-6,6], y:[-6,6]};
+function plotCfg(m, b) {
+  return { preset:'plot-line', window:PLOT_WIN, ticks:{x:1,y:1}, size:{w:340,h:340}, equalAspect:true, expected:{m:m, b:b} };
+}
+
+// gen4 (STUDENT MAKES THE GRAPH): graph y = mx + b by clicking two points
 function gen4() {
-  const m  = rInt(5) - 2;
-  const adjM = m === 0 ? 2 : m;
-  const x1 = rInt(4) + 1;
-  const b  = rInt(6) - 2;
-  const adjB = b === 0 ? 3 : b;
-  const y1 = adjM * x1 + adjB;
-  const x2 = x1 + rInt(3) + 1;
-  const y2 = adjM * x2 + adjB;
+  const m  = choose([-3,-2,-1,1,2,3]);
+  const b  = rInt(7) - 3;
+  const bStr = b === 0 ? '' : (b < 0 ? ` - ${Math.abs(b)}` : ` + ${b}`);
   return {
-    latex:  `\\text{Find the y-intercept of the line through }(${x1},\\,${y1})\\text{ and }(${x2},\\,${y2}).`,
-    answer: [String(adjB)],
-    hint:   `Find the slope first, then use either point to find b.`,
-    step:   `m=\\frac{${y2-y1}}{${x2-x1}}=${adjM},\\quad b=${adjB}`
+    latex:  `\\text{Graph the line }y = ${fc(m)}x${bStr}.`,
+    plot:   plotCfg(m, b),
+    hint:   `Which point is the y-intercept? From there, what do the rise and run tell you about a second point?`,
+    step:   `\\text{Start at }(0,${b}),\\ \\text{then move }${m>0?'up':'down'}\\ ${Math.abs(m)}\\ \\text{for every }1\\text{ to the right.}`
   };
 }
 
@@ -247,21 +249,16 @@ function gen7() {
   };
 }
 
-// gen8: find b from two points (slope from scratch)
+// gen8 (STUDENT MAKES THE GRAPH): graph the line with slope m through (x1, y1), point-slope style
 function gen8() {
-  const m  = rInt(4) - 2;
-  const adjM = m === 0 ? 3 : m;
-  const b  = rInt(5) - 2;
-  const adjB = b === 0 ? 2 : b;
-  const x1 = 0;                      // one point is the y-intercept itself
-  const y1 = adjB;
-  const x2 = rInt(4) + 1;
-  const y2 = adjM * x2 + adjB;
+  const m  = choose([-3,-2,-1,1,2,3]);
+  let x1, y1, b;
+  do { x1 = rInt(7) - 3; y1 = rInt(7) - 3; b = y1 - m * x1; } while (x1 === 0 || Math.abs(b) > 5);
   return {
-    latex:  `\\text{Find the y-intercept of the line through }(${x1},\\,${y1})\\text{ and }(${x2},\\,${y2}).`,
-    answer: [String(adjB)],
-    hint:   `One of these points has x = 0. What does that make its y-value?`,
-    step:   `(0,${adjB})\\text{ has }x=0,\\text{ so the y-intercept is }${adjB}`
+    latex:  `\\text{Graph the line with slope }${m}\\text{ through the point }(${x1},\\,${y1}).`,
+    plot:   plotCfg(m, b),
+    hint:   `Mark the given point first. How do you use the slope to find another point on the line?`,
+    step:   `y-${y1<0?'('+y1+')':y1}=${m}(x-${x1<0?'('+x1+')':x1})\\Rightarrow y=${fc(m)}x${b===0?'':(b<0?'-'+Math.abs(b):'+'+b)}`
   };
 }
 
@@ -274,7 +271,8 @@ let ACTIVE, correct, flags, attempted, peeked;
 function norm(s) {
   return s.trim().toLowerCase().replace(/\s+/g, '').replace(/[−–]/g, '-');
 }
-function ok(user, acc) { return acc.some(a => norm(user) === norm(a)); }
+function ok(user, acc) { if (acc.some(a => norm(user) === norm(a))) return true; try { if (typeof MathCheck !== 'undefined') return MathCheck.smart(user, acc).ok; } catch (e) {} return false; }
+let PLOTS = {};   // card index -> GraphKit mount (graph-making problems)
 
 function init() {
   ACTIVE    = shuffle(GENERATORS.map(gen => gen()));
@@ -289,25 +287,38 @@ function _re(p,i){const e=document.getElementById('expr-'+i),KO={delimiters:[{le
 function buildCards() {
   const wrap = document.getElementById('problems');
   wrap.innerHTML = '';
+  PLOTS = {};
   ACTIVE.forEach((p, i) => {
     const div = document.createElement('div');
-    div.className = 'card'; div.id = 'card-' + i;
+    div.className = 'card' + (p.plot ? ' plot-card' : ''); div.id = 'card-' + i;
+    const inputRow = p.plot
+      ? `<div id="gk-${i}"></div>
+        <div class="input-row" style="margin-top:8px"><button class="check-btn" id="chk-${i}" onclick="check(${i})">Check</button></div>`
+      : `<div class="input-row">
+          <input class="ans-input" id="ai-${i}" placeholder="answer" />
+          <button class="check-btn" id="chk-${i}" onclick="check(${i})">Check</button>
+        </div>`;
     div.innerHTML =
       `<div class="card-body">
         <div class="card-meta">Problem ${i + 1}</div>
         <div class="card-expr" id="expr-${i}"></div>
-        <div class="input-row">
-          <input class="ans-input" id="ai-${i}" placeholder="answer" />
-          <button class="check-btn" id="chk-${i}" onclick="check(${i})">Check</button>
-        </div>
+        ${inputRow}
         <div class="hint">${p.hint}</div>
         <div class="feedback" id="fb-${i}"></div>
         <span class="reveal-link" id="rl-${i}" onclick="reveal(${i})">Show solution</span>
         <div class="revealed-answer" id="ra-${i}"></div>
       </div>`;
     wrap.appendChild(div);
-    document.getElementById('ai-' + i)
-      .addEventListener('keydown', e => { if (e.key === 'Enter') check(i); });
+    if (p.plot) {
+      if (typeof GraphKit !== 'undefined') {
+        PLOTS[i] = GraphKit.mount(document.getElementById('gk-' + i), Object.assign({}, p.plot, { quietFeedback: true }));
+      } else {
+        document.getElementById('gk-' + i).textContent = 'The graph tool did not load. Please reload the page.';
+      }
+    } else {
+      document.getElementById('ai-' + i)
+        .addEventListener('keydown', e => { if (e.key === 'Enter') check(i); });
+    }
     _re(p, i);
   });
 }
@@ -315,18 +326,27 @@ function buildCards() {
 function check(i) {
   const p = ACTIVE[i], inp = document.getElementById('ai-'+i),
         fb = document.getElementById('fb-'+i), card = document.getElementById('card-'+i),
-        good = ok(inp.value, p.answer);
-  inp.className = 'ans-input';
+        cls = p.plot ? 'card plot-card' : 'card';
+  let good, detail = '';
+  if (p.plot) {
+    const g = PLOTS[i];
+    if (!g) return;
+    const r = g.grade(); good = r.ok; detail = r.detail || '';
+  } else {
+    good = ok(inp.value, p.answer);
+    inp.className = 'ans-input';
+  }
   if (good) {
-    inp.className = 'ans-input ok'; fb.className = 'feedback correct';
-    fb.textContent = '✓ Correct!'; card.className = 'card correct';
+    if (inp) inp.className = 'ans-input ok'; fb.className = 'feedback correct';
+    fb.textContent = '✓ Correct!'; card.className = cls + ' correct';
     if (!flags[i] && !attempted[i] && !peeked[i]) { flags[i]=true; correct++; updateScore(); }
     attempted[i] = true;
-    document.getElementById('chk-'+i).disabled = true; inp.readOnly = true;
+    document.getElementById('chk-'+i).disabled = true;
+    if (inp) inp.readOnly = true; else PLOTS[i].lock(true);
   } else {
-    attempted[i] = true; inp.className = 'ans-input bad'; fb.className = 'feedback wrong';
-    fb.textContent = '✗ Not quite — try again or show the solution.';
-    card.className = peeked[i] ? 'card peeked' : 'card wrong';
+    attempted[i] = true; if (inp) inp.className = 'ans-input bad'; fb.className = 'feedback wrong';
+    fb.textContent = '✗ ' + (detail || 'Not quite') + ' — try again or show the solution.';
+    card.className = cls + (peeked[i] ? ' peeked' : ' wrong');
   }
 }
 
@@ -336,8 +356,9 @@ function reveal(i) {
   if (box.style.display === 'block') {
     box.style.display = 'none'; lnk.textContent = 'Show solution';
   } else {
+    if (p.plot && PLOTS[i]) PLOTS[i].showAnswer();
     if (!flags[i]) {
-      peeked[i] = true; document.getElementById('card-'+i).className = 'card peeked';
+      peeked[i] = true; document.getElementById('card-'+i).className = (p.plot ? 'card plot-card' : 'card') + ' peeked';
       if (!attempted[i]) {
         const fb = document.getElementById('fb-'+i);
         fb.className = 'feedback peeked';
@@ -360,6 +381,8 @@ function updateScore() {
 function resetAll() { init(); buildCards(); updateScore(); }
 </script>
 
+<script src="../js/mathcheck.js"></script>
+<script src="../js/graphkit.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/contrib/auto-render.min.js"></script>
 <script>
