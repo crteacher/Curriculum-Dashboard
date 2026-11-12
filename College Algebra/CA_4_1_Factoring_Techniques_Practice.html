@@ -102,6 +102,7 @@
   </div>
 </div>
 
+<script src="../js/mathcheck.js"></script>
 <script>
 // ── RNG ──────────────────────────────────────────────────────────────────────
 function _rf(){const b=new Uint32Array(1);crypto.getRandomValues(b);return b[0]/4294967296;}
@@ -237,6 +238,14 @@ const GENERATORS=[gen1,gen2,gen3,gen4,gen5,gen6,gen7,gen8];
 // ── State ─────────────────────────────────────────────────────────────────────
 let ACTIVE,correct,flags,attempted,peeked;
 
+// ── MathCheck pilot (2026-11-12) ─────────────────────────────────────────────
+// If ../js/mathcheck.js is loaded, answers are graded as "equal to the answer AND fully factored",
+// with short feedback. If it is missing or fails, the original okFact() matching above is used.
+function gradeAnswer(user,p){
+  try{ if(typeof MathCheck!=='undefined') return MathCheck.check(user,{type:'expr',value:p.answer[0],form:'factored'}); }catch(e){}
+  return {ok:okFact(user,p.answer),reason:''};
+}
+
 function init(){
   ACTIVE=shuffle(GENERATORS.map(g=>g()));
   correct=0;
@@ -276,7 +285,7 @@ function buildCards(){
 function check(i){
   const p=ACTIVE[i],inp=document.getElementById('ai-'+i),
         fb=document.getElementById('fb-'+i),card=document.getElementById('card-'+i),
-        good=okFact(inp.value,p.answer);
+        res=gradeAnswer(inp.value,p), good=res.ok;
   inp.className='ans-input';
   if(good){
     inp.className='ans-input ok';fb.className='feedback correct';
@@ -286,7 +295,7 @@ function check(i){
     document.getElementById('chk-'+i).disabled=true;inp.readOnly=true;
   }else{
     attempted[i]=true;inp.className='ans-input bad';fb.className='feedback wrong';
-    fb.textContent='✗ Not quite — try again or show the solution.';
+    fb.textContent='✗ '+(res.reason||'Not quite — try again or show the solution.');
     card.className=peeked[i]?'card peeked':'card wrong';
   }
 }

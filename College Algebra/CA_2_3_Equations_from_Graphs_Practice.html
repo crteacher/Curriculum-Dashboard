@@ -105,6 +105,7 @@
   </div>
 </div>
 
+<script src="../js/graphkit.js"></script>
 <script>
 // ── Crypto-quality RNG ────────────────────────────────────────────────────────
 function _rf() {
@@ -179,8 +180,27 @@ function markPoint(px, py, label) {
   return s;
 }
 
-// makeGraph(m, b, question, marks) — marks: optional array of [x, y, label] to circle
+// ── GraphKit pilot (2026-11-12) ──────────────────────────────────────────────
+// If ../js/graphkit.js is loaded, graphs are drawn by GraphKit. If it is missing or fails,
+// the original drawing code (makeGraphOld / makeVerticalGraphOld below) is used, so the page never breaks.
+function gkGraph(lineObj, question, marks) {
+  const draw = [Object.assign({type: 'line', width: 2.5}, lineObj)];
+  (marks || []).forEach(pt => draw.push({type: 'point', at: [pt[0], pt[1]], label: pt[2]}));
+  const svg = GraphKit.svg({window: {x: [-5.5, 5.5], y: [-5.5, 5.5]}, ticks: {x: 1, y: 1}, size: {w: 260, h: 260}, draw: draw});
+  const qHtml = `<p style="font-family:sans-serif;font-size:13px;text-align:center;margin-top:6px;color:#1a1a1a">${question}</p>`;
+  return `<div style="max-width:260px;margin:0 auto">${svg}</div>${qHtml}`;
+}
 function makeGraph(m, b, question, marks) {
+  try { if (typeof GraphKit !== 'undefined') return gkGraph({m: m, b: b}, question, marks); } catch (e) {}
+  return makeGraphOld(m, b, question, marks);
+}
+function makeVerticalGraph(h, question, marks) {
+  try { if (typeof GraphKit !== 'undefined') return gkGraph({x: h}, question, marks); } catch (e) {}
+  return makeVerticalGraphOld(h, question, marks);
+}
+
+// makeGraphOld(m, b, question, marks) — marks: optional array of [x, y, label] to circle
+function makeGraphOld(m, b, question, marks) {
   const cx = 110, cy = 110, sc = 20;
   let g = gridAxesSVG();
   // the line, clipped to x ∈ [-5.5, 5.5]
@@ -191,8 +211,8 @@ function makeGraph(m, b, question, marks) {
   return svgWrap(g, question);
 }
 
-// makeVerticalGraph(h, question, marks) — for x = h lines, which makeGraph can't represent
-function makeVerticalGraph(h, question, marks) {
+// makeVerticalGraphOld(h, question, marks) — for x = h lines, which makeGraphOld can't represent
+function makeVerticalGraphOld(h, question, marks) {
   const cx = 110, cy = 110, sc = 20;
   let g = gridAxesSVG();
   g += `<line x1="${cx+h*sc}" y1="10" x2="${cx+h*sc}" y2="210" stroke="#1e3a5c" stroke-width="2.5" stroke-linecap="round"/>`;
