@@ -35,7 +35,7 @@ function rInt(n){return Math.floor(_rf()*n);}
 function shuffle(arr){var a=arr.slice();for(var i=a.length-1;i>0;i--){var j=rInt(i+1);var t=a[i];a[i]=a[j];a[j]=t;}return a;}
 function choose(arr){return arr[rInt(arr.length)];}
 function norm(s){return s.trim().toLowerCase().replace(/\s+/g,'').replace(/[‐–—]/g,'-').replace(/∞/g,'inf').replace(/∪/g,'u');}
-function ok(user,acc){return acc.some(function(a){return norm(user)===norm(a);});}
+function ok(user, acc) { if (acc.some(a => norm(user) === norm(a))) return true; try { if (typeof MathCheck !== 'undefined') return MathCheck.smart(user, acc).ok; } catch (e) {} return false; }
 var GENERATORS=[
   function(){return{latex:'\\text{Rotate }y=x^2\\text{ about the }y\\text{-axis on }[0,1]\\text{ using shells. Find the volume.}',answer:['pi/2'],hint:'In the shell formula V=2pi*integral of x*f(x) dx, what is f(x) here?',step:'V=2\\pi\\int_0^1 x\\cdot x^2\\,dx=2\\pi\\left[\\tfrac{x^4}{4}\\right]_0^1=\\tfrac{\\pi}{2}'};},
   function(){return{latex:'\\text{Rotate }y=x\\text{ about the }y\\text{-axis on }[0,2]\\text{ using shells. Find the volume.}',answer:['16pi/3'],hint:'Each shell at position x has radius x and height f(x). What is f(x)?',step:'V=2\\pi\\int_0^2 x^2\\,dx=2\\pi\\left[\\tfrac{x^3}{3}\\right]_0^2=\\tfrac{16\\pi}{3}'};},
@@ -56,6 +56,7 @@ function reveal(i){var p=ACTIVE[i],box=document.getElementById('ra-'+i),lnk=docu
 function updateScore(){var n=ACTIVE.length;document.getElementById('score').textContent=correct+' / '+n;document.getElementById('prog').style.width=Math.round(correct/n*100)+'%';}
 function resetAll(){init();buildCards();updateScore();}
 </script>
+<script src="../js/mathcheck.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/contrib/auto-render.min.js"></script>
 <script>renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});init();buildCards();updateScore();</script>
