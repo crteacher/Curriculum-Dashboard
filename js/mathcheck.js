@@ -469,6 +469,10 @@ function checkSimplified(u) {                  // fractions reduced, radicals si
       while (na.t === 'neg') na = na.a;
       while (nb.t === 'neg') nb = nb.a;
       if (na.t === 'num' && nb.t === 'num' && isInt(na.v) && isInt(nb.v) && (Math.round(nb.v) === 1 || gcd(na.v, nb.v) > 1)) { why = 'reduce'; return; }
+      if (nb.t === 'num' && isInt(nb.v) && nb.v > 1 && na.t === 'mul') {        // 2pi/6, 6sqrt(3)/3 : integer coefficient shares a factor with the denominator
+        var cf = 1; (function ic(m) { while (m.t === 'neg') m = m.a; if (m.t === 'mul') { ic(m.a); ic(m.b); } else if (m.t === 'num' && isInt(m.v)) cf *= Math.abs(Math.round(m.v)); })(na);
+        if (cf > 1 && gcd(cf, Math.round(nb.v)) > 1) { why = 'reduce'; return; }
+      }
     }
     if (n.t === 'fn' && n.n === 'sqrt' && n.a.t === 'num' && isInt(n.a.v) && n.a.v >= 0) {
       var v = Math.round(n.a.v);
@@ -898,6 +902,65 @@ MC.grade = function (user, problem) {
   return {ok: legacyOk(user, problem ? problem.answer : []), reason:''};
 };
 MC.ok = function (user, problem) { return MC.grade(user, problem).ok; };
+
+/* smart(user, acc, opts) — one-line upgrade for pages that only have an answer list.
+   1) anything the old exact-match accepts still passes;  2) otherwise each stored answer is read
+   and an equivalent-form check is built from it (interval / number / list of numbers / yes-no /
+   algebraic expression).  Answers it can't read (points, words, equations with two sides) stay exact-match.
+   opts: {form:'simplified'|'factored'|'expanded'}  applies to algebraic expressions only. */
+function inferSpec(a, opts) {
+  var s = String(a == null ? '' : a).trim(); if (!s) return null;
+  var cs = clean(s).toLowerCase();
+  if (/^(yes|no|true|false)$/.test(cs)) return {type:'choice', value:cs};
+  if (/inf|∞/.test(cs) && /[\[\(]/.test(cs)) return {type:'interval', value:s};
+  var plusC = /\+\s*c$/i.test(s), body = plusC ? s.replace(/\s*\+\s*c$/i, '') : s;
+  try {
+    var parts = splitTop(clean(body), /[,;]/).map(function (p) { return p.trim(); }).filter(Boolean);
+    if (!parts.length) return null;
+    if (parts.length > 1) {
+      var vals = [];
+      for (var i = 0; i < parts.length; i++) { if (hasVar(parse(parts[i]))) return null; vals.push(parts[i]); }
+      return {type:'set', values:vals};
+    }
+    var ast = parse(clean(body).replace(PREFIX_RE, ''));
+    if (!hasVar(ast)) {
+      var oneTerm = !/[a-z0-9)]\s*[+-]/i.test(body.replace(/^\s*[-+]/, ''));   // sums stay lenient (e^2/4+1/4 is fine)
+      var simp = oneTerm && /\/|sqrt|√/.test(body) ? {form:'simplified'} : {};
+      return Object.assign({type:'number', value:body}, simp);
+    }
+    var spec = {type:'expr', value:body};
+    if (plusC) spec.plusC = true;
+    if (opts && opts.form) spec.form = opts.form;
+    return spec;
+  } catch (e) { if (e && e.mc) return null; throw e; }
+}
+function hasRadDenom(n) {
+  if (!n) return false;
+  if (n.t === 'div') { var found = false; (function w(m) { if (!m || found) return; if (m.t === 'fn' && m.n === 'sqrt' && m.a && m.a.t === 'num' && Math.abs(Math.sqrt(m.a.v) - Math.round(Math.sqrt(m.a.v))) > 1e-12) { found = true; return; } w(m.a); w(m.b); })(n.b); if (found) return true; }
+  return hasRadDenom(n.a) || hasRadDenom(n.b);
+}
+MC.smart = function (user, acc, opts) {
+  acc = acc == null ? [] : [].concat(acc);
+  if (legacyOk(user, acc)) return {ok:true, reason:''};
+  if (user == null || !String(user).trim()) return {ok:false, reason:''};
+  var specs = [];
+  acc.forEach(function (a) { var sp = inferSpec(a, opts); if (sp) { sp.quiet = true; specs.push(sp); } });
+  if (!specs.length) return {ok:false, reason:''};
+  var r = MC.check(user, {anyOf: specs});
+  var isSet = specs.some(function (sp) { return sp.type === 'set'; }), isNum = specs.some(function (sp) { return sp.type === 'number'; });
+  if (r.ok && (isSet || isNum)) {     // exact values: no radicals left in a denominator (1/sqrt(2) is not sqrt(2)/2); in lists, each value simplified too (2pi/6 is not pi/3)
+    try {
+      var parts = isSet ? splitTop(clean(String(user)).toLowerCase().replace(/\b(or|and)\b/g, ','), /[,;]/) : [clean(String(user))];
+      for (var i = 0; i < parts.length; i++) {
+        var p = parts[i].trim().replace(/^[a-z](?:_?\d+)?\s*=\s*/, '');
+        if (!p || p.indexOf('±') >= 0) continue;
+        var pa = parse(p);
+        if (hasRadDenom(pa) || (isSet && checkSimplified(pa))) return {ok: false, reason: ''};
+      }
+    } catch (e) { if (!e || !e.mc) throw e; }
+  }
+  return {ok: !!r.ok, reason: ''};
+};
 MC.legacyOk = legacyOk; MC.legacyNorm = legacyNorm;
 MC.config = { reasons: true };
 MC.REASONS = REASONS;
