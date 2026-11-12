@@ -318,10 +318,11 @@ function asinh(v) { var a = Math.abs(v), r = Math.log(a + Math.sqrt(a * a + 1));
 GK.polyShape = function (zs, s) {
   var rs = zs.map(function (z) { return z.r; }), rmin = Math.min.apply(null, rs), rmax = Math.max.apply(null, rs), ref = 0, x;
   function g(xx) { var v = s; zs.forEach(function (z) { v *= Math.pow(xx - z.r, z.m); }); return v; }
-  for (x = rmin - 0.5; x <= rmax + 0.5; x += 0.02) ref = Math.max(ref, Math.abs(g(x)));
+  /* the curve is the true polynomial a(x-r1)^m1(x-r2)^m2..., scaled vertically so the biggest bump between the zeros reaches 0.8; beyond the outer zeros it climbs like the real thing and is clipped by the window */
+  var lo = rmin === rmax ? rmin - 1 : rmin, hi = rmin === rmax ? rmax + 1 : rmax;
+  for (x = lo; x <= hi; x += 0.02) ref = Math.max(ref, Math.abs(g(x)));
   if (ref === 0) ref = 1;
-  var C = 20, den = asinh(C);
-  return function (xx) { return asinh(C * g(xx) / ref) / den; };
+  return function (xx) { var v = 0.8 * g(xx) / ref; return v > 4 ? 4 : v < -4 ? -4 : v; };
 };
 GK.polyEnds = function (deg, s) { return {left: (deg % 2 ? -s : s) > 0 ? 'up' : 'down', right: s > 0 ? 'up' : 'down'}; };
 GK.polySign = function (zs, left, right) {                 // leading-coefficient sign implied by the ends the student chose (left end wins)

@@ -163,9 +163,19 @@ function buildSketch(zs, c) {
     step: step
   };
 }
+// Reject zero sets whose smallest hump between zeros would be too small to see next to the biggest one.
+function humpsOK(zs) {
+  if (zs.length < 3) return true;
+  const g = x => zs.reduce((p, z) => p * Math.pow(x - z[0], z[1]), 1), h = [];
+  for (let i = 0; i + 1 < zs.length; i++) { let m = 0; for (let x = zs[i][0]; x <= zs[i + 1][0]; x += 0.05) m = Math.max(m, Math.abs(g(x))); h.push(m); }
+  return Math.min(...h) / Math.max(...h) >= 0.15;
+}
 function sk(spec, c) {
-  const zs = shuffle([-4, -3, -2, -1, 0, 1, 2, 3, 4]).slice(0, spec.length).sort((p, q) => p - q).map((r, i) => [r, spec[i]]);
-  return buildSketch(zs, c);
+  for (let t = 0; t < 500; t++) {
+    const zs = shuffle([-4, -3, -2, -1, 0, 1, 2, 3, 4]).slice(0, spec.length).sort((p, q) => p - q).map((r, i) => [r, spec[i]]);
+    if (humpsOK(zs)) return buildSketch(zs, c);
+  }
+  return buildSketch([[-1, spec[0]], [1, spec[1] || 1]].slice(0, spec.length), c);
 }
 function sgn() { return choose([1, -1]); }
 function mag() { return choose([1, 1, 1, 2, 3]); }
