@@ -291,6 +291,10 @@ function pathOf(L, segs) {
 function dot(L, p, color, open, r) {
   return tag('circle', {cx: r2(L.sx(p[0])), cy: r2(L.sy(p[1])), r: r || 4.2, fill: open ? '#fff' : color, stroke: color, 'stroke-width': open ? 2 : 1});
 }
+function zdot(L, r, color, m) {                       // zero marker: filled = crosses, open = bounces, diamond = flat kink
+  if (m !== 1 && m % 2 === 1) { var cx = r2(L.sx(r)), cy = r2(L.sy(0)), d = 7; return tag('polygon', {points: (cx) + ',' + (cy - d) + ' ' + (cx + d) + ',' + cy + ' ' + cx + ',' + (cy + d) + ' ' + (cx - d) + ',' + cy, fill: color, stroke: color, 'stroke-width': 1}); }
+  return dot(L, [r, 0], color, m % 2 === 0, 5.5);
+}
 function text(x, y, s, o) {
   o = o || {};
   return tag('text', {x: r2(x), y: r2(y), 'font-size': o.size || 11, 'font-family': 'Georgia,serif', fill: o.fill || NAVY, 'text-anchor': o.anchor || 'start',
@@ -341,7 +345,7 @@ function drawObject(L, o, color, out) {
     case 'polysketch':
       var pz = o.zeros || [];
       if (pz.length) out.curves += tag('path', stroke(o, color, {d: polyPath(L, pz, o.a || 1), 'clip-path': out.clip}));
-      pz.forEach(function (z) { out.points += dot(L, [z.r, 0], col, z.m % 2 === 0, 5.5); });
+      pz.forEach(function (z) { out.points += zdot(L, z.r, col, z.m); });
       out.desc.push('sketch of a polynomial with ' + pz.map(function (z) { return 'a zero at x = ' + plain(z.r) + (z.m % 2 === 0 ? ' where it touches and turns around' : ' where it crosses'); }).join(', '));
       break;
     case 'fn':
@@ -561,9 +565,9 @@ GK.act = function (input, st, a) {
   st = clone(st); st.marks = null; st.zok = null;
   var mode = st.mode, hx = a.hx || 0.3, hy = a.hy || 0.3, n, near;
   if (a.type === 'end') { if (a.side === 'left' || a.side === 'right') st[a.side] = a.dir === 'down' ? 'down' : 'up'; return st; }
-  if (mode === 'polysketch' && a.type === 'click') {         // one click = crosses, second = touches, third = removes
+  if (mode === 'polysketch' && a.type === 'click') {         // 1 click = crosses straight, 2 = bounces, 3 = flat kink, 4 = removes
     var zr = Math.round(a.x), zc = st.zs[zr];
-    if (!zc) st.zs[zr] = 1; else if (zc === 1) st.zs[zr] = 2; else delete st.zs[zr];
+    if (!zc) st.zs[zr] = 1; else if (zc < 3) st.zs[zr] = zc + 1; else delete st.zs[zr];
     return st;
   }
   if (a.type === 'clear') { var fresh = GK.newState(mode); fresh.tool = mode === 'numberline' ? 'closed' : 'point'; return fresh; }
@@ -662,13 +666,13 @@ GK.gradeState = function (input, st, win) {
   }
   if (mode === 'polysketch') {                                   // zeros, crosses-or-touches at each, and both ends: 4 parts
     var tr = {}, ex = {}, mk = st.zs || {}, deg = 0, got = 0, issues = [], zok = {}, trK, mkK, k, miss, extra;
-    (e.zeros || []).forEach(function (z) { tr[z.r] = z.m % 2 === 0 ? 2 : 1; ex[z.r] = z.m; deg += z.m; });
+    (e.zeros || []).forEach(function (z) { tr[z.r] = z.m === 1 ? 1 : z.m % 2 === 0 ? 2 : 3; ex[z.r] = z.m; deg += z.m; });
     trK = Object.keys(tr).sort(); mkK = Object.keys(mk).sort();
     mkK.forEach(function (q) { zok[q] = false; });
     if (trK.join() === mkK.join()) {
       got++; var badK = null;
       trK.forEach(function (q) { zok[q] = tr[q] === mk[q]; if (!zok[q] && badK === null) badK = q; });
-      if (badK === null) got++; else issues.push('Recheck x = ' + fmt(+badK) + ': does that factor\'s exponent make the graph cross or touch?');
+      if (badK === null) got++; else issues.push('Recheck x = ' + fmt(+badK) + ': does that factor\'s exponent make the graph cross straight through, bounce, or cross with a flat kink?');
     } else if (!mkK.length) issues.push('Click the grid to mark the zeros first.');
     else {
       miss = trK.filter(function (q) { return mkK.indexOf(q) < 0; }); extra = mkK.filter(function (q) { return trK.indexOf(q) < 0; });
@@ -715,7 +719,7 @@ function drawInput(L, c, st) {
   if (st.mode === 'polysketch') {
     var zl = Object.keys(st.zs || {}).map(Number).sort(function (p, q) { return p - q; }).map(function (r) { return {r: r, m: st.zs[r]}; }), sg = GK.polySign(zl, st.left, st.right);
     if (zl.length && sg) s += tag('path', {d: polyPath(L, zl, sg), fill: 'none', stroke: NAVY, 'stroke-width': 2.4, 'stroke-linecap': 'round', 'stroke-linejoin': 'round', 'clip-path': L.clipRef});
-    zl.forEach(function (z) { s += dot(L, [z.r, 0], st.zok ? (st.zok[z.r] ? OKC : BADC) : NAVY, z.m === 2, 5.5); });
+    zl.forEach(function (z) { s += zdot(L, z.r, st.zok ? (st.zok[z.r] ? OKC : BADC) : NAVY, z.m); });
   }
   if (st.mode === 'numberline') {
     var y = L.sy(0);
@@ -767,7 +771,7 @@ var TOOLBARS = {      // the ONLY buttons each mode ever shows
 };
 GK.toolbarFor = function (cfg) { var c = resolve(cfg), m = c.input && c.input.mode; return TOOLBARS[m] ? TOOLBARS[m](c.input).map(function (b) { return b.label; }) : m === 'sketch' ? ((c.sketch && c.sketch.tools) || ['keypoint', 'vertex']) : []; };
 var HINTS = { points: 'Click to place a point. Click a point again to remove it.', line: 'Click two points on the line. Click again to move the nearer point.',
-  polysketch: 'Click a zero once if the graph crosses there, twice if it touches and turns around, a third time to remove it. Then choose both ends.',
+  polysketch: 'Click a zero: 1 click = crosses straight through, 2 = bounces, 3 = crosses with a flat kink, 4 = removes it. Then choose both ends.',
   inequality: 'Click two points for the boundary, choose solid or dashed, then click the side to shade.', numberline: 'Place your point(s), then choose Shade and click the part(s) of the line to shade.' };
 
 GK.mount = function (el, cfg) {

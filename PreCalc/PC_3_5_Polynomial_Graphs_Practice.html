@@ -93,7 +93,7 @@
   <div class="section">
     <div class="section-title">Practice Problems</div>
     <p style="font-family:sans-serif;font-size:13px;color:#666;margin-bottom:1rem;">
-      Every problem asks you to <strong>sketch the graph</strong>. Click a zero on the x-axis once for a <em>cross</em>, twice for a <em>touch</em>, three times to remove it. Choose the left and right end behavior, then press <strong>Check</strong>. The curve draws itself from your choices.
+      Every problem asks you to <strong>sketch the graph</strong>. Click a zero on the x-axis: 1 click = straight cross, 2 = bounce, 3 = cross with a kink, 4 = remove. Choose the left and right end behavior, then press <strong>Check</strong>. The curve draws itself from your choices.
     </p>
     <div class="score-bar">
       <span class="score-label">Score:</span>
@@ -152,9 +152,9 @@ function buildSketch(zs, c) {
   const prompt =
     'Sketch $f(x)=' + polyTeX(zs, c) + '$.<br>' +
     '<span style="font-size:13px;font-family:sans-serif;color:#444">' +
-    'Click each zero on the x-axis: one click if the graph <em>crosses</em> there, two clicks if it <em>touches and turns around</em>. ' +
+    'Click each zero on the x-axis: 1 click = crosses straight through, 2 = bounces (touches and turns around), 3 = crosses with a flat kink, 4 = removes it. ' +
     'Then choose what the graph does at the far left and far right.</span>';
-  const step = '\\text{Zeros: }' + zs.map(z => 'x=' + z[0] + '\\ (\\text{' + (z[1] % 2 ? 'crosses' : 'touches') + '})').join(',\\ ') +
+  const step = '\\text{Zeros: }' + zs.map(z => 'x=' + z[0] + '\\ (\\text{' + (z[1] === 1 ? 'crosses' : z[1] % 2 ? 'crosses with a kink' : 'touches') + '})').join(',\\ ') +
     '.\\quad \\text{Degree }' + deg + ',\\ \\text{leading coefficient ' + (a > 0 ? 'positive' : 'negative') + '}: \\text{left end ' + ends.left + ', right end ' + ends.right + '}.';
   return {
     html: prompt,
