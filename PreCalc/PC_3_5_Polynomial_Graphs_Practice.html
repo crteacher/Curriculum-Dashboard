@@ -93,8 +93,7 @@
   <div class="section">
     <div class="section-title">Practice Problems</div>
     <p style="font-family:sans-serif;font-size:13px;color:#666;margin-bottom:1rem;">
-      Every problem asks you to <strong>sketch the graph</strong>. Click the grid to place the points described, then press <strong>Check</strong>.
-      A dashed curve is drawn through your points. Click a marker to remove it, or use <em>Reset graph</em> to start over.
+      Every problem asks you to <strong>sketch the graph</strong>. Click a zero on the x-axis once for a <em>cross</em>, twice for a <em>touch</em>, three times to remove it. Choose the left and right end behavior, then press <strong>Check</strong>. The curve draws itself from your choices.
     </p>
     <div class="score-bar">
       <span class="score-label">Score:</span>
@@ -140,72 +139,44 @@ function addT(n, v) {
 // ── Problem generators (section-specific, injected below) ─────────────────────
 
 // ── Polynomial sketching generators (student makes the graph) ────────────────
-// A "build" = zeros with multiplicities + leading sign a (= +1 or -1).
-// Student marks: ○ every CROSSING zero (odd multiplicity), ◆ every TOUCHING zero (even multiplicity),
-// ○ the y-intercept (if it is not a zero) and ○ two extra points given in the prompt (one left, one right).
-function polyFn(zs, a) { return x => a * zs.reduce((p, z) => p * Math.pow(x - z[0], z[1]), 1); }
-function polyTeX(zs, a) {
-  let s = a === -1 ? '-' : '';
+// A "build" = zeros with multiplicities + leading coefficient (sign matters; size is for show).
+// Student clicks each zero (1 click = crosses, 2 = touches/bounces, 3 = removes) and picks both end behaviors.
+function polyTeX(zs, c) {
+  let s = c === -1 ? '-' : (c === 1 ? '' : String(c));
   zs.forEach(z => { const r = z[0]; const f = r === 0 ? 'x' : '(x' + (r < 0 ? '+' : '-') + Math.abs(r) + ')'; s += f + (z[1] > 1 ? '^{' + z[1] + '}' : ''); });
   return s;
 }
-function buildSketch(zs, a, opts) {
-  opts = opts || {};
-  const f = polyFn(zs, a), roots = zs.map(z => z[0]);
-  const lo = Math.min(...roots), hi = Math.max(...roots);
-  // extra points: one left of every zero, one right of every zero
-  const xl = lo - 1, xr = hi + 1;
-  const pts = [xl, xr];
-  if (pts.some(x => x < -3 || x > 3)) return null;
-  const y0 = f(0), ext = pts.map(f);
-  const ymax = Math.max(Math.abs(y0), ...ext.map(Math.abs));
-  if (ymax > 16 || ymax === 0) return null;
-  const Y = [6, 8, 12, 16, 20].find(v => v >= ymax * 1.25);
-  const keypoints = [], vertex = [];
-  zs.forEach(z => { (z[1] % 2 ? keypoints : vertex).push({x: z[0], y: 0, label: 'zero at x = ' + z[0] + (z[1] % 2 ? ' (crosses)' : ' (touches)')}); });
-  if (!roots.includes(0)) keypoints.push({x: 0, y: y0, label: 'y-intercept (0, ' + y0 + ')'});
-  pts.forEach((x, i) => { if (!roots.includes(x) && x !== 0) keypoints.push({x: x, y: f(x), label: 'point (' + x + ', ' + f(x) + ')'}); });
-  const need = pts.filter(x => x !== 0 && !roots.includes(x));
+function buildSketch(zs, c) {
+  const a = c < 0 ? -1 : 1, deg = zs.reduce((t, z) => t + z[1], 0);
+  const ends = {left: (deg % 2 ? -a : a) > 0 ? 'rises' : 'falls', right: a > 0 ? 'rises' : 'falls'};
   const prompt =
-    'Sketch $f(x)=' + polyTeX(zs, a) + '$.<br>' +
+    'Sketch $f(x)=' + polyTeX(zs, c) + '$.<br>' +
     '<span style="font-size:13px;font-family:sans-serif;color:#444">' +
-    (keypoints.some(k => k.y === 0) ? 'Mark ○ at each zero where the graph <em>crosses</em> the x-axis. ' : '') +
-    (vertex.length ? 'Mark ◆ at each zero where it <em>touches</em> the axis and turns around. ' : '') +
-    (roots.includes(0) ? '' : 'Plot the y-intercept with ○. ') +
-    'Also plot ○ ' + need.map(x => '$(' + x + ',\\,' + f(x) + ')$').join(' and ') + '.</span>';
-  const step = '\\text{Zeros: }' + zs.map(z => 'x=' + z[0] + (z[1] % 2 ? '\\ (\\text{crosses})' : '\\ (\\text{touches})')).join(',\\ ') +
-    '.\\quad f(0)=' + y0 + '.\\quad ' + (a === 1 ? '\\text{Leading coefficient positive}' : '\\text{Leading coefficient negative}') +
-    '\\text{, degree }' + zs.reduce((s, z) => s + z[1], 0) + '.';
+    'Click each zero on the x-axis: one click if the graph <em>crosses</em> there, two clicks if it <em>touches and turns around</em>. ' +
+    'Then choose what the graph does at the far left and far right.</span>';
+  const step = '\\text{Zeros: }' + zs.map(z => 'x=' + z[0] + '\\ (\\text{' + (z[1] % 2 ? 'crosses' : 'touches') + '})').join(',\\ ') +
+    '.\\quad \\text{Degree }' + deg + ',\\ \\text{leading coefficient ' + (a > 0 ? 'positive' : 'negative') + '}: \\text{left end ' + ends.left + ', right end ' + ends.right + '}.';
   return {
     html: prompt,
-    sketch: { preset: 'sketch-curve', window: {x: [-4, 4], y: [-Y, Y]},
-      sketch: { fn: f, tStep: 1, hStep: Y <= 8 ? 2 : 4, xLabel: 'x', yLabel: 'f(x)', tolerance: 0.07, curveTolerance: 0.3, curvePassFrac: 0.6,
-        expected: {keypoints: keypoints, vertex: vertex} } },
-    hint: 'What does each zero\'s multiplicity tell you about how the graph meets the x-axis there?',
+    sketch: {preset: 'poly-sketch', expected: {zeros: zs.map(z => ({r: z[0], m: z[1]})), a: a}},
+    hint: 'What do the exponents and the leading coefficient tell you about zeros and ends?',
     step: step
   };
 }
-function pickZeros(spec) {   // spec: array of multiplicities e.g. [1,1,1]; returns distinct integer zeros in [-2,2]
-  const pool = [-2, -1, 0, 1, 2];
-  const chosen = shuffle(pool).slice(0, spec.length).sort((p, q) => p - q);
-  return chosen.map((r, i) => [r, spec[i]]);
+function sk(spec, c) {
+  const zs = shuffle([-4, -3, -2, -1, 0, 1, 2, 3, 4]).slice(0, spec.length).sort((p, q) => p - q).map((r, i) => [r, spec[i]]);
+  return buildSketch(zs, c);
 }
-function sk(spec, a) {
-  for (let t = 0; t < 400; t++) {
-    const zs = pickZeros(shuffle(spec));
-    const r = buildSketch(zs, a);
-    if (r) return r;
-  }
-  return null;
-}
-function gen1() { return sk([1, 1, 1], 1); }      // cubic, three crossings, rises to the right
-function gen2() { return sk([1, 1, 1], -1); }     // cubic, three crossings, falls to the right
-function gen3() { return sk([2, 1], 1); }         // one touch + one cross
-function gen4() { return sk([2, 1], -1); }
-function gen5() { return sk([2, 2], 1); }         // W shape: two touches
-function gen6() { return sk([2, 1, 1], 1); }      // quartic: one touch, two crosses
-function gen7() { return sk([1, 1], choose([1, -1])); }   // quadratic: two crossings (parabola)
-function gen8() { return sk([2, 2], -1); }        // M shape
+function sgn() { return choose([1, -1]); }
+function mag() { return choose([1, 1, 1, 2, 3]); }
+function gen1() { return sk(shuffle([1, 1, 1]), sgn() * mag()); }     // cubic, three crossings
+function gen2() { return sk(shuffle([1, 1, 1, 1]), sgn() * mag()); }  // quartic, four crossings
+function gen3() { return sk(shuffle([2, 1]), sgn() * mag()); }        // one touch + one cross
+function gen4() { return sk(shuffle([2, 1, 1]), sgn() * mag()); }     // quartic: one touch, two crosses
+function gen5() { return sk(shuffle([2, 2]), sgn() * mag()); }        // two touches
+function gen6() { return sk(shuffle([3, 1]), sgn() * mag()); }        // flat crossing + simple crossing
+function gen7() { return sk(shuffle([1, 2, 2]), sgn() * mag()); }     // quintic: one cross, two touches
+function gen8() { return sk(shuffle([1, 1]), sgn() * mag()); }        // parabola
 const GENERATORS = [gen1, gen2, gen3, gen4, gen5, gen6, gen7, gen8];
 
 
@@ -254,7 +225,7 @@ function buildCards() {
         <div class="revealed-answer" id="ra-${i}"></div>
       </div>`;
     wrap.appendChild(div);
-    if (typeof GraphKit !== 'undefined' && typeof SketchWidget !== 'undefined') {
+    if (typeof GraphKit !== 'undefined') {
       PLOTS[i] = GraphKit.mount(document.getElementById('gk-' + i), p.sketch);
     } else {
       document.getElementById('gk-' + i).textContent = 'The graph tool did not load. Please reload the page.';
@@ -281,7 +252,7 @@ function check(i) {
     document.getElementById('chk-'+i).disabled = true; document.getElementById('rst-'+i).disabled = true;
   } else {
     attempted[i] = true; fb.className = 'feedback wrong';
-    fb.textContent = '✗ Not quite. Compare with the list above, then press Reset graph to try again.';
+    fb.textContent = '✗ ' + (r.detail || 'Not quite.') + ' Fix it and press Check again, or Reset graph.';
     card.className = 'card plot-card' + (peeked[i] ? ' peeked' : ' wrong');
   }
 }
@@ -318,7 +289,6 @@ function resetAll() { init(); buildCards(); updateScore(); }
 </script>
 
 <script src="../js/mathcheck.js"></script>
-<script src="../js/sketch-widget.js"></script>
 <script src="../js/graphkit.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/contrib/auto-render.min.js"></script>

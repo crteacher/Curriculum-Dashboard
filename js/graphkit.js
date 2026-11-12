@@ -206,7 +206,8 @@ GK.fitWindow = function (cfg) {
 var PRESETS = {
   'read-graph': {}, 'plot-points': {input: {mode: 'points'}}, 'plot-line': {input: {mode: 'line'}},
   'shade-inequality': {input: {mode: 'inequality'}}, 'sketch-curve': {input: {mode: 'sketch'}},
-  'two-lines': {}, 'piecewise': {}, 'number-line': {kind: 'numberline'}, 'pick-graph': {input: {mode: 'choose'}}
+  'two-lines': {}, 'piecewise': {}, 'number-line': {kind: 'numberline'}, 'pick-graph': {input: {mode: 'choose'}},
+  'poly-sketch': {input: {mode: 'polysketch'}, qualitative: true, window: {x: [-6, 6], y: [-1.35, 1.35]}, size: {w: 440, h: 230}, ticks: {x: 1, y: 1}}
 };
 GK.presets = Object.keys(PRESETS);
 var DEFAULT_SHOW = ['grid', 'axes', 'ticks', 'numbers', 'arrows'];
@@ -259,7 +260,7 @@ function layout(c) {
     win = GK.fitWindow(c);
   }
   var numbers = has(c.show, 'numbers');
-  var pad = nl ? {l: 16, r: 16, t: 8, b: 8} : {l: numbers ? 34 : 12, r: 16, t: 14, b: numbers ? 26 : 12};
+  var pad = nl ? {l: 16, r: 16, t: 8, b: 8} : {l: numbers && !c.qualitative ? 34 : 12, r: 16, t: 14, b: numbers ? 26 : 12};
   var W = size.w, H = size.h, iw = W - pad.l - pad.r, ih = H - pad.t - pad.b;
   if (c.equalAspect && !nl) {
     var ux = iw / (win.x[1] - win.x[0]), uy = ih / (win.y[1] - win.y[0]), u = Math.min(ux, uy);
@@ -312,9 +313,36 @@ function lineText(ln) {
   return 'line with slope ' + plain(ln.m) + ' and y-intercept ' + plain(ln.b);
 }
 
+/* qualitative polynomial sketch: zeros [{r,m}] and the sign s of the leading coefficient give a curve squeezed into (-1, 1) so every bump shows */
+function asinh(v) { var a = Math.abs(v), r = Math.log(a + Math.sqrt(a * a + 1)); return v < 0 ? -r : r; }
+GK.polyShape = function (zs, s) {
+  var rs = zs.map(function (z) { return z.r; }), rmin = Math.min.apply(null, rs), rmax = Math.max.apply(null, rs), ref = 0, x;
+  function g(xx) { var v = s; zs.forEach(function (z) { v *= Math.pow(xx - z.r, z.m); }); return v; }
+  for (x = rmin - 0.5; x <= rmax + 0.5; x += 0.02) ref = Math.max(ref, Math.abs(g(x)));
+  if (ref === 0) ref = 1;
+  var C = 20, den = asinh(C);
+  return function (xx) { return asinh(C * g(xx) / ref) / den; };
+};
+GK.polyEnds = function (deg, s) { return {left: (deg % 2 ? -s : s) > 0 ? 'up' : 'down', right: s > 0 ? 'up' : 'down'}; };
+GK.polySign = function (zs, left, right) {                 // leading-coefficient sign implied by the ends the student chose (left end wins)
+  var deg = zs.reduce(function (t, z) { return t + z.m; }, 0), p = deg % 2 === 0 ? 1 : -1;
+  return left ? (left === 'up' ? p : -p) : right ? (right === 'up' ? 1 : -1) : 0;
+};
+function polyPath(L, zs, s) {
+  var f = GK.polyShape(zs, s), w = L.win, pp = [], i, n = 320;
+  for (i = 0; i <= n; i++) { var x = w.x[0] + (w.x[1] - w.x[0]) * i / n; pp.push([x, f(x)]); }
+  return pathOf(L, [pp]);
+}
+
 function drawObject(L, o, color, out) {
   var w = L.win, f, segs, a, b, ln, P, Q, i, s = '', col = o.color || color;
   switch (o.type) {
+    case 'polysketch':
+      var pz = o.zeros || [];
+      if (pz.length) out.curves += tag('path', stroke(o, color, {d: polyPath(L, pz, o.a || 1), 'clip-path': out.clip}));
+      pz.forEach(function (z) { out.points += dot(L, [z.r, 0], col, z.m % 2 === 0, 5.5); });
+      out.desc.push('sketch of a polynomial with ' + pz.map(function (z) { return 'a zero at x = ' + plain(z.r) + (z.m % 2 === 0 ? ' where it touches and turns around' : ' where it crosses'); }).join(', '));
+      break;
     case 'fn':
       f = toFn(o.f); a = o.domain ? Math.max(o.domain[0], w.x[0]) : w.x[0]; b = o.domain ? Math.min(o.domain[1], w.x[1]) : w.x[1];
       segs = GK.sample(f, a, b, o.samples || 260, w.y[0], w.y[1]);
@@ -453,7 +481,7 @@ function frame(L, c, out) {
   var nx = (w.x[1] - w.x[0]) / L.stepX, ny = (w.y[1] - w.y[0]) / L.stepY, everyX = nx > 14 ? 2 : 1, everyY = ny > 14 ? 2 : 1;
   if (has(show, 'grid')) {
     for (k = Math.ceil(w.x[0] / L.stepX - eps); k * L.stepX <= w.x[1] + eps; k++) { x = L.sx(k * L.stepX); s += tag('line', {x1: r2(x), y1: L.pad.t, x2: r2(x), y2: L.pad.t + L.ih, stroke: GRIDC, 'stroke-width': 1}); }
-    for (k = Math.ceil(w.y[0] / L.stepY - eps); k * L.stepY <= w.y[1] + eps; k++) { y = L.sy(k * L.stepY); s += tag('line', {x1: L.pad.l, y1: r2(y), x2: L.pad.l + L.iw, y2: r2(y), stroke: GRIDC, 'stroke-width': 1}); }
+    if (!c.qualitative) for (k = Math.ceil(w.y[0] / L.stepY - eps); k * L.stepY <= w.y[1] + eps; k++) { y = L.sy(k * L.stepY); s += tag('line', {x1: L.pad.l, y1: r2(y), x2: L.pad.l + L.iw, y2: r2(y), stroke: GRIDC, 'stroke-width': 1}); }
   }
   var arrows = has(show, 'arrows');
   if (has(show, 'axes')) {
@@ -469,7 +497,7 @@ function frame(L, c, out) {
     if (has(show, 'ticks') && has(show, 'axes')) s += tag('line', {x1: r2(x), y1: bx - 3, x2: r2(x), y2: bx + 3, stroke: AXISC, 'stroke-width': 1});
     if (has(show, 'numbers') && k % everyX === 0 && x < L.pad.l + L.iw - 6) s += text(x, Math.min(bx + 14, L.H - 3), fmt(xv), {fill: NUMC, anchor: 'middle', size: 10});
   }
-  for (k = Math.ceil(w.y[0] / L.stepY - eps); k * L.stepY <= w.y[1] + eps; k++) {
+  if (!c.qualitative) for (k = Math.ceil(w.y[0] / L.stepY - eps); k * L.stepY <= w.y[1] + eps; k++) {
     var yv = k * L.stepY; if (Math.abs(yv) < eps && xin && yin) continue; y = L.sy(yv);
     if (has(show, 'ticks') && has(show, 'axes')) s += tag('line', {x1: by - 3, y1: r2(y), x2: by + 3, y2: r2(y), stroke: AXISC, 'stroke-width': 1});
     if (has(show, 'numbers') && k % everyY === 0 && y > L.pad.t + 8) s += text(Math.max(by - 6, 3), y + 3.5, fmt(yv), {fill: NUMC, anchor: by - 6 < 12 ? 'start' : 'end', size: 10});
@@ -519,7 +547,7 @@ GK.describe = function (cfg) { return build(cfg).desc; };
 GK.window = function (cfg) { return build(cfg).L.win; };
 
 /* ══════════════════════════ 5. Student input: state, actions, grading (no browser needed) ══════════════════════════ */
-GK.newState = function (mode) { return {mode: mode, pts: [], dashed: false, side: null, shade: [], tool: mode === 'numberline' ? 'closed' : 'point', marks: null, choice: null}; };
+GK.newState = function (mode) { return {mode: mode, pts: [], dashed: false, side: null, shade: [], tool: mode === 'numberline' ? 'closed' : 'point', marks: null, choice: null, zs: {}, left: null, right: null, zok: null}; };
 
 function nearest(pts, x, y, hx, hy) {
   var best = -1, bd = Infinity;
@@ -529,8 +557,14 @@ function nearest(pts, x, y, hx, hy) {
 function regionOf(sortedXs, x) { var i = 0; while (i < sortedXs.length && x > sortedXs[i]) i++; return i; }  // 0 .. n
 /* action: {type:'click', x, y, hx, hy} (hx,hy = "close enough" distances in graph units) | {type:'tool', tool} | {type:'dashed', value} | {type:'clear'} | {type:'choose', index} */
 GK.act = function (input, st, a) {
-  st = clone(st); st.marks = null;
+  st = clone(st); st.marks = null; st.zok = null;
   var mode = st.mode, hx = a.hx || 0.3, hy = a.hy || 0.3, n, near;
+  if (a.type === 'end') { if (a.side === 'left' || a.side === 'right') st[a.side] = a.dir === 'down' ? 'down' : 'up'; return st; }
+  if (mode === 'polysketch' && a.type === 'click') {         // one click = crosses, second = touches, third = removes
+    var zr = Math.round(a.x), zc = st.zs[zr];
+    if (!zc) st.zs[zr] = 1; else if (zc === 1) st.zs[zr] = 2; else delete st.zs[zr];
+    return st;
+  }
   if (a.type === 'clear') { var fresh = GK.newState(mode); fresh.tool = mode === 'numberline' ? 'closed' : 'point'; return fresh; }
   if (a.type === 'tool') { st.tool = a.tool; return st; }
   if (a.type === 'dashed') { st.dashed = !!a.value; return st; }
@@ -625,6 +659,27 @@ GK.gradeState = function (input, st, win) {
     var ends = function (ps) { var o = []; ps.forEach(function (p) { if (isFinite(p.lo)) o.push(p.lo); if (isFinite(p.hi)) o.push(p.hi); }); return o.join(','); };
     return {ok: good, score: good ? 1 : 0, detail: good ? '' : (!st.pts.length && !st.shade.length) ? 'Place a point, then shade.' : ends(got) === ends(want) && got.length === want.length ? 'The numbers are right. Check open versus closed circles, and what is shaded.' : 'Not quite. Check your endpoints and shading.'};
   }
+  if (mode === 'polysketch') {                                   // zeros, crosses-or-touches at each, and both ends: 4 parts
+    var tr = {}, ex = {}, mk = st.zs || {}, deg = 0, got = 0, issues = [], zok = {}, trK, mkK, k, miss, extra;
+    (e.zeros || []).forEach(function (z) { tr[z.r] = z.m % 2 === 0 ? 2 : 1; ex[z.r] = z.m; deg += z.m; });
+    trK = Object.keys(tr).sort(); mkK = Object.keys(mk).sort();
+    mkK.forEach(function (q) { zok[q] = false; });
+    if (trK.join() === mkK.join()) {
+      got++; var badK = null;
+      trK.forEach(function (q) { zok[q] = tr[q] === mk[q]; if (!zok[q] && badK === null) badK = q; });
+      if (badK === null) got++; else issues.push('Recheck x = ' + fmt(+badK) + ': does that factor\'s exponent make the graph cross or touch?');
+    } else if (!mkK.length) issues.push('Click the grid to mark the zeros first.');
+    else {
+      miss = trK.filter(function (q) { return mkK.indexOf(q) < 0; }); extra = mkK.filter(function (q) { return trK.indexOf(q) < 0; });
+      trK.forEach(function (q) { if (mk[q] !== undefined) zok[q] = tr[q] === mk[q]; });
+      issues.push((miss.length ? 'You are missing a zero. ' : '') + (extra.length ? 'x = ' + fmt(+extra[0]) + ' is not a zero of f. ' : '') + 'Each factor (x − r) gives a zero at x = r.');
+    }
+    var en = e.ends || GK.polyEnds(deg, e.a || 1);
+    if (!st.left || !st.right) issues.push('Choose both end behaviors.');
+    else { if (st.left === en.left) got++; else issues.push('Recheck the left end.'); if (st.right === en.right) got++; else issues.push('Recheck the right end.'); }
+    st.zok = zok;
+    return {ok: got === 4, score: got / 4, detail: got === 4 ? '' : issues.join(' ')};
+  }
   if (mode === 'choose') { var c = st.choice === e; return {ok: c, score: c ? 1 : 0, detail: st.choice == null ? 'Pick one of the graphs.' : ''}; }
   return {ok: false, score: 0, detail: ''};
 };
@@ -635,6 +690,7 @@ function autoAnswer(mode, e) {
   if (mode === 'line') { q.type = 'line'; for (k in e) q[k] = e[k]; return [q]; }
   if (mode === 'inequality') { q.type = 'inequality'; for (k in e) q[k] = e[k]; return [q]; }
   if (mode === 'numberline') return [{type: 'interval', value: e, color: GOLD, lift: 16}];
+  if (mode === 'polysketch') return [{type: 'polysketch', zeros: e.zeros, a: e.a || 1, color: GOLD}];
   return [];
 }
 /* drawing of the student's marks */
@@ -654,6 +710,11 @@ function drawInput(L, c, st) {
       s += tag('line', {x1: r2(L.sx(P[0][0])), y1: r2(L.sy(P[0][1])), x2: r2(L.sx(P[1][0])), y2: r2(L.sy(P[1][1])), stroke: NAVY, 'stroke-width': 2.2, 'stroke-dasharray': st.mode === 'inequality' && st.dashed ? '7 5' : null, 'clip-path': L.clipRef});
     }
     st.pts.forEach(function (p) { s += dot(L, [p.x, p.y], NAVY, false, 5); });
+  }
+  if (st.mode === 'polysketch') {
+    var zl = Object.keys(st.zs || {}).map(Number).sort(function (p, q) { return p - q; }).map(function (r) { return {r: r, m: st.zs[r]}; }), sg = GK.polySign(zl, st.left, st.right);
+    if (zl.length && sg) s += tag('path', {d: polyPath(L, zl, sg), fill: 'none', stroke: NAVY, 'stroke-width': 2.4, 'stroke-linecap': 'round', 'stroke-linejoin': 'round', 'clip-path': L.clipRef});
+    zl.forEach(function (z) { s += dot(L, [z.r, 0], st.zok ? (st.zok[z.r] ? OKC : BADC) : NAVY, z.m === 2, 5.5); });
   }
   if (st.mode === 'numberline') {
     var y = L.sy(0);
@@ -700,10 +761,12 @@ var TOOLBARS = {      // the ONLY buttons each mode ever shows
   points: function (input) { return (input.allowOpen ? [{tool: 'point', label: '● Closed'}, {tool: 'open', label: '○ Open'}] : []).concat([{act: 'undo', label: 'Undo', quiet: true}, {act: 'clear', label: 'Clear', quiet: true}]); },
   line: function () { return [{act: 'undo', label: 'Undo', quiet: true}, {act: 'clear', label: 'Clear', quiet: true}]; },
   inequality: function () { return [{dashed: false, label: 'Solid line'}, {dashed: true, label: 'Dashed line'}, {act: 'undo', label: 'Undo', quiet: true}, {act: 'clear', label: 'Clear', quiet: true}]; },
-  numberline: function () { return [{tool: 'closed', label: '● Closed point'}, {tool: 'open', label: '○ Open point'}, {tool: 'shade', label: 'Shade'}, {act: 'undo', label: 'Undo', quiet: true}, {act: 'clear', label: 'Clear', quiet: true}]; }
+  numberline: function () { return [{tool: 'closed', label: '● Closed point'}, {tool: 'open', label: '○ Open point'}, {tool: 'shade', label: 'Shade'}, {act: 'undo', label: 'Undo', quiet: true}, {act: 'clear', label: 'Clear', quiet: true}]; },
+  polysketch: function () { return [{end: {side: 'left', dir: 'up'}, label: 'Left end ↑'}, {end: {side: 'left', dir: 'down'}, label: 'Left end ↓'}, {end: {side: 'right', dir: 'up'}, label: 'Right end ↑'}, {end: {side: 'right', dir: 'down'}, label: 'Right end ↓'}, {act: 'undo', label: 'Undo', quiet: true}, {act: 'clear', label: 'Clear', quiet: true}]; }
 };
 GK.toolbarFor = function (cfg) { var c = resolve(cfg), m = c.input && c.input.mode; return TOOLBARS[m] ? TOOLBARS[m](c.input).map(function (b) { return b.label; }) : m === 'sketch' ? ((c.sketch && c.sketch.tools) || ['keypoint', 'vertex']) : []; };
 var HINTS = { points: 'Click to place a point. Click a point again to remove it.', line: 'Click two points on the line. Click again to move the nearer point.',
+  polysketch: 'Click a zero once if the graph crosses there, twice if it touches and turns around, a third time to remove it. Then choose both ends.',
   inequality: 'Click two points for the boundary, choose solid or dashed, then click the side to shade.', numberline: 'Place your point(s), then choose Shade and click the part(s) of the line to shade.' };
 
 GK.mount = function (el, cfg) {
@@ -732,6 +795,7 @@ GK.mount = function (el, cfg) {
         if (t.act === 'clear') st = GK.act(input, st, {type: 'clear'});
         else if (t.tool) st = GK.act(input, st, {type: 'tool', tool: t.tool});
         else if ('dashed' in t) st = GK.act(input, st, {type: 'dashed', value: t.dashed});
+        else if (t.end) st = GK.act(input, st, {type: 'end', side: t.end.side, dir: t.end.dir});
         refresh();
       });
       b._t = t; bar.appendChild(b);
@@ -792,6 +856,7 @@ GK.mount = function (el, cfg) {
     var g = svg.querySelector('.gk-input'); if (g && st) g.innerHTML = drawInput(L, c, st);
     if (bar) Array.prototype.forEach.call(bar.querySelectorAll('button'), function (b) {
       var t = b._t; if (t.tool) b.setAttribute('aria-pressed', String(st.tool === t.tool)); if ('dashed' in t) b.setAttribute('aria-pressed', String(st.dashed === t.dashed));
+      if (t.end) b.setAttribute('aria-pressed', String(st[t.end.side] === t.end.dir));
     });
   }
   function wire() {
