@@ -847,7 +847,7 @@ function mountChoose(el, c, api) {
 
 /* sketch-curve: hands the work to the existing SketchWidget so its behaviour and grading stay exactly the same */
 function mountSketch(el, c, api) {
-  var doc = el.ownerDocument, SW = root.SketchWidget, id = 'gksk' + (++UID), sk = c.sketch || {}, prob = {}, k;
+  var doc = el.ownerDocument, SW = root.SketchWidget || (typeof SketchWidget !== 'undefined' ? SketchWidget : null), id = 'gksk' + (++UID), sk = c.sketch || {}, prob = {}, k;
   if (!SW) { el.innerHTML = '<div class="gk-fb bad">The sketch tool (sketch-widget.js) is not loaded on this page.</div>'; api.grade = function () { return {ok: false, score: 0, detail: 'sketch tool missing'}; }; api.showAnswer = api.reset = function () {}; return api; }
   for (k in sk) prob[k] = sk[k];
   var win = c.window && c.window.x && c.window.y ? c.window : GK.fitWindow({window: c.window, draw: c.draw.concat(sk.fn ? [{type: 'fn', f: sk.fn}] : [])});
