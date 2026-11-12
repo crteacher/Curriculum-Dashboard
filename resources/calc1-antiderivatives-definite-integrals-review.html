@@ -177,12 +177,12 @@
   .fr { display: inline-flex; flex-direction: column; vertical-align: middle; text-align: center; margin: 0 .18em; line-height: 1.2; font-size: .95em; }
   .fr > span:first-child { border-bottom: 1.5px solid currentColor; padding: 0 .25em 1px; }
   .fr > span:last-child { padding: 1px .25em 0; }
-  .int { display: inline-flex; align-items: center; vertical-align: middle; margin-right: .2em; }
-  .int .sym { font: 300 2.4em/1 "Fraunces", Georgia, serif; transform: scaleY(1.05); }
-  .int .lim { display: inline-flex; flex-direction: column; justify-content: space-between; height: 2.45em; font-size: .8em; margin-left: -.3em; margin-right: .2em; line-height: 1; }
+  .int { display: inline-flex; align-items: center; vertical-align: middle; margin-right: .3em; }
+  .int .isym { height: 2.3em; width: .78em; fill: none; stroke: currentColor; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; flex: none; overflow: visible; }
+  .int .lim { display: inline-flex; flex-direction: column; justify-content: space-between; height: 2.3em; font-size: .72em; margin-left: .12em; line-height: 1; padding: .05em 0; }
   .rad { white-space: nowrap; } .rad .ov { border-top: 1.5px solid currentColor; padding: 0 .12em; margin-left: .05em; } .rad sup { font-size: .6em; margin-right: -.1em; }
   .op { margin: 0 .22em; }
-  .mx i { font-family: "Fraunces", Georgia, serif; }
+  .mx i { font-family: "Fraunces", Georgia, serif; padding-right: .06em; }
   .res table { width: 100%; border-collapse: collapse; }
   .res th, .res td { text-align: left; padding: 7px 8px; border-bottom: 1px solid var(--card-border); }
   .res td.n, .res th.n { text-align: right; font-family: "JetBrains Mono", monospace; }
@@ -378,8 +378,8 @@
   function X(e) { return e === 1 ? VX : VX + sup(e); }
   function RAD(inner, idx) { return "<span class=\"rad\">" + (idx ? sup(idx) : "") + "&radic;<span class=\"ov\">" + inner + "</span></span>"; }
   function lim(v) { return typeof v === "number" ? nm(v) : v; }
-  function INT(a, b, body) { return "<span class=\"int\"><span class=\"sym\">&int;</span><span class=\"lim\"><span>" + lim(b) + "</span><span>" + lim(a) + "</span></span></span><span class=\"body\">" + body + "</span>"; }
-  function INT0(body) { return "<span class=\"int\"><span class=\"sym\">&int;</span></span><span class=\"body\">" + body + "</span>"; }
+  function INT(a, b, body) { return "<span class=\"int\"><svg class=\"isym\" viewBox=\"0 0 20 60\" aria-hidden=\"true\"><path d=\"M17 6 C16.5 2 12.5 1.5 11.5 7 L8.5 53 C7.5 58.5 3.5 58.5 3 54\"/></svg><span class=\"lim\"><span>" + lim(b) + "</span><span>" + lim(a) + "</span></span></span><span class=\"body\">" + body + "</span>"; }
+  function INT0(body) { return "<span class=\"int\"><svg class=\"isym\" viewBox=\"0 0 20 60\" aria-hidden=\"true\"><path d=\"M17 6 C16.5 2 12.5 1.5 11.5 7 L8.5 53 C7.5 58.5 3.5 58.5 3 54\"/></svg></span><span class=\"body\">" + body + "</span>"; }
   function I(a, b, body) { return INT(a, b, body) + DX(); }
   function DX() { return " <i>dx</i>"; }
   function ML(h) { return "<span class=\"mathline mx\">" + h + "</span>"; }
