@@ -58,6 +58,9 @@
     color:#444;background:#f5f3ef;border-radius:6px;padding:8px 11px;line-height:1.8;overflow-x:auto}
   code{font-family:'Courier New',monospace;background:#f0ede7;padding:1px 5px;border-radius:3px;font-size:12px}
 
+  .plot-card .card-expr{line-height:1.8;margin-bottom:8px}
+  .plot-card svg{max-width:100%;height:auto}
+  .plot-btns{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
 
 .hint{display:none!important}
 </style>
@@ -90,8 +93,8 @@
   <div class="section">
     <div class="section-title">Practice Problems</div>
     <p style="font-family:sans-serif;font-size:13px;color:#666;margin-bottom:1rem;">
-      Enter integers for asymptotes (e.g. <code>x=2</code> → enter <code>2</code>) or excluded values; <code>none</code> if no horizontal asymptote; <code>hole</code> or <code>va</code> for type.
-      Press <strong>Check</strong> or hit Enter.
+      Typed problems: enter integers (e.g. for <code>x=2</code> enter <code>2</code>) or <code>hole</code> / <code>va</code>. Press <strong>Check</strong> or hit Enter.
+      Graph problems: choose a tool (<em>Vertical asymptote</em>, <em>Horizontal asymptote</em>, <em>Hole</em>), then click the grid. Click a mark again to remove it. Place only what the function has.
     </p>
     <div class="score-bar">
       <span class="score-label">Score:</span>
@@ -136,6 +139,20 @@ function addT(n, v) {
 
 // ── Problem generators (section-specific, injected below) ─────────────────────
 
+// ── Helpers for the graph problems ────────────────────────────────────────────
+function lin(a, b) { let s = (a === 1 ? '' : a === -1 ? '-' : String(a)) + 'x'; if (b) s += (b > 0 ? '+' : '-') + Math.abs(b); return s; }
+function fac(r) { return r === 0 ? 'x' : 'x' + (r > 0 ? '-' : '+') + Math.abs(r); }
+// card whose answer is made on a graph: student marks asymptotes (and holes) for f = num/den
+function ratCard(numT, denT, fText, exp, step) {
+  const e = Object.assign({f: fText}, exp);
+  return {
+    html: 'Mark every vertical and horizontal asymptote of $f(x)=\\dfrac{' + numT + '}{' + denT + '}$.',
+    plot: {preset: 'mark-asymptotes', window: {x: [-8, 8], y: [-8, 8]}, size: {w: 380, h: 300}, ticks: {x: 2, y: 2}, expected: e},
+    hint: 'Which factors of the denominator cancel, and what do the degrees tell you about the ends of the graph?',
+    step: step
+  };
+}
+
 function gen1(){
   // Domain: one excluded x (linear denominator x - a)
   const a = choose([-5,-4,-3,-2,-1,1,2,3,4,5]);
@@ -169,118 +186,69 @@ function gen2(){
 }
 
 function gen3(){
-  // Vertical asymptote — after confirming no cancellation
-  const a = choose([-5,-4,-3,-2,-1,1,2,3,4,5]);
-  const aS = a >= 0 ? `-${a}` : `+${-a}`;
-  // numerator is a constant or non-canceling linear
-  const num = choose([1,2,3,4,5,6]);
-  return {
-    latex: `f(x)=\\dfrac{${num}}{x${aS}}.\\quad\\text{Vertical asymptote: }x=`,
-    answer: [String(a)],
-    hint: 'Where does a rational function have a vertical asymptote when the denominator is zero?',
-    step: `\\text{Denominator }x${aS}=0\\Rightarrow x=${a}.\\;\\text{No cancellation, so VA at }x=${a}`
-  };
+  // Graph: mark vertical + horizontal asymptotes, deg(num) < deg(den)  ->  HA y = 0
+  const pool = [-5,-4,-3,-2,-1,1,2,3,4,5];
+  for (let t = 0; t < 200; t++) {
+    const r1 = choose(pool), r2 = choose(pool.filter(v => v !== r1));
+    const a = choose([0,0,1,2,-1,-2,3]), b = choose([-3,-2,-1,1,2,3,4]);
+    if (a * r1 + b === 0 || a * r2 + b === 0) continue;          // no cancellation: both zeros of the denominator are VAs
+    const lo = Math.min(r1, r2), hi = Math.max(r1, r2), numT = a === 0 ? String(b) : lin(a, b);
+    const den = '(' + fac(lo) + ')(' + fac(hi) + ')';
+    return ratCard(numT, den, '(' + numT + ')/(' + den + ')', {v: [lo, hi], h: [0]},
+      `\\text{Denominator zeros: }x=${lo},\\ x=${hi}\\ (\\text{no cancellation}).\\quad \\deg(\\text{num})<\\deg(\\text{den})\\Rightarrow y=0`);
+  }
 }
 
 function gen4(){
-  // Horizontal asymptote: deg(num) < deg(den) → y = 0
-  const denDegs = [
-    {num:'3x+1',     den:'x^2-4',       ha:0},
-    {num:'2x-5',     den:'x^2+x+1',     ha:0},
-    {num:'x^2-1',    den:'x^3+2x',      ha:0},
-    {num:'4',        den:'x^2-9',       ha:0},
-    {num:'x+3',      den:'x^3-8',       ha:0},
-    {num:'2x^2+1',   den:'x^4-1',       ha:0},
-  ];
-  const {num,den,ha} = choose(denDegs);
-  return {
-    latex: `f(x)=\\dfrac{${num}}{${den}}.\\quad\\text{Horizontal asymptote: }y=`,
-    answer: ['0'],
-    hint: 'When the numerator degree is less than the denominator degree, what value does f approach at infinity?',
-    step: `\\text{deg(num) < deg(den)}\\Rightarrow y=0`
-  };
+  // Graph: deg(num) = deg(den)  ->  HA y = a/c (integer), one VA
+  const pool = [-5,-4,-3,-2,-1,1,2,3,4,5];
+  for (let t = 0; t < 200; t++) {
+    const c = choose([1,1,2]), k = choose([-3,-2,-1,1,2,3,4]), a = c * k, r = choose(pool), b = choose([-4,-3,-2,-1,1,2,3,4]);
+    if (a * r + b === 0) continue;
+    const numT = lin(a, b), denT = c === 1 ? fac(r) : lin(c, -c * r);
+    return ratCard(numT, denT, '(' + numT + ')/(' + denT + ')', {v: [r], h: [k]},
+      `${denT}=0\\Rightarrow x=${r}\\ (\\text{VA}).\\quad \\text{Equal degrees: }y=\\dfrac{${a}}{${c}}=${k}`);
+  }
 }
 
 function gen5(){
-  // Horizontal asymptote: deg(num) = deg(den) → y = ratio of leading coefficients (integer)
-  const cases = [
-    {num:'2x+3',    den:'x-1',      ha:2},
-    {num:'3x^2-1',  den:'x^2+4',    ha:3},
-    {num:'-4x+2',   den:'2x+1',     ha:-2},
-    {num:'6x^2+x',  den:'2x^2-3',   ha:3},
-    {num:'-3x^2+1', den:'x^2-x+2',  ha:-3},
-    {num:'5x-1',    den:'x+3',      ha:5},
-    {num:'4x^2-x',  den:'2x^2+1',   ha:2},
-    {num:'-6x+1',   den:'3x-2',     ha:-2},
-  ];
-  const {num,den,ha} = choose(cases);
-  return {
-    latex: `f(x)=\\dfrac{${num}}{${den}}.\\quad\\text{Horizontal asymptote: }y=`,
-    answer: [String(ha)],
-    hint: 'When numerator and denominator have equal degrees, what ratio determines the horizontal asymptote?',
-    step: `\\text{Equal degrees: }y=\\dfrac{\\text{leading coeff of num}}{\\text{leading coeff of den}}=${ha}`
-  };
+  // Graph: deg(num) > deg(den)  ->  VA only, NO horizontal asymptote
+  const pool = [-4,-3,-2,-1,1,2,3,4];
+  for (let t = 0; t < 200; t++) {
+    const a = choose([1,1,2]), p = choose([-3,-2,-1,0,1,2,3]), q = choose([-4,-3,-2,-1,1,2,3,4]), r = choose(pool);
+    if (a * r * r + p * r + q === 0) continue;
+    const numT = (a === 1 ? '' : String(a)) + 'x^2' + (p ? (p > 0 ? '+' : '-') + (Math.abs(p) === 1 ? '' : Math.abs(p)) + 'x' : '') + (q > 0 ? '+' : '-') + Math.abs(q);
+    return ratCard(numT, fac(r), '(' + numT + ')/(' + fac(r) + ')', {v: [r], h: []},
+      `x${r > 0 ? '-' : '+'}${Math.abs(r)}=0\\Rightarrow x=${r}\\ (\\text{VA}).\\quad \\deg(\\text{num})>\\deg(\\text{den})\\Rightarrow\\text{no horizontal asymptote}`);
+  }
 }
 
 function gen6(){
-  // Hole: (x-a) cancels from both numerator and denominator
-  const a = choose([-4,-3,-2,-1,1,2,3,4]);
-  const b = choose([-4,-3,-2,-1,1,2,3,4].filter(v => v !== a));
-  const aS = a >= 0 ? `-${a}` : `+${-a}`;
-  const bS_num = b >= 0 ? `-${b}` : `+${-b}`;
-  // f(x) = (x-a)(x-b) / ((x-a)(x-c)) for some c ≠ a, b
-  const c = choose([-4,-3,-2,-1,1,2,3,4].filter(v => v !== a && v !== b));
-  const cS = c >= 0 ? `-${c}` : `+${-c}`;
-  return {
-    latex: `f(x)=\\dfrac{(x${aS})(x${bS_num})}{(x${aS})(x${cS})}.\\quad\\text{Hole at }x=`,
-    answer: [String(a)],
-    hint: 'When a factor cancels between numerator and denominator, what type of discontinuity remains?',
-    step: `(x${aS})\\text{ cancels}\\Rightarrow\\text{removable discontinuity (hole) at }x=${a}`
-  };
+  // Graph: a hole (a factor cancels), a VA, and the HA y = 1.  Hole height is always an integer.
+  const pool = [-4,-3,-2,-1,1,2,3,4];
+  for (let t = 0; t < 400; t++) {
+    const a = choose(pool), b = choose(pool.filter(v => v !== a)), c = choose(pool.filter(v => v !== a && v !== b));
+    if ((a - b) % (a - c) !== 0) continue;
+    const y = (a - b) / (a - c);
+    if (Math.abs(y) > 6) continue;
+    const numT = '(' + fac(a) + ')(' + fac(b) + ')', denT = '(' + fac(a) + ')(' + fac(c) + ')';
+    const card = ratCard(numT, denT, '(' + numT + ')/(' + denT + ')', {v: [c], h: [1], holes: [[a, y]]},
+      `(${fac(a)})\\text{ cancels: hole at }x=${a},\\ y=\\dfrac{${a}${b < 0 ? '+' : '-'}${Math.abs(b)}}{${a}${c < 0 ? '+' : '-'}${Math.abs(c)}}=${y}.\\quad \\text{VA }x=${c},\\ \\text{HA }y=1`);
+    card.html = 'Mark every vertical asymptote, horizontal asymptote, and hole of $f(x)=\\dfrac{' + numT + '}{' + denT + '}$.';
+    return card;
+  }
 }
 
 function gen7(){
-  // No horizontal asymptote: deg(num) > deg(den)
-  const cases = [
-    {num:'x^2+3x',  den:'x+1',   ans:'none'},
-    {num:'x^3-1',   den:'x^2+2', ans:'none'},
-    {num:'2x^2+x',  den:'x-3',   ans:'none'},
-    {num:'x^4-x',   den:'x^3+1', ans:'none'},
-    {num:'3x^3+2',  den:'x^2-1', ans:'none'},
-  ];
-  const {num,den,ans} = choose(cases);
-  return {
-    latex: `f(x)=\\dfrac{${num}}{${den}}.\\quad\\text{Horizontal asymptote: }y=`,
-    answer: ['none','dne','does not exist'],
-    hint: 'When the numerator degree exceeds the denominator degree, does a horizontal asymptote exist?',
-    step: `\\text{deg(num) > deg(den)}\\Rightarrow\\text{no horizontal asymptote}`
-  };
-}
-
-function gen8(){
   // VA or hole? Given f with a shared factor
   const a = choose([-3,-2,-1,1,2,3]);
   const b = choose([-3,-2,-1,1,2,3].filter(v => v !== a));
   const aS = a >= 0 ? `-${a}` : `+${-a}`;
   const bS = b >= 0 ? `-${b}` : `+${-b}`;
-  // If isHole: numerator has (x-a), denominator has (x-a)(x-b) → hole at a, VA at b
-  // If isVA: numerator has (x-b), denominator has (x-a)(x-b) → VA at a (no cancellation), hole at b
   const isHole = choose([true, false]);
-  const zeroInQ = isHole ? a : a;   // always asking about a
   const ans = isHole ? 'hole' : 'va';
-  let num_expr, den_expr;
-  if (isHole) {
-    // (x-a) cancels → hole at a
-    num_expr = `(x${aS})(x${bS})`;
-    den_expr = `(x${aS})^2(x${bS})`;
-    // Actually simpler: num=(x-a), den=(x-a)(x-b) → hole at a (since factor cancels)
-    num_expr = `(x${aS})`;
-    den_expr = `(x${aS})(x${bS})`;
-  } else {
-    // x=a is a genuine VA (no cancellation in numerator)
-    num_expr = `1`;
-    den_expr = `(x${aS})(x${bS})`;
-  }
+  const num_expr = isHole ? `(x${aS})` : `1`;
+  const den_expr = `(x${aS})(x${bS})`;
   return {
     latex: `f(x)=\\dfrac{${num_expr}}{${den_expr}}.\\quad\\text{At }x=${a}:\\text{ VA or hole?}`,
     answer: [ans, (isHole?'removable':'vertical asymptote')],
@@ -291,7 +259,26 @@ function gen8(){
   };
 }
 
+function gen8(){
+  // Pick the graph: f(x) = (kx+b)/(x-r). Wrong choices flip the horizontal asymptote or the vertical asymptote.
+  const pool = [-4,-3,-2,-1,1,2,3,4];
+  for (let t = 0; t < 200; t++) {
+    const r = choose(pool), k = choose([-3,-2,-1,1,2,3]), b = choose([-3,-2,-1,1,2,3]);
+    if (k * r + b === 0 || k * (-r) + b === 0) continue;
+    const opt = (kk, rr) => ({draw: [{type: 'fn', f: '(' + lin(kk, b) + ')/(' + fac(rr) + ')'}, {type: 'asymptote', x: rr}, {type: 'asymptote', y: kk}],
+      window: {x: [-8, 8], y: [-8, 8]}, size: {w: 210, h: 210}, ticks: {x: 2, y: 2}});
+    const options = shuffle([{o: opt(k, r), good: true}, {o: opt(-k, r), good: false}, {o: opt(k, -r), good: false}]);
+    return {
+      html: 'Which graph is $f(x)=\\dfrac{' + lin(k, b) + '}{' + fac(r) + '}$?',
+      plot: {preset: 'pick-graph', options: options.map(x => x.o), expected: options.findIndex(x => x.good)},
+      hint: 'Find the vertical and horizontal asymptotes first, then compare them with each graph.',
+      step: `${fac(r)}=0\\Rightarrow\\text{VA }x=${r}.\\quad \\text{Equal degrees: HA }y=${k}`
+    };
+  }
+}
+
 const GENERATORS = [gen1, gen2, gen3, gen4, gen5, gen6, gen7, gen8];
+let PLOTS = {};   // card index -> GraphKit mount
 
 
 // ── State ─────────────────────────────────────────────────────────────────────
@@ -319,30 +306,50 @@ function _re(p,i){const e=document.getElementById('expr-'+i),KO={delimiters:[{le
 function buildCards() {
   const wrap = document.getElementById('problems');
   wrap.innerHTML = '';
+  PLOTS = {};
   ACTIVE.forEach((p, i) => {
     const div = document.createElement('div');
-    div.className = 'card'; div.id = 'card-' + i;
+    div.className = 'card' + (p.plot ? ' plot-card' : ''); div.id = 'card-' + i;
+    const body = p.plot
+      ? `<div id="gk-${i}"></div>
+        <div class="plot-btns">
+          <button class="check-btn" id="chk-${i}" onclick="check(${i})">Check</button>
+          <button class="reset-btn" id="rst-${i}" onclick="resetGraph(${i})">Reset graph</button>
+        </div>`
+      : `<div class="input-row">
+          <input class="ans-input" id="ai-${i}" placeholder="answer" />
+          <button class="check-btn" id="chk-${i}" onclick="check(${i})">Check</button>
+        </div>`;
     div.innerHTML =
       `<div class="card-body">
         <div class="card-meta">Problem ${i + 1}</div>
         <div class="card-expr" id="expr-${i}"></div>
-        <div class="input-row">
-          <input class="ans-input" id="ai-${i}" placeholder="answer" />
-          <button class="check-btn" id="chk-${i}" onclick="check(${i})">Check</button>
-        </div>
+        ${body}
         <div class="hint">${p.hint}</div>
         <div class="feedback" id="fb-${i}"></div>
         <span class="reveal-link" id="rl-${i}" onclick="reveal(${i})">Show solution</span>
         <div class="revealed-answer" id="ra-${i}"></div>
       </div>`;
     wrap.appendChild(div);
-    document.getElementById('ai-' + i)
-      .addEventListener('keydown', e => { if (e.key === 'Enter') check(i); });
+    if (p.plot) {
+      if (typeof GraphKit !== 'undefined') PLOTS[i] = GraphKit.mount(document.getElementById('gk-' + i), Object.assign({}, p.plot, { quietFeedback: true }));
+      else document.getElementById('gk-' + i).textContent = 'The graph tool did not load. Please reload the page.';
+    } else {
+      document.getElementById('ai-' + i).addEventListener('keydown', e => { if (e.key === 'Enter') check(i); });
+    }
     _re(p, i);
   });
 }
 
+function resetGraph(i) {
+  const g = PLOTS[i]; if (!g || flags[i]) return;
+  g.reset();
+  const fb = document.getElementById('fb-' + i); fb.className = 'feedback'; fb.textContent = '';
+  document.getElementById('card-' + i).className = 'card plot-card' + (peeked[i] ? ' peeked' : '');
+}
+
 function check(i) {
+  if (ACTIVE[i].plot) return checkPlot(i);
   const p = ACTIVE[i], inp = document.getElementById('ai-'+i),
         fb = document.getElementById('fb-'+i), card = document.getElementById('card-'+i),
         good = ok(inp.value, p.answer);
@@ -360,6 +367,22 @@ function check(i) {
   }
 }
 
+function checkPlot(i) {
+  const g = PLOTS[i], fb = document.getElementById('fb-' + i), card = document.getElementById('card-' + i);
+  if (!g) return;
+  const r = g.grade();
+  if (r.ok) {
+    fb.className = 'feedback correct'; fb.textContent = '✓ Correct!'; card.className = 'card plot-card correct';
+    if (!flags[i] && !attempted[i] && !peeked[i]) { flags[i] = true; correct++; updateScore(); }
+    attempted[i] = true; g.lock(true);
+    document.getElementById('chk-' + i).disabled = true; document.getElementById('rst-' + i).disabled = true;
+  } else {
+    attempted[i] = true; fb.className = 'feedback wrong';
+    fb.textContent = '✗ ' + (r.detail || 'Not quite.') + ' Adjust your marks and press Check again, or Reset graph.';
+    card.className = 'card plot-card' + (peeked[i] ? ' peeked' : ' wrong');
+  }
+}
+
 function reveal(i) {
   const p = ACTIVE[i], box = document.getElementById('ra-'+i),
         lnk = document.getElementById('rl-'+i);
@@ -374,6 +397,7 @@ function reveal(i) {
         fb.textContent = '⚠ Solution revealed — no point awarded.';
       }
     }
+    if (PLOTS[i]) PLOTS[i].showAnswer();
     box.innerHTML = '<strong>Solution:</strong><br>';
     const span = document.createElement('span'); box.appendChild(span);
     katex.render(p.step, span, { throwOnError: false, displayMode: true });
@@ -390,6 +414,8 @@ function updateScore() {
 function resetAll() { init(); buildCards(); updateScore(); }
 </script>
 
+<script src="../js/mathcheck.js"></script>
+<script src="../js/graphkit.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/contrib/auto-render.min.js"></script>
 <script>

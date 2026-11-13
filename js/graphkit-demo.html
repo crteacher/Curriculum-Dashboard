@@ -103,7 +103,11 @@ card('interactive', 'number-line', 'Graph x < 2 or x ≥ 4.', {preset:'number-li
 card('interactive', 'pick-graph', 'Which graph is y = −x² + 2?', {preset:'pick-graph', options:[{draw:[{type:'fn', f:'x^2+2'}]}, {draw:[{type:'fn', f:'-x^2+2'}]}, {draw:[{type:'fn', f:'-x^2-2'}]}], expected:1}, true);
 card('interactive', 'sketch-curve (wraps the existing SketchWidget)', 'Sketch f′ for the navy curve f(x) = x² − 2: mark where f′ = 0.', {preset:'sketch-curve', window:{x:[-4,4], y:[-6,6]}, sketch:{fn:'2x', staticFn:'x^2-2', tools:['keypoint'], expected:{keypoints:[{x:0, y:0, label:"f′(0) = 0 at the vertex of f"}]}, passThreshold:1}}, true);
 
-card('interactive', 'poly-sketch', 'Sketch f(x) = (x+2)²(x−1): click each zero (1 = cross, 2 = touch), then pick both ends.', {preset:'poly-sketch', expected:{zeros:[{r:-2,m:2},{r:1,m:1}], a:1}}, true);
+card('interactive', 'poly-sketch', 'Sketch f(x) = (x+2)²(x−1): click each zero (1 click = straight cross, 2 = bounce, 3 = flat kink, 4 = remove), then pick both ends.', {preset:'poly-sketch', expected:{zeros:[{r:-2,m:2},{r:1,m:1}], a:1}}, true);
+
+card('interactive', 'mark-asymptotes', 'Mark every asymptote of f(x) = 1/(x − 2) + 1. Choose Vertical or Horizontal, then click the grid.', {preset:'mark-asymptotes', draw:[{type:'fn', f:'1/(x-2)+1'}], window:{x:[-6,6], y:[-6,6]}, expected:{v:[2], h:[1]}}, true);
+
+card('interactive', 'mark-asymptotes + holes', 'Mark every vertical asymptote, horizontal asymptote and hole of f(x) = (x − 2)(x + 1) / ((x − 2)(x − 3)). Adds the Hole tool because a hole is expected.', {preset:'mark-asymptotes', window:{x:[-8,8], y:[-8,8]}, expected:{f:'(x-2)(x+1)/((x-2)(x-3))', v:[3], h:[1], holes:[[2,3]]}}, true);
 
 /* ── tool levels ── */
 card('levels', 'Display only', 'No toolbar at all.', {preset:'read-graph', draw:[{type:'line', m:1, b:1}], window:{x:[-5,5], y:[-5,5]}}, false);

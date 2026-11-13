@@ -236,7 +236,7 @@ function buildCards() {
       </div>`;
     wrap.appendChild(div);
     if (typeof GraphKit !== 'undefined') {
-      PLOTS[i] = GraphKit.mount(document.getElementById('gk-' + i), p.sketch);
+      PLOTS[i] = GraphKit.mount(document.getElementById('gk-' + i), Object.assign({}, p.sketch, { quietFeedback: true }));
     } else {
       document.getElementById('gk-' + i).textContent = 'The graph tool did not load. Please reload the page.';
     }
