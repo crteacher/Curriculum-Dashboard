@@ -60,6 +60,8 @@
 
   .plot-card .card-expr{line-height:1.8;margin-bottom:8px}
   .plot-card svg{max-width:100%;height:auto}
+  .problems{grid-auto-flow:dense}
+  .card.wide{grid-column:1/-1}
   .plot-btns{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
 
 .hint{display:none!important}
@@ -93,12 +95,12 @@
   <div class="section">
     <div class="section-title">Practice Problems</div>
     <p style="font-family:sans-serif;font-size:13px;color:#666;margin-bottom:1rem;">
-      Typed problems: enter integers (e.g. for <code>x=2</code> enter <code>2</code>) or <code>hole</code> / <code>va</code>. Press <strong>Check</strong> or hit Enter.
+      Typed problems: enter integers (e.g. for <code>x=2</code> enter <code>2</code>), <code>none</code>, or <code>hole</code> / <code>va</code>. Press <strong>Check</strong> or hit Enter.
       Graph problems: choose a tool (<em>Vertical asymptote</em>, <em>Horizontal asymptote</em>, <em>Hole</em>), then click the grid. Click a mark again to remove it. Place only what the function has.
     </p>
     <div class="score-bar">
       <span class="score-label">Score:</span>
-      <span class="score-display" id="score">0 / 8</span>
+      <span class="score-display" id="score">0 / 9</span>
       <span class="score-note">first attempt only</span>
       <div class="progress"><div class="progress-fill" id="prog" style="width:0%"></div></div>
       <button class="reset-btn" onclick="resetAll()">New set &nbsp;&#8635;</button>
@@ -270,6 +272,7 @@ function gen8(){
     const options = shuffle([{o: opt(k, r), good: true}, {o: opt(-k, r), good: false}, {o: opt(k, -r), good: false}]);
     return {
       html: 'Which graph is $f(x)=\\dfrac{' + lin(k, b) + '}{' + fac(r) + '}$?',
+      wide: true,
       plot: {preset: 'pick-graph', options: options.map(x => x.o), expected: options.findIndex(x => x.good)},
       hint: 'Find the vertical and horizontal asymptotes first, then compare them with each graph.',
       step: `${fac(r)}=0\\Rightarrow\\text{VA }x=${r}.\\quad \\text{Equal degrees: HA }y=${k}`
@@ -277,7 +280,31 @@ function gen8(){
   }
 }
 
-const GENERATORS = [gen1, gen2, gen3, gen4, gen5, gen6, gen7, gen8];
+function gen9(){
+  // Typed: horizontal asymptote from the degrees (lower, equal, or higher)
+  const cases = [
+    {num:'3x+1',    den:'x^2-4',    ans:['0'],  why:'\\deg(\\text{num})<\\deg(\\text{den})\\Rightarrow y=0'},
+    {num:'2x-5',    den:'x^2+x+1',  ans:['0'],  why:'\\deg(\\text{num})<\\deg(\\text{den})\\Rightarrow y=0'},
+    {num:'x^2-1',   den:'x^3+2x',   ans:['0'],  why:'\\deg(\\text{num})<\\deg(\\text{den})\\Rightarrow y=0'},
+    {num:'2x+3',    den:'x-1',      ans:['2'],  why:'\\text{Equal degrees: }y=\\dfrac{2}{1}=2'},
+    {num:'3x^2-1',  den:'x^2+4',    ans:['3'],  why:'\\text{Equal degrees: }y=\\dfrac{3}{1}=3'},
+    {num:'-4x+2',   den:'2x+1',     ans:['-2'], why:'\\text{Equal degrees: }y=\\dfrac{-4}{2}=-2'},
+    {num:'6x^2+x',  den:'2x^2-3',   ans:['3'],  why:'\\text{Equal degrees: }y=\\dfrac{6}{2}=3'},
+    {num:'-3x^2+1', den:'x^2-x+2',  ans:['-3'], why:'\\text{Equal degrees: }y=\\dfrac{-3}{1}=-3'},
+    {num:'x^2+3x',  den:'x+1',      ans:['none','dne','does not exist'], why:'\\deg(\\text{num})>\\deg(\\text{den})\\Rightarrow\\text{no horizontal asymptote}'},
+    {num:'x^3-1',   den:'x^2+2',    ans:['none','dne','does not exist'], why:'\\deg(\\text{num})>\\deg(\\text{den})\\Rightarrow\\text{no horizontal asymptote}'},
+    {num:'3x^3+2',  den:'x^2-1',    ans:['none','dne','does not exist'], why:'\\deg(\\text{num})>\\deg(\\text{den})\\Rightarrow\\text{no horizontal asymptote}'}
+  ];
+  const c = choose(cases);
+  return {
+    latex: `f(x)=\\dfrac{${c.num}}{${c.den}}.\\quad\\text{Horizontal asymptote: }y=\\ (\\text{or none})`,
+    answer: c.ans,
+    hint: 'Compare the degrees of the numerator and denominator. What does each case tell you about the ends of the graph?',
+    step: c.why
+  };
+}
+
+const GENERATORS = [gen1, gen2, gen3, gen4, gen5, gen6, gen7, gen8, gen9];
 let PLOTS = {};   // card index -> GraphKit mount
 
 
@@ -309,7 +336,7 @@ function buildCards() {
   PLOTS = {};
   ACTIVE.forEach((p, i) => {
     const div = document.createElement('div');
-    div.className = 'card' + (p.plot ? ' plot-card' : ''); div.id = 'card-' + i;
+    div.className = 'card' + (p.plot ? ' plot-card' : '') + (p.wide ? ' wide' : ''); div.id = 'card-' + i;
     const body = p.plot
       ? `<div id="gk-${i}"></div>
         <div class="plot-btns">
@@ -345,7 +372,7 @@ function resetGraph(i) {
   const g = PLOTS[i]; if (!g || flags[i]) return;
   g.reset();
   const fb = document.getElementById('fb-' + i); fb.className = 'feedback'; fb.textContent = '';
-  document.getElementById('card-' + i).className = 'card plot-card' + (peeked[i] ? ' peeked' : '');
+  document.getElementById('card-' + i).className = 'card plot-card' + (ACTIVE[i].wide ? ' wide' : '') + (peeked[i] ? ' peeked' : '');
 }
 
 function check(i) {
@@ -372,14 +399,14 @@ function checkPlot(i) {
   if (!g) return;
   const r = g.grade();
   if (r.ok) {
-    fb.className = 'feedback correct'; fb.textContent = '✓ Correct!'; card.className = 'card plot-card correct';
+    fb.className = 'feedback correct'; fb.textContent = '✓ Correct!'; card.className = 'card plot-card' + (ACTIVE[i].wide ? ' wide' : '') + ' correct';
     if (!flags[i] && !attempted[i] && !peeked[i]) { flags[i] = true; correct++; updateScore(); }
     attempted[i] = true; g.lock(true);
     document.getElementById('chk-' + i).disabled = true; document.getElementById('rst-' + i).disabled = true;
   } else {
     attempted[i] = true; fb.className = 'feedback wrong';
     fb.textContent = '✗ ' + (r.detail || 'Not quite.') + ' Adjust your marks and press Check again, or Reset graph.';
-    card.className = 'card plot-card' + (peeked[i] ? ' peeked' : ' wrong');
+    card.className = 'card plot-card' + (ACTIVE[i].wide ? ' wide' : '') + (peeked[i] ? ' peeked' : ' wrong');
   }
 }
 
@@ -390,7 +417,7 @@ function reveal(i) {
     box.style.display = 'none'; lnk.textContent = 'Show solution';
   } else {
     if (!flags[i]) {
-      peeked[i] = true; document.getElementById('card-'+i).className = 'card peeked';
+      peeked[i] = true; document.getElementById('card-'+i).className = 'card' + (p.plot ? ' plot-card' : '') + (p.wide ? ' wide' : '') + ' peeked';
       if (!attempted[i]) {
         const fb = document.getElementById('fb-'+i);
         fb.className = 'feedback peeked';
