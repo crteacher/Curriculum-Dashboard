@@ -221,7 +221,8 @@ function renderSchedule(colEl,course,schedule,currentId,secMap){
 function practiceExamLink(course,item){
   if(!item?.practiceExamFile)return'';
   const folder=course==='ca'?'./College%20Algebra':course==='pc'?'./PreCalc':'./Calc%201';
-  return`<a href="${folder}/${item.practiceExamFile}" class="do-now-link ${course}" target="_blank">Open Practice Exam →</a>`;
+  const href=item.practiceExamFile.indexOf('/')>=0?'./'+item.practiceExamFile:folder+'/'+item.practiceExamFile;   // "resources/..." paths are site-relative
+  return`<a href="${href}" class="do-now-link ${course}" target="_blank">Open Practice Exam →</a>`;
 }
 
 function buildReviewCard(course,dayNum,item,secMap){
