@@ -96,11 +96,11 @@
     <div class="section-title">Practice Problems</div>
     <p style="font-family:sans-serif;font-size:13px;color:#666;margin-bottom:1rem;">
       Typed problems: enter integers (e.g. for <code>x=2</code> enter <code>2</code>), <code>none</code>, or <code>hole</code> / <code>va</code>. Press <strong>Check</strong> or hit Enter.
-      Graph problems: choose a tool (<em>Vertical asymptote</em>, <em>Horizontal asymptote</em>, <em>Hole</em>), then click the grid. Click a mark again to remove it. Place only what the function has.
+      Graph problems: choose a tool (<em>Vertical asymptote</em>, <em>Horizontal asymptote</em>, <em>Hole</em>, <em>x-intercept</em>, <em>y-intercept</em>), then click the grid. Click a mark again to remove it. Place only what the function has.
     </p>
     <div class="score-bar">
       <span class="score-label">Score:</span>
-      <span class="score-display" id="score">0 / 9</span>
+      <span class="score-display" id="score">0 / 7</span>
       <span class="score-note">first attempt only</span>
       <div class="progress"><div class="progress-fill" id="prog" style="width:0%"></div></div>
       <button class="reset-btn" onclick="resetAll()">New set &nbsp;&#8635;</button>
@@ -237,6 +237,7 @@ function gen6(){
     const card = ratCard(numT, denT, '(' + numT + ')/(' + denT + ')', {v: [c], h: [1], holes: [[a, y]]},
       `(${fac(a)})\\text{ cancels: hole at }x=${a},\\ y=\\dfrac{${a}${b < 0 ? '+' : '-'}${Math.abs(b)}}{${a}${c < 0 ? '+' : '-'}${Math.abs(c)}}=${y}.\\quad \\text{VA }x=${c},\\ \\text{HA }y=1`);
     card.html = 'Mark every vertical asymptote, horizontal asymptote, and hole of $f(x)=\\dfrac{' + numT + '}{' + denT + '}$.';
+    card.wide = true; card.plot.size = {w: 560, h: 340};
     return card;
   }
 }
@@ -304,7 +305,50 @@ function gen9(){
   };
 }
 
-const GENERATORS = [gen1, gen2, gen3, gen4, gen5, gen6, gen7, gen8, gen9];
+function gen10(){
+  // Capstone: build the whole graph. Mark VA(s), HA, hole (if any), x-intercept(s) and the y-intercept; the curve then draws itself from the marks.
+  const pool = [-5,-4,-3,-2,-1,1,2,3,4,5];
+  const cs = a => a === 1 ? '' : a === -1 ? '-' : String(a);
+  const pick = n => { const out = []; while (out.length < n) { const v = choose(pool); if (!out.includes(v)) out.push(v); } return out; };
+  const f1 = r => '(x' + (r > 0 ? '-' : '+') + Math.abs(r) + ')';
+  const asc = (u, v) => u - v;
+  for (let t = 0; t < 4000; t++) {
+    const fam = choose(['D', 'A', 'B', 'C']), a = choose([-1, 1]) * choose([1, 1, 2, 3]);
+    let numF, denF, e;
+    if (fam === 'D') {
+      const [z, v] = pick(2);
+      if ((a * z) % v !== 0 || Math.abs(a * z / v) > 7) continue;
+      numF = f1(z); denF = f1(v); e = {v: [v], h: [a], zeros: [z], yint: a * z / v};
+    } else if (fam === 'A') {
+      const [z, v1, v2] = pick(3);
+      if ((-a * z) % (v1 * v2) !== 0 || Math.abs(a * z / (v1 * v2)) > 7) continue;
+      const vs = [v1, v2].sort(asc);
+      numF = f1(z); denF = f1(vs[0]) + f1(vs[1]); e = {v: vs, h: [0], zeros: [z], yint: -a * z / (v1 * v2)};
+    } else if (fam === 'B') {
+      const [z1, z2, v1, v2] = pick(4);
+      if ((a * z1 * z2) % (v1 * v2) !== 0 || Math.abs(a * z1 * z2 / (v1 * v2)) > 7) continue;
+      const zs = [z1, z2].sort(asc), vs = [v1, v2].sort(asc);
+      numF = f1(zs[0]) + f1(zs[1]); denF = f1(vs[0]) + f1(vs[1]); e = {v: vs, h: [a], zeros: zs, yint: a * z1 * z2 / (v1 * v2)};
+    } else {
+      const [z, h, v] = pick(3);
+      if ((a * z) % v !== 0 || Math.abs(a * z / v) > 7 || (a * (h - z)) % (h - v) !== 0 || Math.abs(a * (h - z) / (h - v)) > 6) continue;
+      numF = f1(z) + f1(h); denF = f1(h) + f1(v); e = {v: [v], h: [a], zeros: [z], yint: a * z / v, holes: [[h, a * (h - z) / (h - v)]]};
+    }
+    e.f = a + '*' + numF + '/(' + denF + ')';
+    const feats = '\\text{VA: }' + e.v.map(v => 'x=' + v).join(',\\ ') + ';\\ \\text{HA: }y=' + e.h[0] + ';\\ ' +
+      (e.holes ? '\\text{hole: }(' + e.holes[0][0] + ',' + e.holes[0][1] + ');\\ ' : '') +
+      '\\text{x-int: }' + e.zeros.join(',\\ ') + ';\\ \\text{y-int: }' + e.yint;
+    return {
+      html: 'Build the graph of $f(x)=\\dfrac{' + cs(a) + numF + '}{' + denF + '}$. Mark every vertical asymptote, horizontal asymptote, hole, x-intercept and the y-intercept the function has. Your curve draws itself from your marks, so check that it looks right.',
+      wide: true,
+      plot: {preset: 'mark-asymptotes', window: {x: [-8, 8], y: [-8, 8]}, size: {w: 640, h: 400}, ticks: {x: 2, y: 2}, input: {build: true}, expected: e},
+      hint: 'List the features first: denominator zeros, canceled factors, numerator zeros, f(0), and the degrees.',
+      step: feats
+    };
+  }
+}
+
+const GENERATORS = [gen1, gen2, gen3, gen4, gen5, gen6, gen7, gen8, gen9, gen10];
 let PLOTS = {};   // card index -> GraphKit mount
 
 
@@ -321,11 +365,12 @@ function norm(s) {
 function ok(user, acc) { return acc.some(a => norm(user) === norm(a)); }
 
 function init() {
-  ACTIVE    = shuffle(GENERATORS.map(gen => gen()));
+  // fixed order: 4 half-width cards, then 3 full-width cards (hole graph, pick the graph, build the whole graph)
+  ACTIVE    = [choose([gen1, gen2])(), gen9(), choose([gen3, gen4, gen5])(), gen7(), gen6(), gen8(), gen10()];
   correct   = 0;
-  flags     = Array(GENERATORS.length).fill(false);
-  attempted = Array(GENERATORS.length).fill(false);
-  peeked    = Array(GENERATORS.length).fill(false);
+  flags     = Array(ACTIVE.length).fill(false);
+  attempted = Array(ACTIVE.length).fill(false);
+  peeked    = Array(ACTIVE.length).fill(false);
 }
 
 function _lth(s){let h='',r=s;while(r.length){const m=r.match(/^\\text\{([^}]*)\}/);if(m){h+=m[1];r=r.slice(m[0].length);}else{const n=r.indexOf('\\text{');if(n<0){h+=(r.trim()?'$'+r+'$':'');r='';}else{if(n>0)h+='$'+r.slice(0,n)+'$';r=r.slice(n);}}}return h;}

@@ -554,7 +554,16 @@ GK.window = function (cfg) { return build(cfg).L.win; };
 
 /* ══════════════════════════ 5. Student input: state, actions, grading (no browser needed) ══════════════════════════ */
 function defaultTool(mode) { return mode === 'numberline' ? 'closed' : mode === 'asymptotes' ? 'v' : 'point'; }
-GK.newState = function (mode) { return {mode: mode, pts: [], dashed: false, side: null, shade: [], tool: defaultTool(mode), marks: null, choice: null, zs: {}, left: null, right: null, zok: null, av: [], ah: [], hl: []}; };
+GK.newState = function (mode) { return {mode: mode, pts: [], dashed: false, side: null, shade: [], tool: defaultTool(mode), marks: null, choice: null, zs: {}, left: null, right: null, zok: null, av: [], ah: [], hl: [], zr: [], yi: null}; };
+/* rational function implied by a student's marks: a * prod(x - zero) / prod(x - vertical asymptote); the y-intercept fixes a. Holes cancel, so they only add an open point. */
+GK.rationalFrom = function (st) {
+  var zr = st.zr || [], av = st.av || [], i, num = 1, den = 1;
+  if (st.yi == null || (!zr.length && !av.length)) return null;
+  for (i = 0; i < zr.length; i++) { if (Math.abs(zr[i]) < 1e-9) return null; num *= -zr[i]; }
+  for (i = 0; i < av.length; i++) { if (Math.abs(av[i]) < 1e-9) return null; den *= -av[i]; }
+  var a = st.yi * den / num;
+  return function (x) { var n = a, d = 1, j; for (j = 0; j < zr.length; j++) n *= (x - zr[j]); for (j = 0; j < av.length; j++) d *= (x - av[j]); return n / d; };
+};
 
 function nearest(pts, x, y, hx, hy) {
   var best = -1, bd = Infinity;
@@ -578,6 +587,8 @@ GK.act = function (input, st, a) {
   if (a.type === 'choose') { st.choice = a.index; return st; }
   if (a.type !== 'click') return st;
   if (mode === 'asymptotes') {                                 // Vertical tool: a click toggles x = a.x. Horizontal tool: a click toggles y = a.y. Hole tool: a click toggles an open point
+    if (st.tool === 'zero') { var zi, zhit = -1, zp = Math.round(a.x * 1e6) / 1e6; for (zi = 0; zi < st.zr.length; zi++) if (Math.abs(st.zr[zi] - zp) <= Math.max(1e-9, hx * 0.6)) zhit = zi; if (zhit >= 0) st.zr.splice(zhit, 1); else st.zr.push(zp); return st; }
+    if (st.tool === 'yint') { var yp = Math.round(a.y * 1e6) / 1e6; st.yi = (st.yi != null && Math.abs(st.yi - yp) <= Math.max(1e-9, hy * 0.6)) ? null : yp; return st; }
     if (st.tool === 'hole') { near = nearest(st.hl, a.x, a.y, hx, hy); if (near.i >= 0 && near.d <= 1) st.hl.splice(near.i, 1); else st.hl.push({x: Math.round(a.x * 1e6) / 1e6, y: Math.round(a.y * 1e6) / 1e6}); return st; }
     var hz = st.tool === 'h', arr = hz ? st.ah : st.av, pos = Math.round((hz ? a.y : a.x) * 1e6) / 1e6, tolA = Math.max(1e-9, (hz ? hy : hx) * 0.6), hit = -1, qi;
     for (qi = 0; qi < arr.length; qi++) if (Math.abs(arr[qi] - pos) <= tolA) hit = qi;
@@ -711,6 +722,18 @@ GK.gradeState = function (input, st, win) {
       if (sameH) for (k2 = 0; k2 < wantH.length; k2++) if (Math.abs(wantH[k2][0] - haveH[k2].x) > 1e-6 || Math.abs(wantH[k2][1] - haveH[k2].y) > 1e-6) sameH = false;
       if (sameH) got2++; else if (any) iss.push(wantH.length !== haveH.length ? 'Check how many holes there are.' : 'Recheck where the hole' + (wantH.length > 1 ? 's go.' : ' goes.'));
     }
+    if (e.zeros) {                                               // optional: x-intercepts
+      parts++; any = any || (st.zr || []).length > 0;
+      var wz = e.zeros.slice().sort(function (u, v) { return u - v; }), hz2 = (st.zr || []).slice().sort(function (u, v) { return u - v; }), sz = wz.length === hz2.length, k3;
+      zv.z = {}; hz2.forEach(function (x) { zv.z[x] = wz.some(function (q) { return Math.abs(q - x) < 1e-6; }); });
+      if (sz) for (k3 = 0; k3 < wz.length; k3++) if (Math.abs(wz[k3] - hz2[k3]) > 1e-6) sz = false;
+      if (sz) got2++; else if (any) iss.push(wz.length !== hz2.length ? 'Check how many x-intercepts there are.' : 'Recheck where the x-intercept' + (wz.length > 1 ? 's go.' : ' goes.'));
+    }
+    if (e.yint != null) {                                        // optional: y-intercept
+      parts++; any = any || st.yi != null;
+      zv.y = st.yi != null && Math.abs(st.yi - e.yint) < 1e-6;
+      if (zv.y) got2++; else if (any) iss.push(st.yi == null ? 'Mark the y-intercept.' : 'Recheck the y-intercept.');
+    }
     st.zok = zv;
     return {ok: got2 === parts, score: got2 / parts, detail: got2 === parts ? '' : any ? iss.join(' ') : 'Place your marks first: choose a tool, then click the grid.'};
   }
@@ -728,6 +751,8 @@ function autoAnswer(mode, e) {
   if (mode === 'asymptotes') {
     var out = (e.f ? [{type: 'fn', f: e.f, color: GOLD, width: 2}] : []).concat((e.v || []).map(function (x) { return {type: 'asymptote', x: x, color: GOLD, width: 2}; }), (e.h || []).map(function (y) { return {type: 'asymptote', y: y, color: GOLD, width: 2}; }));
     (e.holes || []).forEach(function (h) { out.push({type: 'hole', at: [h[0], h[1]], color: GOLD}); });
+    (e.zeros || []).forEach(function (z) { out.push({type: 'point', at: [z, 0], color: GOLD}); });
+    if (e.yint != null) out.push({type: 'point', at: [0, e.yint], color: GOLD});
     return out;
   }
   return [];
@@ -756,6 +781,10 @@ function drawInput(L, c, st) {
     zl.forEach(function (z) { s += zdot(L, z.r, st.zok ? (st.zok[z.r] ? OKC : BADC) : NAVY, z.m); });
   }
   if (st.mode === 'asymptotes') {
+    var rf = input.build ? GK.rationalFrom(st) : null;           // the curve implied by the student's own marks, drawn live
+    if (rf) s += tag('path', {d: pathOf(L, GK.sample(rf, w.x[0], w.x[1], 420, w.y[0], w.y[1])), fill: 'none', stroke: NAVY, 'stroke-width': 2.4, 'stroke-linecap': 'round', 'stroke-linejoin': 'round', 'clip-path': L.clipRef});
+    (st.zr || []).forEach(function (x) { s += dot(L, [x, 0], st.zok && st.zok.z ? (st.zok.z[x] ? OKC : BADC) : NAVY, false, 5.5); });
+    if (st.yi != null) s += dot(L, [0, st.yi], st.zok && st.zok.y != null ? (st.zok.y ? OKC : BADC) : NAVY, false, 5.5);
     (st.av || []).forEach(function (x) { var cl = st.zok ? (st.zok.v[x] ? OKC : BADC) : NAVY; s += tag('line', {x1: r2(L.sx(x)), y1: r2(L.sy(w.y[0])), x2: r2(L.sx(x)), y2: r2(L.sy(w.y[1])), stroke: cl, 'stroke-width': 2.2, 'stroke-dasharray': '7 5', 'clip-path': L.clipRef}); });
     (st.hl || []).forEach(function (h, i) { s += dot(L, [h.x, h.y], st.zok && st.zok.hl ? (st.zok.hl[i] ? OKC : BADC) : NAVY, true, 5.5); });
     (st.ah || []).forEach(function (yv) { var cl = st.zok ? (st.zok.h[yv] ? OKC : BADC) : NAVY; s += tag('line', {x1: r2(L.sx(w.x[0])), y1: r2(L.sy(yv)), x2: r2(L.sx(w.x[1])), y2: r2(L.sy(yv)), stroke: cl, 'stroke-width': 2.2, 'stroke-dasharray': '7 5', 'clip-path': L.clipRef}); });
@@ -806,12 +835,12 @@ var TOOLBARS = {      // the ONLY buttons each mode ever shows
   line: function () { return [{act: 'undo', label: 'Undo', quiet: true}, {act: 'clear', label: 'Clear', quiet: true}]; },
   inequality: function () { return [{dashed: false, label: 'Solid line'}, {dashed: true, label: 'Dashed line'}, {act: 'undo', label: 'Undo', quiet: true}, {act: 'clear', label: 'Clear', quiet: true}]; },
   numberline: function () { return [{tool: 'closed', label: '● Closed point'}, {tool: 'open', label: '○ Open point'}, {tool: 'shade', label: 'Shade'}, {act: 'undo', label: 'Undo', quiet: true}, {act: 'clear', label: 'Clear', quiet: true}]; },
-  asymptotes: function (input) { return [{tool: 'v', label: 'Vertical asymptote'}, {tool: 'h', label: 'Horizontal asymptote'}].concat(input && input.expected && input.expected.holes ? [{tool: 'hole', label: '○ Hole'}] : [], [{act: 'undo', label: 'Undo', quiet: true}, {act: 'clear', label: 'Clear', quiet: true}]); },
+  asymptotes: function (input) { return [{tool: 'v', label: 'Vertical asymptote'}, {tool: 'h', label: 'Horizontal asymptote'}].concat(input && input.expected && input.expected.holes ? [{tool: 'hole', label: '○ Hole'}] : [], input && input.expected && input.expected.zeros ? [{tool: 'zero', label: '● x-intercept'}] : [], input && input.expected && input.expected.yint != null ? [{tool: 'yint', label: '● y-intercept'}] : [], [{act: 'undo', label: 'Undo', quiet: true}, {act: 'clear', label: 'Clear', quiet: true}]); },
   polysketch: function () { return [{end: {side: 'left', dir: 'up'}, label: 'Left end ↑'}, {end: {side: 'left', dir: 'down'}, label: 'Left end ↓'}, {end: {side: 'right', dir: 'up'}, label: 'Right end ↑'}, {end: {side: 'right', dir: 'down'}, label: 'Right end ↓'}, {act: 'undo', label: 'Undo', quiet: true}, {act: 'clear', label: 'Clear', quiet: true}]; }
 };
 GK.toolbarFor = function (cfg) { var c = resolve(cfg), m = c.input && c.input.mode; return TOOLBARS[m] ? TOOLBARS[m](c.input).map(function (b) { return b.label; }) : m === 'sketch' ? ((c.sketch && c.sketch.tools) || ['keypoint', 'vertex']) : []; };
 var HINTS = { points: 'Click to place a point. Click a point again to remove it.',
-  asymptotes: 'Choose a tool, then click the grid: Vertical or Horizontal places a dashed asymptote, Hole places an open point. Click again to remove.', line: 'Click two points on the line. Click again to move the nearer point.',
+  asymptotes: 'Choose a tool, then click the grid: Vertical or Horizontal places a dashed asymptote, Hole places an open point, intercept tools place points. Click again to remove.', line: 'Click two points on the line. Click again to move the nearer point.',
   polysketch: 'Click a zero: 1 click = crosses straight through, 2 = bounces, 3 = crosses with a flat kink, 4 = removes it. Then choose both ends.',
   inequality: 'Click two points for the boundary, choose solid or dashed, then click the side to shade.', numberline: 'Place your point(s), then choose Shade and click the part(s) of the line to shade.' };
 
