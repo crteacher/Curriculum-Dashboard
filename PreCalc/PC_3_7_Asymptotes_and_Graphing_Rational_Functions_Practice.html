@@ -76,20 +76,21 @@
     <div class="section-title">Core Ideas</div>
 
   <div class="concept">
-    <span class="concept-label">Slant (oblique) asymptotes</span>
-    When $\deg(\text{num})=\deg(\text{den})+1$, <strong>divide</strong> the numerator by the denominator. The quotient $mx+k$ is the <strong>slant asymptote</strong> $y=mx+k$, and the remainder term goes to $0$ as $x\to\pm\infty$.
-    <br>A function has <em>at most one</em> end-behavior asymptote: horizontal ($n\le d$), slant ($n=d+1$), or neither ($n\ge d+2$).
+    <span class="concept-label">End behavior from the leading terms</span>
+    When $|x|$ is huge only the leading terms matter: $f(x)\approx\dfrac{a x^{n}}{c x^{d}}$.
+    <br>&bull; $n<d$: $f\to0$. &nbsp; &bull; $n=d$: $f\to\dfrac{a}{c}$ (the horizontal asymptote).
+    <br>&bull; $n>d$: no horizontal asymptote; $f\to\pm\infty$, and the sign comes from $\dfrac{a}{c}x^{\,n-d}$ (remember $x^{\,n-d}$ changes sign as $x\to-\infty$ when $n-d$ is odd).
   </div>
   <div class="concept">
     <span class="concept-label">Behavior beside a vertical asymptote</span>
-    Near $x=a$, the function goes to $+\infty$ or $-\infty$ depending on the <strong>sign</strong> of $f$ just left and just right of $a$.
+    Near $x=a$, $f\to+\infty$ or $-\infty$ depending on the <strong>sign</strong> of $f$ just left and just right of $a$.
     <br>&bull; An <em>odd</em> power of $(x-a)$ in the denominator: the two sides go opposite ways.
     <br>&bull; An <em>even</em> power: both sides go the same way.
-    <br>Test a point on each side (or track the signs of the factors) to decide up or down.
+    <br>Track the sign of each factor at a test point to decide up or down.
   </div>
   <div class="concept">
     <span class="concept-label">Graphing checklist</span>
-    1. Cancel common factors (holes). 2. Vertical asymptotes. 3. End-behavior asymptote (horizontal, slant, or none). 4. Intercepts. 5. Up/down on each side of every vertical asymptote. 6. Connect the pieces.
+    1. Cancel common factors (holes). 2. Vertical asymptotes. 3. Horizontal asymptote (if any). 4. Intercepts. 5. Up/down on each side of every vertical asymptote. 6. Connect the pieces. (A graph <em>can</em> cross its horizontal asymptote in the middle.)
   </div>
 
   </div>
@@ -97,8 +98,8 @@
   <div class="section">
     <div class="section-title">Practice Problems</div>
     <p style="font-family:sans-serif;font-size:13px;color:#666;margin-bottom:1rem;">
-      Typed problems: enter an expression like <code>2x+1</code>, a letter (<code>h</code>, <code>s</code>, <code>n</code>), or <code>inf</code> / <code>-inf</code>. Press <strong>Check</strong> or hit Enter.
-      Graph problems: choose a tool, then click the grid. The <em>Slant</em> tool takes two clicks on the line. In the up/down problem, click just left or right of an asymptote: once for up, twice for down, three times to clear. Click a mark again to remove it.
+      Typed problems: enter a number, <code>inf</code> / <code>-inf</code>, or <code>pos</code> / <code>neg</code>. Press <strong>Check</strong> or hit Enter.
+      Graph problems: choose a tool, then click the grid. In the up/down problem, click just left or right of an asymptote: once for up, twice for down, three times to clear. Click a mark again to remove it.
     </p>
     <div class="score-bar">
       <span class="score-label">Score:</span>
@@ -149,75 +150,50 @@ function lin(a, b) { let s = (a === 1 ? '' : a === -1 ? '-' : String(a)) + 'x'; 
 function fac(r) { return r === 0 ? 'x' : 'x' + (r > 0 ? '-' : '+') + Math.abs(r); }
 function f1(r) { return '(' + fac(r) + ')'; }
 function cs(a) { return a === 1 ? '' : a === -1 ? '-' : String(a); }
-function quad(a, b, c) { let s = cs(a) + 'x^2'; if (b) s += (b > 0 ? '+' : '-') + (Math.abs(b) === 1 ? '' : Math.abs(b)) + 'x'; if (c) s += (c > 0 ? '+' : '-') + Math.abs(c); return s; }
+function pw(a, deg, k) { let s = cs(a) + 'x' + (deg > 1 ? '^' + deg : ''); if (k) s += (k > 0 ? '+' : '-') + Math.abs(k); return s; }
 function sgn(v) { return v > 0 ? 1 : -1; }
 function pick(n, pool) { const p = pool || POOL, out = []; while (out.length < n) { const v = choose(p); if (!out.includes(v)) out.push(v); } return out; }
 const asc = (u, v) => u - v;
 
-// 1. Typed: divide to find the slant asymptote
+// 1. Typed: end behavior from the leading terms
 function gen1() {
-  const m = choose([1, 1, 2, -1, 3]), r = choose([-4, -3, -2, -1, 1, 2, 3, 4]), k = choose([-4, -3, -2, -1, 0, 1, 2, 3, 4]), rem = choose([-6, -5, -4, -3, -2, -1, 1, 2, 3, 4, 5, 6]);
-  const num = quad(m, k - m * r, rem - k * r), ans = lin(m, k), den = fac(r);
+  const n = choose([1, 2, 2, 3]), d = choose([1, 2]), c = choose([1, 2]), k = choose([-3, -2, -1, 1, 2, 3]), a = c * k, p = choose([-3, -2, -1, 1, 2, 3]), q = choose([-3, -2, -1, 1, 2, 3]);
+  const plus = choose([true, false]);
+  const num = pw(a, n, p), den = pw(c, d, q);
+  let ans, why;
+  if (n < d) { ans = ['0']; why = '\\deg(\\text{num})<\\deg(\\text{den}):\\ f(x)\\to0'; }
+  else if (n === d) { ans = [String(k)]; why = '\\text{Equal degrees: }f(x)\\to\\dfrac{' + a + '}{' + c + '}=' + k; }
+  else {
+    const up = sgn(a / c) * (plus ? 1 : (n - d) % 2 ? -1 : 1) > 0;
+    ans = up ? ['inf', '+inf', 'infinity'] : ['-inf', '-infinity'];
+    why = 'f(x)\\approx\\dfrac{' + a + 'x^{' + n + '}}{' + c + 'x^{' + d + '}}=' + (a / c) + 'x^{' + (n - d) + '}\\text{ for large }|x|,\\ \\text{which}\\to' + (up ? '\\infty' : '-\\infty') + '\\text{ as }x\\to' + (plus ? '' : '-') + '\\infty';
+  }
   return {
-    latex: 'f(x)=\\dfrac{' + num + '}{' + den + '}.\\quad\\text{Slant asymptote: }y=',
-    answer: [ans, 'y=' + ans],
-    hint: 'Divide the numerator by the denominator. Which part of the result is the line?',
-    step: '\\dfrac{' + num + '}{' + den + '}=(' + ans + ')+\\dfrac{' + rem + '}{' + den + '}.\\quad\\text{The remainder term}\\to0\\text{ as }x\\to\\pm\\infty,\\ \\text{so }y=' + ans
+    latex: 'f(x)=\\dfrac{' + num + '}{' + den + '}.\\quad\\text{As }x\\to' + (plus ? '' : '-') + '\\infty,\\ f(x)\\to\\ (\\text{a number, inf or -inf})',
+    answer: ans,
+    hint: 'Only the leading terms matter when |x| is huge. What do they simplify to?',
+    step: why
   };
 }
 
-// 2. Typed: which kind of end-behavior asymptote?
+// 2. Typed: sign of f at a test point
 function gen2() {
-  const S = ['s', 'slant', 'oblique'], H = ['h', 'horizontal', 'ha'], N = ['n', 'neither', 'none'];
-  const cases = [
-    {num:'x^2+1', den:'x-3', a:S, why:'\\deg(\\text{num})=\\deg(\\text{den})+1\\Rightarrow\\text{slant asymptote}'},
-    {num:'2x^2-x', den:'x+1', a:S, why:'\\deg(\\text{num})=\\deg(\\text{den})+1\\Rightarrow\\text{slant asymptote}'},
-    {num:'x^3-8', den:'x^2+1', a:S, why:'\\deg(\\text{num})=\\deg(\\text{den})+1\\Rightarrow\\text{slant asymptote}'},
-    {num:'3x^2+x-2', den:'x-4', a:S, why:'\\deg(\\text{num})=\\deg(\\text{den})+1\\Rightarrow\\text{slant asymptote}'},
-    {num:'2x+1', den:'x-5', a:H, why:'\\text{Equal degrees}\\Rightarrow\\text{horizontal asymptote}'},
-    {num:'x^2+4', den:'x^2-1', a:H, why:'\\text{Equal degrees}\\Rightarrow\\text{horizontal asymptote}'},
-    {num:'3x-1', den:'x^2+2', a:H, why:'\\deg(\\text{num})<\\deg(\\text{den})\\Rightarrow\\text{horizontal asymptote }y=0'},
-    {num:'x^3+1', den:'x-2', a:N, why:'\\deg(\\text{num})\\ge\\deg(\\text{den})+2\\Rightarrow\\text{neither}'},
-    {num:'x^4-1', den:'x^2+3', a:N, why:'\\deg(\\text{num})\\ge\\deg(\\text{den})+2\\Rightarrow\\text{neither}'}
-  ];
-  const c = choose(cases);
-  return {
-    latex: 'f(x)=\\dfrac{' + c.num + '}{' + c.den + '}.\\quad\\text{Type h (horizontal), s (slant) or n (neither):}',
-    answer: c.a,
-    hint: 'Compare the degrees. How far apart are they?',
-    step: c.why
-  };
-}
-
-// 3. Graph: mark vertical + horizontal + slant asymptotes (the slant tool takes two clicks on the line)
-function gen3() {
-  for (let t = 0; t < 400; t++) {
-    const r = choose([-4, -3, -2, -1, 1, 2, 3, 4]);
-    if (choose([true, true, false])) {
-      const m = choose([1, 1, 2, -1]), k = choose([-4, -3, -2, -1, 0, 1, 2, 3, 4]), rem = choose([-5, -4, -3, -2, -1, 1, 2, 3, 4, 5]);
-      if (Math.abs(k) > 4 || Math.abs(m + k) > 6) continue;
-      const num = quad(m, k - m * r, rem - k * r), den = fac(r), ans = lin(m, k);
-      return {
-        html: 'Mark every vertical, horizontal and slant asymptote of $f(x)=\\dfrac{' + num + '}{' + den + '}$. For a slant asymptote, pick the Slant tool and click two points on the line.',
-        plot: {preset: 'mark-asymptotes', window: {x: [-8, 8], y: [-8, 8]}, size: {w: 380, h: 300}, ticks: {x: 2, y: 2}, expected: {f: '(' + num + ')/(' + den + ')', v: [r], h: [], slant: {m: m, b: k}}},
-        hint: 'Divide to get the slant line, and compare the degrees to decide whether there is a horizontal asymptote.',
-        step: '\\text{VA: }x=' + r + '.\\quad \\deg(\\text{num})>\\deg(\\text{den})\\Rightarrow\\text{no HA.}\\quad\\text{Divide: slant asymptote }y=' + ans
-      };
-    }
-    const c = choose([1, 2]), kk = choose([-3, -2, -1, 1, 2, 3]), a = c * kk, b = choose([-4, -3, -2, -1, 1, 2, 3, 4]);
-    if (a * r + b === 0) continue;
-    const numT = lin(a, b), denT = c === 1 ? fac(r) : lin(c, -c * r);
+  for (let t = 0; t < 200; t++) {
+    const a = choose([-1, 1]), zs = pick(choose([1, 2])), vs = pick(choose([1, 2])), tp = choose([-6, -5, -4, -3, -2, -1, 1, 2, 3, 4, 5, 6]);
+    if (zs.some(z => vs.includes(z)) || [...zs, ...vs].includes(tp)) continue;
+    let s = a; zs.forEach(z => { s *= sgn(tp - z); }); vs.forEach(v => { s *= sgn(tp - v); });
+    const numF = zs.map(f1).join(''), denF = vs.map(f1).join('');
     return {
-      html: 'Mark every vertical, horizontal and slant asymptote of $f(x)=\\dfrac{' + numT + '}{' + denT + '}$. Place only what the function has.',
-      plot: {preset: 'mark-asymptotes', window: {x: [-8, 8], y: [-8, 8]}, size: {w: 380, h: 300}, ticks: {x: 2, y: 2}, expected: {f: '(' + numT + ')/(' + denT + ')', v: [r], h: [kk], slant: false}},
-      hint: 'Compare the degrees: which kind of end-behavior asymptote do they allow?',
-      step: '\\text{VA: }x=' + r + '.\\quad\\text{Equal degrees: HA }y=' + kk + '.\\quad\\text{No slant asymptote (the degrees are not one apart).}'
+      latex: 'f(x)=\\dfrac{' + cs(a) + numF + '}{' + denF + '}.\\quad f(' + tp + ')\\text{ is positive or negative? Type pos or neg:}',
+      answer: s > 0 ? ['pos', 'positive', '+'] : ['neg', 'negative', '-'],
+      hint: 'You do not need the value: just the sign of each factor at the test point.',
+      step: zs.concat(vs).map(r => '\\text{sign of }(x' + (r > 0 ? '-' : '+') + Math.abs(r) + ')=' + (tp - r > 0 ? '+' : '-')).join(',\\ ') + '\\Rightarrow f(' + tp + ')' + (s > 0 ? '>0' : '<0')
     };
   }
 }
 
-// 4. Typed: which way does f go next to a vertical asymptote?
-function gen4() {
+// 3. Typed: which way does f go next to a vertical asymptote?
+function gen3() {
   const r = choose([-4, -3, -2, -1, 1, 2, 3, 4]), z = choose([-4, -3, -2, -1, 1, 2, 3, 4].filter(v => v !== r)), c = choose([-2, -1, 1, 2]), m = choose([1, 2]), right = choose([true, false]);
   const base = sgn(c) * sgn(r - z), up = (right ? base : base * (m % 2 ? -1 : 1)) > 0;
   const num = lin(c, -c * z), den = m === 1 ? '(' + fac(r) + ')' : '(' + fac(r) + ')^2';
@@ -227,6 +203,38 @@ function gen4() {
     hint: 'Pick a number just ' + (right ? 'right' : 'left') + ' of the asymptote. Is each factor positive or negative there?',
     step: '\\text{Test a point just ' + (right ? 'right' : 'left') + ' of }x=' + r + ':\\ \\text{the sign of }f\\text{ is }' + (up ? '+' : '-') + '\\Rightarrow f(x)\\to' + (up ? '\\infty' : '-\\infty')
   };
+}
+
+// 4. Graph: mark vertical + horizontal asymptotes (degree of num below, equal to, or above den)
+function gen4() {
+  for (let t = 0; t < 400; t++) {
+    const fam = choose(['lt', 'eq', 'gt']);
+    if (fam === 'lt') {
+      const [r1, r2] = pick(2), a = choose([0, 0, 1, 2, -1, -2]), b = choose([-3, -2, -1, 1, 2, 3, 4]);
+      if (a * r1 + b === 0 || a * r2 + b === 0) continue;
+      const lo = Math.min(r1, r2), hi = Math.max(r1, r2), numT = a === 0 ? String(b) : lin(a, b), den = f1(lo) + f1(hi);
+      return {html: 'Mark every vertical and horizontal asymptote of $f(x)=\\dfrac{' + numT + '}{' + den + '}$. Place only what the function has.',
+        plot: {preset: 'mark-asymptotes', window: {x: [-8, 8], y: [-8, 8]}, size: {w: 380, h: 300}, ticks: {x: 2, y: 2}, expected: {f: '(' + numT + ')/(' + den + ')', v: [lo, hi], h: [0]}},
+        hint: 'Which factors of the denominator stay, and what do the degrees say about the ends?',
+        step: '\\text{VA: }x=' + lo + ',\\ x=' + hi + '.\\quad\\deg(\\text{num})<\\deg(\\text{den})\\Rightarrow\\text{HA }y=0'};
+    }
+    if (fam === 'eq') {
+      const c = choose([1, 2]), kk = choose([-3, -2, -1, 1, 2, 3]), a = c * kk, r = choose(POOL), b = choose([-4, -3, -2, -1, 1, 2, 3, 4]);
+      if (a * r + b === 0) continue;
+      const numT = lin(a, b), denT = c === 1 ? fac(r) : lin(c, -c * r);
+      return {html: 'Mark every vertical and horizontal asymptote of $f(x)=\\dfrac{' + numT + '}{' + denT + '}$. Place only what the function has.',
+        plot: {preset: 'mark-asymptotes', window: {x: [-8, 8], y: [-8, 8]}, size: {w: 380, h: 300}, ticks: {x: 2, y: 2}, expected: {f: '(' + numT + ')/(' + denT + ')', v: [r], h: [kk]}},
+        hint: 'Compare the degrees: what do they say about the ends?',
+        step: '\\text{VA: }x=' + r + '.\\quad\\text{Equal degrees: HA }y=' + kk};
+    }
+    const m = choose([1, 1, 2]), p = choose([-3, -2, -1, 0, 1, 2, 3]), q = choose([-4, -3, -2, -1, 1, 2, 3, 4]), r = choose([-4, -3, -2, -1, 1, 2, 3, 4]);
+    if (m * r * r + p * r + q === 0) continue;
+    const numT = cs(m) + 'x^2' + (p ? (p > 0 ? '+' : '-') + (Math.abs(p) === 1 ? '' : Math.abs(p)) + 'x' : '') + (q > 0 ? '+' : '-') + Math.abs(q);
+    return {html: 'Mark every vertical and horizontal asymptote of $f(x)=\\dfrac{' + numT + '}{' + fac(r) + '}$. Place only what the function has.',
+      plot: {preset: 'mark-asymptotes', window: {x: [-8, 8], y: [-8, 8]}, size: {w: 380, h: 300}, ticks: {x: 2, y: 2}, expected: {f: '(' + numT + ')/(' + fac(r) + ')', v: [r], h: []}},
+      hint: 'Compare the degrees: is there a horizontal asymptote at all?',
+      step: '\\text{VA: }x=' + r + '.\\quad\\deg(\\text{num})>\\deg(\\text{den})\\Rightarrow\\text{no horizontal asymptote}'};
+  }
 }
 
 // 5. Graph (wide): show where the curve goes on both sides of every vertical asymptote
@@ -253,32 +261,30 @@ function gen5() {
   }
 }
 
-// 6. Capstone (wide): build the whole graph, now with slant asymptotes
+// 6. Capstone (wide): build the whole graph
 function gen6() {
   for (let t = 0; t < 6000; t++) {
-    const fam = choose(['S', 'S', 'S', 'B', 'A']), a = fam === 'S' ? choose([-2, -1, 1, 2]) : choose([-1, 1]) * choose([1, 1, 2, 3]);
+    const fam = choose(['D', 'B', 'A']), a = choose([-1, 1]) * choose([1, 1, 2, 3]);
     let numF, denF, e;
-    if (fam === 'S') {
-      const [z1, z2, v] = pick(3);
-      if ((a * z1 * z2) % v !== 0 || Math.abs(a * z1 * z2 / v) > 7) continue;
-      const b = a * (v - z1 - z2); if (Math.abs(b) > 6 || Math.abs(a + b) > 6) continue;
-      const zs = [z1, z2].sort(asc);
-      numF = f1(zs[0]) + f1(zs[1]); denF = f1(v); e = {v: [v], h: [], zeros: zs, yint: -a * z1 * z2 / v, slant: {m: a, b: b}};
+    if (fam === 'D') {
+      const [z, v] = pick(2);
+      if ((a * z) % v !== 0 || Math.abs(a * z / v) > 7) continue;
+      numF = f1(z); denF = f1(v); e = {v: [v], h: [a], zeros: [z], yint: a * z / v};
     } else if (fam === 'B') {
       const [z1, z2, v1, v2] = pick(4);
       if ((a * z1 * z2) % (v1 * v2) !== 0 || Math.abs(a * z1 * z2 / (v1 * v2)) > 7) continue;
       const zs = [z1, z2].sort(asc), vs = [v1, v2].sort(asc);
-      numF = f1(zs[0]) + f1(zs[1]); denF = f1(vs[0]) + f1(vs[1]); e = {v: vs, h: [a], zeros: zs, yint: a * z1 * z2 / (v1 * v2), slant: false};
+      numF = f1(zs[0]) + f1(zs[1]); denF = f1(vs[0]) + f1(vs[1]); e = {v: vs, h: [a], zeros: zs, yint: a * z1 * z2 / (v1 * v2)};
     } else {
       const [z, v1, v2] = pick(3);
       if ((-a * z) % (v1 * v2) !== 0 || Math.abs(a * z / (v1 * v2)) > 7) continue;
       const vs = [v1, v2].sort(asc);
-      numF = f1(z); denF = f1(vs[0]) + f1(vs[1]); e = {v: vs, h: [0], zeros: [z], yint: -a * z / (v1 * v2), slant: false};
+      numF = f1(z); denF = f1(vs[0]) + f1(vs[1]); e = {v: vs, h: [0], zeros: [z], yint: -a * z / (v1 * v2)};
     }
     e.f = a + '*' + numF + '/(' + denF + ')';
-    const feats = '\\text{VA: }' + e.v.map(v => 'x=' + v).join(',\\ ') + ';\\ ' + (e.slant ? '\\text{slant: }y=' + lin(e.slant.m, e.slant.b) : '\\text{HA: }y=' + e.h[0]) + ';\\ \\text{x-int: }' + e.zeros.join(',\\ ') + ';\\ \\text{y-int: }' + e.yint;
+    const feats = '\\text{VA: }' + e.v.map(v => 'x=' + v).join(',\\ ') + ';\\ \\text{HA: }y=' + e.h[0] + ';\\ \\text{x-int: }' + e.zeros.join(',\\ ') + ';\\ \\text{y-int: }' + e.yint;
     return {
-      html: 'Build the graph of $f(x)=\\dfrac{' + cs(a) + numF + '}{' + denF + '}$. Mark every vertical asymptote, horizontal or slant asymptote (if it has one), x-intercept, and the y-intercept. Your curve draws itself from your marks, so check that it looks right.',
+      html: 'Build the graph of $f(x)=\\dfrac{' + cs(a) + numF + '}{' + denF + '}$. Mark every vertical asymptote, the horizontal asymptote, every x-intercept, and the y-intercept. Your curve draws itself from your marks, so check that it looks right.',
       wide: true,
       plot: {preset: 'mark-asymptotes', window: {x: [-8, 8], y: [-8, 8]}, size: {w: 640, h: 400}, ticks: {x: 2, y: 2}, input: {build: true}, expected: e},
       hint: 'List the features first: denominator zeros, numerator zeros, f(0), and what the degrees say about the ends.',
@@ -308,7 +314,7 @@ function ok(user, acc) {
 }
 
 function init() {
-  // fixed order: 2 typed, slant graph, typed up/down, then two full-width cards (up/down graph, build the whole graph)
+  // fixed order: 3 typed, asymptote graph, then two full-width cards (up/down graph, build the whole graph)
   ACTIVE    = [gen1(), gen2(), gen3(), gen4(), gen5(), gen6()];
   correct   = 0;
   flags     = Array(ACTIVE.length).fill(false);

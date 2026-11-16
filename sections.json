@@ -6853,43 +6853,43 @@
       "id": "PC_3_7",
       "section": "3.7",
       "title": "Asymptotes & Graphing Rational Functions",
-      "swbat": "Students will be able to find slant asymptotes by division, decide whether a rational function has a horizontal, slant, or no end-behavior asymptote, describe the behavior on each side of every vertical asymptote, and sketch the full graph.",
-      "exitTicket": "Find all asymptotes and intercepts of $f(x)=\\dfrac{x^2-4}{x-1}$, and say where the graph goes on each side of the vertical asymptote.",
+      "swbat": "Students will be able to describe end behavior from the leading terms, find the sign of a rational function on each interval, describe the behavior on each side of every vertical asymptote, and sketch the full graph.",
+      "exitTicket": "For $f(x)=\\dfrac{(x-2)(x+1)}{(x-1)(x+2)}$, find all asymptotes and intercepts and say where the graph goes on each side of each vertical asymptote.",
       "hasPractice": true,
       "workedExamples": [
         {
-          "problem": "Find all asymptotes of $f(x)=\\dfrac{x^2+3x-4}{x-2}$.",
-          "answer": "VA at $x=2$. Degree of numerator is one more than denominator: divide to get $x+5+\\dfrac{6}{x-2}$. Slant asymptote $y=x+5$. No HA.",
-          "technique": "$\\deg(p)=\\deg(q)+1$: divide; the quotient is the slant asymptote."
+          "problem": "Describe $f(x)=\\dfrac{3x^2+1}{x-2}$ as $x\\to\\pm\\infty$.",
+          "answer": "$n-d=1$: $f\\approx 3x$, so $f\\to+\\infty$ as $x\\to\\infty$ and $f\\to-\\infty$ as $x\\to-\\infty$.",
+          "technique": "Use the leading terms: $f\\approx\\dfrac{a}{c}x^{n-d}$. Equal degrees give the horizontal asymptote $y=a/c$; lower numerator degree gives $0$."
         },
         {
-          "problem": "State the end-behavior asymptote of (a) $\\dfrac{2x^2+1}{x-1}$ (b) $\\dfrac{x^2+5}{x^2-1}$ (c) $\\dfrac{x^3+1}{x-1}$.",
-          "answer": "(a) Slant $y=2x+2$. (b) HA $y=1$. (c) Neither (degree is two higher).",
-          "technique": "Compare degrees: $n\\le d$ horizontal, $n=d+1$ slant, $n\\ge d+2$ neither."
+          "problem": "Where is $h(x)=\\dfrac{x+1}{(x-2)(x-5)}$ positive?",
+          "answer": "Critical values $-1,2,5$. Signs: $-,+,-,+$. Positive on $(-1,2)\\cup(5,\\infty)$.",
+          "technique": "Mark zeros and vertical asymptotes, then test one point in each interval."
         },
         {
           "problem": "Describe the behavior on each side of each vertical asymptote of $g(x)=\\dfrac{x-2}{(x+1)(x-3)}$.",
           "answer": "At $x=-1$: down on the left, up on the right. At $x=3$: down on the left, up on the right. HA $y=0$.",
-          "technique": "Test a number just left and just right of each VA, or track the sign of each factor. Odd power flips sides, even power does not."
+          "technique": "Test a number just left and just right of each VA. Odd power flips sides, even power does not."
         },
         {
-          "problem": "Graph $f(x)=\\dfrac{(x-2)(x+2)}{x-1}$.",
-          "answer": "Zeros $\\pm2$, $y$-int $4$, VA $x=1$, slant $y=x+1$. Just right of $1$ the graph goes down, just left it goes up. It is below the slant line on the far right and above it on the far left.",
-          "technique": "Checklist: holes, VAs, end-behavior asymptote, intercepts, up/down beside each VA, connect."
+          "problem": "Graph $f(x)=\\dfrac{(x-2)(x+1)}{(x-1)(x+2)}$.",
+          "answer": "Zeros $2,-1$; $y$-int $1$; VAs $x=1,-2$; HA $y=1$. Beside each VA the graph goes down on the right and up on the left. It crosses its HA at $(0,1)$.",
+          "technique": "Checklist: holes, VAs, HA, intercepts, up/down beside each VA, connect."
         }
       ],
       "reviewProblems": [
         {
-          "problem": "Find the slant asymptote of $f(x)=\\dfrac{2x^2-3x+5}{x-2}$.",
-          "answer": "$y=2x+1$."
+          "problem": "Describe $g(x)=\\dfrac{-x^2+3}{x+2}$ as $x\\to\\infty$.",
+          "answer": "$g\\approx -x\\to-\\infty$."
         },
         {
           "problem": "As $x\\to-4^{+}$ and $x\\to-4^{-}$, what does $f(x)=\\dfrac{-3}{x+4}$ do?",
           "answer": "$f\\to-\\infty$ from the right and $+\\infty$ from the left."
         },
         {
-          "problem": "Does $h(x)=\\dfrac{x^4-1}{x^2+3}$ have a horizontal or slant asymptote?",
-          "answer": "Neither: the degree of the numerator is two more than the denominator."
+          "problem": "Where is $f(x)=\\dfrac{x-1}{(x+2)(x-3)}$ positive?",
+          "answer": "$(-2,1)\\cup(3,\\infty)$."
         }
       ],
       "practiceFile": "PC_3_7_Asymptotes_and_Graphing_Rational_Functions_Practice.html",
