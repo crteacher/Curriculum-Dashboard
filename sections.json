@@ -6850,6 +6850,52 @@
       "notesFile": "PC_3_6_Rational_Functions"
     },
     {
+      "id": "PC_3_7",
+      "section": "3.7",
+      "title": "Asymptotes & Graphing Rational Functions",
+      "swbat": "Students will be able to find slant asymptotes by division, decide whether a rational function has a horizontal, slant, or no end-behavior asymptote, describe the behavior on each side of every vertical asymptote, and sketch the full graph.",
+      "exitTicket": "Find all asymptotes and intercepts of $f(x)=\\dfrac{x^2-4}{x-1}$, and say where the graph goes on each side of the vertical asymptote.",
+      "hasPractice": true,
+      "workedExamples": [
+        {
+          "problem": "Find all asymptotes of $f(x)=\\dfrac{x^2+3x-4}{x-2}$.",
+          "answer": "VA at $x=2$. Degree of numerator is one more than denominator: divide to get $x+5+\\dfrac{6}{x-2}$. Slant asymptote $y=x+5$. No HA.",
+          "technique": "$\\deg(p)=\\deg(q)+1$: divide; the quotient is the slant asymptote."
+        },
+        {
+          "problem": "State the end-behavior asymptote of (a) $\\dfrac{2x^2+1}{x-1}$ (b) $\\dfrac{x^2+5}{x^2-1}$ (c) $\\dfrac{x^3+1}{x-1}$.",
+          "answer": "(a) Slant $y=2x+2$. (b) HA $y=1$. (c) Neither (degree is two higher).",
+          "technique": "Compare degrees: $n\\le d$ horizontal, $n=d+1$ slant, $n\\ge d+2$ neither."
+        },
+        {
+          "problem": "Describe the behavior on each side of each vertical asymptote of $g(x)=\\dfrac{x-2}{(x+1)(x-3)}$.",
+          "answer": "At $x=-1$: down on the left, up on the right. At $x=3$: down on the left, up on the right. HA $y=0$.",
+          "technique": "Test a number just left and just right of each VA, or track the sign of each factor. Odd power flips sides, even power does not."
+        },
+        {
+          "problem": "Graph $f(x)=\\dfrac{(x-2)(x+2)}{x-1}$.",
+          "answer": "Zeros $\\pm2$, $y$-int $4$, VA $x=1$, slant $y=x+1$. Just right of $1$ the graph goes down, just left it goes up. It is below the slant line on the far right and above it on the far left.",
+          "technique": "Checklist: holes, VAs, end-behavior asymptote, intercepts, up/down beside each VA, connect."
+        }
+      ],
+      "reviewProblems": [
+        {
+          "problem": "Find the slant asymptote of $f(x)=\\dfrac{2x^2-3x+5}{x-2}$.",
+          "answer": "$y=2x+1$."
+        },
+        {
+          "problem": "As $x\\to-4^{+}$ and $x\\to-4^{-}$, what does $f(x)=\\dfrac{-3}{x+4}$ do?",
+          "answer": "$f\\to-\\infty$ from the right and $+\\infty$ from the left."
+        },
+        {
+          "problem": "Does $h(x)=\\dfrac{x^4-1}{x^2+3}$ have a horizontal or slant asymptote?",
+          "answer": "Neither: the degree of the numerator is two more than the denominator."
+        }
+      ],
+      "practiceFile": "PC_3_7_Asymptotes_and_Graphing_Rational_Functions_Practice.html",
+      "notesFile": "PC_3_7_Asymptotes_and_Graphing_Rational_Functions"
+    },
+    {
       "id": "PC_4_1",
       "section": "4.1",
       "title": "Exponential Functions",

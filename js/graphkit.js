@@ -207,7 +207,7 @@ var PRESETS = {
   'read-graph': {}, 'plot-points': {input: {mode: 'points'}}, 'plot-line': {input: {mode: 'line'}},
   'shade-inequality': {input: {mode: 'inequality'}}, 'sketch-curve': {input: {mode: 'sketch'}},
   'two-lines': {}, 'piecewise': {}, 'number-line': {kind: 'numberline'}, 'pick-graph': {input: {mode: 'choose'}},
-  'mark-asymptotes': {input: {mode: 'asymptotes'}},
+  'mark-asymptotes': {input: {mode: 'asymptotes'}}, 'va-sides': {input: {mode: 'sides'}},
   'poly-sketch': {input: {mode: 'polysketch'}, qualitative: true, window: {x: [-6, 6], y: [-1.35, 1.35]}, size: {w: 440, h: 230}, ticks: {x: 1, y: 1}}
 };
 GK.presets = Object.keys(PRESETS);
@@ -340,9 +340,19 @@ function polyPath(L, zs, s) {
   return pathOf(L, [pp]);
 }
 
+/* behavior near a vertical asymptote: a short branch hugging x = x0 on one side, running up or down */
+function sideBranch(L, x0, side, dir) {
+  var sg = side === 'l' ? -1 : 1, d = dir === 'down' ? -1 : 1, pts = [], dx;
+  for (dx = 1.3; dx >= 0.1; dx -= 0.05) pts.push([x0 + sg * dx, d * 0.55 / dx]);
+  return pathOf(L, [pts]);
+}
 function drawObject(L, o, color, out) {
   var w = L.win, f, segs, a, b, ln, P, Q, i, s = '', col = o.color || color;
   switch (o.type) {
+    case 'sidebranch':
+      out.curves += tag('path', stroke(o, color, {d: sideBranch(L, o.x, o.side, o.dir), 'clip-path': out.clip}));
+      out.desc.push('branch just ' + (o.side === 'l' ? 'left' : 'right') + ' of x = ' + plain(o.x) + ' going ' + o.dir);
+      break;
     case 'polysketch':
       var pz = o.zeros || [];
       if (pz.length) out.curves += tag('path', stroke(o, color, {d: polyPath(L, pz, o.a || 1), 'clip-path': out.clip}));
@@ -553,8 +563,8 @@ GK.describe = function (cfg) { return build(cfg).desc; };
 GK.window = function (cfg) { return build(cfg).L.win; };
 
 /* ══════════════════════════ 5. Student input: state, actions, grading (no browser needed) ══════════════════════════ */
-function defaultTool(mode) { return mode === 'numberline' ? 'closed' : mode === 'asymptotes' ? 'v' : 'point'; }
-GK.newState = function (mode) { return {mode: mode, pts: [], dashed: false, side: null, shade: [], tool: defaultTool(mode), marks: null, choice: null, zs: {}, left: null, right: null, zok: null, av: [], ah: [], hl: [], zr: [], yi: null}; };
+function defaultTool(mode) { return mode === 'numberline' ? 'closed' : mode === 'asymptotes' ? 'v' : mode === 'sides' ? 'side' : 'point'; }
+GK.newState = function (mode) { return {mode: mode, pts: [], dashed: false, side: null, shade: [], tool: defaultTool(mode), marks: null, choice: null, zs: {}, left: null, right: null, zok: null, av: [], ah: [], hl: [], zr: [], yi: null, sl: [], sd: {}}; };
 /* rational function implied by a student's marks: a * prod(x - zero) / prod(x - vertical asymptote); the y-intercept fixes a. Holes cancel, so they only add an open point. */
 GK.rationalFrom = function (st) {
   var zr = st.zr || [], av = st.av || [], i, num = 1, den = 1;
@@ -586,9 +596,18 @@ GK.act = function (input, st, a) {
   if (a.type === 'dashed') { st.dashed = !!a.value; return st; }
   if (a.type === 'choose') { st.choice = a.index; return st; }
   if (a.type !== 'click') return st;
+  if (mode === 'sides' && a.type === 'click') {               // click left/right of a vertical asymptote: unset -> up -> down -> unset
+    var xs = (input.expected && input.expected.sides || []).map(function (q) { return q.x; }), bi = -1, bd = Infinity, ii;
+    for (ii = 0; ii < xs.length; ii++) { var dd = Math.abs((a.rawX != null ? a.rawX : a.x) - xs[ii]); if (dd < bd) { bd = dd; bi = ii; } }
+    if (bi < 0) return st;
+    var rx = a.rawX != null ? a.rawX : a.x, sk = rx < xs[bi] ? 'l' : 'r', ent = st.sd[bi] || (st.sd[bi] = {}), cv = ent[sk];
+    if (!cv) ent[sk] = 'up'; else if (cv === 'up') ent[sk] = 'down'; else delete ent[sk];
+    return st;
+  }
   if (mode === 'asymptotes') {                                 // Vertical tool: a click toggles x = a.x. Horizontal tool: a click toggles y = a.y. Hole tool: a click toggles an open point
     if (st.tool === 'zero') { var zi, zhit = -1, zp = Math.round(a.x * 1e6) / 1e6; for (zi = 0; zi < st.zr.length; zi++) if (Math.abs(st.zr[zi] - zp) <= Math.max(1e-9, hx * 0.6)) zhit = zi; if (zhit >= 0) st.zr.splice(zhit, 1); else st.zr.push(zp); return st; }
     if (st.tool === 'yint') { var yp = Math.round(a.y * 1e6) / 1e6; st.yi = (st.yi != null && Math.abs(st.yi - yp) <= Math.max(1e-9, hy * 0.6)) ? null : yp; return st; }
+    if (st.tool === 'slant') { near = nearest(st.sl, a.x, a.y, hx, hy); if (near.i >= 0 && near.d <= 1) st.sl.splice(near.i, 1); else if (st.sl.length < 2) st.sl.push({x: Math.round(a.x * 1e6) / 1e6, y: Math.round(a.y * 1e6) / 1e6}); return st; }
     if (st.tool === 'hole') { near = nearest(st.hl, a.x, a.y, hx, hy); if (near.i >= 0 && near.d <= 1) st.hl.splice(near.i, 1); else st.hl.push({x: Math.round(a.x * 1e6) / 1e6, y: Math.round(a.y * 1e6) / 1e6}); return st; }
     var hz = st.tool === 'h', arr = hz ? st.ah : st.av, pos = Math.round((hz ? a.y : a.x) * 1e6) / 1e6, tolA = Math.max(1e-9, (hz ? hy : hx) * 0.6), hit = -1, qi;
     for (qi = 0; qi < arr.length; qi++) if (Math.abs(arr[qi] - pos) <= tolA) hit = qi;
@@ -734,8 +753,22 @@ GK.gradeState = function (input, st, win) {
       zv.y = st.yi != null && Math.abs(st.yi - e.yint) < 1e-6;
       if (zv.y) got2++; else if (any) iss.push(st.yi == null ? 'Mark the y-intercept.' : 'Recheck the y-intercept.');
     }
+    if (e.slant !== undefined) {                                 // optional: slant asymptote y = mx + b (or false = there is none)
+      parts++; var sp2 = st.sl || [], sm = null, okS = false; any = any || sp2.length > 0;
+      if (sp2.length === 2 && Math.abs(sp2[1].x - sp2[0].x) > 1e-9) { sm = (sp2[1].y - sp2[0].y) / (sp2[1].x - sp2[0].x); sm = {m: sm, b: sp2[0].y - sm * sp2[0].x}; }
+      if (e.slant === false) okS = sp2.length === 0; else okS = !!sm && Math.abs(sm.m - e.slant.m) < 1e-6 && Math.abs(sm.b - e.slant.b) < 1e-6;
+      zv.s = okS; if (okS) got2++; else if (any || e.slant === false) iss.push(e.slant === false ? 'Recheck: does this function have a slant asymptote?' : sp2.length < 2 ? 'Mark two points on the slant asymptote.' : 'Recheck the slant asymptote.');
+    }
     st.zok = zv;
     return {ok: got2 === parts, score: got2 / parts, detail: got2 === parts ? '' : any ? iss.join(' ') : 'Place your marks first: choose a tool, then click the grid.'};
+  }
+  if (mode === 'sides') {                                        // expected.sides = [{x, l:'up'|'down', r:'up'|'down'}]
+    var sg = e.sides || [], tot = sg.length * 2, okn = 0, bad = [], zs2 = {}, filled = 0;
+    sg.forEach(function (q, i) { var en = st.sd[i] || {}, good = true; zs2[i] = {};
+      ['l', 'r'].forEach(function (k) { if (en[k]) filled++; var okk = en[k] === q[k]; zs2[i][k] = okk; if (okk) okn++; else good = false; });
+      if (!good) bad.push(q.x); });
+    st.zok = zs2;
+    return {ok: okn === tot, score: tot ? okn / tot : 1, detail: okn === tot ? '' : !filled ? 'Click on each side of a vertical asymptote to show where the curve goes.' : filled < tot ? 'Show both sides of every vertical asymptote.' : 'Recheck the behavior near x = ' + fmt(bad[0]) + '.'};
   }
   if (mode === 'choose') { var c = st.choice === e; return {ok: c, score: c ? 1 : 0, detail: st.choice == null ? 'Pick one of the graphs.' : ''}; }
   return {ok: false, score: 0, detail: ''};
@@ -753,7 +786,13 @@ function autoAnswer(mode, e) {
     (e.holes || []).forEach(function (h) { out.push({type: 'hole', at: [h[0], h[1]], color: GOLD}); });
     (e.zeros || []).forEach(function (z) { out.push({type: 'point', at: [z, 0], color: GOLD}); });
     if (e.yint != null) out.push({type: 'point', at: [0, e.yint], color: GOLD});
+    if (e.slant) out.push({type: 'asymptote', m: e.slant.m, b: e.slant.b, color: GOLD, width: 2});
     return out;
+  }
+  if (mode === 'sides') {
+    var o2 = [];
+    (e.sides || []).forEach(function (q) { ['l', 'r'].forEach(function (k) { o2.push({type: 'sidebranch', x: q.x, side: k, dir: q[k], color: GOLD, width: 2.4}); }); });
+    return o2;
   }
   return [];
 }
@@ -787,7 +826,14 @@ function drawInput(L, c, st) {
     if (st.yi != null) s += dot(L, [0, st.yi], st.zok && st.zok.y != null ? (st.zok.y ? OKC : BADC) : NAVY, false, 5.5);
     (st.av || []).forEach(function (x) { var cl = st.zok ? (st.zok.v[x] ? OKC : BADC) : NAVY; s += tag('line', {x1: r2(L.sx(x)), y1: r2(L.sy(w.y[0])), x2: r2(L.sx(x)), y2: r2(L.sy(w.y[1])), stroke: cl, 'stroke-width': 2.2, 'stroke-dasharray': '7 5', 'clip-path': L.clipRef}); });
     (st.hl || []).forEach(function (h, i) { s += dot(L, [h.x, h.y], st.zok && st.zok.hl ? (st.zok.hl[i] ? OKC : BADC) : NAVY, true, 5.5); });
+    if ((st.sl || []).length === 2 && Math.abs(st.sl[1].x - st.sl[0].x) > 1e-9) { var slm = (st.sl[1].y - st.sl[0].y) / (st.sl[1].x - st.sl[0].x), slb = st.sl[0].y - slm * st.sl[0].x, scl = st.zok && st.zok.s != null ? (st.zok.s ? OKC : BADC) : NAVY; s += tag('line', {x1: r2(L.sx(w.x[0])), y1: r2(L.sy(slm * w.x[0] + slb)), x2: r2(L.sx(w.x[1])), y2: r2(L.sy(slm * w.x[1] + slb)), stroke: scl, 'stroke-width': 2.2, 'stroke-dasharray': '7 5', 'clip-path': L.clipRef}); }
+    (st.sl || []).forEach(function (p) { s += dot(L, [p.x, p.y], NAVY, false, 4.5); });
     (st.ah || []).forEach(function (yv) { var cl = st.zok ? (st.zok.h[yv] ? OKC : BADC) : NAVY; s += tag('line', {x1: r2(L.sx(w.x[0])), y1: r2(L.sy(yv)), x2: r2(L.sx(w.x[1])), y2: r2(L.sy(yv)), stroke: cl, 'stroke-width': 2.2, 'stroke-dasharray': '7 5', 'clip-path': L.clipRef}); });
+  }
+  if (st.mode === 'sides') {
+    Object.keys(st.sd || {}).forEach(function (i) { var q = (input.expected && input.expected.sides || [])[i]; if (!q) return;
+      ['l', 'r'].forEach(function (k) { var v = st.sd[i][k]; if (!v) return; var cl = st.zok && st.zok[i] ? (st.zok[i][k] ? OKC : BADC) : NAVY;
+        s += tag('path', {d: sideBranch(L, q.x, k, v), fill: 'none', stroke: cl, 'stroke-width': 2.6, 'stroke-linecap': 'round', 'clip-path': L.clipRef}); }); });
   }
   if (st.mode === 'numberline') {
     var y = L.sy(0);
@@ -835,13 +881,14 @@ var TOOLBARS = {      // the ONLY buttons each mode ever shows
   line: function () { return [{act: 'undo', label: 'Undo', quiet: true}, {act: 'clear', label: 'Clear', quiet: true}]; },
   inequality: function () { return [{dashed: false, label: 'Solid line'}, {dashed: true, label: 'Dashed line'}, {act: 'undo', label: 'Undo', quiet: true}, {act: 'clear', label: 'Clear', quiet: true}]; },
   numberline: function () { return [{tool: 'closed', label: '● Closed point'}, {tool: 'open', label: '○ Open point'}, {tool: 'shade', label: 'Shade'}, {act: 'undo', label: 'Undo', quiet: true}, {act: 'clear', label: 'Clear', quiet: true}]; },
-  asymptotes: function (input) { return [{tool: 'v', label: 'Vertical asymptote'}, {tool: 'h', label: 'Horizontal asymptote'}].concat(input && input.expected && input.expected.holes ? [{tool: 'hole', label: '○ Hole'}] : [], input && input.expected && input.expected.zeros ? [{tool: 'zero', label: '● x-intercept'}] : [], input && input.expected && input.expected.yint != null ? [{tool: 'yint', label: '● y-intercept'}] : [], [{act: 'undo', label: 'Undo', quiet: true}, {act: 'clear', label: 'Clear', quiet: true}]); },
+  asymptotes: function (input) { return [{tool: 'v', label: 'Vertical asymptote'}, {tool: 'h', label: 'Horizontal asymptote'}].concat(input && input.expected && input.expected.holes ? [{tool: 'hole', label: '○ Hole'}] : [], input && input.expected && input.expected.slant !== undefined ? [{tool: 'slant', label: 'Slant asymptote'}] : [], input && input.expected && input.expected.zeros ? [{tool: 'zero', label: '● x-intercept'}] : [], input && input.expected && input.expected.yint != null ? [{tool: 'yint', label: '● y-intercept'}] : [], [{act: 'undo', label: 'Undo', quiet: true}, {act: 'clear', label: 'Clear', quiet: true}]); },
+  sides: function () { return [{act: 'undo', label: 'Undo', quiet: true}, {act: 'clear', label: 'Clear', quiet: true}]; },
   polysketch: function () { return [{end: {side: 'left', dir: 'up'}, label: 'Left end ↑'}, {end: {side: 'left', dir: 'down'}, label: 'Left end ↓'}, {end: {side: 'right', dir: 'up'}, label: 'Right end ↑'}, {end: {side: 'right', dir: 'down'}, label: 'Right end ↓'}, {act: 'undo', label: 'Undo', quiet: true}, {act: 'clear', label: 'Clear', quiet: true}]; }
 };
 GK.toolbarFor = function (cfg) { var c = resolve(cfg), m = c.input && c.input.mode; return TOOLBARS[m] ? TOOLBARS[m](c.input).map(function (b) { return b.label; }) : m === 'sketch' ? ((c.sketch && c.sketch.tools) || ['keypoint', 'vertex']) : []; };
 var HINTS = { points: 'Click to place a point. Click a point again to remove it.',
-  asymptotes: 'Choose a tool, then click the grid: Vertical or Horizontal places a dashed asymptote, Hole places an open point, intercept tools place points. Click again to remove.', line: 'Click two points on the line. Click again to move the nearer point.',
-  polysketch: 'Click a zero: 1 click = crosses straight through, 2 = bounces, 3 = crosses with a flat kink, 4 = removes it. Then choose both ends.',
+  asymptotes: 'Choose a tool, then click the grid: Vertical or Horizontal places a dashed asymptote, Slant needs two clicks on the line, Hole places an open point, intercept tools place points. Click again to remove.', line: 'Click two points on the line. Click again to move the nearer point.',
+  sides: 'Click just left or right of a vertical asymptote: 1 click = the curve goes up, 2 = down, 3 = clears.', polysketch: 'Click a zero: 1 click = crosses straight through, 2 = bounces, 3 = crosses with a flat kink, 4 = removes it. Then choose both ends.',
   inequality: 'Click two points for the boundary, choose solid or dashed, then click the side to shade.', numberline: 'Place your point(s), then choose Shade and click the part(s) of the line to shade.' };
 
 GK.mount = function (el, cfg) {
