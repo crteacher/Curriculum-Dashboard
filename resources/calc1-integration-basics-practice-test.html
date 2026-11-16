@@ -243,9 +243,9 @@
   .hidden { display: none !important; }
 
   /* integration test additions */
-  .int { display: inline-flex; align-items: center; gap: 1px; vertical-align: middle; }
-  .int .isign { font-size: 2em; line-height: 1; font-weight: 300; }
-  .lims { display: inline-flex; flex-direction: column; justify-content: space-between; font-size: 0.66em; line-height: 1; height: 2.7em; }
+  .int { display: inline-flex; align-items: center; vertical-align: middle; margin-right: .15em; }
+  .int .isym { height: 2.3em; width: .78em; fill: none; stroke: currentColor; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; flex: none; overflow: visible; }
+  .lims { display: inline-flex; flex-direction: column; justify-content: space-between; font-size: 0.72em; line-height: 1; height: 2.3em; margin-left: .12em; padding: .05em 0; }
   .lims sup, .lims sub { position: static; vertical-align: baseline; }
   .qprompt .math sup, .qsolution sup { font-size: 0.72em; line-height: 0; }
   .nobr { white-space: nowrap; }
@@ -407,7 +407,7 @@
   }
   function integ(lo, hi, bodyHtml) {
     var lims = (lo !== null) ? "<span class=\"lims\"><sup>" + hi + "</sup><sub>" + lo + "</sub></span>" : "";
-    return "<span class=\"int\"><span class=\"isign\">&int;</span>" + lims + "</span>&thinsp;" + bodyHtml + "<i>dx</i>";
+    return "<span class=\"int\"><svg class=\"isym\" viewBox=\"0 0 20 60\" aria-hidden=\"true\"><path d=\"M17 6 C16.5 2 12.5 1.5 11.5 7 L8.5 53 C7.5 58.5 3.5 58.5 3 54\"/></svg>" + lims + "</span>&thinsp;" + bodyHtml + "<i>dx</i>";
   }
   function powSup(p, q) { return q === 1 ? String(p) : p + "/" + q; }
 
@@ -537,59 +537,98 @@
   var PARTS = [];
   var FMT_HINT = "<span class=\"fmt-hint\">Type powers with ^ and fractions in parentheses, e.g. (2/5)x^(5/2) &minus; x^3 + C. Don&rsquo;t forget + C.</span>";
 
-  // ---------- 1: power rule with fractional exponent ----------
+  function sgn() { return randBool() ? 1 : -1; }
+  function sfrac(n, d) { var r = red(n, d); return (r[0] < 0 ? "&minus;" : "") + mag(r[0], r[1], false); }   // signed fraction as html
+  function expHtml(P, Q) { return (P < 0 ? "&minus;" : "") + powSup(Math.abs(P), Q); }                       // exponent P/Q as html (sup contents)
+
+  // ---------- 1: power rule (fractional / negative exponents) with a second term: power or sin/cos ----------
   PARTS.push({
     id: "1", group: "1", label: "", points: 4,
     gen: function () {
-      var q = randChoice([[1, 2], [1, 3], [1, 4], [2, 3], [3, 2], [3, 4]]), pp = q[0], qq = q[1];
-      var r, ss, g;
-      do { r = randInt(1, 4); ss = randInt(2, 5); g = gcdInt(r, ss); } while (g !== 1 || r === ss);
-      var sgn1 = randBool() ? 1 : -1, k = randInt(2, 6) * (randBool() ? 1 : -1), n = randInt(2, 5);
-      var a1 = red(sgn1 * r * qq, ss * (pp + qq));           // coefficient on x^((p+q)/q)
-      var a2 = red(k, n + 1);                                  // coefficient on x^(n+1)
-      var e1 = (pp + qq) / qq;
-      var s = { pp: pp, qq: qq, r: r, ss: ss, sgn1: sgn1, k: k, n: n, a1: a1, a2: a2 };
-      s.f = function (x) { return sgn1 * r / ss * Math.pow(x, pp / qq) + k * Math.pow(x, n); };
-      s.F = function (x) { return a1[0] / a1[1] * Math.pow(x, e1) + a2[0] / a2[1] * Math.pow(x, n + 1); };
-      s.typed = termTxt(a1[0], a1[1], "x^(" + (pp + qq) + "/" + qq + ")", true) + termTxt(a2[0], a2[1], "x^" + (n + 1), false) + " + C";
+      var q = randChoice([[1, 2], [1, 3], [1, 4], [2, 3], [3, 2], [3, 4], [5, 2], [4, 3], [-1, 2], [-1, 3], [-3, 2], [-2, 1], [-3, 1], [5, 1]]), pp = q[0], qq = q[1];
+      var c1 = red(sgn() * randInt(1, 6), randInt(1, 5));                 // coefficient on the first term (may be a fraction)
+      var a1 = red(c1[0] * qq, c1[1] * (pp + qq));                        // its antiderivative coefficient
+      var e1 = [pp + qq, qq];
+      var kind = randChoice(["pow", "pow", "sin", "cos"]), k, n, a2, f2, F2, body2, typed2, sol2;
+      if (kind === "pow") {
+        do { n = randChoice([2, 3, 4, 5, 6, -2, -3]); } while (qq === 1 && n === pp); k = randInt(2, 6) * sgn(); a2 = red(k, n + 1);
+        f2 = function (x) { return k * Math.pow(x, n); }; F2 = function (x) { return a2[0] / a2[1] * Math.pow(x, n + 1); };
+        typed2 = termTxt(a2[0], a2[1], "x^(" + (n + 1) + ")", false);
+      } else if (kind === "sin") {
+        k = randInt(1, 6) * sgn();
+        f2 = function (x) { return k * Math.sin(x); }; F2 = function (x) { return -k * Math.cos(x); };
+        typed2 = termTxt(-k, 1, "cos(x)", false);
+      } else {
+        k = randInt(1, 6) * sgn();
+        f2 = function (x) { return k * Math.cos(x); }; F2 = function (x) { return k * Math.sin(x); };
+        typed2 = termTxt(k, 1, "sin(x)", false);
+      }
+      var s = { pp: pp, qq: qq, c1: c1, a1: a1, e1: e1, kind: kind, k: k, n: n, a2: a2 };
+      s.f = function (x) { return c1[0] / c1[1] * Math.pow(x, pp / qq) + f2(x); };
+      s.F = function (x) { return a1[0] / a1[1] * Math.pow(x, e1[0] / e1[1]) + F2(x); };
+      s.typed = termTxt(a1[0], a1[1], "x^(" + e1[0] + "/" + e1[1] + ")", true) + typed2 + " + C";
       return s;
     },
     prompt: function (s) {
-      var body = term(s.sgn1 * s.r, s.ss, "x<sup>" + powSup(s.pp, s.qq) + "</sup>", true) + term(s.k, 1, "x<sup>" + s.n + "</sup>", false);
+      var body = term(s.c1[0], s.c1[1], "x<sup>" + expHtml(s.pp, s.qq) + "</sup>", true);
+      body += s.kind === "pow" ? term(s.k, 1, "x<sup>" + s.n + "</sup>", false) : term(s.k, 1, s.kind + "(x)", false);
       return "<span class=\"math\">" + integ(null, null, "(" + body + ")") + "</span>";
     },
     inputsHtml: function () {
-      return "<span class=\"field-label\">Antiderivative =</span><input type=\"text\" class=\"ans-main ans-wide\" placeholder=\"e.g. (2/5)x^(5/2) - x^3 + C\" autocomplete=\"off\" spellcheck=\"false\">" + FMT_HINT;
+      return "<span class=\"field-label\">Antiderivative =</span><input type=\"text\" class=\"ans-main ans-wide\" placeholder=\"e.g. (2/5)x^(5/2) - cos(x) + C\" autocomplete=\"off\" spellcheck=\"false\">" +
+        "<span class=\"fmt-hint\">Type powers with ^ and fractional exponents in parentheses, e.g. (2/5)x^(5/2) &minus; x^3 + C. Use sin(x), cos(x). Don&rsquo;t forget + C.</span>";
     },
     readAnswer: function (card) { return { raw: card.querySelector(".ans-main").value }; },
     isCorrect: function (ua, s) { return gradeAnti(ua.raw, s.F, 4).pts >= 4; },
     grade: function (ua, s) { return gradeAnti(ua.raw, s.F, 4); },
     solutionHtml: function (s) {
-      var e1 = powSup(s.pp + s.qq, s.qq);
+      var E = expHtml(s.e1[0], s.e1[1]), recip = sfrac(s.qq, s.pp + s.qq), second;
+      if (s.kind === "pow") second = "Second term: " + term(s.k, 1, "x<sup>" + s.n + "</sup>", true) + " &rarr; " + term(s.a2[0], s.a2[1], "x<sup>" + (s.n + 1) + "</sup>", true) + ".";
+      else if (s.kind === "sin") second = "Second term: &int;sin(x)dx = &minus;cos(x), so " + term(s.k, 1, "sin(x)", true) + " &rarr; " + term(-s.k, 1, "cos(x)", true) + ".";
+      else second = "Second term: &int;cos(x)dx = sin(x), so " + term(s.k, 1, "cos(x)", true) + " &rarr; " + term(s.k, 1, "sin(x)", true) + ".";
+      var ans = term(s.a1[0], s.a1[1], "x<sup>" + E + "</sup>", true) +
+        (s.kind === "pow" ? term(s.a2[0], s.a2[1], "x<sup>" + (s.n + 1) + "</sup>", false) : (s.kind === "sin" ? term(-s.k, 1, "cos(x)", false) : term(s.k, 1, "sin(x)", false)));
       return "<span class=\"sol-label\">Solution</span>" +
         "<div class=\"step\">Power rule: &int;x<sup>m</sup>dx = x<sup>m+1</sup>/(m+1) + C. Constants come out front, and we integrate term by term.</div>" +
-        "<div class=\"step\">First term: m = " + powSup(s.pp, s.qq) + ", so m + 1 = " + e1 + ". Dividing by " + e1 + " is the same as multiplying by " + frac(String(s.qq), String(s.pp + s.qq)) + ": " +
-          (s.sgn1 < 0 ? "&minus;" : "") + mag(s.r, s.ss, false) + " &middot; " + frac(String(s.qq), String(s.pp + s.qq)) + " &middot; x<sup>" + e1 + "</sup> = " + (s.a1[0] < 0 ? "&minus;" : "") + mag(s.a1[0], s.a1[1], false) + "x<sup>" + e1 + "</sup>.</div>" +
-        "<div class=\"step\">Second term: " + term(s.k, 1, "x<sup>" + s.n + "</sup>", true) + " &rarr; " + (s.a2[0] < 0 ? "&minus;" : "") + mag(s.a2[0], s.a2[1], true) + "x<sup>" + (s.n + 1) + "</sup>.</div>" +
-        "<div class=\"final\">Answer: " + term(s.a1[0], s.a1[1], "x<sup>" + e1 + "</sup>", true) + term(s.a2[0], s.a2[1], "x<sup>" + (s.n + 1) + "</sup>", false) + " + C</div>";
+        "<div class=\"step\">First term: m = " + expHtml(s.pp, s.qq) + ", so m + 1 = " + E + ". Dividing by " + E + " is the same as multiplying by " + recip + ": " +
+          term(s.c1[0], s.c1[1], "", true) + " &middot; " + recip + " &middot; x<sup>" + E + "</sup> = " + term(s.a1[0], s.a1[1], "x<sup>" + E + "</sup>", true) + ".</div>" +
+        "<div class=\"step\">" + second + "</div>" +
+        "<div class=\"final\">Answer: " + ans + " + C</div>";
     }
   });
 
-  // ---------- 2: 1/x, sin, cos, e^x ----------
+  // ---------- 2: mix of 1/x, sin, cos, e^x and sometimes a power ----------
   PARTS.push({
     id: "2", group: "2", label: "", points: 4,
     gen: function () {
-      var sg = function () { return randBool() ? 1 : -1; };
-      var a = randInt(2, 6) * sg(), b = randInt(1, 5) * sg(), c = randInt(1, 4) * sg(), d = randInt(2, 6) * sg();
-      var s = { a: a, b: b, c: c, d: d };
-      s.f = function (x) { return a / x + b * Math.sin(x) + c * Math.cos(x) + d * Math.exp(x); };
-      s.F = function (x) { return a * Math.log(x) - b * Math.cos(x) + c * Math.sin(x) + d * Math.exp(x); };
-      s.typed = termTxt(a, 1, "ln|x|", true) + termTxt(-b, 1, "cos(x)", false) + termTxt(c, 1, "sin(x)", false) + termTxt(d, 1, "e^x", false) + " + C";
+      var pool = shuffle(["inv", "sin", "cos", "exp", "pow"]);
+      var kinds = pool.slice(0, randChoice([3, 4, 4]));
+      // never a bare pair that is too easy: always include at least one trig or exp or 1/x (any pick of 3+ does)
+      var terms = kinds.map(function (kd) {
+        var c = randInt(1, 6) * sgn();
+        if (kd === "inv") c = randInt(2, 6) * sgn();
+        if (kd === "pow") { var n = randChoice([2, 3, 4, -2, -3]); return { kd: kd, c: c, n: n, a: red(c, n + 1) }; }
+        return { kd: kd, c: c };
+      });
+      var s = { terms: terms };
+      s.f = function (x) { var t = 0; terms.forEach(function (T) { t += T.kd === "inv" ? T.c / x : T.kd === "sin" ? T.c * Math.sin(x) : T.kd === "cos" ? T.c * Math.cos(x) : T.kd === "exp" ? T.c * Math.exp(x) : T.c * Math.pow(x, T.n); }); return t; };
+      s.F = function (x) { var t = 0; terms.forEach(function (T) { t += T.kd === "inv" ? T.c * Math.log(x) : T.kd === "sin" ? -T.c * Math.cos(x) : T.kd === "cos" ? T.c * Math.sin(x) : T.kd === "exp" ? T.c * Math.exp(x) : T.a[0] / T.a[1] * Math.pow(x, T.n + 1); }); return t; };
+      var typed = "";
+      terms.forEach(function (T, i) {
+        var first = i === 0;
+        typed += T.kd === "inv" ? termTxt(T.c, 1, "ln|x|", first) : T.kd === "sin" ? termTxt(-T.c, 1, "cos(x)", first) : T.kd === "cos" ? termTxt(T.c, 1, "sin(x)", first) : T.kd === "exp" ? termTxt(T.c, 1, "e^x", first) : termTxt(T.a[0], T.a[1], "x^(" + (T.n + 1) + ")", first);
+      });
+      s.typed = typed + " + C";
       return s;
     },
     prompt: function (s) {
-      var body = (s.a < 0 ? "&minus;" : "") + frac(String(Math.abs(s.a)), "x") +
-        term(s.b, 1, "sin(x)", false) + term(s.c, 1, "cos(x)", false) + term(s.d, 1, "e<sup>x</sup>", false);
+      var body = "";
+      s.terms.forEach(function (T, i) {
+        var first = i === 0;
+        if (T.kd === "inv") body += (first ? (T.c < 0 ? "&minus;" : "") : (T.c < 0 ? " &minus; " : " + ")) + frac(String(Math.abs(T.c)), "x");
+        else if (T.kd === "pow") body += T.n > 0 ? term(T.c, 1, "x<sup>" + T.n + "</sup>", first) : (first ? (T.c < 0 ? "&minus;" : "") : (T.c < 0 ? " &minus; " : " + ")) + frac(String(Math.abs(T.c)), "x<sup>" + (-T.n) + "</sup>");
+        else body += term(T.c, 1, T.kd === "exp" ? "e<sup>x</sup>" : T.kd + "(x)", first);
+      });
       return "<span class=\"math\">" + integ(null, null, "(" + body + ")") + "</span>";
     },
     inputsHtml: function () {
@@ -600,27 +639,40 @@
     isCorrect: function (ua, s) { return gradeAnti(ua.raw, s.F, 4).pts >= 4; },
     grade: function (ua, s) { return gradeAnti(ua.raw, s.F, 4); },
     solutionHtml: function (s) {
+      var rules = [], lines = [], ans = "";
+      s.terms.forEach(function (T, i) {
+        var first = i === 0, src, res;
+        if (T.kd === "inv") { src = frac(String(Math.abs(T.c)), "x"); res = "ln|x|"; lines.push("<div class=\"step\">" + term(T.c, 1, "&int;(1/x)dx", true) + " &rarr; " + term(T.c, 1, "ln|x|", true) + "</div>"); ans += term(T.c, 1, "ln|x|", first); }
+        else if (T.kd === "sin") { lines.push("<div class=\"step\">" + term(T.c, 1, "&int;sin(x)dx", true) + " &rarr; " + term(-T.c, 1, "cos(x)", true) + "</div>"); ans += term(-T.c, 1, "cos(x)", first); }
+        else if (T.kd === "cos") { lines.push("<div class=\"step\">" + term(T.c, 1, "&int;cos(x)dx", true) + " &rarr; " + term(T.c, 1, "sin(x)", true) + "</div>"); ans += term(T.c, 1, "sin(x)", first); }
+        else if (T.kd === "exp") { lines.push("<div class=\"step\">" + term(T.c, 1, "&int;e<sup>x</sup>dx", true) + " &rarr; " + term(T.c, 1, "e<sup>x</sup>", true) + "</div>"); ans += term(T.c, 1, "e<sup>x</sup>", first); }
+        else { lines.push("<div class=\"step\">" + term(T.c, 1, "&int;x<sup>" + (T.n < 0 ? "&minus;" + (-T.n) : T.n) + "</sup>dx", true) + " &rarr; " + term(T.a[0], T.a[1], "x<sup>" + (T.n + 1 < 0 ? "&minus;" + (-(T.n + 1)) : T.n + 1) + "</sup>", true) + (T.n < 0 ? " (power rule; 1/x<sup>" + (-T.n) + "</sup> is x<sup>&minus;" + (-T.n) + "</sup>)" : " (power rule)") + "</div>"); ans += term(T.a[0], T.a[1], "x<sup>" + (T.n + 1 < 0 ? "&minus;" + (-(T.n + 1)) : T.n + 1) + "</sup>", first); }
+      });
       return "<span class=\"sol-label\">Solution</span>" +
-        "<div class=\"step\">Use the basic rules: &int;1/x dx = ln|x|, &int;sin(x)dx = &minus;cos(x), &int;cos(x)dx = sin(x), &int;e<sup>x</sup>dx = e<sup>x</sup>.</div>" +
-        "<div class=\"step\">" + term(s.a, 1, "&int;(1/x)dx", true) + " &rarr; " + term(s.a, 1, "ln|x|", true) + "</div>" +
-        "<div class=\"step\">" + term(s.b, 1, "&int;sin(x)dx", true) + " &rarr; " + term(-s.b, 1, "cos(x)", true) + "</div>" +
-        "<div class=\"step\">" + term(s.c, 1, "&int;cos(x)dx", true) + " &rarr; " + term(s.c, 1, "sin(x)", true) + "</div>" +
-        "<div class=\"step\">" + term(s.d, 1, "&int;e<sup>x</sup>dx", true) + " &rarr; " + term(s.d, 1, "e<sup>x</sup>", true) + "</div>" +
-        "<div class=\"final\">Answer: " + term(s.a, 1, "ln|x|", true) + term(-s.b, 1, "cos(x)", false) + term(s.c, 1, "sin(x)", false) + term(s.d, 1, "e<sup>x</sup>", false) + " + C</div>";
+        "<div class=\"step\">Use the basic rules: &int;1/x dx = ln|x|, &int;sin(x)dx = &minus;cos(x), &int;cos(x)dx = sin(x), &int;e<sup>x</sup>dx = e<sup>x</sup>, and the power rule for x<sup>n</sup>.</div>" +
+        lines.join("") + "<div class=\"final\">Answer: " + ans + " + C</div>";
     }
   });
 
-  // ---------- 3: properties of definite integrals ----------
+  // ---------- helper for Q3 / Q4: an integral with the same limit on top and bottom (it is 0 and should be ignored) ----------
+  function zeroIntegral(opts) {
+    var c = randInt(0, 9), k = randChoice([1, 1, 2, 3, 4]), w = randChoice(opts), neg = randBool();
+    return { c: c, k: k, w: w, neg: neg, html: integ(c, c, (k === 1 ? "" : String(k)) + w) };
+  }
+
+  // ---------- 3: properties of definite integrals (sometimes with an extra integral that has equal limits) ----------
   PARTS.push({
     id: "3", group: "3", label: "", points: 4,
     gen: function () {
       var lo = randInt(0, 4), hi = lo + randInt(1, 3);
       var A = randNonZeroInt(-6, 8), B = randNonZeroInt(-6, 8), p = randInt(2, 9), q = randInt(2, 9);
-      return { lo: lo, hi: hi, A: A, B: B, p: p, q: q, answer: { type: "number", value: -(p * A - q * B) } };
+      var z = randBool() ? zeroIntegral(["h(x)", "h(x)", "f(x)", "g(x)"]) : null;
+      return { lo: lo, hi: hi, A: A, B: B, p: p, q: q, z: z, answer: { type: "number", value: -(p * A - q * B) } };
     },
     prompt: function (s) {
+      var tail = s.z ? (s.z.neg ? " &minus; " : " + ") + s.z.html : "";
       return "<span class=\"math\">If " + integ(s.lo, s.hi, "f(x)") + " = " + numStr(s.A) + " and " + integ(s.lo, s.hi, "g(x)") + " = " + numStr(s.B) + ", what is " +
-        integ(s.hi, s.lo, "(" + s.p + "f(x) &minus; " + s.q + "g(x))") + " ?</span>";
+        integ(s.hi, s.lo, "(" + s.p + "f(x) &minus; " + s.q + "g(x))") + tail + " ?</span>";
     },
     inputsHtml: function () {
       return "<span class=\"field-label\">Value =</span><input type=\"text\" class=\"ans-main\" placeholder=\"e.g. 12\">";
@@ -630,23 +682,29 @@
     solutionHtml: function (s) {
       var inner = s.p * s.A - s.q * s.B;
       return "<span class=\"sol-label\">Solution</span>" +
+        (s.z ? "<div class=\"step\">Look at the limits on the extra integral: both are " + s.z.c + ". An integral from a number to itself has no width, so " + s.z.html + " = 0 and it can be ignored, whatever the function is.</div>" : "") +
         "<div class=\"step\">Swapping the limits flips the sign: " + integ(s.hi, s.lo, "(&hellip;)") + " = &minus;" + integ(s.lo, s.hi, "(&hellip;)") + ".</div>" +
         "<div class=\"step\">Constants and sums split apart: " + integ(s.lo, s.hi, "(" + s.p + "f &minus; " + s.q + "g)") + " = " + s.p + "(" + numStr(s.A) + ") &minus; " + s.q + "(" + numStr(s.B) + ") = " + numStr(inner) + ".</div>" +
         "<div class=\"final\">Answer: &minus;(" + numStr(inner) + ") = " + numStr(-inner) + "</div>";
     }
   });
 
-  // ---------- 4: additivity of intervals ----------
+  // ---------- 4: additivity of intervals (sometimes with an extra integral that has equal limits) ----------
   PARTS.push({
     id: "4", group: "4", label: "", points: 4,
     gen: function () {
       var p, q, r;
       do { p = randInt(1, 9); q = randInt(1, 9); r = randInt(1, 9); } while (p === q || q === r || p === r);
-      return { p: p, q: q, r: r };
+      var z = randBool() ? zeroIntegral(["g(x)", "h(x)", "f(x)", "f(x)"]) : null;
+      return { p: p, q: q, r: r, z: z, zpos: z ? randInt(0, 2) : -1 };
     },
     prompt: function (s) {
-      return "<span class=\"math\">" + integ(s.p, s.q, "f(x)") + " + " + integ(s.q, s.r, "f(x)") + "</span>" +
-        "<div style=\"margin-top:8px\">Write this sum as a single integral.</div>";
+      var items = [{ html: integ(s.p, s.q, "f(x)"), neg: false }, { html: integ(s.q, s.r, "f(x)"), neg: false }];
+      if (s.z) items.splice(s.zpos, 0, { html: s.z.html, neg: s.z.neg });
+      var out = "";
+      items.forEach(function (it, i) { out += (i === 0 ? (it.neg ? "&minus; " : "") : (it.neg ? " &minus; " : " + ")) + it.html; });
+      return "<span class=\"math\">" + out + "</span>" +
+        "<div style=\"margin-top:8px\">Write this as a single integral of f(x).</div>";
     },
     inputsHtml: function () {
       return "<span class=\"field-label\">Single integral: lower limit</span><input type=\"text\" class=\"ans-lo\" placeholder=\"a\" style=\"width:70px\">" +
@@ -657,6 +715,7 @@
     isCorrect: function (ua, s) { return answersMatch(ua.lo, { type: "number", value: s.p }, 1e-9) && answersMatch(ua.hi, { type: "number", value: s.r }, 1e-9); },
     solutionHtml: function (s) {
       return "<span class=\"sol-label\">Solution</span>" +
+        (s.z ? "<div class=\"step\">The integral " + s.z.html + " has the same number (" + s.z.c + ") on top and bottom, so it equals 0 and drops out.</div>" : "") +
         "<div class=\"step\">Integrals over back-to-back intervals combine: the first one ends at " + s.q + " where the second begins, so the " + s.q + " drops out.</div>" +
         "<div class=\"step\">" + integ(s.p, s.q, "f(x)") + " + " + integ(s.q, s.r, "f(x)") + " = " + integ(s.p, s.r, "f(x)") + "</div>" +
         "<div class=\"final\">Answer: lower limit " + s.p + ", upper limit " + s.r + "</div>";
@@ -698,34 +757,100 @@
     }
   });
 
-  // ---------- 6: evaluate a definite integral ----------
+  // ---------- 6: evaluate a definite integral (rotating forms: negative powers, roots, polynomials, sin/cos) ----------
+  function radd(a, b) { return red(a[0] * b[1] + b[0] * a[1], a[1] * b[1]); }
+  function rneg(a) { return [-a[0], a[1]]; }
+  // antiderivative value of c * x^(P/Q) at x (x = s^Q with integer s), exact: c*Q/(P+Q) * s^(P+Q)
+  function powF(c, P, Q, x) {
+    var s = Q === 1 ? x : Math.round(Math.sqrt(x)), m = P + Q, num = c * Q, den = m;
+    if (m > 0) num *= Math.pow(s, m); else den *= Math.pow(s, -m);
+    return red(num, den);
+  }
+  function exHtml(P, Q) { return expHtml(P, Q); }
   PARTS.push({
     id: "6", group: "6", label: "", points: 4,
     gen: function () {
-      var a = randChoice([1, 1, 2]), b = a + randInt(2, 4), c = randInt(2, 6), k = randChoice([1, 2, 3, 4, -1, -2, -3]), swap = randBool();
-      var f1 = red(c * (b - a), a * b), f2 = red(k * (b * b - a * a), 2);
-      var num = f1[0] * f2[1] + f2[0] * f1[1], den = f1[1] * f2[1], t = red(num, den);
-      var s = { a: a, b: b, c: c, k: k, swap: swap, f1: f1, f2: f2, t: t, answer: { type: "number", value: t[0] / t[1] } };
-      s.f = function (x) { return c / (x * x) + k * x; };
+      var type = randChoice(["neg", "neg", "root", "poly", "poly", "trig", "trig"]), s = { type: type }, terms = [], a, b, lo, hi;
+      if (type === "trig") {
+        var span = randChoice([[0, 1], [0, 2], [1, 2]]);                 // multiples of pi/2
+        lo = span[0]; hi = span[1];
+        var c = randInt(1, 6) * sgn(), k = randInt(1, 6) * sgn(), cosv = [0, -1], sinv = [1, 0];   // cos(0)=1, cos(pi/2)=0, cos(pi)=-1 ; sin(0)=0, sin(pi/2)=1, sin(pi)=0
+        var cs = [1, 0, -1], ss = [0, 1, 0];
+        s.c = c; s.k = k; s.lo = lo; s.hi = hi; s.swapT = randBool();
+        s.value = c * (cs[lo] - cs[hi]) + k * (ss[hi] - ss[lo]);          // integral of c sin x + k cos x
+        s.f = function (x) { return c * Math.sin(x) + k * Math.cos(x); };
+        s.loN = lo * Math.PI / 2; s.hiN = hi * Math.PI / 2;
+        s.answer = { type: "number", value: s.value };
+        s.t = [s.value, 1];
+        s.a = lo === 0 ? "0" : (lo === 1 ? "&pi;/2" : "&pi;"); s.b = hi === 1 ? "&pi;/2" : "&pi;";
+        return s;
+      }
+      if (type === "neg") {
+        var m = randChoice([2, 2, 3, 4]), c1 = randInt(1, 6) * sgn(), j = randChoice([1, 1, 2]), k1 = randChoice([1, 2, 3, 4, -1, -2, -3]);
+        a = randChoice([1, 1, 2]); b = a + randInt(1, 3);
+        terms = [{ c: c1, P: -m, Q: 1 }, { c: k1, P: j, Q: 1 }];
+      } else if (type === "root") {
+        var sq = randChoice([[1, 4], [1, 9], [4, 9], [0, 4], [1, 16], [4, 16]]), c2 = 3 * randInt(1, 4) * sgn(), j2 = randChoice([1, 2]), k2 = randChoice([1, 2, 3, -1, -2, -3]);
+        a = sq[0]; b = sq[1];
+        terms = [{ c: c2, P: 1, Q: 2 }, { c: k2, P: j2, Q: 1 }];
+      } else {
+        var n = randChoice([2, 3, 4, 5]), j3 = randChoice([0, 1, 2]), c3 = randChoice([1, 2, 3, 4, 5, -1, -2, -3, -4]), k3 = randChoice([2, 3, 4, 5, 6, -2, -3, -4]);
+        if (j3 === n) j3 = 1;
+        a = randChoice([0, 1, 1, 2]); b = a + randInt(1, 3);
+        terms = [{ c: c3, P: n, Q: 1 }, { c: k3, P: j3, Q: 1 }];
+      }
+      if (randBool()) terms.reverse();
+      var tot = [0, 1], fa = [0, 1], fb = [0, 1];
+      terms.forEach(function (T) { var vb = powF(T.c, T.P, T.Q, b), va = powF(T.c, T.P, T.Q, a); fb = radd(fb, vb); fa = radd(fa, va); });
+      tot = radd(fb, rneg(fa));
+      s.terms = terms; s.a = a; s.b = b; s.loN = a; s.hiN = b; s.fa = fa; s.fb = fb; s.t = tot;
+      s.f = function (x) { var v = 0; terms.forEach(function (T) { v += T.c * Math.pow(x, T.P / T.Q); }); return v; };
+      s.answer = { type: "number", value: tot[0] / tot[1] };
       return s;
     },
     prompt: function (s) {
-      var tc = "<span class=\"nobr\">" + frac(String(s.c), "x<sup>2</sup>") + "</span>", tk = term(s.k, 1, "x", s.swap);
-      var body = s.swap ? tk + " + " + tc : tc + term(s.k, 1, "x", false);
+      var body = "";
+      if (s.type === "trig") {
+        body = s.swapT ? term(s.k, 1, "cos(x)", true) + term(s.c, 1, "sin(x)", false) : term(s.c, 1, "sin(x)", true) + term(s.k, 1, "cos(x)", false);
+      } else {
+        s.terms.forEach(function (T, i) {
+          var first = i === 0;
+          if (T.P < 0) body += (first ? (T.c < 0 ? "&minus;" : "") : (T.c < 0 ? " &minus; " : " + ")) + "<span class=\"nobr\">" + frac(String(Math.abs(T.c)), "x<sup>" + (-T.P) + "</sup>") + "</span>";
+          else if (T.P === 0) body += term(T.c, 1, "", first);
+          else if (T.Q === 1 && T.P === 1) body += term(T.c, 1, "x", first);
+          else body += term(T.c, 1, "x<sup>" + powSup(T.P, T.Q) + "</sup>", first);
+        });
+      }
       return "<span class=\"math\">Evaluate " + integ(s.a, s.b, "(" + body + ")") + "</span>";
     },
-    inputsHtml: function () {
+    inputsHtml: function (s) {
       return "<span class=\"field-label\">Value =</span><input type=\"text\" class=\"ans-main\" placeholder=\"e.g. 17/3 or 5.67\"><span class=\"fmt-hint\">An exact fraction, or a decimal rounded to at least 2 places.</span>";
     },
     readAnswer: function (card) { return { main: parseAnswer(card.querySelector(".ans-main").value) }; },
     isCorrect: function (ua, s) { return answersMatch(ua.main, s.answer, 0.01); },
     solutionHtml: function (s) {
-      var ans = fracStr(s.t[0], s.t[1]);
+      var ans;
+      if (s.type === "trig") {
+        var cs = ["1", "0", "&minus;1"], ss = ["0", "1", "0"], Fh = term(-s.c, 1, "cos(x)", true) + term(s.k, 1, "sin(x)", false);
+        return "<span class=\"sol-label\">Solution</span>" +
+          "<div class=\"step\">&int;sin(x)dx = &minus;cos(x) and &int;cos(x)dx = sin(x), so an antiderivative is F(x) = " + Fh + ".</div>" +
+          "<div class=\"step\">Use the exact values: cos(" + s.a + ") = " + cs[s.lo] + ", cos(" + s.b + ") = " + cs[s.hi] + ", sin(" + s.a + ") = " + ss[s.lo] + ", sin(" + s.b + ") = " + ss[s.hi] + ".</div>" +
+          "<div class=\"step\">F(" + s.b + ") &minus; F(" + s.a + ") = " + numStr(s.value) + "</div>" +
+          "<div class=\"final\">Answer: " + numStr(s.value) + "</div>";
+      }
+      var Fx = "", rew = [];
+      s.terms.forEach(function (T, i) {
+        var r = red(T.c * T.Q, T.P + T.Q), E = exHtml(T.P + T.Q, T.Q);
+        Fx += term(r[0], r[1], "x<sup>" + E + "</sup>", i === 0).replace("x<sup>1</sup>", "x");
+        if (T.P < 0) rew.push(T.c + "/x<sup>" + (-T.P) + "</sup> = " + T.c + "x<sup>&minus;" + (-T.P) + "</sup>");
+        if (T.Q === 2) rew.push("x<sup>1/2</sup> is the square root of x");
+      });
+      var t = s.t, ansTxt = fracStr(t[0], t[1]);
       return "<span class=\"sol-label\">Solution</span>" +
-        "<div class=\"step\">Rewrite " + s.c + "/x&sup2; as " + s.c + "x<sup>&minus;2</sup>, then use the power rule: an antiderivative of the integrand is F(x) = &minus;" + s.c + "/x " + (s.k < 0 ? "&minus; " : "+ ") + frac(String(Math.abs(s.k)), "2") + "x&sup2;.</div>" +
-        "<div class=\"step\">F(" + s.b + ") &minus; F(" + s.a + ") = [&minus;" + fracStr(s.c, s.b) + " " + (s.k < 0 ? "&minus;" : "+") + " " + fracStr(Math.abs(s.k) * s.b * s.b, 2) + "] &minus; [&minus;" + fracStr(s.c, s.a) + " " + (s.k < 0 ? "&minus;" : "+") + " " + fracStr(Math.abs(s.k) * s.a * s.a, 2) + "]</div>" +
-        "<div class=\"step\">= " + fracStr(s.f1[0], s.f1[1]) + " " + (s.f2[0] < 0 ? "&minus;" : "+") + " " + fracStr(Math.abs(s.f2[0]), s.f2[1]) + "</div>" +
-        "<div class=\"final\">Answer: " + ans + (s.t[1] === 1 ? "" : " &asymp; " + numStr(s.t[0] / s.t[1])) + "</div>";
+        "<div class=\"step\">" + (rew.length ? "Rewrite first: " + rew.join("; ") + ". " : "") + "Use the power rule on each term: F(x) = " + Fx + ".</div>" +
+        "<div class=\"step\">F(" + s.b + ") = " + fracStr(s.fb[0], s.fb[1]) + " and F(" + s.a + ") = " + fracStr(s.fa[0], s.fa[1]) + ".</div>" +
+        "<div class=\"step\">F(" + s.b + ") &minus; F(" + s.a + ") = " + fracStr(s.fb[0], s.fb[1]) + " &minus; " + (s.fa[0] < 0 ? "(" + fracStr(s.fa[0], s.fa[1]) + ")" : fracStr(s.fa[0], s.fa[1])) + "</div>" +
+        "<div class=\"final\">Answer: " + ansTxt + (t[1] === 1 ? "" : " &asymp; " + numStr(t[0] / t[1])) + "</div>";
     }
   });
 
