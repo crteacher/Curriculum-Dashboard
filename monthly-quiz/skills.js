@@ -1,4 +1,6 @@
 /* Monthly Skills Check — skill bank.
+   IMPORTANT: the skill IDs and their title wording are what the Google Sheet records (Report headers show the title plus [id]).
+   Do not reword them once students have taken a quiz, so results stay comparable from year to year.
    Each skill: MQ.def(id, course, title, gen). gen(r) gets a seeded RNG and returns one question.
    Add a new skill = add one MQ.def block here. A month's quiz = a list of skill IDs in config.js. */
 (function () {
@@ -79,7 +81,7 @@
   /* =====================================================================
      ALGEBRA
      ===================================================================== */
-  MQ.def('alg.linear', 'alg', 'Solve a linear equation (variable on both sides)', function (r) {
+  MQ.def('alg.linear', 'alg', 'Linear equations: solving with the variable on both sides', function (r) {
     var x = r.nz(-9, 9), a = r.int(2, 9), c = r.nz(-6, 6);
     if (c === a) c = -a;
     var b = r.nz(-12, 12), d = a * x + b - c * x;
@@ -87,14 +89,14 @@
       { lhs: function (v) { return a * v + b; }, rhs: function (v) { return c * v + d; } });
   });
 
-  MQ.def('alg.slope', 'alg', 'Slope from two points', function (r) {
+  MQ.def('alg.slope', 'alg', 'Slope: finding the slope of a line from two points', function (r) {
     var x1 = r.int(-6, 6), dx = r.nz(-6, 6), y1 = r.int(-8, 8), dy = r.nz(-9, 9);
     var x2 = x1 + dx, y2 = y1 + dy, f = reduce(dy, dx);
     return numQ('Find the slope of the line through (' + mi(x1) + ', ' + mi(y1) + ') and (' + mi(x2) + ', ' + mi(y2) + ').',
       f[0] / f[1], fshow(f[0], f[1]), { x1: x1, y1: y1, x2: x2, y2: y2 });
   });
 
-  MQ.def('alg.vertex', 'alg', 'Vertex of a parabola', function (r) {
+  MQ.def('alg.vertex', 'alg', 'Quadratics: finding the vertex of a parabola', function (r) {
     var h = r.nz(-6, 6), a = r.pick([1, 2, 3, -1, -2, -3]), b = -2 * a * h, c = r.int(-9, 9);
     return numQ('What is the <i>x</i>-coordinate of the vertex of the parabola <i>y</i> = ' + polyStr([c, b, a]) + '?', h, null,
       { f: function (v) { return a * v * v + b * v + c; }, a: a });
@@ -103,7 +105,7 @@
   /* =====================================================================
      PRECALCULUS
      ===================================================================== */
-  MQ.def('pc.endbehavior', 'precalc', 'End behavior of a polynomial', function (r) {
+  MQ.def('pc.endbehavior', 'precalc', 'Polynomials: describing end behavior from the leading term', function (r) {
     var deg = r.int(3, 6), lc = r.nz(-5, 5);
     var pows = []; for (var p = 0; p < deg; p++) pows.push(p);
     pows = r.shuffle(pows).slice(0, r.int(2, 3));
@@ -120,7 +122,7 @@
       { terms: terms, deg: deg, lc: lc, left: left, right: right });
   });
 
-  MQ.def('pc.bounce', 'precalc', 'Zeros: cross or bounce (multiplicity)', function (r) {
+  MQ.def('pc.bounce', 'precalc', 'Polynomials: zeros that cross or bounce (multiplicity)', function (r) {
     var zs = []; while (zs.length < 3) { var z = r.int(-6, 6); if (zs.indexOf(z) < 0) zs.push(z); }
     var bounce = zs[0], mult = [{ z: bounce, m: r.pick([2, 4]) }, { z: zs[1], m: r.pick([1, 3]) }, { z: zs[2], m: r.pick([1, 3]) }];
     var k = r.pick([1, 1, 2, -1, -3]);
@@ -137,7 +139,7 @@
       { k: k, mult: mult, vals: vals, bounce: bounce, f: function (v) { return mult.reduce(function (p, t) { return p * Math.pow(v - t.z, t.m); }, k); } });
   });
 
-  MQ.def('pc.logeval', 'precalc', 'Evaluate logarithm expressions', function (r) {
+  MQ.def('pc.logeval', 'precalc', 'Logarithms: evaluating logarithm expressions', function (r) {
     var b = r.pick([2, 2, 3, 5]), top = b === 5 ? 3 : 4;
     var e1 = r.int(1, top), e2 = r.int(1, top), e3 = r.int(1, top);
     function L(e) { return 'log<sub>' + b + '</sub> ' + Math.pow(b, e); }
@@ -148,7 +150,7 @@
   /* =====================================================================
      CALCULUS 1
      ===================================================================== */
-  MQ.def('c1.power', 'calc1', 'Derivative of a polynomial at a point', function (r) {
+  MQ.def('c1.power', 'calc1', 'Derivatives: derivative of a polynomial at a point', function (r) {
     var n = r.int(3, 5), m = r.pick([1, 2]), a = r.nz(-6, 6), b = r.nz(-9, 9), c = r.nz(-9, 9);
     var cs = []; for (var i = 0; i <= n; i++) cs.push(0);
     cs[n] = a; cs[m] = b; cs[0] = c;
@@ -158,7 +160,7 @@
       { f: function (v) { return a * Math.pow(v, n) + b * Math.pow(v, m) + c; }, k: k });
   });
 
-  MQ.def('c1.limit', 'calc1', 'Limit of a 0/0 rational expression', function (r) {
+  MQ.def('c1.limit', 'calc1', 'Limits: limit of a rational expression that gives 0/0', function (r) {
     var a = r.nz(-5, 5), b = r.nz(-6, 6), c = a * a + a * b;
     return numQ('Evaluate <span class="lim">lim<sub><i>x</i>→' + mi(a) + '</sub></span> ' +
       frac('<i>x</i><sup>2</sup>' + termStr(b, 1, false) + (c ? termStr(-c, 0, false) : ''), xminus(a)),
@@ -166,7 +168,7 @@
       { f: function (v) { return (v * v + b * v - c) / (v - a); }, a: a });
   });
 
-  MQ.def('c1.chain', 'calc1', 'Chain rule at a point', function (r) {
+  MQ.def('c1.chain', 'calc1', 'Derivatives: chain rule evaluated at a point', function (r) {
     var n = r.pick([3, 4, 5]), a = r.pick([2, 3, 4, -2, -3]), k = r.int(-2, 2), u0 = r.pick([-2, -1, 1, 2, 3]);
     var b = u0 - a * k;
     return numQ('Let <i>f</i>(<i>x</i>) = (' + lin(a, b) + ')<sup>' + n + '</sup>. Find <i>f</i>′(' + mi(k) + ').',
@@ -177,14 +179,14 @@
   /* =====================================================================
      CALCULUS 2
      ===================================================================== */
-  MQ.def('c2.integral', 'calc2', 'Definite integral of a polynomial', function (r) {
+  MQ.def('c2.integral', 'calc2', 'Integrals: definite integral of a polynomial', function (r) {
     var p = r.pick([1, 2, 3, -1, -2]), q = r.nz(-4, 4), c = r.nz(-6, 6), k = r.int(1, 4);
     return numQ('Evaluate <span class="intw"><span class="isign">∫</span><span class="lims"><sup>' + k + '</sup><sub>0</sub></span></span> (' +
       polyStr([c, 2 * q, 3 * p]) + ') <i>dx</i>', p * k * k * k + q * k * k + c * k, null,
       { f: function (v) { return 3 * p * v * v + 2 * q * v + c; }, k: k });
   });
 
-  MQ.def('c2.geoseries', 'calc2', 'Sum of a geometric series', function (r) {
+  MQ.def('c2.geoseries', 'calc2', 'Series: sum of a geometric series', function (r) {
     var m = r.int(2, 5), s = r.pick([1, -1]), a = r.int(1, 8);
     var f = s === 1 ? reduce(a * m, m - 1) : reduce(a * m, m + 1);
     return numQ('Find the sum of the series <span class="sumw"><small>∞</small><span class="big">Σ</span><small><i>n</i>=0</small></span> ' +
@@ -195,7 +197,7 @@
   /* =====================================================================
      NOVEMBER FUNDAMENTALS (same five for every class)
      ===================================================================== */
-  MQ.def('ns.fracadd', 'core', 'Add and subtract fractions', function (r) {
+  MQ.def('ns.fracadd', 'core', 'Fractions: adding and subtracting fractions', function (r) {
     var ds = [2, 3, 4, 5, 6, 8, 10, 12], b, d, n1, n2, op, num, den, tries = 0;
     do {
       b = r.pick(ds); d = r.pick(ds);
@@ -210,7 +212,7 @@
     return q;
   });
 
-  MQ.def('ns.orderops', 'core', 'Order of operations with negatives', function (r) {
+  MQ.def('ns.orderops', 'core', 'Order of operations: expressions with negative numbers', function (r) {
     var t = r.int(1, 3), a, b, c, d, e, html, ans;
     if (t === 1) {
       a = r.int(2, 9); b = r.int(2, 6); c = r.int(2, 6); d = r.int(2, 5);
@@ -242,7 +244,7 @@
     return q;
   });
 
-  MQ.def('alg.twostep', 'core', 'Solve a two-step equation', function (r) {
+  MQ.def('alg.twostep', 'core', 'Equations: solving two-step equations', function (r) {
     var v = r.int(1, 3), a, b, c, x, t, html, meta;
     if (v === 1) {
       a = r.pick([2, 3, 4, 5, -2, -3, -4]); b = r.nz(-12, 12); x = r.nz(-8, 8); c = a * x + b;
@@ -279,7 +281,7 @@
     return s + '</svg>';
   }
 
-  MQ.def('gr.readvalue', 'core', 'Read a value from a graph', function (r) {
+  MQ.def('gr.readvalue', 'core', 'Graphs: reading a value from a graph', function (r) {
     var ys = [r.int(-3, 3)], i, y, tries;
     for (i = 1; i < 9; i++) {
       tries = 0; do { y = ys[i - 1] + r.pick([-3, -2, -1, 1, 2, 3]); tries++; } while ((y < -5 || y > 5) && tries < 50);
@@ -362,7 +364,7 @@
   ];
   var RATES = [2, 2.5, 3, 3.5, 4, 4.5, 5, 6, 7, 8];
 
-  MQ.def('rp.unitrate', 'core', 'Constant of proportionality from a table', function (r) {
+  MQ.def('rp.unitrate', 'core', 'Proportional relationships: finding the constant of proportionality from a table', function (r) {
     var c = r.pick(RP_CTX), k = r.pick(RATES), xs = r.shuffle([2, 4, 6, 8, 10, 12]).slice(0, 4).sort(function (a, b) { return a - b; });
     var ys = xs.map(function (x) { return k * x; });
     var q = numQ('The table shows a proportional relationship. What is the unit rate, in ' + c.pu + '?' +
@@ -378,14 +380,14 @@
     ['dollars', 'hours', 'Jordan earns {Q} dollars for {N} hours of work. At the same hourly rate, how many dollars does Jordan earn in {M} hours?'],
     ['gallons', 'minutes', 'A tank fills with {Q} gallons of water in {N} minutes. At this rate, how many gallons will it hold after {M} minutes?']
   ];
-  MQ.def('rp.proportion', 'core', 'Solve a proportion in context', function (r) {
+  MQ.def('rp.proportion', 'core', 'Proportional relationships: solving a proportion in context', function (r) {
     var t = r.pick(PROP_CTX), u = r.int(2, 9), N = r.pick([2, 3, 4, 5, 6]), M;
     do { M = r.int(2, 12) * (r.pick([1, 1, 2])); } while (M === N || M < 2);
     var Q = u * N, s = t[2].replace('{Q}', Q).replace('{N}', N).replace('{M}', M);
     return numQ(s, u * M, null, { Q: Q, N: N, M: M });
   });
 
-  MQ.def('rp.graph', 'core', 'Unit rate from the graph of a proportional relationship', function (r) {
+  MQ.def('rp.graph', 'core', 'Proportional relationships: finding the unit rate from a graph', function (r) {
     var c = r.pick(RP_CTX), k = r.pick([0.5, 1, 1.5, 2, 2.5, 3]), ymax = 4 * k + 2;
     ymax = Math.ceil(ymax / 2) * 2;
     var P = plane({ x0: 0, x1: 6, y0: 0, y1: ymax, ux: 40, uy: ymax > 8 ? 18 : 26, gs: 1, ts: ymax > 8 ? 2 : 1, xl: c.x, yl: c.y, label: 'Graph of a line through the origin' });
@@ -396,7 +398,7 @@
     return q;
   });
 
-  MQ.def('rp.compare', 'core', 'Compare two proportional relationships', function (r) {
+  MQ.def('rp.compare', 'core', 'Proportional relationships: comparing two relationships', function (r) {
     var RS = [2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 7], ka = r.pick(RS), kb, i, same = r.f() < 0.12;
     kb = same ? ka : r.pick(RS.filter(function (v) { return v !== ka; }));
     var xs = r.pick([[2, 4, 6], [2, 4, 8], [4, 6, 8], [2, 6, 10]]);
@@ -410,7 +412,7 @@
   /* =====================================================================
      UNITS & RATES  (A1.NQ.B.3.c)
      ===================================================================== */
-  MQ.def('un.convert', 'core', 'Convert units (rates, areas, volumes)', function (r) {
+  MQ.def('un.convert', 'core', 'Units: converting units of rates, areas, and volumes', function (r) {
     var v = r.int(1, 3), q, M, G, s, w, l;
     if (v === 1) {
       M = r.pick([15, 30, 45, 60, 75, 90]);
@@ -426,7 +428,7 @@
     return q;
   });
 
-  MQ.def('un.bestbuy', 'core', 'Unit price: which is the better buy?', function (r) {
+  MQ.def('un.bestbuy', 'core', 'Units: unit price and choosing the better buy', function (r) {
     var items = [['juice', 'ounces', 'a bottle'], ['rice', 'pounds', 'a bag'], ['cereal', 'ounces', 'a box'], ['laundry soap', 'ounces', 'a jug'], ['trail mix', 'ounces', 'a bag']];
     var it = r.pick(items), n1, n2, p1, p2, u1, u2, tries = 0;
     do {
@@ -440,7 +442,7 @@
       ch, u1 < u2 ? 0 : 1, { n1: n1, p1: p1, n2: n2, p2: p2 });
   });
 
-  MQ.def('un.units', 'core', 'Use units to check an answer', function (r) {
+  MQ.def('un.units', 'core', 'Units: using units to check an answer', function (r) {
     var c = r.int(1, 5), T, k, R, D, C, P, L, W, H, html, good, alts;
     if (c === 1) { T = r.pick([2, 3, 4, 5]); k = r.int(3, 9); R = T * k; html = 'A cyclist rides at ' + R + ' miles per hour for ' + T + ' hours. How far does the cyclist ride?'; good = [R * T, 'miles']; alts = [[R * T, 'miles per hour'], [k, 'miles'], [R * T, 'hours']]; }
     else if (c === 2) { T = r.pick([2, 3, 4, 5]); k = r.int(12, 20) * 3; D = T * k; html = 'A car travels ' + D + ' miles in ' + T + ' hours. What is its average speed?'; good = [k, 'miles per hour']; alts = [[k, 'hours per mile'], [D * T, 'miles per hour'], [k, 'miles']]; }
@@ -454,7 +456,7 @@
   /* =====================================================================
      WORD PROBLEMS & EQUATIONS  (7.EEI.B.4, A1.CED.A.1, A1.CED.A.3)
      ===================================================================== */
-  MQ.def('wp.equation', 'core', 'Write and solve an equation from a situation', function (r) {
+  MQ.def('wp.equation', 'core', 'Word problems: writing and solving an equation from a situation', function (r) {
     var ctxs = [
       function (f, m, T) { return 'A taxi company charges a flat fee of ' + money(f) + ' plus ' + money(m) + ' per mile. A ride costs ' + money(T) + ' in all. '; },
       function (f, m, T) { return 'A gym charges a ' + money(f) + ' sign-up fee plus ' + money(m) + ' per month. Maria has paid ' + money(T) + ' in total. '; },
@@ -470,14 +472,14 @@
       [m + '(<i>x</i> + ' + f + ') = ' + T, f + '<i>x</i> + ' + m + ' = ' + T, m + '<i>x</i> − ' + f + ' = ' + T], { f: f, m: m, n: n, T: T, mode: 'mc' });
   });
 
-  MQ.def('wp.plans', 'core', 'Break-even between two plans', function (r) {
+  MQ.def('wp.plans', 'core', 'Word problems: break-even between two plans', function (r) {
     var m2 = r.int(5, 15), d = r.int(2, 6), m1 = m2 + d, n = r.int(2, 10), f1 = r.pick([0, 5, 10, 15, 20]), f2 = f1 + d * n;
     var nm = r.pick([['Gym A', 'Gym B', 'month', 'membership'], ['Plan A', 'Plan B', 'month', 'phone plan']]);
     return numQ(nm[0] + ' charges ' + money(f1) + ' to join plus ' + money(m1) + ' per ' + nm[2] + '. ' + nm[1] + ' charges ' + money(f2) + ' to join plus ' + money(m2) +
       ' per ' + nm[2] + '. After how many ' + nm[2] + 's will the total cost of the two be the same?', n, null, { f1: f1, m1: m1, f2: f2, m2: m2, n: n });
   });
 
-  MQ.def('wp.geom', 'core', 'Set up and solve: perimeter and consecutive integers', function (r) {
+  MQ.def('wp.geom', 'core', 'Word problems: perimeter and consecutive-integer setups', function (r) {
     var v = r.int(1, 2), w, k, S, n;
     if (v === 1) {
       w = r.int(3, 15); k = r.int(1, 8);
@@ -501,18 +503,18 @@
     }
     return a;
   }
-  MQ.def('st.mean', 'core', 'Find the mean', function (r) {
+  MQ.def('st.mean', 'core', 'Statistics: finding the mean', function (r) {
     var n = r.int(5, 8), a = dataSet(r, n, 60, 98, true);
     return numQ('Find the mean of these ' + r.pick(ST_CTX) + ':<div class="eq">' + listStr(a) + '</div>', a.reduce(function (p, c) { return p + c; }, 0) / n, null, { a: a });
   });
-  MQ.def('st.median', 'core', 'Find the median', function (r) {
+  MQ.def('st.median', 'core', 'Statistics: finding the median', function (r) {
     var n = r.pick([7, 8, 9, 10]), pool = [], i, a;
     for (i = 5; i <= 60; i++) pool.push(i);
     a = r.shuffle(pool).slice(0, n);
     var s = a.slice().sort(function (x, y) { return x - y; }), med = n % 2 ? s[(n - 1) / 2] : (s[n / 2 - 1] + s[n / 2]) / 2;
     return numQ('Find the median of this data set:<div class="eq">' + listStr(a) + '</div>', med, null, { a: a });
   });
-  MQ.def('st.missing', 'core', 'Find the missing value for a target mean', function (r) {
+  MQ.def('st.missing', 'core', 'Statistics: finding the missing value for a target mean', function (r) {
     var a, m, miss, tries = 0;
     do {
       m = r.int(80, 90); a = [r.int(68, 96), r.int(68, 96), r.int(68, 96), r.int(68, 96)];
@@ -520,7 +522,7 @@
     } while ((miss < 60 || miss > 100) && tries < 300);
     return numQ('Dana’s scores on her first four tests are ' + listStr(a) + '. What score does she need on the fifth test to have a mean of exactly ' + m + '?', miss, null, { a: a, m: m });
   });
-  MQ.def('st.compare', 'core', 'Compare two data sets (center and spread)', function (r) {
+  MQ.def('st.compare', 'core', 'Statistics: comparing two data sets by center and spread', function (r) {
     var v = r.int(1, 3), A, B, ans, ask, tries = 0, n, f;
     function sum(x) { return x.reduce(function (p, c) { return p + c; }, 0); }
     function med(x) { var s = x.slice().sort(function (p, q) { return p - q; }); return s[(s.length - 1) / 2]; }
@@ -547,7 +549,7 @@
     s += '<text class="gp-l" x="' + (W / 2) + '" y="' + (H - 4) + '" text-anchor="middle">' + xlabel + '</text>';
     return '<div class="fig"><svg class="gp" viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Dot plot of ' + xlabel + '">' + s + '</svg></div>';
   }
-  MQ.def('st.dotplot', 'core', 'Mode, median, or range from a dot plot', function (r) {
+  MQ.def('st.dotplot', 'core', 'Statistics: mode, median, or range from a dot plot', function (r) {
     var v = r.int(1, 3), lo = r.int(0, 3), len = 8, counts, tot, i, tries = 0, mx, nmax;
     do {
       counts = []; tot = 0; for (i = 0; i < len; i++) { counts.push(r.pick([0, 1, 1, 2, 2, 3, 4, 5])); tot += counts[i]; }
@@ -582,18 +584,18 @@
     return svgBox(W, H, 'A right triangle with its side lengths labeled', out);
   }
   var UNITS = ['cm', 'in', 'ft', 'm'];
-  MQ.def('py.hyp', 'core', 'Find the hypotenuse', function (r) {
+  MQ.def('py.hyp', 'core', 'Pythagorean theorem: finding the hypotenuse', function (r) {
     var t = r.pick(TRIPLES), u = r.pick(UNITS), legs = r.f() < 0.5 ? [t[0], t[1]] : [t[1], t[0]];
     return numQ('Find the length of the hypotenuse, <i>x</i>.' + triSvg(legs[0], legs[1], legs[0] + ' ' + u, legs[1] + ' ' + u, '<tspan font-style="italic">x</tspan>', r.f() < 0.5), t[2], null, { legs: legs, c: t[2] });
   });
-  MQ.def('py.leg', 'core', 'Find a missing leg', function (r) {
+  MQ.def('py.leg', 'core', 'Pythagorean theorem: finding a missing leg', function (r) {
     var t = r.pick(TRIPLES), u = r.pick(UNITS), hz = r.f() < 0.5, a = hz ? t[0] : t[1], b = hz ? t[1] : t[0];
     var q = hz
       ? numQ('Find the length of the missing leg, <i>x</i>.' + triSvg(a, b, '<tspan font-style="italic">x</tspan>', b + ' ' + u, t[2] + ' ' + u, r.f() < 0.5), a, null, { a: a, b: b, c: t[2] })
       : numQ('Find the length of the missing leg, <i>x</i>.' + triSvg(a, b, a + ' ' + u, '<tspan font-style="italic">x</tspan>', t[2] + ' ' + u, r.f() < 0.5), b, null, { a: a, b: b, c: t[2] });
     return q;
   });
-  MQ.def('py.converse', 'core', 'Is it a right triangle? (converse)', function (r) {
+  MQ.def('py.converse', 'core', 'Pythagorean theorem: deciding if a triangle is a right triangle (converse)', function (r) {
     var kind = r.pick(['right', 'right', 'acute', 'obtuse']), a, b, c, t, k, tries = 0, u = r.pick(UNITS);
     if (kind === 'right') { t = r.pick(TRIPLES); a = t[0]; b = t[1]; c = t[2]; }
     else {
@@ -610,7 +612,7 @@
     var good = a * a + b * b === c * c ? 0 : (a * a + b * b < c * c ? 1 : 2);
     return mcQ('A triangle has side lengths ' + sides + '. Is it a right triangle?', ch, good, { a: a, b: b, c: c, kind: kind });
   });
-  MQ.def('py.distance', 'core', 'Distance between two points on the coordinate plane', function (r) {
+  MQ.def('py.distance', 'core', 'Pythagorean theorem: distance between two points on a coordinate plane', function (r) {
     var d = r.pick([[3, 4], [4, 3], [6, 8], [8, 6], [5, 12], [12, 5], [9, 12], [12, 9]]), sx = r.pick([1, -1]), sy = r.pick([1, -1]);
     var dx = d[0] * sx, dy = d[1] * sy, x1, y1;
     x1 = dx > 0 ? r.int(-7, 7 - d[0]) : r.int(-7 + d[0], 7); y1 = dy > 0 ? r.int(-7, 7 - d[1]) : r.int(-7 + d[1], 7);
@@ -622,7 +624,7 @@
     return numQ('Points <i>A</i>(' + mi(x1) + ', ' + mi(y1) + ') and <i>B</i>(' + mi(x2) + ', ' + mi(y2) + ') are graphed. What is the distance from <i>A</i> to <i>B</i>, in grid units?' + P.wrap(inner),
       Math.sqrt(dx * dx + dy * dy), null, { x1: x1, y1: y1, x2: x2, y2: y2 });
   });
-  MQ.def('py.applied', 'core', 'Pythagorean theorem in context', function (r) {
+  MQ.def('py.applied', 'core', 'Pythagorean theorem: applying it in context', function (r) {
     var t = r.pick(TRIPLES), v = r.int(1, 3), k, q;
     if (v === 1) {
       q = numQ('A ladder leans against a vertical wall. The base of the ladder is ' + t[0] + ' feet from the wall, and the top reaches ' + t[1] + ' feet up the wall. How long is the ladder?' + triSvg(t[0], t[1], 'ground: ' + t[0] + ' ft', 'wall: ' + t[1] + ' ft', 'ladder', false), t[2], null, { v: v, t: t });
@@ -659,7 +661,7 @@
       '<circle class="sv-f" cx="100" cy="95" r="70"/><path class="sv-d" d="M30 95 A70 18 0 0 0 170 95"/><path class="sv-s" d="M30 95 A70 18 0 0 1 170 95" style="opacity:.35"/>' +
       '<line class="sv-d" x1="100" y1="95" x2="170" y2="95"/><circle cx="100" cy="95" r="3" fill="var(--ink)"/><text x="176" y="99">' + rl + '</text>');
   }
-  MQ.def('pav.circle', 'core', 'Circle: area or circumference in terms of π', function (r) {
+  MQ.def('pav.circle', 'core', 'Area and volume: circle area or circumference in terms of π', function (r) {
     var v = r.int(1, 3), R = r.int(2, 12), D = 2 * R, q;
     if (v === 1) q = numQ('The diameter of a circle is ' + D + ' cm. What is its area? Give the answer in terms of π: enter the number that multiplies π.' + circleSvg('d = ' + D + ' cm', true), R * R, null, { v: v, R: R });
     else if (v === 2) q = numQ('The radius of a circle is ' + R + ' cm. What is its circumference? Give the answer in terms of π: enter the number that multiplies π.' + circleSvg('r = ' + R + ' cm'), 2 * R, null, { v: v, R: R });
@@ -667,13 +669,13 @@
     q.hint = 'Enter a whole number. For example, if the answer is 36π, enter 36.';
     return q;
   });
-  MQ.def('pav.cylinder', 'core', 'Volume of a cylinder', function (r) {
+  MQ.def('pav.cylinder', 'core', 'Area and volume: volume of a cylinder', function (r) {
     var R = r.int(2, 8), h = r.int(3, 14), u = r.pick(['cm', 'in', 'ft']);
     var q = numQ('Find the volume of the cylinder. Give the answer in terms of π: enter the number that multiplies π.' + cylSvg('r = ' + R + ' ' + u, 'h = ' + h + ' ' + u), R * R * h, null, { R: R, h: h });
     q.hint = 'Enter a whole number. For example, if the answer is 144π, enter 144.';
     return q;
   });
-  MQ.def('pav.conesphere', 'core', 'Volume of a cone or sphere', function (r) {
+  MQ.def('pav.conesphere', 'core', 'Area and volume: volume of a cone or sphere', function (r) {
     var v = r.int(1, 3), R, h, q, u = r.pick(['cm', 'in', 'ft']);
     if (v === 1) { R = r.int(2, 8); h = 3 * r.int(1, 5); q = numQ('Find the volume of the cone. Give the answer in terms of π: enter the number that multiplies π.' + coneSvg('r = ' + R + ' ' + u, 'h = ' + h + ' ' + u), R * R * h / 3, null, { v: v, R: R, h: h }); }
     else if (v === 2) { R = r.pick([3, 6]); q = numQ('Find the volume of the sphere. Give the answer in terms of π: enter the number that multiplies π.' + sphereSvg('r = ' + R + ' ' + u), 4 * R * R * R / 3, null, { v: v, R: R }); }
@@ -682,7 +684,7 @@
     return q;
   });
   /* cross-sections and solids of revolution (G.GMD.B.4) */
-  MQ.def('pav.slice', 'core', 'Cross-section of a solid', function (r) {
+  MQ.def('pav.slice', 'core', 'Area and volume: cross-section of a solid', function (r) {
     var cases = [
       { s: 'cylinder', how: 'parallel to its bases', ans: 'Circle' },
       { s: 'cylinder', how: 'perpendicular to its bases, through the center of the bases', ans: 'Rectangle' },
@@ -708,7 +710,7 @@
     var dim = r.int(3, 12); var desc = c.s === 'sphere' ? 'sphere with radius ' + dim + ' cm' : (c.s === 'cylinder' ? 'cylinder with radius ' + dim + ' cm' : (c.s === 'cone' ? 'cone with radius ' + dim + ' cm' : c.s + ' with base edges of ' + dim + ' cm'));
     return mcShuffle(r, 'A plane slices a ' + desc + ' ' + c.how + '. What shape is the cross-section?' + fig, c.ans, all.filter(function (a) { return a !== c.ans; }), { s: c.s, how: c.how });
   });
-  MQ.def('pav.rotate', 'core', 'Solid formed by rotating a 2-D shape', function (r) {
+  MQ.def('pav.rotate', 'core', 'Area and volume: solid formed by rotating a 2-D shape', function (r) {
     var cases = [
       { shape: 'rectangle', axis: 'one of its sides', ans: 'Cylinder', svg: '<rect class="sv-f" x="70" y="30" width="70" height="110"/><line class="sv-d" x1="70" y1="14" x2="70" y2="156"/>' },
       { shape: 'right triangle', axis: 'one of its legs', ans: 'Cone', svg: '<polygon class="sv-f" points="70,30 70,140 150,140"/><line class="sv-d" x1="70" y1="14" x2="70" y2="156"/>' },
@@ -720,7 +722,7 @@
     c.shape = c.shape === 'rectangle' ? 'rectangle ' + d1 + ' cm by ' + d2 + ' cm' : (c.shape === 'right triangle' ? 'right triangle with legs ' + d1 + ' cm and ' + d2 + ' cm' : (c.shape === 'semicircle' ? 'semicircle with radius ' + d1 + ' cm' : (c.shape === 'circle' ? 'circle with radius ' + d1 + ' cm' : c.shape + ' with base ' + 2 * d1 + ' cm and height ' + d2 + ' cm')));
     return mcShuffle(r, 'A ' + c.shape + ' is rotated 360° around the dashed line (' + c.axis + '). What solid does it form?' + svgBox(220, 170, 'A ' + c.shape + ' next to its axis of rotation', c.svg), c.ans, all.filter(function (a) { return a !== c.ans; }), { shape: c.shape });
   });
-  MQ.def('pav.composite', 'core', 'Area or perimeter of a composite figure', function (r) {
+  MQ.def('pav.composite', 'core', 'Area and volume: area or perimeter of a composite figure', function (r) {
     var W = r.int(9, 16), H = r.int(8, 14), w = r.int(3, W - 4), h = r.int(3, H - 4), fx = r.pick([1, -1]), fy = r.pick([1, -1]);
     var s = 14, ox = 50, oy = 30, PW = W * s, PH = H * s;
     function T(x, y) { var X = fx > 0 ? x : W - x, Y = fy > 0 ? y : H - y; return [ox + X * s, oy + (H - Y) * s]; }
@@ -752,7 +754,7 @@
     return pts.join(' ');
   }
   var POLY_NAMES = { 3: 'equilateral triangle', 4: 'square', 5: 'regular pentagon', 6: 'regular hexagon', 8: 'regular octagon', 9: 'regular nonagon', 10: 'regular decagon', 12: 'regular dodecagon' };
-  MQ.def('co.symmetry', 'core', 'Lines of symmetry and rotations', function (r) {
+  MQ.def('co.symmetry', 'core', 'Congruence and transformations: lines of symmetry and rotations', function (r) {
     var v = r.int(1, 3), n, q, fig, off = r.pick([0, 0.5, 1]) * Math.PI / 6 * r.pick([0, 1]);
     if (v === 1) {
       n = r.pick([3, 4, 5, 6, 8]);
@@ -808,7 +810,7 @@
     });
     return s;
   }
-  MQ.def('co.transform', 'core', 'Image of a point after a transformation', function (r) {
+  MQ.def('co.transform', 'core', 'Congruence and transformations: image of a point after a transformation', function (r) {
     var kinds = [['tx', 'reflected across the <i>x</i>-axis'], ['ty', 'reflected across the <i>y</i>-axis'], ['r90', 'rotated 90° counterclockwise about the origin'], ['r180', 'rotated 180° about the origin'], ['t', null]];
     var k = r.pick(kinds), P0 = triPts(r, -5, 5), t = [0, 0], idx = r.int(0, 2), names = ['A', 'B', 'C'];
     var desc = k[1];
@@ -829,7 +831,7 @@
       good, wrong.filter(function (w) { return w !== good; }), { P0: P0, kind: k[0], t: t, idx: idx });
   });
 
-  MQ.def('co.identify', 'core', 'Identify a rigid motion from a picture', function (r) {
+  MQ.def('co.identify', 'core', 'Congruence and transformations: identifying a rigid motion from a picture', function (r) {
     var T0, kinds = ['tx', 'ty', 'r180', 't'], k = r.pick(kinds), t = [0, 0], img, tries = 0, ok;
     function key(a) { return a.map(function (p) { return p.join(','); }).sort().join(';'); }
     do {
@@ -847,7 +849,7 @@
     return mcQ('The blue triangle is moved to the red triangle by one rigid motion. Which motion is it?' + P.wrap(inner), ch, good, { T0: T0, img: img, kind: k });
   });
 
-  MQ.def('co.criteria', 'core', 'Triangle congruence criteria', function (r) {
+  MQ.def('co.criteria', 'core', 'Congruence and transformations: triangle congruence criteria', function (r) {
     var cases = [
       { given: 'AB = DE, BC = EF, and AC = DF', ans: 0 },
       { given: 'AB = DE, ∠B = ∠E, and BC = EF', ans: 1 },
@@ -865,7 +867,7 @@
     return mcQ('In △<i>' + c.names[0] + '</i> and △<i>' + c.names[1] + '</i>, ' + c.given + '. Which congruence criterion proves △<i>' + c.names[0] + '</i> ≅ △<i>' + c.names[1] + '</i>?', ch, c.ans, { given: c.given, names: c.names });
   });
 
-  MQ.def('co.corresp', 'core', 'Corresponding parts of congruent triangles', function (r) {
+  MQ.def('co.corresp', 'core', 'Congruence and transformations: corresponding parts of congruent triangles', function (r) {
     var perm = r.shuffle(['D', 'E', 'F']), L = ['A', 'B', 'C'], v = r.int(1, 2), q, a, b;
     var stmt = '△<i>ABC</i> ≅ △<i>' + perm.join('') + '</i>';
     if (v === 1) {
@@ -888,13 +890,13 @@
      ===================================================================== */
   var FLIP = { '<': '>', '>': '<', '≤': '≥', '≥': '≤' };
   function ineq(op, v) { return '<i>x</i> ' + op + ' ' + mi(v); }
-  MQ.def('in.solve', 'core', 'Solve a two-step inequality', function (r) {
+  MQ.def('in.solve', 'core', 'Inequalities: solving a two-step inequality', function (r) {
     var op = r.pick(['<', '>', '≤', '≥']), a = r.pick([2, 3, 4, 5, -2, -3, -4, -5]), x0 = r.nz(-8, 8), b = r.nz(-12, 12), c = a * x0 + b;
     var lhs = lin(a, b), real = a > 0 ? op : FLIP[op], good = ineq(real, x0);
     var wrong = [ineq(FLIP[real], x0), ineq(real, -x0), ineq(FLIP[real], -x0)];
     return mcShuffle(r, 'Solve the inequality.<div class="eq">' + lhs + ' ' + op + ' ' + mi(c) + '</div>', good, wrong, { a: a, b: b, c: c, op: op, x0: x0 });
   });
-  MQ.def('in.write', 'core', 'Write an inequality from a situation', function (r) {
+  MQ.def('in.write', 'core', 'Inequalities: writing an inequality from a situation', function (r) {
     var v = r.int(1, 2), B, F, p, good, wrong, html;
     if (v === 1) {
       F = r.int(8, 20); p = r.int(2, 5); B = F + p * r.int(4, 9) + r.int(0, p - 1) + 5;
@@ -907,7 +909,7 @@
     }
     return mcShuffle(r, html, good, wrong, { v: v, B: B, F: F, p: p });
   });
-  MQ.def('in.graph', 'core', 'Match a number-line graph to an inequality', function (r) {
+  MQ.def('in.graph', 'core', 'Inequalities: matching a number-line graph to an inequality', function (r) {
     var b = r.int(-5, 5), op = r.pick(['<', '>', '≤', '≥']), closed = (op === '≤' || op === '≥'), right = (op === '>' || op === '≥');
     var u = 26, ox = 30, W = ox * 2 + u * 12, H = 78, X = function (v) { return ox + (v + 6) * u; }, s = '', i;
     s += '<line class="gp-axis" x1="' + X(-6) + '" y1="38" x2="' + X(6) + '" y2="38"/>';
@@ -919,7 +921,7 @@
     var good = ineq(op, b), wrong = ['<', '>', '≤', '≥'].filter(function (o) { return o !== op; }).map(function (o) { return ineq(o, b); });
     return mcShuffle(r, 'Which inequality is graphed on the number line?' + fig, good, wrong, { b: b, op: op });
   });
-  MQ.def('in.max', 'core', 'How many can you afford? (constraint)', function (r) {
+  MQ.def('in.max', 'core', 'Inequalities: how many can you afford (constraints)', function (r) {
     var v = r.int(1, 2), q, B, F, p, n, extra;
     if (v === 1) {
       p = r.pick([3, 4, 5, 6, 7, 8]); F = r.int(5, 15); n = r.int(5, 12); extra = r.int(1, p - 1); B = F + p * n + extra;
@@ -931,7 +933,7 @@
     q.hint = 'Enter a whole number.';
     return q;
   });
-  MQ.def('in.justify', 'core', 'Justify a step in solving an equation', function (r) {
+  MQ.def('in.justify', 'core', 'Equations and inequalities: justifying a step in solving', function (r) {
     var a = r.int(2, 6), b = r.nz(-8, 8), x0 = r.int(-6, 9), c = a * (x0 + b), step = r.int(2, 4);
     var lines = [a + '(<i>x</i> ' + (b < 0 ? '− ' + (-b) : '+ ' + b) + ') = ' + mi(c),
       a + '<i>x</i> ' + (a * b < 0 ? '− ' + (-a * b) : '+ ' + (a * b)) + ' = ' + mi(c),
@@ -948,7 +950,7 @@
   /* =====================================================================
      PROBABILITY  (7.DSP.C.6, C.7, C.8)
      ===================================================================== */
-  MQ.def('pr.simple', 'core', 'Probability of a simple event', function (r) {
+  MQ.def('pr.simple', 'core', 'Probability: probability of a simple event', function (r) {
     var R = r.int(2, 7), B = r.int(2, 7), G = r.int(1, 6), T = R + B + G, v = r.int(1, 3), n, html;
     var bag = 'A bag contains ' + R + ' red, ' + B + ' blue, and ' + G + ' green marbles. One marble is chosen at random. ';
     if (v === 1) { n = R; html = bag + 'What is the probability that it is red?'; }
@@ -956,7 +958,7 @@
     else { n = B + R; html = bag + 'What is the probability that it is red <b>or</b> blue?'; }
     return fracQ(html, n, T, { R: R, B: B, G: G, v: v });
   });
-  MQ.def('pr.experimental', 'core', 'Experimental probability and predictions', function (r) {
+  MQ.def('pr.experimental', 'core', 'Probability: experimental probability and predictions', function (r) {
     var T = r.pick([20, 25, 40, 50]), h = r.int(3, T - 5), v = r.int(1, 2), k, q;
     var thing = r.pick([['spinner', 'landed on blue', 'spins'], ['number cube', 'showed a 6', 'rolls'], ['coin-toss machine', 'landed heads', 'tosses']]);
     if (v === 1) {
@@ -969,7 +971,7 @@
     }
     return q;
   });
-  MQ.def('pr.compound', 'core', 'Probability of a compound event', function (r) {
+  MQ.def('pr.compound', 'core', 'Probability: probability of a compound event', function (r) {
     var v = r.int(1, 3), n, d, html, a, b, t, k, ev;
     if (v === 1) {
       ev = r.pick([['a number greater than 4', 2], ['an even number', 3], ['a number less than 3', 2], ['a multiple of 3', 2], ['a number greater than 2', 4]]);
@@ -983,21 +985,21 @@
     }
     return fracQ(html, n, d, { v: v });
   });
-  MQ.def('pr.counting', 'core', 'Counting outcomes (sample space)', function (r) {
+  MQ.def('pr.counting', 'core', 'Probability: counting outcomes (sample space)', function (r) {
     var v = r.int(1, 3), a, b, c, q;
     if (v === 1) { a = r.int(3, 6); b = r.int(2, 5); c = r.int(2, 4); q = numQ('An outfit is one shirt, one pair of pants, and one pair of shoes. Kai has ' + a + ' shirts, ' + b + ' pairs of pants, and ' + c + ' pairs of shoes. How many different outfits are possible?', a * b * c, null, { v: v, a: a, b: b, c: c }); q.hint = 'Enter a whole number.'; }
     else if (v === 2) { a = r.int(3, 5); b = r.int(3, 5); c = r.int(2, 3); q = numQ('A lunch special lets you pick 1 of ' + a + ' sandwiches, 1 of ' + b + ' sides, and 1 of ' + c + ' drinks. How many different lunches are possible?', a * b * c, null, { v: v, a: a, b: b, c: c }); q.hint = 'Enter a whole number.'; }
     else { a = r.int(2, 4); b = r.int(3, 5); q = fracQ('A game picks one of ' + a + ' colors and one of ' + b + ' numbers at random, each equally likely. What is the probability that it picks one specific color-and-number pair?', 1, a * b, { v: v, a: a, b: b }); }
     return q;
   });
-  MQ.def('pr.nonreplace', 'core', 'Probability without replacement', function (r) {
+  MQ.def('pr.nonreplace', 'core', 'Probability: probability without replacement', function (r) {
     var t = r.int(5, 10), R = r.int(2, t - 2), B = r.int(1, t - R), v = r.int(1, 2), n, d = t * (t - 1), html;
     var bag = 'A bag has ' + R + ' red marbles and ' + (t - R) + ' blue marbles. Two marbles are drawn one after the other <b>without</b> putting the first one back. ';
     if (v === 1) { html = bag + 'What is the probability that both are red?'; n = R * (R - 1); }
     else { html = bag + 'What is the probability that the first is red and the second is blue?'; n = R * (t - R); }
     return fracQ(html, n, d, { t: t, R: R, v: v });
   });
-  MQ.def('pr.simulate', 'core', 'Choose a simulation for a probability', function (r) {
+  MQ.def('pr.simulate', 'core', 'Probability: choosing a simulation', function (r) {
     var v = r.int(1, 2), k, html, good, wrong;
     if (v === 1) {
       k = r.int(2, 8);
@@ -1043,7 +1045,7 @@
   var DA_CTX = [
     { x: 'Hours studied', y: 'Test score' }, { x: 'Hours of sleep', y: 'Reaction time (ms)' }, { x: 'Daily screen time (hours)', y: 'Books read per month' }, { x: 'Temperature (°F)', y: 'Cups of cocoa sold' }
   ];
-  MQ.def('da.assoc', 'core', 'Describe the association in a scatter plot', function (r) {
+  MQ.def('da.assoc', 'core', 'Data analysis: describing the association in a scatter plot', function (r) {
     var kind = r.pick(['pos', 'neg', 'none', 'curve']), xs = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], ys, tries = 0, ok, i;
     do {
       ys = xs.map(function (x) {
@@ -1062,7 +1064,7 @@
     var ch = ['Positive linear association', 'Negative linear association', 'No association', 'Nonlinear association'];
     return mcQ('The scatter plot shows a data set. Which statement best describes the association between the two variables?' + P.wrap(scatter(P, xs, ys)), ch, { pos: 0, neg: 1, none: 2, curve: 3 }[kind], { kind: kind, xs: xs, ys: ys });
   });
-  MQ.def('da.trend', 'core', 'Use a trend line to make a prediction', function (r) {
+  MQ.def('da.trend', 'core', 'Data analysis: using a trend line to make a prediction', function (r) {
     var lines = [[0.5, 1], [0.5, 2], [0.5, 3], [1, 1], [1, 2], [-0.5, 8], [-0.5, 9], [-1, 11], [0.5, 4], [1, 0]], L = r.pick(lines), m = L[0], b = L[1];
     var xs = [1, 2, 3, 4, 5, 6, 7, 8, 9], ys = xs.map(function (x) { return clip(m * x + b + r.pick([-1, -0.5, 0, 0.5, 1]), 0, 12); });
     var ks = [2, 4, 6, 8].filter(function (k) { return Number.isInteger(m * k + b) && m * k + b >= 0 && m * k + b <= 12; }), k = r.pick(ks);
@@ -1078,7 +1080,7 @@
     { x: 'weeks', xs: 'week', y: 'amount saved', u: 'dollars', pre: '$' },
     { x: 'minutes', xs: 'minute', y: 'distance a runner has covered', u: 'meters', pre: '' }
   ];
-  MQ.def('da.model', 'core', 'Interpret the slope and intercept of a linear model', function (r) {
+  MQ.def('da.model', 'core', 'Data analysis: interpreting the slope and intercept of a linear model', function (r) {
     var c = r.pick(MODEL_CTX), m = r.pick([2, 3, 4, 5, 6, 8, 12]), b = r.pick([5, 8, 10, 12, 15, 20, 25]), ask = r.pick(['slope', 'int']);
     var eq = '<i>y</i> = ' + m + '<i>x</i> + ' + b, per = 'each additional ' + c.xs;
     var ctx = 'A scatter plot of the ' + c.y + ' (<i>y</i>, in ' + c.u + ') after <i>x</i> ' + c.x + ' is modeled by the line ' + eq + '. ';
@@ -1090,7 +1092,7 @@
       : [iw, 'The number of ' + c.x + ' needed for the ' + c.y + ' to reach ' + b + ' ' + c.u, 'The total ' + c.y + ' after ' + b + ' ' + c.x];
     return mcShuffle(r, html, good, wrong, { m: m, b: b, ask: ask });
   });
-  MQ.def('da.twoway', 'core', 'Two-way frequency table: relative frequency', function (r) {
+  MQ.def('da.twoway', 'core', 'Data analysis: relative frequency in a two-way table', function (r) {
     var T = r.pick([20, 25, 50]), a = r.int(2, T - 3), tr_ = r.pick([20, 25, 40, 50]), b = tr_ === 40 ? 2 * r.int(1, 19) : r.int(2, tr_ - 3);
     var rows = [[a, T - a], [b, tr_ - b]], byRow = r.f() < 0.5;
     var ctx = r.pick([['8th graders', '9th graders', 'play a sport', 'do not play a sport'], ['students with a pet', 'students without a pet', 'ride the bus', 'do not ride the bus']]);
@@ -1104,7 +1106,7 @@
     q.hint = 'Enter a number (the % sign is optional). Use the row total as the whole.';
     return q;
   });
-  MQ.def('da.outlier', 'core', 'Find the outlier in a scatter plot', function (r) {
+  MQ.def('da.outlier', 'core', 'Data analysis: finding the outlier in a scatter plot', function (r) {
     var LN = r.pick([[0.5, 1], [0.5, 2], [0.5, 3], [1, 0], [-0.5, 9], [-0.5, 10], [-1, 10]]), m = LN[0], b = LN[1], xs = [1, 2, 3, 4, 5, 6, 7, 8, 9], xo = r.int(2, 8), ys, up = r.f() < 0.5;
     ys = xs.map(function (x) { return clip(Math.round(m * x + b + r.pick([-1, 0, 0, 1])), 0, 10); });
     var base = Math.round(m * xo + b), yo, cand = up ? [6, -6, 5, -5] : [-6, 6, -5, 5]; for (var ci = 0; ci < 4; ci++) { yo = base + cand[ci]; if (yo >= 0 && yo <= 10) break; }
