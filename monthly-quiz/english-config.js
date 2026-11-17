@@ -11,7 +11,7 @@ window.MQ_CONFIG = {
   showAnswers: true,
 
   /* Teachers and class sections shown in the pickers (recorded in the Sheet). Edit these lists to change the pickers. */
-  teachers: ['Halverson', 'Mickey', 'Muschal', 'Mason', 'Jackson', 'Bender'],
+  teachers: ['Mickey', 'Muschal', 'Mason', 'Jackson', 'Bender'],
   sections: ['A1', 'A2', 'A3', 'A4', 'B5', 'B6', 'B7', 'B8'],
 
   /* Each month: 5 skill IDs, the same for every class. Skill IDs:
