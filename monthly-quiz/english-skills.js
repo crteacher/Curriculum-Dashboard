@@ -1,4 +1,6 @@
 /* Monthly Skills Check (English) — ACT-style item bank + skill definitions.
+   IMPORTANT: the skill IDs and the TITLES wording below are what the Google Sheet records (Report headers show the title plus [id]).
+   Do not reword them once students have taken a quiz, so results stay comparable from year to year.
    Loads after skills.js (which provides MQ.def / MQ.rng / MQ.grade). One question = one short paragraph with a numbered underlined spot. */
 (function () {
   var MQ = window.MQ, EB = {};
@@ -262,7 +264,7 @@ EB['en.order'] = [
 ];
 
 
-  var TITLES = {"en.comma": "Commas", "en.semi": "Semicolons and colons", "en.runon": "Run-ons, splices and fragments", "en.apos": "Apostrophes and possessives", "en.extra": "Unnecessary punctuation", "en.agree": "Subject–verb agreement", "en.pronoun": "Pronoun case and agreement", "en.tense": "Verb tense consistency", "en.concise": "Concision and redundancy", "en.modifier": "Dangling and misplaced modifiers", "en.transition": "Transitions", "en.addelete": "Adding or deleting a sentence", "en.order": "Sentence order", "en.goal": "Writer’s goal, openers and closers"};
+  var TITLES = {"en.comma": "Commas: series, introductory phrases, nonessential clauses, and joining sentences", "en.semi": "Semicolons and colons: joining sentences and introducing lists", "en.runon": "Run-ons, comma splices, and fragments: joining or separating sentences correctly", "en.apos": "Apostrophes: possessives, plurals, and contractions (its/it’s, whose/who’s, their/they’re)", "en.extra": "Unnecessary punctuation: commas and colons that do not belong", "en.agree": "Subject–verb agreement: matching verbs to singular and plural subjects", "en.pronoun": "Pronouns: case (I/me, who/whom), agreement, and possessives", "en.tense": "Verb tense: staying consistent and matching the time clues", "en.concise": "Concision: removing wordiness and redundancy", "en.modifier": "Modifiers: fixing dangling and misplaced phrases", "en.transition": "Transitions: choosing the word that shows the right relationship between ideas", "en.addelete": "Adding or deleting sentences: relevance and purpose", "en.order": "Organization: putting sentences in a logical order within a paragraph", "en.goal": "Writer’s purpose: the best opener, closer, detail, or tone for the writer’s goal"};
   function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
   function build(it, r) {
     var p = it[0], u = it[1], alts = it[2], ans = it[3], why = it[4], stem = it[5], custom = it[6] === 'c';
