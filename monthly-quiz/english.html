@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Monthly Skills Check: English</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Source+Sans+3:wght@400;600;700&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f3f6f9; --card:#ffffff; --ink:#16212b; --mute:#566573; --line:#d5dde5;
+  --accent:#1f5f8b; --accent-ink:#ffffff; --accent-soft:#e3eef7;
+  --good:#1b7a47; --good-soft:#e1f3e8; --bad:#b03226; --bad-soft:#fbe8e5; --warn-soft:#fff3d6; --warn:#7a5600;
+  --shadow:0 1px 2px rgba(22,33,43,.06),0 4px 14px rgba(22,33,43,.05);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0f1720; --card:#17222d; --ink:#e8eef3; --mute:#9fb0be; --line:#2b3a47;
+    --accent:#6fb1e0; --accent-ink:#0b1620; --accent-soft:#1b2f40;
+    --good:#5fd08b; --good-soft:#15301f; --bad:#ff8f80; --bad-soft:#38201d; --warn-soft:#33290f; --warn:#f0c65a;
+    --shadow:none;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0f1720; --card:#17222d; --ink:#e8eef3; --mute:#9fb0be; --line:#2b3a47;
+  --accent:#6fb1e0; --accent-ink:#0b1620; --accent-soft:#1b2f40;
+  --good:#5fd08b; --good-soft:#15301f; --bad:#ff8f80; --bad-soft:#38201d; --warn-soft:#33290f; --warn:#f0c65a;
+  --shadow:none;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.5 "Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:720px;margin:0 auto;padding:28px 16px 64px}
+.eyebrow{font-size:.78rem;letter-spacing:.09em;text-transform:uppercase;color:var(--mute);font-weight:600;margin:0 0 6px}
+h1{font:700 2rem/1.15 Fraunces,Georgia,serif;margin:0 0 4px;text-wrap:balance}
+.sub{color:var(--mute);margin:0 0 22px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:20px;box-shadow:var(--shadow)}
+.card + .card{margin-top:14px}
+label{display:block;font-weight:600;margin:0 0 4px;font-size:.95rem}
+.field{margin-bottom:14px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:520px){.row2{grid-template-columns:1fr}}
+input[type=text],select{width:100%;font:inherit;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:8px;padding:10px 12px}
+input[type=text]:focus,select:focus,button:focus-visible{outline:3px solid var(--accent);outline-offset:1px;border-color:var(--accent)}
+button{font:inherit;font-weight:700;border:0;border-radius:8px;padding:12px 20px;background:var(--accent);color:var(--accent-ink);cursor:pointer}
+button:disabled{opacity:.5;cursor:default}
+button.ghost{background:transparent;color:var(--accent);border:1.5px solid var(--accent)}
+.note{background:var(--accent-soft);border-radius:8px;padding:12px 14px;font-size:.95rem;margin:4px 0 16px}
+.warn{background:var(--warn-soft);color:var(--ink);border-left:4px solid var(--warn)}
+.err{background:var(--bad-soft);border-left:4px solid var(--bad);border-radius:8px;padding:12px 14px;margin:0 0 14px;font-size:.95rem}
+.bar{position:sticky;top:0;z-index:5;background:var(--bg);padding:10px 0;margin:-10px 0 10px;display:flex;justify-content:space-between;align-items:baseline;gap:12px;border-bottom:1px solid var(--line);font-size:.92rem;color:var(--mute)}
+.bar b{color:var(--ink)}
+.q{margin-top:14px}
+.qnum{font:700 .8rem/1 "Source Sans 3",sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-bottom:8px}
+.qtext{font-size:1.15rem;margin-bottom:12px}
+.eq{margin:10px 0 0;font-size:1.3rem}
+.choices{display:grid;gap:8px}
+.choice{display:flex;gap:10px;align-items:flex-start;border:1.5px solid var(--line);border-radius:8px;padding:10px 12px;cursor:pointer;background:var(--bg)}
+.choice input{margin-top:.35em;accent-color:var(--accent)}
+.choice:has(input:checked){border-color:var(--accent);background:var(--accent-soft)}
+.hint{color:var(--mute);font-size:.85rem;margin-top:6px}
+.num{max-width:220px}
+.submitrow{margin-top:20px;display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.score{font:700 3rem/1 Fraunces,Georgia,serif;margin:0}
+.res{display:grid;grid-template-columns:auto 1fr;gap:6px 12px;margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}
+.res .mark{font-weight:700;width:1.6em;height:1.6em;display:grid;place-items:center;border-radius:50%}
+.res .ok{background:var(--good-soft);color:var(--good)}
+.res .no{background:var(--bad-soft);color:var(--bad)}
+.res small{color:var(--mute)}
+.res .skill{font-size:.85rem;color:var(--mute)}
+.fig{margin-top:6px}
+.gp{display:block;width:100%;max-width:360px;margin:10px 0 2px}
+.gp-grid{stroke:var(--line);stroke-width:1}
+.gp-axis{stroke:var(--mute);stroke-width:1.6}
+.gp text{fill:var(--mute);font:11px "Source Sans 3",system-ui,sans-serif}
+.gp .gp-l{font-style:italic;font-size:13px}
+.gp-line{fill:none;stroke:var(--accent);stroke-width:2.6;stroke-linejoin:round}
+.gp-dot{fill:var(--accent)}
+/* math bits */
+i{font-style:italic}
+sup,sub{line-height:0}
+.frac{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;margin:0 .2em;line-height:1.25}
+.frac>span:first-child{border-bottom:1.5px solid currentColor;padding:0 .25em}
+.frac>span:last-child{padding:0 .25em}
+.intw{display:inline-flex;align-items:center;gap:1px;vertical-align:middle}
+.isign{font-size:2em;line-height:1;font-weight:300}
+.lims{display:inline-flex;flex-direction:column;justify-content:space-between;font-size:.7em;line-height:1;height:2.6em}
+.lims sup,.lims sub{position:static;vertical-align:baseline}
+.sumw{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;line-height:1.05;margin-right:.3em}
+.sumw .big{font-size:1.7em}
+.sumw small{font-size:.7em}
+.lim,.nw{white-space:nowrap}
+/* figures for the MLS common-assessment questions */
+.sv{display:block;width:100%;max-width:360px;margin:10px 0 2px}
+.sv text,.gp .sv-t{fill:var(--ink);font:13px "Source Sans 3",system-ui,sans-serif}
+.gp .sv-t{font-weight:700}
+.sv-s{fill:none;stroke:var(--ink);stroke-width:2;stroke-linejoin:round}
+.sv-f{fill:var(--accent-soft);stroke:var(--accent);stroke-width:2.2;stroke-linejoin:round}
+.sv-f2{fill:var(--bad-soft);stroke:var(--bad);stroke-width:2.2;stroke-linejoin:round;fill-opacity:.7}
+.sv-d{fill:none;stroke:var(--mute);stroke-width:1.4;stroke-dasharray:5 4}
+.sv-cut{fill:none;stroke:var(--bad);stroke-width:2.4;stroke-dasharray:6 4}
+.sv-pt{fill:var(--accent);stroke:var(--accent);stroke-width:2.5}
+.sv-open{fill:var(--card);stroke:var(--accent);stroke-width:2.5}
+.sv-ray{stroke:var(--accent);stroke-width:3.4}
+.sv-arrow{fill:var(--accent)}
+.dtw{overflow-x:auto;margin:10px 0 6px}
+.dt{border-collapse:collapse;font-size:1rem}
+.dt th,.dt td{border:1px solid var(--line);padding:6px 12px;text-align:center;white-space:nowrap}
+.dt th{background:var(--accent-soft);font-weight:600}
+.steps{margin:10px 0 12px;padding:10px 14px;border:1px solid var(--line);border-radius:8px;background:var(--bg);font-size:1.05rem}
+.steps div+div{margin-top:4px}
+.sn{display:inline-block;min-width:4.2em;color:var(--mute);font-size:.82rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em}
+@media (prefers-reduced-motion:no-preference){button{transition:filter .15s}button:hover:not(:disabled){filter:brightness(1.08)}}
+
+/* ---- English: passage block ---- */
+.passage{font-family:"Source Serif 4",Georgia,"Times New Roman",serif;font-size:1.08rem;line-height:1.75}
+.passage .lead{font:600 .9rem/1.45 "Source Sans 3",sans-serif;color:var(--mute);margin:0 0 14px}
+.passage p{margin:0 0 14px}
+.passage p:last-child{margin-bottom:0}
+.passage .pl{display:block;font:700 .72rem/1 "Source Sans 3",sans-serif;letter-spacing:.09em;text-transform:uppercase;color:var(--accent);margin:0 0 4px}
+.passage .sp{text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:3px}
+.passage .sn{font:700 .72em/1 "Source Sans 3",sans-serif;color:var(--accent);margin-left:2px;vertical-align:sub;text-decoration:none;display:inline-block;min-width:0;letter-spacing:0;text-transform:none}
+.passage .mk{font:700 .8em "Source Sans 3",sans-serif;color:var(--accent);background:var(--accent-soft);border-radius:4px;padding:0 5px}
+.qstem{font-size:1.05rem;margin:0 0 10px}
+.qstem i{font-style:italic}
+.ltr{font-weight:700;min-width:1.4em;color:var(--accent)}
+.choice .ct{flex:1}
+</style>
+</head>
+<body>
+<main id="app"></main>
+<script src="skills.js"></script>
+<script src="english-skills.js"></script>
+<script src="english-config.js"></script>
+<script>
+(function () {
+  var CFG = window.MQ_CONFIG, MQ = window.MQ, app = document.getElementById('app');
+  var qs = new URLSearchParams(location.search);
+  var preview = /^(1|true)/.test(qs.get('preview') || '');
+  var monthKey = qs.get('month') || CFG.current;
+  var MONTH = CFG.months[monthKey];
+  app.addEventListener('input', function (e) { onInput(e); });
+  var S = { teacher: qs.get('teacher') || '', section: qs.get('section') || '', first: '', last: '', seed: 0, qs: [], given: [], armed: false };
+
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function html(h) { app.innerHTML = h; window.scrollTo(0, 0); }
+  function header(sub) {
+    return '<p class="eyebrow">Cardinal Ritter College Prep · English</p><h1>English Skills Check</h1><p class="sub">' + sub + '</p>';
+  }
+
+  /* ---------- server ---------- */
+  function api(body) {
+    body.month = body.month + ' English';
+    var ctl = new AbortController(), t = setTimeout(function () { ctl.abort(); }, 20000);
+    return fetch(CFG.scriptUrl, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(body), signal: ctl.signal })
+      .then(function (r) { clearTimeout(t); if (!r.ok) throw new Error('http ' + r.status); return r.json(); })
+      .catch(function (e) { clearTimeout(t); throw e; });
+  }
+
+  /* ---------- start screen ---------- */
+  function showStart(msg) {
+    if (!MONTH) { html(header('') + '<div class="err">There is no quiz set up for ' + esc(monthKey) + '. Check the link with your teacher.</div>'); return; }
+    var opts = '<option value="">Choose your class\u2026</option>' + (CFG.sections || []).map(function (c) {
+      return '<option value="' + esc(c) + '"' + (S.section === c ? ' selected' : '') + '>' + esc(c) + '</option>';
+    }).join('');
+    var topts = '<option value="">Choose your teacher\u2026</option>' + (CFG.teachers || []).map(function (t) {
+      return '<option value="' + esc(t) + '"' + (S.teacher === t ? ' selected' : '') + '>' + esc(t) + '</option>';
+    }).join('');
+    var setup = (!CFG.scriptUrl && !preview)
+      ? '<div class="err">Results tracking is not connected yet, so the quiz cannot start. Teachers: add <b>?preview=1</b> to the link to try it.</div>' : '';
+    html(header(esc(MONTH.label) + ' · 5 questions') +
+      '<div class="card">' + setup + (msg ? '<div class="err">' + msg + '</div>' : '') +
+      (preview ? '<div class="note warn"><b>Teacher preview.</b> Nothing is saved to the Sheet and you can retry as often as you like.</div>' : '') +
+      '<div class="row2"><div class="field"><label for="teacher">Teacher</label><select id="teacher">' + topts + '</select></div>' +
+      '<div class="field"><label for="section">Class</label><select id="section">' + opts + '</select></div></div>' +
+      '<div class="row2"><div class="field"><label for="first">First name</label><input type="text" id="first" autocomplete="given-name" value="' + esc(S.first) + '"></div>' +
+      '<div class="field"><label for="last">Last name</label><input type="text" id="last" autocomplete="family-name" value="' + esc(S.last) + '"></div></div>' +
+      '<div class="note"><b>One attempt only.</b> Type your name the way it appears on your class roster. Once you click Start your questions are locked in — if you reload the page you will get the same five questions back.</div>' +
+      '<button id="go">Start</button></div>');
+    document.getElementById('go').onclick = onStart;
+  }
+
+  function onStart() {
+    var teacher = document.getElementById('teacher').value,
+        section = document.getElementById('section').value,
+        first = document.getElementById('first').value.trim(),
+        last = document.getElementById('last').value.trim();
+    S.teacher = teacher; S.section = section; S.first = first; S.last = last;
+    if (!teacher || !section || first.length < 2 || last.length < 2) { showStart('Pick your teacher and your class, and type your first and last name.'); return; }
+    var go = document.getElementById('go'); go.disabled = true; go.textContent = 'Checking…';
+    if (preview) { S.seed = (crypto.getRandomValues(new Uint32Array(1))[0] || 1); beginQuiz(); return; }
+    api({ action: 'start', month: monthKey, section: section, teacher: teacher, first: first, last: last }).then(function (res) {
+      if (!res.ok) throw new Error(res.error || 'server');
+      if (res.status === 'done') { showDone(res); return; }
+      S.seed = res.seed; beginQuiz();
+    }).catch(function () {
+      showStart('Could not reach the quiz server. Check your internet connection and click Start again. Nothing was lost.');
+    });
+  }
+
+  function showDone(res) {
+    html(header(esc(MONTH.label)) + '<div class="card"><h2 style="margin-top:0">You have already completed this quiz.</h2>' +
+      '<p>' + esc(S.first) + ' ' + esc(S.last) + ' · ' + esc(S.section) + ' · score ' + res.score + ' / ' + res.total +
+      '.</p><p class="hint">Only one attempt is allowed. If your name was typed wrong the first time, see your teacher.</p></div>');
+  }
+
+  /* ---------- build + render questions ---------- */
+  function beginQuiz() {
+    var ids = MONTH.skills;
+    S.qs = ids.map(function (id, i) {
+      var sk = MQ.skills[id];
+      var q = sk.gen(MQ.rng((S.seed + 7919 * (i + 1)) >>> 0));
+      q.skill = id; q.title = sk.title; return q;
+    });
+    S.given = S.qs.map(function () { return null; });
+    S.armed = false;
+    window.onbeforeunload = function (e) { e.preventDefault(); e.returnValue = ''; };
+    renderQuiz();
+  }
+
+  var LET = ['A', 'B', 'C', 'D', 'E'], LET2 = ['F', 'G', 'H', 'J', 'K'];
+  function para(q, i) {
+    var n = i + 1, p = q.para, u = q.under, out;
+    function fmt(t) { return esc(t).replace(/\[A\]/g, '<span class="mk">A</span>').replace(/\[(\d)\]/g, '<span class="mk">$1</span>'); }
+    var parts = p.split('{u}');
+    if (parts.length === 2) {
+      out = fmt(parts[0]) + '<span class="sp">' + esc(u) + '</span><span class="sn">' + n + '</span>' + fmt(parts[1]);
+    } else { out = fmt(p); }
+    return '<p><span class="pl">Paragraph ' + n + '</span>' + out + '</p>';
+  }
+  function qCard(q, i) {
+    var L = (i % 2 === 0) ? LET : LET2;
+    var stem = q.stem || 'Choose the best version of the underlined portion (spot ' + (i + 1) + ').';
+    var body = '<div class="choices">' + q.choices.map(function (c, k) {
+      return '<label class="choice"><input type="radio" name="q' + i + '" value="' + k + '"><span class="ltr">' + L[k] + '.</span><span class="ct">' + c + '</span></label>';
+    }).join('') + '</div>';
+    return '<div class="card q" data-i="' + i + '"><div class="qnum">Question ' + (i + 1) + ' of ' + S.qs.length + '</div><div class="qstem">' + esc(stem) + '</div>' + body + '</div>';
+  }
+  function renderQuiz(err) {
+    html('<div class="bar"><span><b>' + esc(S.first) + ' ' + esc(S.last) + '</b> · ' + esc(S.section) + '</span><span id="prog"></span></div>' +
+      (err ? '<div class="err">' + err + '</div>' : '') +
+      '<div class="card passage"><p class="lead">Read each paragraph. The underlined, numbered portions (or the bracketed marks) go with the questions below.</p>' + S.qs.map(para).join('') + '</div>' +
+      S.qs.map(qCard).join('') +
+      '<div class="submitrow"><button id="sub">Submit quiz</button><span class="hint" id="subhint">You cannot change your answers after submitting.</span></div>');
+    S.qs.forEach(function (q, i) { restore(q, i); });
+    document.getElementById('sub').onclick = onSubmit;
+    updateProg();
+  }
+  function restore(q, i) {
+    if (S.given[i] == null) return;
+    if (q.type === 'mc') { var r = app.querySelector('input[name="q' + i + '"][value="' + S.given[i] + '"]'); if (r) r.checked = true; }
+    else document.getElementById('q' + i).value = S.given[i];
+  }
+  function onInput(e) {
+    var t = e.target;
+    if (t.type === 'radio') { S.given[+t.name.slice(1)] = +t.value; }
+    else if (t.id && /^q\d+$/.test(t.id)) { S.given[+t.id.slice(1)] = t.value; }
+    S.armed = false;
+    var b = document.getElementById('sub'); if (b) b.textContent = 'Submit quiz';
+    updateProg();
+  }
+  function answered() { return S.given.filter(function (g, i) { return g !== null && g !== '' && !(S.qs[i].type === 'num' && !String(g).trim()); }).length; }
+  function updateProg() { var p = document.getElementById('prog'); if (p) p.innerHTML = '<b>' + answered() + '</b> of ' + S.qs.length + ' answered'; }
+
+  /* ---------- submit ---------- */
+  function onSubmit() {
+    var left = S.qs.length - answered(), b = document.getElementById('sub'), h = document.getElementById('subhint');
+    if (!S.armed) {
+      S.armed = true;
+      b.textContent = 'Click again to submit';
+      h.textContent = left ? left + ' question' + (left > 1 ? 's are' : ' is') + ' still blank. After you submit, answers are final.' : 'After you submit, answers are final.';
+      return;
+    }
+    b.disabled = true; b.textContent = 'Saving…';
+    var answers = S.qs.map(function (q, i) {
+      var g = S.given[i], ok = g !== null && g !== '' && MQ.grade(q, g);
+      return {
+        skill: q.skill, title: q.title, ok: !!ok,
+        given: g === null ? '' : (q.type === 'mc' ? q.choices[g].replace(/<[^>]+>/g, '') : String(g)),
+        correct: q.type === 'mc' ? q.choices[q.correct].replace(/<[^>]+>/g, '') : q.show
+      };
+    });
+    var score = answers.filter(function (a) { return a.ok; }).length;
+    function finish() { window.onbeforeunload = null; showResults(answers, score); }
+    if (preview) { finish(); return; }
+    api({ action: 'submit', month: monthKey, section: S.section, teacher: S.teacher, first: S.first, last: S.last, seed: S.seed, answers: answers }).then(function (res) {
+      if (!res.ok) throw new Error(res.error || 'server');
+      finish();
+    }).catch(function () {
+      S.armed = false; b.disabled = false; b.textContent = 'Try saving again';
+      h.innerHTML = '<b style="color:var(--bad)">Your answers did not save.</b> Do not close this page — check your internet and click again.';
+    });
+  }
+
+  /* ---------- results ---------- */
+  function showResults(answers, score) {
+    var rows = answers.map(function (a, i) {
+      var q = S.qs[i];
+      return '<span class="mark ' + (a.ok ? 'ok' : 'no') + '" aria-label="' + (a.ok ? 'correct' : 'incorrect') + '">' + (a.ok ? '✓' : '✕') + '</span>' +
+        '<div><div>Question ' + (i + 1) + '<span class="skill"> · ' + esc(q.title) + '</span></div>' +
+        (a.ok ? '' : '<small>Your answer: ' + (a.given ? esc(a.given) : '<i>blank</i>') + (CFG.showAnswers ? ' · Correct: ' + esc(a.correct) : '') + (CFG.showAnswers && q.fixed ? '<br><i>' + esc(q.fixed) + '</i>' : '') + (CFG.showAnswers && q.why ? '<br>' + esc(q.why) : '') + '</small>') + '</div>';
+    }).join('');
+    html(header(esc(MONTH.label) + ' · submitted') +
+      (preview ? '<div class="note warn"><b>Teacher preview</b> — not recorded.</div>' : '') +
+      '<div class="card"><p class="score">' + score + ' / ' + answers.length + '</p><p class="sub" style="margin:6px 0 0">' +
+      esc(S.first) + ' ' + esc(S.last) + ' · ' + esc(S.section) +
+      (preview ? '' : ' · Your result has been saved.') + '</p><div class="res">' + rows + '</div></div>' +
+      (preview ? '<div class="submitrow"><button class="ghost" id="again">Try again (preview)</button></div>' : ''));
+    var ag = document.getElementById('again'); if (ag) ag.onclick = function () { showStart(); };
+  }
+
+  window.__MQ = { S: S, beginQuiz: beginQuiz };   // hook for automated tests
+  showStart();
+})();
+</script>
+</body>
+</html>
