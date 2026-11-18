@@ -586,6 +586,7 @@ GK.act = function (input, st, a) {
   st = clone(st); st.marks = null; st.zok = null;
   var mode = st.mode, hx = a.hx || 0.3, hy = a.hy || 0.3, n, near;
   if (a.type === 'dir') { st.pd = a.dir === 'down' ? 'down' : 'up'; return st; }
+  if (mode === 'parabola' && a.type === 'click' && st.tool === 'zero') { var pzp = Math.round(a.x * 1e6) / 1e6, pzh = -1, pzi; if (Math.abs(a.y) > Math.max(1e-9, hy * 0.6)) return st; for (pzi = 0; pzi < st.zr.length; pzi++) if (Math.abs(st.zr[pzi] - pzp) <= Math.max(1e-9, hx * 0.6)) pzh = pzi; if (pzh >= 0) st.zr.splice(pzh, 1); else st.zr.push(pzp); return st; }
   if (mode === 'parabola' && a.type === 'click') {            // one click places (or moves) the vertex; clicking it again removes it
     if (st.vt && Math.abs(st.vt.x - a.x) < 1e-9 && Math.abs(st.vt.y - a.y) < 1e-9) st.vt = null; else st.vt = {x: Math.round(a.x * 1e6) / 1e6, y: Math.round(a.y * 1e6) / 1e6};
     return st;
@@ -778,9 +779,17 @@ GK.gradeState = function (input, st, win) {
   if (mode === 'parabola') {                                     // expected {h, k, a:+1|-1}; two parts: the vertex and which way it opens
     var vok = !!st.vt && Math.abs(st.vt.x - e.h) < 1e-6 && Math.abs(st.vt.y - e.k) < 1e-6, dok = st.pd === (e.a > 0 ? 'up' : 'down'), isu = [];
     st.zok = {vt: st.vt ? vok : null, pd: st.pd ? dok : null};
+    var pzn = 2, pzs = (vok ? 1 : 0) + (dok ? 1 : 0), pzok = true;
+    if (e.zeros) {                                               // optional: x-intercepts (factored form)
+      var pw = e.zeros.slice().sort(function (u, v) { return u - v; }), ph = (st.zr || []).slice().sort(function (u, v) { return u - v; }), psame = pw.length === ph.length, pk;
+      st.zok.z = {}; ph.forEach(function (x) { st.zok.z[x] = pw.some(function (q) { return Math.abs(q - x) < 1e-6; }); });
+      if (psame) for (pk = 0; pk < pw.length; pk++) if (Math.abs(pw[pk] - ph[pk]) > 1e-6) psame = false;
+      pzn = 3; if (psame) pzs++; pzok = psame;
+      if (!psame) isu.push(!ph.length ? 'Mark the x-intercepts.' : pw.length !== ph.length ? 'Check how many x-intercepts there are.' : 'Recheck where the x-intercepts go.');
+    }
     if (!st.vt) isu.push('Place the vertex.'); else if (!vok) isu.push('Recheck the vertex.');
     if (!st.pd) isu.push('Choose which way it opens.'); else if (!dok) isu.push('Recheck which way the parabola opens.');
-    return {ok: vok && dok, score: ((vok ? 1 : 0) + (dok ? 1 : 0)) / 2, detail: vok && dok ? '' : isu.join(' ')};
+    return {ok: vok && dok && pzok, score: pzs / pzn, detail: vok && dok && pzok ? '' : isu.join(' ')};
   }
   if (mode === 'choose') { var c = st.choice === e; return {ok: c, score: c ? 1 : 0, detail: st.choice == null ? 'Pick one of the graphs.' : ''}; }
   return {ok: false, score: 0, detail: ''};
@@ -792,7 +801,7 @@ function autoAnswer(mode, e) {
   if (mode === 'line') { q.type = 'line'; for (k in e) q[k] = e[k]; return [q]; }
   if (mode === 'inequality') { q.type = 'inequality'; for (k in e) q[k] = e[k]; return [q]; }
   if (mode === 'numberline') return [{type: 'interval', value: e, color: GOLD, lift: 16}];
-  if (mode === 'parabola') { var pa = e.a > 0 ? 1 : -1; return [{type: 'fn', f: function (x) { return pa * (x - e.h) * (x - e.h) + e.k; }, color: GOLD, width: 2.2}, {type: 'point', at: [e.h, e.k], color: GOLD}]; }
+  if (mode === 'parabola') { var pa = e.a > 0 ? 1 : -1; return [{type: 'fn', f: function (x) { return pa * (x - e.h) * (x - e.h) + e.k; }, color: GOLD, width: 2.2}, {type: 'point', at: [e.h, e.k], color: GOLD}].concat((e.zeros || []).map(function (r) { return {type: 'point', at: [r, 0], color: GOLD}; })); }
   if (mode === 'polysketch') return [{type: 'polysketch', zeros: e.zeros, a: e.a || 1, color: GOLD}];
   if (mode === 'asymptotes') {
     var out = (e.f ? [{type: 'fn', f: e.f, color: GOLD, width: 2}] : []).concat((e.v || []).map(function (x) { return {type: 'asymptote', x: x, color: GOLD, width: 2}; }), (e.h || []).map(function (y) { return {type: 'asymptote', y: y, color: GOLD, width: 2}; }));
@@ -846,6 +855,7 @@ function drawInput(L, c, st) {
   if (st.mode === 'parabola') {
     var pc = st.zok ? (st.zok.vt && st.zok.pd ? OKC : BADC) : NAVY;
     if (st.vt && st.pd) { var ps = st.pd === 'up' ? 1 : -1, pvx = st.vt.x, pvy = st.vt.y; s += tag('path', {d: pathOf(L, GK.sample(function (x) { return ps * (x - pvx) * (x - pvx) + pvy; }, w.x[0], w.x[1], 300, w.y[0], w.y[1])), fill: 'none', stroke: pc, 'stroke-width': 2.4, 'stroke-linecap': 'round', 'clip-path': L.clipRef}); }
+    (st.zr || []).forEach(function (x) { s += dot(L, [x, 0], st.zok && st.zok.z ? (st.zok.z[x] ? OKC : BADC) : NAVY, false, 5.5); });
     if (st.vt) s += dot(L, [st.vt.x, st.vt.y], st.zok && st.zok.vt != null ? (st.zok.vt ? OKC : BADC) : NAVY, false, 5.5);
   }
   if (st.mode === 'sides') {
@@ -900,7 +910,7 @@ var TOOLBARS = {      // the ONLY buttons each mode ever shows
   inequality: function () { return [{dashed: false, label: 'Solid line'}, {dashed: true, label: 'Dashed line'}, {act: 'undo', label: 'Undo', quiet: true}, {act: 'clear', label: 'Clear', quiet: true}]; },
   numberline: function () { return [{tool: 'closed', label: '● Closed point'}, {tool: 'open', label: '○ Open point'}, {tool: 'shade', label: 'Shade'}, {act: 'undo', label: 'Undo', quiet: true}, {act: 'clear', label: 'Clear', quiet: true}]; },
   asymptotes: function (input) { return [{tool: 'v', label: 'Vertical asymptote'}, {tool: 'h', label: 'Horizontal asymptote'}].concat(input && input.expected && input.expected.holes ? [{tool: 'hole', label: '○ Hole'}] : [], input && input.expected && input.expected.slant !== undefined ? [{tool: 'slant', label: 'Slant asymptote'}] : [], input && input.expected && input.expected.zeros ? [{tool: 'zero', label: '● x-intercept'}] : [], input && input.expected && input.expected.yint != null ? [{tool: 'yint', label: '● y-intercept'}] : [], [{act: 'undo', label: 'Undo', quiet: true}, {act: 'clear', label: 'Clear', quiet: true}]); },
-  parabola: function () { return [{dir: 'up', label: 'Opens up'}, {dir: 'down', label: 'Opens down'}, {act: 'undo', label: 'Undo', quiet: true}, {act: 'clear', label: 'Clear', quiet: true}]; },
+  parabola: function (input) { return (input && input.expected && input.expected.zeros ? [{tool: 'point', label: 'Vertex'}, {tool: 'zero', label: '● x-intercept'}] : []).concat([{dir: 'up', label: 'Opens up'}, {dir: 'down', label: 'Opens down'}, {act: 'undo', label: 'Undo', quiet: true}, {act: 'clear', label: 'Clear', quiet: true}]); },
   sides: function () { return [{act: 'undo', label: 'Undo', quiet: true}, {act: 'clear', label: 'Clear', quiet: true}]; },
   polysketch: function () { return [{end: {side: 'left', dir: 'up'}, label: 'Left end ↑'}, {end: {side: 'left', dir: 'down'}, label: 'Left end ↓'}, {end: {side: 'right', dir: 'up'}, label: 'Right end ↑'}, {end: {side: 'right', dir: 'down'}, label: 'Right end ↓'}, {act: 'undo', label: 'Undo', quiet: true}, {act: 'clear', label: 'Clear', quiet: true}]; }
 };

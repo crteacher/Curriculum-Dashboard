@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Graphing in Factored Form &mdash; Practice</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.css">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.7}
+  .container{max-width:820px;margin:0 auto;padding:2rem 1.5rem 4rem}
+  h1{font-size:26px;font-weight:700;margin-bottom:4px}
+  .subtitle{font-size:14px;color:#666;margin-bottom:2rem;font-family:sans-serif}
+  .section{margin-bottom:2.5rem}
+  .section-title{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;
+    color:#777;font-family:sans-serif;margin-bottom:1rem;border-bottom:1px solid #ddd;padding-bottom:6px}
+  .concept{background:#d9e8f5;border-left:4px solid #1e3a5c;border-radius:0 8px 8px 0;
+    padding:.85rem 1.1rem;font-size:15px;margin-bottom:1rem}
+  .concept-label{font-family:sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;
+    letter-spacing:.07em;color:#1e3a5c;display:block;margin-bottom:.35rem}
+  .score-bar{display:flex;align-items:center;gap:12px;margin-bottom:1.25rem;
+    font-family:sans-serif;font-size:14px;flex-wrap:wrap}
+  .score-display{font-weight:700;font-size:18px;min-width:60px}
+  .score-label{color:#777;font-size:13px}
+  .score-note{font-size:12px;color:#999;font-style:italic}
+  .progress{flex:1;min-width:80px;height:6px;background:#e5e1d8;border-radius:3px;overflow:hidden}
+  .progress-fill{height:100%;background:#1e3a5c;border-radius:3px;transition:width .4s}
+  .reset-btn{font-size:12px;background:none;border:1px solid #bbb;border-radius:5px;
+    padding:4px 10px;cursor:pointer;color:#666;font-family:sans-serif;white-space:nowrap}
+  .reset-btn:hover{background:#eee}
+  .problems{display:grid;grid-template-columns:repeat(auto-fill,minmax(370px,1fr));gap:14px}
+  .card{background:#fff;border:1.5px solid #ddd;border-radius:10px;overflow:hidden;transition:border-color .25s}
+  .card.correct{border-color:#3a7a3a}.card.wrong{border-color:#b03030}.card.peeked{border-color:#b8860b}
+  .card-body{padding:14px 16px}
+  .card-meta{font-family:sans-serif;font-size:12px;color:#888;margin-bottom:4px}
+  .card-expr{font-size:17px;margin-bottom:12px;line-height:2.2;overflow-x:auto}
+  .katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}
+  .input-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .ans-input{font-family:'Courier New',monospace;font-size:14px;border:1px solid #ccc;
+    border-radius:6px;padding:7px 10px;flex:1;min-width:120px;background:#fafaf8;
+    color:#1a1a1a;outline:none}
+  .ans-input:focus{border-color:#1e3a5c;background:#fff}
+  .ans-input.ok{border-color:#3a7a3a;background:#f0faf0}
+  .ans-input.bad{border-color:#b03030;background:#fdf0f0}
+  .check-btn{font-family:sans-serif;font-size:13px;background:#1a1a1a;color:#fff;
+    border:none;border-radius:6px;padding:7px 14px;cursor:pointer}
+  .check-btn:hover{background:#333}.check-btn:disabled{background:#aaa;cursor:default}
+  .hint{font-family:sans-serif;font-size:12px;color:#888;margin-top:7px}
+  .feedback{font-family:sans-serif;font-size:13px;margin-top:10px;padding:8px 12px;
+    border-radius:6px;display:none;line-height:1.5}
+  .feedback.correct{display:block;background:#eaf5ea;color:#1a5a1a}
+  .feedback.wrong{display:block;background:#faeaea;color:#7a1a1a}
+  .feedback.peeked{display:block;background:#fdf8e8;color:#7a5a00}
+  .reveal-link{font-family:sans-serif;font-size:12px;color:#999;cursor:pointer;
+    text-decoration:underline;margin-top:8px;display:inline-block}
+  .reveal-link:hover{color:#555}
+  .revealed-answer{display:none;margin-top:8px;font-family:sans-serif;font-size:13px;
+    color:#444;background:#f5f3ef;border-radius:6px;padding:8px 11px;line-height:1.8;overflow-x:auto}
+  code{font-family:'Courier New',monospace;background:#f0ede7;padding:1px 5px;border-radius:3px;font-size:12px}
+
+  .plot-card .card-expr{line-height:1.8;margin-bottom:8px}
+  .plot-card svg{max-width:100%;height:auto}
+  .problems{grid-auto-flow:dense}
+  .card.wide{grid-column:1/-1}
+  .plot-btns{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+
+.hint{display:none!important}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Graphing in Factored Form</h1>
+  <p class="subtitle">College Algebra &nbsp;&middot;&nbsp; &sect;4.3b &nbsp;&middot;&nbsp; Instructor: Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026</p>
+
+  <div class="section">
+    <div class="section-title">Core Ideas</div>
+
+  <div class="concept">
+    <span class="concept-label">Factored Form  f(x) = a(x − r₁)(x − r₂)</span>
+    The x-intercepts (zeros) are $x=r_1$ and $x=r_2$. Watch the signs: $(x+3)$ gives the zero $x=-3$.
+  </div>
+  <div class="concept">
+    <span class="concept-label">Getting to the vertex</span>
+    The parabola is symmetric, so the vertex sits <strong>exactly halfway between the zeros</strong>: $h=\dfrac{r_1+r_2}{2}$. Then find $k=f(h)$ by plugging $h$ in. The vertex form is $f(x)=a(x-h)^2+k$.
+  </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Practice Problems</div>
+    <p style="font-family:sans-serif;font-size:13px;color:#666;margin-bottom:1rem;">
+      Typed problems: integers, a pair like <code>-3,5</code> (smaller first), or a vertex form like <code>(x-1)^2-4</code> (write <code>-(x-1)^2+4</code> when it opens down). Press <strong>Check</strong> or hit Enter. Press <strong>Check</strong> or hit Enter.
+      Graph problems: use the <em>● x-intercept</em> tool to mark both zeros, the <em>Vertex</em> tool to mark the vertex, then choose <em>Opens up</em> or <em>Opens down</em>. Click a mark again to remove it.
+    </p>
+    <div class="score-bar">
+      <span class="score-label">Score:</span>
+      <span class="score-display" id="score">0 / 7</span>
+      <span class="score-note">first attempt only</span>
+      <div class="progress"><div class="progress-fill" id="prog" style="width:0%"></div></div>
+      <button class="reset-btn" onclick="resetAll()">New set &nbsp;&#8635;</button>
+    </div>
+    <div class="problems" id="problems"></div>
+  </div>
+</div>
+
+<script>
+// ── Crypto-quality RNG ────────────────────────────────────────────────────────
+function _rf() {
+  const b = new Uint32Array(1);
+  crypto.getRandomValues(b);
+  return b[0] / 4294967296;
+}
+function rInt(n)   { return Math.floor(_rf() * n); }
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = rInt(i + 1);
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+// Pick one element at random from an array  e.g. choose([1,4,9])
+function choose(arr) { return arr[rInt(arr.length)]; }
+
+// ── Display helpers ───────────────────────────────────────────────────────────
+// Leading coefficient: 1→'', -1→'-', else the number as a string
+function fc(a) { if (a===1) return ''; if (a===-1) return '-'; return String(a); }
+// Subsequent term with sign: addT(-2,'x')→' - 2x', addT(3,'')→' + 3', addT(0,'x')→''
+function addT(n, v) {
+  if (n===0) return '';
+  const s = n>0?'+':'-', abs = Math.abs(n);
+  if (abs===1 && v) return ' ' + s + ' ' + v;
+  return ' ' + s + ' ' + abs + (v||'');
+}
+
+// ── Problem generators (section-specific, injected below) ─────────────────────
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
+function fac(r) { return r === 0 ? 'x' : '(x' + (r > 0 ? '-' : '+') + Math.abs(r) + ')'; }
+function facL(a, r1, r2) { return fc(a) + fac(r1) + fac(r2); }     // a(x-r1)(x-r2) as text/LaTeX
+function vfT(a, h, k) {   // a(x-h)^2+k as text, a = +1 or -1
+  const sq = h === 0 ? 'x^2' : '(x' + (h > 0 ? '-' : '+') + Math.abs(h) + ')^2';
+  return (a < 0 ? '-' : '') + sq + (k ? (k > 0 ? '+' : '-') + Math.abs(k) : '');
+}
+function sameParity() {   // zeros of the same parity so the vertex has integer coordinates; r1 < r2
+  const d = choose([2, 4, 6]), r1 = choose([-6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6].filter(r => r + d <= 7 && r >= -7));
+  return [r1, r1 + d];
+}
+function pars() { const [r1, r2] = sameParity(), a = choose([-3, -2, -1, 1, 2, 3]); return {a, r1, r2, h: (r1 + r2) / 2, k: -a * (r2 - r1) * (r2 - r1) / 4}; }
+
+// typed cards
+function tZeros() {
+  let r1 = choose([-6, -5, -4, -3, -2, -1, 1, 2, 3, 4, 5, 6]), r2 = choose([-6, -5, -4, -3, -2, -1, 1, 2, 3, 4, 5, 6]);
+  if (r1 === r2) r2 = r1 > 0 ? r1 - 2 : r1 + 2; if (r1 > r2) [r1, r2] = [r2, r1];
+  const a = choose([-2, -1, 1, 2, 3]);
+  return {
+    latex:  'f(x)=' + facL(a, r1, r2) + '.\\quad\\text{Find the x-intercepts, smaller first (like }-3,5\\text{).}',
+    answer: [r1 + ',' + r2],
+    hint:   'Set each factor equal to zero.',
+    step:   'x-r_1=0,\\;x-r_2=0\\Rightarrow x=' + r1 + ',\\;x=' + r2
+  };
+}
+function tVertexX() {
+  const p = pars();
+  return {
+    latex:  'f(x)=' + facL(p.a, p.r1, p.r2) + '.\\quad\\text{Find the x-coordinate of the vertex.}',
+    answer: [String(p.h)],
+    hint:   'The vertex is halfway between the zeros.',
+    step:   'h=\\dfrac{' + p.r1 + '+' + (p.r2 < 0 ? '(' + p.r2 + ')' : p.r2) + '}{2}=' + p.h
+  };
+}
+function tVertexY() {
+  const p = pars();
+  return {
+    latex:  'f(x)=' + facL(p.a, p.r1, p.r2) + '.\\quad\\text{The vertex has }x=' + p.h + '.\\text{ Find its y-coordinate.}',
+    answer: [String(p.k)],
+    hint:   'Plug the x-coordinate into f.',
+    step:   'k=f(' + p.h + ')=' + p.a + '(' + (p.h - p.r1) + ')(' + (p.h - p.r2) + ')=' + p.k
+  };
+}
+function tVertexForm() {   // a = +1 or -1 only so the answer has one clean written form
+  const a = choose([1, -1]), p = pars(); p.a = a; p.k = -a * (p.r2 - p.r1) * (p.r2 - p.r1) / 4;
+  const vf = vfT(a, p.h, p.k), alt = a > 0 ? '1' + vf : '-1' + vf.slice(1);
+  return {
+    latex:  'f(x)=' + facL(a, p.r1, p.r2) + '.\\quad\\text{Write it in vertex form }a(x-h)^2+k.',
+    answer: [vf, alt, vf.replace(/\+-/g, '-')],
+    exact:  true,
+    hint:   'Find the midpoint of the zeros, then plug it in.',
+    step:   'h=' + p.h + ',\\;k=' + p.k + '\\Rightarrow f(x)=' + vf.replace(/\^2/g, '^2')
+  };
+}
+
+// graph cards (a = +1 or -1; window fixed at -8..8)
+function gFac(a, wide) {
+  const d = choose([2, 4]), r1 = choose([-6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4].filter(r => r + d <= 6)), r2 = r1 + d, h = r1 + d / 2, k = -a * d * d / 4, dir = a > 0 ? 'up' : 'down';
+  return {
+    html: 'Graph $f(x)=' + facL(a, r1, r2) + '$. Mark both x-intercepts and the vertex, then choose whether it opens up or down.',
+    wide: !!wide,
+    plot: {preset: 'plot-parabola', window: {x: [-8, 8], y: [-8, 8]}, size: wide ? {w: 560, h: 340} : {w: 380, h: 300}, ticks: {x: 2, y: 2}, expected: {h: h, k: k, a: a, zeros: [r1, r2]}},
+    hint: 'Zeros from the factors, vertex halfway between them.',
+    step: '\\text{Zeros: }' + r1 + ',\\,' + r2 + '.\\quad h=' + h + ',\\;k=f(' + h + ')=' + k + '.\\quad a=' + a + '\\Rightarrow\\text{opens ' + dir + '}'
+  };
+}
+const GENERATORS = [tZeros, tVertexX, tVertexY, tVertexForm, gFac];
+let PLOTS = {};   // card index -> GraphKit mount
+
+
+// ── State ─────────────────────────────────────────────────────────────────────
+let ACTIVE, correct, flags, attempted, peeked;
+
+function norm(s) {
+  return s.trim().toLowerCase()
+    .replace(/\s+/g, '')
+    .replace(/[−–]/g, '-')
+    .replace(/∞/g, 'inf')
+    .replace(/∪/g, 'u');
+}
+function ok(user, acc, exact) {
+  if (acc.some(a => norm(user) === norm(a))) return true;
+  if (exact) return false;
+  try { if (typeof MathCheck !== 'undefined' && /x/.test(acc[0])) return MathCheck.smart(user, acc).ok; } catch (e) {}
+  return false;
+}
+
+function init() {
+  // fixed order: 4 typed, 2 half-width graphs (one up, one down), 1 full-width graph
+  const sg = choose([1, -1]);
+  ACTIVE    = [tZeros(), tVertexX(), tVertexY(), tVertexForm(), gFac(sg), gFac(-sg), gFac(choose([1, -1]), true)];
+  correct   = 0;
+  flags     = Array(ACTIVE.length).fill(false);
+  attempted = Array(ACTIVE.length).fill(false);
+  peeked    = Array(ACTIVE.length).fill(false);
+}
+
+function _lth(s){let h='',r=s;while(r.length){const m=r.match(/^\\text\{([^}]*)\}/);if(m){h+=m[1];r=r.slice(m[0].length);}else{const n=r.indexOf('\\text{');if(n<0){h+=(r.trim()?'$'+r+'$':'');r='';}else{if(n>0)h+='$'+r.slice(0,n)+'$';r=r.slice(n);}}}return h;}
+function _re(p,i){const e=document.getElementById('expr-'+i),KO={delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false};if(p.svg){e.innerHTML=p.svg;}else if(p.html){e.innerHTML=p.html;renderMathInElement(e,KO);}else if(p.latex&&/\\text\{/.test(p.latex)){e.innerHTML=_lth(p.latex);renderMathInElement(e,KO);}else{katex.render(p.latex,e,{throwOnError:false,displayMode:true});}}
+function buildCards() {
+  const wrap = document.getElementById('problems');
+  wrap.innerHTML = '';
+  PLOTS = {};
+  ACTIVE.forEach((p, i) => {
+    const div = document.createElement('div');
+    div.className = 'card' + (p.plot ? ' plot-card' : '') + (p.wide ? ' wide' : ''); div.id = 'card-' + i;
+    const body = p.plot
+      ? `<div id="gk-${i}"></div>
+        <div class="plot-btns">
+          <button class="check-btn" id="chk-${i}" onclick="check(${i})">Check</button>
+          <button class="reset-btn" id="rst-${i}" onclick="resetGraph(${i})">Reset graph</button>
+        </div>`
+      : `<div class="input-row">
+          <input class="ans-input" id="ai-${i}" placeholder="answer" />
+          <button class="check-btn" id="chk-${i}" onclick="check(${i})">Check</button>
+        </div>`;
+    div.innerHTML =
+      `<div class="card-body">
+        <div class="card-meta">Problem ${i + 1}</div>
+        <div class="card-expr" id="expr-${i}"></div>
+        ${body}
+        <div class="hint">${p.hint}</div>
+        <div class="feedback" id="fb-${i}"></div>
+        <span class="reveal-link" id="rl-${i}" onclick="reveal(${i})">Show solution</span>
+        <div class="revealed-answer" id="ra-${i}"></div>
+      </div>`;
+    wrap.appendChild(div);
+    if (p.plot) {
+      if (typeof GraphKit !== 'undefined') PLOTS[i] = GraphKit.mount(document.getElementById('gk-' + i), Object.assign({}, p.plot, { quietFeedback: true }));
+      else document.getElementById('gk-' + i).textContent = 'The graph tool did not load. Please reload the page.';
+    } else {
+      document.getElementById('ai-' + i).addEventListener('keydown', e => { if (e.key === 'Enter') check(i); });
+    }
+    _re(p, i);
+  });
+}
+
+function resetGraph(i) {
+  const g = PLOTS[i]; if (!g || flags[i]) return;
+  g.reset();
+  const fb = document.getElementById('fb-' + i); fb.className = 'feedback'; fb.textContent = '';
+  document.getElementById('card-' + i).className = 'card plot-card' + (ACTIVE[i].wide ? ' wide' : '') + (peeked[i] ? ' peeked' : '');
+}
+
+function check(i) {
+  if (ACTIVE[i].plot) return checkPlot(i);
+  const p = ACTIVE[i], inp = document.getElementById('ai-'+i),
+        fb = document.getElementById('fb-'+i), card = document.getElementById('card-'+i),
+        good = ok(inp.value, p.answer, p.exact);
+  inp.className = 'ans-input';
+  if (good) {
+    inp.className = 'ans-input ok'; fb.className = 'feedback correct';
+    fb.textContent = '✓ Correct!'; card.className = 'card correct';
+    if (!flags[i] && !attempted[i] && !peeked[i]) { flags[i]=true; correct++; updateScore(); }
+    attempted[i] = true;
+    document.getElementById('chk-'+i).disabled = true; inp.readOnly = true;
+  } else {
+    attempted[i] = true; inp.className = 'ans-input bad'; fb.className = 'feedback wrong';
+    fb.textContent = '✗ Not quite — try again or show the solution.';
+    card.className = peeked[i] ? 'card peeked' : 'card wrong';
+  }
+}
+
+function checkPlot(i) {
+  const g = PLOTS[i], fb = document.getElementById('fb-' + i), card = document.getElementById('card-' + i);
+  if (!g) return;
+  const r = g.grade();
+  if (r.ok) {
+    fb.className = 'feedback correct'; fb.textContent = '✓ Correct!'; card.className = 'card plot-card' + (ACTIVE[i].wide ? ' wide' : '') + ' correct';
+    if (!flags[i] && !attempted[i] && !peeked[i]) { flags[i] = true; correct++; updateScore(); }
+    attempted[i] = true; g.lock(true);
+    document.getElementById('chk-' + i).disabled = true; document.getElementById('rst-' + i).disabled = true;
+  } else {
+    attempted[i] = true; fb.className = 'feedback wrong';
+    fb.textContent = '✗ ' + (r.detail || 'Not quite.') + ' Adjust your marks and press Check again, or Reset graph.';
+    card.className = 'card plot-card' + (ACTIVE[i].wide ? ' wide' : '') + (peeked[i] ? ' peeked' : ' wrong');
+  }
+}
+
+function reveal(i) {
+  const p = ACTIVE[i], box = document.getElementById('ra-'+i),
+        lnk = document.getElementById('rl-'+i);
+  if (box.style.display === 'block') {
+    box.style.display = 'none'; lnk.textContent = 'Show solution';
+  } else {
+    if (!flags[i]) {
+      peeked[i] = true; document.getElementById('card-'+i).className = 'card' + (p.plot ? ' plot-card' : '') + (p.wide ? ' wide' : '') + ' peeked';
+      if (!attempted[i]) {
+        const fb = document.getElementById('fb-'+i);
+        fb.className = 'feedback peeked';
+        fb.textContent = '⚠ Solution revealed — no point awarded.';
+      }
+    }
+    if (PLOTS[i]) PLOTS[i].showAnswer();
+    box.innerHTML = '<strong>Solution:</strong><br>';
+    const span = document.createElement('span'); box.appendChild(span);
+    katex.render(p.step, span, { throwOnError: false, displayMode: true });
+    box.style.display = 'block'; lnk.textContent = 'Hide solution';
+  }
+}
+
+function updateScore() {
+  const n = ACTIVE.length;
+  document.getElementById('score').textContent = correct + ' / ' + n;
+  document.getElementById('prog').style.width = Math.round(correct / n * 100) + '%';
+}
+
+function resetAll() { init(); buildCards(); updateScore(); }
+</script>
+
+<script src="../js/mathcheck.js"></script>
+<script src="../js/graphkit.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/contrib/auto-render.min.js"></script>
+<script>
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left: '$$', right: '$$', display: true},
+      {left: '$',  right: '$',  display: false}
+    ]
+  });
+  init(); buildCards(); updateScore();
+</script>
+</body>
+</html>

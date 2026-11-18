@@ -148,78 +148,88 @@ details[open]>.proof-toggle{color:#1e3a5c}
 <div class="container">
 <h1 class="page-title">Completing the Square</h1>
 <p class="page-sub">College Algebra &nbsp;&middot;&nbsp; &sect;4.4 &nbsp;&middot;&nbsp; Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026 &nbsp;&middot;&nbsp; <strong>INSTRUCTOR</strong></p>
-<div class="opening-q">The identity $x^2 + bx = \left(x + \frac{b}{2}\right)^2 - \left(\frac{b}{2}\right)^2$ turns a binomial into a perfect square minus a constant. What does that tell you about $x^2 + 6x$, and why is that useful for solving equations?</div>
+<div class="opening-q">Vertex form shows the turning point and factored form shows the zeros, but quadratics often arrive as $x^2+6x+5$. Is there a method that turns standard form into <em>both</em> of the other forms? And if you ran that method on $ax^2+bx+c$ with letters instead of numbers, what would you get?</div>
 <div class="two-col">
-<div class="col"><div class="section-head">The Completing-the-Square Identity</div>
-<div class="accent-box"><p><strong>Key identity:</strong><br>$x^2 + bx = \left(x + \dfrac{b}{2}\right)^2 - \left(\dfrac{b}{2}\right)^2$</p><p><strong>Steps to rewrite $x^2 + bx + c$ in vertex form:</strong></p><ol style='margin-left:1.2rem;margin-top:.3rem'><li>Take half of the $x$-coefficient: $\dfrac{b}{2}$</li><li>Square it: $\left(\dfrac{b}{2}\right)^2$</li><li>Add and subtract that value</li><li>Write as $(x + \frac{b}{2})^2 + \text{remainder}$</li></ol><p>e.g. $x^2 + 8x = (x+4)^2 - 16$</p></div>
-<details class="proof-panel">
+<div class="col"><div class="section-head">Standard to Vertex Form</div>
+<div class="accent-box"><p><strong>Key identity:</strong> $x^2+bx=\left(x+\dfrac b2\right)^2-\left(\dfrac b2\right)^2$</p><ol style='margin-left:1.2rem;margin-top:.3rem'><li>If $a\neq1$, factor $a$ out of the $x^2$ and $x$ terms.</li><li>Take half the $x$-coefficient and square it.</li><li>Add and subtract it inside the parentheses; the first three terms become a perfect square.</li><li>Collect the constants: this is $a(x-h)^2+k$.</li></ol><p>$x^2+6x+5=(x+3)^2-9+5=(x+3)^2-4$</p></div><details class="proof-panel">
 <summary class="proof-toggle">▸ Show Proof</summary>
 <div class="proof-body">
-  <p>The identity says $x^2 + bx = \left(x + \dfrac{b}{2}\right)^2 - \left(\dfrac{b}{2}\right)^2$. Verify by expanding the right side:</p>
-  <p>$$\left(x + \frac{b}{2}\right)^2 - \left(\frac{b}{2}\right)^2 = x^2 + 2\cdot x\cdot\frac{b}{2} + \frac{b^2}{4} - \frac{b^2}{4} = x^2 + bx$$</p>
-  <p>The $\dfrac{b^2}{4}$ terms cancel, leaving exactly $x^2 + bx$. This shows why the rule is "take half the middle coefficient, square it, add and subtract" &mdash; adding a perfect square converts the binomial into one without changing its value.</p>
+  <p>Expand the right side of the identity:</p>
+  <p>$$\left(x+\frac b2\right)^2-\left(\frac b2\right)^2=x^2+bx+\frac{b^2}{4}-\frac{b^2}{4}=x^2+bx.$$</p>
+  <p>The $\frac{b^2}{4}$ terms cancel, so adding and subtracting the square of half the coefficient does not change the value.</p>
   <p class="proof-qed">∎</p>
 </div>
 </details>
 </div>
-<div class="col"><div class="section-head">Solving with the Identity</div>
-<div class="accent-box"><p><strong>Solve $x^2 + bx + c = 0$:</strong></p><ol style='margin-left:1.2rem;margin-top:.3rem'><li>Move constant: $x^2 + bx = -c$</li><li>Complete the square on left, add same to right</li><li>Write as perfect square: $(x+h)^2 = k$</li><li>Take square root: $x + h = \pm\sqrt{k}$</li><li>Solve for $x$</li></ol><p>e.g. $(x+3)^2 = 16$:<br>$x + 3 = \pm 4 \Rightarrow x = 1$ or $x = -7$</p></div>
+<div class="col"><div class="section-head">Vertex to Factored Form</div>
+<div class="accent-box"><p>The zeros are where $f(x)=0$:</p><ol style='margin-left:1.2rem;margin-top:.3rem'><li>Set $a(x-h)^2+k=0$.</li><li>Isolate the square: $(x-h)^2=-\dfrac ka$.</li><li>Take square roots: $x=h\pm\sqrt{-k/a}$.</li><li>Write $f(x)=a(x-r_1)(x-r_2)$.</li></ol><p>$(x+3)^2-4=0\Rightarrow x+3=\pm2\Rightarrow x=-1,\,-5$<br>So $x^2+6x+5=(x+1)(x+5)$.</p><p>If $-k/a<0$ there are no real zeros; if it is not a perfect square the zeros are irrational and factoring would not have found them.</p></div></div>
 </div>
+<div class="section-head">The Same Steps on $ax^2+bx+c$: the Quadratic Formula</div>
+<div class="accent-box"><p>Do exactly those steps with letters. The result is $\left(x+\dfrac{b}{2a}\right)^2=\dfrac{b^2-4ac}{4a^2}$, which gives the formula you will use next section.</p></div><details class="proof-panel">
+<summary class="proof-toggle">▸ Show Proof</summary>
+<div class="proof-body">
+  <p>Solve $ax^2+bx+c=0$ by completing the square.</p>
+  <p>Divide by $a$ and move the constant: $$x^2+\frac ba\,x=-\frac ca.$$</p>
+  <p>Add $\left(\frac{b}{2a}\right)^2$ to both sides: $$x^2+\frac ba\,x+\frac{b^2}{4a^2}=\frac{b^2}{4a^2}-\frac ca=\frac{b^2-4ac}{4a^2}.$$</p>
+  <p>The left side is a perfect square: $$\left(x+\frac{b}{2a}\right)^2=\frac{b^2-4ac}{4a^2}.$$</p>
+  <p>Take square roots: $$x+\frac{b}{2a}=\pm\frac{\sqrt{b^2-4ac}}{2a}\quad\Rightarrow\quad x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}.$$</p>
+  <p class="proof-qed">∎</p>
 </div>
+</details>
 <div class="section-head">Worked Examples</div>
 <div class="examples-grid">
 <div class="ex-block">
-  <div class="ex-label">Example 1 &nbsp;&mdash;&nbsp; Rewrite as a perfect square</div>
-  <div class="ex-body">Rewrite $x^2 + 8x$ by completing the square.</div>
-  <div class="ex-answer instructor">$\left(\frac{8}{2}\right)^2 = 16$; &nbsp; $x^2 + 8x = (x+4)^2 - 16$</div>
+  <div class="ex-label">Example 1 &nbsp;&mdash;&nbsp; Standard to vertex form</div>
+  <div class="ex-body">Write $f(x)=x^2+6x+5$ in vertex form and find the vertex.</div>
+  <div class="ex-answer instructor">Half of $6$ is $3$; $3^2=9$.<br>$f(x)=(x+3)^2-9+5=(x+3)^2-4$. Vertex $(-3,-4)$.</div>
 </div>
 <div class="ex-block">
-  <div class="ex-label">Example 2 &nbsp;&mdash;&nbsp; Solve by completing the square</div>
-  <div class="ex-body">Solve $x^2 + 6x + 5 = 0$ by completing the square.</div>
-  <div class="ex-answer instructor">$x^2+6x=-5 \Rightarrow (x+3)^2=4 \Rightarrow x+3=\pm 2$<br>$x=-1$ or $x=-5$</div>
+  <div class="ex-label">Example 2 &nbsp;&mdash;&nbsp; Vertex to factored form</div>
+  <div class="ex-body">Use $f(x)=(x+3)^2-4$ to find the zeros and write $f$ in factored form.</div>
+  <div class="ex-answer instructor">$(x+3)^2=4\Rightarrow x+3=\pm2\Rightarrow x=-1,\,-5$<br>$f(x)=(x+1)(x+5)$. Check: $x^2+6x+5$. &check;</div>
 </div>
 <div class="ex-block">
-  <div class="ex-label">Example 3 &nbsp;&mdash;&nbsp; Negative constant</div>
-  <div class="ex-body">Solve $x^2 - 4x - 5 = 0$ by completing the square.</div>
-  <div class="ex-answer instructor">$x^2-4x=5 \Rightarrow (x-2)^2=9 \Rightarrow x-2=\pm 3$<br>$x=5$ or $x=-1$</div>
+  <div class="ex-label">Example 3 &nbsp;&mdash;&nbsp; When $a\neq1$</div>
+  <div class="ex-body">For $f(x)=2x^2-8x-10$ find vertex form, zeros, and factored form.</div>
+  <div class="ex-answer instructor">$f=2(x^2-4x)-10=2\big[(x-2)^2-4\big]-10=2(x-2)^2-18$<br>$2(x-2)^2=18\Rightarrow x-2=\pm3\Rightarrow x=5,\,-1$<br>$f(x)=2(x-5)(x+1)$</div>
 </div>
 <div class="ex-block">
-  <div class="ex-label">Example 4 &nbsp;&mdash;&nbsp; Already in vertex form</div>
-  <div class="ex-body">Solve $(x+3)^2 = 16$.</div>
-  <div class="ex-answer instructor">$x+3=\pm 4 \Rightarrow x=1$ or $x=-7$</div>
+  <div class="ex-label">Example 4 &nbsp;&mdash;&nbsp; Use the proof's result</div>
+  <div class="ex-body">Solve $x^2+2x-1=0$ using $\left(x+\frac{b}{2a}\right)^2=\frac{b^2-4ac}{4a^2}$.</div>
+  <div class="ex-answer instructor">$a=1,b=2,c=-1$: $\dfrac{b^2-4ac}{4a^2}=\dfrac{8}{4}=2$<br>$(x+1)^2=2\Rightarrow x=-1\pm\sqrt2$ (irrational, so factoring would not work)</div>
 </div>
 </div>
 <div class="section-head">Practice Problems</div>
 <div class="practice">
 <div class="pr-row">
   <div class="pr-num">1.</div>
-  <div class="pr-prob">Rewrite $x^2 + 10x$ by completing the square.</div>
-  <div class="pr-ans instructor">$(x+5)^2 - 25$</div>
+  <div class="pr-prob">Write $f(x)=x^2+10x+9$ in vertex form.</div>
+  <div class="pr-ans instructor">$(x+5)^2-16$</div>
 </div>
 <div class="pr-row">
   <div class="pr-num">2.</div>
-  <div class="pr-prob">Rewrite $x^2 - 6x$ by completing the square.</div>
-  <div class="pr-ans instructor">$(x-3)^2 - 9$</div>
+  <div class="pr-prob">For $f(x)=x^2-6x+5$ give the vertex form and the zeros.</div>
+  <div class="pr-ans instructor">$(x-3)^2-4$; zeros $x=1,\,5$</div>
 </div>
 <div class="pr-row">
   <div class="pr-num">3.</div>
-  <div class="pr-prob">Solve $x^2 + 4x - 12 = 0$ by completing the square.</div>
-  <div class="pr-ans instructor">$(x+2)^2=16 \Rightarrow x=2$ or $x=-6$</div>
+  <div class="pr-prob">For $f(x)=2x^2+12x+10$ give the vertex and factored form.</div>
+  <div class="pr-ans instructor">$2(x+3)^2-8$, vertex $(-3,-8)$; zeros $-1,-5$; $f=2(x+1)(x+5)$</div>
 </div>
 <div class="pr-row">
   <div class="pr-num">4.</div>
-  <div class="pr-prob">Solve $x^2 - 8x + 7 = 0$ by completing the square.</div>
-  <div class="pr-ans instructor">$(x-4)^2=9 \Rightarrow x=7$ or $x=1$</div>
+  <div class="pr-prob">For $f(x)=-x^2+4x+5$ give vertex form and factored form.</div>
+  <div class="pr-ans instructor">$-(x-2)^2+9$; zeros $5,-1$; $f=-(x-5)(x+1)$</div>
 </div>
 <div class="pr-row">
   <div class="pr-num">5.</div>
-  <div class="pr-prob">Solve $(x-5)^2 = 9$.</div>
-  <div class="pr-ans instructor">$x-5=\pm 3 \Rightarrow x=8$ or $x=2$</div>
+  <div class="pr-prob">Solve $x^2+4x-1=0$ by completing the square.</div>
+  <div class="pr-ans instructor">$(x+2)^2=5\Rightarrow x=-2\pm\sqrt5$</div>
 </div>
 <div class="pr-row">
   <div class="pr-num">6.</div>
-  <div class="pr-prob">Solve $x^2 + 2x - 3 = 0$ by completing the square.</div>
-  <div class="pr-ans instructor">$(x+1)^2=4 \Rightarrow x=1$ or $x=-3$</div>
+  <div class="pr-prob">Solve $2x^2+4x-6=0$ using $\left(x+\frac{b}{2a}\right)^2=\frac{b^2-4ac}{4a^2}$.</div>
+  <div class="pr-ans instructor">$\dfrac{16+48}{16}=4$, so $(x+1)^2=4\Rightarrow x=1,\,-3$</div>
 </div>
 </div>
 
@@ -242,5 +252,9 @@ function toggleAns(btn) {
   });
 </script>
 <!-- proof-layer:done -->
+<style>.gk-fig svg{max-width:100%;height:auto;display:block;margin:.4rem auto 0}</style>
+<script src="../js/mathcheck.js"></script>
+<script src="../js/graphkit.js"></script>
+<script>document.querySelectorAll('.gk-fig').forEach(function(e){try{e.innerHTML=GraphKit.svg(JSON.parse(e.getAttribute('data-gk')));}catch(x){}});</script>
 </body>
 </html>

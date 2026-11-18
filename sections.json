@@ -1626,55 +1626,55 @@
     {
       "id": "CA_4_3",
       "section": "4.3",
-      "title": "Graphing Quadratics",
-      "swbat": "graph parabolas and identify vertex, axis of symmetry, and intercepts",
+      "title": "Graphing in Vertex Form",
+      "swbat": "read the vertex, axis, direction, and y-intercept from vertex form and graph the parabola",
       "practiceFile": "CA_4_3_Graphing_Quadratics_Practice.html",
       "hasPractice": true,
-      "doNowQ": "A football thrown in the air, an arch on a bridge, the cables of a suspension bridge &mdash; all parabolas. The equation $f(x)=ax^2+bx+c$ controls everything: which way it opens, how wide, and where the turning point sits. Before graphing anything, what single number in the equation tells you whether the parabola opens up or down?",
-      "exitTicket": "$f(x)=-x^2+4x+1$. Does the parabola open up or down? Find the vertex.",
-      "exitTicketAnswer": "Opens down; $h=2$, $k=5$ &rarr; vertex $(2,5)$",
+      "doNowQ": "A parabola has one most important point, its turning point. If $f(x)=a(x-h)^2+k$, which two numbers in the equation tell you exactly where that point is, and what single number tells you whether it is a peak or a valley?",
+      "exitTicket": "$f(x)=-(x-2)^2+7$. Does the parabola open up or down? Find the vertex and the $y$-intercept.",
+      "exitTicketAnswer": "Opens down; vertex $(2,7)$; $f(0)=-4+7=3$, so $y$-intercept $(0,3)$",
       "workedExamples": [
         {
-          "problem": "Find the vertex of $f(x)=x^2-6x+5$.",
-          "answer": "$h=\\dfrac{6}{2}=3$, &ensp; $k=9-18+5=-4$Vertex: $(3,-4)$"
+          "problem": "State the vertex and direction of $f(x)=2(x-3)^2+1$.",
+          "answer": "$h=3$, $k=1$, $a=2>0$: vertex $(3,1)$, opens up"
         },
         {
-          "problem": "State vertex and direction for $g(x)=-2(x+1)^2+5$.",
-          "answer": "$h=-1$, $k=5$, $a=-2Vertex: $(-1,5)$ &mdash; maximum"
+          "problem": "Graph $g(x)=-(x+2)^2+3$.",
+          "answer": "$h=-2$, $k=3$, opens down: vertex $(-2,3)$"
         },
         {
-          "problem": "Find the $y$-intercept of $f(x)=x^2+2x-8$.",
-          "answer": "Set $x=0$: $f(0)=-8$$y$-intercept: $(0,-8)$"
+          "problem": "Find the $y$-intercept of $f(x)=(x-3)^2-1$.",
+          "answer": "$f(0)=8$, so $(0,8)$"
         },
         {
-          "problem": "Find the axis of symmetry of $f(x)=2x^2+8x+3$.",
-          "answer": "$x=-\\dfrac{8}{4}=-2$ &ensp; Axis: $x=-2$"
+          "problem": "A parabola has vertex $(1,-2)$ and passes through $(3,2)$. Write its equation.",
+          "answer": "$a=1$: $f(x)=(x-1)^2-2$"
         }
       ],
       "practiceProblems": [
         {
-          "problem": "$f(x)=x^2+6x+4$. Find the $x$-coordinate of the vertex.",
-          "answer": "$h=-3$"
+          "problem": "Find the vertex of $f(x)=3(x+4)^2-2$.",
+          "answer": "$(-4,-2)$"
         },
         {
-          "problem": "$f(x)=-(x-2)^2+7$. State the vertex and direction.",
-          "answer": "$(2,7)$, opens down"
+          "problem": "$f(x)=-(x-2)^2+7$. Maximum or minimum? Value and where?",
+          "answer": "Maximum $7$ at $x=2$"
         },
         {
-          "problem": "$f(x)=x^2-4x+1$. Find the vertex.",
-          "answer": "$h=2$, $k=-3$ &rarr; $(2,-3)$"
+          "problem": "Find the axis of symmetry of $f(x)=(x+5)^2-1$.",
+          "answer": "$x=-5$"
         },
         {
-          "problem": "$f(x)=3x^2-12x+5$. Find the axis of symmetry.",
-          "answer": "$x=-(-12)/(6)=2$"
+          "problem": "Find the $y$-intercept of $f(x)=2(x-1)^2-3$.",
+          "answer": "$(0,-1)$"
         },
         {
-          "problem": "$f(x)=x^2-2x-8$. Find the $y$-intercept.",
-          "answer": "$(0,-8)$"
+          "problem": "Graph $f(x)=(x-2)^2-3$.",
+          "answer": "Vertex $(2,-3)$, opens up"
         },
         {
-          "problem": "$f(x)=-x^2+4x+1$. Does the parabola open up or down? Find the vertex.",
-          "answer": "Opens down; $h=2$, $k=5$ &rarr; vertex $(2,5)$"
+          "problem": "Vertex $(-1,4)$, passes through $(1,0)$. Write the equation.",
+          "answer": "$f(x)=-(x+1)^2+4$"
         }
       ],
       "reviewProblems": [
@@ -1696,57 +1696,113 @@
       "notesFile": "CA_4_3_Graphing_Quadratics"
     },
     {
-      "id": "CA_4_4",
-      "section": "4.4",
-      "title": "Completing the Square",
-      "swbat": "solve quadratic equations by completing the square and convert to vertex form",
-      "practiceFile": "CA_4_4_Completing_Square_Practice.html",
+      "id": "CA_4_3b",
+      "section": "4.3b",
+      "title": "Graphing in Factored Form",
+      "swbat": "find zeros, vertex, and y-intercept from factored form, and convert to vertex form using the midpoint of the zeros",
+      "practiceFile": "CA_4_3b_Graphing_in_Factored_Form_Practice.html",
       "hasPractice": true,
-      "doNowQ": "The identity $x^2 + bx = \\left(x + \\frac{b}{2}\\right)^2 - \\left(\\frac{b}{2}\\right)^2$ turns a binomial into a perfect square minus a constant. What does that tell you about $x^2 + 6x$, and why is that useful for solving equations?",
-      "exitTicket": "Solve $x^2 + 2x - 3 = 0$ by completing the square.",
-      "exitTicketAnswer": "$(x+1)^2=4 \\Rightarrow x=1$ or $x=-3$",
+      "doNowQ": "Consider $f(x)=(x-1)(x-5)$. Without graphing, where does this parabola cross the $x$-axis? Because a parabola is symmetric, where must its turning point be, left to right?",
+      "exitTicket": "$f(x)=(x+1)(x-5)$. Find the zeros, the vertex, and write $f$ in vertex form.",
+      "exitTicketAnswer": "Zeros $-1,5$; $h=2$, $k=(3)(-3)=-9$; vertex $(2,-9)$; $f(x)=(x-2)^2-9$",
       "workedExamples": [
         {
-          "problem": "Rewrite $x^2 + 8x$ by completing the square.",
-          "answer": "$\\left(\\frac{8}{2}\\right)^2 = 16$; &nbsp; $x^2 + 8x = (x+4)^2 - 16$"
+          "problem": "For $f(x)=-2(x+3)(x-1)$ find the zeros, direction, and $y$-intercept.",
+          "answer": "Zeros $-3,1$; opens down; $(0,6)$"
         },
         {
-          "problem": "Solve $x^2 + 6x + 5 = 0$ by completing the square.",
-          "answer": "$x^2+6x=-5 \\Rightarrow (x+3)^2=4 \\Rightarrow x+3=\\pm 2$$x=-1$ or $x=-5$"
+          "problem": "Write $f(x)=(x+1)(x-5)$ in vertex form.",
+          "answer": "$h=2$, $k=-9$: $f(x)=(x-2)^2-9$"
         },
         {
-          "problem": "Solve $x^2 - 4x - 5 = 0$ by completing the square.",
-          "answer": "$x^2-4x=5 \\Rightarrow (x-2)^2=9 \\Rightarrow x-2=\\pm 3$$x=5$ or $x=-1$"
+          "problem": "Graph $f(x)=-(x-1)(x-5)$.",
+          "answer": "Zeros $1,5$; vertex $(3,4)$; opens down"
         },
         {
-          "problem": "Solve $(x+3)^2 = 16$.",
-          "answer": "$x+3=\\pm 4 \\Rightarrow x=1$ or $x=-7$"
+          "problem": "Zeros $1$ and $3$, passes through $(0,-6)$. Write the equation.",
+          "answer": "$a=-2$: $f(x)=-2(x-1)(x-3)$"
         }
       ],
       "practiceProblems": [
         {
-          "problem": "Rewrite $x^2 + 10x$ by completing the square.",
-          "answer": "$(x+5)^2 - 25$"
+          "problem": "Find the zeros of $f(x)=(x-4)(x+2)$.",
+          "answer": "$4,-2$"
         },
         {
-          "problem": "Rewrite $x^2 - 6x$ by completing the square.",
-          "answer": "$(x-3)^2 - 9$"
+          "problem": "Find the x-coordinate of the vertex of $f(x)=(x+3)(x-7)$.",
+          "answer": "$2$"
         },
         {
-          "problem": "Solve $x^2 + 4x - 12 = 0$ by completing the square.",
-          "answer": "$(x+2)^2=16 \\Rightarrow x=2$ or $x=-6$"
+          "problem": "Find the vertex of $f(x)=(x-1)(x-7)$.",
+          "answer": "$(4,-9)$"
         },
         {
-          "problem": "Solve $x^2 - 8x + 7 = 0$ by completing the square.",
-          "answer": "$(x-4)^2=9 \\Rightarrow x=7$ or $x=1$"
+          "problem": "Write $f(x)=-(x+2)(x-4)$ in vertex form.",
+          "answer": "$-(x-1)^2+9$"
         },
         {
-          "problem": "Solve $(x-5)^2 = 9$.",
-          "answer": "$x-5=\\pm 3 \\Rightarrow x=8$ or $x=2$"
+          "problem": "Find the $y$-intercept of $f(x)=2(x+1)(x-3)$.",
+          "answer": "$(0,-6)$"
         },
         {
-          "problem": "Solve $x^2 + 2x - 3 = 0$ by completing the square.",
-          "answer": "$(x+1)^2=4 \\Rightarrow x=1$ or $x=-3$"
+          "problem": "Graph $f(x)=(x+4)(x-2)$.",
+          "answer": "Zeros $-4,2$; vertex $(-1,-9)$; opens up"
+        }
+      ],
+      "notesFile": "CA_4_3b_Graphing_in_Factored_Form"
+    },
+    {
+      "id": "CA_4_4",
+      "section": "4.4",
+      "title": "Completing the Square",
+      "swbat": "convert standard form to vertex form and factored form by completing the square, and see the quadratic formula come from the same steps",
+      "practiceFile": "CA_4_4_Completing_Square_Practice.html",
+      "hasPractice": true,
+      "doNowQ": "Vertex form shows the turning point and factored form shows the zeros, but quadratics often arrive as $x^2+6x+5$. Is there a method that turns standard form into both of the other forms? And if you ran that method on $ax^2+bx+c$ with letters instead of numbers, what would you get?",
+      "exitTicket": "Write $f(x)=x^2+6x+5$ in vertex form, then use it to find the zeros.",
+      "exitTicketAnswer": "$(x+3)^2-4$; $(x+3)^2=4\\Rightarrow x=-1,-5$",
+      "workedExamples": [
+        {
+          "problem": "Write $f(x)=x^2+6x+5$ in vertex form and find the vertex.",
+          "answer": "$(x+3)^2-4$; vertex $(-3,-4)$"
+        },
+        {
+          "problem": "Use $f(x)=(x+3)^2-4$ to find the zeros and write $f$ in factored form.",
+          "answer": "$x=-1,-5$; $f(x)=(x+1)(x+5)$"
+        },
+        {
+          "problem": "For $f(x)=2x^2-8x-10$ find vertex form, zeros, and factored form.",
+          "answer": "$2(x-2)^2-18$; zeros $5,-1$; $2(x-5)(x+1)$"
+        },
+        {
+          "problem": "Solve $x^2+2x-1=0$ using $\\left(x+\\frac{b}{2a}\\right)^2=\\frac{b^2-4ac}{4a^2}$.",
+          "answer": "$(x+1)^2=2\\Rightarrow x=-1\\pm\\sqrt2$"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "problem": "Write $f(x)=x^2+10x+9$ in vertex form.",
+          "answer": "$(x+5)^2-16$"
+        },
+        {
+          "problem": "For $f(x)=x^2-6x+5$ give vertex form and zeros.",
+          "answer": "$(x-3)^2-4$; zeros $1,5$"
+        },
+        {
+          "problem": "For $f(x)=2x^2+12x+10$ give vertex and factored form.",
+          "answer": "$2(x+3)^2-8$; $2(x+1)(x+5)$"
+        },
+        {
+          "problem": "For $f(x)=-x^2+4x+5$ give vertex and factored form.",
+          "answer": "$-(x-2)^2+9$; $-(x-5)(x+1)$"
+        },
+        {
+          "problem": "Solve $x^2+4x-1=0$ by completing the square.",
+          "answer": "$-2\\pm\\sqrt5$"
+        },
+        {
+          "problem": "Solve $2x^2+4x-6=0$ using the proof's result.",
+          "answer": "$x=1,-3$"
         }
       ],
       "reviewProblems": [

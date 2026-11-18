@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Graphing Quadratics &mdash; Notes</title>
+<title>Graphing in Vertex Form &mdash; Notes</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.css">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -146,89 +146,81 @@ details[open]>.proof-toggle{color:#1e3a5c}
 </head>
 <body>
 <div class="container">
-<h1 class="page-title">Graphing Quadratics</h1>
+<h1 class="page-title">Graphing in Vertex Form</h1>
 <p class="page-sub">College Algebra &nbsp;&middot;&nbsp; &sect;4.3 &nbsp;&middot;&nbsp; Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026 &nbsp;&middot;&nbsp; <strong>STUDENT</strong></p>
-<div class="opening-q">A football thrown in the air, an arch on a bridge, the cables of a suspension bridge &mdash; all parabolas. The equation $f(x)=ax^2+bx+c$ controls everything: which way it opens, how wide, and where the turning point sits. Before graphing anything, what single number in the equation tells you whether the parabola opens up or down?</div>
-<div class="accent-box"><p><strong>What is a Quadratic?</strong><br>
-A <strong>quadratic function</strong> is any polynomial of degree 2. Its standard form is
-$$f(x) = ax^2 + bx + c, \quad a \neq 0$$
-where $a$, $b$, $c$ are real numbers and $a\neq 0$ ensures the degree is exactly 2.
-The graph of every quadratic is a <strong>parabola</strong> — a symmetric U-shaped (or ∩-shaped) curve.
-The number $a$ controls the direction and width; $b$ and $c$ shift the position.</p></div>
-<div class="two-col">
-<div class="col"><div class="section-head">Standard Form $f(x)=ax^2+bx+c$</div>
-<div class="accent-box"><p>$a>0$ &rarr; opens <strong>up</strong> (vertex is a minimum)<br>$a<0$ &rarr; opens <strong>down</strong> (vertex is a maximum)</p><p><strong>Axis of symmetry:</strong> $x=-\dfrac{b}{2a}$</p><p><strong>Vertex:</strong><br>&ensp; $x$-coordinate: $h=-\dfrac{b}{2a}$<br>&ensp; $y$-coordinate: $k=f(h)$</p><p><strong>$y$-intercept:</strong> always at $(0,c)$</p><p><em>Example:</em> $f(x)=x^2+4x+1$:<br>$h=-4/2=-2$, $k=4-8+1=-3$<br>Vertex: $(-2,-3)$ &ensp; Axis: $x=-2$</p></div>
+<div class="opening-q">A parabola has one most important point, its turning point. If $f(x)=a(x-h)^2+k$, which two numbers in the equation tell you exactly where that point is, and what single number tells you whether it is a peak or a valley?</div>
+<div class="accent-box"><p><strong>Vertex Form</strong>
+$$f(x)=a(x-h)^2+k,\quad a\neq0$$
+The graph is a <strong>parabola</strong> with <strong>vertex</strong> $(h,k)$ and <strong>axis of symmetry</strong> $x=h$. Nothing needs to be calculated: read $h$ and $k$ straight from the equation.</p></div><div class="two-col">
+<div class="col"><div class="section-head">Reading the Form</div>
+<div class="accent-box"><p>$a>0$ &rarr; opens <strong>up</strong>; the vertex is the <strong>minimum</strong> value $k$<br>$a<0$ &rarr; opens <strong>down</strong>; the vertex is the <strong>maximum</strong> value $k$<br>Larger $|a|$ &rarr; narrower parabola</p><p><strong>Watch the sign of $h$:</strong> $(x+2)^2=(x-(-2))^2$, so $h=-2$. The sign of $k$ is just as it appears.</p><p>$f(x)=2(x-3)^2+1$: vertex $(3,1)$, up<br>$f(x)=-(x+2)^2-4$: vertex $(-2,-4)$, down</p></div></div>
+<div class="col"><div class="section-head">Graphing Recipe</div>
+<div class="accent-box"><ol style='margin-left:1.2rem'><li>Read the vertex $(h,k)$ and plot it.</li><li>Check the sign of $a$: up or down.</li><li>Sketch the curve from the vertex, symmetric about $x=h$.</li></ol><p><strong>y-intercept:</strong> set $x=0$: $f(0)=ah^2+k$.</p><p><em>Example:</em> $f(x)=(x-3)^2-1$: $f(0)=9-1=8$, so $(0,8)$.</p></div></div>
+</div>
 <details class="proof-panel">
 <summary class="proof-toggle">▸ Show Proof</summary>
 <div class="proof-body">
-  <p>The axis of symmetry $x=-\dfrac{b}{2a}$ comes from completing the square.</p>
-  <p>Factor $a$ from the first two terms:</p>
-  <p>$$f(x) = a\left(x^2 + \frac{b}{a}x\right) + c$$</p>
-  <p>Complete the square inside the parentheses (add and subtract $\left(\frac{b}{2a}\right)^2$):</p>
-  <p>$$f(x) = a\left(x + \frac{b}{2a}\right)^2 + \left(c - \frac{b^2}{4a}\right)$$</p>
-  <p>This is vertex form $a(x-h)^2+k$ with $h = -\dfrac{b}{2a}$. Since $(x-h)^2\geq 0$, the minimum (if $a>0$) or maximum (if $a<0$) occurs at $x=h=-\dfrac{b}{2a}$ &mdash; the vertex's $x$-coordinate and the axis of symmetry.</p>
+  <p>Since $(x-h)^2\ge0$ for every $x$, we have $a(x-h)^2$ has the sign of $a$ (or is $0$).</p>
+  <p>If $a>0$: $f(x)=a(x-h)^2+k\ge k$, with equality only at $x=h$. So $(h,k)$ is the lowest point.</p>
+  <p>If $a<0$: $f(x)\le k$, with equality only at $x=h$. So $(h,k)$ is the highest point.</p>
+  <p>Symmetry: $f(h+t)=at^2+k=f(h-t)$, so points equally far left and right of $x=h$ have equal heights. The line $x=h$ is the axis of symmetry.</p>
   <p class="proof-qed">∎</p>
 </div>
 </details>
-</div>
-<div class="col"><div class="section-head">Vertex Form $f(x)=a(x-h)^2+k$</div>
-<div class="accent-box"><p>Vertex $(h,k)$ is read directly from the equation.</p><p>$f(x)=2(x-3)^2+1$ &rarr; vertex $(3,1)$, opens up</p><p>$f(x)=-(x+2)^2-4$: since $x+2=x-(-2)$, vertex $(-2,-4)$, opens down</p><p><strong>Finding the $y$-intercept from vertex form:</strong><br>Set $x=0$: $f(0)=ah^2+k$</p><p><em>Example:</em> $f(x)=(x-3)^2-1$:<br>$f(0)=9-1=8$ &rarr; $y$-intercept $(0,8)$</p></div>
-</div>
-</div>
 <div class="section-head">Worked Examples</div>
 <div class="examples-grid">
 <div class="ex-block">
-  <div class="ex-label">Example 1 &nbsp;&mdash;&nbsp; Vertex from standard form</div>
-  <div class="ex-body">Find the vertex of $f(x)=x^2-6x+5$.</div>
-  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">$h=\dfrac{6}{2}=3$, &ensp; $k=9-18+5=-4$<br>Vertex: $(3,-4)$</div></div>
+  <div class="ex-label">Example 1 &nbsp;&mdash;&nbsp; Read the vertex</div>
+  <div class="ex-body">State the vertex and direction of $f(x)=2(x-3)^2+1$.</div>
+  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">$h=3$, $k=1$, $a=2>0$<br>Vertex $(3,1)$, opens up (minimum value $1$)</div></div>
 </div>
 <div class="ex-block">
-  <div class="ex-label">Example 2 &nbsp;&mdash;&nbsp; Vertex from vertex form</div>
-  <div class="ex-body">State vertex and direction for $g(x)=-2(x+1)^2+5$.</div>
-  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">$h=-1$, $k=5$, $a=-2<0$ &rarr; opens down<br>Vertex: $(-1,5)$ &mdash; maximum</div></div>
+  <div class="ex-label">Example 2 &nbsp;&mdash;&nbsp; Watch the sign and graph it</div>
+  <div class="ex-body">Graph $g(x)=-(x+2)^2+3$.</div>
+  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">$x+2=x-(-2)$, so $h=-2$, $k=3$. $a=-1<0$: opens down.<br>Vertex $(-2,3)$, maximum value $3$.<div class="gk-fig" data-gk='{"draw":[{"type":"fn","f":"-(x+2)^2+3","color":"#1e3a5c"},{"type":"point","at":[-2,3]}],"window":{"x":[-8,8],"y":[-8,8]},"size":{"w":380,"h":300},"ticks":{"x":2,"y":2}}'></div></div></div>
 </div>
 <div class="ex-block">
-  <div class="ex-label">Example 3 &nbsp;&mdash;&nbsp; $y$-intercept</div>
-  <div class="ex-body">Find the $y$-intercept of $f(x)=x^2+2x-8$.</div>
-  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">Set $x=0$: $f(0)=-8$<br>$y$-intercept: $(0,-8)$</div></div>
+  <div class="ex-label">Example 3 &nbsp;&mdash;&nbsp; y-intercept</div>
+  <div class="ex-body">Find the $y$-intercept of $f(x)=(x-3)^2-1$.</div>
+  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">$f(0)=(0-3)^2-1=8$<br>$y$-intercept: $(0,8)$</div></div>
 </div>
 <div class="ex-block">
-  <div class="ex-label">Example 4 &nbsp;&mdash;&nbsp; Axis of symmetry</div>
-  <div class="ex-body">Find the axis of symmetry of $f(x)=2x^2+8x+3$.</div>
-  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">$x=-\dfrac{8}{4}=-2$ &ensp; Axis: $x=-2$</div></div>
+  <div class="ex-label">Example 4 &nbsp;&mdash;&nbsp; Find $a$</div>
+  <div class="ex-body">A parabola has vertex $(1,-2)$ and passes through $(3,2)$. Write its equation in vertex form.</div>
+  <div class="ex-answer student-interactive"><textarea class="st-work" placeholder="Your work…"></textarea><button class="st-btn" onclick="toggleAns(this)">Show Answer</button><div class="st-ans-hidden">$f(x)=a(x-1)^2-2$. Plug in $(3,2)$: $2=a(2)^2-2\Rightarrow 4a=4\Rightarrow a=1$<br>$f(x)=(x-1)^2-2$</div></div>
 </div>
 </div>
 <div class="section-head">Practice Problems</div>
 <div class="practice">
 <div class="pr-row">
   <div class="pr-num">1.</div>
-  <div class="pr-prob">$f(x)=x^2+6x+4$. Find the $x$-coordinate of the vertex.</div>
-  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$h=-3$</div></div>
+  <div class="pr-prob">Find the vertex of $f(x)=3(x+4)^2-2$.</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$(-4,-2)$</div></div>
 </div>
 <div class="pr-row">
   <div class="pr-num">2.</div>
-  <div class="pr-prob">$f(x)=-(x-2)^2+7$. State the vertex and direction.</div>
-  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$(2,7)$, opens down</div></div>
+  <div class="pr-prob">$f(x)=-(x-2)^2+7$. Does it have a maximum or minimum? What is its value, and where does it occur?</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">Opens down: maximum value $7$ at $x=2$</div></div>
 </div>
 <div class="pr-row">
   <div class="pr-num">3.</div>
-  <div class="pr-prob">$f(x)=x^2-4x+1$. Find the vertex.</div>
-  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$h=2$, $k=-3$ &rarr; $(2,-3)$</div></div>
+  <div class="pr-prob">Find the axis of symmetry of $f(x)=(x+5)^2-1$.</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$x=-5$</div></div>
 </div>
 <div class="pr-row">
   <div class="pr-num">4.</div>
-  <div class="pr-prob">$f(x)=3x^2-12x+5$. Find the axis of symmetry.</div>
-  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$x=-(-12)/(6)=2$</div></div>
+  <div class="pr-prob">Find the $y$-intercept of $f(x)=2(x-1)^2-3$.</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$f(0)=2-3=-1$, so $(0,-1)$</div></div>
 </div>
 <div class="pr-row">
   <div class="pr-num">5.</div>
-  <div class="pr-prob">$f(x)=x^2-2x-8$. Find the $y$-intercept.</div>
-  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$(0,-8)$</div></div>
+  <div class="pr-prob">Graph $f(x)=(x-2)^2-3$.</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">Vertex $(2,-3)$, opens up<div class="gk-fig" data-gk='{"draw":[{"type":"fn","f":"(x-2)^2-3","color":"#1e3a5c"},{"type":"point","at":[2,-3]}],"window":{"x":[-8,8],"y":[-8,8]},"size":{"w":380,"h":300},"ticks":{"x":2,"y":2}}'></div></div></div>
 </div>
 <div class="pr-row">
   <div class="pr-num">6.</div>
-  <div class="pr-prob">$f(x)=-x^2+4x+1$. Does the parabola open up or down? Find the vertex.</div>
-  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">Opens down; $h=2$, $k=5$ &rarr; vertex $(2,5)$</div></div>
+  <div class="pr-prob">A parabola has vertex $(-1,4)$ and passes through $(1,0)$. Write its equation.</div>
+  <div class="pr-ans student-interactive"><textarea class="st-work-sm" placeholder="Answer…"></textarea><button class="st-btn-sm" onclick="toggleAns(this)">Show</button><div class="st-ans-hidden">$0=a(2)^2+4\Rightarrow a=-1$<br>$f(x)=-(x+1)^2+4$</div></div>
 </div>
 </div>
 
@@ -251,5 +243,9 @@ function toggleAns(btn) {
   });
 </script>
 <!-- proof-layer:done -->
+<style>.gk-fig svg{max-width:100%;height:auto;display:block;margin:.4rem auto 0}</style>
+<script src="../js/mathcheck.js"></script>
+<script src="../js/graphkit.js"></script>
+<script>document.querySelectorAll('.gk-fig').forEach(function(e){try{e.innerHTML=GraphKit.svg(JSON.parse(e.getAttribute('data-gk')));}catch(x){}});</script>
 </body>
 </html>

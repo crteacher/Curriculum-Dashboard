@@ -65,27 +65,22 @@
 <body>
 <div class="container">
   <h1>Completing the Square</h1>
-  <p class="subtitle">College Algebra &nbsp;&middot;&nbsp; &sect;4.3 &nbsp;&middot;&nbsp; Instructor: Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026</p>
+  <p class="subtitle">College Algebra &nbsp;&middot;&nbsp; &sect;4.4 &nbsp;&middot;&nbsp; Instructor: Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026</p>
 
   <div class="section">
     <div class="section-title">Core Ideas</div>
 
     <div class="concept">
-      <span class="concept-label">The Identity</span>
-      $x^2+bx \;=\; \left(x+\dfrac{b}{2}\right)^{\!2} - \left(\dfrac{b}{2}\right)^{\!2}$
-      &nbsp;&mdash; rewrite the <em>expression</em>, not the equation.
-      Substitute this into $x^2+bx+c=0$, then isolate the squared term and apply the square root method.
+      <span class="concept-label">Standard &rarr; Vertex Form</span>
+      Complete the square: $x^2+bx = \left(x+\dfrac{b}{2}\right)^{2}-\left(\dfrac{b}{2}\right)^{2}$. So $x^2+bx+c=\left(x+\dfrac b2\right)^2+\left(c-\dfrac{b^2}{4}\right)$, giving the vertex $\left(-\dfrac b2,\;c-\dfrac{b^2}{4}\right)$. If $a\neq1$, factor $a$ out of the $x^2$ and $x$ terms first.
     </div>
     <div class="concept">
-      <span class="concept-label">Why This Generalizes</span>
-      Applying the same identity to $ax^2+bx+c=0$ (dividing by $a$ first) gives
-      $\left(x+\dfrac{b}{2a}\right)^{\!2}=\dfrac{b^2-4ac}{4a^2}$,
-      which is exactly the quadratic formula. No tricks — just one identity.
+      <span class="concept-label">Vertex &rarr; Factored Form</span>
+      Set $a(x-h)^2+k=0$, isolate the square, and take square roots: $x=h\pm\sqrt{-k/a}$. The roots are the zeros, so $f(x)=a(x-r_1)(x-r_2)$.
     </div>
     <div class="concept">
-      <span class="concept-label">Square Root Method</span>
-      $(x-h)^2=k \;\Rightarrow\; x=h\pm\sqrt{k}$.
-      Two solutions when $k&gt;0$, one when $k=0$, none (real) when $k&lt;0$.
+      <span class="concept-label">Same Steps on ax² + bx + c</span>
+      Do exactly these steps with letters and you get $\left(x+\dfrac{b}{2a}\right)^{2}=\dfrac{b^2-4ac}{4a^2}$, which is the quadratic formula. No tricks.
     </div>
 
   </div>
@@ -93,8 +88,7 @@
   <div class="section">
     <div class="section-title">Practice Problems</div>
     <p style="font-family:sans-serif;font-size:13px;color:#666;margin-bottom:1rem;">
-      All answers are integers — enter the root value or completing-the-square term.
-      Press <strong>Check</strong> or hit Enter.
+      Answers are integers, a pair like <code>(2,-3)</code>, two roots like <code>-3,5</code> (smaller first), or a vertex form like <code>2(x+1)^2-5</code>. Press <strong>Check</strong> or hit Enter.
     </p>
     <div class="score-bar">
       <span class="score-label">Score:</span>
@@ -139,105 +133,97 @@ function addT(n, v) {
 
 // ── Problem generators (section-specific, injected below) ─────────────────────
 
-// gen1: x² = k² → positive root
-function gen1() {
-  const k = rInt(5) + 2;
+// ── Helpers ───────────────────────────────────────────────────────────────────
+function polyL(a, b, c) { return fc(a) + 'x^2' + (b ? (b > 0 ? '+' : '-') + (Math.abs(b) === 1 ? '' : Math.abs(b)) + 'x' : '') + (c ? (c > 0 ? '+' : '-') + Math.abs(c) : ''); }
+function vfT(a, h, k) { return fc(a) + (h === 0 ? 'x^2' : '(x' + (h > 0 ? '-' : '+') + Math.abs(h) + ')^2') + (k ? (k > 0 ? '+' : '-') + Math.abs(k) : ''); }
+function alt1(a, str) { return a === 1 ? '1' + str : a === -1 ? '-1' + str.slice(1) : str; }
+function pars(aSet) {   // a(x-h)^2+k with integer h, k: b = -2ah, c = k + ah^2
+  const a = choose(aSet), m = choose([-4, -3, -2, -1, 1, 2, 3, 4]), h = -m, b = 2 * a * m, k = choose([-6, -5, -4, -3, -2, -1, 1, 2, 3, 4, 5, 6]), c = k + a * h * h;
+  return {a, h, b, c, k};
+}
+
+// 1: the number that completes the square
+function cTerm() {
+  const half = rInt(5) + 1, b = 2 * half * choose([-1, 1]);
   return {
-    latex:  `x^2=${k*k}.\\quad\\text{Find the positive solution.}`,
-    answer: [String(k)],
-    hint:   'What operation is the inverse of squaring?',
-    step:   `x=\\pm${k}\\quad\\text{positive solution: }${k}`
+    latex:  '\\text{What number completes the square for }' + polyL(1, b, 0) + '\\,+\\,?',
+    answer: [String(half * half)],
+    hint:   'Half the x-coefficient, squared.',
+    step:   '\\left(\\dfrac{' + b + '}{2}\\right)^2=' + half * half
+  };
+}
+// 2: standard -> vertex form, a = 1 (typed)
+function cToVertex() {
+  const p = pars([1]), vf = vfT(1, p.h, p.k);
+  return {
+    latex:  'f(x)=' + polyL(1, p.b, p.c) + '.\\quad\\text{Complete the square to write it in vertex form.}',
+    answer: [vf, alt1(1, vf)],
+    hint:   'Add and subtract the square of half the x-coefficient.',
+    step:   'x^2' + (p.b > 0 ? '+' : '-') + Math.abs(p.b) + 'x+' + (p.b / 2) * (p.b / 2) + ' - ' + (p.b / 2) * (p.b / 2) + (p.c < 0 ? p.c : '+' + p.c) + '=' + vf
+  };
+}
+// 3: standard -> vertex (ordered pair), a any
+function cVertexPair() {
+  const p = pars([-2, -1, 1, 2, 3]);
+  return {
+    latex:  'f(x)=' + polyL(p.a, p.b, p.c) + '.\\quad\\text{Complete the square. What is the vertex?}',
+    answer: ['(' + p.h + ',' + p.k + ')'],
+    hint:   'Factor a out of the first two terms, then complete the square inside.',
+    step:   'f(x)=' + vfT(p.a, p.h, p.k) + '\\Rightarrow(' + p.h + ',' + p.k + ')'
+  };
+}
+// 4: standard -> vertex form, a != 1
+function cToVertexA() {
+  const p = pars([-2, 2, 3]), vf = vfT(p.a, p.h, p.k);
+  return {
+    latex:  'f(x)=' + polyL(p.a, p.b, p.c) + '.\\quad\\text{Write it in vertex form }a(x-h)^2+k.',
+    answer: [vf],
+    hint:   'Factor a out of the x² and x terms first.',
+    step:   'f(x)=' + p.a + '(x^2' + (p.b / p.a > 0 ? '+' : '-') + Math.abs(p.b / p.a) + 'x)' + (p.c < 0 ? p.c : '+' + p.c) + '=' + vf
+  };
+}
+// 5: vertex -> factored (find the roots)
+function cToFactored() {
+  const a = choose([-2, -1, 1, 2, 3]), h = choose([-4, -3, -2, -1, 1, 2, 3, 4]), s = choose([1, 2, 3]), k = -a * s * s;
+  return {
+    latex:  vfT(a, h, k).replace(/^/, '') + '=0.\\quad\\text{Solve for x. Give both roots, smaller first (like }-3,5\\text{).}',
+    answer: [(h - s) + ',' + (h + s)],
+    hint:   'Isolate the squared factor, then take square roots.',
+    step:   '(x' + (h > 0 ? '-' : '+') + Math.abs(h) + ')^2=' + s * s + '\\Rightarrow x=' + h + '\\pm' + s + '\\Rightarrow x=' + (h - s) + ',\\;' + (h + s)
+  };
+}
+// 6: solve a trinomial by completing the square (integer roots)
+function cSolve() {
+  const r1 = rInt(4) + 1, r2 = -(rInt(3) + 1), b = -(r1 + r2), c = r1 * r2;
+  return {
+    latex:  polyL(1, b, c) + '=0.\\quad\\text{Solve by completing the square. Give both roots, smaller first.}',
+    answer: [r2 + ',' + r1],
+    hint:   'Write it as (x - h)² = something, then take square roots.',
+    step:   '\\text{Roots: }' + r2 + '\\text{ and }' + r1
+  };
+}
+// 7: the proof step on ax^2+bx+c: what do you add to both sides?
+function cProofAdd() {
+  const a = choose([2, 3, 4, 5]), m = choose([1, 2, 3]), b = 2 * a * m, c = choose([1, 2, 3, 5, 7]);
+  return {
+    latex:  polyL(a, b, c) + '=0.\\quad\\text{Divide by }a\\text{, then move the constant. What number do you add to both sides to complete the square?}',
+    answer: [String(m * m)],
+    hint:   'After dividing by a, the x-coefficient is b/a. Half of it, squared.',
+    step:   'x^2+\\dfrac{' + b + '}{' + a + '}x=\\ldots,\\quad\\left(\\dfrac{b}{2a}\\right)^2=' + m + '^2=' + m * m
+  };
+}
+// 8: the right side of the proof, evaluated: (b^2 - 4ac)/(4a^2)
+function cProofRHS() {
+  const m = choose([-4, -3, -2, -1, 1, 2, 3, 4]), b = 2 * m, c = choose([-6, -5, -4, -3, -2, -1, 1, 2, 3]), v = m * m - c;
+  return {
+    latex:  'x^2' + (b > 0 ? '+' : '-') + Math.abs(b) + 'x' + (c < 0 ? c : '+' + c) + '=0\\text{ becomes }\\left(x+\\dfrac{b}{2a}\\right)^2=\\dfrac{b^2-4ac}{4a^2}.\\quad\\text{Evaluate the right side.}',
+    answer: [String(v)],
+    hint:   'Substitute a, b, c from the equation.',
+    step:   '\\dfrac{(' + b + ')^2-4(1)(' + c + ')}{4(1)^2}=\\dfrac{' + (b * b - 4 * c) + '}{4}=' + v
   };
 }
 
-// gen2: (x - h)² = k² → larger root = h + k
-function gen2() {
-  const h = rInt(5) + 1, k = rInt(4) + 1;
-  return {
-    latex:  `(x-${h})^2=${k*k}.\\quad\\text{Find the larger root.}`,
-    answer: [String(h + k)],
-    hint:   'What operation reverses squaring a binomial?',
-    step:   `x-${h}=\\pm${k}\\Rightarrow x=${h+k}\\text{ or }x=${h-k}`
-  };
-}
-
-// gen3: (x + h)² = k² → smaller root = −h − k
-function gen3() {
-  const h = rInt(4) + 1, k = rInt(4) + 1;
-  return {
-    latex:  `(x+${h})^2=${k*k}.\\quad\\text{Find the smaller root.}`,
-    answer: [String(-h - k)],
-    hint:   'What operation reverses squaring a binomial?',
-    step:   `x+${h}=\\pm${k}\\Rightarrow x=${-h+k}\\text{ or }x=${-h-k}`
-  };
-}
-
-// gen4: what value completes the square? (b/2)²  — b even
-function gen4() {
-  const half = rInt(4) + 1;
-  const b    = 2 * half * choose([-1, 1]);
-  const term = half * half;
-  const bStr = b < 0 ? `- ${Math.abs(b)}` : `+ ${b}`;
-  return {
-    latex:  `\\text{What value completes the square for }x^2${bStr}x\\,+\\,?`,
-    answer: [String(term)],
-    hint:   'What value involving the x-coefficient transforms x² + bx into a perfect square trinomial?',
-    step:   `\\left(\\frac{${b}}{2}\\right)^2=${half}^2=${term}`
-  };
-}
-
-// gen5: (x - h)² = 0 → double root = h
-function gen5() {
-  const h = rInt(6) + 1;
-  return {
-    latex:  `(x-${h})^2=0.\\quad\\text{Find the solution.}`,
-    answer: [String(h)],
-    hint:   'If (expression)² = 0, how many values of x satisfy that?',
-    step:   `x-${h}=0\\Rightarrow x=${h}\\text{ (double root)}`
-  };
-}
-
-// gen6: (x + h)² = k² → larger root = −h + k
-function gen6() {
-  const h = rInt(3) + 1, k = rInt(4) + h + 1;  // k > h so larger root is positive
-  return {
-    latex:  `(x+${h})^2=${k*k}.\\quad\\text{Find the larger root.}`,
-    answer: [String(-h + k)],
-    hint:   'What operation reverses squaring a binomial?',
-    step:   `x+${h}=\\pm${k}\\Rightarrow x=${-h+k}\\text{ or }x=${-h-k}`
-  };
-}
-
-// gen7: x² + bx = c → what is the RHS after completing the square?
-function gen7() {
-  const half = rInt(3) + 1;
-  const b    = 2 * half * choose([-1, 1]);
-  const c    = rInt(5) + 1;
-  const rhs  = c + half * half;
-  const bStr = b < 0 ? `- ${Math.abs(b)}` : `+ ${b}`;
-  return {
-    latex:  `x^2${bStr}x=${c}.\\quad\\text{After completing the square, the right side becomes?}`,
-    answer: [String(rhs)],
-    hint:   'What does the completing-the-square identity say about x² + bx?',
-    step:   `x^2${bStr}x+${half*half}=${c}+${half*half}=${rhs}`
-  };
-}
-
-// gen8: solve by completing the square → find larger root (integer roots design)
-function gen8() {
-  const r1 = rInt(4) + 1, r2 = -(rInt(3) + 1);  // r1 positive, r2 negative
-  const b  = -(r1 + r2), c = r1 * r2;
-  const bStr = b < 0 ? `- ${Math.abs(b)}` : `+ ${b}`;
-  const cStr = c < 0 ? `- ${Math.abs(c)}` : `+ ${c}`;
-  return {
-    latex:  `x^2${bStr}x${cStr}=0.\\quad\\text{Solve by completing the square. Find the larger root.}`,
-    answer: [String(r1)],
-    hint:   'After applying the identity, what form does the left side take?',
-    step:   `\\text{Roots: }${r1}\\text{ and }${r2};\\quad\\text{larger}=${r1}`
-  };
-}
-
-const GENERATORS = [gen1, gen2, gen3, gen4, gen5, gen6, gen7, gen8];
+const GENERATORS = [cTerm, cToVertex, cVertexPair, cToVertexA, cToFactored, cSolve, cProofAdd, cProofRHS];
 
 
 // ── State ─────────────────────────────────────────────────────────────────────
@@ -249,11 +235,11 @@ function norm(s) {
 function ok(user, acc) { return acc.some(a => norm(user) === norm(a)); }
 
 function init() {
-  ACTIVE    = shuffle(GENERATORS.map(gen => gen()));
+  ACTIVE    = GENERATORS.map(gen => gen());   // fixed order follows the lesson
   correct   = 0;
-  flags     = Array(GENERATORS.length).fill(false);
-  attempted = Array(GENERATORS.length).fill(false);
-  peeked    = Array(GENERATORS.length).fill(false);
+  flags     = Array(ACTIVE.length).fill(false);
+  attempted = Array(ACTIVE.length).fill(false);
+  peeked    = Array(ACTIVE.length).fill(false);
 }
 
 function _lth(s){let h='',r=s;while(r.length){const m=r.match(/^\\text\{([^}]*)\}/);if(m){h+=m[1];r=r.slice(m[0].length);}else{const n=r.indexOf('\\text{');if(n<0){h+=(r.trim()?'$'+r+'$':'');r='';}else{if(n>0)h+='$'+r.slice(0,n)+'$';r=r.slice(n);}}}return h;}
