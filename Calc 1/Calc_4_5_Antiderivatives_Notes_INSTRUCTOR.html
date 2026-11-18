@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Antiderivatives &amp; Initial Value Problems &mdash; Notes</title>
+<title>Antiderivatives, Initial Values &amp; Motion &mdash; Notes</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.css">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -64,6 +64,31 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   border-radius:5px;padding:4px 9px;line-height:1.75}
 .pr-ans.student{border-bottom:1.5px solid #bbb;min-height:2.2rem}
 
+/* ── Student interactive ── */
+.st-work{width:100%;min-height:3rem;border:1px solid #ccc;border-radius:5px;
+  padding:.35rem .5rem;font-family:Georgia,serif;font-size:13px;resize:vertical;
+  background:#fafafa;display:block;margin-bottom:.3rem}
+.st-work-sm{width:100%;min-height:1.5rem;border:1px solid #ccc;border-radius:4px;
+  padding:.2rem .4rem;font-family:Georgia,serif;font-size:12px;resize:vertical;
+  background:#fafafa;display:block;margin-bottom:.2rem}
+.st-btn{font-family:sans-serif;font-size:10px;font-weight:700;color:#1e3a5c;
+  background:none;border:1.5px solid #1e3a5c;border-radius:4px;
+  padding:2px 9px;cursor:pointer;margin-bottom:.2rem;display:inline-block}
+.st-btn-sm{font-family:sans-serif;font-size:9px;font-weight:700;color:#1e3a5c;
+  background:none;border:1px solid #1e3a5c;border-radius:3px;
+  padding:1px 6px;cursor:pointer;margin-bottom:.15rem;display:inline-block}
+.st-btn:hover,.st-btn-sm:hover{background:#eef3f9}
+.st-ans-hidden{display:none;background:#fef9e7;border-left:3px solid #7a5c1e;
+  border-radius:0 5px 5px 0;padding:.4rem .7rem;font-size:13px;
+  color:#5a3e00;line-height:1.85}
+.st-ans-hidden.visible{display:block}
+
+/* ── SVG figures ── */
+.svg-figure{text-align:center;margin:.4rem 0 .6rem}
+.svg-figure svg{max-width:100%;height:auto}
+.svg-caption{font-family:sans-serif;font-size:11px;color:#555;
+  margin-top:.2rem;font-style:italic}
+
 /* ── KaTeX overflow ── */
 .katex-display{overflow-x:auto;overflow-y:hidden;padding:2px 0}
 
@@ -93,9 +118,18 @@ body{font-family:Georgia,serif;background:#f8f7f4;color:#1a1a1a;line-height:1.75
   .pr-ans.instructor{font-size:9.5pt;padding:2px 7px;line-height:1.55;
     background:#fef9e7 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
   .pr-ans.student{min-height:1.6rem}
+  .st-work{background:none;border:none;border-bottom:1.5px solid #bbb;
+    border-radius:0;min-height:2.6rem;resize:none}
+  .st-work-sm{background:none;border:none;border-bottom:1.5px solid #bbb;
+    border-radius:0;min-height:1.3rem;resize:none}
+  .st-btn,.st-btn-sm{display:none}
+  .st-ans-hidden{display:none !important}
   .opening-q{
     background:#eef3f9 !important;
     -webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .svg-figure{margin:.25rem 0 .4rem}
+  .svg-figure svg{max-width:100%;height:auto}
+  .svg-caption{font-size:9pt}
 }
 @page{margin:.55in .65in;size:letter}
 .proof-panel{margin:.4rem 0 1.1rem;border-left:3px solid #7a9a6a;border-radius:0 6px 6px 0;background:#f5f7f3}
@@ -111,72 +145,90 @@ details[open]>.proof-toggle{color:#1e3a5c}
 </head>
 <body>
 <div class="container">
-<h1 class="page-title">Antiderivatives &amp; Initial Value Problems</h1>
+<h1 class="page-title">Antiderivatives, Initial Values &amp; Motion</h1>
 <p class="page-sub">Calculus I &nbsp;&middot;&nbsp; &sect;4.5 &nbsp;&middot;&nbsp; Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026 &nbsp;&middot;&nbsp; <strong>INSTRUCTOR</strong></p>
-<div class="opening-q">Differentiation and antidifferentiation are inverse operations. But when we antidifferentiate, we get a whole family of functions — differing by a constant $C$. How do we pin down which one we want using an initial condition?</div>
+<div class="opening-q">Derivatives took us down the chain from position to velocity to acceleration. Going back <em>up</em>, an antiderivative gives a whole family of functions that differ by a constant $C$. If you know a car&rsquo;s acceleration, what extra information pins down its velocity &mdash; and then its position?</div>
 <div class="two-col">
+<div class="col"><div class="section-head">Going Up the Chain</div>
+<div class="accent-box"><p><strong>Differentiate downward:</strong><br>$s(t)\xrightarrow{\;d/dt\;}v(t)\xrightarrow{\;d/dt\;}a(t)$</p><p><strong>Integrate upward:</strong><br>$a(t)\xrightarrow{\;\int\;}v(t)+C_1\xrightarrow{\;\int\;}s(t)+C_2$</p><p>Each step adds a constant. An <strong>initial condition</strong> ($v(0)$ or $s(0)$) pins it down.</p></div>
+<div class="section-head">Initial Value Problems</div>
+<div class="accent-box"><p>Given $F'(x)=f(x)$ and $F(a)=b$:</p><ol style="margin-left:1.2rem"><li>Antidifferentiate: $F(x)=\cdots+C$</li><li>Substitute the initial condition: $F(a)=b$</li><li>Solve for $C$ and write the specific solution</li></ol><p>Motion problems are IVPs <em>twice</em>: one constant for $v$, one for $s$. Check by differentiating.</p></div>
+</div>
 <div class="col"><div class="section-head">Antiderivative Rules</div>
-<div class="accent-box"><p><strong>Power rule:</strong> $\displaystyle\int x^n\,dx=\frac{x^{n+1}}{n+1}+C$ &ensp;$(n\neq-1)$</p><p><strong>Constant:</strong> $\displaystyle\int k\,dx=kx+C$</p><p><strong>Trig:</strong><br>$\int\cos x\,dx=\sin x+C$ &ensp; $\int\sin x\,dx=-\cos x+C$</p><p><strong>Exponential / Log:</strong><br>$\int e^x\,dx=e^x+C$ &ensp; $\int\dfrac{1}{x}\,dx=\ln|x|+C$</p><p>Integrate term by term; pull constants outside.</p></div>
+<div class="accent-box"><p>$\displaystyle\int x^n\,dx=\frac{x^{n+1}}{n+1}+C$ $(n\neq-1)$ &nbsp; $\displaystyle\int k\,dx=kx+C$</p><p>$\int\cos x\,dx=\sin x+C$ &nbsp; $\int\sin x\,dx=-\cos x+C$</p><p>$\int e^x\,dx=e^x+C$ &nbsp; $\int\dfrac1x\,dx=\ln|x|+C$</p></div>
+<div class="section-head">Displacement vs Total Distance</div>
+<div class="accent-box"><p><strong>Displacement</strong> (signed): $\displaystyle\Delta s=\int_a^b v(t)\,dt=s(b)-s(a)$. It can be negative.</p><p><strong>Total distance</strong> (always $\geq0$): $\displaystyle\int_a^b|v(t)|\,dt$. Split at the zeros of $v$.</p></div>
+<details class="proof-panel">
+<summary class="proof-toggle">▸ Show Proof</summary>
+<div class="proof-body">
+  <p><strong>Displacement:</strong> Since velocity is the derivative of position, $v(t) = s'(t)$. So by FTC Part 2 with antiderivative $s$:</p>
+  <p>$$\int_a^b v(t)\,dt = \int_a^b s'(t)\,dt = s(b) - s(a) = \Delta s$$</p>
+  <p>The integral of velocity literally <em>undoes</em> differentiation to recover the net change in position.</p>
+  <p><strong>Total distance:</strong> The ordinary integral $\int_a^b v\,dt$ gives <em>signed</em> area — regions where $v < 0$ subtract, canceling out leftward motion. But distance must always accumulate positively regardless of direction.</p>
+  <p>The fix: replace $v(t)$ with $|v(t)|$. When $v > 0$, $|v| = v$ (rightward motion adds). When $v < 0$, $|v| = -v > 0$ (leftward motion still adds positively). In practice, we find where $v = 0$, split the interval there, and compute each piece with the appropriate sign flip:</p>
+  <p>$$\text{distance} = \int_a^b |v(t)|\,dt$$</p>
+  <p>The two formulas agree only when the object never reverses direction.</p>
+  <p class="proof-qed">∎</p>
 </div>
-<div class="col"><div class="section-head">Initial Value Problems</div>
-<div class="accent-box"><p>Given $F'(x)=f(x)$ and an initial condition $F(a)=b$:</p><ol style='margin-left:1.2rem;margin-top:.3rem'>  <li>Antidifferentiate: $F(x)=\cdots+C$</li>  <li>Substitute initial condition: $F(a)=b$</li>  <li>Solve for $C$</li>  <li>Write the specific solution</li></ol><p><em>Shortcut:</em> if $F(0)=d$, all variable terms vanish and $C=d$ directly.</p></div>
-<p class="body-text">Always verify your answer by differentiating $F(x)$ — you should get $f(x)$ back.</p>
+</details>
+<p class="body-text">Moving <strong>right/up</strong> when $v>0$; <strong>left/down</strong> when $v<0$; <strong>stopped</strong> when $v=0$.</p>
 </div>
 </div>
+<div class="svg-figure"><svg viewBox="0 0 280 135" xmlns="http://www.w3.org/2000/svg" style="width:268px;height:auto"><polygon points="20,120 51,117 83,108 114,93 145,73 145,73 20,73" fill="#fde8e8" stroke="none"/><polygon points="145,73 176,47 208,15 208,73 145,73" fill="#e8f5e8" stroke="none"/><line x1="18" y1="73" x2="270" y2="73" stroke="#888" stroke-width="1.2"/><polygon points="270,70 276,73 270,76" fill="#888"/><line x1="20" y1="128" x2="20" y2="8" stroke="#888" stroke-width="1.2"/><polygon points="17,8 20,2 23,8" fill="#888"/><text x="271" y="77" font-size="9" fill="#555" font-family="sans-serif">t</text><text x="23" y="9" font-size="9" fill="#555" font-family="sans-serif">v(t)</text><polyline points="20,120 51,117 83,108 114,93 145,73 176,47 208,15" stroke="#1e3a5c" stroke-width="2.2" fill="none" stroke-linejoin="round"/><line x1="145" y1="70" x2="145" y2="76" stroke="#888" stroke-width="1"/><text x="141" y="86" font-size="9" fill="#555" font-family="sans-serif">2</text><line x1="208" y1="70" x2="208" y2="76" stroke="#888" stroke-width="1"/><text x="204" y="86" font-size="9" fill="#555" font-family="sans-serif">3</text><text x="78" y="100" text-anchor="middle" font-size="9.5" fill="#c03030" font-family="sans-serif" font-weight="bold">v &lt; 0</text><text x="78" y="112" text-anchor="middle" font-size="8.5" fill="#c03030" font-family="sans-serif">(moving left)</text><text x="178" y="62" text-anchor="middle" font-size="9.5" fill="#2a8c2a" font-family="sans-serif" font-weight="bold">v &gt; 0</text><text x="178" y="74" text-anchor="middle" font-size="8.5" fill="#2a8c2a" font-family="sans-serif">(moving right)</text><text x="140" y="125" text-anchor="end" font-size="8.5" fill="#c03030" font-family="sans-serif" font-style="italic">net area &lt; 0</text><text x="145" y="125" text-anchor="start" font-size="8.5" fill="#2a8c2a" font-family="sans-serif" font-style="italic">net area &gt; 0</text></svg><div class="svg-caption">Displacement $= \int_a^b v(t)\,dt$ = net signed area (cancels). Total distance $= \int_a^b |v(t)|\,dt$ = sum of shaded areas.</div></div>
 <div class="section-head">Worked Examples</div>
 <div class="examples-grid">
 <div class="ex-block">
-  <div class="ex-label">Example 1 &nbsp;&mdash;&nbsp; General antiderivative</div>
-  <div class="ex-body">Find $\displaystyle\int (3x^2+4x-1)\,dx$.</div>
-  <div class="ex-answer instructor">$x^3+2x^2-x+C$</div>
+  <div class="ex-label">Example 1 &mdash; Acceleration to position</div>
+  <div class="ex-body">$a(t)=6t$, $v(0)=2$, $s(0)=1$. Find $v(t)$ and then $s(t)$.</div>
+  <div class="ex-answer instructor">$v(t)=\int6t\,dt=3t^2+C_1$; $v(0)=C_1=2\Rightarrow v(t)=3t^2+2$.<br>$s(t)=\int(3t^2+2)\,dt=t^3+2t+C_2$; $s(0)=C_2=1\Rightarrow s(t)=t^3+2t+1$.</div>
 </div>
 <div class="ex-block">
-  <div class="ex-label">Example 2 &nbsp;&mdash;&nbsp; Fractional exponent</div>
-  <div class="ex-body">Find $\displaystyle\int \sqrt{x}\,dx$.</div>
-  <div class="ex-answer instructor">$\int x^{1/2}\,dx=\dfrac{x^{3/2}}{3/2}+C=\dfrac{2}{3}x^{3/2}+C$</div>
+  <div class="ex-label">Example 2 &mdash; Thrown ball</div>
+  <div class="ex-body">A ball is thrown up from the ground at $20$ m/s with $a(t)=-10$. Find $s(t)$ and the maximum height.</div>
+  <div class="ex-answer instructor">$v(t)=-10t+C_1$, $v(0)=20\Rightarrow v(t)=-10t+20$. $s(t)=-5t^2+20t+C_2$, $s(0)=0\Rightarrow s(t)=-5t^2+20t$.<br>Highest when $v=0$: $t=2$, so $s(2)=-20+40=20$ m.</div>
 </div>
 <div class="ex-block">
-  <div class="ex-label">Example 3 &nbsp;&mdash;&nbsp; Initial value problem</div>
-  <div class="ex-body">Find $F(x)$ given $F'(x)=2x+3$ and $F(0)=5$.</div>
-  <div class="ex-answer instructor">$F(x)=x^2+3x+C$<br>$F(0)=0+0+C=5 \Rightarrow C=5$<br>$F(x)=x^2+3x+5$</div>
+  <div class="ex-label">Example 3 &mdash; General IVP</div>
+  <div class="ex-body">Find $F(x)$ given $F'(x)=6x^2-4$ and $F(1)=3$.</div>
+  <div class="ex-answer instructor">$F(x)=2x^3-4x+C$. $F(1)=2-4+C=3\Rightarrow C=5$.<br>$F(x)=2x^3-4x+5$.</div>
 </div>
 <div class="ex-block">
-  <div class="ex-label">Example 4 &nbsp;&mdash;&nbsp; IVP with trig</div>
+  <div class="ex-label">Example 4 &mdash; IVP with trig</div>
   <div class="ex-body">Find $f(x)$ given $f'(x)=\cos x$ and $f(0)=2$.</div>
-  <div class="ex-answer instructor">$f(x)=\sin x+C$<br>$f(0)=0+C=2 \Rightarrow C=2$<br>$f(x)=\sin x+2$</div>
+  <div class="ex-answer instructor">$f(x)=\sin x+C$. $f(0)=0+C=2\Rightarrow C=2$.<br>$f(x)=\sin x+2$.</div>
 </div>
 </div>
 <div class="section-head">Practice Problems</div>
 <div class="practice">
 <div class="pr-row">
   <div class="pr-num">1.</div>
-  <div class="pr-prob">Find $\displaystyle\int (4x^3-6x+2)\,dx$.</div>
-  <div class="pr-ans instructor">$x^4-3x^2+2x+C$</div>
+  <div class="pr-prob">$v(t)=4t$, $s(0)=3$. Find $s(t)$.</div>
+  <div class="pr-ans instructor">$s(t)=2t^2+3$</div>
 </div>
 <div class="pr-row">
   <div class="pr-num">2.</div>
-  <div class="pr-prob">Find $\displaystyle\int \dfrac{3}{x^2}\,dx$.</div>
-  <div class="pr-ans instructor">$\int 3x^{-2}\,dx=-3x^{-1}+C=-\dfrac{3}{x}+C$</div>
+  <div class="pr-prob">$a(t)=6t-2$, $v(0)=5$, $s(0)=0$. Find $s(t)$.</div>
+  <div class="pr-ans instructor">$v(t)=3t^2-2t+5$; $s(t)=t^3-t^2+5t$</div>
 </div>
 <div class="pr-row">
   <div class="pr-num">3.</div>
-  <div class="pr-prob">Find $F(x)$ given $F'(x)=6x^2-4$ and $F(1)=3$.</div>
-  <div class="pr-ans instructor">$F(x)=2x^3-4x+C$; $F(1)=2-4+C=3 \Rightarrow C=5$. $F(x)=2x^3-4x+5$</div>
-</div>
-<div class="pr-row">
-  <div class="pr-num">4.</div>
   <div class="pr-prob">Find $F(x)$ given $F'(x)=e^x$ and $F(0)=0$.</div>
   <div class="pr-ans instructor">$F(x)=e^x+C$; $C=-1$. $F(x)=e^x-1$</div>
 </div>
 <div class="pr-row">
+  <div class="pr-num">4.</div>
+  <div class="pr-prob">Find $F(x)$ given $F'(x)=\dfrac{3}{x^2}$ and $F(1)=0$.</div>
+  <div class="pr-ans instructor">$F(x)=-\dfrac3x+C$; $F(1)=-3+C=0\Rightarrow C=3$. $F(x)=-\dfrac3x+3$</div>
+</div>
+<div class="pr-row">
   <div class="pr-num">5.</div>
-  <div class="pr-prob">Find $\displaystyle\int (\sin x + 3)\,dx$.</div>
-  <div class="pr-ans instructor">$-\cos x+3x+C$</div>
+  <div class="pr-prob">$v(t)=2t-6$ on $[0,4]$. Find the displacement and the total distance.</div>
+  <div class="pr-ans instructor">Displacement: $[t^2-6t]_0^4=-8$. $v=0$ at $t=3$: distance $=\int_0^3(6-2t)\,dt+\int_3^4(2t-6)\,dt=9+1=10$.</div>
 </div>
 <div class="pr-row">
   <div class="pr-num">6.</div>
-  <div class="pr-prob">Velocity $v(t)=3t^2-2t$, $s(0)=4$. Find position $s(t)$.</div>
-  <div class="pr-ans instructor">$s(t)=t^3-t^2+C$; $C=4$. $s(t)=t^3-t^2+4$</div>
+  <div class="pr-prob">$s(t)=t^3-6t^2+9t$. When is the object stopped?</div>
+  <div class="pr-ans instructor">$v(t)=3t^2-12t+9=3(t-1)(t-3)=0$ at $t=1$ and $t=3$.</div>
 </div>
 </div>
 
@@ -184,6 +236,12 @@ details[open]>.proof-toggle{color:#1e3a5c}
 <script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/contrib/auto-render.min.js"></script>
 <script>
+function toggleAns(btn) {
+  if (!btn.dataset.orig) btn.dataset.orig = btn.textContent;
+  var ans = btn.nextElementSibling;
+  var showing = ans.classList.toggle('visible');
+  btn.textContent = showing ? 'Hide' : btn.dataset.orig;
+}
   renderMathInElement(document.body, {
     delimiters: [
       {left: '$$', right: '$$', display: true},

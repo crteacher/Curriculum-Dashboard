@@ -207,7 +207,7 @@ var PRESETS = {
   'read-graph': {}, 'plot-points': {input: {mode: 'points'}}, 'plot-line': {input: {mode: 'line'}},
   'shade-inequality': {input: {mode: 'inequality'}}, 'sketch-curve': {input: {mode: 'sketch'}},
   'two-lines': {}, 'piecewise': {}, 'number-line': {kind: 'numberline'}, 'pick-graph': {input: {mode: 'choose'}},
-  'mark-asymptotes': {input: {mode: 'asymptotes'}}, 'va-sides': {input: {mode: 'sides'}},
+  'mark-asymptotes': {input: {mode: 'asymptotes'}}, 'va-sides': {input: {mode: 'sides'}}, 'plot-parabola': {input: {mode: 'parabola'}},
   'poly-sketch': {input: {mode: 'polysketch'}, qualitative: true, window: {x: [-6, 6], y: [-1.35, 1.35]}, size: {w: 440, h: 230}, ticks: {x: 1, y: 1}}
 };
 GK.presets = Object.keys(PRESETS);
@@ -564,7 +564,7 @@ GK.window = function (cfg) { return build(cfg).L.win; };
 
 /* ══════════════════════════ 5. Student input: state, actions, grading (no browser needed) ══════════════════════════ */
 function defaultTool(mode) { return mode === 'numberline' ? 'closed' : mode === 'asymptotes' ? 'v' : mode === 'sides' ? 'side' : 'point'; }
-GK.newState = function (mode) { return {mode: mode, pts: [], dashed: false, side: null, shade: [], tool: defaultTool(mode), marks: null, choice: null, zs: {}, left: null, right: null, zok: null, av: [], ah: [], hl: [], zr: [], yi: null, sl: [], sd: {}}; };
+GK.newState = function (mode) { return {mode: mode, pts: [], dashed: false, side: null, shade: [], tool: defaultTool(mode), marks: null, choice: null, zs: {}, left: null, right: null, zok: null, av: [], ah: [], hl: [], zr: [], yi: null, sl: [], sd: {}, vt: null, pd: null}; };
 /* rational function implied by a student's marks: a * prod(x - zero) / prod(x - vertical asymptote); the y-intercept fixes a. Holes cancel, so they only add an open point. */
 GK.rationalFrom = function (st) {
   var zr = st.zr || [], av = st.av || [], i, num = 1, den = 1;
@@ -585,6 +585,11 @@ function regionOf(sortedXs, x) { var i = 0; while (i < sortedXs.length && x > so
 GK.act = function (input, st, a) {
   st = clone(st); st.marks = null; st.zok = null;
   var mode = st.mode, hx = a.hx || 0.3, hy = a.hy || 0.3, n, near;
+  if (a.type === 'dir') { st.pd = a.dir === 'down' ? 'down' : 'up'; return st; }
+  if (mode === 'parabola' && a.type === 'click') {            // one click places (or moves) the vertex; clicking it again removes it
+    if (st.vt && Math.abs(st.vt.x - a.x) < 1e-9 && Math.abs(st.vt.y - a.y) < 1e-9) st.vt = null; else st.vt = {x: Math.round(a.x * 1e6) / 1e6, y: Math.round(a.y * 1e6) / 1e6};
+    return st;
+  }
   if (a.type === 'end') { if (a.side === 'left' || a.side === 'right') st[a.side] = a.dir === 'down' ? 'down' : 'up'; return st; }
   if (mode === 'polysketch' && a.type === 'click') {         // 1 click = crosses straight, 2 = bounces, 3 = flat kink, 4 = removes
     var zr = Math.round(a.x), zc = st.zs[zr];
@@ -770,6 +775,13 @@ GK.gradeState = function (input, st, win) {
     st.zok = zs2;
     return {ok: okn === tot, score: tot ? okn / tot : 1, detail: okn === tot ? '' : !filled ? 'Click on each side of a vertical asymptote to show where the curve goes.' : filled < tot ? 'Show both sides of every vertical asymptote.' : 'Recheck the behavior near x = ' + fmt(bad[0]) + '.'};
   }
+  if (mode === 'parabola') {                                     // expected {h, k, a:+1|-1}; two parts: the vertex and which way it opens
+    var vok = !!st.vt && Math.abs(st.vt.x - e.h) < 1e-6 && Math.abs(st.vt.y - e.k) < 1e-6, dok = st.pd === (e.a > 0 ? 'up' : 'down'), isu = [];
+    st.zok = {vt: st.vt ? vok : null, pd: st.pd ? dok : null};
+    if (!st.vt) isu.push('Place the vertex.'); else if (!vok) isu.push('Recheck the vertex.');
+    if (!st.pd) isu.push('Choose which way it opens.'); else if (!dok) isu.push('Recheck which way the parabola opens.');
+    return {ok: vok && dok, score: ((vok ? 1 : 0) + (dok ? 1 : 0)) / 2, detail: vok && dok ? '' : isu.join(' ')};
+  }
   if (mode === 'choose') { var c = st.choice === e; return {ok: c, score: c ? 1 : 0, detail: st.choice == null ? 'Pick one of the graphs.' : ''}; }
   return {ok: false, score: 0, detail: ''};
 };
@@ -780,6 +792,7 @@ function autoAnswer(mode, e) {
   if (mode === 'line') { q.type = 'line'; for (k in e) q[k] = e[k]; return [q]; }
   if (mode === 'inequality') { q.type = 'inequality'; for (k in e) q[k] = e[k]; return [q]; }
   if (mode === 'numberline') return [{type: 'interval', value: e, color: GOLD, lift: 16}];
+  if (mode === 'parabola') { var pa = e.a > 0 ? 1 : -1; return [{type: 'fn', f: function (x) { return pa * (x - e.h) * (x - e.h) + e.k; }, color: GOLD, width: 2.2}, {type: 'point', at: [e.h, e.k], color: GOLD}]; }
   if (mode === 'polysketch') return [{type: 'polysketch', zeros: e.zeros, a: e.a || 1, color: GOLD}];
   if (mode === 'asymptotes') {
     var out = (e.f ? [{type: 'fn', f: e.f, color: GOLD, width: 2}] : []).concat((e.v || []).map(function (x) { return {type: 'asymptote', x: x, color: GOLD, width: 2}; }), (e.h || []).map(function (y) { return {type: 'asymptote', y: y, color: GOLD, width: 2}; }));
@@ -829,6 +842,11 @@ function drawInput(L, c, st) {
     if ((st.sl || []).length === 2 && Math.abs(st.sl[1].x - st.sl[0].x) > 1e-9) { var slm = (st.sl[1].y - st.sl[0].y) / (st.sl[1].x - st.sl[0].x), slb = st.sl[0].y - slm * st.sl[0].x, scl = st.zok && st.zok.s != null ? (st.zok.s ? OKC : BADC) : NAVY; s += tag('line', {x1: r2(L.sx(w.x[0])), y1: r2(L.sy(slm * w.x[0] + slb)), x2: r2(L.sx(w.x[1])), y2: r2(L.sy(slm * w.x[1] + slb)), stroke: scl, 'stroke-width': 2.2, 'stroke-dasharray': '7 5', 'clip-path': L.clipRef}); }
     (st.sl || []).forEach(function (p) { s += dot(L, [p.x, p.y], NAVY, false, 4.5); });
     (st.ah || []).forEach(function (yv) { var cl = st.zok ? (st.zok.h[yv] ? OKC : BADC) : NAVY; s += tag('line', {x1: r2(L.sx(w.x[0])), y1: r2(L.sy(yv)), x2: r2(L.sx(w.x[1])), y2: r2(L.sy(yv)), stroke: cl, 'stroke-width': 2.2, 'stroke-dasharray': '7 5', 'clip-path': L.clipRef}); });
+  }
+  if (st.mode === 'parabola') {
+    var pc = st.zok ? (st.zok.vt && st.zok.pd ? OKC : BADC) : NAVY;
+    if (st.vt && st.pd) { var ps = st.pd === 'up' ? 1 : -1, pvx = st.vt.x, pvy = st.vt.y; s += tag('path', {d: pathOf(L, GK.sample(function (x) { return ps * (x - pvx) * (x - pvx) + pvy; }, w.x[0], w.x[1], 300, w.y[0], w.y[1])), fill: 'none', stroke: pc, 'stroke-width': 2.4, 'stroke-linecap': 'round', 'clip-path': L.clipRef}); }
+    if (st.vt) s += dot(L, [st.vt.x, st.vt.y], st.zok && st.zok.vt != null ? (st.zok.vt ? OKC : BADC) : NAVY, false, 5.5);
   }
   if (st.mode === 'sides') {
     Object.keys(st.sd || {}).forEach(function (i) { var q = (input.expected && input.expected.sides || [])[i]; if (!q) return;
@@ -882,13 +900,14 @@ var TOOLBARS = {      // the ONLY buttons each mode ever shows
   inequality: function () { return [{dashed: false, label: 'Solid line'}, {dashed: true, label: 'Dashed line'}, {act: 'undo', label: 'Undo', quiet: true}, {act: 'clear', label: 'Clear', quiet: true}]; },
   numberline: function () { return [{tool: 'closed', label: '● Closed point'}, {tool: 'open', label: '○ Open point'}, {tool: 'shade', label: 'Shade'}, {act: 'undo', label: 'Undo', quiet: true}, {act: 'clear', label: 'Clear', quiet: true}]; },
   asymptotes: function (input) { return [{tool: 'v', label: 'Vertical asymptote'}, {tool: 'h', label: 'Horizontal asymptote'}].concat(input && input.expected && input.expected.holes ? [{tool: 'hole', label: '○ Hole'}] : [], input && input.expected && input.expected.slant !== undefined ? [{tool: 'slant', label: 'Slant asymptote'}] : [], input && input.expected && input.expected.zeros ? [{tool: 'zero', label: '● x-intercept'}] : [], input && input.expected && input.expected.yint != null ? [{tool: 'yint', label: '● y-intercept'}] : [], [{act: 'undo', label: 'Undo', quiet: true}, {act: 'clear', label: 'Clear', quiet: true}]); },
+  parabola: function () { return [{dir: 'up', label: 'Opens up'}, {dir: 'down', label: 'Opens down'}, {act: 'undo', label: 'Undo', quiet: true}, {act: 'clear', label: 'Clear', quiet: true}]; },
   sides: function () { return [{act: 'undo', label: 'Undo', quiet: true}, {act: 'clear', label: 'Clear', quiet: true}]; },
   polysketch: function () { return [{end: {side: 'left', dir: 'up'}, label: 'Left end ↑'}, {end: {side: 'left', dir: 'down'}, label: 'Left end ↓'}, {end: {side: 'right', dir: 'up'}, label: 'Right end ↑'}, {end: {side: 'right', dir: 'down'}, label: 'Right end ↓'}, {act: 'undo', label: 'Undo', quiet: true}, {act: 'clear', label: 'Clear', quiet: true}]; }
 };
 GK.toolbarFor = function (cfg) { var c = resolve(cfg), m = c.input && c.input.mode; return TOOLBARS[m] ? TOOLBARS[m](c.input).map(function (b) { return b.label; }) : m === 'sketch' ? ((c.sketch && c.sketch.tools) || ['keypoint', 'vertex']) : []; };
 var HINTS = { points: 'Click to place a point. Click a point again to remove it.',
   asymptotes: 'Choose a tool, then click the grid: Vertical or Horizontal places a dashed asymptote, Slant needs two clicks on the line, Hole places an open point, intercept tools place points. Click again to remove.', line: 'Click two points on the line. Click again to move the nearer point.',
-  sides: 'Click just left or right of a vertical asymptote: 1 click = the curve goes up, 2 = down, 3 = clears.', polysketch: 'Click a zero: 1 click = crosses straight through, 2 = bounces, 3 = crosses with a flat kink, 4 = removes it. Then choose both ends.',
+  parabola: 'Click the grid to place the vertex, then choose whether the parabola opens up or down. The curve draws itself.', sides: 'Click just left or right of a vertical asymptote: 1 click = the curve goes up, 2 = down, 3 = clears.', polysketch: 'Click a zero: 1 click = crosses straight through, 2 = bounces, 3 = crosses with a flat kink, 4 = removes it. Then choose both ends.',
   inequality: 'Click two points for the boundary, choose solid or dashed, then click the side to shade.', numberline: 'Place your point(s), then choose Shade and click the part(s) of the line to shade.' };
 
 GK.mount = function (el, cfg) {
@@ -918,6 +937,7 @@ GK.mount = function (el, cfg) {
         else if (t.tool) st = GK.act(input, st, {type: 'tool', tool: t.tool});
         else if ('dashed' in t) st = GK.act(input, st, {type: 'dashed', value: t.dashed});
         else if (t.end) st = GK.act(input, st, {type: 'end', side: t.end.side, dir: t.end.dir});
+        else if (t.dir) st = GK.act(input, st, {type: 'dir', dir: t.dir});
         refresh();
       });
       b._t = t; bar.appendChild(b);
@@ -979,6 +999,7 @@ GK.mount = function (el, cfg) {
     if (bar) Array.prototype.forEach.call(bar.querySelectorAll('button'), function (b) {
       var t = b._t; if (t.tool) b.setAttribute('aria-pressed', String(st.tool === t.tool)); if ('dashed' in t) b.setAttribute('aria-pressed', String(st.dashed === t.dashed));
       if (t.end) b.setAttribute('aria-pressed', String(st[t.end.side] === t.end.dir));
+      if (t.dir) b.setAttribute('aria-pressed', String(st.pd === t.dir));
     });
   }
   function wire() {

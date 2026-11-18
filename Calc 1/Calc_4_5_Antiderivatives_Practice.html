@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Antiderivatives & Initial Value Problems &mdash; Practice</title>
+<title>Antiderivatives, Initial Values &amp; Motion &mdash; Practice</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.css">
 <style>
   *{box-sizing:border-box;margin:0;padding:0}
@@ -64,24 +64,25 @@
 </head>
 <body>
 <div class="container">
-  <h1>Antiderivatives & Initial Value Problems</h1>
+  <h1>Antiderivatives, Initial Values &amp; Motion</h1>
   <p class="subtitle">Calculus I &nbsp;&middot;&nbsp; &sect;4.5 &nbsp;&middot;&nbsp; Instructor: Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026</p>
 
   <div class="section">
     <div class="section-title">Core Ideas</div>
 
     <div class="concept">
-      <span class="concept-label">Antiderivative Rules</span>
-      Power rule: $\displaystyle\int x^n\,dx = \frac{x^{n+1}}{n+1}+C$ &nbsp;$(n\neq -1)$
-      &nbsp;&nbsp;&nbsp;
-      Constant: $\displaystyle\int k\,dx = kx+C$
-      <br>Integrate term by term; pull constants outside. Always verify by differentiating.
+      <span class="concept-label">Going up the chain</span>
+      $a(t)\to v(t)+C_1\to s(t)+C_2$. Each integration adds a constant; the initial conditions $v(t_0)$ and $s(t_0)$ pin them down.
+      Position is the antiderivative of velocity; velocity is the antiderivative of acceleration.
     </div>
     <div class="concept">
       <span class="concept-label">Initial Value Problems</span>
-      Given $F'(x)=f(x)$ and $F(a)=b$: antidifferentiate to get $F(x)=\cdots+C$,
-      then substitute $F(a)=b$ to solve for $C$.
-      &nbsp; Shortcut: if $F(0)=d$, all non-constant terms vanish and $C=d$ directly.
+      Given $F'(x)=f(x)$ and $F(a)=b$: antidifferentiate to get $F(x)=\cdots+C$, then substitute $F(a)=b$ to solve for $C$.
+      Shortcut: if the condition is at $0$, all non-constant terms vanish and $C$ is the given value.
+    </div>
+    <div class="concept">
+      <span class="concept-label">Displacement</span>
+      $\displaystyle\int_a^b v(t)\,dt=s(b)-s(a)$ is signed: it can be negative if the object moves back.
     </div>
 
   </div>
@@ -89,7 +90,7 @@
   <div class="section">
     <div class="section-title">Practice Problems</div>
     <p style="font-family:sans-serif;font-size:13px;color:#666;margin-bottom:1rem;">
-      All answers are integers. Find C problems: enter the value of the constant. Find F(c) problems: enter the value of the function at the given point.
+      All answers are integers. Motion problems: enter the requested velocity, position or displacement. Find C problems: enter the value of the constant. Find F(c) problems: enter the value of the function at the given point.
       Press <strong>Check</strong> or hit Enter.
     </p>
     <div class="score-bar">
@@ -135,49 +136,65 @@ function addT(n, v) {
 
 // ── Problem generators (section-specific, injected below) ─────────────────────
 
-// gen1: Find C — F'(x)=k (constant), F(a)=b → C=b-ka
+// gen1: v(T) from a(t)=k, v(0)=v0
 function gen1() {
-  const k  = rInt(4) + 2;         // k in {2,3,4,5}
-  const a  = rInt(3) + 1;         // a in {1,2,3}
-  const ct = rInt(5) + 1;         // C in {1,2,3,4,5}
-  const b  = k * a + ct;
+  const k = rInt(3) + 2, v0 = rInt(4) + 1, T = rInt(2) + 2, ans = k * T + v0;
   return {
-    latex:  `\\text{Find }C\\text{ if }F'(x)=${k}\\text{ and }F(${a})=${b}.`,
-    answer: [String(ct)],
-    hint:   `Which antiderivative rule applies to a constant? Then substitute the given point to solve for C.`,
-    step:   `F(x)=${k}x+C,\\quad ${k}(${a})+C=${b},\\quad C=${ct}`
-  };
-}
-
-// gen2: Find C — F'(x)=2x, F(a)=b → C=b-a²
-function gen2() {
-  const cases = [
-    {a:1, b:4,  ans:3},
-    {a:1, b:6,  ans:5},
-    {a:2, b:7,  ans:3},
-    {a:2, b:9,  ans:5},
-    {a:3, b:11, ans:2},
-    {a:3, b:14, ans:5},
-  ];
-  const {a, b, ans} = choose(cases);
-  return {
-    latex:  `\\text{Find }C\\text{ if }F'(x)=2x\\text{ and }F(${a})=${b}.`,
+    latex:  `\\text{Given }a(t)=${k}\\text{ and }v(0)=${v0},\\text{ find }v(${T}).`,
     answer: [String(ans)],
-    hint:   `Power rule applies here. Once you have F(x)=\\ldots+C, what equation does F(${a})=${b} give you?`,
-    step:   `F(x)=x^2+C,\\quad ${a*a}+C=${b},\\quad C=${ans}`
+    hint:   `Velocity is the antiderivative of acceleration. Which rule applies to a constant, and what does v(0) tell you about C?`,
+    step:   `v(t)=${k}t+C,\\; C=${v0},\\quad v(${T})=${k*T}+${v0}=${ans}`
   };
 }
 
-// gen3: Find C — F'(x)=3x², F(a)=b → C=b-a³
+// gen2: s(T) from v(t)=2t+k, s(0)=s0
+function gen2() {
+  const k = rInt(4) + 1, s0 = rInt(4) + 1, T = rInt(2) + 2, ans = T * T + k * T + s0;
+  return {
+    latex:  `\\text{Given }v(t)=2t+${k}\\text{ and }s(0)=${s0},\\text{ find }s(${T}).`,
+    answer: [String(ans)],
+    hint:   `Position is the antiderivative of velocity. Use s(0) to find C, then evaluate at t=${T}.`,
+    step:   `s(t)=t^2+${k}t+C,\\; C=${s0},\\quad s(${T})=${T*T}+${k*T}+${s0}=${ans}`
+  };
+}
+
+// gen3: s(T) from a(t)=2, v(0)=v0, s(0)=s0 (two integrations)
 function gen3() {
-  const cases = [
-    {a:1, b:3,  ans:2},
-    {a:1, b:5,  ans:4},
-    {a:2, b:10, ans:2},
-    {a:2, b:12, ans:4},
-    {a:1, b:7,  ans:6},
-    {a:2, b:9,  ans:1},
-  ];
+  const v0 = rInt(4) + 1, s0 = rInt(4) + 1, T = rInt(2) + 2, ans = T * T + v0 * T + s0;
+  return {
+    latex:  `\\text{Given }a(t)=2,\\; v(0)=${v0},\\; s(0)=${s0},\\text{ find }s(${T}).`,
+    answer: [String(ans)],
+    hint:   `This takes two integration steps, each with its own constant. Which initial condition goes with which step?`,
+    step:   `v(t)=2t+${v0},\\quad s(t)=t^2+${v0}t+${s0},\\quad s(${T})=${T*T}+${v0*T}+${s0}=${ans}`
+  };
+}
+
+// gen4: s(T) from a(t)=6t, v(0)=v0, s(0)=s0
+function gen4() {
+  const v0 = rInt(4) + 1, s0 = rInt(4) + 1, T = rInt(2) + 1, ans = T * T * T + v0 * T + s0;
+  return {
+    latex:  `\\text{Given }a(t)=6t,\\; v(0)=${v0},\\; s(0)=${s0},\\text{ find }s(${T}).`,
+    answer: [String(ans)],
+    hint:   `Integrate a(t) to get v(t) and fix C with v(0). Then integrate v(t) and fix its constant with s(0).`,
+    step:   `v(t)=3t^2+${v0},\\quad s(t)=t^3+${v0}t+${s0},\\quad s(${T})=${T*T*T}+${v0*T}+${s0}=${ans}`
+  };
+}
+
+// gen5: Find C, F'(x)=2x+k, F(a)=b
+function gen5() {
+  const cases = [{a:1,k:2,b:6,ans:3},{a:1,k:3,b:8,ans:4},{a:2,k:1,b:8,ans:2},{a:2,k:2,b:11,ans:3},{a:1,k:1,b:7,ans:5},{a:2,k:3,b:11,ans:1}];
+  const {a, k, b, ans} = choose(cases);
+  return {
+    latex:  `\\text{Find }C\\text{ if }F'(x)=2x+${k}\\text{ and }F(${a})=${b}.`,
+    answer: [String(ans)],
+    hint:   `Antidifferentiate term by term. Then use F(${a})=${b} to set up an equation for C.`,
+    step:   `F(x)=x^2+${k}x+C,\\quad ${a*a}+${k*a}+C=${b},\\quad C=${ans}`
+  };
+}
+
+// gen6: Find C, F'(x)=3x^2, F(a)=b
+function gen6() {
+  const cases = [{a:1,b:3,ans:2},{a:1,b:5,ans:4},{a:2,b:10,ans:2},{a:2,b:12,ans:4},{a:1,b:7,ans:6},{a:2,b:9,ans:1}];
   const {a, b, ans} = choose(cases);
   return {
     latex:  `\\text{Find }C\\text{ if }F'(x)=3x^2\\text{ and }F(${a})=${b}.`,
@@ -187,76 +204,26 @@ function gen3() {
   };
 }
 
-// gen4: Find C — F'(x)=2x+k, F(a)=b → C=b-a²-ka
-function gen4() {
-  const cases = [
-    {a:1, k:2, b:6,  ans:3},
-    {a:1, k:3, b:8,  ans:4},
-    {a:2, k:1, b:8,  ans:2},
-    {a:2, k:2, b:11, ans:3},
-    {a:1, k:1, b:7,  ans:5},
-    {a:2, k:3, b:11, ans:1},
-  ];
-  const {a, k, b, ans} = choose(cases);
-  return {
-    latex:  `\\text{Find }C\\text{ if }F'(x)=2x+${k}\\text{ and }F(${a})=${b}.`,
-    answer: [String(ans)],
-    hint:   `Antiderivate term by term. Then use F(${a})=${b} to set up an equation for C.`,
-    step:   `F(x)=x^2+${k}x+C,\\quad ${a*a}+${k*a}+C=${b},\\quad C=${ans}`
-  };
-}
-
-// gen5: Find F(c) — F'(x)=k, F(0)=d → F(c)=kc+d
-function gen5() {
-  const k   = rInt(4) + 2;    // k in {2,3,4,5}
-  const d   = rInt(5) + 1;    // C=d in {1,2,3,4,5}
-  const c   = rInt(3) + 2;    // c in {2,3,4}
-  const ans = k * c + d;
-  return {
-    latex:  `\\text{Find }F(${c})\\text{ if }F'(x)=${k}\\text{ and }F(0)=${d}.`,
-    answer: [String(ans)],
-    hint:   `What is the antiderivative of ${k}? Use F(0)=${d} to determine C, then evaluate at x=${c}.`,
-    step:   `C=${d},\\quad F(x)=${k}x+${d},\\quad F(${c})=${k*c}+${d}=${ans}`
-  };
-}
-
-// gen6: Find F(c) — F'(x)=2x, F(0)=d → F(c)=c²+d
-function gen6() {
-  const d   = rInt(5) + 1;    // C=d in {1,2,3,4,5}
-  const c   = rInt(3) + 2;    // c in {2,3,4}
-  const ans = c * c + d;
-  return {
-    latex:  `\\text{Find }F(${c})\\text{ if }F'(x)=2x\\text{ and }F(0)=${d}.`,
-    answer: [String(ans)],
-    hint:   `What is the antiderivative of 2x? Use F(0)=${d} to determine C, then evaluate at x=${c}.`,
-    step:   `C=${d},\\quad F(x)=x^2+${d},\\quad F(${c})=${c*c}+${d}=${ans}`
-  };
-}
-
-// gen7: Find F(c) — F'(x)=3x², F(0)=d → F(c)=c³+d
+// gen7: F(c) from F'(x)=2x+k, F(0)=d
 function gen7() {
-  const d   = rInt(5) + 1;    // C=d in {1,2,3,4,5}
-  const c   = rInt(2) + 2;    // c in {2,3}
-  const ans = c * c * c + d;
-  return {
-    latex:  `\\text{Find }F(${c})\\text{ if }F'(x)=3x^2\\text{ and }F(0)=${d}.`,
-    answer: [String(ans)],
-    hint:   `What is the antiderivative of 3x²? Use F(0)=${d} to determine C, then evaluate at x=${c}.`,
-    step:   `C=${d},\\quad F(x)=x^3+${d},\\quad F(${c})=${c*c*c}+${d}=${ans}`
-  };
-}
-
-// gen8: Find F(c) — F'(x)=2x+k, F(0)=d → F(c)=c²+kc+d
-function gen8() {
-  const k   = rInt(3) + 1;    // k in {1,2,3}
-  const d   = rInt(4) + 1;    // C=d in {1,2,3,4}
-  const c   = rInt(2) + 2;    // c in {2,3}
-  const ans = c * c + k * c + d;
+  const k = rInt(3) + 1, d = rInt(4) + 1, c = rInt(2) + 2, ans = c * c + k * c + d;
   return {
     latex:  `\\text{Find }F(${c})\\text{ if }F'(x)=2x+${k}\\text{ and }F(0)=${d}.`,
     answer: [String(ans)],
-    hint:   `Antiderivate each term. Use F(0)=${d} to determine C, then evaluate at x=${c}.`,
+    hint:   `Antidifferentiate each term. Use F(0)=${d} to determine C, then evaluate at x=${c}.`,
     step:   `C=${d},\\quad F(x)=x^2+${k}x+${d},\\quad F(${c})=${c*c}+${k*c}+${d}=${ans}`
+  };
+}
+
+// gen8: displacement when velocity changes sign
+function gen8() {
+  const cases = [{b:6,T:3,ans:9},{b:4,T:2,ans:4},{b:8,T:3,ans:15},{b:6,T:2,ans:8},{b:10,T:4,ans:24},{b:8,T:4,ans:16}];
+  const {b, T, ans} = choose(cases);
+  return {
+    latex:  `\\text{Find displacement }\\int_0^{${T}} (-2t+${b})\\,dt.`,
+    answer: [String(ans)],
+    hint:   `Displacement = ∫v dt even when v changes sign. Set up the antiderivative and apply FTC at the endpoints.`,
+    step:   `\\left[-t^2+${b}t\\right]_0^{${T}}=-${T*T}+${b*T}=${ans}`
   };
 }
 
