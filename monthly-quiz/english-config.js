@@ -2,7 +2,7 @@
    Results go to the English Google Sheet (separate from the math Sheet). */
 window.MQ_CONFIG = {
   /* Paste the English Sheet's own Apps Script web-app URL here (a separate Sheet and deployment from the math quiz). If this is ever blank, students cannot start the quiz; teachers can still preview with ?preview=1. */
-  scriptUrl: 'https://script.google.com/macros/s/AKfycbyS75717Lh_whrqa4wNb0SauBiQuKQrmoD4Kt7blZqDJPThA3gljmTAcGGieynwrI-9/exec',
+  scriptUrl: 'https://script.google.com/macros/s/AKfycbwwOAjW8sjSRMqp8g20CWtqCn9rLud-TTByCXjNtreu7od70j4hVlii4kJpeiQGNA88pQ/exec',
 
   /* Which month's quiz students get from the plain link. */
   current: '2026-11',
