@@ -1,8 +1,8 @@
 /* English Monthly Skills Check — settings. Edit this file (not english-skills.js) to change who sees the quiz and what each month covers.
-   Results go to the same Google Sheet as the math quiz, in tabs ending in "English". */
+   Results go to the English Google Sheet (separate from the math Sheet). */
 window.MQ_CONFIG = {
-  /* Same Apps Script web-app URL as the math quiz. */
-  scriptUrl: 'https://script.google.com/a/macros/cardinalritterprep.org/s/AKfycbzZ8o5CtgXgPmmlTBgmRQ7q_oTFCruZ0tlM7eaYBPaOP3SmLP-v5o0iPoIg0LMODDRcGA/exec',
+  /* Paste the English Sheet's own Apps Script web-app URL here (a separate Sheet and deployment from the math quiz). Until it is filled in, students cannot start the quiz; teachers can still preview with ?preview=1. */
+  scriptUrl: '',
 
   /* Which month's quiz students get from the plain link. */
   current: '2026-11',
