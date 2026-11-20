@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Definite Integral &amp; FTC Part 1 &mdash; Practice</title>
+<title>The Definite Integral &mdash; Practice</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.css">
 <style>
   *{box-sizing:border-box;margin:0;padding:0}
@@ -63,7 +63,7 @@
 </head>
 <body>
 <div class="container">
-  <h1>The Definite Integral &amp; FTC Part 1</h1>
+  <h1>The Definite Integral</h1>
   <p class="subtitle">Calculus I &nbsp;&middot;&nbsp; &sect;4.3 &nbsp;&middot;&nbsp; Instructor: Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026</p>
 
   <div class="section">
@@ -72,16 +72,15 @@
     <div class="concept">
       <span class="concept-label">The Definite Integral</span>
       $$\int_a^b f(x)\,dx = \lim_{n\to\infty}\sum_{i=1}^{n}f(x_i)\,\Delta x$$
+      It is the <strong>signed area</strong> between $f$ and the x-axis: area above counts positive, area below counts negative.
       $\sum i = \tfrac{n(n+1)}{2}$ &nbsp;&nbsp;
       $\sum i^2 = \tfrac{n(n+1)(2n+1)}{6}$
     </div>
     <div class="concept">
-      <span class="concept-label">FTC Part 1 &nbsp;|&nbsp; Properties</span>
-      If $G(x)=\int_a^x f(t)\,dt$, then $G'(x)=f(x)$.
-      &ensp;<strong>Chain rule variant:</strong> $\dfrac{d}{dx}\!\left[\int_a^{g(x)}\!f(t)\,dt\right]=f(g(x))\cdot g'(x)$.
-      &ensp;<strong>Key properties:</strong>
+      <span class="concept-label">Properties</span>
       $\int_a^a f=0$;&ensp;
       $\int_a^b f=-\int_b^a f$;&ensp;
+      $\int_a^b (cf\pm g)=c\int_a^b f\pm\int_a^b g$;&ensp;
       $\int_a^b f=\int_a^c f+\int_c^b f$.
     </div>
 
@@ -90,8 +89,7 @@
   <div class="section">
     <div class="section-title">Practice Problems</div>
     <p style="font-family:sans-serif;font-size:13px;color:#666;margin-bottom:1rem;">
-      FTC Part 1 derivatives: enter the expression (e.g. <code>x^2+1</code>, <code>cos(x)*2x</code>). Integral properties: enter the numeric value.
-      Press <strong>Check</strong> or hit Enter.
+      All answers are integers. Press <strong>Check</strong> or hit Enter.
     </p>
     <div class="score-bar">
       <span class="score-label">Score:</span>
@@ -134,54 +132,11 @@ function addT(n, v) {
   return ' ' + s + ' ' + abs + (v||'');
 }
 
-// ── Problem generators (section-specific, injected below) ─────────────────────
+// ── Problem generators ───────────────────────────────────────────────────────
 
-// gen1: FTC Part 1 — basic: d/dx[∫₀ˣ f(t) dt] = f(x)
+// gen1: reversed limits
 function gen1() {
-  const fns = [
-    {fStr:'t^2+1',       ans:'x^2+1'},
-    {fStr:'3t^2',        ans:'3x^2'},
-    {fStr:'e^t',         ans:'e^x'},
-    {fStr:'\\cos t',     ans:'\\cos x'},
-    {fStr:'\\sin t',     ans:'\\sin x'},
-    {fStr:'t^3-2t',      ans:'x^3-2x'},
-    {fStr:'4t+5',        ans:'4x+5'},
-    {fStr:'\\sqrt{t}',   ans:'\\sqrt{x}'},
-  ];
-  const {fStr, ans} = choose(fns);
-  return {
-    latex: `\\frac{d}{dx}\\!\\left[\\int_0^x ${fStr}\\,dt\\right]`,
-    answer: [ans.replace(/\\/g,'')],
-    hint: `FTC Part 1: differentiate by substituting x in place of t in the integrand.`,
-    step: `= ${ans}`
-  };
-}
-
-// gen2: FTC Part 1 — chain rule variant: d/dx[∫₀^{g(x)} f(t) dt] = f(g(x))·g'(x)
-function gen2() {
-  const cases = [
-    {fStr:'\\cos t', gStr:'x^2',   gpStr:'2x',    ans:'\\cos(x^2)\\cdot 2x'},
-    {fStr:'e^t',     gStr:'x^3',   gpStr:'3x^2',  ans:'e^{x^3}\\cdot 3x^2'},
-    {fStr:'\\sin t', gStr:'x^2',   gpStr:'2x',    ans:'\\sin(x^2)\\cdot 2x'},
-    {fStr:'t^2+1',   gStr:'3x',    gpStr:'3',     ans:'(9x^2+1)\\cdot 3'},
-    {fStr:'\\sqrt{t}',gStr:'x^2',  gpStr:'2x',    ans:'\\sqrt{x^2}\\cdot 2x=|x|\\cdot 2x'},
-    {fStr:'e^t',     gStr:'\\sin x',gpStr:'\\cos x', ans:'e^{\\sin x}\\cdot\\cos x'},
-  ];
-  const {fStr, gStr, gpStr, ans} = choose(cases);
-  return {
-    latex: `\\frac{d}{dx}\\!\\left[\\int_0^{${gStr}} ${fStr}\\,dt\\right]`,
-    answer: [ans.replace(/\\/g,'').replace(/[{}]/g,'')],
-    hint: `Chain-rule variant of FTC Part 1: f(g(x))·g′(x). First apply FTC to get f(g(x)), then multiply by g′(x) = ${gpStr}.`,
-    step: `f(g(x))\\cdot g'(x)=${ans}`
-  };
-}
-
-// gen3: Reversed limits: ∫ₐᵇ f = -∫ᵦᵃ f  → give ∫ₐᵇ, ask for ∫ᵦᵃ
-function gen3() {
-  const val  = rInt(10) + 2;   // ∫ₐᵇ f = val
-  const neg  = -val;
-  const a    = rInt(4) + 1;
-  const b    = a + rInt(5) + 2;
+  const val = rInt(10) + 2, neg = -val, a = rInt(4) + 1, b = a + rInt(5) + 2;
   return {
     latex: `\\int_{${a}}^{${b}} f(x)\\,dx=${val}.\\quad\\text{Find }\\int_{${b}}^{${a}} f(x)\\,dx.`,
     answer: [String(neg)],
@@ -189,55 +144,30 @@ function gen3() {
     step: `\\int_{${b}}^{${a}} f\\,dx = -\\int_{${a}}^{${b}} f\\,dx = -${val}=${neg}`
   };
 }
-
-// gen4: Additivity: given ∫ₐᶜ and ∫ₐᵇ (b > c), find ∫ᶜᵇ
-function gen4() {
-  const a   = rInt(3) + 1;
-  const c   = a + rInt(3) + 1;
-  const b   = c + rInt(3) + 2;
-  const ac  = rInt(8) + 2;      // ∫ₐᶜ f
-  const ab  = ac + rInt(10) + 3; // ∫ₐᵇ f
-  const cb  = ab - ac;
+// gen2: additivity
+function gen2() {
+  const a = rInt(3) + 1, c = a + rInt(3) + 1, b = c + rInt(3) + 2, ac = rInt(8) + 2, ab = ac + rInt(10) + 3, cb = ab - ac;
   return {
     latex: `\\int_{${a}}^{${c}} f\\,dx=${ac},\\;\\int_{${a}}^{${b}} f\\,dx=${ab}.\\quad\\text{Find }\\int_{${c}}^{${b}} f\\,dx.`,
     answer: [String(cb)],
-    hint: `Additivity: ∫ₐᵇ f = ∫ₐᶜ f + ∫ᶜᵇ f. Solve for the missing piece.`,
+    hint: `Additivity: split the big interval at c and solve for the missing piece.`,
     step: `\\int_{${c}}^{${b}} f\\,dx = ${ab} - ${ac} = ${cb}`
   };
 }
-
-// gen5: Linearity: given ∫ₐᵇ f and ∫ₐᵇ g, find ∫ₐᵇ (cf ± dg)
-function gen5() {
-  const a  = rInt(3) + 1;
-  const b  = a + rInt(4) + 2;
-  const F  = rInt(8) + 2;
-  const G  = rInt(8) + 2;
-  const c  = rInt(3) + 2;
-  const d  = rInt(3) + 1;
-  const pm = rInt(2) === 0;     // true = plus, false = minus
-  const ans = pm ? c*F + d*G : c*F - d*G;
-  const dStr = d === 1 ? '' : String(d);
-  const pmStr = pm ? '+' : '-';
+// gen3: linearity
+function gen3() {
+  const a = rInt(3) + 1, b = a + rInt(4) + 2, F = rInt(8) + 2, G = rInt(8) + 2, c = rInt(3) + 2, d = rInt(3) + 1, pm = rInt(2) === 0;
+  const ans = pm ? c*F + d*G : c*F - d*G, dStr = d === 1 ? '' : String(d);
   return {
-    latex: `\\int_{${a}}^{${b}} f\\,dx=${F},\\;\\int_{${a}}^{${b}} g\\,dx=${G}.`
-         + `\\quad\\text{Find }\\int_{${a}}^{${b}}[${c}f(x)${pmStr}${dStr}g(x)]\\,dx.`,
+    latex: `\\int_{${a}}^{${b}} f\\,dx=${F},\\;\\int_{${a}}^{${b}} g\\,dx=${G}.\\quad\\text{Find }\\int_{${a}}^{${b}}[${c}f(x)${pm?'+':'-'}${dStr}g(x)]\\,dx.`,
     answer: [String(ans)],
-    hint: `Use linearity of the integral: ∫(cf ± dg) = c∫f ± d∫g.`,
+    hint: `Use linearity: pull the constants out, then substitute the given values.`,
     step: `${c}(${F})${pm?'+':'-'}${d}(${G})=${ans}`
   };
 }
-
-// gen6: Same-limit property: ∫ₐᵃ anything = 0
-function gen6() {
-  const fns = [
-    '\\sin(x^3)',
-    'e^{x^2}',
-    '\\sqrt{x^4+7}',
-    '\\cos(x^5)',
-    'x^{99}+x',
-  ];
-  const fn = choose(fns);
-  const a  = rInt(5) + 1;
+// gen4: same limits
+function gen4() {
+  const fn = choose(['\\sin(x^3)', 'e^{x^2}', '\\sqrt{x^4+7}', '\\cos(x^5)', 'x^{99}+x']), a = rInt(5) + 1;
   return {
     latex: `\\int_{${a}}^{${a}} ${fn}\\,dx`,
     answer: ['0'],
@@ -245,42 +175,44 @@ function gen6() {
     step: `= 0 \\text{ (same upper and lower limit)}`
   };
 }
-
-// gen7: FTC Part 1 with a lower-variable limit: d/dx[∫ₓᵇ f] = -f(x)
-function gen7() {
-  const fns = [
-    {fStr:'t^2',   ans:'-x^2'},
-    {fStr:'e^t',   ans:'-e^x'},
-    {fStr:'\\sin t', ans:'-\\sin x'},
-    {fStr:'t^3+1', ans:'-(x^3+1)'},
-  ];
-  const {fStr, ans} = choose(fns);
-  const b = rInt(4) + 2;
+// gen5: area by geometry, f(x) = m x on [0, b] (triangle), m even so the answer is an integer
+function gen5() {
+  const m = choose([2, 4, 6]), b = rInt(4) + 2, ans = m * b * b / 2;
   return {
-    latex: `\\frac{d}{dx}\\!\\left[\\int_x^{${b}} ${fStr}\\,dt\\right]`,
-    answer: [ans.replace(/\\/g,'').replace(/[{}]/g,'')],
-    hint: `Rewrite using the reversal property: ∫ₓᵇ f = −∫ᵇˣ f (wait — it's −∫ₓᵇ... actually flip: ∫ₓᵇ f dt = −∫ᵇₓ f dt... use ∫ₓᵇ = −∫ᵇₓ). Then apply FTC Part 1.`,
-    step: `\\int_x^{${b}} ${fStr}\\,dt = -\\int_{${b}}^x ${fStr}\\,dt`
-         + `\\;\\Rightarrow\\;\\frac{d}{dx}[\\cdots]=${ans}`
+    latex: `\\text{Use geometry (area of a triangle) to evaluate }\\int_0^{${b}} ${m}x\\,dx.`,
+    answer: [String(ans)],
+    hint: `Sketch the line y = ${m}x from 0 to ${b}: the region is a triangle.`,
+    step: `\\text{base }${b},\\ \\text{height }${m*b}:\\ \\tfrac12(${b})(${m*b})=${ans}`
   };
 }
-
-// gen8: G(x) = ∫ₐˣ f, find G(a) and G'(x)
-function gen8() {
-  const fns = [
-    {fStr:'t^2-3t', gStr:'x^2-3x'},
-    {fStr:'4t+1',   gStr:'4x+1'},
-    {fStr:'e^t',    gStr:'e^x'},
-    {fStr:'\\cos t',gStr:'\\cos x'},
-    {fStr:'t^3',    gStr:'x^3'},
-  ];
-  const {fStr, gStr} = choose(fns);
-  const a = rInt(4) + 1;
+// gen6: signed area, f(x) = x - c on [0, b], b even, b > c  (triangle below minus triangle above... computed as b^2/2 - cb)
+function gen6() {
+  const c = rInt(3) + 1, b = choose([6, 8, 10]), ans = b*b/2 - c*b;
   return {
-    latex: `G(x)=\\int_{${a}}^x ${fStr}\\,dt.\\quad\\text{Find }G'(x)\\text{ and }G(${a}).`,
-    answer: [gStr.replace(/\\/g,'').replace(/[{}]/g,''), '0'],
-    hint: `G′(x) = f(x) by FTC Part 1. For G(${a}), remember what happens when the upper limit equals the lower limit.`,
-    step: `G'(x)=${gStr};\\quad G(${a})=\\int_{${a}}^{${a}} ${fStr}\\,dt=0`
+    latex: `\\text{Use signed area to evaluate }\\int_0^{${b}} (x-${c})\\,dx.`,
+    answer: [String(ans)],
+    hint: `Area below the x-axis counts as negative.`,
+    step: `\\text{below: }-\\tfrac12(${c})(${c})=${-c*c/2};\\ \\text{above: }\\tfrac12(${b-c})(${b-c})=${(b-c)*(b-c)/2};\\ \\text{total }=${ans}`
+  };
+}
+// gen7: sigma formula values
+function gen7() {
+  const n = rInt(6) + 4, sq = rInt(2) === 0, ans = sq ? n*(n+1)*(2*n+1)/6 : n*(n+1)/2;
+  return {
+    latex: sq ? `\\text{Evaluate }\\sum_{i=1}^{${n}} i^2.` : `\\text{Evaluate }\\sum_{i=1}^{${n}} i.`,
+    answer: [String(ans)],
+    hint: sq ? `Use the closed form with n(n+1)(2n+1).` : `Use the closed form with n(n+1).`,
+    step: sq ? `\\tfrac{${n}(${n+1})(${2*n+1})}{6}=${ans}` : `\\tfrac{${n}(${n+1})}{2}=${ans}`
+  };
+}
+// gen8: reversed limits plus linearity
+function gen8() {
+  const a = rInt(3) + 1, b = a + rInt(4) + 2, F = rInt(7) + 2, G = rInt(7) + 2, c = rInt(3) + 2, ans = -(c*F + G);
+  return {
+    latex: `\\int_{${a}}^{${b}} f\\,dx=${F},\\;\\int_{${a}}^{${b}} g\\,dx=${G}.\\quad\\text{Find }\\int_{${b}}^{${a}}[${c}f(x)+g(x)]\\,dx.`,
+    answer: [String(ans)],
+    hint: `Reverse the limits (negate), then use linearity.`,
+    step: `-(${c}(${F})+${G})=${ans}`
   };
 }
 

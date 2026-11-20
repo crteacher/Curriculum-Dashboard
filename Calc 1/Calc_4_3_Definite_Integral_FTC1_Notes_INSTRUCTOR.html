@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Definite Integral &amp; FTC Part 1 &mdash; Notes</title>
+<title>The Definite Integral &mdash; Notes</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.css">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -173,41 +173,33 @@ details[open]>.mistake-toggle{color:#1e3a5c}
 </head>
 <body>
 <div class="container">
-<h1 class="page-title">The Definite Integral &amp; FTC Part 1</h1>
+<h1 class="page-title">The Definite Integral</h1>
 <p class="page-sub">Calculus I &nbsp;&middot;&nbsp; &sect;4.3 &nbsp;&middot;&nbsp; Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026 &nbsp;&middot;&nbsp; <strong>INSTRUCTOR</strong></p>
-<div class="opening-q">In &sect;4.2 you computed a Riemann sum $R_n$ and took $n\to\infty$ to get an exact area. That limiting process defines the integral. But here&rsquo;s a strange observation: $\dfrac{d}{dx}\!\left[\int_0^x t^2\,dt\right] = x^2$. Differentiating an integral gives back the original function. Is that always true?</div>
+<div class="opening-q">In &sect;4.2 you computed a Riemann sum $R_n$ and let $n\to\infty$ to get an exact area. That limit is the definite integral. If $\int_2^7 f(x)\,dx=10$, what should $\int_7^2 f(x)\,dx$ be? And what should the integral mean when part of the graph lies <em>below</em> the x-axis?</div>
 <div class="two-col">
-<div class="col"><div class="section-head">The Definite Integral &amp; FTC Part 1</div>
-<div class="accent-box"><p>The <strong>definite integral</strong> of $f$ on $[a,b]$:</p><p>$$\int_a^b f(x)\,dx = \lim_{n\to\infty}\sum_{i=1}^{n}f(x_i)\,\Delta x$$</p><p>where $\Delta x=(b-a)/n$ and $x_i=a+i\,\Delta x$. The symbol $\int$ is an elongated S for &ldquo;sum&rdquo;; $a,b$ are the <strong>limits of integration</strong>; $dx$ corresponds to $\Delta x\to 0$.</p><p><strong>Closed-form sigma formulas</strong> (for evaluating the limit):<br>$\displaystyle\sum_{i=1}^{n}i=\frac{n(n+1)}{2}\qquad\displaystyle\sum_{i=1}^{n}i^2=\frac{n(n+1)(2n+1)}{6}$</p><hr style="border:none;border-top:1px solid #c8d8e8;margin:.6rem 0"><p><strong>FTC Part 1.</strong> If $f$ is continuous on $[a,b]$ and $G(x)=\displaystyle\int_a^x\!f(t)\,dt$, then</p><p>$$G'(x)=f(x)$$</p><p><em>Proof sketch.</em> $G(x+h)-G(x)=\displaystyle\int_x^{x+h}\!f(t)\,dt\approx f(x)\cdot h$ for small $h$ (the integrand barely changes over the tiny interval $[x,x+h]$). Divide by $h$ and let $h\to 0$: &nbsp;$G'(x)=f(x)$.&ensp;$\square$</p><p><strong>Chain-rule variant:</strong> If the upper limit is $g(x)$:<br>$\dfrac{d}{dx}\!\left[\int_a^{g(x)}\!f(t)\,dt\right]=f(g(x))\cdot g'(x)$</p></div>
-<details class="mistake-panel">
-<summary class="mistake-toggle">&blacktriangleright; Common Mistake</summary>
-<div class="mistake-body">
-<p>When applying FTC Part 1 with a non-trivial upper limit, students often forget the chain rule. $\dfrac{d}{dx}\!\left[\int_0^{x^2}\cos t\,dt\right]=\cos(x^2)\cdot 2x$, not $\cos(x^2)$. The $f(g(x))$ part is the FTC; the $\cdot g'(x)$ part is the chain rule &mdash; both are required.</p>
-</div>
-</details>
-</div>
+<div class="col"><div class="section-head">The Definite Integral</div>
+<div class="accent-box"><p>The <strong>definite integral</strong> of $f$ on $[a,b]$:</p><p>$$\int_a^b f(x)\,dx = \lim_{n\to\infty}\sum_{i=1}^{n}f(x_i)\,\Delta x$$</p><p>where $\Delta x=(b-a)/n$ and $x_i=a+i\,\Delta x$. The symbol $\int$ is an elongated S for &ldquo;sum&rdquo;; $a,b$ are the <strong>limits of integration</strong>; $dx$ corresponds to $\Delta x\to 0$.</p><p><strong>Signed area:</strong> the integral counts area <em>above</em> the x-axis as positive and area <em>below</em> as negative.</p><p><strong>Closed-form sigma formulas</strong> (for evaluating the limit):<br>$\displaystyle\sum_{i=1}^{n}i=\frac{n(n+1)}{2}\qquad\displaystyle\sum_{i=1}^{n}i^2=\frac{n(n+1)(2n+1)}{6}$</p></div></div>
 <div class="col"><div class="section-head">Properties of Definite Integrals</div>
-<div class="accent-box"><p>These follow directly from the limit definition.</p><p><strong>Same limits:</strong> $\displaystyle\int_a^a f(x)\,dx=0$</p><p><strong>Reverse limits:</strong> $\displaystyle\int_a^b f(x)\,dx=-\int_b^a f(x)\,dx$</p><p><strong>Constant multiple:</strong> $\displaystyle\int_a^b cf(x)\,dx=c\int_a^b f(x)\,dx$</p><p><strong>Sum/difference:</strong> $\displaystyle\int_a^b[f(x)\pm g(x)]\,dx=\int_a^b f(x)\,dx\pm\int_a^b g(x)\,dx$</p><p><strong>Additivity:</strong> $\displaystyle\int_a^b f(x)\,dx=\int_a^c f(x)\,dx+\int_c^b f(x)\,dx$</p><p><strong>Comparison:</strong> If $f(x)\ge 0$ on $[a,b]$, then $\displaystyle\int_a^b f(x)\,dx\ge 0$.</p></div>
-<details class="mistake-panel">
+<div class="accent-box"><p>These follow directly from the limit definition.</p><p><strong>Same limits:</strong> $\displaystyle\int_a^a f(x)\,dx=0$</p><p><strong>Reverse limits:</strong> $\displaystyle\int_a^b f(x)\,dx=-\int_b^a f(x)\,dx$</p><p><strong>Constant multiple:</strong> $\displaystyle\int_a^b cf(x)\,dx=c\int_a^b f(x)\,dx$</p><p><strong>Sum/difference:</strong> $\displaystyle\int_a^b[f(x)\pm g(x)]\,dx=\int_a^b f(x)\,dx\pm\int_a^b g(x)\,dx$</p><p><strong>Additivity:</strong> $\displaystyle\int_a^b f(x)\,dx=\int_a^c f(x)\,dx+\int_c^b f(x)\,dx$</p><p><strong>Comparison:</strong> If $f(x)\ge 0$ on $[a,b]$, then $\displaystyle\int_a^b f(x)\,dx\ge 0$.</p></div><details class="mistake-panel">
 <summary class="mistake-toggle">&blacktriangleright; Common Mistake</summary>
 <div class="mistake-body">
 <p>The additivity rule splits on an interior point $c$ &mdash; but $c$ does not have to be between $a$ and $b$. $\displaystyle\int_1^5 f\,dx = \int_1^8 f\,dx + \int_8^5 f\,dx$ is valid even though $8>5$. Students who assume $a<c<b$ miss cases where the split point lies outside the interval.</p>
 </div>
 </details>
-<p class="body-text">FTC Part 1 connects these properties to differentiation: the accumulation function $G(x)=\int_a^x f(t)\,dt$ is an antiderivative of $f$ &mdash; that&rsquo;s why the integral and the derivative undo each other. §4.4 uses this to prove the evaluation formula $\int_a^b f\,dx=F(b)-F(a)$.</p>
+<p class="body-text">Evaluating the limit is slow. &sect;4.4 (FTC Part 2) replaces it with one antiderivative and a subtraction. How the integral and the derivative undo each other (FTC Part 1) comes at the end of the unit.</p>
 </div>
 </div>
 <div class="section-head">Worked Examples</div>
 <div class="examples-grid">
 <div class="ex-block">
-  <div class="ex-label">Example 1 &nbsp;&mdash;&nbsp; FTC Part 1 — basic</div>
-  <div class="ex-body">Find $\dfrac{d}{dx}\!\left[\displaystyle\int_0^x (t^3+2t)\,dt\right]$.</div>
-  <div class="ex-answer instructor">FTC Part 1: differentiate by plugging $x$ in for $t$.<br>$= x^3+2x$</div>
+  <div class="ex-label">Example 1 &nbsp;&mdash;&nbsp; Area by geometry</div>
+  <div class="ex-body">Use geometry to evaluate $\displaystyle\int_0^4 x\,dx$.</div>
+  <div class="ex-answer instructor">The region under $y=x$ from $0$ to $4$ is a triangle with base $4$ and height $4$.<br>$\tfrac12(4)(4)=8$</div>
 </div>
 <div class="ex-block">
-  <div class="ex-label">Example 2 &nbsp;&mdash;&nbsp; FTC Part 1 — chain rule</div>
-  <div class="ex-body">Find $\dfrac{d}{dx}\!\left[\displaystyle\int_1^{x^2}\sin t\,dt\right]$.</div>
-  <div class="ex-answer instructor">Upper limit is $g(x)=x^2$, so apply the chain-rule variant:<br>$f(g(x))\cdot g'(x)=\sin(x^2)\cdot 2x$</div>
+  <div class="ex-label">Example 2 &nbsp;&mdash;&nbsp; Signed area</div>
+  <div class="ex-body">Use signed area to evaluate $\displaystyle\int_0^6 (x-2)\,dx$.</div>
+  <div class="ex-answer instructor">Below the axis ($0\le x\le2$): triangle of area $\tfrac12(2)(2)=2$, counted as $-2$.<br>Above ($2\le x\le6$): $\tfrac12(4)(4)=8$.<br>Total: $8-2=6$</div>
 </div>
 <div class="ex-block">
   <div class="ex-label">Example 3 &nbsp;&mdash;&nbsp; Using properties</div>
@@ -224,13 +216,13 @@ details[open]>.mistake-toggle{color:#1e3a5c}
 <div class="practice">
 <div class="pr-row">
   <div class="pr-num">1.</div>
-  <div class="pr-prob">Find $\dfrac{d}{dx}\!\left[\displaystyle\int_0^x e^t\,dt\right]$.</div>
-  <div class="pr-ans instructor">$e^x$ &nbsp;(FTC Part 1 — plug $x$ in for $t$)</div>
+  <div class="pr-prob">Use geometry to evaluate $\displaystyle\int_0^3 2x\,dx$.</div>
+  <div class="pr-ans instructor">Triangle, base $3$, height $6$: $9$</div>
 </div>
 <div class="pr-row">
   <div class="pr-num">2.</div>
-  <div class="pr-prob">Find $\dfrac{d}{dx}\!\left[\displaystyle\int_0^{x^3}\cos t\,dt\right]$.</div>
-  <div class="pr-ans instructor">$\cos(x^3)\cdot 3x^2$ &nbsp;(chain-rule variant)</div>
+  <div class="pr-prob">Use signed area to evaluate $\displaystyle\int_{-3}^{3} x\,dx$.</div>
+  <div class="pr-ans instructor">The triangle left of $0$ cancels the triangle right of $0$: $0$</div>
 </div>
 <div class="pr-row">
   <div class="pr-num">3.</div>
@@ -249,8 +241,8 @@ details[open]>.mistake-toggle{color:#1e3a5c}
 </div>
 <div class="pr-row">
   <div class="pr-num">6.</div>
-  <div class="pr-prob">Let $G(x)=\displaystyle\int_3^x (t^2+1)\,dt$. Find $G'(x)$ and $G(3)$.</div>
-  <div class="pr-ans instructor">$G'(x)=x^2+1$ (FTC Part 1);&ensp; $G(3)=0$ (same upper and lower limit)</div>
+  <div class="pr-prob">Evaluate $\displaystyle\sum_{i=1}^{6} i^2$.</div>
+  <div class="pr-ans instructor">$\dfrac{6(7)(13)}{6}=91$</div>
 </div>
 </div>
 
