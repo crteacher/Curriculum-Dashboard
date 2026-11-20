@@ -371,6 +371,8 @@
 </div>
 
 
+<script src="../js/mathcheck.js"></script>
+<script src="../js/graphkit.js"></script>
 <script>
 (function () {
   "use strict";
@@ -1330,109 +1332,29 @@
     return out;
   }
   var SK_FORMULA = function (s) { return "<span class=\"math\">f(x) = " + facH(s.zs, s.s) + "</span>"; };
-  PARTS.push({
-    id: "2a", group: "2", label: "(a)", points: 4,
-    gen: function () { var g = genSk("mix"); g.opts = makeOptions(g.zs, g.s); return g; },
-    prompt: function (s) { return "Which graph is a sketch of " + SK_FORMULA(s) + "? It must show the correct zeros, the multiplicity at each zero, and the end behavior."; },
-    inputsHtml: function (s) { return graphOptHtml("g", s.opts.map(function (o) { return sketchSvg2(o.zs, o.s); })); },
-    afterRender: mcAfterRender,
-    readAnswer: function (card) { return { g: mcSel(card, "g") }; },
-    grade: function (ua, s) {
-      if (ua.g === null || ua.g === undefined) return { pts: 0, msg: "Pick one of the graphs." };
-      var o = s.opts[+ua.g];
-      return o.ok ? { pts: 4, msg: "" } : { pts: 0, msg: pickHint(o, s.zs, s.s) };
-    },
-    isCorrect: function (ua, s) { return { ok: ua.g !== null && s.opts[+ua.g].ok }; },
-    solutionHtml: function (s) {
-      var i = 0; s.opts.forEach(function (o, k) { if (o.ok) i = k; });
-      return solLabel() + skExplain(s.zs, s.s) + step("The matching sketch is <strong>graph " + "ABCD".charAt(i) + "</strong>:") + "<div class=\"sol-fig\">" + sketchSvg2(s.zs, s.s) + "</div>" + finalH("graph " + "ABCD".charAt(i));
-    }
-  });
-
-  // 2b: build the sketch by clicking the zeros
-  var SKW = [-6, 6, -1.35, 1.35];
-  function skMarksList(marks) { return Object.keys(marks).map(Number).sort(function (a, b) { return a - b; }).map(function (r) { return { r: r, m: marks[r] }; }); }
-  function skSign(zsM, leftEnd) { var deg = zsDeg(zsM), p = deg % 2 === 0 ? 1 : -1; return leftEnd === "up" ? p : -p; }
-  function skCaption(card) {
-    var canvas = card.querySelector("canvas"), cap = card.querySelector(".qgraph-caption"), marks = canvas._marks || {};
-    var list = skMarksList(marks);
-    if (!cap) return;
-    if (!list.length) { cap.textContent = "Click an x-value on the grid to mark a zero."; return; }
-    var txt = list.map(function (z) { return "x = " + String(z.r).replace("-", "−") + (z.m === 1 ? " crosses" : " touches"); }).join(";  ");
-    var right = sel(card, ".ans-right"), left = sel(card, ".ans-left");
-    if (left && right) {
-      var zsM = list.map(function (z) { return { r: z.r, m: z.m }; }), sg = skSign(zsM, left), derived = sg > 0 ? "up" : "down";
-      if (derived !== right) txt += "   — these ends don't fit the zeros you marked: check how the crossings change the direction.";
-    }
-    cap.textContent = txt;
-  }
-  function drawSk(canvas, s) {
-    var g = drawGrid(canvas, SKW[0], SKW[1], SKW[2], SKW[3], { noYLabels: true, hGrid: 100 });
-    var ca = cssVar("--graph-stroke-a"), cb = cssVar("--graph-stroke-b"), card = canvas._card;
-    if (canvas._showSolution) {
-      plotFn(g, sketchShape(s.zs, s.s), cb, 2.8);
-      s.zs.forEach(function (z) { plotDot(g, z.r, 0, cb, 6, z.m % 2 === 0); });
-    }
-    var list = skMarksList(canvas._marks || {}), left = card ? sel(card, ".ans-left") : "";
-    if (list.length && left) {
-      var zsM = list.map(function (z) { return { r: z.r, m: z.m }; });
-      plotFn(g, sketchShape(zsM, skSign(zsM, left)), ca, 2.4);
-    }
-    list.forEach(function (z) { plotDot(g, z.r, 0, ca, 5.5, z.m === 2); });
-  }
-  function wireSk(card, id) {
-    var canvas = card.querySelector("canvas");
-    canvas._marks = {}; canvas._showSolution = false; canvas._card = card; skCaption(card);
-    if (!canvas._wired) {
-      canvas._wired = true; canvas.style.cursor = "pointer";
-      canvas.addEventListener("click", function (evt) {
-        var s = window.__PT_STATE[id]; if (!s) return;
-        var gp = clickToGraph(canvas, evt, SKW), gx = Math.max(-6, Math.min(6, Math.round(gp[0])));
-        var cur = canvas._marks[gx];
-        if (!cur) canvas._marks[gx] = 1; else if (cur === 1) canvas._marks[gx] = 2; else delete canvas._marks[gx];
-        drawSk(canvas, s); skCaption(card);
-      });
-    }
-    ["ans-left", "ans-right"].forEach(function (c) {
-      var el = card.querySelector("." + c);
-      if (el && !el._wired) { el._wired = true; el.addEventListener("change", function () { var s = window.__PT_STATE[id]; if (s) drawSk(canvas, s); skCaption(card); }); }
-    });
-    var clr = card.querySelector(".clear-points-btn");
-    if (clr && !clr._wired) { clr._wired = true; clr.addEventListener("click", function () { canvas._marks = {}; var s = window.__PT_STATE[id]; if (s) drawSk(canvas, s); skCaption(card); }); }
-    var sb = card.querySelector(".solution-btn");
-    if (sb && !sb._wired) { sb._wired = true; sb.addEventListener("click", function () { canvas._showSolution = true; var s = window.__PT_STATE[id]; if (s) drawSk(canvas, s); }); }
-  }
-  PARTS.push({
-    id: "2b", group: "2", label: "(b)", points: 4, hasGraph: true, interactive: true, graphClass: "wide",
-    gen: function () { return genSk(Math.random() < 0.45 ? "even" : "any"); },
-    prompt: function (s) { return "Build a sketch of " + SK_FORMULA(s) + ". Click the grid at each <strong>zero</strong>: one click marks a zero where the graph <em>crosses</em> (solid dot), a second click on the same spot changes it to a zero where the graph <em>touches</em> and turns around (open dot), and a third click removes it. Then choose the <strong>end behavior</strong> and your sketch is drawn for you."; },
-    inputsHtml: function () { return row("End behavior:", "<span class=\"mini\">left end</span>" + endSel("ans-left", "left end") + "<span class=\"mini\">&nbsp; right end</span>" + endSel("ans-right", "right end")); },
-    afterRender: function (card) { wireSk(card, "2b"); },
-    readAnswer: function (card) { return { marks: JSON.parse(JSON.stringify(card.querySelector("canvas")._marks || {})), left: sel(card, ".ans-left"), right: sel(card, ".ans-right") }; },
-    drawGraph: drawSk,
-    grade: function (ua, s) {
-      var tr = rootsMapOf(s.zs), mk = ua.marks || {}, trK = Object.keys(tr).sort(), mkK = Object.keys(mk).sort(), pts = 0, issues = [];
-      var setOK = JSON.stringify(trK) === JSON.stringify(mkK);
-      if (setOK) {
-        pts++;
-        var multOK = trK.every(function (k) { return tr[k] === mk[k]; });
-        if (multOK) pts++; else { var bk = trK.filter(function (k) { return tr[k] !== mk[k]; })[0]; issues.push("At x = " + bk.replace("-", "−") + " the exponent is " + tr[bk] + ", so the graph should " + (tr[bk] % 2 === 0 ? "touch and turn around" : "cross") + "."); }
-      } else {
-        var miss = trK.filter(function (k) { return mkK.indexOf(k) === -1; }), extra = mkK.filter(function (k) { return trK.indexOf(k) === -1; });
-        if (!mkK.length) issues.push("Mark the zeros on the grid first.");
-        else issues.push((miss.length ? "You are missing a zero. " : "") + (extra.length ? "x = " + extra[0].replace("-", "−") + " is not a zero of f. " : "") + "Each factor (x − r) gives a zero at x = r.");
+  function gkMissing(card, host) { host.innerHTML = "<div class=\"field-note\">The graph tool did not load. Please reload the page.</div>"; card._gk = null; }
+  function sketchCard(id, label, modeFn) {
+    return {
+      id: id, group: "2", label: label, points: 4,
+      gen: modeFn,
+      prompt: function (s) { return "Sketch " + SK_FORMULA(s) + ". Your sketch must show the <strong>zeros</strong>, what the graph does at each one (cross or touch), and the <strong>end behavior</strong>. Click the x-axis at each zero, then choose the far-left and far-right ends."; },
+      inputsHtml: function () { return "<div class=\"gk-host\"></div>"; },
+      afterRender: function (card) {
+        var host = card.querySelector(".gk-host"), s = window.__PT_STATE[id];
+        if (typeof GraphKit === "undefined") return gkMissing(card, host);
+        card._gk = GraphKit.mount(host, { preset: "poly-sketch", quietFeedback: true, expected: { zeros: s.zs.map(function (z) { return { r: z.r, m: z.m }; }), a: s.s } });
+      },
+      readAnswer: function (card) { return { res: card._gk ? card._gk.grade() : { score: 0, detail: "The graph tool did not load." } }; },
+      grade: function (ua) { var pts = Math.round(ua.res.score * 4); return { pts: pts, msg: pts >= 4 ? "" : (ua.res.detail || "") }; },
+      isCorrect: function () { return { ok: false }; },
+      solutionHtml: function (s, card) {
+        if (card && card._gk) card._gk.showAnswer();
+        return solLabel() + skExplain(s.zs, s.s) + "<div class=\"sol-fig\">" + sketchSvg2(s.zs, s.s) + "</div>" + finalH("the correct sketch also appears in gold on your graph");
       }
-      var e = endsOf(zsDeg(s.zs), s.s);
-      if (!ua.left || !ua.right) issues.push("Choose both end behaviors.");
-      else {
-        if (ua.left === e.left) pts++; else issues.push("Recheck the left end.");
-        if (ua.right === e.right) pts++; else issues.push("Recheck the right end.");
-      }
-      return { pts: pts, msg: pts >= 4 ? "" : issues.join(" ") };
-    },
-    isCorrect: function () { return { ok: false }; },
-    solutionHtml: function (s) { return solLabel() + skExplain(s.zs, s.s) + "<div class=\"sol-fig\">" + sketchSvg2(s.zs, s.s) + "</div>" + finalH("shown in teal above your sketch"); }
-  });
+    };
+  }
+  PARTS.push(sketchCard("2a", "(a)", function () { return genSk("mix"); }));
+  PARTS.push(sketchCard("2b", "(b)", function () { return genSk(Math.random() < 0.45 ? "even" : "any"); }));
 
   // ---------- Q3: write a polynomial from a graph ----------
   var K_CANDS = [F(1), F(2), F(3), F(1, 2), F(1, 3), F(1, 4), F(1, 5), F(1, 6), F(1, 8), F(1, 10), F(1, 12), F(1, 15), F(1, 20), F(1, 30), F(1, 50), F(1, 80), F(1, 100)];
@@ -1586,16 +1508,33 @@
     Object.keys(names).forEach(function (k) { if (g.ok[k]) pts++; else if (g.msg[k]) msgs.push(names[k] + ": " + g.msg[k]); });
     return { pts: pts, msg: msgs.join(" ") };
   }
+  function genRatG() {
+    for (var t = 0; t < 4000; t++) {
+      var s = genRat(), I = s.info;
+      if (s.d !== 1) continue;                                   // whole-number horizontal asymptote
+      if (I.ha && Math.abs(fnum(I.ha)) > 6) continue;
+      if (I.holes.some(function (h) { var y = fnum(h.y); return Math.abs(y - Math.round(y)) > 1e-9 || Math.abs(y) > 6; })) continue;   // hole must sit on a grid point
+      return s;
+    }
+    return genRat();
+  }
   PARTS.push({
     id: "4", group: "4", label: "", points: 4,
-    gen: genRat,
-    prompt: function (s) { return "Find all zeros, asymptotes, and removable discontinuities of <span class=\"math\">f(x) = </span>" + ratFracH(s.N, s.D, s.n, s.d) + RAT_NOTE; },
-    inputsHtml: RAT_FIELDS,
-    readAnswer: ratRead,
-    grade: function (ua, s) { return ratFeedback(gradeRatFields(ua, s.info)); },
-    isCorrect: function (ua, s) { return { ok: ratFeedback(gradeRatFields(ua, s.info)).pts >= 4 }; },
-    solutionHtml: function (s) {
+    gen: genRatG,
+    prompt: function (s) { return "Find all zeros, asymptotes, and removable discontinuities of <span class=\"math\">f(x) = </span>" + ratFracH(s.N, s.D, s.n, s.d) + "<div class=\"field-note\">Mark them on the graph: choose a tool, then click the grid. Use <strong>x-intercept</strong> for each zero, <strong>Vertical asymptote</strong> and <strong>Horizontal asymptote</strong> for the dashed lines, and <strong>Hole</strong> for an open point (give its x and y). Click a mark again to remove it. Place only what the function has; leave a tool unused if the function has none of that feature.</div>"; },
+    inputsHtml: function () { return "<div class=\"gk-host\"></div>"; },
+    afterRender: function (card) {
+      var host = card.querySelector(".gk-host"), s = window.__PT_STATE["4"], I = s.info;
+      if (typeof GraphKit === "undefined") return gkMissing(card, host);
+      card._gk = GraphKit.mount(host, { preset: "mark-asymptotes", quietFeedback: true, window: { x: [-8, 8], y: [-8, 8] }, size: { w: 560, h: 340 }, ticks: { x: 1, y: 1 },
+        expected: { f: function (x) { return I.f(x); }, v: I.vas.slice(), h: I.ha ? [fnum(I.ha)] : [], holes: I.holes.map(function (h) { return [h.x, fnum(h.y)]; }), zeros: I.zeros.slice() } });
+    },
+    readAnswer: function (card) { return { res: card._gk ? card._gk.grade() : { score: 0, detail: "The graph tool did not load." } }; },
+    grade: function (ua) { var d = ua.res.detail || "", pts = /^Place your marks first/.test(d) ? 0 : Math.round(ua.res.score * 4); return { pts: pts, msg: pts >= 4 ? "" : d }; },
+    isCorrect: function () { return { ok: false }; },
+    solutionHtml: function (s, card) {
       var I = s.info;
+      if (card && card._gk) card._gk.showAnswer();
       return solLabel() + ratSolution(s.N, s.D, s.n, s.d, I) + finalH("zeros: " + (I.zeros.length ? I.zeros.map(M).join(", ") : "none") + ";  VA: " + (I.vas.length ? I.vas.map(function (v) { return "x = " + M(v); }).join(", ") : "none") + ";  HA: " + haFmt(I.ha) + ";  hole: " + (I.holes.length ? "(" + M(I.holes[0].x) + ", " + fpl(I.holes[0].y) + ")" : "none"));
     }
   });
@@ -1663,7 +1602,7 @@
     "1": { num: "1.", desc: "Determine whether each function is a polynomial. If it is, give the degree and the end behavior (which way each end of the graph points)." },
     "2": { num: "2.", desc: "Sketch the following. Your sketch needs to show the zeros, the multiplicities, and the end behavior." },
     "3": { num: "3.", desc: "Write a polynomial that could have the following graph. Consider the zeros, what is happening at the zeros, and the end behavior." },
-    "4": { num: "4.", desc: "Find all zeros, asymptotes, and removable discontinuities." },
+    "4": { num: "4.", desc: "Find all zeros, asymptotes, and removable discontinuities. Mark each one on the graph." },
     "5": { num: "5.", desc: "Extra credit: sketch a graph of the rational function." }
   };
   window.__PT = { PARTS: PARTS, shapeSamples: shapeSamples, shapeDist: shapeDist, F: F, ratInfo: ratInfo, ratSig: ratSig, makeOptions: makeOptions, sigOf: sigOf, endsOf: endsOf, gradeRatFields: gradeRatFields, gradeHole: gradeHole, grade3: grade3, gOf: gOf, expandStr: expandStr, toDense: toDense, intRootsOf: intRootsOf };
