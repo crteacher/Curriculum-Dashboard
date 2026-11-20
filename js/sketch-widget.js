@@ -16,6 +16,8 @@
  *   staticColor             — stroke color for staticFn (default '#1e3a5c')
  *   expected                — { keypoints:[{x,y,label}], vertex:[{x,y,label}] }
  *   passThreshold           — minimum correct count for success message (default 2)
+ *   degree                  — optional integer d >= 0: the curve is the degree-d polynomial through the placed points
+ *                             (least squares if more than d+1), and Check needs at least d+1 markers
  *   labels                  — optional: {keypoints:'...', vertex:'...'} names used in the feedback list
  *
  * toolbarEl (optional):
@@ -59,7 +61,7 @@ class SketchWidget {
       });
     });
 
-    this._buildGrid();
+    this._buildGrid(); this._status();
   }
 
   // ── Coordinate transforms ──────────────────────────────────────────────────
@@ -137,8 +139,42 @@ class SketchWidget {
   _rm(id){this.markers=this.markers.filter(m=>m.id!==id);const el=this.mg.querySelector('[data-mid="'+id+'"]');if(el)el.remove();this._sketchFromMarkers();}
 
   // ── Spline through placed markers ──────────────────────────────────────────
+  _needPts(){const d=this.prob.degree;return (typeof d==='number'&&d>=0)?Math.floor(d)+1:0;}
+  _status(){
+    if(!this._needPts()||this.checked) return;
+    const need=this._needPts(), have=this.markers.length;
+    this.fbEl.innerHTML=have>=need?'':'<div style="color:#7a5c1e">Place at least '+need+' point'+(need===1?'':'s')+' to draw your curve'+(have?' ('+(need-have)+' more).':'.')+'</div>';
+  }
+  // Least-squares polynomial of exact degree d through the markers (normal equations in a centred, scaled x).
+  _polyFit(d){
+    const pts=this.markers.map(m=>[m.mx,m.my]); if(pts.length<d+1) return null;
+    const{xMin,xMax}=this.prob, xc=(xMin+xMax)/2, hw=(xMax-xMin)/2, n=d+1;
+    const A=Array.from({length:n},()=>new Array(n+1).fill(0));
+    for(const[x,y] of pts){const u=(x-xc)/hw,pw=[1];for(let k=1;k<=2*d;k++)pw[k]=pw[k-1]*u;
+      for(let i=0;i<n;i++){for(let j=0;j<n;j++)A[i][j]+=pw[i+j];A[i][n]+=pw[i]*y;}}
+    for(let i=0;i<n;i++)A[i][i]+=1e-13;
+    for(let c=0;c<n;c++){let p=c;for(let r=c+1;r<n;r++)if(Math.abs(A[r][c])>Math.abs(A[p][c]))p=r;
+      if(Math.abs(A[p][c])<1e-12) return null; [A[c],A[p]]=[A[p],A[c]];
+      for(let r=0;r<n;r++){if(r===c)continue;const f=A[r][c]/A[c][c];for(let k=c;k<=n;k++)A[r][k]-=f*A[c][k];}}
+    const co=A.map((row,i)=>row[n]/row[i]);
+    return x=>{const u=(x-xc)/hw;let y=0;for(let i=n-1;i>=0;i--)y=y*u+co[i];return y;};
+  }
   _sketchFromMarkers() {
     const old=this.svgEl.querySelector('#sk-sketch-'+this.svgEl.id); if(old) old.remove();
+    this._status();
+    if(this._needPts()){
+      const d=this._needPts()-1, f=this._polyFit(d);
+      if(!f){this._sketchPath=null;return;}
+      const{xMin,xMax,yMin,yMax}=this.prob, path=[], N=240;
+      for(let i=0;i<=N;i++){const x=xMin+i/N*(xMax-xMin);path.push([x,f(x)]);}
+      this._sketchPath=path;
+      const ptStr=path.map(([x,y])=>this.tx(x).toFixed(1)+','+this.ty(Math.max(yMin-.5,Math.min(yMax+.5,y))).toFixed(1)).join(' ');
+      const p=this._el('polyline'); p.setAttribute('id','sk-sketch-'+this.svgEl.id); p.setAttribute('points',ptStr);
+      p.setAttribute('fill','none'); p.setAttribute('stroke','#7a5c1e'); p.setAttribute('stroke-width','2');
+      p.setAttribute('stroke-dasharray','7,4'); p.setAttribute('opacity','.8');
+      p.setAttribute('clip-path','url(#sk-clip-'+this.svgEl.id+')'); p.setAttribute('stroke-linejoin','round');
+      this.svgEl.insertBefore(p,this.mg); return;
+    }
     if(this.markers.length<2){this._sketchPath=null;return;}
     const pts=[...this.markers].sort((a,b)=>a.mx-b.mx).map(m=>({
       x:m.mx, y:m.my, s:(m.type==='vertex')?0:null
@@ -235,7 +271,9 @@ class SketchWidget {
 
   // ── Grading ────────────────────────────────────────────────────────────────
   checkSketch() {
-    if(this.checked) return; this.checked=true;
+    if(this.checked) return;
+    if(this._needPts()&&this.markers.length<this._needPts()){this._status();return;}   // not enough points yet: do not grade
+    this.checked=true;
     const{expected}=this.prob;
     const xRange=this.prob.xMax-this.prob.xMin, yRange=this.prob.yMax-this.prob.yMin;
     const tol=this.prob.tolerance||0.06;
@@ -319,7 +357,7 @@ class SketchWidget {
 
   reset() {
     this.markers=[]; this.nextId=0; this.checked=false; this.answered=false;
-    this._sketchPath=null; this.fbEl.innerHTML=''; this._buildGrid();
+    this._sketchPath=null; this.fbEl.innerHTML=''; this._buildGrid(); this._status();
   }
 
   // ── SVG helpers ────────────────────────────────────────────────────────────

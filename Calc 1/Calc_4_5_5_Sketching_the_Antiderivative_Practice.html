@@ -123,6 +123,7 @@ const PROBLEMS = [
     prob: {
       staticFn:    x => -x/2,
       staticColor: '#1e3a5c',
+      degree: 2,
       fn:          x => -x*x/4,
       xMin: -3, xMax: 3, yMin: -2, yMax: 2,
       tStep: 1, hStep: 1, tolerance: 0.08,
@@ -143,6 +144,7 @@ const PROBLEMS = [
     prob: {
       staticFn:    x => x/2,
       staticColor: '#1e3a5c',
+      degree: 2,
       fn:          x => x*x/4,
       xMin: -3, xMax: 3, yMin: -2, yMax: 2,
       tStep: 1, hStep: 1, tolerance: 0.08,
@@ -164,6 +166,7 @@ const PROBLEMS = [
     prob: {
       staticFn:    x => 0.5*(x*x - 1),
       staticColor: '#1e3a5c',
+      degree: 3,
       fn:          x => 0.5*(x*x*x/3 - x),
       xMin: -2.5, xMax: 2.5, yMin: -1.5, yMax: 2,
       tStep: 1, hStep: 1, tolerance: 0.1,
@@ -189,6 +192,7 @@ const PROBLEMS = [
     prob: {
       staticFn:    x => 0.6,
       staticColor: '#1e3a5c',
+      degree: 1,
       fn:          x => 0.6*x,
       xMin: -3, xMax: 3, yMin: -2, yMax: 2,
       tStep: 1, hStep: 1, tolerance: 0.12,
@@ -214,6 +218,7 @@ const PROBLEMS = [
     prob: {
       staticFn:    x => -x/2,
       staticColor: '#1e3a5c',
+      degree: 2,
       fn:          x => -x*x/4,
       xMin: -3, xMax: 3, yMin: -2, yMax: 2,
       tStep: 1, hStep: 1, tolerance: 0.08,
@@ -235,6 +240,7 @@ const PROBLEMS = [
     prob: {
       staticFn:    x => 0.5*(x*x - 1),
       staticColor: '#1e3a5c',
+      degree: 3,
       fn:          x => 0.5*(x*x*x/3 - x),
       xMin: -2.5, xMax: 2.5, yMin: -1.5, yMax: 2,
       tStep: 1, hStep: 1, tolerance: 0.1,
@@ -261,6 +267,7 @@ const PROBLEMS = [
     prob: {
       staticFn:    x => -x,
       staticColor: '#1e3a5c',
+      degree: 3,
       fn:          x => -x*x*x/6,   // F = ∫∫ f′ dx² = ∫ (-x²/2) dx = -x³/6
       xMin: -3, xMax: 3, yMin: -2, yMax: 2,
       tStep: 1, hStep: 1, tolerance: 0.1,

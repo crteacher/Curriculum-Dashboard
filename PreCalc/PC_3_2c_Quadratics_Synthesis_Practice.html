@@ -320,6 +320,7 @@ function newProblem(){
   const hStep = maxH > 80 ? 20 : 10;
   const hAxisMax = Math.ceil((maxH + hStep*1.5) / hStep) * hStep;
   const skProb = {
+    degree: 2,
     fn: t => -16*t*t + v0*t + h0,
     xMin: -0.3, xMax: tAxisMax,
     yMin: -(hAxisMax * 0.08), yMax: hAxisMax,
