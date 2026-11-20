@@ -16,6 +16,7 @@
  *   staticColor             — stroke color for staticFn (default '#1e3a5c')
  *   expected                — { keypoints:[{x,y,label}], vertex:[{x,y,label}] }
  *   passThreshold           — minimum correct count for success message (default 2)
+ *   labels                  — optional: {keypoints:'...', vertex:'...'} names used in the feedback list
  *
  * toolbarEl (optional):
  *   If supplied, [data-sktype] buttons inside that element control activeType.
@@ -294,7 +295,7 @@ class SketchWidget {
 
   // ── Feedback ───────────────────────────────────────────────────────────────
   _showFB(results,correct,total,curveResult) {
-    const kl={keypoints:'Key Point',vertex:'Vertex'};
+    const kl=Object.assign({keypoints:'Key Point',vertex:'Vertex'},this.prob.labels||{});
     let html='<div style="margin-bottom:.4rem;font-weight:700;color:#1e3a5c">'+correct+'/'+total+' key features identified</div>';
     for(const r of results)
       html+='<div class="sk-feat '+(r.hit?'hit':'miss')+'"><span>'+(r.hit?'✓':'✗')+'</span><span><strong>'+kl[r.key]+':</strong> '+r.ep.label+'</span></div>';

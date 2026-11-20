@@ -61,8 +61,8 @@ Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026</p>
   <span class="concept-label">How to use this practice</span>
   The graph of <strong>\(f\)</strong> is drawn in navy. Use the toolbar to place markers, then
   sketch where you think <strong>\(f'\)</strong> should be:<br>
-  &bull; <strong>Key Point</strong> (circle) — place where \(f' = 0\) (i.e., where \(f\) has a local max or min)<br>
-  &bull; <strong>Vertex</strong> (diamond) — place at the highest or lowest point of the \(f'\) curve itself<br>
+  &bull; <strong>Point on f&prime;</strong> (circle) — mark a spot on the \(f'\) graph, such as an x-intercept where \(f' = 0\) (a local max or min of \(f\))<br>
+  &bull; <strong>High/Low point of f&prime;</strong> (diamond) — mark the highest or lowest point of the \(f'\) curve itself<br>
   Click a placed marker to remove it. Hit <em>Check Sketch</em> to grade your key points.
 </div>
 
@@ -71,8 +71,8 @@ Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026</p>
   <div class="card-question" id="prob-q"></div>
 
   <div class="sk-toolbar" id="sk-toolbar">
-    <button class="sk-type sk-active" data-sktype="keypoint">&#9675; Key Point &nbsp;<small>(f&prime;=0)</small></button>
-    <button class="sk-type" data-sktype="vertex">&#9670; Vertex &nbsp;<small>(extremum of f&prime;)</small></button>
+    <button class="sk-type sk-active" data-sktype="keypoint">&#9675; Point on f&prime; &nbsp;<small>(e.g. f&prime;=0)</small></button>
+    <button class="sk-type" data-sktype="vertex">&#9670; High/Low point of f&prime; &nbsp;<small>(max or min of f&prime;)</small></button>
     <span class="sk-note">Click the grid to place markers &bull; Click a marker to remove it</span>
   </div>
 
@@ -102,7 +102,7 @@ const PROBLEMS = [
   {
     label: 'Problem 1 of 7',
     question: 'The curve below is the graph of \\(f(x) = -\\frac{x^2}{4} + 1.2\\). '
-            + 'Place a <strong>Key Point</strong> where \\(f\'= 0\\), then sketch \\(f\'\\).',
+            + 'Mark a <strong>point on f&prime;</strong> where \\(f\'= 0\\), then sketch \\(f\'\\).',
     prob: {
       staticFn: x => -x*x/4 + 1.2,
       staticColor: '#1e3a5c',
@@ -120,7 +120,7 @@ const PROBLEMS = [
   {
     label: 'Problem 2 of 7',
     question: 'The curve below is the graph of \\(f(x) = \\frac{x^2}{4} - 1\\). '
-            + 'Place a <strong>Key Point</strong> where \\(f\'= 0\\), then sketch \\(f\'\\).',
+            + 'Mark a <strong>point on f&prime;</strong> where \\(f\'= 0\\), then sketch \\(f\'\\).',
     prob: {
       staticFn: x => x*x/4 - 1,
       staticColor: '#1e3a5c',
@@ -138,7 +138,7 @@ const PROBLEMS = [
   {
     label: 'Problem 3 of 7',
     question: 'The curve below is the graph of \\(f(x) = -\\frac{(x+1)^2}{4} + 1\\). '
-            + 'Place a <strong>Key Point</strong> where \\(f\'= 0\\), then sketch \\(f\'\\).',
+            + 'Mark a <strong>point on f&prime;</strong> where \\(f\'= 0\\), then sketch \\(f\'\\).',
     prob: {
       staticFn: x => -(x+1)*(x+1)/4 + 1,
       staticColor: '#1e3a5c',
@@ -156,7 +156,7 @@ const PROBLEMS = [
   {
     label: 'Problem 4 of 7',
     question: 'The curve below is a cubic with local max at \\(x = -1\\) and local min at \\(x = 1\\). '
-            + 'Place <strong>Key Points</strong> where \\(f\'= 0\\), a <strong>Vertex</strong> '
+            + 'Mark <strong>points on f&prime;</strong> where \\(f\'= 0\\), a <strong>high/low point</strong> '
             + 'at the min of \\(f\'\\), then sketch \\(f\'\\).',
     prob: {
       staticFn: x => 0.75*(x*x*x/3 - x),
@@ -181,7 +181,7 @@ const PROBLEMS = [
   {
     label: 'Problem 5 of 7',
     question: 'The curve below is a cubic with turning points at \\(x = 0\\) and \\(x = 2\\). '
-            + 'Place <strong>Key Points</strong> where \\(f\'= 0\\), a <strong>Vertex</strong> '
+            + 'Mark <strong>points on f&prime;</strong> where \\(f\'= 0\\), a <strong>high/low point</strong> '
             + 'at the min of \\(f\'\\), then sketch \\(f\'\\).',
     prob: {
       staticFn: x => { const u = x-1; return 0.75*(u*u*u/3 - u); },
@@ -206,7 +206,7 @@ const PROBLEMS = [
   {
     label: 'Problem 6 of 7',
     question: 'The curve below is the graph of a <strong>linear</strong> function. '
-            + 'What should \\(f\'\\) look like? Place a <strong>Key Point</strong> anywhere '
+            + 'What should \\(f\'\\) look like? Mark a <strong>point on f&prime;</strong> anywhere '
             + 'on the line \\(f\'= 0.6\\), then sketch \\(f\'\\).',
     prob: {
       staticFn: x => 0.6*x + 0.3,
@@ -228,7 +228,7 @@ const PROBLEMS = [
     question: '<span class="stretch-badge">STRETCH</span> '
             + 'The navy curve is the <em>same cubic</em> as Problem 4: \\(f(x) = \\frac{3}{4}\\left(\\frac{x^3}{3} - x\\right)\\). '
             + 'This time, sketch <strong>\\(f\'\'\\)</strong>. '
-            + 'Place a <strong>Key Point</strong> where \\(f\'\'= 0\\) (the inflection point of \\(f\\)), '
+            + 'Mark a <strong>point on f&prime;</strong> where \\(f\'\'= 0\\) (the inflection point of \\(f\\)), '
             + 'then sketch the \\(f\'\'\\) curve.',
     prob: {
       staticFn: x => 0.75*(x*x*x/3 - x),
@@ -277,6 +277,7 @@ function loadProblem(idx) {
   toolbar.querySelectorAll('[data-sktype]').forEach(b => b.classList.remove('sk-active'));
   toolbar.querySelector('[data-sktype="keypoint"]').classList.add('sk-active');
 
+  p.prob.labels = {keypoints:'Point', vertex:'High/low point'};
   widget = new SketchWidget('sk-svg', 'sk-fb', p.prob, toolbar);
 }
 

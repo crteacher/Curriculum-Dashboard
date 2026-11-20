@@ -63,8 +63,8 @@ Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026</p>
   <span class="concept-label">How to use this practice</span>
   The <strong>navy</strong> curve is the <em>given</em> function. Read it and sketch the <em>target</em>
   function described in each problem.<br>
-  &bull; <strong>Vertex</strong> (diamond) &mdash; place where the <em>target</em> has slope 0 (a local max or min)<br>
-  &bull; <strong>Key Point</strong> (circle) &mdash; place any other guiding point on the target curve<br>
+  &bull; <strong>Turning point</strong> (diamond) &mdash; mark where the <em>target</em> has slope 0 (a local max or min)<br>
+  &bull; <strong>Guide point</strong> (circle) &mdash; mark any other point on the target curve<br>
   Problems 1&ndash;4: given \(f\), sketch \(F\) (antiderivative). &nbsp;
   Problems 5&ndash;6: given \(f'\), sketch \(f\) (review). &nbsp;
   Problem 7: stretch.
@@ -75,8 +75,8 @@ Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026</p>
   <div class="card-question" id="prob-q"></div>
 
   <div class="sk-toolbar" id="sk-toolbar">
-    <button class="sk-type sk-active" data-sktype="keypoint">&#9675; Key Point</button>
-    <button class="sk-type" data-sktype="vertex">&#9670; Vertex &nbsp;<small>(slope = 0)</small></button>
+    <button class="sk-type sk-active" data-sktype="keypoint">&#9675; Guide point</button>
+    <button class="sk-type" data-sktype="vertex">&#9670; Turning point &nbsp;<small>(slope = 0)</small></button>
     <span class="sk-note" id="sk-hint-text">Click the grid to place markers &bull; Click a marker to remove it</span>
   </div>
 
@@ -102,8 +102,8 @@ Christopher Halverson &nbsp;&middot;&nbsp; Fall 2026</p>
 // For antiderivative problems:
 //   staticFn = f  (shown in navy)
 //   fn       = F  (answer, shown after Check)
-//   Vertex markers go where F has slope 0 (i.e., where f = 0)
-//   Key Point markers guide the curve shape elsewhere
+//   Turning-point markers go where F has slope 0 (i.e., where f = 0)
+//   Guide-point markers guide the curve shape elsewhere
 //
 // For derivative-direction problems (5-6):
 //   staticFn = f'  (shown in navy)
@@ -117,9 +117,9 @@ const PROBLEMS = [
     label: 'Problem 1 of 7',
     tag:   'anti',
     question: 'The navy curve is \\(f(x) = -\\frac{x}{2}\\). '
-            + 'Place a <strong>Vertex</strong> where \\(F\\) has its local max '
+            + 'Mark a <strong>turning point</strong> where \\(F\\) has its local max '
             + '(i.e., where \\(f = 0\\)), then sketch \\(F\\).',
-    hint: 'Vertex = where f = 0 → F has slope 0',
+    hint: 'Turning point = where f = 0 → F has slope 0',
     prob: {
       staticFn:    x => -x/2,
       staticColor: '#1e3a5c',
@@ -137,9 +137,9 @@ const PROBLEMS = [
     label: 'Problem 2 of 7',
     tag:   'anti',
     question: 'The navy curve is \\(f(x) = \\frac{x}{2}\\). '
-            + 'Place a <strong>Vertex</strong> where \\(F\\) has its local min '
+            + 'Mark a <strong>turning point</strong> where \\(F\\) has its local min '
             + '(i.e., where \\(f = 0\\)), then sketch \\(F\\).',
-    hint: 'Vertex = where f = 0 → F has slope 0',
+    hint: 'Turning point = where f = 0 → F has slope 0',
     prob: {
       staticFn:    x => x/2,
       staticColor: '#1e3a5c',
@@ -177,15 +177,15 @@ const PROBLEMS = [
     }
   },
 
-  // 4. ANTI: f = 0.6 (constant) → F = 0.6x (line, no crits — Key Points only)
+  // 4. ANTI: f = 0.6 (constant) → F = 0.6x (line, no crits — guide points only)
   {
     label: 'Problem 4 of 7',
     tag:   'anti',
     question: 'The navy curve is the constant function \\(f(x) = 0.6\\). '
             + '\\(f\\) is always positive and never zero. '
-            + 'Place two <strong>Key Points</strong> on the \\(F\\) curve and sketch it. '
+            + 'Mark two <strong>guide points</strong> on the \\(F\\) curve and sketch it. '
             + 'What shape does \\(F\\) have?',
-    hint: 'No zeros → no Vertex needed; F is always rising',
+    hint: 'No zeros → no turning point needed; F is always rising',
     prob: {
       staticFn:    x => 0.6,
       staticColor: '#1e3a5c',
@@ -208,9 +208,9 @@ const PROBLEMS = [
     tag:   'deriv',
     question: '<em>Derivative direction (review of §2.2.7).</em> '
             + 'The navy curve is \\(f\'(x) = -\\frac{x}{2}\\). '
-            + 'Place a <strong>Vertex</strong> where \\(f\' = 0\\) '
+            + 'Mark a <strong>turning point</strong> where \\(f\' = 0\\) '
             + '(critical point of \\(f\\)), then sketch \\(f\\).',
-    hint: 'Vertex where f′ = 0; sign of f′ tells you if f rises or falls',
+    hint: 'Turning point where f′ = 0; sign of f′ tells you if f rises or falls',
     prob: {
       staticFn:    x => -x/2,
       staticColor: '#1e3a5c',
@@ -296,6 +296,8 @@ function loadProblem(idx) {
   const toolbar = document.getElementById('sk-toolbar');
   toolbar.querySelectorAll('[data-sktype]').forEach(b => b.classList.remove('sk-active'));
   toolbar.querySelector('[data-sktype="keypoint"]').classList.add('sk-active');
+
+  p.prob.labels = {keypoints:'Guide point', vertex:'Turning point'};
 
   widget = new SketchWidget('sk-svg', 'sk-fb', p.prob, toolbar);
 }
